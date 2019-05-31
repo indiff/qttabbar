@@ -1,0 +1,2 @@
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\obj\x64\Release64\QTQuick.csproj.GenerateResource.Cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\obj\x64\Release64\QTQuick.csprojResolveAssemblyReference.cache

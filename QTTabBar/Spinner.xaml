@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="QTTabBarLib.Spinner" x:Name="SpinnerControl"
+             Width="50"
+             Height="23"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:qt="clr-namespace:QTTabBarLib"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <qt:Converter Type="{x:Type qt:Spinner+IntToTextConverter}" x:Key="IntToTextConverter"/>
+    </UserControl.Resources>
+    <Grid Height="{Binding Path=Height, ElementName=SpinnerControl}" Width="{Binding Path=Width, ElementName=SpinnerControl}">
+        <TextBox x:Name="txtValue"
+                 KeyDown="txtValue_KeyDown"                 
+                 Padding="2,2,16,0"
+                 PreviewTextInput="txtValue_PreviewTextInput"
+                 Text="{Binding Path=Value, ElementName=SpinnerControl, Converter={StaticResource IntToTextConverter}, Mode=TwoWay}"
+                 TextChanged="txtValue_TextChanged"/>
+        <ScrollBar x:Name="scrollBar" 
+                   HorizontalAlignment="Right"
+                   Margin="1"
+                   Maximum="{Binding Path=Max, ElementName=SpinnerControl}"
+                   Minimum="{Binding Path=Min, ElementName=SpinnerControl}"
+                   SmallChange="1"
+                   Value="{Binding Path=Value, ElementName=SpinnerControl}">
+            <ScrollBar.LayoutTransform>
+                <RotateTransform Angle="180" />
+            </ScrollBar.LayoutTransform>
+        </ScrollBar>        
+    </Grid>
+</UserControl>

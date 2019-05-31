@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<qt:OptionsDialogTab
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    x:Class="QTTabBarLib.Options11_ButtonBar"
+    x:ClassModifier="internal"
+    DataContext="{Binding Path=WorkingConfig.bbar, RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <DockPanel
+        LastChildFill="True"
+        Margin="14,5,10,16">
+        <StackPanel
+            DockPanel.Dock="Top"
+            Margin="0,0,0,4"
+            Orientation="Horizontal">
+            <Image
+                Source="{Binding Source={x:Static qt:Resources_Image.imgTabBBar}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Style="{StaticResource PageHeaderImageStyle}"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=0}"
+                FontSize="13"
+                VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <Label
+            Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=1}"
+            DockPanel.Dock="Top"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <StackPanel 
+            DockPanel.Dock="Bottom"
+            Orientation="Vertical">
+            <Label
+                Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=2}"
+                Style="{StaticResource SectionHeaderStyle}"/>
+            <CheckBox x:Name="chkLargeButtons"
+                Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=3}"
+                Height="16"
+                HorizontalAlignment="Left"
+                IsChecked="{Binding Path=LargeButtons}"
+                Margin="13,1,0,1"/>
+            <CheckBox x:Name="chkShowButtonLabels"
+                Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=4}"
+                Height="16"
+                HorizontalAlignment="Left"
+                IsChecked="{Binding Path=ShowButtonLabels}"
+                Margin="13,1,0,1"/>
+            <CheckBox x:Name="chkLockDropDownButtons"
+                Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=5}"
+                Height="16"
+                HorizontalAlignment="Left"
+                IsChecked="{Binding Path=LockDropDownButtons}"
+                Margin="13,1,0,1"/>
+            <CheckBox x:Name="chkLockSearchBarWidth"
+                Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=6}"
+                Height="16"
+                HorizontalAlignment="Left"
+                IsChecked="{Binding Path=LockSearchBarWidth}"
+                Margin="13,1,0,1"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=7}"
+                Style="{StaticResource SectionHeaderStyle}" />
+            <qt:FileFolderEntryBox
+                FilterText="{qt:Resx Key=FileFilters, Index=0}"
+                FilterExtensions="*.png;*.bmp;*.jpg;*.gif"
+                Margin="13,1,0,1"
+                SelectedPath="{Binding Path=ImageStripPath}"/>
+        </StackPanel>
+        <qt:RestrictDesiredSize MinHeight="200">
+            <Grid Margin="8">
+                <Grid.Resources>
+                    <!-- DataTemplate for the Button Bar editing list boxes -->
+                    <DataTemplate x:Key="ButtonBarItemTemplate">
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                RenderOptions.BitmapScalingMode="NearestNeighbor">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Height" Value="16" />
+                                        <Setter Property="Width" Value="16" />
+                                        <Setter Property="Source" Value="{Binding Path=SmallImage, Converter={StaticResource BitmapToImageSourceConverter}}" />
+                                        <Setter Property="Margin" Value="0,2" />
+                                        <Style.Triggers>
+                                            <DataTrigger 
+                                                Binding="{Binding ElementName=chkLargeButtons, Path=IsChecked}" 
+                                                Value="True">
+                                                <Setter Property="Height" Value="24" />
+                                                <Setter Property="Width" Value="24" />
+                                                <Setter Property="Source" Value="{Binding Path=LargeImage, Converter={StaticResource BitmapToImageSourceConverter}}" />
+                                                <Setter Property="Margin" Value="0" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                            <TextBlock x:Name="txtName"
+                                Margin="5,0"
+                                Tag="{qt:Resx Key=ButtonBar_BtnName}"
+                                VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="qt:Resx.Index" Value="{Binding Path=Index}"/>
+                                        <Setter Property="Text" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsPluginButton}" Value="True">
+                                                <Setter Property="Text" Value="{Binding Path=PluginButtonText}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ListBox x:Name="lstButtonBarPool"
+                    Grid.RowSpan="2"
+                    ItemTemplate="{StaticResource ButtonBarItemTemplate}"/>
+                <Button x:Name="btnBBarAdd"
+                    Click="btnBBarAdd_Click" 
+                    Grid.Column="1"
+                    Margin="8,4"
+                    VerticalAlignment="Bottom">
+                    <Button.Content>
+                        <TextBlock>
+                            <TextBlock.Inlines>
+                                <qt:BindableRun Text="{qt:Resx Key=DialogButtons, Index=7}"/>
+                                <qt:BindableRun Text=" &gt;&gt;"/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
+                <Button x:Name="btnBBarRemove"
+                    Click="btnBBarRemove_Click"
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    Margin="8,4"
+                    VerticalAlignment="Top">
+                    <Button.Content>
+                        <TextBlock>
+                            <TextBlock.Inlines>
+                                <qt:BindableRun Text="&lt;&lt; "/>
+                                <qt:BindableRun Text="{qt:Resx Key=DialogButtons, Index=9}"/>
+                            </TextBlock.Inlines>
+                        </TextBlock>
+                    </Button.Content>
+                 </Button>
+                <ListBox x:Name="lstButtonBarCurrent"
+                    Grid.Column="2"
+                    Grid.RowSpan="2"
+                    ItemTemplate="{StaticResource ButtonBarItemTemplate}"/>
+                <Button x:Name="btnBBarUp"
+                    Click="btnBBarUp_Click" 
+                    Content="&#9650;"
+                    Grid.Column="3"
+                    Margin="8,4"
+                    VerticalAlignment="Bottom"
+                    Width="30"/>
+                <Button x:Name="btnBBarDown"
+                    Click="btnBBarDown_Click"
+                    Content="&#9660;"
+                    Grid.Column="3"
+                    Grid.Row="1"
+                    Margin="8,4"
+                    VerticalAlignment="Top"
+                    Width="30"/>
+            </Grid>
+        </qt:RestrictDesiredSize>
+    </DockPanel>
+</qt:OptionsDialogTab>

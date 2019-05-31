@@ -1,0 +1,8 @@
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\bin\Debug\QTQuick.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\bin\Debug\QTQuick.pdb
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\bin\Debug\Ricciolo.Controls.TreeListView.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\obj\Debug\QTQuick.csprojResolveAssemblyReference.cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\obj\Debug\Qwop.Resource.resources
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\obj\Debug\QTQuick.csproj.GenerateResource.Cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\obj\Debug\QTQuick.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTQuick\obj\Debug\QTQuick.pdb

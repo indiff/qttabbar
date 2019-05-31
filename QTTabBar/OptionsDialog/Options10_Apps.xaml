@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<qt:OptionsDialogTab
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    xmlns:r="clr-namespace:Ricciolo.Controls;assembly=Ricciolo.Controls.TreeListView"
+    x:Class="QTTabBarLib.Options10_Apps"
+    x:ClassModifier="internal">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <DockPanel
+        Margin="14,5,10,16">
+        <StackPanel
+            DockPanel.Dock="Top"
+            Margin="0,0,0,4"
+            Orientation="Horizontal">
+            <Image
+                Source="{Binding Source={x:Static qt:Resources_Image.imgTabApps}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Style="{StaticResource PageHeaderImageStyle}"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page10_Apps, Index=0}"
+                FontSize="13"
+                VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <TextBlock 
+            Text="{qt:Resx Key=Options_Page10_Apps, Index=1}"
+            TextWrapping="Wrap"
+            DockPanel.Dock="Top"
+            Margin="5,10,5,5"/>
+        <Grid
+            DockPanel.Dock="Top"
+            Margin="0,5,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnAppsMoveNodeUp"
+                Click="btnAppsMoveNodeUpDown_Click"    
+                Content="&#9650;"
+                Height="23"
+                Margin="4"
+                Width="28"/>
+            <Button x:Name="btnAppsMoveNodeDown"
+                Click="btnAppsMoveNodeUpDown_Click" 
+                Content="&#9660;"
+                Grid.Column="1"
+                Height="23"
+                Margin="4"
+                Width="28"/>
+            <Button x:Name="btnAppsAddFolder"
+                Click="btnAddAppFolder_Click"
+                Content="{qt:Resx Key=Options_Page10_Apps, Index=2}"
+                Grid.Column="3"
+                Height="23"
+                Margin="4"
+                Width="120"/>
+            <Button x:Name="btnAppsAddNode"
+                Click="btnAddApp_Click"
+                Content="{qt:Resx Key=DialogButtons, Index=8}"
+                Grid.Column="4"
+                Height="23"
+                Margin="4"
+                Width="70"/>
+            <Button x:Name="btnAppsRemoveNode"
+                Click="btnRemoveApp_Click"
+                Content="{qt:Resx Key=DialogButtons, Index=9}"
+                Grid.Column="5"
+                Height="23"
+                Margin="4"
+                Width="70"/>
+        </Grid>
+        <Grid x:Name="grdAppProps"
+            DataContext="{Binding ElementName=tvwApps, Path=SelectedItem}"
+            DockPanel.Dock="Bottom"
+            Margin="0,10,0,0">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsFolder}" Value="False">
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label
+                Content="{qt:Resx Key=Options_Page10_Apps, Index=3}"
+                Grid.Column="0"
+                Grid.Row="0"
+                Height="23"
+                Margin="0,0,10,0"
+                Padding="0"
+                VerticalContentAlignment="Center"/>
+            <qt:FileFolderEntryBox x:Name="txtAppPath"
+                Folder="False"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Grid.Row="0"
+                Height="23"
+                Margin="0,3"
+                SelectedPath="{Binding Path=Path}"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page10_Apps, Index=4}"
+                Grid.Column="0"
+                Grid.Row="1"
+                Height="23"
+                Margin="0,0,10,0"
+                Padding="0"
+                VerticalContentAlignment="Center"/>
+            <TextBox x:Name="txtAppArgs"
+                Grid.Column="1"
+                Grid.Row="1"
+                Height="23"
+                Margin="0,3"
+                Text="{Binding Path=Args, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button x:Name="btnArgVars"
+                Click="btnVars_Click"
+                Content="%"
+                Grid.Column="2"
+                Grid.Row="1"
+                Height="23"
+                Margin="8, 1, 0, 1"
+                Tag="True"
+                Width="26">
+                <Button.ContextMenu>
+                    <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
+                        <ContextMenu.Resources>
+                            <Style TargetType="{x:Type MenuItem}">
+                                <EventSetter Event="Click" Handler="miVars_Click"/>
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <TextBlock.Inlines> 
+                                                    <qt:BindableRun Text="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}"/>
+                                                    <qt:BindableRun Text="-"/>
+                                                    <qt:BindableRun Text="{Binding}"/>
+                                                </TextBlock.Inlines>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ContextMenu.Resources>
+                        <MenuItem
+                            Header="{qt:Resx Key=Options_Page10_Apps, Index=8}"
+                            IsEnabled="False"
+                            HeaderTemplate="{x:Null}"/>
+                        <Separator/>
+                        <MenuItem
+                            Header="{qt:Resx Key=Options_Page10_Apps, Index=9}"
+                            Tag="%f%"
+                            IsEnabled="{Binding Path=Tag}"/>
+                        <MenuItem
+                            Header="{qt:Resx Key=Options_Page10_Apps, Index=10}"
+                            Tag="%d%"/>
+                        <MenuItem
+                            Header="{qt:Resx Key=Options_Page10_Apps, Index=11}"
+                            Tag="%s%"/>
+                        <MenuItem
+                            Header="{qt:Resx Key=Options_Page10_Apps, Index=12}"
+                            Tag="%c%"/>
+                        <MenuItem
+                            Header="{qt:Resx Key=Options_Page10_Apps, Index=13}"
+                            Tag="%cd%"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+            <Label
+                Content="{qt:Resx Key=Options_Page10_Apps, Index=5}"
+                Grid.Column="0"
+                Grid.Row="2"
+                Height="23"
+                Margin="0,0,10,0"
+                Padding="0"
+                VerticalContentAlignment="Center"/>
+            <TextBox x:Name="txtAppDir"
+                Grid.Column="1"
+                Grid.Row="2"
+                Height="23"
+                Margin="0,3"
+                Text="{Binding Path=WorkingDir, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button x:Name="btnWorkingVars"
+                Click="btnVars_Click"
+                Content="%"
+                ContextMenu="{Binding Path=ContextMenu, ElementName=btnArgVars}"
+                Tag="False"
+                Grid.Column="2"
+                Grid.Row="2"
+                Height="23"
+                Margin="8, 1, 0, 1"
+                Width="26"/>
+        </Grid>
+        <qt:RestrictDesiredSize MinHeight="200">
+            <r:TreeListView x:Name="tvwApps"
+                MouseDown="tvwApps_MouseDown"
+                PreviewKeyDown="tvwApps_PreviewKeyDown">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+                        <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}"/>
+                </TreeView.ItemTemplate>
+                <r:TreeListView.Columns>
+                    <GridViewColumn Header="{qt:Resx Key=Options_Page10_Apps, Index=6}" Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                                    <Image
+                                        Source="{Binding Path=Icon, Converter={StaticResource BitmapToImageSourceConverter}}"
+                                        Width="16"
+                                        Height="16"
+                                        Stretch="Fill"
+                                        Margin="0,0,2,0"/>
+                                    <qt:EditableHeader x:Name="ehrName"
+                                        Container="{Binding RelativeSource={RelativeSource AncestorType={x:Type r:TreeListViewItem}}}"
+                                        IsEditing="{Binding Path=IsEditing}"
+                                        Text="{Binding Path=Name}"
+                                        Margin="0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="{qt:Resx Key=Options_Page10_Apps, Index=7}" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock x:Name="txtHotkey"
+                                    Text="{Binding Path=HotkeyString}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Visibility="Collapsed"/>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsFolder}" Value="False">
+                                        <Setter TargetName="txtHotkey" Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </r:TreeListView.Columns>
+            </r:TreeListView>
+        </qt:RestrictDesiredSize>
+    </DockPanel>
+</qt:OptionsDialogTab>

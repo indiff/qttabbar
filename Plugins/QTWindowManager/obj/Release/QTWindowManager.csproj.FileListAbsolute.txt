@@ -1,0 +1,6 @@
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTWindowManager\bin\Release\QTWindowManager.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTWindowManager\obj\Release\QuizoPlugins.Resource.resources
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTWindowManager\obj\Release\QuizoPlugins.SettingWindow.resources
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTWindowManager\obj\Release\QTWindowManager.csproj.GenerateResource.Cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTWindowManager\obj\Release\QTWindowManager.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTWindowManager\obj\Release\QTWindowManager.csprojResolveAssemblyReference.cache

@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    x:Class="QTTabBarLib.OptionsDialog"
+    x:ClassModifier="internal"
+    Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
+    Height="650"
+    Title="{qt:Resx Key=OptionsDialog, Index=0}"
+    Width="750"
+    Left="0" Top="0"
+    >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- The OK/Cancel/etc buttons -->
+        <DockPanel
+            HorizontalAlignment="Stretch"
+            Margin="2,3,0,3"
+            Grid.Column="1"
+            Grid.Row="1"
+            LastChildFill="False"
+            VerticalAlignment="Center">
+            <DockPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Height" Value="22"/>
+                    <Setter Property="Margin" Value="3,0"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Width" Value="75"/>
+                </Style>
+            </DockPanel.Resources>
+            <StackPanel
+                DockPanel.Dock="Left"
+                Orientation="Horizontal">
+                <Button x:Name="btnResetPage"
+                    Click="btnResetPage_Click"
+                    Content="{qt:Resx Key=DialogButtons, Index=4 }"/>
+                <Button x:Name="btnResetAll"
+                    Click="btnResetAll_Click"
+                    Content="{qt:Resx Key=DialogButtons, Index=5 }"/>
+            </StackPanel>
+            <StackPanel
+                DockPanel.Dock="Right"
+                Orientation="Horizontal">
+                <Button x:Name="btnOK"
+                    Click="btnOK_Click"
+                    Content="{qt:Resx Key=DialogButtons, Index=0 }"/>
+                <Button x:Name="btnCancel"
+                    Click="btnCancel_Click"
+                    Content="{qt:Resx Key=DialogButtons, Index=1 }"/>
+                <Button x:Name="btnApply"
+                    Click="btnApply_Click"
+                    Content="{qt:Resx Key=DialogButtons, Index=2 }"/>            
+            </StackPanel>
+        </DockPanel>
+
+        <!-- The category listview -->
+        <ListView x:Name="lstCategories"
+            ItemsSource="{Binding Items, ElementName=tabbedPanel}"
+            Margin="3,3,0,0"
+            SelectionMode="Single"
+            PreviewMouseWheel="lstCategories_PreviewMouseWheel"
+            Width="136">
+            <ListBox.Resources>
+                <SolidColorBrush 
+                    x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                    Color="White"/>
+                <SolidColorBrush 
+                    x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                    Color="Black"/>
+                <SolidColorBrush 
+                    x:Key="{x:Static SystemColors.ControlBrushKey}"
+                    Color="White"/>
+            </ListBox.Resources>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <EventSetter
+                        Event="PreviewMouseRightButtonDown"
+                        Handler="CategoryListBoxItem_PreviewMouseRightButtonDown" />
+                    <EventSetter
+                        Event="PreviewMouseDown"
+                        Handler="CategoryListBoxItem_PreviewMouseDown" />
+                    <EventSetter
+                        Event="PreviewMouseWheel"
+                        Handler="CategoryListBoxItem_PreviewMouseWheel" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        Background="#d8ded9"
+                        Height="25"
+                        Margin="0,1"
+                        Cursor="Hand"
+                        Width="128">
+                        <Image x:Name="imgCategorySelection" 
+                            Visibility="Collapsed"/>
+                        <TextBlock
+                            Margin="10,1"
+                            Text="{qt:Resx Key=TabBar_Option_Genre}"
+							HorizontalAlignment="center"
+                            VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="qt:Resx.Index" Value="{Binding Path=Index}"/>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                            <Setter TargetName="imgCategorySelection" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="imgCategorySelection" Property="Source" Value="{Binding Source={x:Static qt:Resources_Image.imgOptions_NoFocus}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
+                            <Setter TargetName="imgCategorySelection" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="imgCategorySelection" Property="Source" Value="{Binding Source={x:Static qt:Resources_Image.imgOptions_Hot}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
+                                <Condition Binding="{Binding Path=IsKeyboardFocused, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="imgCategorySelection" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="imgCategorySelection" Property="Source" Value="{Binding Source={x:Static qt:Resources_Image.imgOptions_Selected}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="imgCategorySelection" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="imgCategorySelection" Property="Source" Value="{Binding Source={x:Static qt:Resources_Image.imgOptions_SelAndHot}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+                        </MultiDataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListView>
+
+        <!-- The main TabControl -->
+    	<TabControl x:Name="tabbedPanel"
+            Background="{StaticResource {x:Static SystemColors.ControlLightLightBrushKey}}"
+            Grid.Column="1"
+            Margin="0,3,3,0"
+            Padding="0"
+            SelectedItem="{Binding SelectedItem, ElementName=lstCategories}"
+            TabStripPlacement="Left">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Width" Value="0" />
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ScrollViewer
+                        Content="{Binding}"
+                        VerticalScrollBarVisibility="Auto"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </Grid>
+</Window>

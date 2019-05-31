@@ -1,0 +1,7 @@
+D:\SVN\indiff\trunk\QTTabBar\Plugins\Memo\bin\Debug\Memo.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\Memo\bin\Debug\Memo.pdb
+D:\SVN\indiff\trunk\QTTabBar\Plugins\Memo\obj\Debug\Memo.csprojResolveAssemblyReference.cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\Memo\obj\Debug\QuizoPlugins.Resource.resources
+D:\SVN\indiff\trunk\QTTabBar\Plugins\Memo\obj\Debug\Memo.csproj.GenerateResource.Cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\Memo\obj\Debug\Memo.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\Memo\obj\Debug\Memo.pdb

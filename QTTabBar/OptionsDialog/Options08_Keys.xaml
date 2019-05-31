@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<qt:OptionsDialogTab
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    x:Class="QTTabBarLib.Options08_Keys"
+    x:ClassModifier="internal"
+    DataContext="{Binding Path=WorkingConfig.keys, RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <DockPanel
+        Margin="14,5,10,16">
+        <StackPanel
+            DockPanel.Dock="Top"
+            Margin="0,0,0,4"
+            Orientation="Horizontal">
+            <Image
+                Source="{Binding Source={x:Static qt:Resources_Image.imgTabKeys}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Style="{StaticResource PageHeaderImageStyle}"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page08_Keys, Index=0}"
+                FontSize="13"
+                VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <StackPanel
+            DockPanel.Dock="Bottom"
+            Margin="0,10,0,0"
+            Orientation="Vertical">
+            <Label
+                Content="{qt:Resx Key=Options_Page08_Keys, Index=2}"
+                Style="{StaticResource SectionHeaderStyle}"/>
+            <CheckBox
+                Content="{qt:Resx Key=Options_Page08_Keys, Index=3}"
+                IsChecked="{Binding Path=UseTabSwitcher}"
+                Margin="13,0,1,0"/>
+        </StackPanel>
+        <TextBlock 
+            Text="{qt:Resx Key=Options_Page08_Keys, Index=1}"
+            TextWrapping="Wrap"
+            DockPanel.Dock="Top"
+            Margin="5,10,5,15"/>
+        <qt:RestrictDesiredSize MinHeight="200">
+            <ListView x:Name="lvwHotkeys"
+                PreviewKeyDown="lvwHotkeys_PreviewKeyDown"
+                TextInput="lvwHotkeys_TextInput"
+                SelectionMode="Single"
+                BorderThickness="1.000001">
+                <ListBox.Style>
+                    <Style TargetType="{x:Type ListView}">
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Style>
+                </ListBox.Style>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Padding" Value="5,2,5,2"/>
+                        <Setter Property="Margin" Value="0,0,0,1"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Enabled}" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <DockPanel LastChildFill="True">
+                                    <TextBlock 
+                                        DockPanel.Dock="Left"
+                                        Foreground="MediumBlue"
+                                        Margin="20, 1, 4, 4"
+                                        Text="{qt:Resx Key=ShortcutKeys_Groups}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="qt:Resx.Index" Value="1"/>
+                                                <Setter Property="qt:Resx.Param" Value="{Binding Path=Name}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=Name}" Value="">
+                                                        <Setter Property="qt:Resx.Index" Value="0"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <Border
+                                        BorderBrush="LightGray"
+                                        BorderThickness="1"
+                                        Height="1"
+                                        Margin="0,0,10,0"
+                                        SnapsToDevicePixels="True"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="{qt:Resx Key=Options_Page08_Keys, Index=4}" Width="350">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox x:Name="chkKeyEnable"
+                                            FocusVisualStyle="{x:Null}"
+                                            IsEnabled="{Binding Path=Assigned}"
+                                            IsChecked="{Binding Path=Enabled}"
+                                            VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="txtKeyAction"
+                                            Tag="{qt:Resx Key=ShortcutKeys_ActionNames}"
+                                            Margin="6,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="Text" Value="{Binding Path=KeyActionText}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=PluginName}" Value="">
+                                                            <Setter Property="qt:Resx.Index" Value="{Binding Path=Index}"/>
+                                                            <Setter Property="Text" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{qt:Resx Key=Options_Page08_Keys, Index=5}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="txtKeyString"
+                                        Text="{Binding Path=HotkeyString}"
+                                        TextAlignment="Center"
+                                        Width="120"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </qt:RestrictDesiredSize>
+    </DockPanel>
+</qt:OptionsDialogTab>

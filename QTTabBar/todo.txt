@@ -1,0 +1,3 @@
+﻿1. to do translate 
+	  <!-- to do translate-->
+	  <data name="Options_Page08_Keys" xml:space="preserve">

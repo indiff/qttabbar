@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<qt:OptionsDialogTab
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    x:Class="QTTabBarLib.Options14_About"
+    x:ClassModifier="internal">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel
+        Margin="14,5,10,0"
+        Orientation="Vertical">
+        <StackPanel
+            Margin="0,0,0,4"
+            Orientation="Horizontal">
+            <Image
+                Source="{Binding Source={x:Static qt:Resources_Image.imgTabAbout}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Style="{StaticResource PageHeaderImageStyle}"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page14_About, Index=0}"
+                FontSize="13"
+                VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <StackPanel
+            Margin="0,20,0,0"
+            Orientation="Vertical">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Label}">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+                <Style TargetType="{x:Type StackPanel}">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+            </StackPanel.Resources>
+            <Label x:Name="lblVersion"
+                Height="28"/>
+            <Label x:Name="buildBy"
+                Height="28" Content="{qt:Resx Key=Options_Page14_About, Index=7}" qt:Resx.Param="qwop"/>
+            <Label
+                Height="28">
+                <Hyperlink x:Name="hypSite">
+                    <Run x:Name="runSite"/>
+                </Hyperlink>
+            </Label>
+            <Label
+                Content="{qt:Resx Key=Options_Page14_About, Index=1}"
+                qt:Resx.Param="Quizo"
+                Margin="10"/>
+            <StackPanel Margin="10">
+                <Label Content="{qt:Resx Key=Options_Page14_About, Index=2}" FontWeight="Bold"/>
+                <Label Content="Paul Accisano"/>
+            </StackPanel>
+            <StackPanel Margin="10">
+                <Label Content="{qt:Resx Key=Options_Page14_About, Index=3}" FontWeight="Bold"/>
+                <Label Content="Mokuzu Kawano"/>
+                <Label Content="Jerome Doby"/>
+            </StackPanel>
+            <StackPanel Margin="10">
+                <Label Content="{qt:Resx Key=Options_Page14_About, Index=4}" FontWeight="Bold"/>
+                <Label Content="Kemie Guaida"/>
+            </StackPanel>
+            <StackPanel Margin="10">
+                <Label Content="{qt:Resx Key=Options_Page14_About, Index=5}"/>
+                <Image x:Name="imgPaypal"
+                    MouseUp="imgPaypal_MouseUp"
+                    Cursor="Hand"
+                    HorizontalAlignment="Center"
+                    Margin="10"
+                    Stretch="None"
+                    Source="{Binding Source={x:Static qt:Resources_Image.paypalBtn}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+            </StackPanel>
+
+			<!-- add by qwop start -->
+            <StackPanel Margin="10">
+                <Label Content="{qt:Resx Key=Options_Page14_About, Index=6}" FontWeight="Bold"/>
+                <Label Content="qwop(qwop@w.cn QQ:76430850)"/>
+            </StackPanel>
+
+            <Label
+                Height="28">
+                <Hyperlink x:Name="qwopSite" >
+                    <Run x:Name="runQwopSite"/>
+                </Hyperlink>
+            </Label>
+			<!-- add by qwop end -->
+
+
+        </StackPanel>
+    </StackPanel>
+</qt:OptionsDialogTab>

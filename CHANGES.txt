@@ -1,0 +1,97 @@
+======= 1.5.0.0 Beta 2 =======
+Bugs Fixed:
+    Fixed scrolling lag buildup when using the ItemsView.
+    Fixed massive memory leak (!)
+    Fixed navigation on Homegroup Libraries.
+    Refined Windows searches no longer show up in the navigation history.
+    Clearing the Search bar now navigates back, instead of navigating to Libraries.
+    Middle-clicking on the Navigation Pane now respects the relevant option.
+    Fixed various problems occuring when Explorer is in single-click mode.
+    Fixed extension deselect when renaming .zip and .url files on XP.
+    IFilter-based Plugins, such as Megimo Loader, are no longer unloaded when the Options dialog is closed.
+    Support for systems with only .NET 4 and not .NET 3.5.
+    Support for both the x64 and x86 versions of Explorer on Vista x64.
+    
+New Features:
+    Capturing new Explorer instances is now MUCH smoother in most cases, and supports selecting items.
+    Middle-clicking on Vista and 7's Breadcrumb Bar will open the target folder in a new tab.
+
+======= 1.5.0.0 Beta 1 =======
+Bugs Fixed:
+    Minor tweaks, fixes, and polish all around.
+    Fixed crash when uninstalling plugins.
+    Installer installs for all users now, not just a single user.
+    Fixed Subdirectory Tip display in details mode on Windows XP (for good this time).
+    Fixed bug where OK/Cancel buttons in Control Panel windows don’t work.
+    Moved the Exception log from the Desktop to %APPDATA%\QTTabBar.
+
+New Features:
+    Ctrl-Click on the Folder Tree now opens a new tab.
+
+======= 1.5.0.0 Alpha 5 =======
+Bugs Fixed:
+    Many random crashes involving navigation fixed
+    Fixed a few random crashes involving the search bar
+    Broken Drag/Drop on XP fixed
+    Dragging files from the SysListView into other applications doesn't double the action anymore.
+    "Close all but this" and similar menu items fixed
+    In XP, SubDirTips no longer disappear if the mouse is moved off file label
+    Desktop Tool is not registered on Windows 7, as it doesn't work yet.
+    SysListView no longer behaves strangely when attempting to navigate to a folder unsuccessfully
+    OK/Cancel buttons on Control Panel dialogs now function as expected
+    Header In All Views functionality reimplemented using a more reliable method; won't mess with icon sizes now
+    Dragging files over folders now respects SubDirTip settings
+    Fixed crash induced by Windows Search on XP
+    Escape key now clears the search box, as expected
+    Search box now clears upon refresh without introducing duplicate items
+    Automatic renaming of ambiguous tabs is now case-insensitive
+    Installer activates TabBar and ButtonBar automatically
+    Installer deactivates TabBar and ButtonBar before removing them, working around Explorer's menu bar hiding bug
+
+New Features:
+    Brand new MSI-based installer
+    Middle-click on the Folder Tree opens the folder in a new tab on Vista/7
+
+======= 1.5.0.0 Alpha 4 =======
+Bugs Fixed:
+    General stability improvements, more exception logging code added
+    Changing environment variables on x64 systems no longer crashes Explorer
+    Tabbar/Toolbar positioning now works correctly on XP
+    Search box no longer mysteriously shrinks when focused
+    Closing dialogs in Win7 such as the Firewall dialog works correctly
+    Subdirectory Tips appear and disappear when they should, drag and drop into them much easier
+    Opening a new tab by navigating on a locked tab opens the tab in the correct location
+    Minimize to tray no longer crashes Explorer
+    Full Row Select can be enabled/disabled when the SysListView32 is used
+    Tabs are restored only on the first instance, not on subsequent instances
+    Libraries can be dropped into
+
+New/Restored Features:
+    Desktop Bar restored for XP/Vista
+    F2 rename selection functionality restored    
+    SelectionChanged plugin event fires correctly
+    Cursor looping reimplemented
+    "Use old ListView control" option enabled
+    "Display column headers in all views" option enabled
+
+======= 1.5.0.0 Alpha 3 =======
+Bugs Fixed:
+    Explorer process no longer consumes a full CPU core.
+    Doubleclicking the Tab Bar background creates a new tab if the appropriate option is set.
+    Explorer window no longer becomes nonresponsive when new tab created and Activate New Tab is disabled.
+    Doubleclicking column headers no longer results in Up One Directory.
+    Subdirectory Tips launched from tab icons no longer crash Explorer.
+    Options menu no longer disables right-click after closed.
+    Button Bar correctly displays buttons when activated after Tab Bar.
+    Mouse cursor now becomes an IBeam in the Search Box.
+    
+New/Restored Features:
+    Tab Locking functionality restored
+        
+======= 1.5.0.0 Alpha 2 =======
+Bugs Fixed:
+    Fixed crashes on 32-bit Windows.
+
+======= 1.5.0.0 Alpha 1 =======
+New/Restored Features:
+    First release compatible with Windows 7.

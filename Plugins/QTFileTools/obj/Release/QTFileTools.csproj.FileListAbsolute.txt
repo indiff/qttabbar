@@ -1,0 +1,5 @@
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFileTools\bin\Release\QTFileTools.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFileTools\obj\Release\QuizoPlugins.Resource.resources
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFileTools\obj\Release\QTFileTools.csproj.GenerateResource.Cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFileTools\obj\Release\QTFileTools.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFileTools\obj\Release\QTFileTools.csprojResolveAssemblyReference.cache

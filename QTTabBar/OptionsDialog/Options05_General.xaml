@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<qt:OptionsDialogTab
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    x:Class="QTTabBarLib.Options05_General"
+    x:ClassModifier="internal"
+    DataContext="{Binding Path=WorkingConfig.misc, RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel
+        Margin="14,5,10,0"
+        Orientation="Vertical">
+        <StackPanel
+            Margin="0,0,0,4"
+            Orientation="Horizontal">
+            <Image
+                Source="{Binding Source={x:Static qt:Resources_Image.imgTabMisc}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Style="{StaticResource PageHeaderImageStyle}"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page05_General, Index=0}"
+                FontSize="13"
+                VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <Label
+            Content="{qt:Resx Key=Options_Page05_General, Index=1}"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <CheckBox x:Name="chkTaskbarThumbnails"
+            Content="{qt:Resx Key=Options_Page05_General, Index=2}"
+            IsChecked="{Binding Path=TaskbarThumbnails}"
+            Style="{StaticResource CheckStyle}"/>
+        <Label
+            Content="{qt:Resx Key=Options_Page05_General, Index=3}"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <CheckBox x:Name="chkKeepHistory"
+                Content="{qt:Resx Key=Options_Page05_General, Index=4}"
+                Grid.Column="0"
+                IsChecked="{Binding Path=KeepHistory}"
+                Height="16"
+                Margin="13,1,10,1"/>
+            <qt:Spinner
+                Grid.Column="1"
+                Min="1"
+                Max="30"
+                Value="{Binding Path=TabHistoryCount}"/>
+            <Button x:Name="btnRecentTabsClear"
+                Click="btnRecentTabsClear_Click"
+                Content="{qt:Resx Key=Options_Page05_General, Index=5}"
+                IsEnabled="{Binding Path=HaveRecentTabs}"
+                Grid.Column="2"
+                Height="23"
+                Margin="5,2"
+                Width="75"/>
+            <CheckBox x:Name="chkKeepRecentFiles"
+                Content="{qt:Resx Key=Options_Page05_General, Index=6}"
+                Grid.Row="1"
+                IsChecked="{Binding Path=KeepRecentFiles}"
+                Height="16"
+                Margin="13,1,10,1"/>
+            <qt:Spinner 
+                Grid.Column="1"
+                Grid.Row="1"
+                Min="1"
+                Max="30"
+                Value="{Binding Path=FileHistoryCount}" />
+            <Button x:Name="btnRecentFilesClear"
+                Click="btnRecentFilesClear_Click"
+                Content="{qt:Resx Key=Options_Page05_General, Index=5}"
+                IsEnabled="{Binding Path=HaveRecentFiles}"
+                Grid.Column="2"
+                Grid.Row="1"
+                Height="23"
+                Margin="5,2"
+                Width="75"/>
+        </Grid>
+        <Label
+            Content="{qt:Resx Key=Options_Page05_General, Index=7}"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <StackPanel
+            Orientation="Horizontal">
+            <Label
+                Content="{qt:Resx Key=Options_Page05_General, Index=8}"
+                Height="16"
+                Margin="13,1,10,1"
+                Padding="0"/>
+            <qt:Spinner
+                Height="23"
+                Min="0"
+                Max="120"
+                Margin="5,2"
+                Value="{Binding Path=NetworkTimeout}"/>
+        </StackPanel>
+        <StackPanel
+            Orientation="Horizontal">
+            <CheckBox x:Name="chkAutoUpdate"
+                Content="{qt:Resx Key=Options_Page05_General, Index=9}"
+                IsChecked="{Binding Path=AutoUpdate}"
+                Style="{StaticResource CheckStyle}"/>
+            <Button x:Name="btnUpdateNow"
+                Click="btnUpdateNow_Click"
+                Content="{qt:Resx Key=Options_Page05_General, Index=10}"
+                Height="23"
+                Margin="5,2"
+                Width="75"/>
+        </StackPanel>
+        <Label
+            Content="{qt:Resx Key=Options_Page05_General, Index=11}"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <Button x:Name="btnExport"
+            Click="btnExport_Click"
+            Content="{qt:Resx Key=Options_Page05_General, Index=12}"
+            Height="23"
+            HorizontalAlignment="Left"
+            Margin="13,2,5,2"
+            Width="120"/>
+    </StackPanel>
+</qt:OptionsDialogTab>

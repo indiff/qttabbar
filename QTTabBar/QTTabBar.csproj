@@ -1,0 +1,825 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>QTTabBarLib</RootNamespace>
+    <AssemblyName>QTTabBar</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\QTTabBar Rebirth.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Reg%29|x86'">
+    <OutputPath>bin\x86\Debug %28No Reg%29\</OutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\QTTabBar.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\QTTabBar.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Reg%29|x64'">
+    <OutputPath>bin\x64\Debug %28No Reg%29\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>QTTabBar.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release64|AnyCPU'">
+    <OutputPath>bin\Release64\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\QTTabBar.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Visual_Studio_2010_Ultimate\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Visual_Studio_2010_Ultimate\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release64|x86'">
+    <OutputPath>bin\x86\Release64\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x86\Release\QTTabBar.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Visual_Studio_2010_Ultimate\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Visual_Studio_2010_Ultimate\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release64|x64'">
+    <OutputPath>bin\x64\Release64\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\QTTabBar.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets;C:\Visual_Studio_2010_Ultimate\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules;C:\Visual_Studio_2010_Ultimate\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="Ricciolo.Controls.TreeListView, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ffedd4b1334b06f5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\Ricciolo.Controls.TreeListView.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppsManager.cs" />
+    <Compile Include="AutoLoader.cs" />
+    <Compile Include="AutomationClasses.cs" />
+    <Compile Include="BreadcrumbBar.cs" />
+    <Compile Include="AbstractListView.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Interop\SHELLSTATE.cs" />
+    <Compile Include="OptionsDialog\Options03_Tweaks.xaml.cs">
+      <DependentUpon>Options03_Tweaks.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options04_Tooltips.xaml.cs">
+      <DependentUpon>Options04_Tooltips.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options05_General.xaml.cs">
+      <DependentUpon>Options05_General.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options06_Appearance.xaml.cs">
+      <DependentUpon>Options06_Appearance.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options07_Mouse.xaml.cs">
+      <DependentUpon>Options07_Mouse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options08_Keys.xaml.cs">
+      <DependentUpon>Options08_Keys.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options09_Groups.xaml.cs">
+      <DependentUpon>Options09_Groups.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options10_Apps.xaml.cs">
+      <DependentUpon>Options10_Apps.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options11_ButtonBar.xaml.cs">
+      <DependentUpon>Options11_ButtonBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options12_Plugins.xaml.cs">
+      <DependentUpon>Options12_Plugins.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options13_Language.xaml.cs">
+      <DependentUpon>Options13_Language.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options14_About.xaml.cs">
+      <DependentUpon>Options14_About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options02_Tabs.xaml.cs">
+      <DependentUpon>Options02_Tabs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\Options01_Window.xaml.cs">
+      <DependentUpon>Options01_Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PluginManager.cs" />
+    <Compile Include="PluginServer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resource_String_zh_CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource_String_zh_CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ShellContextMenu.cs" />
+    <Compile Include="EditableHeader.xaml.cs">
+      <DependentUpon>EditableHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileFolderEntryBox.xaml.cs">
+      <DependentUpon>FileFolderEntryBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FolderBrowserDialogEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GroupsManager.cs" />
+    <Compile Include="HookLibManager.cs" />
+    <Compile Include="Interop\BROWSEINFO.cs" />
+    <Compile Include="Interop\ShellConstants.cs" />
+    <Compile Include="Interop\TBBUTTON.cs" />
+    <Compile Include="Interop\TBBUTTONINFO.cs" />
+    <Compile Include="MarginCombo.xaml.cs">
+      <DependentUpon>MarginCombo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsDialog\OptionsDialog.xaml.cs">
+      <DependentUpon>OptionsDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RebarController.cs" />
+    <Compile Include="Resources_Image.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources_Image.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources_String.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources_String.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MiscClasses.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Spinner.xaml.cs">
+      <DependentUpon>Spinner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StaticReg.cs" />
+    <Compile Include="TrayIcon.cs" />
+    <Compile Include="TreeViewWrapper.cs" />
+    <Compile Include="Interop\INameSpaceTreeControl.cs" />
+    <Compile Include="Interop\IOleWindow.cs" />
+    <Compile Include="Interop\IFolderView2.cs" />
+    <Compile Include="Interop\IFolderViewOptions.cs" />
+    <Compile Include="Interop\IUIAutomationGridPattern.cs" />
+    <Compile Include="ShellBrowserEx.cs" />
+    <Compile Include="CreateNewGroupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataGridViewEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DropDownMenuBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DropDownMenuDropTarget.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DropDownMenuReorderable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExtendedItemsView.cs" />
+    <Compile Include="ExtendedSysListView32.cs" />
+    <Compile Include="FileHashComputerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FindFile.cs" />
+    <Compile Include="Delegates.cs" />
+    <Compile Include="IDLWrapper.cs" />
+    <Compile Include="ImageReservationKey.cs" />
+    <Compile Include="InstanceManager.cs" />
+    <Compile Include="Interop\BITMAPINFO.cs" />
+    <Compile Include="Interop\BITMAPINFOHEADER.cs" />
+    <Compile Include="Interop\CMINVOKECOMMANDINFO.cs" />
+    <Compile Include="Interop\IUIAutomationScrollPattern.cs" />
+    <Compile Include="Interop\IUIAutomationRegistrar.cs" />
+    <Compile Include="Interop\IUIAutomationSelectionItemPattern.cs" />
+    <Compile Include="Interop\UIAutomationPropertyInfo.cs" />
+    <Compile Include="Interop\IUIAutomationTreeWalker.cs" />
+    <Compile Include="Interop\COPYDATASTRUCT.cs" />
+    <Compile Include="Interop\CWPSTRUCT.cs" />
+    <Compile Include="Interop\DEV_BROADCAST_HDR.cs" />
+    <Compile Include="Interop\DEV_BROADCAST_VOLUME.cs" />
+    <Compile Include="Interop\DROPFILES.cs" />
+    <Compile Include="Interop\DropTargetWrapper.cs" />
+    <Compile Include="Interop\DTTOPTS.cs" />
+    <Compile Include="Interop\EnumWndProc.cs" />
+    <Compile Include="Interop\FOLDERSETTINGS.cs" />
+    <Compile Include="Interop\HDITEM.cs" />
+    <Compile Include="Interop\HookProc.cs" />
+    <Compile Include="Interop\ICONINFO.cs" />
+    <Compile Include="Interop\IContextMenu2.cs" />
+    <Compile Include="Interop\IDeskBand2.cs" />
+    <Compile Include="Interop\IEnumIDList.cs" />
+    <Compile Include="Interop\IEnumTravelLogEntry.cs" />
+    <Compile Include="Interop\IExtractImage.cs" />
+    <Compile Include="Interop\IFolderView.cs" />
+    <Compile Include="Interop\IOleCommandTarget.cs" />
+    <Compile Include="Interop\IPersistFolder2.cs" />
+    <Compile Include="Interop\IQueryInfo.cs" />
+    <Compile Include="Interop\ISharedBitmap.cs" />
+    <Compile Include="Interop\IShellBrowser.cs" />
+    <Compile Include="Interop\IShellFolder.cs" />
+    <Compile Include="Interop\IShellFolderView.cs" />
+    <Compile Include="Interop\IShellItem.cs" />
+    <Compile Include="Interop\IShellLinkW.cs" />
+    <Compile Include="Interop\IShellView.cs" />
+    <Compile Include="Interop\ITaskbarList.cs" />
+    <Compile Include="Interop\IThumbnailCache.cs" />
+    <Compile Include="Interop\ITravelLogEntry.cs" />
+    <Compile Include="Interop\ITravelLogStg.cs" />
+    <Compile Include="Interop\IUIAutomationElement.cs" />
+    <Compile Include="Interop\ListViewConstants.cs" />
+    <Compile Include="Interop\LocalThumbnailCache.cs" />
+    <Compile Include="Interop\LOGFONT.cs" />
+    <Compile Include="Interop\LVHITTESTINFO.cs" />
+    <Compile Include="Interop\LVITEM.cs" />
+    <Compile Include="Interop\MARGINS.cs" />
+    <Compile Include="Interop\MOUSEHOOKSTRUCT.cs" />
+    <Compile Include="Interop\MOUSEHOOKSTRUCTEX.cs" />
+    <Compile Include="Interop\NMCUSTOMDRAW.cs" />
+    <Compile Include="Interop\NMHDR.cs" />
+    <Compile Include="Interop\NMITEMACTIVATE.cs" />
+    <Compile Include="Interop\NMLISTVIEW.cs" />
+    <Compile Include="Interop\NMLVCUSTOMDRAW.cs" />
+    <Compile Include="Interop\NMLVDISPINFO.cs" />
+    <Compile Include="Interop\NMLVGETINFOTIP.cs" />
+    <Compile Include="Interop\NMLVKEYDOWN.cs" />
+    <Compile Include="Interop\NMLVODSTATECHANGE.cs" />
+    <Compile Include="Interop\NMTTDISPINFO.cs" />
+    <Compile Include="Interop\NMUPDOWN.cs" />
+    <Compile Include="Interop\PInvoke.cs" />
+    <Compile Include="Interop\IUIAutomation.cs" />
+    <Compile Include="Interop\RECT.cs" />
+    <Compile Include="Interop\RGBQUAD.cs" />
+    <Compile Include="Interop\SHELLEXECUTEINFO.cs" />
+    <Compile Include="Interop\ShellMethods.cs" />
+    <Compile Include="Interop\SHFILEINFO.cs" />
+    <Compile Include="Interop\SHFILEOPSTRUCT.cs" />
+    <Compile Include="Interop\SHFILEOPSTRUCT64.cs" />
+    <Compile Include="Interop\STRRET.cs" />
+    <Compile Include="Interop\STRRETinternal.cs" />
+    <Compile Include="Interop\TRACKMOUSEEVENT.cs" />
+    <Compile Include="Interop\TVHITTESTINFO.cs" />
+    <Compile Include="Interop\WM.cs" />
+    <Compile Include="Interop\WTS_THUMBNAILID.cs" />
+    <Compile Include="Interop\_IDropTarget.cs" />
+    <Compile Include="Interop\_ShellLinkObject.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="ListViewMonitor.cs" />
+    <Compile Include="ExtendedListViewCommon.cs" />
+    <Compile Include="MemoForm.cs" />
+    <Compile Include="MenuItemEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MenuUtility.cs" />
+    <Compile Include="MessageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NativeWindowController.cs" />
+    <Compile Include="UniqueList.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="QTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="QTabItem.cs" />
+    <Compile Include="QTButtonBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QTDesktopTool.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QTTabBarClass.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QTUtility.cs" />
+    <Compile Include="QTUtility2.cs" />
+    <Compile Include="SubDirTipForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TabSwitchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ThumbnailTooltipForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolStripClasses.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TxtEnc.cs" />
+    <Compile Include="WPFUtils.cs" />
+    <Compile Include="UpdateChecker.cs" />
+    <Compile Include="UpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WindowUtils.cs" />
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BandObjectLib\BandObjectLib.csproj">
+      <Project>{BDB3B670-A17B-483E-954C-52FC2B6FF9D3}</Project>
+      <Name>BandObjectLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QTPluginLib\QTPluginLib.csproj">
+      <Project>{749BE612-0CAA-444E-8704-4CF9D9A6F653}</Project>
+      <Name>QTPluginLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="SHDocVw">
+      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources_Image.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources_Image.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources_String.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources_String.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resource_String_zh_CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource_String_zh_CN.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="OptionsDialog\Options03_Tweaks.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options04_Tooltips.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options05_General.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options06_Appearance.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options07_Mouse.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options08_Keys.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options09_Groups.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options10_Apps.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options11_ButtonBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options12_Plugins.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options13_Language.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options14_About.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionsDialog\Options02_Tabs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EditableHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FileFolderEntryBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MarginCombo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OptionsDialog\Options01_Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OptionsDialog\OptionsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OptionsDialog\OptionsDialogResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Spinner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Resources\ButtonStrip24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgBack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgCloseButton_Cold.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgCloseButton_ColdAlt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgCloseButton_Hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgCloseButton_Press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgCurrent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgCurTabCloning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgCurTabDrag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgFolIconBG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgForward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgGroupRoot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgInsertL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgInsertR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgLocked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgNavBack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgNavFwd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgNewTab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgNewWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgOptions_Hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgOptions_NoFocus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgOptions_SelAndHot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgOptions_Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgSubDirBtnCold.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgSubDirBtnPress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgUserAppsRoot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_Check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_LB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_LB_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_LM.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_LM_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_MM.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_MM_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_MT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_MT_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_RB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_RB_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_RM.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_RM_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_RT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_RT_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menuClose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menuOpen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paypalBtn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TitleBar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ButtonStrip16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icoEmpty.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icoOption.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_LT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_LT_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_MB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgVistaMenu_MB_hot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgCapture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgNoCapture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgPlugin16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgPlugin24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabAbout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabApps.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabBBar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabDeskop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabGroups.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabKeys.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabLang.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabMisc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabMouse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabPlugin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabSkin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabTabs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabTooltips.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabTweaks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgTabWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Ricciolo.Controls.TreeListView.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="quizo\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <UsingTask TaskName="NotifyPropertyWeaverMsBuildTask.WeavingTask" AssemblyFile="$(SolutionDir)Tools\NotifyPropertyWeaverMsBuildTask.dll" />
+  <Target Name="AfterCompile">
+    <NotifyPropertyWeaverMsBuildTask.WeavingTask />
+  </Target>
+</Project>

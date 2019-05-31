@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ComboBox x:Class="QTTabBarLib.MarginCombo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    IsEditable="True">
+    <ComboBox.Resources>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{x:Static SystemColors.ControlTextColor}"/>
+    </ComboBox.Resources>
+    <ComboBox.ItemContainerStyle>
+        <Style TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+    </ComboBox.ItemContainerStyle>
+    <ComboBox.ItemTemplate>
+        <DataTemplate>
+            <StackPanel
+                Orientation="Horizontal"
+                Margin="{Binding Path=PanelMargin}"
+                MouseDown="MouseEater"
+                MouseUp="MouseEater"
+                Background="Transparent">
+                <Grid Width="75">
+                    <Label
+                        Content="{qt:Resx Key=MarginDropDown}"
+                        Padding="0"
+                        Margin="{Binding Path=LabelMargin}"
+                        VerticalAlignment="Center">
+                        <Label.Style>
+                            <Style TargetType="{x:Type Label}">
+                                <Setter Property="qt:Resx.Index" Value="{Binding Path=Index}"/>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                </Grid>
+                <TextBox
+                    PreviewTextInput="txtLTRB_PreviewTextInput"
+                    TextChanged="txtLTRB_TextChanged"
+                    Text="{Binding Path=TextBoxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Width="50" />
+            </StackPanel>
+        </DataTemplate>
+    </ComboBox.ItemTemplate>
+</ComboBox>

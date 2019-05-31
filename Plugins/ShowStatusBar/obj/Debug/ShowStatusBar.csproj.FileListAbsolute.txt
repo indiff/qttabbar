@@ -1,0 +1,5 @@
+D:\SVN\indiff\trunk\QTTabBar\Plugins\ShowStatusBar\bin\Debug\ShowStatusBar.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\ShowStatusBar\bin\Debug\ShowStatusBar.pdb
+D:\SVN\indiff\trunk\QTTabBar\Plugins\ShowStatusBar\obj\Debug\ShowStatusBar.csprojResolveAssemblyReference.cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\ShowStatusBar\obj\Debug\ShowStatusBar.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\ShowStatusBar\obj\Debug\ShowStatusBar.pdb

@@ -1,0 +1,8 @@
+You will need the Windows SDK in order to compile the C++ Hook DLL, and WiX 3.5 or higher to compile the installer.
+
+You will need Notify Property Weaver to compile the Options dialog, obtainable from
+http://visualstudiogallery.msdn.microsoft.com/bd351303-db8c-4771-9b22-5e51524fccd3
+
+Open the .sln in Visual Studio, select a configuration, and click Build > Build Solution to compile QTTabBar. The configurations Debug, Debug (No Plugins), and Release will also execute the Register script upon successful compilation, which will register the resulting binary with your computer.  Restart Explorer for the changes to take effect.  Beware, compiling these configurations will overwrite your original installation if you already have QTTabBar installed.
+
+Note that in order for the Register project to successfully register QTTabBar, it must be run with administrator privileges.  The easiest way to accomplish this is to simply run Visual Studio with administrator privileges, by right-clicking the shortcut and selecting "Run as Administrator" from the menu.

@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<qt:OptionsDialogTab 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    x:Class="QTTabBarLib.Options01_Window"
+    x:ClassModifier="internal"
+    DataContext="{Binding Path=WorkingConfig.window, RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <StackPanel
+        Margin="14,5,10,0"
+        Orientation="Vertical">
+        <StackPanel
+            Margin="0,0,0,4"
+            Orientation="Horizontal">
+            <Image
+                Source="{Binding Source={x:Static qt:Resources_Image.imgTabWindow}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Style="{StaticResource PageHeaderImageStyle}"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page01_Window, Index=0}"
+                FontSize="13"
+                VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <Label
+            Content="{qt:Resx Key=Options_Page01_Window, Index=1}"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Image
+                Height="64"
+                Margin="64,0,64,2"
+                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                Source="{Binding Source={x:Static qt:Resources_Image.imgCapture}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Stretch="None"
+                Width="64"/>
+            <Image
+                Grid.Column="1"
+                Height="64"
+                Margin="64,0,64,2"
+                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                Source="{Binding Source={x:Static qt:Resources_Image.imgNoCapture}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Stretch="None"
+                Width="64"/>
+            <qt:RadioButtonEx x:Name="radSingleWindowOn"
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                IsCheckedReal="{Binding Path=CaptureNewWindows}"
+                Width="160">
+                <AccessText
+                    Text="{qt:Resx Key=Options_Page01_Window, Index=2}"
+                    TextWrapping="Wrap"/>
+            </qt:RadioButtonEx>
+            <qt:RadioButtonEx x:Name="radSingleWindowOff"
+                Grid.Column="1"
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                IsCheckedReal="{Binding Path=CaptureNewWindows, Converter={StaticResource BoolInverterConverter}}"
+                Width="160">
+                <AccessText
+                    Text="{qt:Resx Key=Options_Page01_Window, Index=3}"
+                    TextWrapping="Wrap"/>
+            </qt:RadioButtonEx>
+        </Grid>
+        <Label
+            Content="{qt:Resx Key=Options_Page01_Window, Index=4}"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <StackPanel 
+            Margin="13,0"
+            Orientation="Horizontal">
+            <qt:FileFolderEntryBox x:Name="entDefaultLocation" 
+                Folder="True"
+                SelectedIDL="{Binding Path=DefaultLocation}"
+                ShowIcon="True" 
+                Width="400"/>
+        </StackPanel>
+        <Label x:Name="lblRestoreTabs"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=5}"
+            Style="{StaticResource SectionHeaderStyle}">
+            <!-- We use the Tag of the group's section header
+                    label to keep track of the property values, and
+                    all the radio buttons are bound to it. -->
+            <Label.Tag>
+                <MultiBinding 
+                    Converter="{StaticResource BoolJoinMultiConverter}"
+                    Mode="TwoWay">
+                    <Binding Path="RestoreSession" Mode="TwoWay"/>
+                    <Binding Path="RestoreOnlyLocked" Mode="TwoWay"/>
+                </MultiBinding>
+            </Label.Tag>
+        </Label>
+        <qt:RadioButtonEx x:Name="radRestoreTabsOff"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=6}"
+            GroupName="Session"
+            Style="{StaticResource CheckStyle}">
+            <qt:RadioButtonEx.IsCheckedReal>
+                <Binding
+                    Converter="{StaticResource StringEqualityConverter}"
+                    ConverterParameter="False,False"
+                    ElementName="lblRestoreTabs"
+                    Path="Tag"/>
+            </qt:RadioButtonEx.IsCheckedReal>
+        </qt:RadioButtonEx>    
+        <qt:RadioButtonEx x:Name="radRestoreTabsOn"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=7}"
+            GroupName="Session"
+            Style="{StaticResource CheckStyle}">
+            <qt:RadioButtonEx.IsCheckedReal>
+                <Binding
+                    Converter="{StaticResource StringEqualityConverter}"
+                    ConverterParameter="True,False"
+                    ElementName="lblRestoreTabs"
+                    Path="Tag"/>
+            </qt:RadioButtonEx.IsCheckedReal>
+        </qt:RadioButtonEx>
+        <qt:RadioButtonEx x:Name="radRestoreTabsLockedOnly"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=8}"
+            GroupName="Session"
+            Style="{StaticResource CheckStyle}">
+            <qt:RadioButtonEx.IsCheckedReal>
+                <Binding
+                    Converter="{StaticResource StringEqualityConverter}"
+                    ConverterParameter="True,True"
+                    ElementName="lblRestoreTabs"
+                    Path="Tag"/>
+            </qt:RadioButtonEx.IsCheckedReal>
+        </qt:RadioButtonEx>
+        <Label x:Name="lblCloseButton"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=9}"
+            Style="{StaticResource SectionHeaderStyle}">
+            <Label.Tag>
+                <MultiBinding 
+                    Converter="{StaticResource BoolJoinMultiConverter}"
+                    Mode="TwoWay">
+                    <Binding Path="IsChecked" ElementName="chkTrayClose"/>
+                    <Binding Path="CloseBtnClosesSingleTab" Mode="TwoWay"/>
+                    <Binding Path="CloseBtnClosesUnlocked" Mode="TwoWay"/>
+                </MultiBinding>
+            </Label.Tag>
+        </Label>
+        <qt:RadioButtonEx x:Name="radCloseBtnWindow"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=10}"
+            GroupName="Close"
+            IsEnabled="{Binding Path=IsChecked, ElementName=chkTrayClose, Converter={StaticResource BoolInverterConverter}}"
+            Style="{StaticResource CheckStyle}">
+            <qt:RadioButtonEx.IsCheckedReal>
+                <Binding
+                    Converter="{StaticResource StringEqualityConverter}"
+                    ConverterParameter="False,False,False"
+                    ElementName="lblCloseButton"
+                    Path="Tag"/>
+            </qt:RadioButtonEx.IsCheckedReal>
+        </qt:RadioButtonEx>
+        <qt:RadioButtonEx x:Name="radCloseBtnTabs"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=11}"
+            GroupName="Close"
+            IsEnabled="{Binding Path=IsChecked, ElementName=chkTrayClose, Converter={StaticResource BoolInverterConverter}}"
+            Style="{StaticResource CheckStyle}">
+            <qt:RadioButtonEx.IsCheckedReal>
+                <Binding
+                    Converter="{StaticResource StringEqualityConverter}"
+                    ConverterParameter="False,True,False"
+                    ElementName="lblCloseButton"
+                    Path="Tag"/>
+            </qt:RadioButtonEx.IsCheckedReal>
+        </qt:RadioButtonEx>
+        <qt:RadioButtonEx x:Name="radCloseBtnUnlocked"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=12}"
+            GroupName="Close"
+            IsEnabled="{Binding Path=IsChecked, ElementName=chkTrayClose, Converter={StaticResource BoolInverterConverter}}"
+            Style="{StaticResource CheckStyle}">
+            <qt:RadioButtonEx.IsCheckedReal>
+                <Binding
+                    Converter="{StaticResource StringEqualityConverter}"
+                    ConverterParameter="False,False,True"
+                    ElementName="lblCloseButton"
+                    Path="Tag"/>
+            </qt:RadioButtonEx.IsCheckedReal>
+        </qt:RadioButtonEx>
+        <Label
+            Content="{qt:Resx Key=Options_Page01_Window, Index=13}"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <CheckBox x:Name="chkTrayClose"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=14}"
+            IsChecked="{Binding Path=TrayOnClose}"
+            Style="{StaticResource CheckStyle}"/>
+        <CheckBox x:Name="chkTrayMinimize"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=15}"
+            IsChecked="{Binding Path=TrayOnMinimize}"
+            Style="{StaticResource CheckStyle}"/>
+    </StackPanel>
+</qt:OptionsDialogTab>

@@ -1,0 +1,6 @@
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTViewModeButton\bin\x64\Release64\QTViewModeButton.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTViewModeButton\obj\x64\Release64\QuizoPlugins.FolderViewModeWindow.resources
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTViewModeButton\obj\x64\Release64\QuizoPlugins.Resource.resources
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTViewModeButton\obj\x64\Release64\ViewModeButton.csproj.GenerateResource.Cache
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTViewModeButton\obj\x64\Release64\QTViewModeButton.dll
+D:\SVN\indiff\trunk\QTTabBar\Plugins\QTViewModeButton\obj\x64\Release64\ViewModeButton.csprojResolveAssemblyReference.cache

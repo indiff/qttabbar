@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<qt:OptionsDialogTab
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    x:Class="QTTabBarLib.Options07_Mouse"
+    x:ClassModifier="internal"
+    DataContext="{Binding Path=WorkingConfig.mouse, RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <DockPanel
+        LastChildFill="True"
+        Margin="14,5,10,16">
+        <StackPanel
+            DockPanel.Dock="Top"
+            Margin="0,0,0,4"
+            Orientation="Horizontal">
+            <Image
+                Source="{Binding Source={x:Static qt:Resources_Image.imgTabMouse}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                Style="{StaticResource PageHeaderImageStyle}"/>
+            <Label
+                Content="{qt:Resx Key=Options_Page07_Mouse, Index=0}"
+                FontSize="13"
+                VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <StackPanel
+            DockPanel.Dock="Bottom"
+            Margin="0,10,0,0"
+            Orientation="Vertical">
+            <Label
+                Content="{qt:Resx Key=Options_Page07_Mouse, Index=2}"
+                Style="{StaticResource SectionHeaderStyle}"/>
+            <CheckBox
+                Content="{qt:Resx Key=Options_Page07_Mouse, Index=3}"
+                Margin="13,0,1,0"/>
+        </StackPanel>
+        <TextBlock 
+            Text="{qt:Resx Key=Options_Page07_Mouse, Index=1}"
+            TextWrapping="Wrap"
+            DockPanel.Dock="Top"
+            Margin="5,10,5,15"/>
+        <qt:RestrictDesiredSize MinHeight="200">
+            <ListView x:Name="lvwMouseBindings"
+                BorderThickness="1.000001"
+                KeyDown="lvwMouseBindings_KeyDown"
+                SelectionMode="Single">
+                <ListBox.Style>
+                    <Style TargetType="{x:Type ListView}">
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Style>
+                </ListBox.Style>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Height" Value="20"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <DockPanel LastChildFill="True">
+                                    <Grid
+                                        DockPanel.Dock="Left"
+                                        Margin="4,2,0,1">
+                                        <Rectangle x:Name="rctAddMouseAction"
+                                            MouseDown="rctAddMouseAction_MouseDown"
+                                            Fill="LightGray"
+                                            Stroke="Gray"
+                                            StrokeThickness="1"
+                                            Height="16"
+                                            Width="16"
+                                            Tag="{Binding Path=Name}"/>
+                                        <TextBlock
+                                            MouseDown="rctAddMouseAction_MouseDown"
+                                            FontWeight="Bold"
+                                            Tag="{Binding Path=Name}"
+                                            Text="+"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"/>
+                                    </Grid>
+                                    <TextBlock 
+                                        DockPanel.Dock="Left"
+                                        Foreground="MediumBlue"
+                                        Margin="6,3,4,2"
+                                        Text="{qt:Resx Key=Options_Page07_Mouse}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="qt:Resx.Index" Value="{Binding Path=Name}"/>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <Border
+                                        BorderBrush="LightGray"
+                                        BorderThickness="1"
+                                        Height="1"
+                                        Margin="0,2,10,0"
+                                        SnapsToDevicePixels="True"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="{qt:Resx Key=Options_Page07_Mouse, Index=4}" Width="235">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Margin="16,0,0,0">
+                                        <TextBlock.Inlines>
+                                            <!-- The second Run needs to be on the same line as the first,
+                                                 or there will be an extra space inserted between them.
+                                                 Who's dumb idea was that?! -->
+                                            <qt:BindableRun Text="{Binding Path=GestureModifiers}"/><qt:BindableRun
+                                                            Text="{qt:Resx Key=Options_Page07_Mouse}">
+                                                <Run.Style>
+                                                    <Style TargetType="{x:Type Run}">
+                                                        <Setter Property="qt:Resx.Index" Value="{Binding Path=ButtonIdx}"/>
+                                                    </Style>
+                                                </Run.Style>
+                                            </qt:BindableRun>
+                                        </TextBlock.Inlines>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{qt:Resx Key=Options_Page07_Mouse, Index=5}" Width="235">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Stretch">
+                                        <TextBlock x:Name="txtMouseAction"
+                                            Padding="4,0,0,0"
+                                            Text="{qt:Resx Key=ShortcutKeys_ActionNames}"
+                                            TextAlignment="Left">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="qt:Resx.Index" Value="{Binding Path=ActionIdx}"/>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <ComboBox x:Name="cmbInlineMouseAction"
+                                            Height="22"
+                                            HorizontalAlignment="Stretch"
+                                            ItemsSource="{Binding Path=ComboBoxItems}"
+                                            IsDropDownOpen="{Binding Path=IsEditing, Mode=TwoWay}"
+                                            Loaded="cmbInlineMouseAction_Loaded"
+                                            Margin="0,-3"
+                                            SelectedValue="{Binding Path=ActionIdx, Mode=TwoWay}"
+                                            Visibility="Collapsed">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{qt:Resx Key=ShortcutKeys_ActionNames}">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Setter Property="qt:Resx.Index" Value="{Binding}"/>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </Grid>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsEditing}" Value="True">
+                                            <Setter 
+                                                TargetName="cmbInlineMouseAction" 
+                                                Property="Visibility"
+                                                Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=txtMouseAction, Path=IsMouseOver}" Value="True">
+                                            <Setter 
+                                                TargetName="cmbInlineMouseAction" 
+                                                Property="Visibility"
+                                                Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=cmbInlineMouseAction, Path=IsMouseOver}" Value="True">
+                                            <Setter 
+                                                TargetName="cmbInlineMouseAction" 
+                                                Property="Visibility"
+                                                Value="Visible"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </qt:RestrictDesiredSize>
+    </DockPanel>
+</qt:OptionsDialogTab>

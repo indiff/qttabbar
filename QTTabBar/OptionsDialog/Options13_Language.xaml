@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of QTTabBar, a shell extension for Microsoft
+    Windows Explorer.
+    Copyright (C) 2007-2010  Quizo, Paul Accisano
+
+    QTTabBar is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    QTTabBar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<qt:OptionsDialogTab
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:qt="clr-namespace:QTTabBarLib"
+    x:Class="QTTabBarLib.Options13_Language"
+    x:ClassModifier="internal"
+    DataContext="{Binding Path=WorkingConfig.lang, RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="OptionsDialogResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <DockPanel
+        LastChildFill="True"
+        Margin="14,5,10,0">
+        <StackPanel
+            DockPanel.Dock="Top"
+            Orientation="Vertical">
+            <StackPanel
+                Margin="0,0,0,4"
+                Orientation="Horizontal">
+                <Image
+                    Source="{Binding Source={x:Static qt:Resources_Image.imgTabLang}, Converter={StaticResource BitmapToImageSourceConverter}}"
+                    Style="{StaticResource PageHeaderImageStyle}"/>
+                <Label
+                    Content="{qt:Resx Key=Options_Page13_Language, Index=0}"
+                    FontSize="13"
+                    VerticalAlignment="Bottom"/>
+            </StackPanel>
+            <Label
+                Content="{qt:Resx Key=Options_Page13_Language, Index=1}"
+                Style="{StaticResource SectionHeaderStyle}"/>
+            <Grid Margin="13,1,0,1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <qt:RadioButtonEx x:Name="radUseLangFileNo"
+                    Content="{qt:Resx Key=Options_Page13_Language, Index=2}"
+                    Height="16"
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding Path=UseLangFile, Converter={StaticResource BoolInverterConverter}}"
+                    Margin="0,9"
+                    VerticalAlignment="Top"/>
+                <qt:RadioButtonEx x:Name="radUseLangFileYes"
+                    Content="{qt:Resx Key=Options_Page13_Language, Index=3}"
+                    Grid.Row="1"
+                    Height="16"
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding Path=UseLangFile}"
+                    Margin="0,9"
+                    VerticalAlignment="Top"/>
+                <ComboBox
+					x:Name="buildinCbx"
+                    SelectionChanged="buildinCbx_SelectionChanged"
+                    Grid.Column="1"
+                    Height="23"
+                    HorizontalAlignment="Left"
+                    Margin="10,5,0,5"
+                    VerticalAlignment="Top"
+                    SelectedValuePath="Content"
+                    SelectedIndex="{Binding Path=BuiltInLangSelectedIndex}"
+                    Width="150">
+                    <!--SelectedValue="{Binding Path=BuiltInLang}"-->
+					<ComboBoxItem Content="English"/>
+                    <ComboBoxItem Content="{qt:Resx Key=Options_Page13_Language, Index=11}"/>
+					<!--
+                    <ComboBoxItem Content="{qt:Resx Key=Options_Page13_Language, Index=11}"/>
+                    <ComboBoxItem Content="English"/> modify by qwop 
+					-->
+                </ComboBox>
+                <qt:FileFolderEntryBox
+                    FilterText="{qt:Resx Key=FileFilters, Index=1}"
+                    FilterExtensions="*.xml"
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    Height="23"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="{Binding Path=UseLangFile}"
+                    Margin="10,5,0,5"
+                    SelectedPath="{Binding Path=LangFile}"
+                    VerticalAlignment="Top"/>
+            </Grid>
+            <Label
+                Content="{qt:Resx Key=Options_Page13_Language, Index=4}"
+                Style="{StaticResource SectionHeaderStyle}"/>
+            <DockPanel Margin="13,1,0,1">
+                <StackPanel
+                    DockPanel.Dock="Right"
+                    Orientation="Vertical"
+                    VerticalAlignment="Top">
+                    <Button x:Name="btnPluginAdd"
+                        Click="btnPluginAdd_Click"
+                        Content="{qt:Resx Key=DialogButtons, Index=8}"
+                        Padding="6,1"
+                        Margin="5,0,0,5"/>
+                    <Button x:Name="btnPluginRemove"
+                        Click="btnPluginRemove_Click"
+                        Content="{qt:Resx Key=DialogButtons, Index=9}"
+                        Padding="6,1"
+                        Margin="5,5,0,0"/>
+                </StackPanel>
+                <ListBox x:Name="lstPluginFiles"/>
+            </DockPanel>
+            <Label
+                Content="{qt:Resx Key=Options_Page13_Language, Index=5}"
+                Style="{StaticResource SectionHeaderStyle}"/>
+            <ToggleButton x:Name="btnToggleLangEditor"
+                Content="{qt:Resx Key=Options_Page13_Language, Index=6}"
+                HorizontalAlignment="Left"
+                Padding="6,1"
+                Margin="13,2,5,2">
+                <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}">
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Visibility="{Binding ElementName=btnToggleLangEditor, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Width" Value="80"/>
+                        <Setter Property="Margin" Value="6,0,0,0"/>
+                        <Setter Property="Height" Value="22"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button x:Name="btnClear"
+                    Click="btnClear_Click"
+                    Content="{qt:Resx Key=DialogButtons, Index=6}"/>
+                <Button x:Name="btnLoad"
+                    Click="btnLoad_Click"
+                    Content="{qt:Resx Key=DialogButtons, Index=14}"/>
+                <Button x:Name="btnSave"
+                    Click="btnSave_Click"
+                    Content="{qt:Resx Key=DialogButtons, Index=15}"/>
+            </StackPanel>
+        </StackPanel>
+        <qt:RestrictDesiredSize
+            MinHeight="200"
+            Visibility="{Binding ElementName=btnToggleLangEditor, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ListView x:Name="lvwLangEditor"
+                Margin="0,6"
+                KeyDown="lvwLangEditor_KeyDown">
+                <ListBox.Style>
+                    <Style TargetType="{x:Type ListView}">
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Style>
+                </ListBox.Style>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Padding" Value="5,2"/>
+                        <EventSetter Event="Selected" Handler="lvwLangEditor_ItemSelected"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <DockPanel LastChildFill="True">
+                                    <TextBlock 
+                                        DockPanel.Dock="Left"
+                                        Foreground="MediumBlue"
+                                        Margin="20, 1, 4, 4"
+                                        Text="{Binding Path=Name}"/>
+                                    <Border
+                                        BorderBrush="LightGray"
+                                        BorderThickness="1"
+                                        Height="1"
+                                        Margin="0,0,10,0"
+                                        SnapsToDevicePixels="True"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="{qt:Resx Key=Options_Page13_Language, Index=7}" Width="250">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Margin="6,0"
+                                        Text="{Binding Path=Original}"
+                                        TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="{qt:Resx Key=Options_Page13_Language, Index=8}" Width="250">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DataTemplate.Resources>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Setter Property="TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataTemplate.Resources>
+                                    <qt:EditableHeader
+                                        IsEditing="{Binding Path=IsEditing}"
+                                        Margin="0,-1"
+                                        MinWidth="80"
+                                        Text="{Binding Path=Translated}"/>
+                                </DataTemplate>                                    
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>                    
+            </ListView>
+        </qt:RestrictDesiredSize>
+    </DockPanel>
+</qt:OptionsDialogTab>
