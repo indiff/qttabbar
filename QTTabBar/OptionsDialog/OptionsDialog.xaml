@@ -27,9 +27,7 @@
     Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
     Height="650"
     Title="{qt:Resx Key=OptionsDialog, Index=0}"
-    Width="750"
-    Left="0" Top="0"
-    >
+    Width="750">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -93,7 +91,6 @@
             ItemsSource="{Binding Items, ElementName=tabbedPanel}"
             Margin="3,3,0,0"
             SelectionMode="Single"
-            PreviewMouseWheel="lstCategories_PreviewMouseWheel"
             Width="136">
             <ListBox.Resources>
                 <SolidColorBrush 
@@ -115,25 +112,20 @@
                     <EventSetter
                         Event="PreviewMouseDown"
                         Handler="CategoryListBoxItem_PreviewMouseDown" />
-                    <EventSetter
-                        Event="PreviewMouseWheel"
-                        Handler="CategoryListBoxItem_PreviewMouseWheel" />
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid
-                        Background="#d8ded9"
+                        Background="White"
                         Height="25"
                         Margin="0,1"
-                        Cursor="Hand"
                         Width="128">
                         <Image x:Name="imgCategorySelection" 
                             Visibility="Collapsed"/>
                         <TextBlock
                             Margin="10,1"
-                            Text="{qt:Resx Key=TabBar_Option_Genre}"
-							HorizontalAlignment="center"
+                            Text="{qt:Resx Key=TabBar_Option_Genre}" 
                             VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">

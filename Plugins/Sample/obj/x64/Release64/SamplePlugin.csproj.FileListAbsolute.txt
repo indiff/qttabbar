@@ -1,7 +1,0 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\bin\x64\Release64\SampleSplitButton.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\bin\x64\Release64\SampleSplitButton.pdb
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\x64\Release64\QuizoPlugins.Resource.resources
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\x64\Release64\SamplePlugin.csproj.GenerateResource.Cache
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\x64\Release64\SampleSplitButton.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\x64\Release64\SampleSplitButton.pdb
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\x64\Release64\SamplePlugin.csprojResolveAssemblyReference.cache

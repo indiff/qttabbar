@@ -44,7 +44,7 @@ namespace QTTabBarLib {
         internal const string IMAGEKEY_MYNETWORK = "mynetwork";
         internal const string IMAGEKEY_NOEXT = "noext";
         internal const string IMAGEKEY_NOIMAGE = "noimage";
-        internal const bool IS_DEV_VERSION = true;  // <----------------- Change me before releasing!
+        internal const bool IS_DEV_VERSION = false;  // <----------------- Change me before releasing!
         internal static readonly bool IsRTL = CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
         internal static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
         internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
@@ -78,8 +78,8 @@ namespace QTTabBarLib {
         internal static string[] ResMain;
         internal static string[] ResMisc;
         internal static bool RestoreFolderTree_Hide;
-        internal static SolidBrush sbAlternate;
-        internal static Font StartUpTabFont;
+        // internal static SolidBrush sbAlternate;
+       // internal static Font StartUpTabFont;
         internal static Dictionary<string, string[]> TextResourcesDic;
         internal static byte WindowAlpha = 0xff;
 
@@ -520,8 +520,8 @@ namespace QTTabBarLib {
 
         private static Regex singleLinebreakAtStart = new Regex(@"^(\r\n)?");
         public static Dictionary<string, string[]> ReadLanguageFile(string path) {
-            const string linebreak = "\r\n";
-            const string linebreakLiteral = @"\r\n";
+          //  const string linebreak = "\r\n";
+          //  const string linebreakLiteral = @"\r\n";
 
             //We have to remove the first linebreak in the XML element's value, before we can split 
             //on the linebreak. It's there in the XML, when the XML is created using the editor.

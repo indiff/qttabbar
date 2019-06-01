@@ -1,9 +1,0 @@
-QTButtonBar： 负责 按钮栏 的处理， 图片，事件处理
-
-	355行: BII_MISCTOOL: // 复制工具的
-
-添加 鼠标操作
-QTTabBarClass.DoBindAction
-
-按钮栏操作事件
-QTTabBarClass.DoFileTools

@@ -1,5 +1,0 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\CreateNewItem\bin\Debug\CreateNewItem.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\CreateNewItem\bin\Debug\CreateNewItem.pdb
-D:\SVN\indiff\trunk\QTTabBar\Plugins\CreateNewItem\obj\Debug\CreateNewItem.csprojResolveAssemblyReference.cache
-D:\SVN\indiff\trunk\QTTabBar\Plugins\CreateNewItem\obj\Debug\CreateNewItem.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\CreateNewItem\obj\Debug\CreateNewItem.pdb

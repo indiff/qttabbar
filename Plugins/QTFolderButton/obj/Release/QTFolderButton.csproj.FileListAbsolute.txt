@@ -1,5 +1,5 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFolderButton\bin\Release\FolderTreeButton.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFolderButton\obj\Release\QuizoPlugins.Resource.resources
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFolderButton\obj\Release\QTFolderButton.csproj.GenerateResource.Cache
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFolderButton\obj\Release\FolderTreeButton.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTFolderButton\obj\Release\QTFolderButton.csprojResolveAssemblyReference.cache
+D:\code\QTTabBar_2015\Plugins\QTFolderButton\bin\Release\FolderTreeButton.dll
+D:\code\QTTabBar_2015\Plugins\QTFolderButton\obj\Release\QuizoPlugins.Resource.resources
+D:\code\QTTabBar_2015\Plugins\QTFolderButton\obj\Release\QTFolderButton.csproj.GenerateResource.Cache
+D:\code\QTTabBar_2015\Plugins\QTFolderButton\obj\Release\FolderTreeButton.dll
+D:\code\QTTabBar_2015\Plugins\QTFolderButton\obj\Release\QTFolderButton.csprojResolveAssemblyReference.cache

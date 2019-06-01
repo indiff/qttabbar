@@ -1,7 +1,0 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTCmd\bin\Release\QTCmd.exe.config
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTCmd\bin\Release\QTCmd.exe
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTCmd\bin\Release\QTCmd.pdb
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTCmd\bin\Release\Ricciolo.Controls.TreeListView.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTCmd\obj\x86\Release\QTCmd.exe
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTCmd\obj\x86\Release\QTCmd.pdb
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTCmd\obj\x86\Release\QTCmd.csprojResolveAssemblyReference.cache

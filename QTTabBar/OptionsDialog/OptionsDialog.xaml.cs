@@ -32,15 +32,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using QTTabBarLib.Interop;
-using Rectangle = System.Drawing.Rectangle;
 using Font = System.Drawing.Font;
 using Bitmap = System.Drawing.Bitmap;
 using Keys = System.Windows.Forms.Keys;
-using Screen = System.Windows.Forms.Screen;
-using System.Reflection;
-using System.IO;
-using System.Text;
-
 
 namespace QTTabBarLib {
     /// <summary>
@@ -77,19 +71,12 @@ namespace QTTabBarLib {
                     else {
                         instance.Dispatcher.Invoke(new Action(() => {
                             if(instance.WindowState == WindowState.Minimized) {
-                               // MessageBox.Show("instance" + " -> " + instance.WindowState + " ->" + instance.WindowState) ;
                                 instance.WindowState = WindowState.Normal;
                             }
                             else {
                                 instance.Topmost = true;
                                 instance.Activate();
                                 instance.Topmost = false;
-
-                                // add by qwop.
-
-                                /*MessageBox.Show("activate" + " -> " + instance.lastSelected);
-                                if (null != instance.lastSelected)
-                                instance.lastSelected.IsSelected = true;*/
                             }
                         }));
                     }
@@ -123,13 +110,6 @@ namespace QTTabBarLib {
                 }
             };
             instance.Show();
-
-            /***  TO delete */
-            // load the remember lastSelectedIndex by qwop.
-            // MessageBox.Show("" + lastSelectedIndex);
-            instance.lstCategories.SelectedIndex = instance.WorkingConfig.desktop.lstSelectedIndex;
-            /***  TO delete */
-
             Dispatcher.Run();
         }
 
@@ -173,102 +153,7 @@ namespace QTTabBarLib {
                 if(ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
                 tab.InitializeConfig();
             }
-
-
-            //////////// setting by qwop .
-            setByQwop();
         }
-
-
-        #region setting by qwop
-        /// <summary>
-        /// 利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度。
-        /// 可以生成 WorkingConfig 配置 初始化的 值。 
-        /// 方法: generateInitConfig()
-        /// </summary>
-        private void setByQwop() {
- /*           // 必须使用  using Rectangle = System.Drawing.Rectangle;
-            // 不然会有二义性 ambiguous
-            Rectangle rect = Screen.PrimaryScreen.Bounds;
-            // (屏幕的宽度 - 窗体宽度) / 2
-            double left = (rectangle.Width - this.Width) / 2;
-            double top = (rectangle.Height); 
-            // 向左偏移 10 个像素
-            left -= 10;
-            this.Left = left;
-*/
-            Rectangle rect = Screen.PrimaryScreen.Bounds;
-            this.Left = ((rect.Width - this.Width) / 2) - 10;
-            this.Top = 0; //  rect.Height * (0.15);
-
-
-            ///////////////////// change last selected index.
-            //lstCategories.SelectedIndex = WorkingConfig.desktop.lstSelectedIndex;
-
-            ////////////////////////////////////////
-            // generateInitConfig();
-        }
-
-        /// <summary>
-        /// 反射当前的 WorkingConfig 配置的内部属性所有的值
-        /// 如果内部的值为空则生成赋空.
-        /// Author: qwop
-        /// Date:   2012-07-03
-        /// </summary>
-        private void generateInitConfig() {
-            StreamWriter sw = File.CreateText("c:\\qttabbar_default_config_init.txt");
-
-            PropertyInfo[] configProperties = WorkingConfig.GetType().GetProperties();
-            Object _configObj = null;
-            PropertyInfo[] _configObjProperties = null;
-            foreach (PropertyInfo p in configProperties)
-            {
-                _configObj = p.GetValue(WorkingConfig, null);
-
-                if (_configObj != null)
-                {
-                    _configObjProperties = _configObj.GetType().GetProperties();
-                    sw.WriteLine(_configObj);
-                    foreach (PropertyInfo _configProperty in _configObjProperties)
-                    {
-                        StringBuilder b = new StringBuilder();
-
-                        object po = _configProperty.GetValue(_configObj, null);
-
-                        if (null != po)
-                            if (_configProperty.PropertyType == typeof(String))
-                            {
-                                b.Append("\"").Append(_configProperty.GetValue(_configObj, null)).Append("\"");
-                            }
-                            else if (_configProperty.PropertyType.IsArray) /* property type is array. */
-                            {
-                                /* join like this "new System.Int32[] {1, 2, 3}; " */
-                                Array arr = (Array)_configProperty.GetValue(_configObj, null);
-                                b.Append("new ").Append(arr.GetType()).Append("{");
-                                for (int i = 0; i < arr.Length; i++)
-                                {
-                                    b.Append(arr.GetValue(i)).Append(",");
-                                }
-                                b.Append("}");
-                            }
-                            else
-                            {
-                                b.Append(_configProperty.GetValue(_configObj, null).ToString().ToLower());
-                            }
-                        else
-                        {
-                            b.Append("null");
-                        }
-                        b.Append(";");
-                        sw.WriteLine(_configProperty.Name + "\t=\t" + b.ToString());
-                    }// end for each 
-                }
-                sw.WriteLine();
-            }
-            sw.Flush();
-            sw.Close();         
-        }
-        #endregion
 
         private void UpdateOptions() {
             foreach(OptionsDialogTab tab in tabbedPanel.Items) {
@@ -285,123 +170,9 @@ namespace QTTabBarLib {
         }
 
         private void CategoryListBoxItem_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            ListBoxItem lbt = ((ListBoxItem)sender);
-            lbt.Focus();
-            lbt.IsSelected = true;
+            ((ListBoxItem)sender).Focus();
+            ((ListBoxItem)sender).IsSelected = true;
             e.Handled = true;
-
-            // the last selected list box item.
-            WorkingConfig.desktop.lstSelectedIndex = lstCategories.SelectedIndex;
-        }
-
-        private void CategoryListBoxItem_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            
-//            ListBoxItem lbt = ((ListBoxItem)sender);
-//           
-//            lbt.Focus();
-//            lbt.IsSelected = true;
-//            e.Handled = true;
-//
-//            // the last selected list box item.
-//            WorkingConfig.desktop.lstSelectedIndex = lstCategories.SelectedIndex;
-//
-//
-//           
-/*
-            if (e.Delta < 0)
-            {
-                MessageBox.Show("fucdk you:" + e.Delta);
-            }
-            else
-            {
-                MessageBox.Show("fucdk you:" + e.Delta);
-            }
-*/
-        }
-
-
-        private void lstCategories_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-
-  /*          
-            int index = WorkingConfig.desktop.lstSelectedIndex;
-            int maxSize = 14 - 1;
-            int minSize = 0;
-            if (e.Delta < 0)
-            {
-                if (index == minSize)
-                {
-                    index = maxSize;
-                }
-                else
-                {
-                    index--;
-                }
-            }
-            else
-            {
-                if (index == maxSize)
-                {
-                    index = minSize;
-                }
-                else
-                {
-                    index++;
-                }
-            }
-
-            bool up = true, traverseFolders = true;
-            ITreeViewItem sel = lstCategories.SelectedItem as ITreeViewItem;
-            if (sel == null) return;
-            IList list = sel.ParentList;
-            index = list.IndexOf(sel);
-            if (index == -1) return;
-            bool expanded = sel.IsExpanded;
-            if (up && index == 0)
-            {
-                if (!traverseFolders || sel.ParentItem == null) return;
-                IList parentList = sel.ParentItem.ParentList;
-                int parentIndex = parentList.IndexOf(sel.ParentItem);
-                if (parentIndex == -1) return;
-                list.RemoveAt(index);
-                parentList.Insert(parentIndex, sel);
-            }
-            else if (!up && index == list.Count - 1)
-            {
-                if (!traverseFolders || sel.ParentItem == null) return;
-                IList parentList = sel.ParentItem.ParentList;
-                int parentIndex = parentList.IndexOf(sel.ParentItem);
-                if (parentIndex == -1) return;
-                list.RemoveAt(index);
-                parentList.Insert(parentIndex + 1, sel);
-            }
-            else
-            {
-                ITreeViewItem next = (ITreeViewItem)list[index + (up ? -1 : 1)];
-                if (traverseFolders && next.ChildrenList != null && (next.IsExpanded || next.ChildrenList.Count == 0))
-                {
-                    list.RemoveAt(index);
-                    list = next.ChildrenList;
-                    list.Insert(up ? list.Count : 0, sel);
-                    next.IsExpanded = true;
-                }
-                else
-                {
-                    list.RemoveAt(index);
-                    list.Insert(index + (up ? -1 : 1), sel);
-                }
-            }
-            sel.IsExpanded = expanded;
-            sel.IsSelected = true;
-*/
-           
-//			MessageBox.Show( "" + index  + " " + lstCategories.Items[index].ToString() );
-         /*   ListBoxItem lbt = (ListBoxItem)lstCategories.Items[index];
-			lbt.Focus();
-			lbt.IsSelected = true;
-			e.Handled = true;
-			lstCategories.SelectedIndex = WorkingConfig.desktop.lstSelectedIndex = index; */
         }
 
         private void btnResetPage_Click(object sender, RoutedEventArgs e) {

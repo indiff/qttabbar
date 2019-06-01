@@ -1,7 +1,7 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\bin\Release\SampleSplitButton.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\bin\Release\SampleSplitButton.pdb
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\Release\QuizoPlugins.Resource.resources
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\Release\SamplePlugin.csproj.GenerateResource.Cache
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\Release\SampleSplitButton.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\Release\SampleSplitButton.pdb
-D:\SVN\indiff\trunk\QTTabBar\Plugins\Sample\obj\Release\SamplePlugin.csprojResolveAssemblyReference.cache
+D:\code\QTTabBar_2015\Plugins\Sample\bin\Release\SampleSplitButton.dll
+D:\code\QTTabBar_2015\Plugins\Sample\bin\Release\SampleSplitButton.pdb
+D:\code\QTTabBar_2015\Plugins\Sample\obj\Release\QuizoPlugins.Resource.resources
+D:\code\QTTabBar_2015\Plugins\Sample\obj\Release\SamplePlugin.csproj.GenerateResource.Cache
+D:\code\QTTabBar_2015\Plugins\Sample\obj\Release\SampleSplitButton.dll
+D:\code\QTTabBar_2015\Plugins\Sample\obj\Release\SampleSplitButton.pdb
+D:\code\QTTabBar_2015\Plugins\Sample\obj\Release\SamplePlugin.csprojResolveAssemblyReference.cache

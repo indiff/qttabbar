@@ -53,7 +53,7 @@ namespace QuizoPlugins {
         private const string CN_CabinetWClass = "CabinetWClass";
         private const string CN_Explorer = "";
 
-        private bool fFillAllScreen = true;
+        private bool fFillAllScreen;
         private int windowColumnLength = 2;
         private int windowRowLength = 3;
 

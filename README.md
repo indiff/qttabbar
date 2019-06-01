@@ -8,3 +8,9 @@ https://github.com/indiff/qttabbar/releases/download/1.0/QTTabBar.Setup.msi
 - 先安装QTTabBar 
 - 资源管理器中，组织—>布局—>菜单栏
 - 右键菜单栏右方的空白地区—>勾选QTTabBar等工具栏—>按Alt+M—>重启explorer或重启计算机
+
+# 编译
+* 安装 wix311.exe
+* 安装 visual studio 2010
+* 安装插件 NotifyPropertyWeaverVsPackage.vsix
+* Qttabbar项目 添加引用 Ricciolo.Controls.TreeListView, 路径 QTTabBar\Resources\Ricciolo.Controls.TreeListView.dll

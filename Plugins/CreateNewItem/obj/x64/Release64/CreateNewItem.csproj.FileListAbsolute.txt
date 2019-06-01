@@ -1,3 +1,0 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\CreateNewItem\bin\x64\Release64\CreateNewItem.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\CreateNewItem\obj\x64\Release64\CreateNewItem.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\CreateNewItem\obj\x64\Release64\CreateNewItem.csprojResolveAssemblyReference.cache

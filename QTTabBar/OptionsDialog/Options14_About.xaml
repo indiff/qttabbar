@@ -99,7 +99,7 @@
 			<!-- add by qwop start -->
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=6}" FontWeight="Bold"/>
-                <Label Content="qwop(qwop@w.cn QQ:76430850)"/>
+                <Label Content="qwop(qwop@live.cn QQ:76430850)"/>
             </StackPanel>
 
             <Label

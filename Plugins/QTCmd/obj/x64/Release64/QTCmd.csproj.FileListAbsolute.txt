@@ -1,1 +1,0 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTCmd\obj\x64\Release64\QTCmd.csprojResolveAssemblyReference.cache

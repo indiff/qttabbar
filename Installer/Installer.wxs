@@ -30,8 +30,14 @@
     <?define Manufacturer="qwop"?>
     <?define ProductCode="*"?>
     <?define StrongName="QTTabBar, Version=1.0.0.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
-    
-    <!-- Language code page 1252 1033-->
+    <?define MyLanguage="1033"?>  
+    <!-- Language code page 1252 1033
+      语言                              语言-国家     Language      Codepage
+English                            en-us             1033               1252
+Simplified Chinese            zh-cn              2052               936
+Traditional Chinese           zh-tw              1028                950
+Language="1033"
+    -->
     <Product Id="$(var.ProductCode)"
              UpgradeCode="$(var.UpgradeCode)"
              Name="$(var.SkuName) $(var.VersionString)"
@@ -43,7 +49,10 @@
                  Description="$(var.SkuName) $(var.VersionString)"
                  ReadOnly="yes"/>
         <Media Id="1" Cabinet="$(var.SkuName).cab" EmbedCab="yes" />
+
         <WixVariable Id="WixUILicenseRtf" Value="GPL3.rtf" />
+
+
         <Upgrade Id="$(var.UpgradeCode)">
             <UpgradeVersion Minimum="$(var.ProductVersion)" IncludeMinimum="no" OnlyDetect="yes" Property="NEWPRODUCTFOUND" />
             <UpgradeVersion Minimum="$(var.RTMProductVersion)" IncludeMinimum="yes" OnlyDetect="no" Maximum="$(var.ProductVersion)" IncludeMaximum="no" Property="UPGRADEFOUND" />
@@ -82,12 +91,7 @@
                     <Component Id="HookLibrary64" Win64="yes" Guid="27af1a85-9a07-4c79-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                         <File Id="f6" Name="QTHookLib64.dll" Source="..\QTHookLib\bin\Release\QTHookLib64.dll" KeyPath="yes" />
                     </Component>
-                  
-                  <!-- Add by qwop start -->
-                  <Component Id="QTQuick" Win64="yes" DisableRegistryReflection="yes">
-                    <File Id="f7" Name="QTQuick.dll" Source="..\Plugins\QTQuick\bin\Release\QTQuick.dll" KeyPath="yes" />
-                  </Component>
-                  <!-- Add by qwop   end -->
+                    
                     
                     <?foreach arch in x86;x64 ?>
                         <?if $(var.arch) = x64?>
@@ -101,15 +105,17 @@
                             <?if $(var.arch) = x64?>
                                 <Condition>VersionNT64</Condition>
                             <?endif?>
-                            <RegistryKey Root="HKLM" Key="Software\Microsoft\Internet Explorer\Toolbar" Action="create" >
+                             <!-- Action="createAndRemoveOnUninstall" has been deprecated  -->
+                            <RegistryKey Root="HKLM" Key="Software\Microsoft\Internet Explorer\Toolbar"  ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                 <RegistryValue Name="{d2bf470e-ed1c-487f-a333-2bd8835eb6ce}" Value="QTTabBar" Type="string" Action="write" KeyPath="yes" />
                             </RegistryKey>
+                          
                         </Component>
                         <Component Id="QTButtonBarReg_$(var.arch)" Win64="$(var.win64)" DisableRegistryReflection="$(var.win64)">
                             <?if $(var.arch) = x64?>
                                 <Condition>VersionNT64</Condition>
                             <?endif?>
-                            <RegistryKey Root="HKLM" Key="Software\Microsoft\Internet Explorer\Toolbar" Action="create" >
+                            <RegistryKey Root="HKLM" Key="Software\Microsoft\Internet Explorer\Toolbar"   ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                 <RegistryValue Name="{d2bf470e-ed1c-487f-a666-2bd8835eb6ce}" Value="QTButtonBar" Type="string" Action="write" KeyPath="yes"/>
                             </RegistryKey>
                         </Component>
@@ -117,7 +123,7 @@
                             <?if $(var.arch) = x64?>
                                 <Condition>VersionNT64</Condition>
                             <?endif?>
-                            <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\Browser Helper Objects\{d2bf470e-ed1c-487f-a777-2bd8835eb6ce}" Action="createAndRemoveOnUninstall">
+                            <RegistryKey Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Explorer\Browser Helper Objects\{d2bf470e-ed1c-487f-a777-2bd8835eb6ce}" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                 <RegistryValue Value="QTTabBar AutoLoader" Type="string" Action="write" KeyPath="yes"/>
                             </RegistryKey>
                         </Component>
@@ -125,7 +131,7 @@
                             <?if $(var.arch) = x64?>
                                 <Condition>VersionNT64</Condition>
                             <?endif?>
-                            <RegistryKey Root="HKLM" Key="Software\QTTabBar" Action="createAndRemoveOnUninstall">
+                            <RegistryKey Root="HKLM" Key="Software\QTTabBar" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                 <RegistryValue Name="InstallDate" Value="[Date] [Time]" Type="string" Action="write" KeyPath ="yes" />
                             </RegistryKey>
                         </Component>
@@ -156,21 +162,21 @@
                                     <Condition>VersionNT64</Condition>
                                 <?endif?>
 
-                                <Class Id="$(var.compGUID)" Context="InprocServer32"   Description="$(var.compDesc)" ThreadingModel="both" ForeignServer="mscoree.dll" >
+                                <Class Id="$(var.compGUID)" Context="InprocServer32" Description="$(var.compDesc)" ThreadingModel="both" ForeignServer="mscoree.dll" >
                                     <ProgId Id="QTTabBarLib.$(var.compName)" Description="QTTabBarLib.$(var.compName)" />
                                 </Class>
-                                <RegistryKey Root="HKCR" Key="CLSID\$(var.compGUID)" Action="createAndRemoveOnUninstall">
+                                <RegistryKey Root="HKCR" Key="CLSID\$(var.compGUID)" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                     <?if $(var.compName) = QTCoTaskBarClass?>
-                                        <RegistryKey Key="Implemented Categories\{00021492-0000-0000-C000-000000000046}" Action="createAndRemoveOnUninstall" />
+                                        <RegistryKey Key="Implemented Categories\{00021492-0000-0000-C000-000000000046}" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes" />
                                     <?endif?>                                        
-                                    <RegistryKey Key="Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Action="createAndRemoveOnUninstall" />
+                                    <RegistryKey Key="Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes" />
                                     <RegistryValue Name="MenuText" Value="$(var.compDesc)" Type="string" Action="write" />
                                     <RegistryValue Name="HelpText" Value="$(var.compDesc)" Type="string" Action="write" />
-                                    <RegistryKey Key="InprocServer32" Action="createAndRemoveOnUninstall">
+                                    <RegistryKey Key="InprocServer32" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                         <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                         <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
                                         <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />
-                                        <RegistryKey Key="1.0.0.0" Action="createAndRemoveOnUninstall">
+                                        <RegistryKey Key="1.0.0.0" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                             <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                             <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
                                             <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />
@@ -192,10 +198,6 @@
             <ComponentRef Id="QTTabBar" />
             <ComponentRef Id="HookLibrary32" />
             <ComponentRef Id="HookLibrary64" />
-
-            <!-- add by qwop -->
-            <ComponentRef Id="QTQuick" />
-            <!-- add by qwop -->
 
             <?foreach arch in x86;x64 ?>
                 <!-- RegKeys -->
@@ -241,13 +243,14 @@
         </InstallUISequence>
 
         <UI>
-            <ProgressText Action="RollbackCleanup">Compiling native images</ProgressText>
+
+          <ProgressText Action="RollbackCleanup">!(loc.COMPILE_IMG)</ProgressText>
             <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="CloseAndReopen">(NOT Installed) AND WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1</Publish>
           <!-- # Custom controls for the license screen.. -->
         </UI>
-
-        <Property Id="ALLUSERS" Value="1" />
-        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Close all Explorer windows and reopen them as tabs" />
+      
+      <Property Id="ALLUSERS" Value="1" />
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.CLOSE_TABS)" />
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
         <UIRef Id="CustomWixUI_Minimal" />
     </Product>

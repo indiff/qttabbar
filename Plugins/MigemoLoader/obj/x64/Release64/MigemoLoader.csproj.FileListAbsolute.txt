@@ -1,5 +1,0 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\MigemoLoader\bin\x64\Release64\MigemoLoader.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\MigemoLoader\obj\x64\Release64\QuizoPlugins.MigemoOptionForm.resources
-D:\SVN\indiff\trunk\QTTabBar\Plugins\MigemoLoader\obj\x64\Release64\MigemoLoader.csproj.GenerateResource.Cache
-D:\SVN\indiff\trunk\QTTabBar\Plugins\MigemoLoader\obj\x64\Release64\MigemoLoader.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\MigemoLoader\obj\x64\Release64\MigemoLoader.csprojResolveAssemblyReference.cache

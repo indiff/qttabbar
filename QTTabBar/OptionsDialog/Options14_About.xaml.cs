@@ -31,7 +31,9 @@ namespace QTTabBarLib {
             hypSite.RequestNavigate += (sender, args) => Process.Start(Resources_String.SiteURL);
 
             // add by qwop 2012/06/16 http://qwop.iteye.com
-            string mySite = "http://code.google.com/p/qwop-software/"; 
+            //string mySite = "http://code.google.com/p/qwop-software/"; 
+			string mySite = "https://github.com/indiff/qttabbar"; 
+			
             runQwopSite.Text = mySite;
 			qwopSite.NavigateUri = new Uri( mySite );
             qwopSite.RequestNavigate += (sender, args) => Process.Start( mySite );

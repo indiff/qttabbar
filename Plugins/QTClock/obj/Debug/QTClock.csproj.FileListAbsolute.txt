@@ -1,7 +1,0 @@
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTClock\bin\Debug\QTClock.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTClock\bin\Debug\QTClock.pdb
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTClock\obj\Debug\QTClock.csprojResolveAssemblyReference.cache
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTClock\obj\Debug\QuizoPlugins.Resource.resources
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTClock\obj\Debug\QTClock.csproj.GenerateResource.Cache
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTClock\obj\Debug\QTClock.dll
-D:\SVN\indiff\trunk\QTTabBar\Plugins\QTClock\obj\Debug\QTClock.pdb

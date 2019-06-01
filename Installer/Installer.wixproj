@@ -24,6 +24,7 @@
     <SuppressValidation>False</SuppressValidation>
     <SuppressIces>ICE80</SuppressIces>
     <SuppressSpecificWarnings>1076;1118</SuppressSpecificWarnings>
+    <Cultures>en-US;zh-CN</Cultures>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CustomWelcomeEulaDlg.wxs" />
@@ -39,6 +40,10 @@
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="lang.wxl" />
+    <EmbeddedResource Include="lang_zh_CN.wxl" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
