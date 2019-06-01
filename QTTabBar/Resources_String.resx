@@ -193,7 +193,7 @@
     <value>View credits and version information.;Original code by {0};Lead Developer:;Other Developers:;Icons and graphics:;If you find QTTabBar useful, please consider making a small donation.;汉化修改：;Build by: {0}</value>
   </data>
   <data name="PayPalURL" xml:space="preserve">
-    <value>https://sourceforge.net/donate/index.php?group_id=312930</value>
+    <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>
   </data>
   <data name="ShortcutKeys_ActionNames" xml:space="preserve">
     <value>Go back;Go forward;Go back to start;Go forward to end;Select next tab;Select previous tab;Select first tab;Select last tab;Switch to last activated tab;Open new tab;Open new window;Merge tabs from other windows;Close current tab;Close all but current;Close left;Close right;Close window;Undo close;Clone current tab;Open current folder in new window;Lock / unlock current;Lock / unlock all;Browse folder;Create new group;Open option dialog;Show toolbar menu;Show current tab menu;Show group menu (Button Bar);Show recent folder menu (Button Bar);Show user application menu (Button Bar);Show recent files menu (Button Bar);Create new empty file;Create new folder;Copy selected files path;Copy selected files name;Copy current folder path;Copy current folder name;Check MD5 of selected files;Bring window to topmost;Transparency +;Transparency -;Focus file list;Focus search bar (Explorer);Focus search box (Button Bar);Show Subfolder Tip Menu for selected folder;Send window to Task Tray;Focus the Tab Bar;Sort tabs by name;Sort tabs by path;Sort tabs by last activation;Nothing;Up one level;Refresh;Paste;Maximize;Minimize;Open in new tab;Open in new tab without activating;Open in new window;Cut;Copy;Delete;Properties;Copy path;Copy name;View checksum;Close tab;Close tabs to left;Close tabs to right;Up one level;Lock;Show context menu;Open in new window;Clone;Copy path;Properties;Show Subdirectory Tip menu;Close all but this;Open CMD;Open selected folders in new tab without activating</value>
@@ -202,7 +202,7 @@
     <value>QTTabBar;{0} (Plugin)</value>
   </data>
   <data name="SiteURL" xml:space="preserve">
-    <value>http://www.qttabbar.sf.net</value>
+    <value>https://github.com/indiff/qttabbar</value>
   </data>
   <data name="TabBar_Menu" xml:space="preserve">
     <value>Close;Close right;Close left;Close all but this;Add to Group;Create new Group;Lock;Clone this;New window;Copy path;Properties;Tab history;Groups;Undo closed;Last activated;Recently opened files;Browse folder;Close all but current;Close Window;Options;Unlock;Add to Application menu : ;items;Cancel;Branches;Remove this item from menu;O&amp;pen containing folder;Tab label;Tab order;Name;Path;Active;Lock the Toolbars;Merge tabs of other windows;Invert;Open CMD</value>
