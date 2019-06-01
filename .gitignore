@@ -257,3 +257,43 @@
 /QTTabBar/obj/Release/Spinner.g.cs
 /QTTabBar/obj/Release/Spinner.g.i.cs
 /Register/Release/Register.log
+/Installer/bin/Release/en-US/QTTabBar Setup_en-US.msi
+/Installer/bin/Release/zh-CN/QTTabBar Setup_zh-CN.msi
+/QTTabBar Rebirth.suo
+/QTTabBar/obj/Release/TempPE/Properties.Resources.Designer.cs.dll
+/QTTabBar/obj/Release/TempPE/Resource_String_zh_CN.Designer.cs.dll
+/QTTabBar/obj/Release/TempPE/Resources_Image.Designer.cs.dll
+/QTTabBar/obj/Release/TempPE/Resources_String.Designer.cs.dll
+/Plugins/CreateNewItem/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/CreateNewItem/obj/Release/CreateNewItem.csproj.FileListAbsolute.txt
+/Plugins/CreateNewItem/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/Memo/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/Memo/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/Memo/obj/Release/Memo.csproj.FileListAbsolute.txt
+/Plugins/MigemoLoader/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/MigemoLoader/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/MigemoLoader/obj/Release/MigemoLoader.csproj.FileListAbsolute.txt
+/Plugins/QTClock/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTClock/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTClock/obj/Release/QTClock.csproj.FileListAbsolute.txt
+/Plugins/QTFileTools/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTFileTools/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTFileTools/obj/Release/QTFileTools.csproj.FileListAbsolute.txt
+/Plugins/QTFolderButton/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTFolderButton/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTFolderButton/obj/Release/QTFolderButton.csproj.FileListAbsolute.txt
+/Plugins/QTViewModeButton/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTViewModeButton/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTViewModeButton/obj/Release/ViewModeButton.csproj.FileListAbsolute.txt
+/Plugins/QTWindowManager/QTWindowManager.cs
+/Plugins/QTWindowManager/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTWindowManager/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/QTWindowManager/obj/Release/QTWindowManager.csproj.FileListAbsolute.txt
+/Plugins/Sample/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/Sample/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/Sample/obj/Release/SamplePlugin.csproj.FileListAbsolute.txt
+/Plugins/ShowStatusBar/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/ShowStatusBar/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/Plugins/ShowStatusBar/obj/Release/ShowStatusBar.csproj.FileListAbsolute.txt
+/Register/Debug/Register.vcxprojResolveAssemblyReference.cache
+/Register/Release/Register.lastbuildstate
