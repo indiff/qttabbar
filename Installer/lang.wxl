@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="YOURLOCID">Your localized string</String>
+  <String Id="READ_INFO">Please read the following information.</String>
+  <String Id="CLOSE_TABS">Close all Explorer windows and reopen them as tabs</String>
+  <String Id="COMPILE_IMG">Compiling native images</String>
+  
+</WixLocalization>

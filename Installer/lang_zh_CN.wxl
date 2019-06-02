@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="zh-cn" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="YOURLOCID">Your localized string</String>
+  <String Id="READ_INFO">请阅读以下信息。</String>
+  <String Id="CLOSE_TABS">关闭所有的资源管理器窗口并且重新打开</String>
+  <String Id="COMPILE_IMG">编辑本地图像</String>
+
+</WixLocalization>
+
