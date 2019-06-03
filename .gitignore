@@ -310,3 +310,5 @@
 /QTTabBar/obj/Release/QTTabBar_MarkupCompile.i.lref
 /Register/Release/Register.vcxprojResolveAssemblyReference.cache
 /Register/Release/*.log
+*.cache
+*.Cache
