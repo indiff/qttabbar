@@ -3,3 +3,8 @@ D:\code\QTTabBar_2015\Plugins\QTFileTools\obj\Release\QuizoPlugins.Resource.reso
 D:\code\QTTabBar_2015\Plugins\QTFileTools\obj\Release\QTFileTools.csproj.GenerateResource.Cache
 D:\code\QTTabBar_2015\Plugins\QTFileTools\obj\Release\QTFileTools.dll
 D:\code\QTTabBar_2015\Plugins\QTFileTools\obj\Release\QTFileTools.csprojResolveAssemblyReference.cache
+D:\code\qttabbar_indiff\Plugins\QTFileTools\bin\Release\QTFileTools.dll
+D:\code\qttabbar_indiff\Plugins\QTFileTools\obj\Release\QTFileTools.csprojResolveAssemblyReference.cache
+D:\code\qttabbar_indiff\Plugins\QTFileTools\obj\Release\QuizoPlugins.Resource.resources
+D:\code\qttabbar_indiff\Plugins\QTFileTools\obj\Release\QTFileTools.csproj.GenerateResource.Cache
+D:\code\qttabbar_indiff\Plugins\QTFileTools\obj\Release\QTFileTools.dll

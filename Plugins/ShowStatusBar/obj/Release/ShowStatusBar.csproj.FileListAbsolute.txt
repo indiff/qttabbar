@@ -1,3 +1,6 @@
 D:\code\QTTabBar_2015\Plugins\ShowStatusBar\bin\Release\ShowStatusBar.dll
 D:\code\QTTabBar_2015\Plugins\ShowStatusBar\obj\Release\ShowStatusBar.dll
 D:\code\QTTabBar_2015\Plugins\ShowStatusBar\obj\Release\ShowStatusBar.csprojResolveAssemblyReference.cache
+D:\code\qttabbar_indiff\Plugins\ShowStatusBar\bin\Release\ShowStatusBar.dll
+D:\code\qttabbar_indiff\Plugins\ShowStatusBar\obj\Release\ShowStatusBar.csprojResolveAssemblyReference.cache
+D:\code\qttabbar_indiff\Plugins\ShowStatusBar\obj\Release\ShowStatusBar.dll

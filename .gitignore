@@ -297,3 +297,16 @@
 /Plugins/ShowStatusBar/obj/Release/ShowStatusBar.csproj.FileListAbsolute.txt
 /Register/Debug/Register.vcxprojResolveAssemblyReference.cache
 /Register/Release/Register.lastbuildstate
+/BandObjectLib/obj/Release/BandObjectLib.csprojResolveAssemblyReference.cache
+/MinHook/obj/Win32/Release/libMinHook.vcxprojResolveAssemblyReference.cache
+/Plugins/QTClock/obj/Release/TempPE/Resource.Designer.cs.dll
+/Plugins/QTFileTools/obj/Release/TempPE/Resource.Designer.cs.dll
+/Plugins/QTFolderButton/obj/Release/TempPE/Resource.Designer.cs.dll
+/Plugins/QTViewModeButton/obj/Release/TempPE/Resource.Designer.cs.dll
+/Plugins/QTWindowManager/obj/Release/TempPE/Resource.Designer.cs.dll
+/Plugins/Sample/obj/Release/TempPE/Resource.Designer.cs.dll
+/QTHookLib/obj/Win32/Release/QTHookLib.unsuccessfulbuild
+/QTTabBar Rebirth.opensdf
+/QTTabBar/obj/Release/QTTabBar_MarkupCompile.i.lref
+/Register/Release/Register.vcxprojResolveAssemblyReference.cache
+/Register/Release/*.log

@@ -1,3 +1,6 @@
 D:\code\QTTabBar_2015\Plugins\CreateNewItem\bin\Release\CreateNewItem.dll
 D:\code\QTTabBar_2015\Plugins\CreateNewItem\obj\Release\CreateNewItem.dll
 D:\code\QTTabBar_2015\Plugins\CreateNewItem\obj\Release\CreateNewItem.csprojResolveAssemblyReference.cache
+D:\code\qttabbar_indiff\Plugins\CreateNewItem\bin\Release\CreateNewItem.dll
+D:\code\qttabbar_indiff\Plugins\CreateNewItem\obj\Release\CreateNewItem.csprojResolveAssemblyReference.cache
+D:\code\qttabbar_indiff\Plugins\CreateNewItem\obj\Release\CreateNewItem.dll

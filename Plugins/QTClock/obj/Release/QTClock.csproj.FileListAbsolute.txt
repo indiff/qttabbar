@@ -3,3 +3,8 @@ D:\code\QTTabBar_2015\Plugins\QTClock\obj\Release\QuizoPlugins.Resource.resource
 D:\code\QTTabBar_2015\Plugins\QTClock\obj\Release\QTClock.csproj.GenerateResource.Cache
 D:\code\QTTabBar_2015\Plugins\QTClock\obj\Release\QTClock.dll
 D:\code\QTTabBar_2015\Plugins\QTClock\obj\Release\QTClock.csprojResolveAssemblyReference.cache
+D:\code\qttabbar_indiff\Plugins\QTClock\bin\Release\QTClock.dll
+D:\code\qttabbar_indiff\Plugins\QTClock\obj\Release\QTClock.csprojResolveAssemblyReference.cache
+D:\code\qttabbar_indiff\Plugins\QTClock\obj\Release\QuizoPlugins.Resource.resources
+D:\code\qttabbar_indiff\Plugins\QTClock\obj\Release\QTClock.csproj.GenerateResource.Cache
+D:\code\qttabbar_indiff\Plugins\QTClock\obj\Release\QTClock.dll
