@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QTTabBarLib</RootNamespace>
     <AssemblyName>QTTabBar</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\QTTabBar Rebirth.snk</AssemblyOriginatorKeyFile>
@@ -33,6 +33,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -147,9 +148,7 @@
       <DependentUpon>Options01_Window.xaml</DependentUpon>
     </Compile>
     <Compile Include="PluginManager.cs" />
-    <Compile Include="PluginServer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PluginServer.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -330,15 +329,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="QTabItem.cs" />
-    <Compile Include="QTButtonBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="QTDesktopTool.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="QTTabBarClass.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="QTButtonBar.cs" />
+    <Compile Include="QTDesktopTool.cs" />
+    <Compile Include="QTTabBarClass.cs" />
     <Compile Include="QTUtility.cs" />
     <Compile Include="QTUtility2.cs" />
     <Compile Include="SubDirTipForm.cs">
