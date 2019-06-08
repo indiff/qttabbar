@@ -286,7 +286,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 https://sourceforge.net/donate/index.php?group_id=312930 的本地化字符串。
+        ///   查找类似 https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg 的本地化字符串。
         /// </summary>
         internal static string PayPalURL {
             get {
@@ -313,7 +313,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 http://qttabbar.sf.net 的本地化字符串。
+        ///   查找类似 https://github.com/indiff/qttabbar 的本地化字符串。
         /// </summary>
         internal static string SiteURL {
             get {

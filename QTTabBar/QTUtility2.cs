@@ -337,12 +337,11 @@ namespace QTTabBarLib {
 
         public static string MakeVersionString() {
             // qwop comment
-            /*
+            /* */
             if(QTUtility.IS_DEV_VERSION) {
                 return "DevBuild: " + QTUtility.GetLinkerTimestamp();
             }
             else {
-                */
                 string str = QTUtility.CurrentVersion.ToString();
                 if(QTUtility.BetaRevision.Major > 0) {
                     str = str + " Beta " + QTUtility.BetaRevision.Major;
@@ -351,7 +350,8 @@ namespace QTTabBarLib {
                     str = str + " Alpha " + QTUtility.BetaRevision.Minor;
                 }
                 return str;
-          /*  } */
+                /* */
+            } 
         }
 
         public static bool PathEquals(this string str1, string str2) {

@@ -193,7 +193,7 @@
     <value>查看相关人员以及版本信息.;源代码 {0};主要开发人员：;其他开发人员：;图标和图形设计：;如果您发现QTTabBar有用，请考虑做一个小的捐赠。;汉化修改：;编译：{0}</value>
   </data>
   <data name="PayPalURL" xml:space="preserve">
-    <value>https://sourceforge.net/donate/index.php?group_id=312930</value>
+    <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>
   </data>
   <data name="ShortcutKeys_ActionNames" xml:space="preserve">
     <value>上一页 ( Alt + Left );下一页 ( Alt + Right );首页;尾页;选择下一个标签;选择上一个标签;选择第一个标签;选择最后一个标签;切换到最后一个标签;新标签;新窗口;从其他窗口合并标签;关闭当前标签;关闭其他;关闭左标签;关闭右标签;关闭窗口;恢复关闭的标签;复制当前标签;以新窗口开启当前文件夹;锁定/解除锁定当前标签;锁定/解除锁定全部标签;浏览文件夹;建立新标签组;开启选项对话框;显示工具栏菜单;显示当前标签菜单;显示标签组菜单 ( 按钮栏 );显示最近文件夹菜单 ( 按钮栏 );显示使用者应用程序菜单 ( 按钮栏 );显示最近文件菜单 ( 按钮栏 );创建空文件;创建文件夹;复制所选文件路径;复制所选文件名称;复制当前文件夹路径;复制当前文件夹名称;检查所选文件的MD5;将窗口移至最上层;增加透明度;减少透明度;焦点移到文件列表;焦点移到搜索列 (Vista/Win7);焦点移到搜索框 ( 按钮栏 );显示所选文件夹的子目录提示菜单;将窗口缩小到系统托盘;焦点移到标签栏;按标签名称排序;按标签路径排序;按标签最后访问排序;无;上一级;刷新;粘贴;最大化;最小化;在新标签（激活标签）;在新标签（不激活标签）;在新窗口打开;剪切;复制;删除;属性;复制路径;复制名称;查看校验和;关闭标签;Close tabs to left;Close tabs to right;上一级;锁定;显示上下文菜单;在新窗口打开;复制;复制路径;属性;显示子目录提示;关闭其他;打开命令提示符;选中的文件夹到新标签（不激活标签）</value>
@@ -202,7 +202,7 @@
     <value>QTTabBar;外挂插件;用户指令</value>
   </data>
   <data name="SiteURL" xml:space="preserve">
-    <value>http://qttabbar.sf.net</value>
+    <value>https://github.com/indiff/qttabbar</value>
   </data>
   <data name="TabBar_Menu" xml:space="preserve">
     <value>关闭;关闭右侧;关闭左侧;关闭其他标签;新增到标签组;建立新标签组;锁定;复制此标签;开新窗口;复制路径;属性;标签历史;标签组;复原关闭的标签;上次使用的标签;最近开启的文件;浏览文件夹;关闭其他标签;关闭窗口;选项;解除锁定;新增到应用程序菜单(&amp;A)：;个项目;取消;分支;从菜单移除此项;开启所在文件夹(&amp;P);标签标记;标签排序;名称;路径;使用中;锁定工具栏;合并其他窗口的标签;反向;打开命令提示符</value>

@@ -8,3 +8,8 @@ D:\code\qttabbar_indiff\Plugins\QTFileTools\obj\Release\QTFileTools.csprojResolv
 D:\code\qttabbar_indiff\Plugins\QTFileTools\obj\Release\QuizoPlugins.Resource.resources
 D:\code\qttabbar_indiff\Plugins\QTFileTools\obj\Release\QTFileTools.csproj.GenerateResource.Cache
 D:\code\qttabbar_indiff\Plugins\QTFileTools\obj\Release\QTFileTools.dll
+D:\SVN\qttabbar-indiff\Plugins\QTFileTools\bin\Release\QTFileTools.dll
+D:\SVN\qttabbar-indiff\Plugins\QTFileTools\obj\Release\QTFileTools.csprojResolveAssemblyReference.cache
+D:\SVN\qttabbar-indiff\Plugins\QTFileTools\obj\Release\QuizoPlugins.Resource.resources
+D:\SVN\qttabbar-indiff\Plugins\QTFileTools\obj\Release\QTFileTools.csproj.GenerateResource.Cache
+D:\SVN\qttabbar-indiff\Plugins\QTFileTools\obj\Release\QTFileTools.dll

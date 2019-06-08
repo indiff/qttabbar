@@ -44,7 +44,7 @@ namespace QTTabBarLib {
         internal const string IMAGEKEY_MYNETWORK = "mynetwork";
         internal const string IMAGEKEY_NOEXT = "noext";
         internal const string IMAGEKEY_NOIMAGE = "noimage";
-        internal const bool IS_DEV_VERSION = false;  // <----------------- Change me before releasing!
+        internal const bool IS_DEV_VERSION = true;  // <----------------- Change me before releasing!
         internal static readonly bool IsRTL = CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
         internal static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
         internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;

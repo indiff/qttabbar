@@ -8,3 +8,8 @@ D:\code\qttabbar_indiff\Plugins\QTFolderButton\obj\Release\QTFolderButton.csproj
 D:\code\qttabbar_indiff\Plugins\QTFolderButton\obj\Release\QuizoPlugins.Resource.resources
 D:\code\qttabbar_indiff\Plugins\QTFolderButton\obj\Release\QTFolderButton.csproj.GenerateResource.Cache
 D:\code\qttabbar_indiff\Plugins\QTFolderButton\obj\Release\FolderTreeButton.dll
+D:\SVN\qttabbar-indiff\Plugins\QTFolderButton\bin\Release\FolderTreeButton.dll
+D:\SVN\qttabbar-indiff\Plugins\QTFolderButton\obj\Release\QTFolderButton.csprojResolveAssemblyReference.cache
+D:\SVN\qttabbar-indiff\Plugins\QTFolderButton\obj\Release\QuizoPlugins.Resource.resources
+D:\SVN\qttabbar-indiff\Plugins\QTFolderButton\obj\Release\QTFolderButton.csproj.GenerateResource.Cache
+D:\SVN\qttabbar-indiff\Plugins\QTFolderButton\obj\Release\FolderTreeButton.dll

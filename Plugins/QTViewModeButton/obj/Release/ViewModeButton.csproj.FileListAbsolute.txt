@@ -10,3 +10,9 @@ D:\code\qttabbar_indiff\Plugins\QTViewModeButton\obj\Release\QuizoPlugins.Folder
 D:\code\qttabbar_indiff\Plugins\QTViewModeButton\obj\Release\QuizoPlugins.Resource.resources
 D:\code\qttabbar_indiff\Plugins\QTViewModeButton\obj\Release\ViewModeButton.csproj.GenerateResource.Cache
 D:\code\qttabbar_indiff\Plugins\QTViewModeButton\obj\Release\QTViewModeButton.dll
+D:\SVN\qttabbar-indiff\Plugins\QTViewModeButton\bin\Release\QTViewModeButton.dll
+D:\SVN\qttabbar-indiff\Plugins\QTViewModeButton\obj\Release\ViewModeButton.csprojResolveAssemblyReference.cache
+D:\SVN\qttabbar-indiff\Plugins\QTViewModeButton\obj\Release\QuizoPlugins.FolderViewModeWindow.resources
+D:\SVN\qttabbar-indiff\Plugins\QTViewModeButton\obj\Release\QuizoPlugins.Resource.resources
+D:\SVN\qttabbar-indiff\Plugins\QTViewModeButton\obj\Release\ViewModeButton.csproj.GenerateResource.Cache
+D:\SVN\qttabbar-indiff\Plugins\QTViewModeButton\obj\Release\QTViewModeButton.dll

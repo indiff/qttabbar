@@ -10,3 +10,9 @@ D:\code\qttabbar_indiff\Plugins\QTWindowManager\obj\Release\QuizoPlugins.Resourc
 D:\code\qttabbar_indiff\Plugins\QTWindowManager\obj\Release\QuizoPlugins.SettingWindow.resources
 D:\code\qttabbar_indiff\Plugins\QTWindowManager\obj\Release\QTWindowManager.csproj.GenerateResource.Cache
 D:\code\qttabbar_indiff\Plugins\QTWindowManager\obj\Release\QTWindowManager.dll
+D:\SVN\qttabbar-indiff\Plugins\QTWindowManager\bin\Release\QTWindowManager.dll
+D:\SVN\qttabbar-indiff\Plugins\QTWindowManager\obj\Release\QTWindowManager.csprojResolveAssemblyReference.cache
+D:\SVN\qttabbar-indiff\Plugins\QTWindowManager\obj\Release\QuizoPlugins.Resource.resources
+D:\SVN\qttabbar-indiff\Plugins\QTWindowManager\obj\Release\QuizoPlugins.SettingWindow.resources
+D:\SVN\qttabbar-indiff\Plugins\QTWindowManager\obj\Release\QTWindowManager.csproj.GenerateResource.Cache
+D:\SVN\qttabbar-indiff\Plugins\QTWindowManager\obj\Release\QTWindowManager.dll

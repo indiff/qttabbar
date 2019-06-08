@@ -73,14 +73,16 @@ namespace QTTabBarLib {
 
             msg = null;
             string str = null;
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Resources_String.SiteURL + "/files/latestversion.txt");
+           // HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Resources_String.SiteURL + "/files/latestversion.txt");
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://raw.githubusercontent.com/indiff/qttabbar/master/latestversion.txt");
+        
             req.Timeout = 5000;
 
             try {
                 using(HttpWebResponse res = (HttpWebResponse)req.GetResponse()) {
                     Stream stream = res.GetResponseStream();
                     if(stream != null) {
-                        using(StreamReader sr = new StreamReader(stream, Encoding.ASCII)) {
+                        using(StreamReader sr = new StreamReader(stream, Encoding.UTF8)) {
                             str = sr.ReadToEnd();
                         }                        
                     }

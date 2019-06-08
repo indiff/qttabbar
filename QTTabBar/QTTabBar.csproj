@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QTTabBarLib</RootNamespace>
     <AssemblyName>QTTabBar</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\QTTabBar Rebirth.snk</AssemblyOriginatorKeyFile>
@@ -148,7 +148,9 @@
       <DependentUpon>Options01_Window.xaml</DependentUpon>
     </Compile>
     <Compile Include="PluginManager.cs" />
-    <Compile Include="PluginServer.cs" />
+    <Compile Include="PluginServer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -329,9 +331,15 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="QTabItem.cs" />
-    <Compile Include="QTButtonBar.cs" />
-    <Compile Include="QTDesktopTool.cs" />
-    <Compile Include="QTTabBarClass.cs" />
+    <Compile Include="QTButtonBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QTDesktopTool.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="QTTabBarClass.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="QTUtility.cs" />
     <Compile Include="QTUtility2.cs" />
     <Compile Include="SubDirTipForm.cs">

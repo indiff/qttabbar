@@ -8,3 +8,8 @@ D:\code\qttabbar_indiff\Plugins\Memo\obj\Release\Memo.csprojResolveAssemblyRefer
 D:\code\qttabbar_indiff\Plugins\Memo\obj\Release\QuizoPlugins.Resource.resources
 D:\code\qttabbar_indiff\Plugins\Memo\obj\Release\Memo.csproj.GenerateResource.Cache
 D:\code\qttabbar_indiff\Plugins\Memo\obj\Release\Memo.dll
+D:\SVN\qttabbar-indiff\Plugins\Memo\bin\Release\Memo.dll
+D:\SVN\qttabbar-indiff\Plugins\Memo\obj\Release\Memo.csprojResolveAssemblyReference.cache
+D:\SVN\qttabbar-indiff\Plugins\Memo\obj\Release\QuizoPlugins.Resource.resources
+D:\SVN\qttabbar-indiff\Plugins\Memo\obj\Release\Memo.csproj.GenerateResource.Cache
+D:\SVN\qttabbar-indiff\Plugins\Memo\obj\Release\Memo.dll

@@ -8,3 +8,8 @@ D:\code\qttabbar_indiff\Plugins\MigemoLoader\obj\Release\MigemoLoader.csprojReso
 D:\code\qttabbar_indiff\Plugins\MigemoLoader\obj\Release\QuizoPlugins.MigemoOptionForm.resources
 D:\code\qttabbar_indiff\Plugins\MigemoLoader\obj\Release\MigemoLoader.csproj.GenerateResource.Cache
 D:\code\qttabbar_indiff\Plugins\MigemoLoader\obj\Release\MigemoLoader.dll
+D:\SVN\qttabbar-indiff\Plugins\MigemoLoader\bin\Release\MigemoLoader.dll
+D:\SVN\qttabbar-indiff\Plugins\MigemoLoader\obj\Release\MigemoLoader.csprojResolveAssemblyReference.cache
+D:\SVN\qttabbar-indiff\Plugins\MigemoLoader\obj\Release\QuizoPlugins.MigemoOptionForm.resources
+D:\SVN\qttabbar-indiff\Plugins\MigemoLoader\obj\Release\MigemoLoader.csproj.GenerateResource.Cache
+D:\SVN\qttabbar-indiff\Plugins\MigemoLoader\obj\Release\MigemoLoader.dll
