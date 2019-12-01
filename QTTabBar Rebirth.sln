@@ -79,8 +79,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libMinHook", "MinHook\libMi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QTHookLib", "QTHookLib\QTHookLib.vcxproj", "{740C67C7-6AE5-414B-A3F8-D69355FE508B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWindow", "TestWindow\TestWindow.csproj", "{BAEE5E1B-0554-4829-AF54-09672048D469}"
-EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (No Plugins)|Any CPU = Debug (No Plugins)|Any CPU
