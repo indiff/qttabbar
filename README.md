@@ -13,7 +13,7 @@ QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功�
 * 安装 wix311.exe   https://github.com/wixtoolset/wix3/release
 * 安装 wix visual插件  https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2010Extension
 * 安装 visual studio 2010   https://pan.baidu.com/s/1sldAQmD#list/path=%2FVS%E4%BE%BF%E6%90%BA%E7%B2%BE%E7%AE%80%E7%89%88%E5%90%88%E9%9B%86
-* 安装插件 NotifyPropertyWeaverVsPackage.vsix
+* 拉取代码安装插件 NotifyPropertyWeaverVsPackage.vsix
 * Qttabbar项目 添加引用 Ricciolo.Controls.TreeListView, 路径 QTTabBar\Resources\Ricciolo.Controls.TreeListView.dll
 
 # 多图预览
