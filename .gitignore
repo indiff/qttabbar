@@ -450,3 +450,5 @@
 /latestversion.txt
 /QTTabBar/obj/x86/Release/QTTabBar.csproj.FileListAbsolute.txt
 /TestWindow/obj/x86/Release/TestWindow.csproj.FileListAbsolute.txt
+QTTabBar/obj/
+/Register/Release/*.lastbuildstate
