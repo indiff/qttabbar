@@ -79,6 +79,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libMinHook", "MinHook\libMi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QTHookLib", "QTHookLib\QTHookLib.vcxproj", "{740C67C7-6AE5-414B-A3F8-D69355FE508B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QTQuick", "Plugins\QTQuick\QTQuick.csproj", "{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (No Plugins)|Any CPU = Debug (No Plugins)|Any CPU
@@ -737,6 +739,44 @@ Global
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.x86 QT Only|x64.ActiveCfg = Release|x64
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.x86 QT Only|x64.Build.0 = Release|x64
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.x86 QT Only|x86.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Plugins)|Any CPU.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Plugins)|Mixed Platforms.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Plugins)|Mixed Platforms.Build.0 = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Plugins)|x64.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Plugins)|x64.Build.0 = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Plugins)|x86.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Reg)|Any CPU.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Reg)|Mixed Platforms.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Reg)|Mixed Platforms.Build.0 = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Reg)|x64.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Reg)|x64.Build.0 = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug (No Reg)|x86.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug|x64.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug|x64.Build.0 = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Debug|x86.ActiveCfg = Debug|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Installer|Any CPU.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Installer|Mixed Platforms.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Installer|Mixed Platforms.Build.0 = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Installer|x64.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Installer|x64.Build.0 = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Installer|x86.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|Mixed Platforms.Build.0 = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|x64.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|x64.Build.0 = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|x86.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|Any CPU.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|Mixed Platforms.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|Mixed Platforms.Build.0 = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|x64.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|x64.Build.0 = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -752,5 +792,6 @@ Global
 		{59316D50-75D1-48CE-B83F-01F4A1C46F98} = {81712D9C-F1A2-489F-B288-F4B21A36B3F1}
 		{F75F575A-4E9E-4888-AE84-AF2E3427C998} = {81712D9C-F1A2-489F-B288-F4B21A36B3F1}
 		{3E6DBDF7-3386-4E4E-A707-EABF82796A23} = {81712D9C-F1A2-489F-B288-F4B21A36B3F1}
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F} = {81712D9C-F1A2-489F-B288-F4B21A36B3F1}
 	EndGlobalSection
 EndGlobal
