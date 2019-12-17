@@ -50,7 +50,7 @@ Language="1033"
                  ReadOnly="yes"/>
         <Media Id="1" Cabinet="$(var.SkuName).cab" EmbedCab="yes" />
 
-        <WixVariable Id="WixUILicenseRtf" Value="GPL3.rtf" />
+        <WixVariable Id="WixUILicenseRtf" Value="!(loc.GPL_FILE)" />
 
 
         <Upgrade Id="$(var.UpgradeCode)">
@@ -92,6 +92,11 @@ Language="1033"
                     <File Id="f6" Name="QTHookLib64.dll" Source="..\QTHookLib\bin\Release\QTHookLib64.dll" KeyPath="yes" />
                   </Component>
 
+                  <!-- Add by qwop start -->
+                  <Component Id="QTQuick" Win64="yes" DisableRegistryReflection="yes">
+                    <File Id="f7" Name="QTQuick.dll" Source="..\Plugins\QTQuick\bin\Release\QTQuick.dll" KeyPath="yes" />
+                  </Component>
+                  <!-- Add by qwop   end -->
                   <?foreach arch in x86;x64 ?>
                         <?if $(var.arch) = x64?>
                             <?define win64 = yes?>
@@ -197,6 +202,9 @@ Language="1033"
             <ComponentRef Id="QTTabBar" />
             <ComponentRef Id="HookLibrary32" />
             <ComponentRef Id="HookLibrary64" />
+            <!-- add by qwop -->
+            <ComponentRef Id="QTQuick" />
+            <!-- add by qwop -->
 
             <?foreach arch in x86;x64 ?>
                 <!-- RegKeys -->

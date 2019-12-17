@@ -1610,6 +1610,10 @@ namespace QTTabBarLib {
             this.size = size;
         }
 
+        public int LstImagesLength() {
+            return lstImages.ToArray().Length;
+        }
+
         public void AddStrip(Bitmap bmp) {
             int width = bmp.Width;
             int num2 = 0;

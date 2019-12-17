@@ -1458,7 +1458,8 @@ namespace QTTabBarLib {
             }
             return list;
         }
-
+        
+        // 创建新的tab页
         private QTabItem CreateNewTab(IDLWrapper idlw) {
             string path = idlw.Path;
             QTabItem tab = new QTabItem(QTUtility2.MakePathDisplayText(path, false), path, tabControl1);
@@ -1468,6 +1469,7 @@ namespace QTTabBarLib {
             return tab;
         }
 
+        // 创建 tab 图片
         internal static Bitmap[] CreateTabImage() {
             if(File.Exists(Config.Skin.TabImageFile)) {
                 try {

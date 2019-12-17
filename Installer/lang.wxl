@@ -4,5 +4,6 @@
   <String Id="READ_INFO">Please read the following information.</String>
   <String Id="CLOSE_TABS">Close all Explorer windows and reopen them as tabs</String>
   <String Id="COMPILE_IMG">Compiling native images</String>
+  <String Id="GPL_FILE">GPL3.rtf</String>
   
 </WixLocalization>

@@ -184,8 +184,15 @@ namespace QTTabBarLib {
         
         /******* add by qwop start *****/
         // add by qwop 2012 08 10
-        OpenCmd,
-        ItemsOpenInNewTabNoSel //add bool qwop 2012 08 12
+        OpenCmd
+        ,ItemsOpenInNewTabNoSel //add bool qwop 2012 08 12
+        /***** add by qwop end *****/
+
+          /******* add by qwop start *****/
+        // add by qwop 2019 12 16 19:27
+        , SortTab 
+        , TurnOffRepeat
+        //add bool qwop 2019 12 16 19:27
         /***** add by qwop end *****/
     }
 

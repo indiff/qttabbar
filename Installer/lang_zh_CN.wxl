@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="zh-cn" xmlns="http://schemas.microsoft.com/wix/2006/localization">
-	<String Id="YOURLOCID">Your localized string</String>
+	<String Id="YOURLOCID">你的本地字符串</String>
   <String Id="READ_INFO">请阅读以下信息。</String>
   <String Id="CLOSE_TABS">关闭所有的资源管理器窗口并且重新打开</String>
   <String Id="COMPILE_IMG">编译本地图像</String>
-
+  <String Id="GPL_FILE">GPL3_zh_CN.rtf</String>
 </WixLocalization>
 

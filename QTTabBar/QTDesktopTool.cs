@@ -97,14 +97,14 @@ namespace QTTabBarLib {
         private ToolStripMenuItem tsmiExperimental;
 
         private ThumbnailTooltipForm thumbnailTooltip;
-      //  private Timer timer_Thumbnail, timer_ThumbnailMouseHover, timer_Thumbnail_NoTooltip;
+        private Timer timer_Thumbnail, timer_ThumbnailMouseHover, timer_Thumbnail_NoTooltip;
 
-        private SubDirTipForm subDirTip; // , subDirTip_TB;
+        private SubDirTipForm subDirTip, subDirTip_TB;
         private ShellContextMenu iContextMenu2_Desktop = new ShellContextMenu(); // for desktop thread, handled at shellViewListener_MessageCaptured
-      //  private int thumbnailIndex = -1;
-      //  private int itemIndexDROPHILITED = -1;
-      //  private int thumbnailIndex_Inactive = -1;
-       // private Timer timer_HoverSubDirTipMenu;
+        private int thumbnailIndex = -1;
+        private int itemIndexDROPHILITED = -1;
+        private int thumbnailIndex_Inactive = -1;
+        private Timer timer_HoverSubDirTipMenu;
 
         private VisualStyleRenderer bgRenderer;
         private StringFormat stringFormat;
@@ -1852,7 +1852,7 @@ namespace QTTabBarLib {
                 bool fCanRemove = qmi.Genre != MenuGenre.Application;
                 const int COMMANDID_REMOVEITEM = 0xffff; // todo: move to const class
                 const int COMMANDID_OPENPARENT = 0xfffe;
-               // const int COMMANDID_USERCANCEL = 0xfffd;
+                const int COMMANDID_USERCANCEL = 0xfffd;
 
                 using(
                         IDLWrapper idlw = qmi.Genre == MenuGenre.History

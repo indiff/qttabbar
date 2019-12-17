@@ -44,7 +44,7 @@
           <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
         </Control>
         <Control Id="LicenseText" Type="ScrollableText" X="130" Y="36" Width="226" Height="162" Sunken="yes" TabSkip="no">
-          <Text SourceFile="GPL3.rtf" />
+          <Text SourceFile="!(loc.GPL_FILE)" />
         </Control>
       </Dialog>
     </UI>
