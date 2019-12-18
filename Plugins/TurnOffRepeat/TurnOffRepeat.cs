@@ -87,31 +87,33 @@ namespace QuizoPlugins {
 
         public void OnButtonClick() {
             ITab[] tabs = pluginServer.GetTabs();
-            List<string> notdup = new List<string>();
-            List<ITab> dups = new List<ITab>();
-            for (int i = 0; i < tabs.Length; i++)
+            if (tabs.Length > 0)
             {
-                if (notdup.Contains(tabs[i].Address.Path))
+                List<string> notdup = new List<string>();
+                List<ITab> dups = new List<ITab>();
+                for (int i = 0; i < tabs.Length; i++)
                 {
-                    dups.Add(tabs[i]);
+                    if (notdup.Contains(tabs[i].Address.Path))
+                    {
+                        dups.Add(tabs[i]);
+                    }
+                    else
+                    {
+                        notdup.Add(tabs[i].Address.Path);
+                    }
+
+                    // MessageBox.Show(tabs[i].Address.Path);
                 }
-                else
+
+                if (dups.Count > 0)
                 {
-                    notdup.Add(tabs[i].Address.Path);
-                }
-                
-                // MessageBox.Show(tabs[i].Address.Path);
+                    foreach (ITab tab in dups)
+                    {
+                        tab.Close();
+                    }
+                }  
             }
-
-            if (dups.Count > 0)
-            {
-                foreach (ITab tab in dups)
-                {
-                    tab.Close();
-                }
-            }               
-
-            
+                         
         }
 
         public bool ShowTextLabel {
@@ -200,11 +202,58 @@ namespace QuizoPlugins {
         }
 
         public Image GetImage(bool fLarge) {
-            return fLarge ? Resource.CloseRepeatButton_large : Resource.CloseRepeatButton_small;
+            return fLarge ? Resource.Sort24 : Resource.Sort16;
         }
 
         public void OnButtonClick() {
-           // FileOps.FileOperation(FileOpActions.Copy, pluginServer.ExplorerHandle, null);
+            //  È¥ÖØ
+            ITab[] tabs = pluginServer.GetTabs();
+            if (tabs.Length > 0)
+            {
+                List<string> notdup = new List<string>();
+                List<ITab> dups = new List<ITab>();
+                for (int i = 0; i < tabs.Length; i++)
+                {
+                    if (notdup.Contains(tabs[i].Address.Path))
+                    {
+                        dups.Add(tabs[i]);
+                    }
+                    else
+                    {
+                        notdup.Add(tabs[i].Address.Path);
+                    }
+
+                    // MessageBox.Show(tabs[i].Address.Path);
+                }
+
+                if (dups.Count > 0)
+                {
+                    foreach (ITab tab in dups)
+                    {
+                        tab.Close();
+                    }
+                }
+            }
+            // ÅÅÐò
+            tabs = pluginServer.GetTabs();
+            if (tabs.Length > 0)
+            {
+                List<string> sorts = new List<string>();
+                for (int i = 0; i < tabs.Length; i++)
+                {
+                    sorts.Add(tabs[i].Text);
+                }
+
+                sorts.Sort();
+
+                for (int i = 0; i < tabs.Length; i++)
+                {
+                    int idx = sorts.IndexOf(tabs[i].Text);
+                    if (idx >= 0) {
+                        tabs[i].Insert(idx);
+                    }
+                }
+            }
         }
 
         public bool ShowTextLabel {
@@ -243,7 +292,11 @@ namespace QuizoPlugins {
     static class StringResources {
         public static string[] ButtonNames;
         static StringResources() {
-            if(CultureInfo.CurrentCulture.Parent.Name == "ja") {
+            if (CultureInfo.CurrentCulture.Parent.Name == "zh")
+            {
+                ButtonNames = Resource.str_zh.Split(new char[] { ';' });
+            }
+            else if(CultureInfo.CurrentCulture.Parent.Name == "ja") {
                 ButtonNames = Resource.str_ja.Split(new char[] { ';' });
             }
             else {

@@ -81,6 +81,26 @@ namespace QuizoPlugins {
         }
         
         /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Sort16 {
+            get {
+                object obj = ResourceManager.GetObject("Sort16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Sort24 {
+            get {
+                object obj = ResourceManager.GetObject("Sort24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 关重复;排序 的本地化字符串。
         /// </summary>
         internal static string str {
