@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DB674411-121B-4FE2-AFC4-7B04289E3AFD}</ProjectGuid>
+    <ProjectGuid>{62400527-1025-4E41-99DA-28A5C62E6378}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QuizoPlugins</RootNamespace>
-    <AssemblyName>QTFileTools</AssemblyName>
+    <AssemblyName>TurnOffRepeat</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -42,14 +42,13 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileOps.cs" />
-    <Compile Include="FileTools.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="TurnOffRepeat.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource.resx">
@@ -59,64 +58,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\imgCopy24.png" />
+    <None Include="Resources\Repeat16.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\imgCut16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgCut24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgDelete16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgDelete24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgPaste16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgPaste24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgRedo16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgRedo24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgUndo16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgUndo24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\imgCopy16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CopyToButton_small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MoveToButton_large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\MoveToButton_small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CopyToButton_large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SendUpOneLevelButton_large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SendUpOneLevelButton_small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PropertiesButton_large.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PropertiesButton_small.png" />
+    <None Include="Resources\Repeat24.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\QTPluginLib\QTPluginLib.csproj">

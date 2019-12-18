@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Qwop {
+namespace QuizoPlugins {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Qwop {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Qwop.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("QuizoPlugins.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,9 +63,9 @@ namespace Qwop {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap Config_16 {
+        internal static System.Drawing.Bitmap CloseRepeatButton_large {
             get {
-                object obj = ResourceManager.GetObject("Config_16", resourceCulture);
+                object obj = ResourceManager.GetObject("CloseRepeatButton_large", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,10 +73,55 @@ namespace Qwop {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap Config_24 {
+        internal static System.Drawing.Bitmap CloseRepeatButton_small {
             get {
-                object obj = ResourceManager.GetObject("Config_24", resourceCulture);
+                object obj = ResourceManager.GetObject("CloseRepeatButton_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 关重复;排序 的本地化字符串。
+        /// </summary>
+        internal static string str {
+            get {
+                return ResourceManager.GetString("str", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 关重复;排序 的本地化字符串。
+        /// </summary>
+        internal static string str_cn {
+            get {
+                return ResourceManager.GetString("str_cn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Close Repeat Tab;Sort Tab 的本地化字符串。
+        /// </summary>
+        internal static string str_ja {
+            get {
+                return ResourceManager.GetString("str_ja", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 关重复;排序 的本地化字符串。
+        /// </summary>
+        internal static string str_zh {
+            get {
+                return ResourceManager.GetString("str_zh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 关重复;排序 的本地化字符串。
+        /// </summary>
+        internal static string str_zh_CN {
+            get {
+                return ResourceManager.GetString("str_zh_CN", resourceCulture);
             }
         }
     }
