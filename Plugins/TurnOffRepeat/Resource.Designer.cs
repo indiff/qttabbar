@@ -101,20 +101,11 @@ namespace QuizoPlugins {
         }
         
         /// <summary>
-        ///   查找类似 关重复;排序 的本地化字符串。
+        ///   查找类似 Close Repeat Tab;Sort Tab 的本地化字符串。
         /// </summary>
         internal static string str {
             get {
                 return ResourceManager.GetString("str", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 关重复;排序 的本地化字符串。
-        /// </summary>
-        internal static string str_cn {
-            get {
-                return ResourceManager.GetString("str_cn", resourceCulture);
             }
         }
         
@@ -133,15 +124,6 @@ namespace QuizoPlugins {
         internal static string str_zh {
             get {
                 return ResourceManager.GetString("str_zh", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 关重复;排序 的本地化字符串。
-        /// </summary>
-        internal static string str_zh_CN {
-            get {
-                return ResourceManager.GetString("str_zh_CN", resourceCulture);
             }
         }
     }

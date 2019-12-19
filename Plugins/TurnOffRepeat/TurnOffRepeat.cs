@@ -292,11 +292,12 @@ namespace QuizoPlugins {
     static class StringResources {
         public static string[] ButtonNames;
         static StringResources() {
-            if (CultureInfo.CurrentCulture.Parent.Name == "zh")
+            if (  CultureInfo.CurrentCulture.Parent.Name.ToLower().StartsWith( "zh" )  )
             {
                 ButtonNames = Resource.str_zh.Split(new char[] { ';' });
             }
-            else if(CultureInfo.CurrentCulture.Parent.Name == "ja") {
+            else if (CultureInfo.CurrentCulture.Parent.Name.ToLower().StartsWith("ja") )
+            {
                 ButtonNames = Resource.str_ja.Split(new char[] { ';' });
             }
             else {

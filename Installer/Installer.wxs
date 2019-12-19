@@ -96,7 +96,11 @@ Language="1033"
                   <Component Id="QTQuick" Win64="yes" DisableRegistryReflection="yes">
                     <File Id="f7" Name="QTQuick.dll" Source="..\Plugins\QTQuick\bin\Release\QTQuick.dll" KeyPath="yes" />
                   </Component>
+                  <Component Id="TurnOffRepeat" Win64="yes" DisableRegistryReflection="yes">
+                    <File Id="f8" Name="TurnOffRepeat.dll" Source="..\Plugins\TurnOffRepeat\bin\Release\TurnOffRepeat.dll" KeyPath="yes" />
+                  </Component>
                   <!-- Add by qwop   end -->
+                  
                   <?foreach arch in x86;x64 ?>
                         <?if $(var.arch) = x64?>
                             <?define win64 = yes?>
@@ -204,6 +208,7 @@ Language="1033"
             <ComponentRef Id="HookLibrary64" />
             <!-- add by qwop -->
             <ComponentRef Id="QTQuick" />
+            <ComponentRef Id="TurnOffRepeat" />
             <!-- add by qwop -->
 
             <?foreach arch in x86;x64 ?>
