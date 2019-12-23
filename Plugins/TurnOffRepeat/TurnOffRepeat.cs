@@ -87,7 +87,7 @@ namespace QuizoPlugins {
 
         public void OnButtonClick() {
             ITab[] tabs = pluginServer.GetTabs();
-            if (tabs.Length > 0)
+            if ( null != tabs && tabs.Length > 0)
             {
                 List<string> notdup = new List<string>();
                 List<ITab> dups = new List<ITab>();
@@ -208,7 +208,7 @@ namespace QuizoPlugins {
         public void OnButtonClick() {
             //  ШЅжи
             ITab[] tabs = pluginServer.GetTabs();
-            if (tabs.Length > 0)
+            if (null != tabs && tabs.Length > 0)
             {
                 List<string> notdup = new List<string>();
                 List<ITab> dups = new List<ITab>();

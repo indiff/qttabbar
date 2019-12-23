@@ -38,7 +38,7 @@ namespace Qwop {
     ///		
     ///			Author, Name, Version, and Description are used in Options -> Plugins tab.
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Qwop", Name = "快捷", Version = "0.0.0.1", Description = "打开QT选项")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "快捷", Version = "1.0.0.0", Description = "打开QT选项")]
     public class QTQuickButton : IBarDropButton
     {
         static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
@@ -56,7 +56,7 @@ namespace Qwop {
             // add codes here to delete saved settings, files, or registry keys if any.
             // see "Uninstallation" in Instructions.txt
 
-            MessageBox.Show("uninstallation");
+           //  MessageBox.Show("uninstallation");
         }
 
 
