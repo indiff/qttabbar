@@ -7,7 +7,7 @@ https://indiff.github.io/qttabbar/
 - 1.3 更新插件实现去重，排序功能
 
 # 下载地址
-* https://github.com/indiff/qttabbar/releases/tag/1.3
+* https://github.com/indiff/qttabbar/releases/tag/1.4
 
 # 使用方法
 - 先安装QTTabBar 
