@@ -11,3 +11,6 @@ Beware, compiling these configurations will overwrite your original installation
 Note that in order for the Register project to successfully register QTTabBar, it must be run with administrator privileges.  
 The easiest way to accomplish this is to simply run Visual Studio with administrator privileges, 
 by right-clicking the shortcut and selecting "Run as Administrator" from the menu.
+
+force remove qttabbar, delete all the files
+C:\Windows\assembly\temp

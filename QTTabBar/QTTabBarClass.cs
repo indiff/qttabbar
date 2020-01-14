@@ -1814,6 +1814,7 @@ namespace QTTabBarLib {
                 case BindAction.NewFolder:
                     break;
                 case BindAction.NewFile:
+                    createNewFile();
                     break;
 
                 case BindAction.SwitchToLastActivated:
@@ -1920,6 +1921,82 @@ namespace QTTabBarLib {
             }
             return true;
         }
+
+        // 创建新文件 add by indiff
+        /***** add by qwop start ***/
+        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr ILCreateFromPath([MarshalAs(UnmanagedType.LPTStr)] string pszPath);
+
+        [DllImport("shell32.dll")]
+        private static extern IntPtr ILFindLastID(IntPtr pidl);
+
+        private void createNewFile()
+        {
+
+            // Create new file
+            IShellView shellView = null;
+            IntPtr pIDL = IntPtr.Zero;
+
+            try
+            {
+                string path = pluginServer.SelectedTab.Address.Path;
+
+                if (String.IsNullOrEmpty(path) || !Directory.Exists(path))
+                {
+                    SystemSounds.Hand.Play();
+                    return;
+                }
+
+                // make new name
+
+                int i = 2;
+                string name = "新建文本文档";
+                string ext =  ".txt";
+                string pathNew = path + "\\" + name + ext;
+
+                while ( Directory.Exists(pathNew) || File.Exists(pathNew) )
+                {
+                    pathNew = path + "\\" + name + " (" + i + ")" + ext;
+                    i++;
+                }
+
+                using (File.Create(pathNew))
+                {
+                }
+
+                // Select and put into rename mode.
+                if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out shellView))
+                {
+                    shellView.Refresh();
+
+                    pIDL = ILCreateFromPath(pathNew);
+                    if (pIDL != IntPtr.Zero)
+                    {
+                        IntPtr pIDLRltv = ILFindLastID(pIDL);
+                        if (pIDLRltv != IntPtr.Zero) {
+                             shellView.SelectItem(pIDLRltv, SVSIF.SELECT | SVSIF.DESELECTOTHERS | SVSIF.ENSUREVISIBLE | SVSIF.EDIT );
+                           //  ShellBrowser.GetIShellBrowser().SelectItem(pIDLRltv, SVSI_SELECT | SVSI_DESELECTOTHERS | SVSI_ENSUREVISIBLE | SVSI_EDIT);
+                            return;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (ShellBrowser.GetIShellBrowser() != null)
+                    Marshal.ReleaseComObject(ShellBrowser.GetIShellBrowser());
+
+                if (pIDL != IntPtr.Zero)
+                    Marshal.FreeCoTaskMem(pIDL);
+            }
+
+            SystemSounds.Hand.Play();
+       
+        }
+        /***** add by qwop end   ***/
 
         /// <summary>
         /// 该函数设置由不同线程产生的窗口的显示状态。
