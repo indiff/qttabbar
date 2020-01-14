@@ -24,9 +24,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("FileTools")]
 [assembly: AssemblyDescription("Plugin set for file operations")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Quizo")]
+[assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTFileTools")]
-[assembly: AssemblyCopyright("Copyright (C)  2007")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

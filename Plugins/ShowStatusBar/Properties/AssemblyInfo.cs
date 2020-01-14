@@ -24,9 +24,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ShowStatusBar")]
 [assembly: AssemblyDescription("show status bar by key")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Quizo")]
+[assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("ShowStatusBar")]
-[assembly: AssemblyCopyright("Copyright (C)  2007")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

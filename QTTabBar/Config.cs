@@ -696,8 +696,12 @@ namespace QTTabBarLib {
                     {BindAction.ShowUserAppsMenu,   Key.H     | Key.Alt},
                     {BindAction.ShowRecentTabsMenu, Key.U     | Key.Alt},
                     {BindAction.ShowRecentFilesMenu,Key.F     | Key.Alt},
-                    {BindAction.NewFile,            Key.N     | Key.Control},
-                    {BindAction.NewFolder,          Key.N     | Key.Control | Key.Shift},
+
+                    // Bug fix 热键冲突， 调整 by qwop 
+                    // {BindAction.NewFile,            Key.N     | Key.Control},
+                    {BindAction.NewFile,            Key.N     | Key.Control | Key.Alt},
+                    // {BindAction.NewFolder,          Key.N     | Key.Control | Key.Shift},
+                   //  {BindAction.NewFolder,          Key.N     | Key.Shift }, // 系统默认自带
                 };
                 Shortcuts = new int[(int)BindAction.KEYBOARD_ACTION_COUNT];
                 PluginShortcuts = new Dictionary<string, int[]>();

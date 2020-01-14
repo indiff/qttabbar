@@ -22,11 +22,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("QTQuick")]
-[assembly: AssemblyDescription("Qwop plugin.")]
+[assembly: AssemblyDescription("快捷打开系统配置，快捷操作等.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("qwop")]
+[assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTQuick")]
-[assembly: AssemblyCopyright("Copyright (C)  2007")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

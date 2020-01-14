@@ -24,9 +24,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("QTFolderButton")]
 [assembly: AssemblyDescription("Show folder tree for XP")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Quizo")]
+[assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTFolderButton")]
-[assembly: AssemblyCopyright("Copyright (C)  2007")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

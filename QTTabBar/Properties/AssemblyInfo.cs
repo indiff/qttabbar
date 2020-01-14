@@ -27,10 +27,10 @@ using System.Reflection;
 [assembly: AssemblyDescription("Ö÷QTTabBar³ÌÐò¼¯")]
 [assembly: AssemblyConfiguration("")]
 // [assembly: AssemblyCompany("Quizo and Paul Accisano")]
-[assembly: AssemblyCompany("qwop")]
+[assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTTabBar")]
-// 2007-2010
-[assembly: AssemblyCopyright("Copyright (C)  2007-2019")]
+// 2007-2020
+[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyFileVersion("2.0.0.0")]

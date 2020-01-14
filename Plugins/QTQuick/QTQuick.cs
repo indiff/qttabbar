@@ -223,8 +223,11 @@ namespace Qwop {
                 menu.Items.Add(new ToolStripMenuItem("我的文档"));
                 menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\系统"));
                 menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\个性化"));
+                menu.Items.Add(new ToolStripMenuItem("设置当前目录JAVA_HOME"));
+                menu.Items.Add(new ToolStripMenuItem("设置当前目录M2_HOME"));
+                menu.Items.Add(new ToolStripMenuItem("查看系统信息"));
                 // menu.Items.Add(new ToolStripMenuItem("Test selection"));
-
+                
                 fFirstMenuDropDown = false;
 
             }
@@ -266,8 +269,28 @@ namespace Qwop {
                                 path = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{21EC2020-3AEA-1069-A2DD-08002B30309D}";
                             break;
                     }
+                    case 3:
+                        {
+                            // 3. 设置当前目录JAVA_HOME
+                            Environment.SetEnvironmentVariable("one", "1");
+                            break;
+                        }
+                    case 4:
+                        {
+                            // 4. 设置当前目录M2_HOME
+                            Environment.SetEnvironmentVariable("two", "2");
+                            break;
+                        }
+                    case 5:
+                        {
+                            // 5. 查看系统信息
+                            string msinfo32 = Environment.GetEnvironmentVariable("systemroot") + "\\System32\\msinfo32.exe";
+                            Process.Start(msinfo32);
+                            break;
+                        }
 
                         
+         
                 }
                 
                 // pluginServer.CreateTab(new Address(mydocument), -1, false, true);

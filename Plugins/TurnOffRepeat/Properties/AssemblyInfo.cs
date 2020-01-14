@@ -21,12 +21,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FileTools")]
-[assembly: AssemblyDescription("Plugin set for file operations")]
+[assembly: AssemblyTitle("TurnOffRepeat")]
+[assembly: AssemblyDescription("关闭重复，排序插件")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Quizo")]
+[assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTFileTools")]
-[assembly: AssemblyCopyright("Copyright (C)  2007")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
