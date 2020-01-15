@@ -16,14 +16,19 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Media;
+using System.Data;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.ComponentModel;
 using QTPlugin;
 using QTPlugin.Interop;
 using QTTabBarLib;
-using System.Diagnostics;
+using System.IO;
 
 namespace Qwop {
     /// <summary>
@@ -130,7 +135,7 @@ namespace Qwop {
         public void OnOption() {
             // plugin option button is pressed.
 
-            MessageBox.Show("Option of SampleSplitButton");
+          //  MessageBox.Show("Option of SampleSplitButton");
         }
 
         public void OnShortcutKeyPressed(int iIndex) {
@@ -234,6 +239,28 @@ namespace Qwop {
            
         }
 
+        private  string filterEmpty( string ignoreFileName )
+        {
+            HashSet<string> hs = new HashSet<string>();
+            string oldpath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
+            // Environment.GetEnvironmentVariable("PATH");
+            string[] sArray = oldpath.Split(';');
+            if (sArray.Length == 0)
+            {
+                return "";
+            }
+            foreach (string stmp in sArray)
+            {
+
+                if (!string.IsNullOrEmpty(stmp.Trim()) && !File.Exists(Path.Combine(stmp, ignoreFileName)))
+                {
+                    hs.Add(stmp);
+                }
+            }
+            string[] strs = hs.ToArray();
+            oldpath = String.Join(";", strs);
+            return oldpath;
+        }
       
         public void OnDropDownItemClick(ToolStripItem item, MouseButtons mouseButton) {
             // user clicked the dropdown menu item of this plugin button dropdown.
@@ -272,13 +299,100 @@ namespace Qwop {
                     case 3:
                         {
                             // 3. 设置当前目录JAVA_HOME
-                            Environment.SetEnvironmentVariable("one", "1");
+                            string selectedPath = pluginServer.SelectedTab.Address.Path;
+                            string binPath = Path.Combine( selectedPath, "bin" );
+                            string libPath = Path.Combine( selectedPath, "lib" );
+                            string toolsJar = Path.Combine( libPath, "tools.jar" );
+                            string dtJar = Path.Combine( libPath, "dt.jar" );
+
+
+                            if(String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath)) {
+                                MessageBox.Show("当前目录已经删除");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+ 
+                            if(String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath)) {
+                                MessageBox.Show("bin目录不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+ 
+                            if(String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath)) {
+                                MessageBox.Show("lib目录不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+ 
+                            if(String.IsNullOrEmpty(toolsJar) || !File.Exists(toolsJar)) {
+                                MessageBox.Show("toolsJar不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+ 
+                            if(String.IsNullOrEmpty(toolsJar) || !File.Exists(dtJar)) {
+                                MessageBox.Show("dtJar不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+                            Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
+                            Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;", EnvironmentVariableTarget.Machine);
+                            // 去重， 判断是否有 java home 删掉
+                            string oldpath = filterEmpty( "java.exe" );
+                            Environment.SetEnvironmentVariable("PATH", @"%JAVA_HOME%\bin;" + oldpath, EnvironmentVariableTarget.Machine);
+                            MessageBox.Show("设置JAVA_HOME成功");
+
                             break;
                         }
                     case 4:
                         {
                             // 4. 设置当前目录M2_HOME
-                            Environment.SetEnvironmentVariable("two", "2");
+
+                            // 3. 设置当前目录JAVA_HOME
+                            string selectedPath = pluginServer.SelectedTab.Address.Path;
+                            string binPath = Path.Combine(selectedPath, "bin");
+                            string mvnCmd = Path.Combine(binPath, "mvn.cmd");
+
+
+
+                            if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
+                            {
+                                MessageBox.Show("当前目录已经删除");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+                            if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
+                            {
+                                MessageBox.Show("bin目录不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+
+
+                            if (String.IsNullOrEmpty(mvnCmd) || !File.Exists(mvnCmd))
+                            {
+                                MessageBox.Show("mvnCmd不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+                            Environment.SetEnvironmentVariable("M2_HOME", selectedPath, EnvironmentVariableTarget.Machine);
+                            string oldpath = filterEmpty("mvn.cmd");
+                            Environment.SetEnvironmentVariable("PATH", @"%M2_HOME%\bin;" + oldpath, EnvironmentVariableTarget.Machine);
+                            MessageBox.Show("设置M2_HOME成功");
+
                             break;
                         }
                     case 5:
