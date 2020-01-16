@@ -63,6 +63,9 @@ namespace QTTabBarLib {
             ///////////// add default plugin by qwop 2012-07-10////////////////
             // the program data 's default plugin.
             string defaultQtConfigPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll";
+            string turnOffRepeatPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll";
+            List<string> lists = new List<string>();
+
             if (File.Exists(defaultQtConfigPath))
             {
                 // plugin.
@@ -71,7 +74,18 @@ namespace QTTabBarLib {
                      ? new int[] { 1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 65536, 9, 20 }
                      : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 65536, 9, 19, 10 };
 				*/
-                List<string> lists = new string[] { defaultQtConfigPath }.ToList();
+               
+              //  List<string> lists = new string[] { defaultQtConfigPath }.ToList();
+                lists.Add(defaultQtConfigPath);
+            }
+
+
+            if (File.Exists(turnOffRepeatPath))
+            {
+                lists.Add(turnOffRepeatPath);
+            }
+
+            if (lists.Count > 0) {
                 PluginManager.SavePluginAssemblyPaths(lists);
             }
         }
