@@ -10,8 +10,9 @@ https://indiff.github.io/qttabbar/
 * https://github.com/indiff/qttabbar/releases/tag/1.4
 
 # 使用方法
-- 先安装QTTabBar 
-- 资源管理器中，组织—>布局—>菜单栏
+- 运行安装包文件，安装QTTabBar 
+- 资源管理器->查看->选项->(QTTabbar & Buttons )      【win10】
+- 资源管理器中，组织—>布局—>菜单栏  【win10以下】
 - 右键菜单栏右方的空白地区—>勾选QTTabBar等工具栏—>按Alt+M—>重启explorer或重启计算机
 
 # 编译
