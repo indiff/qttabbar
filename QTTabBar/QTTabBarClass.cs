@@ -2046,11 +2046,14 @@ namespace QTTabBarLib {
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo("cmd");
                 startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                startInfo.Verb = "runas";
+                startInfo.CreateNoWindow = false;
+                
                 
                 startInfo.WorkingDirectory = currentPath;
                 // 添加获取焦点
                 Process instance = Process.Start(startInfo );
-                instance.WaitForInputIdle();
+               //  instance.WaitForInputIdle();
                 ShowWindowAsync(instance.MainWindowHandle, WS_SHOWNORMAL); //显示，可以注释掉
                 SetForegroundWindow(instance.MainWindowHandle);            //放到前端
                 SetFocus(instance.MainWindowHandle);

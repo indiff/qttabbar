@@ -272,9 +272,10 @@ namespace QTTabBarLib {
                 TrayOnClose = false;
                 TrayOnMinimize = false;
 
-                string idl = Environment.OSVersion.Version >= new Version(6, 1)
-                        ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
-                        : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // Computer
+  //              string idl = Environment.OSVersion.Version >= new Version(6, 1)
+ //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
+   //                     : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // Computer
+                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // 我的电脑， 默认打开
                 using(IDLWrapper w = new IDLWrapper(idl)) {
                     DefaultLocation = w.IDL;
                 }
@@ -318,22 +319,22 @@ namespace QTTabBarLib {
                 ActiveTabOnBottomRow = true;*/
 
                 /* qwop's default's value.*/
-                NewTabPosition = TabPos.Rightmost;
-                NextAfterClosed = TabPos.LastActive;
-                ActivateNewTab = true;
+                NewTabPosition = TabPos.Rightmost;  // 新标签在最右侧
+                NextAfterClosed = TabPos.LastActive; // 关闭标签时候切换导
+                ActivateNewTab = true;  
                 NeverOpenSame = true;
                 RenameAmbTabs = true;
                 DragOverTabOpensSDT = false;
-                ShowFolderIcon = false;
+                ShowFolderIcon = true;  // 显示驱动器图标
                 ShowSubDirTipOnTab = false;
-                ShowDriveLetters = false;
-                ShowCloseButtons = false;
-                CloseBtnsWithAlt = false;
-                CloseBtnsOnHover = false;
-                ShowNavButtons = true;
-                NavButtonsOnRight = true;
-                MultipleTabRows = true;
-                ActiveTabOnBottomRow = true;
+                ShowDriveLetters = false; // 显示驱动器字符
+                ShowCloseButtons = false;  // 显示关闭按钮
+                CloseBtnsWithAlt = false; // 只有alt按住进行关闭
+                CloseBtnsOnHover = false;  // 仅鼠标悬浮关闭
+                ShowNavButtons = true;  // 在标签显示导航按钮
+                NavButtonsOnRight = true; // 在最右边
+                MultipleTabRows = true; // 允许多行标签
+                ActiveTabOnBottomRow = true; // 始终将活动标签置于底部行
             }
         }
 
@@ -430,12 +431,14 @@ namespace QTTabBarLib {
                     ".txt",".rtf"
                     ,".ini", ".inf"
                     ,".cs", ".log"
-                    ,".js", ".vbs", ".bat", ".cmd"
+                    ,".js", ".vbs", ".bat", ".cmd", ".sh"
                     ,".c",".cpp",".cc",".h", ".rc"
                     ,".xml"
                     ,".htm",".html",".mht",".mhtml", ".shtml", ".hta"
                     ,".java"
                     ,".sql"
+                    ,".csv"
+                    ,".md"
                     
                     ,".py", ".rb"
                     ,".jsp", ".asp", ".php",".aspx"
