@@ -110,4 +110,4 @@ jobs:
         if: env.UPLOAD_ARTIFACT == 'true'
         with:
           name: Telegram
-          path: ${{ env.REPO_NAME }}\out\artifact\a
+          path: ${{ env.REPO_NAME }}\out\artifact\
