@@ -1,0 +1,113 @@
+name: Windows.
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.txt'
+      - '*.vsix'
+      - '*.doc'
+      - '*.yml'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.txt'
+      - '*.vsix'
+      - '*.doc'
+      - '*.yml'
+
+jobs:
+
+  windows:
+    name: Windows
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        defines:
+          - ""
+    env:
+      WIX_NAME: "wixtoolset"
+      WIX_VER: "3.11.2"
+      VC: "call vcvars32.bat && cd Libraries"
+      GIT: "https://github.com"
+      UPLOAD_ARTIFACT: "true"
+      ONLY_CACHE: "false"
+      AUTO_CACHING: "1"
+      MANUAL_CACHING: "2"
+
+    steps:
+      - name: 获取仓库名称
+        shell: bash
+        run: echo ::set-env name=REPO_NAME::${GITHUB_REPOSITORY##*/}
+
+      - name: 克隆最新代码
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
+
+      - name: 建立环境变量
+        shell: cmd
+        run: |
+          cd ..
+          move %REPO_NAME% temp
+          mkdir %REPO_NAME%
+          move temp %REPO_NAME%/%REPO_NAME%
+          cd %REPO_NAME%
+
+          echo ::add-path::C:\Strawberry\perl\bin\
+          echo ::add-path::"%programfiles%\NASM"
+
+          C:
+          cd "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\"
+          echo ::add-path::%cd%
+
+          call vcvars32.bat
+          D:
+          cd %GITHUB_WORKSPACE%
+          msbuild -version > CACHE_KEY.txt
+          echo %MANUAL_CACHING% >> CACHE_KEY.txt
+
+          mkdir Libraries
+          cd Libraries
+          echo ::set-env name=LibrariesPath::%cd%
+
+      - name: 生成缓存主键
+        shell: bash
+        run: |
+          if [ "$AUTO_CACHING" == "1" ]; then
+            thisFile=$REPO_NAME/.github/workflows/win.yml
+            echo `md5sum $thisFile | awk '{ print $1 }'` >> CACHE_KEY.txt
+          fi
+          echo ::set-env name=CACHE_KEY::`md5sum CACHE_KEY.txt | awk '{ print $1 }'`
+
+      - name: Choco无进程安装wix
+        run: |
+          choco install --no-progress -y %WIX_NAME%
+
+      - name: Telegram 客户端构建.
+        if: env.ONLY_CACHE == 'false'
+        shell: cmd
+        run: |
+          cd qttabbar
+
+          call vcvars32.bat
+          cd ..\out
+          msbuild -m "QTTabBar Rebirth.sln" /nologo /p:Configuration=Release,Platform="Any CPU"
+
+      - name: 移动打包制品.
+        if: env.UPLOAD_ARTIFACT == 'true'
+        run: |
+          mkdir qttabbar\out\
+          cd qttabbar\out
+          mkdir artifact
+          move "qttabbar\Installer\bin\Release\zh-CN\QTTabBar Setup.msi" artifact/QTTabBar_zh-CN.msi
+          move "qttabbar\Installer\bin\Release\en-US\QTTabBar Setup.msi" artifact/QTTabBar_en-US.msi
+      - uses: actions/upload-artifact@master
+        name: 上传打包制品.
+        if: env.UPLOAD_ARTIFACT == 'true'
+        with:
+          name: Telegram
+          path: ${{ env.REPO_NAME }}\out\artifact\a
