@@ -1,4 +1,5 @@
 version: 1.0.{build}
+os: windows
 image: Visual Studio 2010
 language: csharp
 solution: QTTabBar Rebirth.sln
