@@ -1,0 +1,8 @@
+version: 1.0.{build}
+image: Visual Studio 2010
+configuration: Release
+platform: Any CPU
+build:
+  project: QTTabBar Rebirth.sln
+  verbosity: minimal
+test: off
