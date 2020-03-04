@@ -85,7 +85,7 @@ jobs:
 
       - name: Choco无进程安装wix
         run: |
-          choco install --no-progress -y %WIX_NAME%
+          choco install --no-progress -y wixtoolset
 
       - name: Telegram 客户端构建.
         if: env.ONLY_CACHE == 'false'
