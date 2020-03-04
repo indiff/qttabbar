@@ -1,0 +1,28 @@
+image: Visual Studio 2010
+clone_folder: C:\TBuild\tdesktop
+test: off
+deploy: off
+configuration: Release
+platform: Any CPU
+
+environment:
+  matrix:
+   - BUILD_VERSION:
+   - BUILD_VERSION: disable_autoupdate
+   - BUILD_VERSION: disable_register_custom_scheme
+   - BUILD_VERSION: disable_crash_reports
+   - BUILD_VERSION: disable_network_proxy
+
+matrix:
+  fast_finish: true
+  
+
+build:
+  project: qttabbar\QTTabBar Rebirth.sln
+  verbosity: minimal
+
+artifacts:
+  - path: qttabbar\Installer\bin\Release\zh-CN\QTTabBar Setup.msi
+    name: QTTabBar Setup_zh-CN.msi
+  - path: qttabbar\Installer\bin\Release\en-US\QTTabBar Setup.msi
+    name: QTTabBar Setup_en-US.msi
