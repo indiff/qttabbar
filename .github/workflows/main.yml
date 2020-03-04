@@ -87,7 +87,7 @@ jobs:
         run: |
           choco install --no-progress -y wixtoolset
 
-      - name: Telegram 客户端构建.
+      - name: qttabbar构建.
         if: env.ONLY_CACHE == 'false'
         shell: cmd
         run: |
