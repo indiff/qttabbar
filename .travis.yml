@@ -1,5 +1,7 @@
 version: 1.0.{build}
 image: Visual Studio 2010
+language: csharp
+solution: QTTabBar Rebirth.sln
 configuration: Release
 platform: Any CPU
 build:
