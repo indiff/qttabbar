@@ -53,12 +53,11 @@ matrix:
 
 
 build:
-- ps: |
-    Write-Output "Configuration: $env:CONFIGURATION"
-    Write-Output "Platform: $env:PLATFORM"
+- cmd: >-
     call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
-    msbuild /v:m /p:"Configuration=$env:CONFIGURATION" /p:Platform="$env:PLATFORM" "$env:Solution" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
+    msbuild /v:m /p:"Configuration=Release" /p:Platform="Any CPU" "QTTabBar Rebirth.sln" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+test: off
 
 artifacts:
   - path: qttabbar\Installer\bin\Release\zh-CN\QTTabBar Setup.msi
