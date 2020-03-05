@@ -53,8 +53,11 @@ matrix:
 
 
 build:
-  project: qttabbar\QTTabBar Rebirth.sln
-  verbosity: minimal
+- ps: |
+    Write-Output "Configuration: $env:CONFIGURATION"
+    Write-Output "Platform: $env:PLATFORM"
+    msbuild /v:m /p:"Configuration=$env:CONFIGURATION" /p:Platform="$env:PLATFORM" "$env:Solution" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+
 
 artifacts:
   - path: qttabbar\Installer\bin\Release\zh-CN\QTTabBar Setup.msi
