@@ -1,5 +1,5 @@
 os: Visual Studio 2015
-clone_folder: C:\TBuild\
+clone_folder: C:\QBuild\
 test: off
 deploy: off
 configuration: Release
