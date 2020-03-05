@@ -1,4 +1,5 @@
-image: Visual Studio 2013
+os:
+  - Visual Studio 2015
 clone_folder: C:\TBuild\tdesktop
 test: off
 deploy: off
@@ -7,10 +8,26 @@ platform: Any CPU
 
 environment:
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
-      GENERATOR: "Visual Studio 10 2010"
-      GROUP: "SUPPORTED"
-      
+    - GENERATOR: "Visual Studio 9 2008"
+      UNICODE: ON
+    - GENERATOR: "Visual Studio 9 2008"
+      UNICODE: OFF
+    - GENERATOR: "Visual Studio 10 2010"
+      UNICODE: ON
+    - GENERATOR: "Visual Studio 10 2010"
+      UNICODE: OFF
+    - GENERATOR: "Visual Studio 11 2012"
+      UNICODE: ON
+    - GENERATOR: "Visual Studio 11 2012"
+      UNICODE: OFF
+    - GENERATOR: "Visual Studio 12 2013"
+      UNICODE: ON
+    - GENERATOR: "Visual Studio 12 2013"
+      UNICODE: OFF
+    - GENERATOR: "Visual Studio 14 2015"
+      UNICODE: ON
+    - GENERATOR: "Visual Studio 14 2015"
+      UNICODE: OFF     
 matrix:
   allow_failures:
     #Group: (EXPERIMENTAL / SUPPORTED)
