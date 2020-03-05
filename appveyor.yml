@@ -7,13 +7,16 @@ platform: Any CPU
 
 environment:
   matrix:
-    - GENERATOR: "Visual Studio 10 2010"
-      UNICODE: ON
-    - GENERATOR: "Visual Studio 10 2010"
-      UNICODE: OFF
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      GENERATOR: "Visual Studio 10 2010"
+      GROUP: "SUPPORTED"
       
 matrix:
-  fast_finish: true
+  allow_failures:
+    #Group: (EXPERIMENTAL / SUPPORTED)
+    #EXPERIMENTAL is allowed to fail under the build matrix
+    - GROUP: "EXPERIMENTAL"
+
 
 build:
   project: qttabbar\QTTabBar Rebirth.sln
