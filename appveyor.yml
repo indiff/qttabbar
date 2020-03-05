@@ -11,41 +11,41 @@ environment:
   matrix:
   - VldStackWalkMethod: safe
     Toolset: v90
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
     GTEST_FILTER: -*.Mfc*
   - VldStackWalkMethod: safe
     Toolset: v100
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
     GTEST_FILTER: -*.Mfc*
   - VldStackWalkMethod: safe
     Toolset: v110
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
     GTEST_FILTER: -*.Mfc*
   - VldStackWalkMethod: safe
     Toolset: v120_xp
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
   - VldStackWalkMethod: safe
     Toolset: v140_xp
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
 
   - VldStackWalkMethod: fast
     Toolset: v90
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
     GTEST_FILTER: -*.Mfc*
   - VldStackWalkMethod: fast
     Toolset: v100
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
     GTEST_FILTER: -*.Mfc*
   - VldStackWalkMethod: fast
     Toolset: v110
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
     GTEST_FILTER: -*.Mfc*
   - VldStackWalkMethod: fast
     Toolset: v120_xp
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
   - VldStackWalkMethod: fast
     Toolset: v140_xp
-    Solution: qttabbar\QTTabBar Rebirth.sln
+    Solution: QTTabBar Rebirth.sln
     
 matrix:
   fast_finish: false
