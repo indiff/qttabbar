@@ -1,38 +1,55 @@
-os:
-  - Visual Studio 2015
-clone_folder: C:\TBuild\tdesktop
+os: Visual Studio 2015
+clone_folder: C:\TBuild\
 test: off
 deploy: off
 configuration: Release
 platform: Any CPU
 
 environment:
+  GTEST_REPEAT: 1
+
   matrix:
-    - GENERATOR: "Visual Studio 9 2008"
-      UNICODE: ON
-    - GENERATOR: "Visual Studio 9 2008"
-      UNICODE: OFF
-    - GENERATOR: "Visual Studio 10 2010"
-      UNICODE: ON
-    - GENERATOR: "Visual Studio 10 2010"
-      UNICODE: OFF
-    - GENERATOR: "Visual Studio 11 2012"
-      UNICODE: ON
-    - GENERATOR: "Visual Studio 11 2012"
-      UNICODE: OFF
-    - GENERATOR: "Visual Studio 12 2013"
-      UNICODE: ON
-    - GENERATOR: "Visual Studio 12 2013"
-      UNICODE: OFF
-    - GENERATOR: "Visual Studio 14 2015"
-      UNICODE: ON
-    - GENERATOR: "Visual Studio 14 2015"
-      UNICODE: OFF     
+  - VldStackWalkMethod: safe
+    Toolset: v90
+    Solution: qttabbar\QTTabBar Rebirth.sln
+    GTEST_FILTER: -*.Mfc*
+  - VldStackWalkMethod: safe
+    Toolset: v100
+    Solution: qttabbar\QTTabBar Rebirth.sln
+    GTEST_FILTER: -*.Mfc*
+  - VldStackWalkMethod: safe
+    Toolset: v110
+    Solution: qttabbar\QTTabBar Rebirth.sln
+    GTEST_FILTER: -*.Mfc*
+  - VldStackWalkMethod: safe
+    Toolset: v120_xp
+    Solution: qttabbar\QTTabBar Rebirth.sln
+  - VldStackWalkMethod: safe
+    Toolset: v140_xp
+    Solution: qttabbar\QTTabBar Rebirth.sln
+
+  - VldStackWalkMethod: fast
+    Toolset: v90
+    Solution: qttabbar\QTTabBar Rebirth.sln
+    GTEST_FILTER: -*.Mfc*
+  - VldStackWalkMethod: fast
+    Toolset: v100
+    Solution: qttabbar\QTTabBar Rebirth.sln
+    GTEST_FILTER: -*.Mfc*
+  - VldStackWalkMethod: fast
+    Toolset: v110
+    Solution: qttabbar\QTTabBar Rebirth.sln
+    GTEST_FILTER: -*.Mfc*
+  - VldStackWalkMethod: fast
+    Toolset: v120_xp
+    Solution: qttabbar\QTTabBar Rebirth.sln
+  - VldStackWalkMethod: fast
+    Toolset: v140_xp
+    Solution: qttabbar\QTTabBar Rebirth.sln
+    
 matrix:
-  allow_failures:
-    #Group: (EXPERIMENTAL / SUPPORTED)
-    #EXPERIMENTAL is allowed to fail under the build matrix
-    - GROUP: "EXPERIMENTAL"
+  fast_finish: false
+    
 
 
 build:
