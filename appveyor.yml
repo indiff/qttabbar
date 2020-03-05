@@ -5,59 +5,13 @@ deploy: off
 configuration: Release
 platform: Any CPU
 
-environment:
-  GTEST_REPEAT: 1
-
-  matrix:
-  - VldStackWalkMethod: safe
-    Toolset: v90
-    Solution: QTTabBar Rebirth.sln
-    GTEST_FILTER: -*.Mfc*
-  - VldStackWalkMethod: safe
-    Toolset: v100
-    Solution: QTTabBar Rebirth.sln
-    GTEST_FILTER: -*.Mfc*
-  - VldStackWalkMethod: safe
-    Toolset: v110
-    Solution: QTTabBar Rebirth.sln
-    GTEST_FILTER: -*.Mfc*
-  - VldStackWalkMethod: safe
-    Toolset: v120_xp
-    Solution: QTTabBar Rebirth.sln
-  - VldStackWalkMethod: safe
-    Toolset: v140_xp
-    Solution: QTTabBar Rebirth.sln
-
-  - VldStackWalkMethod: fast
-    Toolset: v90
-    Solution: QTTabBar Rebirth.sln
-    GTEST_FILTER: -*.Mfc*
-  - VldStackWalkMethod: fast
-    Toolset: v100
-    Solution: QTTabBar Rebirth.sln
-    GTEST_FILTER: -*.Mfc*
-  - VldStackWalkMethod: fast
-    Toolset: v110
-    Solution: QTTabBar Rebirth.sln
-    GTEST_FILTER: -*.Mfc*
-  - VldStackWalkMethod: fast
-    Toolset: v120_xp
-    Solution: QTTabBar Rebirth.sln
-  - VldStackWalkMethod: fast
-    Toolset: v140_xp
-    Solution: QTTabBar Rebirth.sln
-    
-matrix:
-  fast_finish: false
-    
-
 
 build:
 - cmd: >-
     call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
 
     msbuild /v:m /p:"Configuration=Release" /p:Platform="Any CPU" "QTTabBar Rebirth.sln" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-test: off
+
 
 artifacts:
   - path: qttabbar\Installer\bin\Release\zh-CN\QTTabBar Setup.msi
