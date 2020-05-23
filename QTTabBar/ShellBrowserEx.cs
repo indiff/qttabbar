@@ -219,11 +219,13 @@ namespace QTTabBarLib {
         }
 
         public int Navigate(IDLWrapper idlw, SBSP flags = SBSP.SAMEBROWSER) {
-            if(idlw.Available && shellBrowser != null) {
-                try {
+            if(idlw != null && idlw.Available && shellBrowser != null) {
+                try
+                {
                     return shellBrowser.BrowseObject(idlw.PIDL, flags);
                 }
-                catch(COMException) {
+                catch (COMException)
+                {
                 }
             }
             return 1;

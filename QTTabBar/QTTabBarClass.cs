@@ -2024,42 +2024,52 @@ namespace QTTabBarLib {
         /************************************************************************/
         private void OpenCmd( QTabItem tab )
         {
-            string currentPath = "";
-            if (tab != null)
-            {
-                currentPath = tab.CurrentPath;
-            }
-            else
-            {
-                currentPath = ContextMenuedTab.CurrentPath;
-            }
+            /*            if ( tab == null ) {
+                            return ;
+                        }*/
+            if (ShellBrowser.GetIShellBrowser() != null) { 
+                string currentPath = "";
+                if (tab != null)
+                {
+                    currentPath = tab.CurrentPath;
+                }
+                else
+                {
+                    currentPath = ContextMenuedTab.CurrentPath;
+                }
             
-            if (currentPath.IndexOf("???") != -1)
-            {
-                currentPath = currentPath.Substring(0, currentPath.IndexOf("???"));
-            }
-            else if (currentPath.IndexOf("*?*?*") != -1)
-            {
-                currentPath = currentPath.Substring(0, currentPath.IndexOf("*?*?*"));
-            }
-            if (Directory.Exists(currentPath))
-            {
-                ProcessStartInfo startInfo = new ProcessStartInfo("cmd");
-                startInfo.WindowStyle = ProcessWindowStyle.Normal;
-                startInfo.Verb = "runas";
-                startInfo.CreateNoWindow = false;
+                if (currentPath.IndexOf("???") != -1)
+                {
+                    currentPath = currentPath.Substring(0, currentPath.IndexOf("???"));
+                }
+                else if (currentPath.IndexOf("*?*?*") != -1)
+                {
+                    currentPath = currentPath.Substring(0, currentPath.IndexOf("*?*?*"));
+                }
+                // 判断文件是否存在
+                if (Directory.Exists(currentPath))
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo("cmd");
+                    startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                    startInfo.Verb = "runas";
+                    startInfo.CreateNoWindow = false;
                 
                 
-                startInfo.WorkingDirectory = currentPath;
-                // 添加获取焦点
-                Process instance = Process.Start(startInfo );
-               //  instance.WaitForInputIdle();
-                ShowWindowAsync(instance.MainWindowHandle, WS_SHOWNORMAL); //显示，可以注释掉
-                SetForegroundWindow(instance.MainWindowHandle);            //放到前端
-                SetFocus(instance.MainWindowHandle);
+                    startInfo.WorkingDirectory = currentPath;
+                    // 添加获取焦点
+                    Process instance = Process.Start(startInfo );
+                    //  instance.WaitForInputIdle();
+                    
+                    if (!instance.WaitForInputIdle(10000)) // 10 s timout 
+                    {
+                        throw new ApplicationException("Process takes too much time to start");
+                    }
 
-               
-            } // end for open cmd.
+                    ShowWindowAsync(instance.MainWindowHandle, WS_SHOWNORMAL); //显示，可以注释掉
+                    SetForegroundWindow(instance.MainWindowHandle);            //放到前端
+                    SetFocus(instance.MainWindowHandle);
+                } // end for open cmd.
+            }
         }
 
         // todo: clean, enum.

@@ -44,7 +44,7 @@ namespace BandObjectLib {
         // We must subclass the rebar in order to fix a certain bug in 
         // Windows 7.
         internal sealed class RebarBreakFixer : NativeWindow {
-            private BandObject parent;
+            private readonly BandObject parent;
             public bool MonitorSetInfo { get; set; }
             public bool Enabled { get; set; }
 
@@ -257,7 +257,8 @@ namespace BandObjectLib {
                     Explorer = (WebBrowserClass)Marshal.CreateWrapperOfType(obj2 as IWebBrowser, typeof(WebBrowserClass));
                     OnExplorerAttached();
                 }
-                catch(COMException) {
+                catch(COMException exception) {
+                    // QTUtility2.MakeErrorLog(exception, "MSG:" + exception.Message);
                 }
             }
             try {

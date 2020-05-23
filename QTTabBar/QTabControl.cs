@@ -314,16 +314,16 @@ namespace QTTabBarLib {
                 QTabCancelEventArgs e = new QTabCancelEventArgs(tabPages[this.iSelectedIndex], this.iSelectedIndex, false, TabControlAction.Deselecting);
                 Deselecting(this, e);
             }
-            int iSelectedIndex = this.iSelectedIndex;
-            QTabItem selectedTabPage = this.selectedTabPage;
+            int curSelectedIndex = this.iSelectedIndex;
+            QTabItem curSelectedTabPage = this.selectedTabPage;
             this.iSelectedIndex = index;
             this.selectedTabPage = tabToSelect;
             if(Selecting != null) {
                 QTabCancelEventArgs args2 = new QTabCancelEventArgs(tabToSelect, index, false, TabControlAction.Selecting);
                 Selecting(this, args2);
                 if(args2.Cancel) {
-                    this.iSelectedIndex = iSelectedIndex;
-                    this.selectedTabPage = selectedTabPage;
+                    this.iSelectedIndex = curSelectedIndex;
+                    this.selectedTabPage = curSelectedTabPage;
                     return false;
                 }
             }

@@ -214,18 +214,29 @@ namespace QTTabBarLib {
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
                 using(StreamWriter writer = new StreamWriter(path, true)) {
                     writer.WriteLine(DateTime.Now.ToString());
-                    writer.WriteLine(".NET ver: " + Environment.Version);
-                    writer.WriteLine("OS ver: " + Environment.OSVersion.Version);
-                    writer.WriteLine("QT ver: " + MakeVersionString());
+                    writer.WriteLine(".NET 版本: " + Environment.Version);
+                    writer.WriteLine("操作系统版本: " + Environment.OSVersion.Version);
+                    writer.WriteLine("QT 版本: " + MakeVersionString());
                     if(!String.IsNullOrEmpty(optional)) {
-                        writer.WriteLine("Optional information: " + optional);
+                        writer.WriteLine("错误信息: " + optional);
                     }
                     if(ex == null) {
                         writer.WriteLine("Exception: None");
                         writer.WriteLine(Environment.StackTrace);
                     }
                     else {
-                        writer.WriteLine(ex.ToString());
+                       // writer.WriteLine(ex.ToString());
+
+                        writer.WriteLine("\nMessage ---\n{0}", ex.Message);
+                        writer.WriteLine(
+                            "\nHelpLink ---\n{0}", ex.HelpLink);
+                        writer.WriteLine("\nSource ---\n{0}", ex.Source);
+                        writer.WriteLine(
+                            "\nStackTrace ---\n{0}", ex.StackTrace);
+                        writer.WriteLine(
+                            "\nTargetSite ---\n{0}", ex.TargetSite);
+
+
                     }                        
                     writer.WriteLine("--------------");
                     writer.WriteLine();
