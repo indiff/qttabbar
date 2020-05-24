@@ -1,3 +1,13 @@
+======= 1.5.2.0 Beta 2 =======
+Bugs Fixed:
+    修复打开命令提示符异常/Fixed open cmd error.
+	
+	
+New Features:
+    异常日志添加扩展信息提示/Show more info for exception log.
+	添加语言配置文件/Add language config file.
+	
+	
 ======= 1.5.0.0 Beta 2 =======
 Bugs Fixed:
     Fixed scrolling lag buildup when using the ItemsView.
