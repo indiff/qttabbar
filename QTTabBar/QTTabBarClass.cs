@@ -2049,6 +2049,7 @@ namespace QTTabBarLib {
                 // 判断文件是否存在
                 if (Directory.Exists(currentPath))
                 {
+                    /*
                     ProcessStartInfo startInfo = new ProcessStartInfo("cmd");
                     startInfo.WindowStyle = ProcessWindowStyle.Normal;
                     startInfo.Verb = "runas";
@@ -2064,10 +2065,20 @@ namespace QTTabBarLib {
                     {
                         throw new ApplicationException("Process takes too much time to start");
                     }
+                    */
 
-                    ShowWindowAsync(instance.MainWindowHandle, WS_SHOWNORMAL); //显示，可以注释掉
-                    SetForegroundWindow(instance.MainWindowHandle);            //放到前端
-                    SetFocus(instance.MainWindowHandle);
+                    System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                    process.StartInfo.FileName = "cmd.exe";
+                    process.StartInfo.Arguments = "/k cd " + currentPath;
+                    process.StartInfo.WorkingDirectory = currentPath;
+                    process.Start();
+                  
+
+
+                    ShowWindowAsync(process.MainWindowHandle, WS_SHOWNORMAL); //显示，可以注释掉
+                    SetForegroundWindow(process.MainWindowHandle);            //放到前端
+                    SetFocus(process.MainWindowHandle);
                 } // end for open cmd.
             }
         }
@@ -5021,7 +5032,25 @@ namespace QTTabBarLib {
 
         private void SetBarRows(int count) {
             BandHeight = (count * (Config.Skin.TabHeight - 3)) + 5;
-            rebarController.RefreshHeight();
+            // fix bug
+            /**
+           异常文本
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 QTTabBarLib.QTTabBarClass.SetBarRows(Int32 count)
+   在 QTTabBarLib.QTabControl.CalculateItemRectangle_MultiRows()
+   在 QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
+   在 QTTabBarLib.QTabControl.OnPaint(PaintEventArgs e)
+   在 System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
+   在 System.Windows.Forms.Control.WmPaint(Message& m)
+   在 System.Windows.Forms.Control.WndProc(Message& m)
+   在 QTTabBarLib.QTabControl.WndProc(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   在 System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+             **/
+            if (null != rebarController)
+            {
+                rebarController.RefreshHeight();
+            }
         }
 
         protected override bool ShouldHaveBreak() {

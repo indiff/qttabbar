@@ -342,7 +342,6 @@ namespace Qwop {
                                 SystemSounds.Hand.Play();
                                 return;
                             }
-
                             Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
                             Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;", EnvironmentVariableTarget.Machine);
                             // 去重， 判断是否有 java home 删掉
