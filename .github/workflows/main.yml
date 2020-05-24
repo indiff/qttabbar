@@ -64,7 +64,7 @@ jobs:
           cd "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\"
           echo ::add-path::%cd%
 
-          call vcvars32.bat
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86
           D:
           cd %GITHUB_WORKSPACE%
           msbuild -version > CACHE_KEY.txt
@@ -109,5 +109,5 @@ jobs:
         name: 上传打包制品.
         if: env.UPLOAD_ARTIFACT == 'true'
         with:
-          name: Telegram
+          name: qttabbar
           path: ${{ env.REPO_NAME }}\out\artifact\
