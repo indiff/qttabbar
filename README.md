@@ -32,3 +32,5 @@ https://indiff.github.io/qttabbar/
 * [英文配置文件/English Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_en.xml)
 * [中文配置文件/Chinese Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_zh.xml)
 
+# 鸣谢/Thanks
+* [捐助列表](https://github.com/indiff/qttabbar/issues/27)
