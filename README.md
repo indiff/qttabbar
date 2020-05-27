@@ -1,6 +1,6 @@
 # 软件介绍/Introduction
 QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功能的小工具。从此以后工作时不再遍布文件夹窗口，还有给力的文件夹预览功能，大大提高了你工作的效率。就像IE 7和Firefox、Opera那样的。QTTabBar还提供了一些功能插件，如：文件操作工具、树型目录、显示状态栏等等。
-https://indiff.github.io/qttabbar/
+[主页](https://indiff.github.io/qttabbar/)
 
 # 版本更新/Changes
 - 1.5.2(2020) 修复打开命令提示符异常;异常日志添加扩展信息提示;添加语言配置文件
@@ -8,7 +8,7 @@ https://indiff.github.io/qttabbar/
 - 1.3 更新插件实现去重，排序功能
 
 # 下载地址/Download
-* https://github.com/indiff/qttabbar/releases/tag/1.5.2
+* [最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.2)
 
 # 使用方法/Usage
 - 运行安装包文件，安装QTTabBar 
@@ -19,9 +19,9 @@ https://indiff.github.io/qttabbar/
 
 
 # 编译/Build
-* 安装 wix311.exe   https://github.com/wixtoolset/wix3/releases
-* 安装 wix visual插件  https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2010Extension
-* 安装 visual studio 2010   https://pan.baidu.com/s/1sldAQmD#list/path=%2FVS%E4%BE%BF%E6%90%BA%E7%B2%BE%E7%AE%80%E7%89%88%E5%90%88%E9%9B%86
+* 安装 [wix311.exe](https://github.com/wixtoolset/wix3/releases)
+* 安装 wix visual [插件](https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2010Extension)  
+* 安装 visual studio 2010  [百度网盘](https://pan.baidu.com/s/1sldAQmD#list/path=%2FVS%E4%BE%BF%E6%90%BA%E7%B2%BE%E7%AE%80%E7%89%88%E5%90%88%E9%9B%86)
 * 拉取代码安装插件 NotifyPropertyWeaverVsPackage.vsix
 * Qttabbar项目 添加引用 Ricciolo.Controls.TreeListView, 路径 QTTabBar\Resources\Ricciolo.Controls.TreeListView.dll
 
