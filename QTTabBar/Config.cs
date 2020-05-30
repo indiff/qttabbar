@@ -429,16 +429,17 @@ namespace QTTabBarLib {
                 PreviewFont = new Font(new FontFamily("微软雅黑"), 9f);
                 TextExt = new List<string> { 
                     ".txt",".rtf"
-                    ,".ini", ".inf"
+                    ,".ini", ".inf",".properties", ".ruleset", ".settings"
                     ,".cs", ".log"
                     ,".js", ".vbs", ".bat", ".cmd", ".sh"
                     ,".c",".cpp",".cc",".h", ".rc"
                     ,".xml"
                     ,".htm",".html",".mht",".mhtml", ".shtml", ".hta"
+                    ,".HxT",".HxC",".hhc",".hhk", ".hhp"
                     ,".java"
                     ,".sql"
                     ,".csv"
-                    ,".md"
+                    ,".md" 
                     
                     ,".py", ".rb"
                     ,".jsp", ".asp", ".php",".aspx"
