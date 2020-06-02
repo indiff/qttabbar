@@ -20,9 +20,9 @@ using System;
 namespace QTPlugin {
     [Flags]
     public enum MenuType {
-        None,
-        Tab,
-        Bar,
-        Both
+        None = 0 ,
+        Tab = 1 ,
+        Bar = 2 ,
+        Both = 4
     }
 }

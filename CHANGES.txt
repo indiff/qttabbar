@@ -4,7 +4,7 @@ Todos:
 	按钮自定义图片功能无效 #29
 	加入标签关闭按钮和锁定按钮的图标自定义选项 #26
 Bugs Fixed:
-	
+	fix bug 参数无效 GetTextSize qtabitem.cs(331)。
 	
 New Features:
 	

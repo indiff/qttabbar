@@ -805,3 +805,14 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/Plugins/QTClock/obj
+/Plugins/Memo/obj
+/Plugins/MigemoLoader/obj
+/Plugins/QTClock/obj
+/Plugins/QTFileTools/obj
+/Plugins/QTFolderButton/obj
+/Plugins/QTViewModeButton/obj
+/Plugins/QTWindowManager/obj
+/Plugins/Sample/obj
+/.sonarqube
+/.sonarlint

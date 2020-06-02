@@ -329,15 +329,20 @@ namespace QTTabBarLib {
         }
 
         private static SizeF GetTextSize(string str, Graphics g, bool fTitle) {
-            SizeF empty;
-            CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, str.Length) };
-            sfMeasure.SetMeasurableCharacterRanges(ranges);
-            Region[] regionArray = g.MeasureCharacterRanges(str, fTitle ? font : fontSubText, rctMeasure, sfMeasure);
-            using(regionArray[0]) {
-                empty = regionArray[0].GetBounds(g).Size;
-                empty.Width += 6f;
+            SizeF sizeF; 
+            // fix bug 参数无效    
+            if ( !String.IsNullOrEmpty( str )  ) {
+                CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, str.Length) };
+                sfMeasure.SetMeasurableCharacterRanges(ranges);
+               
+                Region[] regionArray = g.MeasureCharacterRanges(str, fTitle ? font : fontSubText, rctMeasure, sfMeasure);
+                using(regionArray[0]) {
+                    sizeF = regionArray[0].GetBounds(g).Size;
+                    sizeF.Width += 6f;
+                    return sizeF;
+                }
             }
-            return empty;
+            return SizeF.Empty;
         }
 
         public LogData GoBackward() {

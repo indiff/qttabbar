@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using SHDocVw;
 
+
 namespace BandObjectLib {
     public class BandObject : UserControl, IDeskBand, IDockingWindow, IInputObject, IObjectWithSite, IOleWindow, IPersistStream {
         private Size _minSize = new Size(-1, -1);
@@ -158,30 +159,30 @@ namespace BandObjectLib {
         public virtual void ContextSensitiveHelp(bool fEnterMode) {
         }
 
-        public virtual void GetBandInfo(uint dwBandID, uint dwViewMode, ref DESKBANDINFO dbi) {
-            if((dbi.dwMask & DBIM.ACTUAL) != 0) {
-                dbi.ptActual.X = Size.Width;
-                dbi.ptActual.Y = Size.Height;
+        public virtual void GetBandInfo(uint dwBandID, uint dwViewMode, ref DESKBANDINFO pdbi) {
+            if((pdbi.dwMask & DBIM.ACTUAL) != 0) {
+                pdbi.ptActual.X = Size.Width;
+                pdbi.ptActual.Y = Size.Height;
             }
-            if((dbi.dwMask & DBIM.INTEGRAL) != 0) {
-                dbi.ptIntegral.X = -1;
-                dbi.ptIntegral.Y = -1;
+            if((pdbi.dwMask & DBIM.INTEGRAL) != 0) {
+                pdbi.ptIntegral.X = -1;
+                pdbi.ptIntegral.Y = -1;
             }
-            if((dbi.dwMask & DBIM.MAXSIZE) != 0) {
-                dbi.ptMaxSize.X = dbi.ptMaxSize.Y = -1;
+            if((pdbi.dwMask & DBIM.MAXSIZE) != 0) {
+                pdbi.ptMaxSize.X = pdbi.ptMaxSize.Y = -1;
             }
-            if((dbi.dwMask & DBIM.MINSIZE) != 0) {
-                dbi.ptMinSize.X = MinSize.Width;
-                dbi.ptMinSize.Y = MinSize.Height;
+            if((pdbi.dwMask & DBIM.MINSIZE) != 0) {
+                pdbi.ptMinSize.X = MinSize.Width;
+                pdbi.ptMinSize.Y = MinSize.Height;
             }
-            if((dbi.dwMask & DBIM.MODEFLAGS) != 0) {
-                dbi.dwModeFlags = DBIMF.NORMAL;
+            if((pdbi.dwMask & DBIM.MODEFLAGS) != 0) {
+                pdbi.dwModeFlags = DBIMF.NORMAL;
             }
-            if((dbi.dwMask & DBIM.BKCOLOR) != 0) {
-                dbi.dwMask &= ~DBIM.BKCOLOR;
+            if((pdbi.dwMask & DBIM.BKCOLOR) != 0) {
+                pdbi.dwMask &= ~DBIM.BKCOLOR;
             }
-            if((dbi.dwMask & DBIM.TITLE) != 0) {
-                dbi.wszTitle = null;
+            if((pdbi.dwMask & DBIM.TITLE) != 0) {
+                pdbi.wszTitle = null;
             }
         }
 
@@ -267,7 +268,9 @@ namespace BandObjectLib {
                     window.GetWindow(out ReBarHandle);
                 }
             }
-            catch {
+            catch (Exception exc)
+            {
+               //  logger.Log(exc);
             }
         }
 
@@ -292,7 +295,7 @@ namespace BandObjectLib {
             return 1;
         }
 
-        public virtual void UIActivateIO(int fActivate, ref MSG Msg) {
+        public virtual void UIActivateIO(int fActivate, ref MSG msg) {
             if(fActivate != 0) {
                 Control nextControl = GetNextControl(this, true);
                 if(nextControl != null) {

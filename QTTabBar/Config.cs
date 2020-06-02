@@ -321,14 +321,14 @@ namespace QTTabBarLib {
                 /* qwop's default's value.*/
                 NewTabPosition = TabPos.Rightmost;  // 新标签在最右侧
                 NextAfterClosed = TabPos.LastActive; // 关闭标签时候切换导
-                ActivateNewTab = true;  
-                NeverOpenSame = true;
-                RenameAmbTabs = true;
-                DragOverTabOpensSDT = false;
+                ActivateNewTab = true;  // 是否立即切换到新标签
+                NeverOpenSame = true;   //  重用新标签
+                RenameAmbTabs = true;  // 模糊重命名标签
+                DragOverTabOpensSDT = false; // 拖拽标签后的操作
                 ShowFolderIcon = true;  // 显示驱动器图标
-                ShowSubDirTipOnTab = false;
+                ShowSubDirTipOnTab = false;  // 在文件夹显示子标签
                 ShowDriveLetters = false; // 显示驱动器字符
-                ShowCloseButtons = false;  // 显示关闭按钮
+                ShowCloseButtons = true;  // 显示关闭按钮
                 CloseBtnsWithAlt = false; // 只有alt按住进行关闭
                 CloseBtnsOnHover = false;  // 仅鼠标悬浮关闭
                 ShowNavButtons = true;  // 在标签显示导航按钮
@@ -370,13 +370,13 @@ namespace QTTabBarLib {
                 AltRowBackgroundColor = QTUtility2.MakeColor(0xfaf5f1); */
 
                 /* qwop's default value.*/
-                AlwaysShowHeaders = true;
-                KillExtWhileRenaming = true;
-                RedirectLibraryFolders = true;
-                F2Selection = false;
-                WrapArrowKeySelection = true;
-                BackspaceUpLevel = true;
-                HorizontalScroll = true;
+                AlwaysShowHeaders = true;  // 显示列标题
+                RedirectLibraryFolders = true; // 使用库文件夹
+                KillExtWhileRenaming = true;  // 重命名时候，不使用扩展名
+                F2Selection = false; // 禁用F2重命名周期选择
+                WrapArrowKeySelection = true; // 使用箭头键时候环绕选择文件夹
+                BackspaceUpLevel = true;  // backupspace 键回到上一级目录
+                HorizontalScroll = true;  // 
                 ForceSysListView = true;
                 ToggleFullRowSelect = QTUtility.IsXP;
                 DetailsGridLines = true;
@@ -418,15 +418,18 @@ namespace QTTabBarLib {
                 ShowSubDirTips = true;
                 SubDirTipsPreview = true;
                 SubDirTipsFiles = true;
-                SubDirTipsWithShift = true;
+                SubDirTipsWithShift = false ; // 仅当shift键按下显示子目录
                 ShowTooltipPreviews = true;
-                ShowPreviewsWithShift = true;
-                ShowPreviewInfo = true;
-
+                ShowPreviewInfo = true; // 启用文件预览
+                ShowPreviewsWithShift = false; // 仅当shift健按下, 启用文件预览
+                
+                // 文件与狼的 宽高
                 PreviewMaxWidth = 512;
                 PreviewMaxHeight = 256;
+                //  字体配置
                 PreviewFont = Control.DefaultFont;
                 PreviewFont = new Font(new FontFamily("微软雅黑"), 9f);
+                // 文本类型扩展名
                 TextExt = new List<string> { 
                     ".txt",".rtf"
                     ,".ini", ".inf",".properties", ".ruleset", ".settings"
@@ -445,6 +448,7 @@ namespace QTTabBarLib {
                     ,".jsp", ".asp", ".php",".aspx"
                     ,".resx",".xaml",  ".config", ".manifest", ".csproj", ".vbproj"
                 };
+                // 配置默认的图像扩展名
                 ImageExt = ThumbnailTooltipForm.MakeDefaultImgExts();
             }
         }
@@ -550,8 +554,10 @@ namespace QTTabBarLib {
                 TabTitleShadows = true;
                 TabTextCentered = false;
                 UseRebarBGColor = true;
-                RebarColor = Color.FromArgb(230,230,230);
-                UseRebarImage = false;
+                // RebarColor = Color.FromArgb(230,230,230);
+                // 设置标签背景色
+                RebarColor = Color.FromArgb(245,246,247);
+                UseRebarImage = false;  // 工具栏自定义图片
                 RebarStretchMode = StretchMode.Tile;
                 RebarImageFile = "";
                 RebarImageSeperateBars = false;
