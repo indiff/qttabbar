@@ -22,6 +22,8 @@ namespace QTTabBarLib {
 
     internal static class RegConst {
         public const string Root = @"Software\QTTabBar\";
+        // HKEY_CURRENT_USER\Software\QTTabBar\Config\Skin , 导出皮肤
+        public const string Root_Config_Skin= @"Software\QTTabBar\Config\Skin\";
         public const string Config = @"Config\";
         public const string Groups = @"Groups\";
         public const string Apps = @"UserApps\";

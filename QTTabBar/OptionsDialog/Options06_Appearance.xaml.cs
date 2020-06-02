@@ -15,6 +15,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -74,6 +76,31 @@ namespace QTTabBarLib {
                 ((Button)sender).Tag = cd.Color;
             }
         }
+		
+
+        private void btnImportSkin_Click(object sender, RoutedEventArgs e)
+        {
+            // 导入皮肤.
+            System.Windows.MessageBox.Show("双击注册表可以直接导入");
+        }
+        private void btnExportSkin_Click(object sender, RoutedEventArgs e)
+        {
+            // 导出皮肤.
+            using (System.Windows.Forms.SaveFileDialog sf = new System.Windows.Forms.SaveFileDialog())
+            {
+                sf.Filter = "Registry file (*.reg)|*.reg";
+                sf.RestoreDirectory = true;
+                System.DateTime dt = System.DateTime.Now;
+                sf.FileName = "QTTabBarSettingsSkin-" + dt.Year + "-" + dt.Month + "-" + dt.Day + ".reg";
+                if (System.Windows.Forms.DialogResult.OK == sf.ShowDialog())
+                {
+                    RegFileWriter.Export(RegConst.Root_Config_Skin, sf.FileName);
+                }
+            }
+        }
+
+
+
 
         // Draws a control to a bitmap
         private static BitmapSource ConvertToBitmapSource(UIElement element) {

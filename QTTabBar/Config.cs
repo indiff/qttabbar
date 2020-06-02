@@ -534,11 +534,11 @@ namespace QTTabBarLib {
                  ActiveTabInBold = false;*/
 
                 /* qwop's default value. */
-                UseTabSkin = false;
-                TabImageFile = "";
-                TabSizeMargin = Padding.Empty;
-                TabContentMargin = Padding.Empty;
-                OverlapPixels = 0;
+                UseTabSkin = false;  // 标签背景
+                TabImageFile = "";  // 标签背景文件
+                TabSizeMargin = Padding.Empty;  // 设置边缘
+                TabContentMargin = Padding.Empty; // 内容边缘
+                OverlapPixels = 0;  // 
                 HitTestTransparent = false;
                 TabHeight = 24;
                 TabMinWidth = 50;
@@ -557,9 +557,9 @@ namespace QTTabBarLib {
                 // RebarColor = Color.FromArgb(230,230,230);
                 // 设置标签背景色
                 RebarColor = Color.FromArgb(245,246,247);
-                UseRebarImage = false;  // 工具栏自定义图片
+                UseRebarImage = false;  // 是否工具栏自定义图片
                 RebarStretchMode = StretchMode.Tile;
-                RebarImageFile = "";
+                RebarImageFile = "";  // 工具栏自定义图片
                 RebarImageSeperateBars = false;
                 RebarSizeMargin = Padding.Empty;
                 ActiveTabInBold = false;
@@ -593,7 +593,7 @@ namespace QTTabBarLib {
                         ? new int[] { 1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 21, 9, 20  }
                         : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 21, 9, 19, 10 };
                 ActivePluginIDs = new string[0];
-                LargeButtons	=	false;
+                LargeButtons	=	false;  // 是否显示大按钮
                 LockSearchBarWidth	=	true;
                 LockDropDownButtons	=	true;
                 ShowButtonLabels	=	true;

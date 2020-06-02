@@ -28,7 +28,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using QTPlugin;
