@@ -39,3 +39,4 @@ QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功�
 
 # 鸣谢/Thanks
 * [捐助列表](https://github.com/indiff/qttabbar/issues/27)
+* [donaation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
