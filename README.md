@@ -11,7 +11,7 @@ QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功�
 # 下载地址/Download
 * 请安装 net framework 3.5/Please install net framework 3.5 [下载/download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 * ![请安装 net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
-* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.2)
+* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta)
 
 # 使用方法/Usage
 - 运行安装包文件，安装QTTabBar 
