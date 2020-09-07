@@ -318,7 +318,8 @@ namespace QTTabBarLib {
             return button;
         }
 
-        internal void CreateItems() {
+        internal void CreateItems()
+        {
             string[] ButtonItemsDisplayName = QTUtility.TextResourcesDic["ButtonBar_BtnName"];
             ManageImageList();
             toolStrip.SuspendLayout();
@@ -731,7 +732,8 @@ namespace QTTabBarLib {
             toolStrip.ResumeLayout(false);
             ResumeLayout();
         }
-
+        
+        // 加载默认的图片资源
         private static void LoadDefaultImages(bool fWriteReg) {
             imageStrip_Large.TransparentColor = imageStrip_Small.TransparentColor = Color.Empty;
             Bitmap bmp = Resources_Image.ButtonStrip24;
@@ -766,22 +768,107 @@ namespace QTTabBarLib {
             return false;
         }
 
-        internal static bool LoadExternalImage(string path, out Bitmap bmpLarge, out Bitmap bmpSmall) {
+  internal static bool LoadExternalImage(string path, out Bitmap bmpLarge, out Bitmap bmpSmall)
+        {
             bmpLarge = (bmpSmall = null);
-            if(File.Exists(path)) {
-                try {
-                    using(Bitmap bitmap = new Bitmap(path)) {
-                        if((bitmap.Width >= 0x1b0) && (bitmap.Height >= 40)) {
-                            bmpLarge = bitmap.Clone(new Rectangle(0, 0, 0x1b0, 0x18), PixelFormat.Format32bppArgb);
-                            bmpSmall = bitmap.Clone(new Rectangle(0, 0x18, 0x120, 0x10), PixelFormat.Format32bppArgb);
+            if (File.Exists(path))
+            {
+                try
+                {
+                    using (Bitmap bitmap = new Bitmap(path))
+                    {
+                        // if ((bitmap.Width >= 0x1b0) && (bitmap.Height >= 40))
+                        /* if ((bitmap.Width >= 0x1b0) && (bitmap.Height >= 0x18))
+                         {
+                             bmpLarge = bitmap.Clone(new Rectangle(0, 0, 0x1b0, 0x18), PixelFormat.Format32bppArgb);
+                             bmpSmall = bitmap.Clone(new Rectangle(0, 0x18, 0x120, 0x10), PixelFormat.Format32bppArgb);
+                             return true;
+                         }*/
+
+                        if ((bitmap.Width >= 504) && (bitmap.Height >= 24))
+                        {
+                            bmpLarge = bitmap.Clone(new Rectangle(0, 0, 504, 24), PixelFormat.Format32bppArgb);
+                            // bmpSmall = bitmap.Clone(new Rectangle(0, 0x18, 0x120, 0x10), PixelFormat.Format32bppArgb);
+                            bmpSmall = (Bitmap)ResizeBitMap(bmpLarge, 336, 16);
                             return true;
                         }
                     }
                 }
-                catch {
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex);
                 }
             }
             return false;
+        }
+
+        internal static Image ResizeBitMap(Bitmap original, int desiredWidth, int desiredHeight)
+        {
+            //throw error if bouning box is to small
+            if (desiredWidth < 4 || desiredHeight < 4)
+                throw new InvalidOperationException("Bounding Box of Resize Photo must be larger than 4X4 pixels.");
+
+            //store image widths in variable for easier use
+            var oW = (decimal)original.Width;
+            var oH = (decimal)original.Height;
+            var dW = (decimal)desiredWidth;
+            var dH = (decimal)desiredHeight;
+
+            //check if image already fits
+            if (oW < dW && oH < dH)
+                return original; //image fits in bounding box, keep size (center with css) If we made it bigger it would stretch the image resulting in loss of quality.
+
+            //check for double squares
+            if (oW == oH && dW == dH)
+            {
+                //image and bounding box are square, no need to calculate aspects, just downsize it with the bounding box
+                Bitmap square = new Bitmap(original, (int)dW, (int)dH);
+                // original.Dispose();
+                return square;
+            }
+
+            //check original image is square
+            if (oW == oH)
+            {
+                //image is square, bounding box isn't.  Get smallest side of bounding box and resize to a square of that center the image vertically and horizontally with Css there will be space on one side.
+                int smallSide = (int)Math.Min(dW, dH);
+                Bitmap square = new Bitmap(original, smallSide, smallSide);
+                // original.Dispose();
+                return square;
+            }
+
+            //not dealing with squares, figure out resizing within aspect ratios            
+            if (oW > dW && oH > dH) //image is wider and taller than bounding box
+            {
+                var r = Math.Min(dW, dH) / Math.Min(oW, oH); //two dimensions so figure out which bounding box dimension is the smallest and which original image dimension is the smallest, already know original image is larger than bounding box
+                var nH = oH * r; //will downscale the original image by an aspect ratio to fit in the bounding box at the maximum size within aspect ratio.
+                var nW = oW * r;
+                var resized = new Bitmap(original, (int)nW, (int)nH);
+                //  original.Dispose();
+                return resized;
+            }
+            else
+            {
+                if (oW > dW) //image is wider than bounding box
+                {
+                    var r = dW / oW; //one dimension (width) so calculate the aspect ratio between the bounding box width and original image width
+                    var nW = oW * r; //downscale image by r to fit in the bounding box...
+                    var nH = oH * r;
+                    var resized = new Bitmap(original, (int)nW, (int)nH);
+                    //  original.Dispose();
+                    return resized;
+                }
+                else
+                {
+                    //original image is taller than bounding box
+                    var r = dH / oH;
+                    var nH = oH * r;
+                    var nW = oW * r;
+                    var resized = new Bitmap(original, (int)nW, (int)nH);
+                    //  original.Dispose();
+                    return resized;
+                }
+            }
         }
 
         private static void ManageImageList() {

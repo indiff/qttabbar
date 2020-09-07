@@ -86,6 +86,7 @@
                 Content="{qt:Resx Key=Options_Page11_ButtonBar, Index=7}"
                 Style="{StaticResource SectionHeaderStyle}" />
             <qt:FileFolderEntryBox
+				x:Name="btnImgPath"
                 FilterText="{qt:Resx Key=FileFilters, Index=0}"
                 FilterExtensions="*.png;*.bmp;*.jpg;*.gif"
                 Margin="13,1,0,1"

@@ -24,7 +24,8 @@ using System.Windows.Forms.VisualStyles;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    internal sealed class QTabControl : Control {
+    internal sealed class QTabControl : Control
+    {
         private Bitmap bmpCloseBtn_Cold;
         private Bitmap bmpCloseBtn_ColdAlt;
         private Bitmap bmpCloseBtn_Hot;
@@ -45,6 +46,8 @@ namespace QTTabBarLib {
         private bool fForceClassic;
         private bool fLimitSize;
         private bool fNeedToDrawUpDown;
+        // 是否添加新增按钮
+        private bool fNeedPlusButton;
         private bool fNowMouseIsOnCloseBtn;
         private bool fNowMouseIsOnIcon;
         private bool fNowShowCloseBtnAlt;
@@ -106,9 +109,12 @@ namespace QTTabBarLib {
         public event QTabCancelEventHandler Selecting;
         public event QTabCancelEventHandler TabCountChanged;
         public event QTabCancelEventHandler TabIconMouseDown;
+        public event QTabCancelEventHandler PlusButtonClicked;
 
         public QTabControl() {
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
+            fNeedPlusButton = true;
+            //SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.UserPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, value: true);
             components = new Container();
             tabPages = new QTabCollection(this);
             BackColor = Color.Transparent;
@@ -131,6 +137,8 @@ namespace QTTabBarLib {
             if(VisualStyleRenderer.IsSupported) {
                 InitializeRenderer();
             }
+
+
         }
 
         private bool CalculateItemRectangle() {
@@ -1021,11 +1029,22 @@ namespace QTTabBarLib {
                             PInvoke.InvalidateRect(Handle, IntPtr.Zero, true);
                         }
                     }
+                } else if ( (fNeedPlusButton && (e.Button != MouseButtons.Right)) && ((PlusButtonClicked != null) && tabMouseOn == null && IsPlusButton(e) ) ) {
+                    PlusButtonClicked(this, null);
                 }
                 else {
                     base.OnMouseUp(e);
                 }
             }
+        }
+
+        private bool IsPlusButton(MouseEventArgs e)
+        {
+            if (newRect != null && newRect.Contains( e.Location ))
+            {
+                return true;
+            }
+            return false;
         }
 
         protected override void OnPaint(PaintEventArgs e) {
@@ -1052,12 +1071,42 @@ namespace QTTabBarLib {
                     if((fNeedToDrawUpDown && (iSelectedIndex < tabPages.Count)) && ((iSelectedIndex > -1) && (GetItemRectangle(iSelectedIndex).X != 0))) {
                         e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(0, 0, 2, e.ClipRectangle.Height));
                     }
+
+                    if (fNeedPlusButton)
+                    {
+                        DrawPlusButton(e.Graphics, GetItemRectangle(tabPages.Count - 1));
+                    }
+
                     ShowUpDown(fNeedToDrawUpDown);
                 }
                 catch(Exception exception) {
                     QTUtility2.MakeErrorLog(exception);
                 }
             }
+        }
+
+        private RectangleF newRect;
+
+        private void DrawPlusButton(Graphics g,Rectangle drawRect)
+        {
+            // Create string to draw.
+            String drawString = "+";
+
+            // Create font and brush.
+            Font drawFont = new Font("Arial", 16, FontStyle.Bold);
+            SolidBrush drawBrush = new SolidBrush(Color.Blue);
+
+            // Create rectangle for drawing.
+            // int defaultDpi = DpiManager.DefaultDpi;
+            //  new PointF((float)defaultDpi / 96f, (float)defaultDpi / 96f);
+            newRect = new RectangleF(drawRect.X + drawRect.Width, drawRect.Y + drawRect.Height / 2 - 10, drawRect.Width / 2, drawRect.Height );
+            // QTUtility2.MakeErrorLog( "x:" + (drawRect.X + drawRect.Width) + ",y:" + (drawRect.Y + drawRect.Height / 2 - 10) + ",width:" + (drawRect.Width / 2) + ",height:" + (drawRect.Height));
+            //  new Rectangle(num, 0, PLUSBUTTON_WIDTH, ScaledTabHeight).TranslateClient(num2, IsRightToLeft);
+            // Draw rectangle to screen.
+            // Pen blackPen = new Pen(Color.Blue);
+            //g.DrawRectangle(blackPen, x, y, width, height);
+            // Draw string to screen.
+            g.DrawString(drawString, drawFont, drawBrush, newRect );
         }
 
         private void OnPaint_MultipleRow(PaintEventArgs e) {
@@ -1084,6 +1133,16 @@ namespace QTTabBarLib {
                     if(flag2) {
                         DrawTab(e.Graphics, tabPages[iSelectedIndex].TabBounds, iSelectedIndex, tabMouseOn, fVisualStyle);
                         flag2 = false;
+                    }
+
+                    if (fNeedPlusButton)
+                    {
+                        if (tabPages.Count > 0)
+                        {
+                            Rectangle plusButtonRect = tabPages[tabPages.Count - 1].TabBounds;
+                            DrawPlusButton(e.Graphics,plusButtonRect);
+                        }
+                        
                     }
                 }
                 ShowUpDown(false);

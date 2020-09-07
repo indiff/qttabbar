@@ -331,7 +331,7 @@ namespace QTTabBarLib {
                 ShowCloseButtons = true;  // 显示关闭按钮
                 CloseBtnsWithAlt = false; // 只有alt按住进行关闭
                 CloseBtnsOnHover = false;  // 仅鼠标悬浮关闭
-                ShowNavButtons = true;  // 在标签显示导航按钮
+                ShowNavButtons = false;  // 在标签显示导航按钮 (	(默认配置关闭按钮显示)标签栏右侧的两个按钮能否添加一个选项以控制是否去掉呢。#28）
                 NavButtonsOnRight = true; // 在最右边
                 MultipleTabRows = true; // 允许多行标签
                 ActiveTabOnBottomRow = true; // 始终将活动标签置于底部行
@@ -557,7 +557,7 @@ namespace QTTabBarLib {
                 // RebarColor = Color.FromArgb(230,230,230);
                 // 设置标签背景色
                 RebarColor = Color.FromArgb(245,246,247);
-                UseRebarImage = false;  // 是否工具栏自定义图片
+                UseRebarImage = true;  // 是否工具栏自定义图片,启用自定义图片
                 RebarStretchMode = StretchMode.Tile;
                 RebarImageFile = "";  // 工具栏自定义图片
                 RebarImageSeperateBars = false;
@@ -594,10 +594,10 @@ namespace QTTabBarLib {
                         : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 21, 9, 19, 10 };
                 ActivePluginIDs = new string[0];
                 LargeButtons	=	false;  // 是否显示大按钮
-                LockSearchBarWidth	=	true;
-                LockDropDownButtons	=	true;
-                ShowButtonLabels	=	true;
-                ImageStripPath	=	"";
+                LockSearchBarWidth	=	true;  // 锁定搜索框大小
+                LockDropDownButtons	=	true;  // 锁定下拉按钮菜单顺序
+                ShowButtonLabels	=	true; // 是否显示按钮标签
+                ImageStripPath	=	"";  // 自定义图片路径
             }
         }
 

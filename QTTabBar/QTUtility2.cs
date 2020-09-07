@@ -247,6 +247,36 @@ namespace QTTabBarLib {
             }
         }
 
+
+        public static void MakeErrorLog( string optional = null)
+        {
+            try
+            {
+                string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string appdataQT = Path.Combine(appdata, "QTTabBar");
+                if (!Directory.Exists(appdataQT))
+                {
+                    Directory.CreateDirectory(appdataQT);
+                }
+                string path = Path.Combine(appdataQT, "QTTabBarException.log");
+                using (StreamWriter writer = new StreamWriter(path, true))
+                {
+
+                    if (!String.IsNullOrEmpty(optional))
+                    {
+                        writer.WriteLine("´íÎóÐÅÏ¢: " + optional);
+                    }
+                   
+                    writer.WriteLine("--------------");
+                    writer.WriteLine();
+                }
+                SystemSounds.Exclamation.Play();
+            }
+            catch
+            {
+            }
+        }
+
         public static string MakeKeyString(Keys key) {
             if(key == Keys.None) {
                 return " - ";
@@ -487,6 +517,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /**
+         * ÉèÖÃ×Ö·û´®µ½¼ôÌù°å
+         */
         internal static void SetStringClipboard(string str) {
             try {
                 Clipboard.SetDataObject(str, true);
@@ -497,6 +530,26 @@ namespace QTTabBarLib {
             }
         }
 
+        /**
+         * ÉèÖÃ×Ö·û´®µ½¼ôÌù°å
+         */
+        internal static string GetStringClipboard()
+        {
+            try
+            {
+                if (Clipboard.ContainsText(TextDataFormat.Text))
+                {
+                    string clipboardText = Clipboard.GetText(TextDataFormat.Text);
+                    SystemSounds.Asterisk.Play();
+                    return clipboardText;
+                }
+            }
+            catch
+            {
+                SystemSounds.Hand.Play();
+            }
+            return "";
+        }
         public static string StringJoin<T>(this IEnumerable<T> list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;

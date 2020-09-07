@@ -5,5 +5,13 @@
   <String Id="CLOSE_TABS">Close all Explorer windows and reopen them as tabs</String>
   <String Id="COMPILE_IMG">Compiling native images</String>
   <String Id="GPL_FILE">GPL3.rtf</String>
-  
+  <String Id="STANDARD_BUTTONS">QTTab Standard Buttons</String>
+  <String Id="DESKTOP_TOOL">QTTab Desktop Tool</String>
+
+  <String Id="QTTABBAR_ATUOLOADER">QTTabBar AutoLoader</String>
+
+  <String Id="ALREADY_INSTALLED">Newer version already installed.</String>
+  <String Id="DETECTED_OLD_VERSION">Setup has detected that an older version of QTTabBar is installed.  Due to a change in installers, you must manually uninstall this older version and restart Explorer before continuing.  Please run the installer again once the older version is uninstalled and Explorer has been restarted.</String>
+  <String Id="STILL_OLD_VERSION">It appears that an older version of QTTabBar is still loaded in Windows Explorer.  Please restart Explorer via the Task Manager or restart your computer before continuing.</String>
+  <String Id="REQUIRE_NET_FRAMEWORK">This application requires the .NET Framework version at least 3.5. Please install the .NET Framework then run this installer again.</String>
 </WixLocalization>

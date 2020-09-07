@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using QTPlugin;
@@ -36,16 +38,146 @@ namespace QTTabBarLib {
             InitializeComponent();
         }
 
+
+        internal static bool LoadExternalImage(string path, out Bitmap bmpLarge, out Bitmap bmpSmall)
+        {
+            bmpLarge = (bmpSmall = null);
+            if (File.Exists(path))
+            {
+                try
+                {
+                    using (Bitmap bitmap = new Bitmap(path))
+                    {
+                        // if ((bitmap.Width >= 0x1b0) && (bitmap.Height >= 40))
+                        /* if ((bitmap.Width >= 0x1b0) && (bitmap.Height >= 0x18))
+                         {
+                             bmpLarge = bitmap.Clone(new Rectangle(0, 0, 0x1b0, 0x18), PixelFormat.Format32bppArgb);
+                             bmpSmall = bitmap.Clone(new Rectangle(0, 0x18, 0x120, 0x10), PixelFormat.Format32bppArgb);
+                             return true;
+                         }*/
+
+                        if ((bitmap.Width >= 504) && (bitmap.Height >= 24))
+                        {
+                            bmpLarge = bitmap.Clone(new Rectangle(0, 0, 504, 24), PixelFormat.Format32bppArgb);
+                            // bmpSmall = bitmap.Clone(new Rectangle(0, 0x18, 0x120, 0x10), PixelFormat.Format32bppArgb);
+                            bmpSmall = (Bitmap)ResizeBitMap(bmpLarge, 336, 16);
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex);
+                }
+            }
+            return false;
+        }
+
+        internal static Image ResizeBitMap(Bitmap original, int desiredWidth, int desiredHeight)
+        {
+            //throw error if bouning box is to small
+            if (desiredWidth < 4 || desiredHeight < 4)
+                throw new InvalidOperationException("Bounding Box of Resize Photo must be larger than 4X4 pixels.");
+
+            //store image widths in variable for easier use
+            var oW = (decimal)original.Width;
+            var oH = (decimal)original.Height;
+            var dW = (decimal)desiredWidth;
+            var dH = (decimal)desiredHeight;
+
+            //check if image already fits
+            if (oW < dW && oH < dH)
+                return original; //image fits in bounding box, keep size (center with css) If we made it bigger it would stretch the image resulting in loss of quality.
+
+            //check for double squares
+            if (oW == oH && dW == dH)
+            {
+                //image and bounding box are square, no need to calculate aspects, just downsize it with the bounding box
+                Bitmap square = new Bitmap(original, (int)dW, (int)dH);
+                // original.Dispose();
+                return square;
+            }
+
+            //check original image is square
+            if (oW == oH)
+            {
+                //image is square, bounding box isn't.  Get smallest side of bounding box and resize to a square of that center the image vertically and horizontally with Css there will be space on one side.
+                int smallSide = (int)Math.Min(dW, dH);
+                Bitmap square = new Bitmap(original, smallSide, smallSide);
+                // original.Dispose();
+                return square;
+            }
+
+            //not dealing with squares, figure out resizing within aspect ratios            
+            if (oW > dW && oH > dH) //image is wider and taller than bounding box
+            {
+                var r = Math.Min(dW, dH) / Math.Min(oW, oH); //two dimensions so figure out which bounding box dimension is the smallest and which original image dimension is the smallest, already know original image is larger than bounding box
+                var nH = oH * r; //will downscale the original image by an aspect ratio to fit in the bounding box at the maximum size within aspect ratio.
+                var nW = oW * r;
+                var resized = new Bitmap(original, (int)nW, (int)nH);
+                //  original.Dispose();
+                return resized;
+            }
+            else
+            {
+                if (oW > dW) //image is wider than bounding box
+                {
+                    var r = dW / oW; //one dimension (width) so calculate the aspect ratio between the bounding box width and original image width
+                    var nW = oW * r; //downscale image by r to fit in the bounding box...
+                    var nH = oH * r;
+                    var resized = new Bitmap(original, (int)nW, (int)nH);
+                    //  original.Dispose();
+                    return resized;
+                }
+                else
+                {
+                    //original image is taller than bounding box
+                    var r = dH / oH;
+                    var nH = oH * r;
+                    var nW = oW * r;
+                    var resized = new Bitmap(original, (int)nW, (int)nH);
+                    //  original.Dispose();
+                    return resized;
+                }
+            }
+        }
+
         public override void InitializeConfig() {
             // Initialize the button bar tab.
             imageStripLarge = new ImageStrip(new Size(24, 24));
-            using(Bitmap b = Resources_Image.ButtonStrip24) {
-                imageStripLarge.AddStrip(b);
-            }
             imageStripSmall = new ImageStrip(new Size(16, 16));
-            using(Bitmap b = Resources_Image.ButtonStrip16) {
-                imageStripSmall.AddStrip(b);
+            if ( null != WorkingConfig.bbar.ImageStripPath && WorkingConfig.bbar.ImageStripPath.Length > 0 )
+            {
+                Bitmap bitmap;
+                Bitmap bitmap2;
+                if (LoadExternalImage(WorkingConfig.bbar.ImageStripPath, out bitmap, out bitmap2))
+                {
+                    imageStripLarge.AddStrip(bitmap);
+                    imageStripSmall.AddStrip(bitmap2);
+                    bitmap.Dispose();
+                    bitmap2.Dispose();
+                    if (Path.GetExtension(WorkingConfig.bbar.ImageStripPath ).PathEquals(".bmp"))
+                    {
+                        imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Magenta;
+                    }
+                    else
+                    {
+                        imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Empty;
+                    }
+                }
+            } else
+            {
+                using (Bitmap b = Resources_Image.ButtonStrip24)
+                {
+                    imageStripLarge.AddStrip(b);
+                }
+                imageStripSmall = new ImageStrip(new Size(16, 16));
+                using (Bitmap b = Resources_Image.ButtonStrip16)
+                {
+                    imageStripSmall.AddStrip(b);
+                }
             }
+            
             ButtonPool = new ObservableCollection<ButtonEntry>();
             CurrentButtons = new ObservableCollection<ButtonEntry>();
 
@@ -120,11 +252,38 @@ namespace QTTabBarLib {
                         p = activeIDs.Count;
                     }
                     p <<= 16;
+
                 }
                 return p + entry.Index;
             }).ToArray();
             WorkingConfig.bbar.ActivePluginIDs = activeIDs.ToArray();
             // TODO: Validate image strip
+
+            // MessageBox.Show("image:" + WorkingConfig.bbar.ImageStripPath);
+          
+            if (null != WorkingConfig.bbar.ImageStripPath && WorkingConfig.bbar.ImageStripPath.Trim().Length > 0)
+            {
+                imageStripLarge = new ImageStrip(new Size(24, 24));
+                imageStripSmall = new ImageStrip(new Size(16, 16));
+
+                Bitmap bitmap;
+                Bitmap bitmap2;
+                if (LoadExternalImage(WorkingConfig.bbar.ImageStripPath, out bitmap, out bitmap2))
+                {
+                    imageStripLarge.AddStrip(bitmap);
+                    imageStripSmall.AddStrip(bitmap2);
+                    bitmap.Dispose();
+                    bitmap2.Dispose();
+                    if (Path.GetExtension(WorkingConfig.bbar.ImageStripPath).PathEquals(".bmp"))
+                    {
+                        imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Magenta;
+                    }
+                    else
+                    {
+                        imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Empty;
+                    }
+                }
+            }
         }
 
         private void btnBBarAdd_Click(object sender, RoutedEventArgs e) {

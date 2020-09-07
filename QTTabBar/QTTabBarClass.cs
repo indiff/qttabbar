@@ -1855,6 +1855,7 @@ namespace QTTabBarLib {
                     break;
 
                 case BindAction.CopyTabPath:
+                    // 复制标签的路径路径
                     string currentPath = tab.CurrentPath;
                     if(currentPath.IndexOf("???") != -1) {
                         currentPath = currentPath.Substring(0, currentPath.IndexOf("???"));
@@ -1900,8 +1901,6 @@ namespace QTTabBarLib {
                 case BindAction.CopyItemName:
                 case BindAction.ChecksumItem:
                     break;
-
-
                 /***** add by qwop start ***/
                 case BindAction.OpenCmd:  // 打开命令提示符
                     OpenCmd( tab ); // add by qwop...
@@ -2019,6 +2018,22 @@ namespace QTTabBarLib {
 
         private const int WS_SHOWNORMAL = 1;
 
+        private void cmdPath(string currentPath)
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.Arguments = "/k cd " + currentPath;
+            process.StartInfo.WorkingDirectory = currentPath;
+            process.Start();
+
+
+
+            ShowWindowAsync(process.MainWindowHandle, WS_SHOWNORMAL); //显示，可以注释掉
+            SetForegroundWindow(process.MainWindowHandle);            //放到前端
+            SetFocus(process.MainWindowHandle);
+        }
+
         /************************************************************************/
         /* 打开当前目录的 命令提示符                                            */
         /************************************************************************/
@@ -2067,19 +2082,27 @@ namespace QTTabBarLib {
                     }
                     */
 
-                    System.Diagnostics.Process process = new System.Diagnostics.Process();
-                    process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-                    process.StartInfo.FileName = "cmd.exe";
-                    process.StartInfo.Arguments = "/k cd " + currentPath;
-                    process.StartInfo.WorkingDirectory = currentPath;
-                    process.Start();
-                  
+                    cmdPath(currentPath);
 
-
-                    ShowWindowAsync(process.MainWindowHandle, WS_SHOWNORMAL); //显示，可以注释掉
-                    SetForegroundWindow(process.MainWindowHandle);            //放到前端
-                    SetFocus(process.MainWindowHandle);
                 } // end for open cmd.
+                else { 
+                    // 找不到路径则打开系统盘
+                    if (QTUtility2.PathExists("C:\\"))
+                    {
+                        cmdPath("C:\\");
+                    } else if (QTUtility2.PathExists("D:\\"))
+                    {
+                        cmdPath("D:\\");
+                    }
+                    else if (QTUtility2.PathExists("E:\\"))
+                    {
+                        cmdPath("E:\\");
+                    }
+                    else if (QTUtility2.PathExists("F:\\"))
+                    {
+                        cmdPath("F:\\");
+                    }
+                }
             }
         }
 
@@ -3444,6 +3467,8 @@ namespace QTTabBarLib {
             tabControl1.TabCountChanged += tabControl1_TabCountChanged;
             tabControl1.CloseButtonClicked += tabControl1_CloseButtonClicked;
             tabControl1.TabIconMouseDown += tabControl1_TabIconMouseDown;
+            tabControl1.PlusButtonClicked += tabControl1_PlusButtonClicked;
+            
             contextMenuTab.Items.Add(new ToolStripMenuItem());
             contextMenuTab.ShowImageMargin = false;
             contextMenuTab.ItemClicked += contextMenuTab_ItemClicked;
@@ -5698,6 +5723,34 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             ShowSubdirTip_Tab(e.TabPage, e.Action == TabControlAction.Selecting, e.TabPageIndex, false, e.Cancel);
         }
 
+        // 新增+号按钮的添加新标签事件
+        private void tabControl1_PlusButtonClicked(object sender, QTabCancelEventArgs e)
+        {
+            // 新标签按钮 qwop
+            string clipPath = QTUtility2.GetStringClipboard();
+            string[] pathArr = { "a:\\", "b:\\", "c:\\", "d:\\", "e:\\", "f:\\", "g:\\", "h:\\", "i:\\" };
+            bool blockSelecting = false,  fForceNew = true;
+            if ( File.Exists( clipPath ))
+            {
+                string pathRoot = Path.GetPathRoot(clipPath);
+                OpenNewTab(pathRoot, blockSelecting, fForceNew);
+            } else if (Directory.Exists(clipPath))
+            {
+                OpenNewTab(clipPath, blockSelecting, fForceNew);
+            } else
+            {
+                for ( int i = 0; i < pathArr.Length; i++ )
+                {
+                    if (Directory.Exists(pathArr[i]))
+                    {
+                        OpenNewTab(pathArr[i], blockSelecting, fForceNew);
+                        break;
+                    }
+                }
+            }
+        }
+
+        
         private void tabSwitcher_Switched(object sender, ItemCheckEventArgs e) {
             tabControl1.SelectedIndex = e.Index;
         }

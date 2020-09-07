@@ -112,18 +112,29 @@ namespace QTTabBarLib {
                 textureBrushRebar.Dispose();
                 textureBrushRebar = null;
             }
-            if(!File.Exists(Config.Skin.RebarImageFile)) return;
-            try {
-                using(Bitmap bitmap = new Bitmap(Config.Skin.RebarImageFile)) {
-                    bmpRebar = new Bitmap(bitmap, bitmap.Size);
-                    textureBrushRebar = new TextureBrush(bmpRebar);
-                    if(Path.GetExtension(Config.Skin.RebarImageFile).PathEquals(".bmp")) {
-                        bmpRebar.MakeTransparent(Color.Magenta);
+            if (!File.Exists(Config.Skin.RebarImageFile)) {
+                // 加载默认的背景图
+                bmpRebar = Resources_Image.imgRebar;
+                textureBrushRebar = new TextureBrush(bmpRebar);
+            } else
+            {
+                try
+                {
+                    using (Bitmap bitmap = new Bitmap(Config.Skin.RebarImageFile))
+                    {
+                        bmpRebar = new Bitmap(bitmap, bitmap.Size);
+                        textureBrushRebar = new TextureBrush(bmpRebar);
+                        if (Path.GetExtension(Config.Skin.RebarImageFile).PathEquals(".bmp"))
+                        {
+                            bmpRebar.MakeTransparent(Color.Magenta);
+                        }
                     }
                 }
+                catch
+                {
+                }
             }
-            catch {
-            }
+            
         }
 
         public void EnsureMenuBarIsCorrect() {

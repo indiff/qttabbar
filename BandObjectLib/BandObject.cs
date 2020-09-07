@@ -258,7 +258,7 @@ namespace BandObjectLib {
                     Explorer = (WebBrowserClass)Marshal.CreateWrapperOfType(obj2 as IWebBrowser, typeof(WebBrowserClass));
                     OnExplorerAttached();
                 }
-                catch(COMException exception) {
+                catch(COMException ) { // exception
                     // QTUtility2.MakeErrorLog(exception, "MSG:" + exception.Message);
                 }
             }
@@ -268,7 +268,7 @@ namespace BandObjectLib {
                     window.GetWindow(out ReBarHandle);
                 }
             }
-            catch (Exception exc)
+            catch (Exception ) // exc
             {
                //  logger.Log(exc);
             }

@@ -23,8 +23,8 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.2" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.2(2020)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define ProductVersion="1.5.3" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.5.3(2020)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano -->
     <?define Manufacturer="indiff"?>
@@ -151,13 +151,13 @@ Language="1033"
                                 <?define compDesc = QTTabBar?>
                             <?elseif $(var.compName) = QTButtonBar?>
                                 <?define compGUID = {D2BF470E-ED1C-487F-A666-2BD8835EB6CE}?>
-                                <?define compDesc = QTTab Standard Buttons?>
+                                <?define compDesc = !(loc.STANDARD_BUTTONS)?>
                             <?elseif $(var.compName) = QTCoTaskBarClass?>
                                 <?define compGUID = {D2BF470E-ED1C-487F-A555-2BD8835EB6CE}?>
-                                <?define compDesc = QTTab Desktop Tool?>
+                                <?define compDesc = !(loc.DESKTOP_TOOL)?>
                             <?elseif $(var.compName) = AutoLoader?>
                                 <?define compGUID = {D2BF470E-ED1C-487F-A777-2BD8835EB6CE}?>
-                                <?define compDesc = QTTabBar AutoLoader?>
+                                <?define compDesc = !(loc.QTTABBAR_ATUOLOADER)?>
                             <?endif?>
                             <Component Id="$(var.compName)_$(var.arch)" Win64="$(var.win64)" DisableRegistryReflection="$(var.win64)">
                                 <?if $(var.compName) = QTCoTaskBarClass?>
@@ -226,16 +226,16 @@ Language="1033"
             <?endforeach?>
         </Feature>
 
-        <CustomAction Id="PreventDowngrading" Error="Newer version already installed." />
+        <CustomAction Id="PreventDowngrading" Error="!(loc.ALREADY_INSTALLED)" />
         <CustomAction Id="HideBars" BinaryKey="InstallerHelper" DllEntry="HideBars" />
         <CustomAction Id="CloseAndReopen" BinaryKey="InstallerHelper" DllEntry="CloseAndReopen" />
         <CustomAction Id="CheckOldVersion" BinaryKey="InstallerHelper" DllEntry="CheckOldVersion" />
-        <CustomAction Id="FailOldVersion1" Error="Setup has detected that an older version of QTTabBar is installed.  Due to a change in installers, you must manually uninstall this older version and restart Explorer before continuing.  Please run the installer again once the older version is uninstalled and Explorer has been restarted." />
-        <CustomAction Id="FailOldVersion2" Error="It appears that an older version of QTTabBar is still loaded in Windows Explorer.  Please restart Explorer via the Task Manager or restart your computer before continuing." />
+        <CustomAction Id="FailOldVersion1" Error="!(loc.DETECTED_OLD_VERSION)" />
+        <CustomAction Id="FailOldVersion2" Error="!(loc.STILL_OLD_VERSION)" />
         <CustomAction Id="SetRuntime4" Property="RUNTIMEVERSION" Value="v4.0.30319" />
         <CustomAction Id="SetRuntimeNot4" Property="RUNTIMEVERSION" Value="v2.0.50727" />
         
-        <Condition Message="This application requires the .NET Framework version at least 3.5. Please install the .NET Framework then run this installer again.">
+        <Condition Message="!(loc.REQUIRE_NET_FRAMEWORK)">
             <![CDATA[Installed OR NETFRAMEWORK35 OR NETFRAMEWORK40CLIENT]]>
         </Condition>
 
