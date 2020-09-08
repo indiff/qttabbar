@@ -1,6 +1,7 @@
 # 软件介绍/Introduction
 QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功能的小工具。从此以后工作时不再遍布文件夹窗口，还有给力的文件夹预览功能，大大提高了你工作的效率。就像IE 7和Firefox、Opera那样的。QTTabBar还提供了一些功能插件，如：文件操作工具、树型目录、显示状态栏等等。
-[主页](https://indiff.github.io/qttabbar/)
+- [GitHub主页](https://indiff.github.io/qttabbar)
+- [Gitee主页](https://gitee.com/qwop/qttabbar)
 
 # 版本更新/Changes
 - [1.5.3(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta) 增加自定义按钮图片，支持按钮换肤功能；添加新功能，支持新开标签页，默认取剪贴板的路径；增加支持视频预览图片功能
@@ -12,9 +13,10 @@ QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功�
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) 内置汉化语言选项
 
 # 下载地址/Download
+* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta)
+* [qttabbar国内镜像](https://gitee.com/qwop/qttabbar/attach_files)
 * 请安装 net framework 3.5/Please install net framework 3.5 [下载/download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 * ![请安装 net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
-* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta)
 
 # 使用方法/Usage
 - 运行安装包文件，安装QTTabBar 
