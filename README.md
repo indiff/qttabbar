@@ -39,7 +39,7 @@ QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功�
 * [中文配置文件/Chinese Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_zh.xml)
 
 # 微信交流群/WeChat Group
-![微信交流群/Wechat group](https://user-images.githubusercontent.com/501276/92434133-a52efb80-f1d1-11ea-8833-c1c5bb1ecc6d.png)
+![微信交流群/WeChat Group](https://user-images.githubusercontent.com/501276/92434770-48ccdb80-f1d3-11ea-8d42-315664e0ace9.png)
 
 # 鸣谢/Thanks
 * [捐助列表](https://github.com/indiff/qttabbar/issues/27)
