@@ -7,7 +7,7 @@ QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功�
 - [1.5.2(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.2) 修复打开命令提示符异常;异常日志添加扩展信息提示;添加语言配置文件
 - [1.4(2020)](https://github.com/indiff/qttabbar/releases/tag/1.4) 调整版本信息，修复热键冲突问题；实现创建空文件；默认自动加载两个插件
 - [1.3](https://github.com/indiff/qttabbar/releases/tag/1.3) 更新插件实现去重，排序功能
-- [1.2](https://github.com/indiff/qttabbar/releases/tag/1.2) 支持win10，修复连接失效问题
+- [1.2](https://github.com/indiff/qttabbar/releases/tag/1.2) 支持win10，修复链接失效问题
 - [1.1](https://github.com/indiff/qttabbar/releases/tag/1.1) 安装界面支持汉化
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) 内置汉化语言选项
 
@@ -38,8 +38,8 @@ QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功�
 * [英文配置文件/English Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_en.xml)
 * [中文配置文件/Chinese Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_zh.xml)
 
-# 交流微信群/wechat
-![微信交流群/Wechat group](https://user-images.githubusercontent.com/501276/91829833-892cd680-ec74-11ea-9c8f-e85de43502e3.png)
+# 微信交流群/WeChat Group
+![微信交流群/Wechat group](https://user-images.githubusercontent.com/501276/92434133-a52efb80-f1d1-11ea-8833-c1c5bb1ecc6d.png)
 
 # 鸣谢/Thanks
 * [捐助列表](https://github.com/indiff/qttabbar/issues/27)
