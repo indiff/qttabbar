@@ -5730,15 +5730,25 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             string clipPath = QTUtility2.GetStringClipboard();
             string[] pathArr = { "a:\\", "b:\\", "c:\\", "d:\\", "e:\\", "f:\\", "g:\\", "h:\\", "i:\\" };
             bool blockSelecting = false,  fForceNew = true;
-            if ( File.Exists( clipPath ))
+            // 如果剪贴板是一个文件路径，并且存在则打开父级目录或者跟级目录
+            if ( File.Exists( clipPath ))  
             {
                 string pathRoot = Path.GetPathRoot(clipPath);
-                OpenNewTab(pathRoot, blockSelecting, fForceNew);
-            } else if (Directory.Exists(clipPath))
+                DirectoryInfo di = new DirectoryInfo(clipPath);
+                if (Directory.Exists(di.Parent.FullName))
+                {
+                    OpenNewTab(di.Parent.FullName, blockSelecting, fForceNew);
+                }
+                else
+                {
+                    OpenNewTab(pathRoot, blockSelecting, fForceNew);
+                }
+            } else if (Directory.Exists(clipPath)) // 剪贴板直接是一个目录则打开标签
             {
                 OpenNewTab(clipPath, blockSelecting, fForceNew);
             } else
             {
+                // 打开指定盘符目录
                 for ( int i = 0; i < pathArr.Length; i++ )
                 {
                     if (Directory.Exists(pathArr[i]))
@@ -5785,6 +5795,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             }
         }
 
+        // 设置窗口置顶操作
         private void ToggleTopMost() {
             if(PInvoke.Ptr_OP_AND(PInvoke.GetWindowLongPtr(ExplorerHandle, -20), 8) != IntPtr.Zero) {
                 PInvoke.SetWindowPos(ExplorerHandle, (IntPtr)(-2), 0, 0, 0, 0, 3);
