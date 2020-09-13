@@ -112,7 +112,7 @@ namespace QTTabBarLib {
         public event QTabCancelEventHandler PlusButtonClicked;
 
         public QTabControl() {
-            fNeedPlusButton = true;
+            fNeedPlusButton = Config.Window.NeedPlusButton;
             //SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.UserPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, value: true);
             components = new Container();
@@ -137,8 +137,6 @@ namespace QTTabBarLib {
             if(VisualStyleRenderer.IsSupported) {
                 InitializeRenderer();
             }
-
-
         }
 
         private bool CalculateItemRectangle() {

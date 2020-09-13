@@ -19,7 +19,7 @@ namespace QTTabBarLib {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource_String_zh_CN {
@@ -47,7 +47,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   使用此强类型资源类，为所有资源查找
+        ///   重写当前线程的 CurrentUICulture 属性
         ///   重写当前线程的 CurrentUICulture 属性。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -151,7 +151,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 资源管理器窗口模式及会话.;单窗口模式;捕捉新Explorer窗口为标签;不捕捉新Explorer窗口;新窗口和标签默认位置;会话保存;每次启动一个新会话;恢复上一个会话所有标签;只恢复上次会话锁定的标签;当关闭按钮被单击;关闭窗口;关闭当前标签;关闭所有未锁定标签;将窗口缩小到系统托盘;关闭;最小化 的本地化字符串。
+        ///   查找类似 资源管理器窗口模式及会话.;单窗口模式;捕捉新Explorer窗口为标签;不捕捉新Explorer窗口;新窗口和标签默认位置;会话保存;每次启动一个新会话;恢复上一个会话所有标签;只恢复上次会话锁定的标签;当关闭按钮被单击;关闭窗口;关闭当前标签;关闭所有未锁定标签;将窗口缩小到系统托盘;关闭;最小化;蓝色新增标签按钮 的本地化字符串。
         /// </summary>
         internal static string Options_Page01_Window {
             get {

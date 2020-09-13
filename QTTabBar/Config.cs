@@ -252,6 +252,7 @@ namespace QTTabBarLib {
             public bool CloseBtnClosesSingleTab  { get; set; }
             public bool TrayOnClose              { get; set; }
             public bool TrayOnMinimize           { get; set; }
+            public bool NeedPlusButton           { get; set; }
             public byte[] DefaultLocation        { get; set; }
 
             public _Window() {
@@ -271,10 +272,11 @@ namespace QTTabBarLib {
                 CloseBtnClosesSingleTab = true;
                 TrayOnClose = false;
                 TrayOnMinimize = false;
+                NeedPlusButton = true; // 是否蓝色新增标签按钮
 
   //              string idl = Environment.OSVersion.Version >= new Version(6, 1)
- //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
-   //                     : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // Computer
+  //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
+  //                     : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // Computer
                 string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // 我的电脑， 默认打开
                 using(IDLWrapper w = new IDLWrapper(idl)) {
                     DefaultLocation = w.IDL;
@@ -551,18 +553,18 @@ namespace QTTabBarLib {
                 TabShadActiveColor = Color.Gray;
                 TabShadInactiveColor = Color.White;
                 TabShadHotColor = Color.White;
-                TabTitleShadows = true;
+                TabTitleShadows = false;
                 TabTextCentered = false;
-                UseRebarBGColor = true;
+                UseRebarBGColor = false;
                 // RebarColor = Color.FromArgb(230,230,230);
                 // 设置标签背景色
                 RebarColor = Color.FromArgb(245,246,247);
-                UseRebarImage = true;  // 是否工具栏自定义图片,启用自定义图片
+                UseRebarImage = false;  // 是否工具栏自定义图片,启用自定义图片
                 RebarStretchMode = StretchMode.Tile;
                 RebarImageFile = "";  // 工具栏自定义图片
                 RebarImageSeperateBars = false;
                 RebarSizeMargin = Padding.Empty;
-                ActiveTabInBold = false;
+                ActiveTabInBold = true;
             }
         }
 
@@ -593,7 +595,7 @@ namespace QTTabBarLib {
                         ? new int[] { 1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 21, 9, 20  }
                         : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 21, 9, 19, 10 };
                 ActivePluginIDs = new string[0];
-                LargeButtons	=	false;  // 是否显示大按钮
+                LargeButtons	= true;  // 是否显示大按钮
                 LockSearchBarWidth	=	true;  // 锁定搜索框大小
                 LockDropDownButtons	=	true;  // 锁定下拉按钮菜单顺序
                 ShowButtonLabels	=	true; // 是否显示按钮标签
