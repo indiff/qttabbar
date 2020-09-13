@@ -23,7 +23,7 @@ QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功�
 - 资源管理器->查看->选项->(QTTabbar & Buttons )      【win10】
 - 资源管理器中，组织—>布局—>菜单栏  【win10以下】
 - 右键菜单栏右方的空白地区—>勾选QTTabBar等工具栏—>按Alt+M—>重启explorer或重启计算机
-![图片](https://user-images.githubusercontent.com/501276/72576075-907fb980-3909-11ea-9dc2-9a1ea0ca2f8e.png)
+![启用qttabbar](https://user-images.githubusercontent.com/501276/72576075-907fb980-3909-11ea-9dc2-9a1ea0ca2f8e.png)
 
 
 # 编译/Build
