@@ -33,7 +33,7 @@ jobs:
      - uses: actions/checkout@master
        
      - name: Install vcexpress2010
-       run: choco install  --no-progress -y vcexpress2010 windows-sdk-7.1
+       run: choco install  --no-progress -y vcexpress2010
 
      - name:  Setup Environment
        run:   |
