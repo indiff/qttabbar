@@ -45,6 +45,7 @@ jobs:
              echo "::set-env name=LIB::C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib;%LIB%"
              echo "::set-env name=INCLUDE::C:\Program Files(x86)\Microsoft Visual Studio 10.0\VC\include;%INCLUDE%"
      - name:  Start VCTools
+       shell: cmd
        run: call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86
             
      - name: Core Build
