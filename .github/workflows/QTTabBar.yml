@@ -1,9 +1,31 @@
-name: QTTabBar Workflow
+name: Main workflow
 
 on:
   push:
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '!docs/building-msvc.md'
+      - 'changelog.txt'
+      - 'LEGAL'
+      - 'LICENSE'
+      - '.github/**'
+      - 'lib/xdg/**'
+      - 'snap/**'
+      - 'qttabbar/build/**'
     branches: [ master ]
   pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '!docs/building-msvc.md'
+      - 'changelog.txt'
+      - 'LEGAL'
+      - 'LICENSE'
+      - '.github/**'
+      - 'lib/xdg/**'
+      - 'snap/**'
+      - 'qttabbar/build/**'
     branches: [ master ]
 
 jobs:
@@ -17,17 +39,17 @@ jobs:
 
      - name:  Setup Environment
        run:   |
-             echo ::add-path::C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE             
-             echo ::add-path::C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\BIN
-             echo ::add-path::C:\Windows\Microsoft.NET\Framework\v4.0.30319
-             echo ::set-env name=LIB::C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\LIB;%LIB%
-             echo ::set-env name=LIB::C:\Program Files (x86)\Microsoft SDKs\Windows\v6.0A\Lib;%LIB%
-             echo ::set-env name=LIB::C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Lib;%LIB%
-             echo ::set-env name=INCLUDE::C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include;%INCLUDE%
-          
+             echo "::add-path::C:\Windows\Microsoft.NET\Framework\v4.0.30319"
+             echo "::add-path::C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE"
+             echo "::add-path::C:\Program Files\Microsoft Visual Studio 10.0\VC\BIN"
+             echo "::set-env name=LIB::C:\Program Files\Microsoft Visual Studio 10.0\VC\LIB;%LIB%"
+             echo "::set-env name=LIB::C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib;%LIB%"
+             echo "::set-env name=LIB::C:\Program Files\Microsoft SDKs\Windows\v7.0A\Lib;%LIB%"
+             echo "::set-env name=INCLUDE::C:\Program FilesMicrosoft Visual Studio 10.0\VC\include;%INCLUDE%"
      - name:  Start VCTools
        run: call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86
             
      - name: Core Build
        working-directory: build        
        run: msbuild "QTTabBar Rebirth.sln" /t:Rebuild /property:Configuration=Release /property:Platform="Any CPU"
+       
