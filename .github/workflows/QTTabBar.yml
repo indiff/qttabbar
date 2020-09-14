@@ -49,6 +49,5 @@ jobs:
        run: call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86
             
      - name: Core Build
-       working-directory: build        
        run: msbuild "QTTabBar Rebirth.sln" /t:Rebuild /property:Configuration=Release /property:Platform="Any CPU"
        
