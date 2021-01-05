@@ -42,7 +42,7 @@
 * [中文配置文件/Chinese Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_zh.xml)
 
 # QQ交流群/QQ Group
-* 群号: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=cIc9Svpa17jTpyA_rQ0SsG4gw4pG3Mw6&jump_from=webapi)
+* 群号: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=AGA5sh_6eCEYIwofpvazRxMFin8jmVI2&jump_from=webapi)
 
 # 鸣谢/Thanks
 * [捐助列表](https://github.com/indiff/qttabbar/issues/27)
