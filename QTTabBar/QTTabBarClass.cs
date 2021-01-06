@@ -5749,6 +5749,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             } else
             {
                 // 打开指定盘符目录
+                /*
                 for ( int i = 0; i < pathArr.Length; i++ )
                 {
                     if (Directory.Exists(pathArr[i]))
@@ -5756,6 +5757,12 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
                         OpenNewTab(pathArr[i], blockSelecting, fForceNew);
                         break;
                     }
+                }
+                */
+                // 打开配置的路径地址
+                using (IDLWrapper wrapper = new IDLWrapper(Config.Window.DefaultLocation))
+                {
+                    OpenNewTab(wrapper, false, true);
                 }
             }
         }
