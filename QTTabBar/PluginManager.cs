@@ -64,16 +64,39 @@ namespace QTTabBarLib {
             // the program data 's default plugin.
             string defaultQtConfigPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll";
             string turnOffRepeatPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll";
-            List<string> lists = new List<string>();
+            string[] plugins = new string[] { 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\CreateNewItem.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\FolderTreeButton.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\Memo.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\MigemoLoader.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTClock.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTFileTools.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTViewModeButton.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTWindowManager.dll", 
+               // Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\SampleSplitButton.dll",                 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\ShowStatusBar.dll"
+            };
 
-            if (File.Exists(defaultQtConfigPath))
-            {
-                // plugin.
-                /* Config.BBar.ActivePluginIDs = new string[] { "QTConfig1.0.0.0(9CD80883)+Qwop.QTConfigPluginButton" };
+            List<string> lists = new List<string>();
+            foreach(string plugin in plugins ) {
+                if (File.Exists(plugin))
+                {
+                    lists.Add(plugin);
+                }
+            }
+             /* Config.BBar.ActivePluginIDs = new string[] { "QTConfig1.0.0.0(9CD80883)+Qwop.QTConfigPluginButton" };
                 Config.BBar.ButtonIndexes = QTUtility.IsXP
                      ? new int[] { 1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 65536, 9, 20 }
                      : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 65536, 9, 19, 10 };
 				*/
+
+            /*
+            if (File.Exists(defaultQtConfigPath))
+            {
+                // plugin.
+               
                
               //  List<string> lists = new string[] { defaultQtConfigPath }.ToList();
                 lists.Add(defaultQtConfigPath);
@@ -84,6 +107,7 @@ namespace QTTabBarLib {
             {
                 lists.Add(turnOffRepeatPath);
             }
+             */
 
             if (lists.Count > 0) {
                 PluginManager.SavePluginAssemblyPaths(lists);

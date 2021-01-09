@@ -4987,6 +4987,7 @@ namespace QTTabBarLib {
             Config.Tabs.NewTabPosition = TabPos.Rightmost;
             try {
                 if(iIndex == 1) {
+                    /*
                     foreach(string str in StaticReg.LockedTabsToRestoreList) {
                         bool flag = false;
                         foreach(QTabItem item2 in tabControl1.TabPages) {
@@ -5001,17 +5002,57 @@ namespace QTTabBarLib {
                                 break;
                             }
                         }
-                        if(!flag) {
-                            if(str != openingPath) {
+                        if (flag)
+                        {  // 判断是否锁定 !flag
+                           // if(str != openingPath) {
                                 using(IDLWrapper wrapper = new IDLWrapper(str)) {
                                     if(wrapper.Available) {
                                         CreateNewTab(wrapper).TabLocked = true;
                                     }
                                     continue;
                                 }
-                            }
+                           // }
                             tabControl1.TabPages.Relocate(0, tabControl1.TabCount - 1);
                             fNowRestoring = true;
+                        }
+                    }
+                    */
+
+                    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RegConst.Root, false))
+                    {
+                        if (key != null)
+                        {
+                            string[] strArray = ((string)key.GetValue("TabsOnLastClosedWindow", string.Empty)).Split(QTUtility.SEPARATOR_CHAR);
+                            if ((strArray.Length > 0) && (strArray[0].Length > 0))
+                            {
+                                foreach (string str2 in strArray.Where(str2 => str2.Length > 0
+                                        && tabControl1.TabPages.All(item3 => item3.CurrentPath != str2)))
+                                {
+                                    if (str2 == openingPath)
+                                    {
+                                        tabControl1.TabPages.Relocate(0, tabControl1.TabCount - 1);
+                                    }
+                                    else
+                                    {
+
+                                        using (IDLWrapper wrapper2 = new IDLWrapper(str2))
+                                            {
+                                                if (wrapper2.Available)
+                                                {
+                                                   // 只恢复锁定的 indiff
+                                                    if (StaticReg.LockedTabsToRestoreList.Contains(str2))
+                                                    {
+                                                        QTabItem item4 = CreateNewTab(wrapper2);
+                                                        item4.TabLocked = true;
+                                                    }
+                                                }
+                                            }
+                                         // end of using 
+                                        
+                                    }
+                                }
+                                fNowRestoring = true;
+                            }
                         }
                     }
                 }
