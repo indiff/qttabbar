@@ -816,3 +816,5 @@ MigrationBackup/
 /Plugins/Sample/obj
 /.sonarqube
 /.sonarlint
+/BandObjectLib/*.ruleset
+*.ruleset
