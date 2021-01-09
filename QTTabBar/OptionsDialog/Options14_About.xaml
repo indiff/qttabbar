@@ -61,7 +61,7 @@
             <Label x:Name="lblVersion"
                 Height="28"/>
             <Label x:Name="buildBy"
-                Height="28" Content="{qt:Resx Key=Options_Page14_About, Index=7}" qt:Resx.Param="qwop"/>
+                Height="28" Content="{qt:Resx Key=Options_Page14_About, Index=7}" qt:Resx.Param="indiff"/>
             <Label
                 Height="28">
                 <Hyperlink x:Name="hypSite">
@@ -74,8 +74,9 @@
                 Margin="10"/>
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=2}" FontWeight="Bold"/>
-                <Label Content="Paul Accisano"/>
+                <Label Content="Paul Accisano,Mokuzu Kawano,Jerome Doby,indiff"/>
             </StackPanel>
+            <!--
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=3}" FontWeight="Bold"/>
                 <Label Content="Mokuzu Kawano"/>
@@ -85,6 +86,7 @@
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=4}" FontWeight="Bold"/>
                 <Label Content="Kemie Guaida"/>
             </StackPanel>
+            --> 
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=5}"/>
                 <Image x:Name="imgPaypal"
@@ -99,7 +101,7 @@
 			<!-- add by qwop start -->
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=6}" FontWeight="Bold"/>
-                <Label Content="qwop(qwop@live.cn QQ:76430850)"/>
+                <Label Content="indiff(indiff@qq.com QQ:531299332 交流群:157604022)"/>
             </StackPanel>
 
             <Label

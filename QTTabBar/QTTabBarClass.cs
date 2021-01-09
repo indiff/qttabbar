@@ -4770,7 +4770,7 @@ namespace QTTabBarLib {
                     CloneCurrentTab();
                     break;
 
-                case QTButtonBar.BII_LOCK:
+                case QTButtonBar.BII_LOCK: // Ëø¶¨°´Å¥
                     CurrentTab.TabLocked = !CurrentTab.TabLocked;
                     break;
 

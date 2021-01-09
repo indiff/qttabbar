@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    This file is part of QTTabBar, a shell extension for Microsoft
-    Windows Explorer.
+    This file is part of QTTabBar, a shell extension for Microsoft Windows Explorer.
     Copyright (C) 2007-2010  Quizo, Paul Accisano
+    Copyright (C) 2011-2021  indiff
 
     QTTabBar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.3" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.3(2020)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define ProductVersion="1.5.4" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.5.4(2021)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano -->
     <?define Manufacturer="indiff"?>
@@ -93,12 +93,50 @@ Language="1033"
                   </Component>
 
                   <!-- Add by qwop start -->
-                  <Component Id="QTQuick" Win64="yes" DisableRegistryReflection="yes">
+                  <Component Id="QTQuick" Win64="yes" Guid="27af1a85-9a08-4c07-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f7" Name="QTQuick.dll" Source="..\Plugins\QTQuick\bin\Release\QTQuick.dll" KeyPath="yes" />
                   </Component>
-                  <Component Id="TurnOffRepeat" Win64="yes" DisableRegistryReflection="yes">
+                  <Component Id="TurnOffRepeat" Win64="yes" Guid="27af1a85-9a08-4c08-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f8" Name="TurnOffRepeat.dll" Source="..\Plugins\TurnOffRepeat\bin\Release\TurnOffRepeat.dll" KeyPath="yes" />
                   </Component>
+                  <Component Id="CreateNewItem" Win64="yes" Guid="27af1a85-9a08-4c09-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f9" Name="CreateNewItem.dll" Source="..\Plugins\CreateNewItem\bin\Release\CreateNewItem.dll" KeyPath="yes" />
+                  </Component>
+                  <Component Id="Memo" Win64="yes" Guid="27af1a85-9a08-4c10-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f10" Name="Memo.dll" Source="..\Plugins\Memo\bin\Release\Memo.dll" KeyPath="yes" />
+                  </Component>
+                  <Component Id="MigemoLoader" Win64="yes" Guid="27af1a85-9a08-4c11-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f11" Name="MigemoLoader.dll" Source="..\Plugins\MigemoLoader\bin\Release\MigemoLoader.dll" KeyPath="yes" />
+                  </Component>
+				          <Component Id="QTClock" Win64="yes" Guid="27af1a85-9a08-4c12-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f12" Name="QTClock.dll" Source="..\Plugins\QTClock\bin\Release\QTClock.dll" KeyPath="yes" />
+                  </Component>
+
+                  <Component Id="QTWindowManager" Win64="yes" Guid="27af1a85-9a08-4c13-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f13" Name="QTWindowManager.dll" Source="..\Plugins\QTWindowManager\bin\Release\QTWindowManager.dll" KeyPath="yes" />
+                  </Component>
+
+                  <Component Id="QTFileTools" Win64="yes" Guid="27af1a85-9a08-4c14-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f14" Name="QTFileTools.dll" Source="..\Plugins\QTFileTools\bin\Release\QTFileTools.dll" KeyPath="yes" />
+                  </Component>
+
+                  <Component Id="FolderTreeButton" Win64="yes" Guid="27af1a85-9a08-4c15-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f15" Name="FolderTreeButton.dll" Source="..\Plugins\QTFolderButton\bin\Release\FolderTreeButton.dll" KeyPath="yes" />
+                  </Component>
+
+                  <Component Id="QTViewModeButton" Win64="yes" Guid="27af1a85-9a08-4c16-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f16" Name="QTViewModeButton.dll" Source="..\Plugins\QTViewModeButton\bin\Release\QTViewModeButton.dll" KeyPath="yes" />
+                  </Component>
+                  <!--
+                  <Component Id="SampleSplitButton" Win64="yes" Guid="27af1a85-9a08-4c17-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f17" Name="SampleSplitButton.dll" Source="..\Plugins\Sample\bin\Release\SampleSplitButton.dll" KeyPath="yes" />
+                  </Component> -->
+
+                  <Component Id="ShowStatusBar" Win64="yes" Guid="27af1a85-9a08-4c18-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f18" Name="ShowStatusBar.dll" Source="..\Plugins\ShowStatusBar\bin\Release\ShowStatusBar.dll" KeyPath="yes" />
+                  </Component>
+
+
                   <!-- Add by qwop   end -->
                   
                   <?foreach arch in x86;x64 ?>
@@ -209,6 +247,16 @@ Language="1033"
             <!-- add by qwop -->
             <ComponentRef Id="QTQuick" />
             <ComponentRef Id="TurnOffRepeat" />
+            <ComponentRef Id="CreateNewItem" />
+            <ComponentRef Id="Memo" />
+            <ComponentRef Id="MigemoLoader" />
+            <ComponentRef Id="QTClock" />
+            <ComponentRef Id="QTWindowManager" />
+            <ComponentRef Id="QTFileTools" />
+            <ComponentRef Id="FolderTreeButton" />
+            <ComponentRef Id="QTViewModeButton" />
+          <!--<ComponentRef Id="SampleSplitButton" /> -->
+            <ComponentRef Id="ShowStatusBar" />
             <!-- add by qwop -->
 
             <?foreach arch in x86;x64 ?>

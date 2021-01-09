@@ -22,7 +22,8 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "SampleClock", Version = "0.9.0.0", Description = "Sample clock plugin")]
+  //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "SampleClock", Version = "0.9.0.0", Description = "Sample clock plugin")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Ê±ÖÓ", Version = "0.9.0.1", Description = "Ê±ÖÓ²å¼þ")]
     public class ClockSample : IBarCustomItem {
         private ToolStripLabel labelTime;
         private Timer timer;
@@ -98,9 +99,11 @@ namespace QuizoPlugins {
 
             int h = dt.Hour;
             int m = dt.Minute;
+            int _m = dt.Month;
+            int _d = dt.Day;
             string sep = fOn ? " " : ":";
 
-            labelTime.Text = h + sep + (m < 10 ? "0" : String.Empty) + m;
+            labelTime.Text = h + sep + (m < 10 ? "0" : String.Empty) + m + "(" + _m + "." + _d + ")";
             labelTime.ToolTipText = dt.ToLongDateString();
 
             fOn = !fOn;

@@ -23,7 +23,8 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    [Plugin(PluginType.Background, Author = "Quizo", Name = "MigemoLoader", Version = "0.9.1.0", Description = "Migemo integration")]
+    // [Plugin(PluginType.Background, Author = "Quizo", Name = "MigemoLoader", Version = "0.9.1.0", Description = "Migemo integration")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "装载机", Version = "0.9.1.0", Description = "装载机集成，后台类型插件")]
     public class MigemoLoader : IFilter {
         private IPluginServer pluginServer;
 

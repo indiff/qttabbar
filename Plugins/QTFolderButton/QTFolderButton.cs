@@ -23,7 +23,8 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    [Plugin(PluginType.Background, Author = "Quizo", Name = "FolderTreeButton", Version = "1.0.0.0", Description = "Show folder tree for XP")]
+   // [Plugin(PluginType.Background, Author = "Quizo", Name = "FolderTreeButton", Version = "1.0.0.0", Description = "Show folder tree for XP")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "目录树", Version = "1.0.0.0", Description = "显示目录树(XP)，后台插件")]
     public class QTFolderTreeButton : IBarButton {
         [DllImport("user32.dll")]
         private static extern IntPtr SetFocus(IntPtr hWnd);

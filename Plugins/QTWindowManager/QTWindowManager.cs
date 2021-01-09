@@ -26,7 +26,8 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    [Plugin(PluginType.Background, Author = "Quizo", Name = "QT Window Manager", Version = "1.1.0.0", Description = "Window manager")]
+   // [Plugin(PluginType.Background, Author = "Quizo", Name = "QT Window Manager", Version = "1.1.0.0", Description = "Window manager")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "QT窗口管理", Version = "1.1.0.0", Description = "窗口管理")]
     public class QTWindowManager : IBarDropButton {
         private IPluginServer pluginServer;
         private string[] ResStrs;

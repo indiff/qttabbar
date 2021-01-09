@@ -24,7 +24,8 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    [Plugin(PluginType.Background, Author = "Quizo", Name = "Folder Memo", Version = "1.0.0.0", Description = "Memo for folder.")]
+  //  [Plugin(PluginType.Background, Author = "Quizo", Name = "Folder Memo", Version = "1.0.0.0", Description = "Memo for folder.")]
+ 	[Plugin(PluginType.Interactive, Author = "indiff", Name = "文件夹备忘录", Version = "1.0.0.0", Description = "文件夹备忘录")]
     public class Memo : IPluginClient {
         internal static byte[] ConfigValues = new byte[4];
         private MemoForm memoForm;
