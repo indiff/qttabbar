@@ -34,6 +34,11 @@
 * 拉取代码安装插件 NotifyPropertyWeaverVsPackage.vsix
 * Qttabbar项目 添加引用 Ricciolo.Controls.TreeListView, 路径 QTTabBar\Resources\Ricciolo.Controls.TreeListView.dll
 
+# 常见问题/Problems
+* [插件使用教程](https://gitee.com/qwop/qttabbar/attach_files/581155/download)
+* [打开选项闪退的解决方案修订版](https://gitee.com/qwop/qttabbar/attach_files/581136/download)
+* [新建文件夹刷新才能看到解决方法](https://gitee.com/qwop/qttabbar/attach_files/581159/download)
+
 # 多图预览/Preview
 * [预览图片/Soft Preview](https://github.com/indiff/qttabbar/issues/3)
 
