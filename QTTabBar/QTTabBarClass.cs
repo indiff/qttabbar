@@ -484,12 +484,22 @@ namespace QTTabBarLib {
                             break;
                         */
 
-                        case WM.CLOSE:
+                        case WM.CLOSE:  // 关闭窗口
                             if(QTUtility.IsXP) {
                                 if((msg.hwnd == ExplorerHandle) && HandleCLOSE(msg.lParam)) {
                                     Marshal.StructureToPtr(new MSG(), lParam, false);
                                 }
                                 break;
+                            }
+
+                            
+                            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                            {
+                                string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                                 where item2.TabLocked
+                                                 select item2.CurrentPath).ToArray();
+                               // MessageBox.Show(String.Join(",", list));
+                                QTUtility2.WriteRegBinary(list, "TabsLocked", key);
                             }
                             if(msg.hwnd == WindowUtils.GetShellTabWindowClass(ExplorerHandle)) {
                                 try {
@@ -858,8 +868,24 @@ namespace QTTabBarLib {
             return paths;
         }
 
+        // 关闭窗口 indiff
         public override void CloseDW(uint dwReserved) {
             try {
+                /*string[] list1 = (from ITab tab in pluginServer.GetTabs()
+                                 where tab.Locked
+                                 select tab.Address.Path).ToArray();
+                MessageBox.Show(String.Join(",", list1));
+               
+
+                MessageBox.Show("关闭窗口:" + tabControl1.TabPages.Count );
+                string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                 where item2.TabLocked
+                                 select item2.CurrentPath).ToArray();
+                MessageBox.Show(String.Join(",", list));
+ */
+                string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                 where item2.TabLocked
+                                 select item2.CurrentPath).ToArray();
                 if(treeViewWrapper != null) {
                     treeViewWrapper.Dispose();
                     treeViewWrapper = null;
@@ -902,7 +928,8 @@ namespace QTTabBarLib {
                         travelBtnController = null;
                     }
                     InstanceManager.RemoveFromTrayIcon(Handle);
-                    
+
+
                     // TODO: check this
                     using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
                         if(Config.Misc.KeepHistory) {
@@ -914,9 +941,14 @@ namespace QTTabBarLib {
                         if(Config.Misc.KeepRecentFiles) {
                             QTUtility.SaveRecentFiles(key);
                         }
-                        string[] list = (from QTabItem item2 in tabControl1.TabPages
-                                where item2.TabLocked
-                                select item2.CurrentPath).ToArray();
+
+                        foreach (QTabItem item in tabControl1.TabPages)
+                        {
+                            if ( item.TabLocked ) {
+                                MessageBox.Show(item.CurrentPath);
+                            }
+                        }
+                       
                         QTUtility2.WriteRegBinary(list, "TabsLocked", key);
                         InstanceManager.UnregisterTabBar();
                         if(0x80000 != ((int)PInvoke.Ptr_OP_AND(PInvoke.GetWindowLongPtr(ExplorerHandle, -20), 0x80000))) {
@@ -1003,6 +1035,7 @@ namespace QTTabBarLib {
             return ((tabControl1.TabCount > 1) && CloseTab(closingTab, false));
         }
 
+        // 关闭标签， 如果锁定则不关闭
         private bool CloseTab(QTabItem closingTab, bool fCritical, bool fSkipSync = false) {
             if(closingTab == null) {
                 return false;
@@ -1105,6 +1138,15 @@ namespace QTTabBarLib {
                 ChooseNewDirectory();
             }
             else if(e.ClickedItem == tsmiCloseWindow) {
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                {
+                    string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                     where item2.TabLocked
+                                     select item2.CurrentPath).ToArray();
+
+                    // MessageBox.Show(String.Join(",", list));
+                    QTUtility2.WriteRegBinary(list, "TabsLocked", key);
+                }
                 WindowUtils.CloseExplorer(ExplorerHandle, 1);
             }
             else {
@@ -1190,6 +1232,15 @@ namespace QTTabBarLib {
             if(ContextMenuedTab != null) {
                 if(e.ClickedItem == tsmiClose) {
                     if(tabControl1.TabCount == 1) {
+                        using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                        {
+                            string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                             where item2.TabLocked
+                                             select item2.CurrentPath).ToArray();
+
+                            // MessageBox.Show(String.Join(",", list));
+                            QTUtility2.WriteRegBinary(list, "TabsLocked", key);
+                        }
                         WindowUtils.CloseExplorer(ExplorerHandle, 1);
                     }
                     else {
@@ -1608,22 +1659,31 @@ namespace QTTabBarLib {
                     }
                     break;
 
-                case BindAction.CloseAllButCurrent:
+                case BindAction.CloseAllButCurrent: // 关闭其他
                 case BindAction.CloseAllButThis:
                     CloseAllTabsExcept(tab);
                     break;
 
-                case BindAction.CloseLeft:
+                case BindAction.CloseLeft: // 关左边
                 case BindAction.CloseLeftTab:
                     CloseLeftRight(true, tab.Index);
                     break;
 
-                case BindAction.CloseRight:
+                case BindAction.CloseRight: // 关闭右边
                 case BindAction.CloseRightTab:
                     CloseLeftRight(false, tab.Index);
                     break;
 
-                case BindAction.CloseWindow:
+                case BindAction.CloseWindow: // 关闭窗口 indiff
+                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                    {
+                        string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                         where item2.TabLocked
+                                         select item2.CurrentPath).ToArray();
+
+                        //MessageBox.Show(String.Join(",", list));
+                        QTUtility2.WriteRegBinary(list, "TabsLocked", key);
+                    }
                     WindowUtils.CloseExplorer(ExplorerHandle, 1);
                     break;
 
@@ -1631,12 +1691,12 @@ namespace QTTabBarLib {
                     RestoreLastClosed();
                     break;
 
-                case BindAction.CloneCurrent:
+                case BindAction.CloneCurrent: // 复制当前
                 case BindAction.CloneTab:
                     CloneTabButton(tab, null, true, -1);
                     break;
 
-                case BindAction.TearOffCurrent:
+                case BindAction.TearOffCurrent: //
                 case BindAction.TearOffTab:
                     if(tabControl1.TabCount > 1) {
                         using(IDLWrapper wrapper = new IDLWrapper(tab.CurrentIDL)) {
@@ -1646,25 +1706,25 @@ namespace QTTabBarLib {
                     }
                     break;
 
-                case BindAction.LockCurrent:
+                case BindAction.LockCurrent: // 关闭标签
                 case BindAction.LockTab:
                     tab.TabLocked = !tab.TabLocked;
                     break;
 
-                case BindAction.LockAll:
+                case BindAction.LockAll: // 锁定所有
                     bool lockState = tabControl1.TabPages.Any(t => t.TabLocked);
                     tabControl1.TabPages.ForEach(t => t.TabLocked = !lockState);
                     break;
 
-                case BindAction.BrowseFolder:
+                case BindAction.BrowseFolder: // 打开文件夹
                     ChooseNewDirectory();
                     break;
 
-                case BindAction.CreateNewGroup:
+                case BindAction.CreateNewGroup: // 创建新分组
                     CreateGroup(tab);
                     break;
 
-                case BindAction.ShowOptions:
+                case BindAction.ShowOptions: // 显示选项
                     OptionsDialog.Open();
                     break;
 
@@ -3084,8 +3144,16 @@ namespace QTTabBarLib {
                     NavigateCurrentTab(false);
                     return true;
 
-                case Keys.Alt | Keys.F4:
+                case Keys.Alt | Keys.F4:  // 快捷键方式关闭窗口
                     if(!fRepeat) {
+                        using (RegistryKey key1 = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                        {
+                            string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                             where item2.TabLocked
+                                             select item2.CurrentPath).ToArray();
+                           //  MessageBox.Show(String.Join(",", list));
+                            QTUtility2.WriteRegBinary(list, "TabsLocked", key1);
+                        }
                         WindowUtils.CloseExplorer(ExplorerHandle, 1);
                     }
                     return true;
@@ -4752,33 +4820,37 @@ namespace QTTabBarLib {
         // todo: consider moving all this to the button bar and just making the necessary methods internal.
         internal void ProcessButtonBarClick(int buttonID) {
             switch(buttonID) {
-                case QTButtonBar.BII_NAVIGATION_BACK:
+                case QTButtonBar.BII_NAVIGATION_BACK: // 导航后退
                     NavigateCurrentTab(true);
                     break;
 
-                case QTButtonBar.BII_NAVIGATION_FWRD:
+                case QTButtonBar.BII_NAVIGATION_FWRD: // 导航前进
                     NavigateCurrentTab(true);
                     break;
 
-                case QTButtonBar.BII_NEWWINDOW:
+                case QTButtonBar.BII_NEWWINDOW:// 新窗口
                     using(IDLWrapper wrapper4 = new IDLWrapper(CurrentTab.CurrentIDL)) {
                         OpenNewWindow(wrapper4);
                     }
                     break;
 
-                case QTButtonBar.BII_CLONE:
+                case QTButtonBar.BII_CLONE:// 复制标签
                     CloneCurrentTab();
                     break;
 
                 case QTButtonBar.BII_LOCK: // 锁定按钮
                     CurrentTab.TabLocked = !CurrentTab.TabLocked;
+                    // CurrentTab.CurrentPath
+                    if (CurrentTab.TabLocked)
+                    {
+                        StaticReg.LockedTabsToRestoreList.Add(CurrentTab.CurrentPath);
+                    }
                     break;
-
-                case QTButtonBar.BII_TOPMOST:
+                case QTButtonBar.BII_TOPMOST: // 置顶
                     ToggleTopMost();
                     break;
 
-                case QTButtonBar.BII_CLOSE_CURRENT:
+                case QTButtonBar.BII_CLOSE_CURRENT:// 关闭当前
                     if(Config.Window.CloseBtnClosesSingleTab) {
                         CloseTab(CurrentTab);
                         return;
@@ -4789,33 +4861,42 @@ namespace QTTabBarLib {
                     }
                     break;
 
-                case QTButtonBar.BII_CLOSE_ALLBUTCURRENT:
+                case QTButtonBar.BII_CLOSE_ALLBUTCURRENT: // 关闭其他
                     if(tabControl1.TabCount > 1) {
                         CloseAllTabsExcept(CurrentTab);
                     }
                     break;
 
-                case QTButtonBar.BII_CLOSE_WINDOW:
+                case QTButtonBar.BII_CLOSE_WINDOW: // 关窗口
+                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                    {
+                        string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                         where item2.TabLocked
+                                         select item2.CurrentPath).ToArray();
+
+                        // MessageBox.Show(String.Join(",", list));
+                        QTUtility2.WriteRegBinary(list, "TabsLocked", key);
+                    }
                     WindowUtils.CloseExplorer(ExplorerHandle, 1);
                     break;
 
-                case QTButtonBar.BII_CLOSE_LEFT:
+                case QTButtonBar.BII_CLOSE_LEFT: // 关闭左侧
                     CloseLeftRight(true, -1);
                     break;
 
-                case QTButtonBar.BII_CLOSE_RIGHT:
+                case QTButtonBar.BII_CLOSE_RIGHT: // 关闭右侧
                     CloseLeftRight(false, -1);
                     break;
 
-                case QTButtonBar.BII_GOUPONELEVEL:
+                case QTButtonBar.BII_GOUPONELEVEL: // 跳转上一级
                     UpOneLevel();
                     break;
 
-                case QTButtonBar.BII_REFRESH_SHELLBROWSER:
+                case QTButtonBar.BII_REFRESH_SHELLBROWSER: // 刷新
                     Explorer.Refresh();
                     break;
 
-                case QTButtonBar.BII_SHELLSEARCH:
+                case QTButtonBar.BII_SHELLSEARCH: // 显示搜索栏
                     ShowSearchBar(true);
                     break;
                 
@@ -4980,6 +5061,7 @@ namespace QTTabBarLib {
             }
         }
 
+        // 初始化回复标签
         private void RestoreTabsOnInitialize(int iIndex, string openingPath) {
             QTUtility.RefreshLockedTabsList();
             // TODO: unjank
@@ -5017,12 +5099,11 @@ namespace QTTabBarLib {
                         }
                     }
                     */
-
                     using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RegConst.Root, false))
                     {
                         if (key != null)
                         {
-                            string[] strArray = ((string)key.GetValue("TabsOnLastClosedWindow", string.Empty)).Split(QTUtility.SEPARATOR_CHAR);
+                            string[] strArray = ((string)key.GetValue("TabsLocked2", string.Empty)).Split(QTUtility.SEPARATOR_CHAR);
                             if ((strArray.Length > 0) && (strArray[0].Length > 0))
                             {
                                 foreach (string str2 in strArray.Where(str2 => str2.Length > 0
@@ -5034,17 +5115,13 @@ namespace QTTabBarLib {
                                     }
                                     else
                                     {
-
                                         using (IDLWrapper wrapper2 = new IDLWrapper(str2))
                                             {
                                                 if (wrapper2.Available)
                                                 {
                                                    // 只恢复锁定的 indiff
-                                                    if (StaticReg.LockedTabsToRestoreList.Contains(str2))
-                                                    {
-                                                        QTabItem item4 = CreateNewTab(wrapper2);
-                                                        item4.TabLocked = true;
-                                                    }
+                                                    QTabItem item4 = CreateNewTab(wrapper2);
+                                                    item4.TabLocked = true;
                                                 }
                                             }
                                          // end of using 
@@ -5485,6 +5562,15 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
                     e.Cancel = !CloseTab(e.TabPage);
                 }
                 else {
+                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                    {
+                        string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                         where item2.TabLocked
+                                         select item2.CurrentPath).ToArray();
+
+                        // MessageBox.Show(String.Join(",", list));
+                        QTUtility2.WriteRegBinary(list, "TabsLocked", key);
+                    }
                     WindowUtils.CloseExplorer(ExplorerHandle, 1);
                 }
             }

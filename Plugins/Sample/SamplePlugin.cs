@@ -36,14 +36,16 @@ namespace QuizoPlugins {
     ///		
     ///			Author, Name, Version, and Description are used in Options -> Plugins tab.
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "SampleSplitButton", Version = "0.9.0.0", Description = "Sample plugin - shows SplitButton")]
-    public class SampleSplitButton : IBarDropButton {
+   // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "SampleSplitButton", Version = "0.9.0.0", Description = "Sample plugin - shows SplitButton")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "测试插件", Version = "0.9.0.0", Description = "测试功能")]
+    public class SampleSplitButton : IBarDropButton
+    {
 
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
 
         private bool fFirstMenuDropDown = true;
-        private string text = "SampleSplitButton";
+        private string text = "测试插件";
         private List<Address> lstSelectedItems = new List<Address>();
 
 
@@ -51,7 +53,7 @@ namespace QuizoPlugins {
             // add codes here to delete saved settings, files, or registry keys if any.
             // see "Uninstallation" in Instructions.txt
 
-            MessageBox.Show("uninstallation");
+          //  MessageBox.Show("uninstallation");
         }
 
 
@@ -102,7 +104,6 @@ namespace QuizoPlugins {
 
         public void OnMenuItemClick(MenuType menuType, string menuText, ITab tab) {
             // user clicked registered menu.
-
             if(menuText == "SampleSplitButton Menu test") {
                 if(menuType == MenuType.Tab) {
                     MessageBox.Show(tab.Address.Path);
@@ -111,6 +112,16 @@ namespace QuizoPlugins {
                     pluginServer.ExecuteCommand(Commands.OpenTabBarOptionDialog, null);
                 }
             }
+            if (menuText == "测试标签锁定状态")
+            {
+                MessageBox.Show("测试标签锁定状态");
+                ITab[] tabs = pluginServer.GetTabs();
+                foreach (ITab iTab in tabs)
+                {
+                    MessageBox.Show("" + iTab.Address + "->" + iTab.Locked);
+                }
+            }
+            
         }
 
         public bool HasOption {
@@ -205,9 +216,9 @@ namespace QuizoPlugins {
             // No need to call "menu.SuspendLayout" or "menu.ResumeLayout".
 
             if(fFirstMenuDropDown) {
-                menu.Items.Add(new ToolStripMenuItem("Open folder"));
-                menu.Items.Add(new ToolStripMenuItem("Test selection"));
-
+                menu.Items.Add(new ToolStripMenuItem("打开文件夹"));
+                menu.Items.Add(new ToolStripMenuItem("测试选中"));
+                menu.Items.Add(new ToolStripMenuItem("测试标签锁定状态"));
                 fFirstMenuDropDown = false;
             }
         }
@@ -215,7 +226,8 @@ namespace QuizoPlugins {
         public void OnDropDownItemClick(ToolStripItem item, MouseButtons mouseButton) {
             // user clicked the dropdown menu item of this plugin button dropdown.
 
-            if(item.Text == "Open folder") {
+            if (item.Text == "打开文件夹")
+            {
                 if(mouseButton == MouseButtons.Left) {
                     string mydocument = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                     pluginServer.CreateTab(new Address(mydocument), -1, false, true);
@@ -224,9 +236,19 @@ namespace QuizoPlugins {
                     SystemSounds.Asterisk.Play();
                 }
             }
-            else if(item.Text == "Test selection") {
+            else if (item.Text == "测试选中")
+            {
                 if(lstSelectedItems.Count > 0)
                     pluginServer.TrySetSelection(lstSelectedItems.ToArray(), false);
+            }
+            else if (item.Text == "测试标签锁定状态")
+            {
+                MessageBox.Show("测试标签锁定状态");
+                ITab[] tabs = pluginServer.GetTabs();
+                foreach (ITab iTab in tabs)
+                {
+                    MessageBox.Show("" + iTab.Address.Path + "->" + iTab.Locked);
+                }
             }
         }
 

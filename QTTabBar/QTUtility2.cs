@@ -578,7 +578,12 @@ namespace QTTabBarLib {
             }
             return s;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pIDL"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static bool TargetIsInNoCapture(IntPtr pIDL, string path) {
             if(pIDL != IntPtr.Zero) {
                 path = ShellMethods.GetPath(pIDL);
@@ -586,7 +591,40 @@ namespace QTTabBarLib {
             return !String.IsNullOrEmpty(path) && QTUtility.NoCapturePathsList.Any(path2 => path.PathEquals(path2));
         }
 
+        /// <summary>
+        ///  写入注册表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="regValueName"></param>
+        /// <param name="rkUserApps"></param>
         public static void WriteRegBinary<T>(T[] array, string regValueName, RegistryKey rkUserApps) {
+            // 如果锁定标签路径有内容
+            if (null != array && "TabsLocked".Equals(regValueName) && array.Length > 0 )
+            {
+                if (rkUserApps != null)
+                {
+                    string[] newArray = (from string path in array
+                                                 where Directory.Exists( path )
+                                     select path ).ToArray();
+                    rkUserApps.SetValue("TabsLocked2", newArray.StringJoin(";"));
+
+                    if (null == newArray || newArray.Length == 0)
+                    {
+                        if (rkUserApps != null)
+                        {
+                            rkUserApps.SetValue("TabsLocked2", "");
+                        }
+                    }
+                }
+            }
+            else if (null == array || array.Length == 0) {
+                if (rkUserApps != null)
+                {
+                    rkUserApps.SetValue("TabsLocked2", "" );
+                }
+            }
+
             if(array != null) {
                 byte[] buffer;
                 BinaryFormatter formatter = new BinaryFormatter();

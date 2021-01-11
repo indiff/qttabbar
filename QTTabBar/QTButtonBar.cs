@@ -710,7 +710,7 @@ namespace QTTabBarLib {
                 dbi.wszTitle = null;
             }
         }
-
+        // 初始化组件
         private void InitializeComponent() {
             components = new Container();
             toolStrip = new ToolStripClasses();
@@ -748,7 +748,8 @@ namespace QTTabBarLib {
                 }
             }
         }
-
+        
+       // 通过路径 加载外部图片
         private static bool LoadExternalImage(string path) {
             Bitmap bitmap;
             Bitmap bitmap2;

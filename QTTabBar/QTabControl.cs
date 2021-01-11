@@ -588,7 +588,7 @@ namespace QTTabBarLib {
                 rectangle2.X += 4;
                 rectangle2.Width -= 4;
             }
-            if(base2.TabLocked) {
+            if(base2.TabLocked) { // 如果锁定则绘制锁定图片
                 Rectangle rectangle4 = new Rectangle(rctItem.X + (bSelected ? 6 : 4), rctItem.Y + num, 9, 11);
                 if(fDrawFolderImg) {
                     rectangle4.X += 9;

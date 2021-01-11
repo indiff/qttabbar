@@ -20,7 +20,7 @@ namespace QTTabBarLib {
         internal static UniqueList<string> ExecutedPathsList = new UniqueList<string>(16); // todo
         internal static UniqueList<string> ClosedTabHistoryList = new UniqueList<string>(16); // todo
 
-        private static RegBackedList<string> _LockedTabsToRestoreList = new RegBackedList<string>("LockedTabs");
+        private static RegBackedList<string> _LockedTabsToRestoreList = new RegBackedList<string>("TabsLocked"); // TabsLocked  LockedTabs
         internal static RegBackedList<string> LockedTabsToRestoreList {
             get {
                 _LockedTabsToRestoreList.Update();

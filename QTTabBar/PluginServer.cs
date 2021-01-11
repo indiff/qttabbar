@@ -92,7 +92,7 @@ namespace QTTabBarLib {
                 FilterPlugin = null;
                 FilterCorePlugin = null;
             }
-
+            // 创建新标签 地址  索引 是否锁定  是否选中
             public bool CreateTab(Address address, int index, bool fLocked, bool fSelect) {
                 using(IDLWrapper wrapper = new IDLWrapper(address)) {
                     address.ITEMIDLIST = wrapper.IDL;
@@ -182,7 +182,16 @@ namespace QTTabBarLib {
                                 tabBar.CloseAllTabsExcept(wrapper.Tab);
                                 return true;
                             }
-                        case Commands.CloseWindow:
+                        case Commands.CloseWindow: // 关闭窗口 2 indiff
+                           /* using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                            {
+                                string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                                 where item2.TabLocked
+                                                 select item2.CurrentPath).ToArray();
+
+                                MessageBox.Show(String.Join(",", list));
+                                QTUtility2.WriteRegBinary(list, "TabsLocked", key);
+                            }*/
                             WindowUtils.CloseExplorer(tabBar.ExplorerHandle, 2);
                             return true;
 
@@ -770,6 +779,7 @@ namespace QTTabBarLib {
                     }
                 }
 
+                // 设置为锁定
                 public bool Locked {
                     get {
                         return ((tab != null) && tab.TabLocked);
