@@ -53,3 +53,8 @@
 # 鸣谢/Thanks
 * [捐助列表](https://github.com/indiff/qttabbar/issues/27)
 * [Donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
+
+# 待办/TODOS
+* 迁移VS2019
+* 添加书签功能
+* 增强预览功能
