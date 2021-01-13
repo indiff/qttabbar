@@ -216,5 +216,9 @@
             IsChecked="{Binding Path=ActiveTabOnBottomRow}"
             IsEnabled="{Binding Path=IsChecked, ElementName=chkMultipleTabRows}"
             Style="{StaticResource IndentedCheckStyle}"/>
+        <CheckBox x:Name="NeedPlusButton"
+            Content="{qt:Resx Key=Options_Page01_Window, Index=16}"
+            IsChecked="{Binding Path=NeedPlusButton}"
+            Style="{StaticResource CheckStyle}"/>
     </StackPanel>
 </qt:OptionsDialogTab>

@@ -220,9 +220,6 @@
             Content="{qt:Resx Key=Options_Page01_Window, Index=15}"
             IsChecked="{Binding Path=TrayOnMinimize}"
             Style="{StaticResource CheckStyle}"/>
-        <CheckBox x:Name="NeedPlusButton"
-            Content="{qt:Resx Key=Options_Page01_Window, Index=16}"
-            IsChecked="{Binding Path=NeedPlusButton}"
-            Style="{StaticResource CheckStyle}"/>
+
     </StackPanel>
 </qt:OptionsDialogTab>

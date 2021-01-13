@@ -60,5 +60,13 @@ namespace QuizoPlugins {
                 return ResourceManager.GetString("str_ja", resourceCulture);
             }
         }
+
+        internal static string str_zh
+        {
+            get
+            {
+                return ResourceManager.GetString("str_zh", resourceCulture);
+            }
+        }
     }
 }

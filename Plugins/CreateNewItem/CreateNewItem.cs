@@ -23,8 +23,10 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    [Plugin(PluginType.Background, Author = "Quizo", Name = "CreateNewItemButton", Version = "0.9.0.0", Description = "Create New Item by shortcut key.")]
-    public class CreateNewItem : IPluginClient {
+   // [Plugin(PluginType.Background, Author = "Quizo", Name = "CreateNewItemButton", Version = "0.9.0.0", Description = "Create New Item by shortcut key.")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "创建新项目", Version = "0.9.0.0", Description = "通过快捷键创建新项目.")]
+    public class CreateNewItem : IPluginClient
+    {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
 
@@ -42,7 +44,7 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = new string[] { "Create a new folder", "Create a new text file" };
+            actions = new string[] { "创建文件夹", "创建新文本" };
             return true;
         }
 
@@ -82,7 +84,7 @@ namespace QuizoPlugins {
                 // make new name
                 bool fDir = index == 0;
                 int i = 2;
-                string name = fDir ? "New folder" : "New Text Document";
+                string name = fDir ? "新目录" : "新文本";
                 string ext = fDir ? String.Empty : ".txt";
                 string pathNew = path + "\\" + name + ext;
 

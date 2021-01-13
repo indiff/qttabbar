@@ -252,7 +252,7 @@ namespace QTTabBarLib {
             public bool CloseBtnClosesSingleTab  { get; set; }
             public bool TrayOnClose              { get; set; }
             public bool TrayOnMinimize           { get; set; }
-            public bool NeedPlusButton           { get; set; }
+           
             public byte[] DefaultLocation        { get; set; }
 
             public _Window() {
@@ -272,7 +272,7 @@ namespace QTTabBarLib {
                 CloseBtnClosesSingleTab = true;
                 TrayOnClose = false;
                 TrayOnMinimize = false;
-                NeedPlusButton = true; // 是否蓝色新增标签按钮
+                
 
   //              string idl = Environment.OSVersion.Version >= new Version(6, 1)
   //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
@@ -302,6 +302,7 @@ namespace QTTabBarLib {
             public bool NavButtonsOnRight        { get; set; }
             public bool MultipleTabRows          { get; set; }
             public bool ActiveTabOnBottomRow     { get; set; }
+            public bool NeedPlusButton           { get; set; }
 
             public _Tabs() {
                /* NewTabPosition = TabPos.Rightmost;
@@ -337,6 +338,7 @@ namespace QTTabBarLib {
                 NavButtonsOnRight = true; // 在最右边
                 MultipleTabRows = true; // 允许多行标签
                 ActiveTabOnBottomRow = true; // 始终将活动标签置于底部行
+                NeedPlusButton = true; // 是否蓝色新增标签按钮
             }
         }
 

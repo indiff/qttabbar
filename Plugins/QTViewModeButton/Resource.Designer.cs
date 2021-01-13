@@ -157,5 +157,14 @@ namespace QuizoPlugins {
                 return ResourceManager.GetString("viewModes_Ja", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 幻灯;缩略图;平铺;图标;列表;详细信息;查看 的本地化字符串。
+        /// </summary>
+        internal static string viewModes_zh {
+            get {
+                return ResourceManager.GetString("viewModes_zh", resourceCulture);
+            }
+        }
     }
 }

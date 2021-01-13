@@ -948,8 +948,12 @@ namespace QTTabBarLib {
                                 MessageBox.Show(item.CurrentPath);
                             }
                         }
-                       
-                        QTUtility2.WriteRegBinary(list, "TabsLocked", key);
+
+                        // 关闭消息去除写入锁定标签的调用
+                        if (list != null && list.Length > 0)
+                        {
+                            QTUtility2.WriteRegBinary(list, "TabsLocked", key);
+                        }
                         InstanceManager.UnregisterTabBar();
                         if(0x80000 != ((int)PInvoke.Ptr_OP_AND(PInvoke.GetWindowLongPtr(ExplorerHandle, -20), 0x80000))) {
                             QTUtility.WindowAlpha = 0xff;
@@ -4932,6 +4936,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// 刷新所有配置
+        /// </summary>
         internal void RefreshOptions() {
             SuspendLayout();
             tabControl1.SuspendLayout();

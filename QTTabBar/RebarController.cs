@@ -186,6 +186,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// 刷新背景颜色和图片
+        /// </summary>
         public void RefreshBG() {
             if(Config.Skin.UseRebarBGColor) {
                 // Save the default color and set the new one
@@ -206,7 +209,8 @@ namespace QTTabBarLib {
             if(hWnd != IntPtr.Zero) {
                 PInvoke.RedrawWindow(hWnd, IntPtr.Zero, IntPtr.Zero, 0x289);
             }
-            if(Config.Skin.UseRebarImage) {
+            // 修复刷新图片空图片情况报错
+            if(Config.Skin.UseRebarImage && Config.Skin.RebarImageFile.Length > 0 && File.Exists( Config.Skin.RebarImageFile ) ) {
                 CreateRebarImage();
             }
         }

@@ -592,7 +592,8 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///  写入注册表
+        ///  写入注册表， 关闭消息去除写入锁定标签的调用
+        ///  qttabbarclass  public override void CloseDW(uint dwReserved)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="array"></param>
@@ -600,30 +601,52 @@ namespace QTTabBarLib {
         /// <param name="rkUserApps"></param>
         public static void WriteRegBinary<T>(T[] array, string regValueName, RegistryKey rkUserApps) {
             // 如果锁定标签路径有内容
-            if (null != array && "TabsLocked".Equals(regValueName) && array.Length > 0 )
+            if ("TabsLocked".Equals(regValueName))
             {
-                if (rkUserApps != null)
+                // MessageBox.Show("写入锁定标签");
+                if (null != array && array.Length > 0)
                 {
-                    string[] newArray = (from string path in array
-                                                 where Directory.Exists( path )
-                                     select path ).ToArray();
-                    rkUserApps.SetValue("TabsLocked2", newArray.StringJoin(";"));
-
-                    if (null == newArray || newArray.Length == 0)
+                    if (rkUserApps != null)
                     {
-                        if (rkUserApps != null)
+                        string[] newArray = (from string path in array
+                                            // where Directory.Exists(path)
+                                             where path.Trim().Length > 0 
+                                             select path).ToArray();
+
+                        if (null == newArray || newArray.Length == 0)
                         {
-                            rkUserApps.SetValue("TabsLocked2", "");
+                            // MessageBox.Show("锁定标签数据为空：" + array.StringJoin(";"));
+                            if (rkUserApps != null)
+                            {
+                                rkUserApps.SetValue("TabsLocked2", "");
+                            }
                         }
+                        else
+                        {
+                            //  MessageBox.Show("锁定标签数据为：" + array.StringJoin(";"));
+                            rkUserApps.SetValue("TabsLocked2", newArray.StringJoin(";"));
+                        }
+                        /*
+                        string value = array.StringJoin(";");
+                        if (value.Trim().Length > 0)
+                        {
+                            rkUserApps.SetValue("TabsLocked2", value );
+                        }
+                        else {
+                            rkUserApps.SetValue("TabsLocked2", "");
+                        } */
+                    }
+                }
+                else if (null == array || array.Length == 0  )
+                {
+                    //   MessageBox.Show("锁定标签数据为空：" + array.StringJoin(";"));
+                    if (rkUserApps != null)
+                    {
+                        rkUserApps.SetValue("TabsLocked2", "");
                     }
                 }
             }
-            else if (null == array || array.Length == 0) {
-                if (rkUserApps != null)
-                {
-                    rkUserApps.SetValue("TabsLocked2", "" );
-                }
-            }
+            
 
             if(array != null) {
                 byte[] buffer;

@@ -51,6 +51,26 @@ namespace QuizoPlugins {
                 chbStartingPreset.Text = strs[13];
                 buttonGetCurrentToPreset.Text = strs[14];
             }
+            if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+            {
+                string[] strs = Resource.ResStrs_Options_zh.Split(new char[] { ';' });
+
+                chbInitialSize.Text = strs[0];
+                chbInitialLoc.Text = strs[1];
+                buttonRestoreSize.Text = strs[2];
+                buttonRestoreLoc.Text = strs[3];
+                checkBoxResizeMode.Text = strs[4];
+                labelDELTARESIZE.Text = strs[5];
+                groupBoxPresets.Text = strs[6];
+                buttonSet.Text = strs[7];
+                buttonDel.Text = strs[8];
+                buttonOK.Text = strs[9];
+                buttonCancel.Text = strs[10];
+                buttonGetCurLoc.Text = strs[11];
+                buttonGetCurSize.Text = strs[12];
+                chbStartingPreset.Text = strs[13];
+                buttonGetCurrentToPreset.Text = strs[14];
+            }
 
 
             hwndExplorer = hwnd;

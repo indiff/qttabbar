@@ -73,7 +73,7 @@
             this.labelDETAIL.Padding = new System.Windows.Forms.Padding(24, 4, 4, 4);
             this.labelDETAIL.Size = new System.Drawing.Size(107, 28);
             this.labelDETAIL.TabIndex = 5;
-            this.labelDETAIL.Text = "Details";
+            this.labelDETAIL.Text = "详细";
             this.labelDETAIL.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.labelDETAIL.Click += new System.EventHandler(this.labelButtons_Click);
             // 
@@ -87,7 +87,7 @@
             this.labelLIST.Padding = new System.Windows.Forms.Padding(24, 4, 4, 4);
             this.labelLIST.Size = new System.Drawing.Size(107, 28);
             this.labelLIST.TabIndex = 4;
-            this.labelLIST.Text = "List";
+            this.labelLIST.Text = "列表";
             this.labelLIST.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.labelLIST.Click += new System.EventHandler(this.labelButtons_Click);
             // 
@@ -101,7 +101,8 @@
             this.labelICON.Padding = new System.Windows.Forms.Padding(24, 4, 4, 4);
             this.labelICON.Size = new System.Drawing.Size(107, 28);
             this.labelICON.TabIndex = 3;
-            this.labelICON.Text = "Icons";
+            //this.labelICON.Text = "Icons";
+            this.labelICON.Text = "图标";
             this.labelICON.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.labelICON.Click += new System.EventHandler(this.labelButtons_Click);
             // 
@@ -115,7 +116,8 @@
             this.labelTILE.Padding = new System.Windows.Forms.Padding(24, 4, 4, 4);
             this.labelTILE.Size = new System.Drawing.Size(107, 28);
             this.labelTILE.TabIndex = 2;
-            this.labelTILE.Text = "Tiles";
+           // this.labelTILE.Text = "Tiles";
+            this.labelTILE.Text = "平铺";
             this.labelTILE.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.labelTILE.Click += new System.EventHandler(this.labelButtons_Click);
             // 
@@ -129,7 +131,8 @@
             this.labelTHUMBNAIL.Padding = new System.Windows.Forms.Padding(24, 4, 4, 4);
             this.labelTHUMBNAIL.Size = new System.Drawing.Size(107, 28);
             this.labelTHUMBNAIL.TabIndex = 1;
-            this.labelTHUMBNAIL.Text = "Thumbnails";
+           // this.labelTHUMBNAIL.Text = "Thumbnails";
+            this.labelTHUMBNAIL.Text = "缩略图";
             this.labelTHUMBNAIL.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.labelTHUMBNAIL.Click += new System.EventHandler(this.labelButtons_Click);
             // 
@@ -143,7 +146,8 @@
             this.labelTHUMBSTRIP.Padding = new System.Windows.Forms.Padding(24, 4, 4, 4);
             this.labelTHUMBSTRIP.Size = new System.Drawing.Size(107, 28);
             this.labelTHUMBSTRIP.TabIndex = 0;
-            this.labelTHUMBSTRIP.Text = "Filmstrip";
+            //this.labelTHUMBSTRIP.Text = "Filmstrip";
+            this.labelTHUMBSTRIP.Text = "幻灯片";
             this.labelTHUMBSTRIP.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.labelTHUMBSTRIP.Click += new System.EventHandler(this.labelButtons_Click);
             // 
@@ -162,7 +166,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FolderViewModeWindow";
             this.ShowInTaskbar = false;
-            this.Text = "FolderViewModeWindow";
+           // this.Text = "FolderViewModeWindow";
+            this.Text = "查看";
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
 

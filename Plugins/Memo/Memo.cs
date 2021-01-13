@@ -89,6 +89,9 @@ namespace QuizoPlugins {
                 if(CultureInfo.CurrentCulture.Parent.Name == "ja") {
                     ResStrs = Resource.str_ja.Split(new char[] { ';' });
                 }
+                else if(CultureInfo.CurrentCulture.Parent.Name == "zh-CHS") {
+                    ResStrs = Resource.str_zh.Split(new char[] { ';' });
+                }
                 else {
                     ResStrs = Resource.str_en.Split(new char[] { ';' });
                 }

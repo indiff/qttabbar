@@ -81,12 +81,12 @@
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=3}" FontWeight="Bold"/>
                 <Label Content="Mokuzu Kawano"/>
                 <Label Content="Jerome Doby"/>
-            </StackPanel>
+            </StackPanel>   -->
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=4}" FontWeight="Bold"/>
-                <Label Content="Kemie Guaida"/>
+                <Label Content="Kemie Guaida,Lili"/>
             </StackPanel>
-            --> 
+         
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=5}"/>
                 <Image x:Name="imgPaypal"
@@ -101,7 +101,7 @@
 			<!-- add by qwop start -->
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=6}" FontWeight="Bold"/>
-                <Label Content="indiff(indiff@qq.com QQ:531299332 交流群:157604022)"/>
+                <Label Content="indiff(indiff@126.com QQ:531299332 交流群:157604022)"/>
             </StackPanel>
 
             <Label

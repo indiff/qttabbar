@@ -83,6 +83,7 @@ namespace QTTabBarLib {
             // 导入皮肤.
             System.Windows.MessageBox.Show("双击注册表可以直接导入");
         }
+
         private void btnExportSkin_Click(object sender, RoutedEventArgs e)
         {
             // 导出皮肤.

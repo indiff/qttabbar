@@ -23,8 +23,10 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Change Folder View Mode", Version = "1.0.0.0", Description = "Button to change folder viewmode for XP.")]
-    public class ViewModeButton : IBarCustomItem {
+    //[Plugin(PluginType.Interactive, Author = "Quizo", Name = "Change Folder View Mode", Version = "1.0.0.0", Description = "Button to change folder viewmode for XP.")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "查看", Version = "1.0.0.0", Description = "添加按钮改变查看方式.")]
+    public class ViewModeButton : IBarCustomItem
+    {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
 
@@ -46,8 +48,10 @@ namespace QuizoPlugins {
                 // this plugin has 2 language resources in assemly, but usually there's no need to do like this.
                 // it only has to have a resource of your own language.
 
-                if(CultureInfo.CurrentCulture.Parent.Name == "ja")
+                if (CultureInfo.CurrentCulture.Parent.Name == "ja")
                     ResStrs = Resource.viewModes_Ja.Split(new char[] { ';' });
+                else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+                    ResStrs = Resource.viewModes_zh.Split(new char[] { ';' });
                 else
                     ResStrs = Resource.viewModes.Split(new char[] { ';' });
             }
@@ -187,25 +191,36 @@ namespace QuizoPlugins {
             return FOLDERVIEWMODE.FVM_ICON;
         }
 
+        /// <summary>
+        /// 更新按钮图片
+        /// 修复皮肤配置空图片报错
+        /// </summary>
+        /// <param name="mode"></param>
         private void UpdateButtonImage(FOLDERVIEWMODE mode) {
             switch(mode) {
                 case FOLDERVIEWMODE.FVM_THUMBSTRIP:
-                    button.Image = Resource.imgFilm;
+                    if ( null != Resource.imgFilm )
+                     button.Image = Resource.imgFilm;
                     break;
                 case FOLDERVIEWMODE.FVM_THUMBNAIL:
-                    button.Image = Resource.imgThumb;
+                    if (null != Resource.imgThumb) 
+                        button.Image = Resource.imgThumb;
                     break;
                 case FOLDERVIEWMODE.FVM_TILE:
-                    button.Image = Resource.imgTiles;
+                    if (null != Resource.imgTiles)
+                        button.Image = Resource.imgTiles;
                     break;
                 case FOLDERVIEWMODE.FVM_ICON:
-                    button.Image = Resource.imgIcon;
+                    if (null != Resource.imgIcon)
+                        button.Image = Resource.imgIcon;
                     break;
                 case FOLDERVIEWMODE.FVM_LIST:
-                    button.Image = Resource.imgList;
+                    if (null != Resource.imgList)
+                        button.Image = Resource.imgList;
                     break;
                 case FOLDERVIEWMODE.FVM_DETAILS:
-                    button.Image = Resource.imgDetails;
+                    if (null != Resource.imgDetails)
+                        button.Image = Resource.imgDetails;
                     break;
             }
         }

@@ -115,5 +115,23 @@ namespace QuizoPlugins {
                 return ResourceManager.GetString("ResStrs_Options_ja", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 启动时的大小;启动时的位置;恢复大小;恢复位置;调整时自动调整位置;调整/移动时的像素;预设;设置;删除;OK;取消;获取当前位置;获取当前大小;启动时预设;获取 的本地化字符串。
+        /// </summary>
+        internal static string ResStrs_Options_zh {
+            get {
+                return ResourceManager.GetString("ResStrs_Options_zh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 窗口管理器选项;放大窗口;收缩窗口;加宽窗口;缩小窗口;加高窗口;降低窗口;恢复初始大小;向左移动窗口;向右移动窗口;向上移动窗口;向下移动窗口;最大化窗口;最小化窗口;恢复窗口;窗口管理器 的本地化字符串。
+        /// </summary>
+        internal static string ResStrs_zh {
+            get {
+                return ResourceManager.GetString("ResStrs_zh", resourceCulture);
+            }
+        }
     }
 }

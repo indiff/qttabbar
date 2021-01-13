@@ -22,7 +22,8 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    [Plugin(PluginType.Background, Author = "Quizo", Name = "Show StatusBar", Version = "0.9.0.0", Description = "ShowStatusBar")]
+    // [Plugin(PluginType.Background, Author = "Quizo", Name = "Show StatusBar", Version = "0.9.0.0", Description = "ShowStatusBar")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "ÏÔÊ¾×´Ì¬À¸", Version = "0.9.0.0", Description = "ÏÔÊ¾×´Ì¬À¸")]
     public class ShowStatusBar : IPluginClient {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
@@ -52,7 +53,8 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = new string[] { "Show statusbar" };
+          //  actions = new string[] { "Show statusbar" };
+            actions = new string[] { "ÏÔÊ¾×´Ì¬À¸" };
             return true;
         }
 

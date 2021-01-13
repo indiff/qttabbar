@@ -97,5 +97,14 @@ namespace QuizoPlugins {
                 return ResourceManager.GetString("strQTFolderButton_ja", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 显示或者隐藏目录树;目录;关注文件夹树 的本地化字符串。
+        /// </summary>
+        internal static string strQTFolderButton_zh {
+            get {
+                return ResourceManager.GetString("strQTFolderButton_zh", resourceCulture);
+            }
+        }
     }
 }

@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="QTWindowManager_large" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\QTWindowManager_large.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -135,5 +135,11 @@
   </data>
   <data name="ResStrs_Options_ja" xml:space="preserve">
     <value>起動時のサイズ;起動時の位置;サイズを復元;位置を復元;リサイズするとき位置も自動で調整;リサイズ/移動時のピクセル;プリセット;設定;削除;OK;キャンセル;現在の位置取得;現在のサイズ取得;起動時プリセット;取得</value>
+  </data>
+  <data name="ResStrs_Options_zh" xml:space="preserve">
+    <value>启动时的大小;启动时的位置;恢复大小;恢复位置;调整时自动调整位置;调整/移动时的像素;预设;设置;删除;OK;取消;获取当前位置;获取当前大小;启动时预设;获取</value>
+  </data>
+  <data name="ResStrs_zh" xml:space="preserve">
+    <value>窗口管理器选项;放大窗口;收缩窗口;加宽窗口;缩小窗口;加高窗口;降低窗口;恢复初始大小;向左移动窗口;向右移动窗口;向上移动窗口;向下移动窗口;最大化窗口;最小化窗口;恢复窗口;窗口管理器</value>
   </data>
 </root>

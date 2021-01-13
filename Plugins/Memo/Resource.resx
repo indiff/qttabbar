@@ -123,4 +123,7 @@
   <data name="str_en" xml:space="preserve">
     <value>Show / hide folder memo;Show if exists;Show always;Stop</value>
   </data>
+  <data name="str_zh" xml:space="preserve">
+    <value>显示/隐藏文件夹备忘录;如果存在则显示;始终显示;停止</value>
+  </data>
 </root>

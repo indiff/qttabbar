@@ -47,7 +47,9 @@ namespace QTTabBarLib {
         public override void ResetConfig() {
             // Should we do anything here?
         }
-
+        /// <summary>
+        /// 提交配置信息
+        /// </summary>
         public override void CommitConfig() {
             HashSet<string> paths = new HashSet<string>();
             HashSet<PluginAssembly> toDispose = new HashSet<PluginAssembly>();
@@ -108,7 +110,11 @@ namespace QTTabBarLib {
                 }
             });
         }
-
+        /// <summary>
+        ///  启用禁用插件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnPluginEnableDisable_Click(object sender, RoutedEventArgs e) {
             PluginEntry entry = (PluginEntry)((Button)sender).DataContext; 
             if(entry.DisableOnClose) {
@@ -125,6 +131,11 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        ///     删除插件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnPluginRemove_Click(object sender, RoutedEventArgs e) {
             PluginEntry entry = (PluginEntry)((Button)sender).DataContext; 
             PluginAssembly pluginAssembly = entry.PluginAssembly;
@@ -173,6 +184,36 @@ namespace QTTabBarLib {
                     lstPluginView.SelectedItem = CurrentPlugins[CurrentPlugins.Count - 1];
                     lstPluginView.ScrollIntoView(lstPluginView.SelectedItem);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 启用所有插件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEnablePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (PluginEntry entry in CurrentPlugins)
+            {
+                
+                entry.Enabled = true;
+                entry.EnableOnClose = true;
+            }
+        }
+
+        /// <summary>
+        /// 禁用所有插件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDisablePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (PluginEntry entry in CurrentPlugins)
+            {
+                entry.Enabled = false;
+                entry.EnableOnClose = false;
+                entry.DisableOnClose = true;
             }
         }
 

@@ -45,14 +45,30 @@
                 FontSize="13"
                 VerticalAlignment="Bottom"/>
         </StackPanel>
-        <Button x:Name="btnBrowsePlugin"
+		<StackPanel
+             DockPanel.Dock="Top"
+            Margin="0,0,0,4"
+            Orientation="Horizontal">
+		<Button x:Name="btnBrowsePlugin"
             Click="btnBrowsePlugin_Click"
             Content="{qt:Resx Key=Options_Page12_Plugins, Index=1}"
-            DockPanel.Dock="Top"
             Height="22"
-            HorizontalAlignment="Left"
+            Margin="0,0,10,0"
+            Width="100"/>
+        <Button x:Name="btnEnablePlugin"
+            Click="btnEnablePlugin_Click"
+            Content="{qt:Resx Key=Options_Page12_Plugins, Index=10}"
+            Height="22"
+            Margin="0,0,10,0"
+            Width="100"/>
+        <Button x:Name="btnDisablePlugin"
+            Click="btnDisablePlugin_Click"
+            Content="{qt:Resx Key=Options_Page12_Plugins, Index=11}"
+            Height="22"
             Margin="0,10"
             Width="120"/>
+        </StackPanel>
+        
         <qt:RestrictDesiredSize MinHeight="200">
             <ListBox x:Name="lstPluginView"
                 HorizontalContentAlignment="Stretch"

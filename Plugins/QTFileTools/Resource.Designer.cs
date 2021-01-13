@@ -259,6 +259,15 @@ namespace QuizoPlugins {
         }
         
         /// <summary>
+        ///   查找类似 剪切;复制;粘贴;删除;复制到文件夹;移动到文件夹;撤消;发送到父级;属性 的本地化字符串。
+        /// </summary>
+        internal static string str_zh {
+            get {
+                return ResourceManager.GetString("str_zh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Bitmap UndoButton_large {

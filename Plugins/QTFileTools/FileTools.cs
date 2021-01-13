@@ -26,7 +26,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// Cut button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Cut", Version = "1.0.0.0", Description = "Cut files")]
+   // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Cut", Version = "1.0.0.0", Description = "Cut files")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "剪切", Version = "1.0.0.0", Description = "剪切文件")]
     public class CutButton : IBarButton {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
@@ -122,7 +123,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// Copy button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Copy", Version = "1.0.0.0", Description = "Copy files")]
+  // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Copy", Version = "1.0.0.0", Description = "Copy files")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "复制", Version = "1.0.0.0", Description = "复制文件")]
     public class CopyButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -215,7 +217,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// Paste Button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Paste", Version = "1.0.0.0", Description = "Paste files")]
+   // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Paste", Version = "1.0.0.0", Description = "Paste files")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "粘贴", Version = "1.0.0.0", Description = "粘贴文件")]
     public class PasteButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -298,7 +301,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// Delete button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Delete", Version = "1.0.0.0", Description = "Delete files")]
+  //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Delete", Version = "1.0.0.0", Description = "Delete files")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "删除", Version = "1.0.0.0", Description = "删除文件")]
     public class DeleteButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -391,7 +395,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// CopyTo button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Copy To Folder", Version = "1.0.0.0", Description = "Open copy-to-folder dialog")]
+  //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Copy To Folder", Version = "1.0.0.0", Description = "Open copy-to-folder dialog")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "复制到文件夹", Version = "1.0.0.0", Description = "打开复制到对话框")]
     public class CopyToButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -485,7 +490,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// MoveTo button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Move To Folder", Version = "1.0.0.0", Description = "Open move-to-folder dialog")]
+  //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Move To Folder", Version = "1.0.0.0", Description = "Open move-to-folder dialog")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "移动到文件夹", Version = "1.0.0.0", Description = "打开移动到文件夹")]
     public class MoveToButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -579,7 +585,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// Undo Button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Undo", Version = "1.0.0.0", Description = "Undo operation")]
+  //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Undo", Version = "1.0.0.0", Description = "Undo operation")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "撤销", Version = "1.0.0.0", Description = "撤销操作")]
     public class UndoButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -653,7 +660,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// Send up button
     /// </summary>
-    [Plugin(PluginType.Background, Author = "Quizo", Name = "Send To Parent", Version = "1.0.0.1", Description = "Send files to parent folder. This copies when Ctrl key is down.")]
+ //   [Plugin(PluginType.Background, Author = "Quizo", Name = "Send To Parent", Version = "1.0.0.1", Description = "Send files to parent folder. This copies when Ctrl key is down.")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "发送到父目录", Version = "1.0.0.1", Description = "发送文件到父目录.该复制操作在仅在Ctrl键按下.")]
     public class SendToParentButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -759,7 +767,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// Properties button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Properties", Version = "1.0.0.1", Description = "Show file properties")]
+ //   [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Properties", Version = "1.0.0.1", Description = "Show file properties")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "属性", Version = "1.0.0.1", Description = "显示文件属性")]
     public class PropertiesButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -844,6 +853,10 @@ namespace QuizoPlugins {
         static StringResources() {
             if(CultureInfo.CurrentCulture.Parent.Name == "ja") {
                 ButtonNames = Resource.str_ja.Split(new char[] { ';' });
+            }
+            else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+            {
+                ButtonNames = Resource.str_zh.Split(new char[] { ';' });
             }
             else {
                 ButtonNames = Resource.str.Split(new char[] { ';' });

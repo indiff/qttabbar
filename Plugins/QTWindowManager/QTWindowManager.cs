@@ -72,6 +72,8 @@ namespace QuizoPlugins {
             if(!pluginServer.TryGetLocalizedStrings(this, RES_COUNT, out ResStrs)) {
                 if(CultureInfo.CurrentCulture.Parent.Name == "ja")
                     ResStrs = Resource.ResStrs_ja.Split(new char[] { ';' });
+                else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+                    ResStrs = Resource.ResStrs_zh.Split(new char[] { ';' });
                 else
                     ResStrs = Resource.ResStrs.Split(new char[] { ';' });
             }
