@@ -5,6 +5,7 @@
 - [Gitee主页](https://gitee.com/qwop/qttabbar)
 
 # 版本更新/Changes
+- [1.5.4(2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta) 默认内置所有插件，支持一键启用，一键禁用;修复锁定功能bug
 - [1.5.3(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta) 增加自定义按钮图片，支持按钮换肤功能；添加新功能，支持新开标签页，默认取剪贴板的路径；增加支持视频预览图片功能
 - [1.5.2(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.2) 修复打开命令提示符异常;异常日志添加扩展信息提示;添加语言配置文件
 - [1.4(2020)](https://github.com/indiff/qttabbar/releases/tag/1.4) 调整版本信息，修复热键冲突问题；实现创建空文件；默认自动加载两个插件
@@ -14,7 +15,7 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) 内置汉化语言选项
 
 # 下载地址/Download
-* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta)
+* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta)
 * [qttabbar国内镜像](https://gitee.com/qwop/qttabbar/attach_files)
 * 请安装 net framework 3.5/Please install net framework 3.5 [下载/download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 * ![请安装 net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
