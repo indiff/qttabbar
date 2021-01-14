@@ -1,29 +1,29 @@
-# 软件介绍/Introduction
-1. QTTabBar国内优化版是基于  sf.net/projects/qttabbar/ (2012-06-17)  提交的最新代码改版的。这个版本原作者没有发布过，具体不知道什么原因。增添一些汉化特性，主要是为了方便国内用户使用；另外日本作者维护的Quizo官网版本的捕获窗口一直用着不习惯，所以该版本保留了捕获窗口这个好用的功能。
-2. QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功能的小工具。从此以后工作时不再遍布文件夹窗口，还有给力的文件夹预览功能，大大提高了你工作的效率。就像IE 7和Firefox、Opera那样的。QTTabBar还提供了一些功能插件，如：文件操作工具、树型目录、显示状态栏等等。
-- [GitHub主页](https://indiff.github.io/qttabbar)
-- [Gitee主页](https://gitee.com/qwop/qttabbar)
+# Introduction
+1. Qttabbar domestic optimized version is based on sf.net/projects/qttabbar/ (2012-06-17). The original author of this version has not released it. I don't know why. Adding some Chinese features is mainly for the convenience of domestic users; in addition, the capture window of quizo official website maintained by Japanese authors is not used to all the time, so this version retains the easy-to-use function of capture window.
+2. Qttabbar is a small tool that allows you to use tab multi label function in Windows Explorer. Since then, there are no windows folder and awesome folder preview functions, which greatly improves the efficiency of your work. It's like IE 7, and it's like Firefox and opera. Qttabbar also provides some plug-ins, such as file operation tool, tree directory, display status bar and so on.
+- [GitHub](https://indiff.github.io/qttabbar)
+- [Gitee](https://gitee.com/qwop/qttabbar)
 
-# 版本更新/Changes
-- [1.5.4(2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta) 默认内置所有插件，支持一键启用，一键禁用;修复锁定功能bug
-- [1.5.3(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta) 增加自定义按钮图片，支持按钮换肤功能；添加新功能，支持新开标签页，默认取剪贴板的路径；增加支持视频预览图片功能
-- [1.5.2(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.2) 修复打开命令提示符异常;异常日志添加扩展信息提示;添加语言配置文件
-- [1.4(2020)](https://github.com/indiff/qttabbar/releases/tag/1.4) 调整版本信息，修复热键冲突问题；实现创建空文件；默认自动加载两个插件
-- [1.3](https://github.com/indiff/qttabbar/releases/tag/1.3) 更新插件实现去重，排序功能
-- [1.2](https://github.com/indiff/qttabbar/releases/tag/1.2) 支持win10，修复链接失效问题
-- [1.1](https://github.com/indiff/qttabbar/releases/tag/1.1) 安装界面支持汉化
-- [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) 内置汉化语言选项
+# Changes
+- [1.5.4(2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta) All plug-ins are built-in by default, which support one click to enable and one click to disable; fix the lock function bug
+- [1.5.3(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta) Add custom button image, support button skin function; add new function, support new tab, take the path of the clipboard by default; add video preview image function
+- [1.5.2(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.2) Repair open command prompt exception; Exception log add extended information prompt; add language configuration file
+- [1.4(2020)](https://github.com/indiff/qttabbar/releases/tag/1.4) Adjust version information, fix hotkey conflict, create empty file, and load two plug-ins automatically by default
+- [1.3](https://github.com/indiff/qttabbar/releases/tag/1.3) Update plug-ins to achieve de duplication, sorting function
+- [1.2](https://github.com/indiff/qttabbar/releases/tag/1.2) Support win10, fix link failure
+- [1.1](https://github.com/indiff/qttabbar/releases/tag/1.1) The installation interface supports Sinicization
+- [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) Built in Chinese Language Options
 
-# 下载地址/Download
-* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta)
-* [qttabbar国内镜像](https://gitee.com/qwop/qttabbar/attach_files)
-* 请安装 net framework 3.5/Please install net framework 3.5 [下载/download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
+# Download
+* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta)
+* [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
+* Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 * ![请安装 net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
 
-# 使用方法/Usage
-- 运行安装包文件，安装QTTabBar 
-- 资源管理器->查看->选项->(QTTabbar & Buttons )      【win10】
-- 资源管理器中，组织—>布局—>菜单栏  【win10以下】
+# Usage
+- Run the installation package file to install qttabbar 
+- Explorer > View > Options - > (qttabbar & buttons)【win10】
+- In Explorer, organization > layout > menu bar  【win10以下】
 - 右键菜单栏右方的空白地区—>勾选QTTabBar等工具栏—>按Alt+M—>重启explorer或重启计算机
 ![启用qttabbar](https://user-images.githubusercontent.com/501276/72576075-907fb980-3909-11ea-9dc2-9a1ea0ca2f8e.png)
 
