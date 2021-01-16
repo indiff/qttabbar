@@ -12,7 +12,7 @@ on:
       - 'lib/xdg/**'
       - 'snap/**'
       - 'qttabbar/build/**'
-    branches: [ master ]
+    branches: [ vs2019 ]
   pull_request:
     paths-ignore:
       - 'docs/**'
@@ -31,25 +31,6 @@ jobs:
     runs-on: windows-latest        
     steps:
      - uses: actions/checkout@master
-       
-     - name: Install vcexpress2010
-       run: choco install  --no-progress -y vcexpress2010
-
-     - name:  Setup Environment
-       run:   |
-             echo "::add-path::C:\Windows\Microsoft.NET\Framework\v4.0.30319"
-             echo "::add-path::C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE"
-             echo "::add-path::C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\BIN"
-             echo "::set-env name=LIB::C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\LIB;%LIB%"
-             echo "::set-env name=LIB::C:\Program Files (x86)\Microsoft SDKs\Windows\v6.0A\Lib;%LIB%"
-             echo "::set-env name=LIB::C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib;%LIB%"
-             echo "::set-env name=INCLUDE::C:\Program Files(x86)\Microsoft Visual Studio 10.0\VC\include;%INCLUDE%"
-     - name:  Start VCTools
-       shell: cmd
-       run: |
-        call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86
-        call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
-            
      - name: Core Build
        run: msbuild "QTTabBar Rebirth.sln" /t:Rebuild /property:Configuration=Release /property:Platform="Any CPU"
        
