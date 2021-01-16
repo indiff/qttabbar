@@ -140,7 +140,8 @@ namespace QTTabBarLib {
                 RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(FrameworkElement), 1)
             });
         }
-        public static readonly DependencyProperty TextProperty =
+        
+        public static readonly DependencyProperty mTextProperty =
                 DependencyProperty.Register("Text", typeof(string),
                 typeof(BindableRun), new PropertyMetadata(OnTextChanged));
         private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -148,8 +149,8 @@ namespace QTTabBarLib {
         }
 
         public new string Text {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get { return (string)GetValue(mTextProperty); }
+            set { SetValue(mTextProperty, value); }
         }
     }
 

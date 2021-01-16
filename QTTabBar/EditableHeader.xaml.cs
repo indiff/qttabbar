@@ -20,11 +20,13 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace QTTabBarLib {
+namespace QTTabBarLib
+{
     /// <summary>
     /// Interaction logic for EditableHeader.xaml
     /// </summary>
-    public partial class EditableHeader : UserControl {
+    public partial class EditableHeader : UserControl
+    {
 
         private bool preparing = false;
         private string originalText;
