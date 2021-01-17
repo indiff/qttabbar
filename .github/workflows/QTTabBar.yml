@@ -63,7 +63,7 @@ jobs:
           fi
           echo "CACHE_KEY=`md5sum CACHE_KEY.txt | awk '{ print $1 }'`" >> $GITHUB_ENV    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
    
-     - uses: actions/checkout@master
-     - name: Core Build
-       run: msbuild "QTTabBar Rebirth.sln" /t:Rebuild /property:Configuration=Release /property:Platform="Any CPU"
+      - uses: actions/checkout@master
+      - name: Core Build
+        run: msbuild "QTTabBar Rebirth.sln" /t:Rebuild /property:Configuration=Release /property:Platform="Any CPU"
        
