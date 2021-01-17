@@ -30,10 +30,39 @@ jobs:
   build:
     runs-on: windows-latest        
     steps:
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-     - name: Setup MSBuild.exe
-       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
-    
+      - name: Get repository name.
+        shell: bash
+        run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+
+      - name: Set up environment paths.
+        shell: bash
+        run: |
+          echo "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\Build\\" >> $GITHUB_PATH
+          mkdir Libraries && cd Libraries
+          echo "Convert unix path to win path."
+          p=`pwd | sed 's#^/[d]#d:#g' |sed 's#/#\\\\#g'`
+          echo "LibrariesPath=$p" >> $GITHUB_ENV
+      - name: Save msbuild version.
+        run: |
+          call vcvars32.bat
+          msbuild -version > CACHE_KEY.txt
+      - name: Clone.
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          path: ${{ env.REPO_NAME }}
+
+      - name: Generate cache key.
+        shell: bash
+        run: |
+          curl -o $LibrariesPath/tg_owt-version.json https://api.github.com/repos/desktop-app/tg_owt/git/refs/heads/master
+          echo $MANUAL_CACHING >> CACHE_KEY.txt
+          if [ "$AUTO_CACHING" == "1" ]; then
+            thisFile=$REPO_NAME/.github/workflows/win.yml
+            echo `md5sum $thisFile | awk '{ print $1 }'` >> CACHE_KEY.txt
+          fi
+          echo "CACHE_KEY=`md5sum CACHE_KEY.txt | awk '{ print $1 }'`" >> $GITHUB_ENV    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+   
      - uses: actions/checkout@master
      - name: Core Build
        run: msbuild "QTTabBar Rebirth.sln" /t:Rebuild /property:Configuration=Release /property:Platform="Any CPU"
