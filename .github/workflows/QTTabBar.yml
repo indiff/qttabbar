@@ -24,7 +24,7 @@ on:
       - 'lib/xdg/**'
       - 'snap/**'
       - 'qttabbar/build/**'
-    branches: [ master ]
+    branches: [ vs2019 ]
 
 jobs:
   build:
