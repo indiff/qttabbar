@@ -51,6 +51,7 @@
 * Group: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=AGA5sh_6eCEYIwofpvazRxMFin8jmVI2&jump_from=webapi)
 
 # Thanks
+* [Original author Quizo](https://twitter.com/QTTabBar) [SF Version Author](https://sourceforge.net/u/masamunexgp/profile)
 * [Donation List](https://github.com/indiff/qttabbar/issues/27)
 * [Donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
 
