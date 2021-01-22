@@ -51,7 +51,8 @@
 * 群号: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=AGA5sh_6eCEYIwofpvazRxMFin8jmVI2&jump_from=webapi)
 
 # 鸣谢/Thanks
-* [原作者Quizo](https://twitter.com/QTTabBar) [SF作者](https://sourceforge.net/u/masamunexgp/profile)
+* [原作者Quizo](https://twitter.com/QTTabBar)
+* [SF作者](https://sourceforge.net/u/masamunexgp/profile)
 * [捐助列表](https://github.com/indiff/qttabbar/issues/27)
 * [Donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
 
