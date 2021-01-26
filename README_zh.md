@@ -56,7 +56,8 @@
 * [SF作者](https://sourceforge.net/u/masamunexgp/profile)
 * [捐助列表](https://github.com/indiff/qttabbar/issues/27)
 * [Donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
-
+* 感谢[JetBrains](https://www.jetbrains.com/?from=QtTabBar) 对开源的支持
+![jetbrains](https://images.gitee.com/uploads/images/2020/0714/114152_d335c2f1_416720.png "jetbrains.png")
 # 待办/TODOS
 * 迁移VS2019
 * 添加书签功能
