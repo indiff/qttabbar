@@ -55,7 +55,8 @@
 * [SF Version Author](https://sourceforge.net/u/masamunexgp/profile)
 * [Donation List](https://github.com/indiff/qttabbar/issues/27)
 * [Donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
-
+* Thanks [JetBrains](https://www.jetbrains.com/?from=QtTabBar), Support for open source projects
+![jetbrains](https://images.gitee.com/uploads/images/2020/0714/114152_d335c2f1_416720.png "jetbrains.png")
 # TODOS
 * Migration VS2019
 * Add boommark
