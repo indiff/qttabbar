@@ -988,7 +988,6 @@ namespace QTTabBarLib {
                             value = new StreamReader(stream).ReadToEnd();
                         }
                     }
-
                     key.SetValue(setting.name,value);
                 }
             }

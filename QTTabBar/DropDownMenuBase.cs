@@ -91,7 +91,7 @@ namespace QTTabBarLib {
         }
 
         public static void ExitMenuMode() {
-            Type type = Type.GetType("System.Windows.Forms.ToolStripManager+ModalMenuFilter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+            Type type = Type.GetType("System.Windows.Forms.ToolStripManager+ModalMenuFilter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
             if(type != null) {
                 type.GetMethod("ExitMenuMode", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, null);
             }

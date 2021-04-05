@@ -247,7 +247,7 @@ namespace QTTabBarLib {
 
         #endregion
 
-        #region Utility Methods
+        #region Utility Methods/工具方法
 
         private static byte[] DelToByte(Delegate del) {
             return QTUtility.ObjectToByteArray(new SerializeDelegate(del));

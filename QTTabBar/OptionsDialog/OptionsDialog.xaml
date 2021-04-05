@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<!--
+﻿<!--
     This file is part of QTTabBar, a shell extension for Microsoft
     Windows Explorer.
     Copyright (C) 2007-2010  Quizo, Paul Accisano
@@ -16,8 +15,10 @@
 
     You should have received a copy of the GNU General Public License
     along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+    
+     xmlns:qt="clr-namespace:QTTabBarLib"
+    
 -->
-
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -27,6 +28,7 @@
     Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
     Height="650"
     Title="{qt:Resx Key=OptionsDialog, Index=0}"
+    ToolTip="{qt:Resx Key=OptionsDialog, Index=0}"
     Width="750"
     Left="0" Top="0"
     >

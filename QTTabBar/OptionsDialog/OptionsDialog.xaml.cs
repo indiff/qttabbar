@@ -16,6 +16,7 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,21 +45,23 @@ using System.Text;
 
 namespace QTTabBarLib {
     /// <summary>
-    /// Interaction logic for OptionsDialog.xaml
+    /// Interaction logic for OptionsDialog.xaml  public class 
     /// </summary>
-    internal partial class OptionsDialog : Window {
+    internal partial class OptionsDialog : Window
+    {
         private static OptionsDialog instance;
         private static Thread instanceThread;
         private static Thread launchingThread;
         private Config WorkingConfig;
         
-        #region ---------- Static Methods ----------
+        #region ---------- 静态方法区 ----------
 
-        public static void Open() {
+        public static void Open() { 
             InstanceManager.ExecuteOnServerProcess(OpenInternal, false);
+            //   OpenInternal();
         }
 
-        private static void OpenInternal() {
+        public static void OpenInternal() {
             lock(typeof(OptionsDialog)) {
                 // Prevent reentrant calls that might happen during the Wait call below.
                 if(launchingThread == Thread.CurrentThread) return;
@@ -108,6 +111,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /**
+         * 线程创建一个监视器
+         */
         private static void ThreadEntry() {
             instance = new OptionsDialog();
             lock(instanceThread) {
@@ -134,49 +140,59 @@ namespace QTTabBarLib {
         }
 
         #endregion
-
+        [GeneratedCode("PresentationBuildTasks", "4.0.0.0")]
         private OptionsDialog() {
-            Initialized += (sender, args) => Topmost = true;
-            ContentRendered += (sender, args) => Topmost = false;
-            InitializeComponent();
+            try
+            {
+                // Initialized += (sender, args) => Topmost = true;
+                // ContentRendered += (sender, args) => Topmost = false;
+                InitializeComponent();
 
-            int i = 0;
-            tabbedPanel.ItemsSource = new OptionsDialogTab[] {
-                new Options01_Window        { Index = i++},
-                new Options02_Tabs          { Index = i++},
-                new Options03_Tweaks        { Index = i++},
-                new Options04_Tooltips      { Index = i++},
-                new Options05_General       { Index = i++},
-                new Options06_Appearance    { Index = i++},
-                new Options07_Mouse         { Index = i++},
-                new Options08_Keys          { Index = i++},
-                new Options09_Groups        { Index = i++},
-                new Options10_Apps          { Index = i++},
-                new Options11_ButtonBar     { Index = i++},
-                new Options12_Plugins       { Index = i++},
-                new Options13_Language      { Index = i++},
-                new Options14_About         { Index = i}
-            };
+                int i = 0;
+                tabbedPanel.ItemsSource = new OptionsDialogTab[]
+                {
+                    new Options01_Window {Index = i++},
+                    new Options02_Tabs {Index = i++},
+                    new Options03_Tweaks {Index = i++},
+                    new Options04_Tooltips {Index = i++},
+                    new Options05_General {Index = i++},
+                    new Options06_Appearance {Index = i++},
+                    new Options07_Mouse {Index = i++},
+                    new Options08_Keys {Index = i++},
+                    new Options09_Groups {Index = i++},
+                    new Options10_Apps {Index = i++},
+                    new Options11_ButtonBar {Index = i++},
+                    new Options12_Plugins {Index = i++},
+                    new Options13_Language {Index = i++},
+                    new Options14_About {Index = i}
+                };
 
-            // For some reason, on XP, the Options dialog starts up with a blank tab
-            // This is the only way I've found to fix it
-            // TODO: Investigate and see if there's a better way
-            Loaded += (sender, args) => {
-                tabbedPanel.SelectedIndex = 1;
-                tabbedPanel.SelectedIndex = 0;
-            };
+                // For some reason, on XP, the Options dialog starts up with a blank tab
+                // This is the only way I've found to fix it
+                // TODO: Investigate and see if there's a better way
+               Loaded += (sender, args) =>
+                {
+                    tabbedPanel.SelectedIndex = 1;
+                    tabbedPanel.SelectedIndex = 0;
+                };
 
-            WorkingConfig = QTUtility2.DeepClone(ConfigManager.LoadedConfig);
-            foreach(OptionsDialogTab tab in tabbedPanel.Items) {
-                tab.WorkingConfig = WorkingConfig;
-                IHotkeyContainer ihc = tab as IHotkeyContainer;
-                if(ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
-                tab.InitializeConfig();
+                
+                WorkingConfig = QTUtility2.DeepClone(ConfigManager.LoadedConfig);
+                foreach (OptionsDialogTab tab in tabbedPanel.Items)
+                {
+                    tab.WorkingConfig = WorkingConfig;
+                    IHotkeyContainer ihc = tab as IHotkeyContainer;
+                    if (ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
+                    tab.InitializeConfig();
+                }
+
+                //////////// setting by qwop .
+                setByQwop();
             }
-
-
-            //////////// setting by qwop .
-            setByQwop();
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "OptionsDialog Init");
+            }
         }
 
 
@@ -450,8 +466,8 @@ namespace QTTabBarLib {
             // Ignore modifier keys.
             if(wpfKey == Key.LeftShift || wpfKey == Key.RightShift
                     || wpfKey == Key.LeftCtrl || wpfKey == Key.RightCtrl
-                    || wpfKey == Key.LeftAlt || wpfKey == Key.RightAlt
-                    || wpfKey == Key.LWin || wpfKey == Key.RWin) {
+                    || wpfKey == Key.LeftAlt  || wpfKey == Key.RightAlt
+                    || wpfKey == Key.LWin     || wpfKey == Key.RWin) {
                 return false;
             }
 
@@ -608,7 +624,9 @@ namespace QTTabBarLib {
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-                throw new NotSupportedException();
+                var e = new NotSupportedException();
+                QTUtility2.MakeErrorLog(e, "BitmapToImageSourceConverter ConvertBack");
+                throw e;
             }
         }
 
@@ -621,7 +639,9 @@ namespace QTTabBarLib {
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-                throw new NotSupportedException();
+                var e = new NotSupportedException();
+                QTUtility2.MakeErrorLog(e, "ColorToBrushConverter ConvertBack");
+                throw e;
             }
         }
 
@@ -635,7 +655,9 @@ namespace QTTabBarLib {
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-                throw new NotSupportedException();
+                var e = new NotSupportedException();
+                QTUtility2.MakeErrorLog(e, "FontStringConverter ConvertBack");
+                throw e;
             }
         }
 
@@ -648,8 +670,11 @@ namespace QTTabBarLib {
                 return value == null ? null : value.GetType().Name;
             }
 
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-                throw new NotSupportedException();
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                var e = new NotSupportedException();
+                QTUtility2.MakeErrorLog(e, "ObjectToClassNameConverter ConvertBack");
+                throw e;
             }
         }
 
@@ -671,7 +696,7 @@ namespace QTTabBarLib {
     /// The base class for the tab pages of the OptionsDialog.
     /// Contains a few things common to more than one page.
     /// </summary>
-    internal abstract class OptionsDialogTab : UserControl {
+    public abstract class OptionsDialogTab : UserControl {
         public static readonly DependencyProperty WorkingConfigProperty =
                 DependencyProperty.Register("WorkingConfig", typeof(Config), typeof(OptionsDialogTab),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
@@ -760,17 +785,23 @@ namespace QTTabBarLib {
         // Common Font Chooser button click handler.
         protected void btnFontChoose_Click(object sender, RoutedEventArgs e) {
             var button = (Button)sender;
-            try {
-                using(var dialog = new System.Windows.Forms.FontDialog()) {
-                    dialog.Font = (Font)button.Tag;
+            try
+            {
+                using (var dialog = new System.Windows.Forms.FontDialog())
+                {
+                    dialog.Font = (Font) button.Tag;
                     dialog.ShowEffects = false;
                     dialog.AllowVerticalFonts = false;
-                    if(System.Windows.Forms.DialogResult.OK == dialog.ShowDialog()) {
+                    if (System.Windows.Forms.DialogResult.OK == dialog.ShowDialog())
+                    {
                         button.Tag = dialog.Font;
                     }
                 }
             }
-            catch { }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "btnFontChoose_Click");
+            }
         }
 
         // Utility method to move nodes up and down in a TreeView.

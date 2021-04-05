@@ -1171,12 +1171,15 @@ namespace QTTabBarLib {
                 }
             }
         }
-
+        
+        // 控件正在打开时候发生
         private void contextMenuSys_Opening(object sender, CancelEventArgs e) {
             InitializeSysMenu(false);
+            // 临时挂起控件布局
             contextMenuSys.SuspendLayout();
             tsmiGroups.DropDown.SuspendLayout();
             tsmiUndoClose.DropDown.SuspendLayout();
+
             MenuUtility.CreateGroupItems(tsmiGroups);
             MenuUtility.CreateUndoClosedItems(tsmiUndoClose);
             if((lstActivatedTabs.Count > 1) && tabControl1.TabPages.Contains(lstActivatedTabs[lstActivatedTabs.Count - 2])) {
