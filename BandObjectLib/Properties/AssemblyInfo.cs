@@ -1,3 +1,5 @@
+using System.Resources;
+using System.Runtime.InteropServices;
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
 //    Copyright (C) 2007-2010  Quizo, Paul Accisano
@@ -27,10 +29,10 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTTabBar")]
-[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
+[assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("1.5.4.0")]
 //
 // Version information for an assembly consists of the following four values:
 //
@@ -42,7 +44,10 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.5.4.0")]
+[assembly: ComVisible(true)]
+[assembly: NeutralResourcesLanguage("")]
+[assembly: Guid("70e873e1-b593-42d5-95aa-bd19fc2d59b6")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
