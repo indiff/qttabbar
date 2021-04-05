@@ -23,13 +23,13 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.4" ?> <!-- Change the last number to the svn revision before release -->
+    <?define ProductVersion="1.5.4.0" ?> <!-- Change the last number to the svn revision before release -->
     <?define VersionString="1.5.4(2021)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
-    <?define StrongName="QTTabBar, Version=1.0.0.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
+    <?define StrongName="QTTabBar, Version=1.5.4.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
     <?define MyLanguage="1033"?>  
     <!-- Language code page 1252 1033
       语言                              语言-国家     Language      Codepage
@@ -138,7 +138,6 @@ Language="1033"
 
 
                   <!-- Add by qwop   end -->
-                  
                   <?foreach arch in x86;x64 ?>
                         <?if $(var.arch) = x64?>
                             <?define win64 = yes?>
@@ -155,7 +154,6 @@ Language="1033"
                             <RegistryKey Root="HKLM" Key="Software\Microsoft\Internet Explorer\Toolbar"  ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                 <RegistryValue Name="{d2bf470e-ed1c-487f-a333-2bd8835eb6ce}" Value="QTTabBar" Type="string" Action="write" KeyPath="yes" />
                             </RegistryKey>
-                          
                         </Component>
                         <Component Id="QTButtonBarReg_$(var.arch)" Win64="$(var.win64)" DisableRegistryReflection="$(var.win64)">
                             <?if $(var.arch) = x64?>
@@ -182,7 +180,9 @@ Language="1033"
                             </RegistryKey>
                         </Component>
                     
-                        <!-- COM Objects -->
+                        <!-- COM Objects  计算机\HKEY_CLASSES_ROOT\CLSID\{D2BF470E-ED1C-487F-A777-2BD8835EB6CE}
+                        计算机\HKEY_CURRENT_USER\Software\QTTabBar
+                        -->
                         <?foreach compName in QTTabBarClass;QTButtonBar;QTCoTaskBarClass;AutoLoader ?>
                             <?if $(var.compName) = QTTabBarClass?>
                                 <?define compGUID = {D2BF470E-ED1C-487F-A333-2BD8835EB6CE}?>
@@ -221,11 +221,12 @@ Language="1033"
                                     <RegistryKey Key="InprocServer32" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                         <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                         <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
-                                        <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />
-                                        <RegistryKey Key="1.0.0.0" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
+                                        <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                                        <RegistryKey Key="$(var.ProductVersion)" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                             <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                             <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
-                                            <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />
+                                           <!--- <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />-->
+                                            <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
                                         </RegistryKey>
                                     </RegistryKey>
                                 </RegistryKey>
