@@ -4,6 +4,7 @@ name: QTTabBar
 
 on:
   push:
+    branches: [ master ]
     tags:
     - 'v*'
 
