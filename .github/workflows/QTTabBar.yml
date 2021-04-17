@@ -1,55 +1,96 @@
-name: Main workflow
+# This workflow uses actions that are not certified by GitHub.
+
+name: QTTabBar
 
 on:
   push:
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - '!docs/building-msvc.md'
-      - 'changelog.txt'
-      - 'LEGAL'
-      - 'LICENSE'
-      - 'lib/xdg/**'
-      - 'snap/**'
-      - 'qttabbar/build/**'
-    branches: [ master ]
-  pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - '!docs/building-msvc.md'
-      - 'changelog.txt'
-      - 'LEGAL'
-      - 'LICENSE'
-      - 'lib/xdg/**'
-      - 'snap/**'
-      - 'qttabbar/build/**'
-    branches: [ master ]
+    tags:
+    - 'v*'
 
 jobs:
-  build:
-    runs-on: windows-latest        
-    steps:
-     - uses: actions/checkout@master
-       
-     - name: Install vcexpress2010
-       run: choco install  --no-progress -y vcexpress2010
 
-     - name:  Setup Environment
-       run:   |
-             echo "::add-path::C:\Windows\Microsoft.NET\Framework\v4.0.30319"
-             echo "::add-path::C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE"
-             echo "::add-path::C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\BIN"
-             echo "::set-env name=LIB::C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\LIB;%LIB%"
-             echo "::set-env name=LIB::C:\Program Files (x86)\Microsoft SDKs\Windows\v6.0A\Lib;%LIB%"
-             echo "::set-env name=LIB::C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib;%LIB%"
-             echo "::set-env name=INCLUDE::C:\Program Files(x86)\Microsoft Visual Studio 10.0\VC\include;%INCLUDE%"
-     - name:  Start VCTools
-       shell: cmd
-       run: |
-        call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86
-        call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
-            
-     - name: Core Build
-       run: msbuild "QTTabBar Rebirth.sln" /t:Rebuild /property:Configuration=Release /property:Platform="Any CPU"
-       
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    runs-on: windows-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    env:
+      Solution_Name: 'QTTabBar Rebirth.sln'                         # Replace with your solution name, i.e. MyWpfApp.sln.
+
+    steps:
+    - name: 拉取代码
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        
+    - name: 配置msbuild
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: 配置nuget
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-version: '5.x'
+        
+#     - uses: actions/cache@v1
+#       id: cache
+#       with:
+#         path: ~/.nuget/packages
+#         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        
+    - name: NuGet Restore
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: nuget restore $env:Solution_Name
+  
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Rebuild the application
+      run: msbuild $env:Solution_Name /t:Rebuild /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+        
+#     - name: Zip the release dir   
+#     - uses: montudor/action-zip@v0.1.1
+#       with:
+#         args: zip -qq -r DBCHM.zip DBCHM\bin\Release        
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: QTTabBar
+        path: |
+          D:\a\QTTabBar\QTTabBar\bin\Release\**\*
+          
+        
+#     - name: Create Release
+#       id: create_release
+#       uses: actions/create-release@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         tag_name: ${{ github.ref }}
+#         release_name: Release ${{ github.ref }}
+#         draft: false
+#         prerelease: false
+        
+#     - name: Upload Release Asset
+#       id: upload-release-asset 
+#       uses: actions/upload-release-asset@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+#         asset_path: D:\a\DBCHM\DBCHM\DBChm\bin\Release\DBCHM.exe
+#         asset_name: DBCHM.exe
+#         asset_content_type: application/zip        
+        
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          D:\a\QTTabBar\QTTabBar\bin\Release\**\*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
