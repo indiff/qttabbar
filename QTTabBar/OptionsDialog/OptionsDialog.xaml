@@ -27,6 +27,7 @@
     Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
     Height="650"
     Title="{qt:Resx Key=OptionsDialog, Index=0}"
+    ToolTip="{qt:Resx Key=OptionsDialog, Index=0}"
     Width="750"
     Left="0" Top="0"
     >

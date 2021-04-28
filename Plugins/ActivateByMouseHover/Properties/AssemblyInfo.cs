@@ -21,11 +21,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MigemoLoader")]
-[assembly: AssemblyDescription("Loader of Migemo dll to Search Box")]
+[assembly: AssemblyTitle("ShowStatusBar")]
+[assembly: AssemblyDescription("show status bar by key")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
-[assembly: AssemblyProduct("MigemoLoader")]
+[assembly: AssemblyProduct("ShowStatusBar")]
 [assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -36,7 +36,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6cd672e7-de8e-4a88-b003-ee5965436982")]
+[assembly: Guid("fee96ce1-f769-4dac-bc86-1c0ee7f69dd1")]
 
 // Version information for an assembly consists of the following four values:
 //

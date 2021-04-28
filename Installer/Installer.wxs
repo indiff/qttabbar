@@ -137,6 +137,11 @@ Language="1033"
                   </Component>
 
 
+                  <Component Id="ActivateByMouseHover" Win64="yes" Guid="27af1a85-9a08-4c19-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f19" Name="ActivateByMouseHover.dll" Source="..\Plugins\ActivateByMouseHover\bin\Release\ActivateByMouseHover.dll" KeyPath="yes" />
+                  </Component>
+
+
                   <!-- Add by qwop   end -->
                   
                   <?foreach arch in x86;x64 ?>
@@ -257,7 +262,9 @@ Language="1033"
             <ComponentRef Id="QTViewModeButton" />
           <!--<ComponentRef Id="SampleSplitButton" /> -->
             <ComponentRef Id="ShowStatusBar" />
-            <!-- add by qwop -->
+          <ComponentRef Id="ActivateByMouseHover" />
+          
+          <!-- add by qwop -->
 
             <?foreach arch in x86;x64 ?>
                 <!-- RegKeys -->
