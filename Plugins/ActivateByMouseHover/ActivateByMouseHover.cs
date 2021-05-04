@@ -84,7 +84,7 @@ namespace QuizoPlugins {
 
         public bool HasOption {
             get {
-                return false;
+                return true;
             }
         }
 
@@ -168,7 +168,7 @@ namespace QuizoPlugins {
 
 		private static void SaveSetting()
 		{
-			using( var rkPlugin = Registry.CurrentUser.CreateSubKey( CONSTANTS.REGISTRY_PLUGINSETTINGS + @"\Quizo\" + REGNAME ) )
+			using( var rkPlugin = Registry.CurrentUser.CreateSubKey( CONSTANTS.REGISTRY_PLUGINSETTINGS + @"\" + REGNAME ) )
 			{
 				if( rkPlugin != null )
 				{

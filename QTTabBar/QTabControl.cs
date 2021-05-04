@@ -758,6 +758,17 @@ namespace QTTabBarLib {
         }
 
         public QTabItem GetTabMouseOn() {
+            if (this == null || this.IsDisposed)
+             {
+                 if (tabPages.Count == 1)
+                 {
+                     return tabPages[0];
+                 }
+                 return null;
+             }
+             if (tabPages.Count == 1) {
+                 return tabPages[0];
+             }
             Point pt = PointToClient(MousePosition);
             if(((upDown != null) && upDown.Visible) && upDown.Bounds.Contains(pt)) {
                 return null;

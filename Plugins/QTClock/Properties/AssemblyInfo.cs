@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("QTClock")]
-[assembly: AssemblyDescription("Sample clock plugin")]
+[assembly: AssemblyDescription("时钟插件")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTClock")]

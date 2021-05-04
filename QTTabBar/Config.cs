@@ -213,7 +213,7 @@ namespace QTTabBarLib {
         public static _Keys Keys        { get { return ConfigManager.LoadedConfig.keys; } }		/*快捷操作*/
         public static _Plugin Plugin    { get { return ConfigManager.LoadedConfig.plugin; } }	/*插件管理*/
         public static _Lang Lang        { get { return ConfigManager.LoadedConfig.lang; } }		/*语言配置*/
-        public static _Desktop Desktop  { get { return ConfigManager.LoadedConfig.desktop; } }
+        public static _Desktop Desktop { get { return ConfigManager.LoadedConfig.desktop; } }   /*关于信息*/
 
         public _Window window   { get; set; }
         public _Tabs tabs       { get; set; }

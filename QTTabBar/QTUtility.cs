@@ -36,7 +36,7 @@ using QTTabBarLib.Interop;
 namespace QTTabBarLib {
     internal static class QTUtility {
         internal static readonly Version BetaRevision = new Version(0, 3);
-        internal static readonly Version CurrentVersion = new Version(1, 5, 4, 0);
+        internal static readonly Version CurrentVersion = new Version(1, 5, 5, 0);
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal const int FLAG_KEYENABLED = 0x100000;
         internal const string IMAGEKEY_FOLDER = "folder";
