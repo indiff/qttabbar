@@ -6,6 +6,7 @@
 - [Gitee](https://gitee.com/qwop/qttabbar)
 
 # Changes
+- [1.5.5(2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta) Fix the known problem. Fix the Explorer crash after clicking the option; Add plug-in mouse suspension activation label
 - [1.5.4(2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta) All plug-ins are built-in by default, which support one click to enable and one click to disable; fix the lock function bug
 - [1.5.3(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta) Add custom button image, support button skin function; add new function, support new tab, take the path of the clipboard by default; add video preview image function
 - [1.5.2(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.2) Repair open command prompt exception; Exception log add extended information prompt; add language configuration file
