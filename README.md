@@ -3,7 +3,7 @@
 1. Qttabbar domestic optimized version is based on sf.net/projects/qttabbar/ (2012-06-17). The original author of this version has not released it. I don't know why. Adding some Chinese features is mainly for the convenience of domestic users; in addition, the capture window of quizo official website maintained by Japanese authors is not used to all the time, so this version retains the easy-to-use function of capture window.
 2. Qttabbar is a small tool that allows you to use tab multi label function in Windows Explorer. Since then, there are no windows folder and awesome folder preview functions, which greatly improves the efficiency of your work. It's like IE 7, and it's like Firefox and opera. Qttabbar also provides some plug-ins, such as file operation tool, tree directory, display status bar and so on.
 - [GitHub](https://indiff.github.io/qttabbar)
-- [Gitee](https://gitee.com/qwop/QTTabBar)
+- [Gitee](https://gitee.com/qwop/qttabbar)
 
 # Changes
 - [1.5.4(2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta) All plug-ins are built-in by default, which support one click to enable and one click to disable; fix the lock function bug
