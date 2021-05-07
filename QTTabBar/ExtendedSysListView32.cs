@@ -328,7 +328,7 @@ namespace QTTabBarLib {
             PInvoke.ClientToScreen(Handle, ref ret);
             return ret;
         }
-
+        // 使用箭头键时候环绕选择文件夹
         protected override bool HandleCursorLoop(Keys key) {
             int focusedIdx = ShellBrowser.GetFocusedIndex();
             int itemCount = ShellBrowser.GetItemCount();

@@ -39,9 +39,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(155, 15);
+            this.label1.Size = new System.Drawing.Size(128, 15);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Mouse Hover Delay (msec): ";
+            this.label1.Text = "鼠标悬浮延迟 (毫秒): ";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // numericUpDown1
@@ -62,7 +62,7 @@
             this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown1.Value = new decimal(new int[] {
-            700,
+            2000,
             0,
             0,
             0});
@@ -75,7 +75,7 @@
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 2;
-            this.buttonOK.Text = "OK";
+            this.buttonOK.Text = "确认";
             this.buttonOK.UseVisualStyleBackColor = true;
             // 
             // SettingForm
@@ -96,7 +96,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Activate By MouseHover";
+            this.Text = "鼠标悬浮激活标签";
             this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);

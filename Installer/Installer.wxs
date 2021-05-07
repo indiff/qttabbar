@@ -23,7 +23,7 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.5" ?> <!-- Change the last number to the svn revision before release -->
+    <?define ProductVersion="1.5.5.0" ?> <!-- Change the last number to the svn revision before release -->
     <?define VersionString="1.5.5(2021)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano -->
@@ -126,6 +126,11 @@ Language="1033"
                   <Component Id="QTViewModeButton" Win64="yes" Guid="27af1a85-9a08-4c16-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f16" Name="QTViewModeButton.dll" Source="..\Plugins\QTViewModeButton\bin\Release\QTViewModeButton.dll" KeyPath="yes" />
                   </Component>
+
+                  <Component Id="ActivateByMouseHover" Win64="yes" Guid="27af1a85-9a08-4c19-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+                    <File Id="f17" Name="ActivateByMouseHover.dll" Source="..\Plugins\ActivateByMouseHover\bin\Release\ActivateByMouseHover.dll" KeyPath="yes" />
+                  </Component>
+                  
                   <!--
                   <Component Id="SampleSplitButton" Win64="yes" Guid="27af1a85-9a08-4c17-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f17" Name="SampleSplitButton.dll" Source="..\Plugins\Sample\bin\Release\SampleSplitButton.dll" KeyPath="yes" />
@@ -134,12 +139,12 @@ Language="1033"
                   <Component Id="ShowStatusBar" Win64="yes" Guid="27af1a85-9a08-4c18-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f18" Name="ShowStatusBar.dll" Source="..\Plugins\ShowStatusBar\bin\Release\ShowStatusBar.dll" KeyPath="yes" />
                   </Component>
-
+                  <!--
 
                   <Component Id="ActivateByMouseHover" Win64="yes" Guid="27af1a85-9a08-4c19-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f19" Name="ActivateByMouseHover.dll" Source="..\Plugins\ActivateByMouseHover\bin\Release\ActivateByMouseHover.dll" KeyPath="yes" />
                   </Component>
-
+ -->
 
                   <!-- Add by qwop   end -->
                   
@@ -227,11 +232,11 @@ Language="1033"
                                     <RegistryKey Key="InprocServer32" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                         <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                         <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
-                                        <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />
+                                        <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" Action="write" />
                                         <RegistryKey Key="$(var.ProductVersion)" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                             <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                             <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
-                                            <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />
+                                            <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" Action="write" />
                                         </RegistryKey>
                                     </RegistryKey>
                                 </RegistryKey>
@@ -263,7 +268,7 @@ Language="1033"
             <ComponentRef Id="QTViewModeButton" />
           <!--<ComponentRef Id="SampleSplitButton" /> -->
             <ComponentRef Id="ShowStatusBar" />
-          <ComponentRef Id="ActivateByMouseHover" />
+            <ComponentRef Id="ActivateByMouseHover" /> 
           
           <!-- add by qwop -->
 

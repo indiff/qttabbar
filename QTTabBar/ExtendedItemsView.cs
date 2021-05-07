@@ -138,6 +138,7 @@ namespace QTTabBarLib {
             return new Point(rect.left, rect.top);
         }
 
+        // 使用箭头键时候环绕选择文件夹
         protected override bool HandleCursorLoop(Keys key) {
             int focusedIdx = ShellBrowser.GetFocusedIndex();
             int itemCount = ShellBrowser.GetItemCount();
