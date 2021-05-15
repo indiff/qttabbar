@@ -55,7 +55,7 @@
 # Thanks
 * [Original author Quizo](https://twitter.com/QTTabBar) 
 * [SF Version Author](https://sourceforge.net/u/masamunexgp/profile)
-* [Donation List](https://github.com/indiff/qttabbar/wiki/%E9%B8%A3%E8%B0%A2%E6%8D%90%E5%8A%A9)
+* [Donation List](https://github.com/indiff/qttabbar/wiki/Thanks-%E9%B8%A3%E8%B0%A2%E6%8D%90%E5%8A%A9)
 * [Donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
 * Thanks [JetBrains](https://www.jetbrains.com/?from=QtTabBar), Support for open source projects
 ![jetbrains](https://images.gitee.com/uploads/images/2020/0714/114152_d335c2f1_416720.png "jetbrains.png")
