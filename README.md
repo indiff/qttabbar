@@ -17,7 +17,7 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) Built in Chinese Language Options
 
 # Download
-* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta)
+* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta)
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
 * Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 * ![Install net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
