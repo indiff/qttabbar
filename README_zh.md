@@ -18,7 +18,7 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) 内置汉化语言选项
 
 # 下载地址/Download
-* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta)
+* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta)
 * [qttabbar国内镜像](https://gitee.com/qwop/qttabbar/attach_files)
 * 请安装 net framework 3.5/Please install net framework 3.5 [下载/download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 * ![请安装 net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
