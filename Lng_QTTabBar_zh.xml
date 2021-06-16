@@ -2,7 +2,7 @@
 <root>
 
 <Version_QTTabBar>
-DevBuild: 2021/5/6 17:10:18
+DevBuild: 2020/5/25 0:06:02
 </Version_QTTabBar>
 
 <DateModified>
@@ -601,4 +601,4 @@ QTTabBar 无法打开\r\n\r\n  "{0}"。
 
 <!-- data end -->
 
-</root 
+</root> 
