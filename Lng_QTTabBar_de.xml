@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+<Author>
+akay.dev
+</Author>
+
+<Language>
+de_DE
+</Language>
+
+<Country>
+Deutschland
+</Country>
+
+<Version_QTTabBar>
+DevBuild: 12.01.2021 09:17:40
+</Version_QTTabBar>
+
+<DateModified>
+05.05.2021
+</DateModified>
+
+<!-- data start -->
+
+<ButtonBar_BtnName>
+Trennzeichen
+Zurück
+Vorwärts
+Gruppen
+Zuletzt geschlossen
+Programmstarter
+Neues Fenster
+Dupliziere aktive Registerkarte
+Sperren
+Kopier-Werkzeug
+Immer im Vordergrund
+Tabulator schließen
+Alle schließen, außer den aktuellen Tab
+Fenster schließen
+Linken Tab schließen
+Rechten Tab schließen
+Aufwärts
+Aktualisieren
+Suchen
+Deckkraft
+Suchbox
+Optionen
+</ButtonBar_BtnName>
+
+<ButtonBar_Misc>
+Pfad
+Name
+Aktueller Ordnerp
+Aktueller Ordnern
+MD5-Prüfsumme
+ Artikel
+Pfade aller Tabs
+</ButtonBar_Misc>
+
+<Desktop>
+Liste
+Details
+Kacheln
+Standard
+</Desktop>
+
+<DialogButtons>
+OK
+Abbrechen
+&amp;Anwenden
+&amp;Standard
+&amp;Seite Zurücksetzen
+&amp;Alle zurücksetzen
+Zurücksetzen
+Hinzufügen
+Hinzufügen...
+Entfernen
+Optionen
+Aktivieren
+Deaktivieren
+Rückgängig
+Laden...
+Speichern...
+</DialogButtons>
+
+<DragDropToolTip>
+Kopieren nach:
+Verschieben nach:
+Verknüpfung erstellen in:
+</DragDropToolTip>
+
+<ErrorDialogs>
+Operation failed.\r\nBitte stellen Sie sicher, dass die Datei oder das Ziel der Verknüpfung existiert:\r\n\r\n{0}
+Fehler - QTTabBar
+Warnung: QTTabBar konnte nicht automatisch aktiviert werden. Um sie manuell zu aktivieren, drücken Sie die Alt-Taste und wählen Sie dann QTTabBar aus dem Menü Ansicht/Symbolleisten.
+Konnte nicht aktivieren
+Fehler
+Die QTTabBar-Hook-Bibliothek kann nicht geladen werden.
+Die QTTabBar-Hook-Bibliothek konnte nicht initialisiert werden.
+Einige Funktionen sind möglicherweise nicht funktionsfähig. Um dies zu beheben, müssen Sie die Anwendung möglicherweise neu installieren.
+Hooking des Desktops fehlgeschlagen. Bitte aktivieren Sie das Werkzeug QT Tab Desktop erneut.
+Der Vorgang ist fehlgeschlagen.\r\nBitte stellen Sie sicher, dass der Ordner existiert oder Sie
+Zugriffsberechtigung für den Ordner haben:\r\n\r\n\t{0}
+</ErrorDialogs>
+
+<FileFilters>
+Bild-Dateien
+Sprachdateien
+Plugin-Dateien
+</FileFilters>
+
+<FileHashComputer>
+Pfad
+Hash
+Schließen
+Klar
+Aktualisieren
+Immer an der Spitze
+Ergebnis anzeigen
+Löschen beim Schließen
+Vollständiger Pfad
+(Jetzt wird gerechnet...)
+</FileHashComputer>
+
+<MarginDropDown>
+Alle
+Links
+Top
+Rechts
+Unten
+</MarginDropDown>
+
+<Misc_Strings>
+Desktop-Suche
+Bilddatei ist ungültig.\r\n\r\nBitte geben Sie eine 432 x 40 px große Bilddatei an.
+Suchergebnisse in
+Abkürzung
+Wählen Sie Ihre Datei
+Wählen Sie Ihren Ordner
+Experimentell
+Dummy
+</Misc_Strings>
+
+<Options_Page01_Window>
+Ändern Sie das Verhalten von Explorer-Fenstern.
+Einzelfenster-Modus
+Erfassen neuer Explorer-Fenster als neue Registerkarten
+Neue Explorer-Fenster nicht erfassen
+Standardspeicherort für neue Fenster und Registerkarten
+Speichern der Sitzung
+Starten Sie jedes Mal eine neue Sitzung
+Alle Registerkarten der vorherigen Sitzung wiederherstellen
+Nur die gesperrten Registerkarten der vorherigen Sitzung wiederherstellen
+Wenn die Schaltfläche "Schließen" angeklickt wird
+Schließen Sie das Fenster
+Schließen der aktuellen Registerkarte
+Alle nicht gesperrten Registerkarten schließen
+Senden Sie das Fenster in die Taskleiste auf
+Schließen
+Minimieren
+Blaue Plus-Taste
+</Options_Page01_Window>
+
+<Options_Page02_Tabs>
+Ändern Sie die Optionen in Bezug auf die Registerkarten.
+Neue Registerkarten öffnen:
+Wenn die aktuelle Registerkarte geschlossen ist, wechseln Sie in die:
+Sofortiges Umschalten auf neue Registerkarten
+Vorhandene Registerkarten wiederverwenden
+Mehrdeutige Registerkarten umbenennen
+Wenn Sie mit dem Mauszeiger über eine Registerkarte ziehen,
+Wechseln Sie dazu
+Anzeigen des Menüs Unterordner-Tipp
+Registerkarten-Symbole
+Ordnersymbole auf Registerkarten anzeigen
+Das Menü "Unterordner-Tipp" anzeigen, wenn auf das Symbol geklickt wird
+Den Laufwerksbuchstaben auf dem Symbol anzeigen
+Schließen-Taste
+Schließen-Schaltfläche auf Registerkarten anzeigen
+Nur bei gedrückter Alt-Taste
+Nur bei Mausverschiebung
+Registerkarte Bar
+Navigationsschaltflächen in der Registerkartenleiste anzeigen
+Auf der linken Seite
+Auf der rechten Seite
+Mehrere Reihen von Registerkarten zulassen
+Legen Sie die Zeile mit der aktiven Registerkarte immer unten an
+Links von der aktuellen Registerkarte
+Rechts von der aktuellen Registerkarte
+In der Position ganz links
+In der Position ganz rechts
+Reiter nach links
+Reiter nach rechts
+Registerkarte ganz links
+Registerkarte ganz rechts
+Zuletzt aktivierte Registerkarte
+Verhalten
+</Options_Page02_Tabs>
+
+<Options_Page03_Tweaks>
+Aktivieren oder Deaktivieren von Anpassungen der Listenansicht des Explorers.
+Tweaks, die mit beiden Listenansichten verwendet werden können
+Anzeige von Spaltenüberschriften in allen Ansichtsmodi (Windows Vista/7)
+Verwenden Sie die Standard-Dateisystemansicht für Bibliotheksordner (Windows 7)
+Abwählen der Dateierweiterung beim Umbenennen von Dateien (Windows XP)
+Zyklusauswahl mit F2 beim Umbenennen
+Beim Verschieben der Auswahl mit den Pfeiltasten umbrechen
+Rücktaste geht eine Ebene nach oben (Windows Vista/7)
+Scrollen mit Mausrad bei gedrückter Umschalttaste scrollt horizontal
+Tweaks, die nur mit der älteren Listenansicht verwendet werden können
+Aktivieren Sie das ältere Steuerelement für die Listenansicht (Windows 7)
+Vollständige Zeilenauswahl in der Details-Ansicht
+Gitterlinien in der Ansicht "Details" anzeigen
+Abwechselnde Zeilenfarben in der Details-Ansicht
+Vordergrundfarbe:
+Hintergrundfarbe:
+</Options_Page03_Tweaks>
+
+<Options_Page04_Tooltips>
+Ändern Sie das Verhalten der Tooltips für Unterordner und Vorschau.
+Tipps für Unterordner
+Tipps für Unterordner einschalten
+Nur bei gedrückter Umschalttaste
+Dateien anzeigen
+Vorschau-Tooltips beim Überfahren von Menüpunkten mit der Maus anzeigen
+Vorschau-Tooltips
+Vorschau-Tooltips einschalten
+Nur bei gedrückter Umschalttaste
+Dateiinformationen unter Bildern anzeigen
+Maximale Breite x Höhe:
+Schriftart:
+Text-Dateitypen
+Bild- und Videodateitypen
+</Options_Page04_Tooltips>
+
+<Options_Page05_General>
+Allgemeine Optionen für das Verhalten von QTTabBar.
+Integration der Taskleiste
+Anzeigen von Registerkartenvorschauen in der Taskleiste
+Geschichte
+Verlauf geschlossener Registerkarten beibehalten
+Jetzt löschen
+Historie der geöffneten Dateien aufbewahren
+Netzwerk
+Netzwerk-Timeout (Geben Sie 0 für die Systemvorgabe ein):
+Regelmäßig nach Updates suchen
+Jetzt prüfen
+Exportieren
+Einstellungen exportieren...
+Dateiverlauf löschen?
+Registerkartenverlauf löschen?
+</Options_Page05_General>
+
+<Options_Page06_Appearance>
+Ändern Sie das Aussehen von Registerkarten oder der Registerkartenleiste.
+Registerkarte Bild
+Benutzerdefiniertes Registerkartenbild verwenden:
+Auslegungsspielräume:
+Überlappungsbereich:
+Inhalt Ränder:
+Hit-Test transparente Bereiche
+Registerkartengröße
+Höhe:
+Min. Breite:
+Max. Breite:
+Auslegungsmodus:
+Volle Breite
+Gleiche Größe
+Registerkarte Text
+Textfarben:
+Schattenfarben:
+Aktive Farbe
+Inaktive Farbe
+Mouseover-Farbe
+Text Schriftart:
+Ausrichtung:
+Links
+Zentrum
+Symbolleisten-Hintergrund
+Bild
+Einfarbig
+Jeden Balken einzeln abbilden
+Streckmodus:
+Auslegungsspielräume:
+Skin-Datei
+Skin importieren...
+Skin exportieren...
+Strecken
+Echte Größe
+Fliese
+</Options_Page06_Appearance>
+
+<Options_Page07_Mouse>
+Weisen Sie den verschiedenen Mausaktionen Befehle zu.
+Um eine Mausbindung hinzuzufügen, führen Sie eine Mausaktion auf dem Plus-Symbol links neben dem entsprechenden Zieltyp aus.  Um eine Bindung zu entfernen, wählen Sie sie in der Liste aus und drücken Sie die Entf-Taste.
+Andere Mausoptionen
+Mausrad scrollt das Fenster unter der Maus
+Maus-Akkord
+Aktion
+Irgendwo
+Registerkarte
+Hintergrund der Registerkartenleiste
+Ordner Link
+Datei oder Ordner
+Explorer Hintergrund
+Linksklick
+Rechtsklick
+Mittlerer Klick
+Doppelklick
+X1 Klick
+X2 Klick
+Diese Maustaste kann für dieses Ziel nicht verwendet werden.
+Die gültigen Maustasten für dieses Ziel sind:
+Ungültige Taste
+</Options_Page07_Mouse>
+
+<Options_Page08_Keys>
+Tastaturkürzel ändern.
+Wählen Sie eine Aktion aus der Liste aus und drücken Sie die Tastengeste, die Sie daran binden möchten. Drücken Sie Escape, um die Bindung aufzuheben.
+Andere Tastaturoptionen
+Das Fenster "Tab Switcher" anzeigen, wenn Strg + Tab gedrückt wird
+Aktion
+Tastenanschlag
+Diese Taste ist bereits zugewiesen:
+Soll sie neu zugewiesen werden?
+Tastenkonflikt
+</Options_Page08_Keys>
+
+<Options_Page09_Groups>
+Erstellen und verwalten Sie Registerkartengruppen.
+Um einer Gruppe eine Schnelltaste zuzuweisen, wählen Sie sie aus und drücken Sie die entsprechende Tastengeste. Drücken Sie Escape, um die Bindung zu löschen.
+Neue Gruppe erstellen
+Ordner
+Inbetriebnahme
+Tastenkürzel
+Neue Gruppe
+Gruppe "{0}" öffnen
+</Options_Page09_Groups>
+
+<Options_Page10_Apps>
+Erstellen Sie Verknüpfungen zu häufig verwendeten Dateien oder Anwendungen.
+Um einer Anwendung eine Schnelltaste zuzuweisen, wählen Sie sie aus und drücken Sie die entsprechende Tastengeste. Drücken Sie Escape, um die Verknüpfung zu löschen.
+Neuen Ordner erstellen
+Pfad:
+Argumente:
+Arbeitsverzeichnis:
+Anwendung
+Tastenkürzel
+Die folgenden Schlüsselwörter werden zur Laufzeit durch Pfadzeichenketten in doppelten Anführungszeichen ersetzt.
+Ausgewählte Dateien.
+Ausgewählte Mappen.
+Ausgewählte Dateien und Ordner.
+Aktueller Ordner.
+Aktueller Ordner, wenn keine Auswahl, sonst ausgewählter Ordner.
+Neue Mappe
+Diesen Ordner und seinen Inhalt entfernen?
+Anwendung "{0}" starten
+</Options_Page10_Apps>
+
+<Options_Page11_ButtonBar>
+Anpassen der Schaltflächenleiste.
+Schaltflächen
+Optionen der Schaltflächenleiste
+Große Symbole
+Beschriftungen auf Schaltflächen anzeigen
+Sperren der Reihenfolge von Dropdown-Schaltflächenmenüs
+Sperren der Größe des Suchfelds
+Benutzerdefinierte Schaltflächenbilder
+</Options_Page11_ButtonBar>
+
+<Options_Page12_Plugins>
+Verwalten Sie Plugins von Drittanbietern.
+Ein Plugin installieren
+(Disabled)
+von {0}
+{0} wurde entfernt.
+Dieses Plugin wird installiert, wenn Sie auf OK oder Übernehmen drücken.
+Dieses Plugin wird aktiviert, wenn Sie auf OK oder Übernehmen drücken.
+Dieses Plugin wird deaktiviert, wenn Sie auf OK oder Übernehmen drücken.
+Wenn Sie dieses Plugin deinstallieren, werden auch die folgenden Plugins deinstalliert:
+Fortfahren?
+Aktivieren Sie
+Deaktivieren
+</Options_Page12_Plugins>
+
+<Options_Page13_Language>
+Ändern Sie die Sprache.
+Hauptsprache
+Eingebaute Sprache verwenden:
+Sprachdatei verwenden:
+Plugin-Sprachdateien
+Sprachdatei-Editor
+Spracheditor anzeigen...
+Original
+Übersetzt
+Alle Einträge auf ihren ursprünglichen Wert zurücksetzen?
+Fehler beim Speichern der Datei.
+Vereinfachtes Chinesisch
+</Options_Page13_Language>
+
+<Options_Page14_About>
+Abspann und Versionsinformationen anzeigen.
+Original-Code von {0}
+Hauptentwickler:
+Andere Entwickler:
+Icons und Grafiken:
+Wenn Sie QTTabBar nützlich finden, ziehen Sie bitte eine kleine Spende in Betracht.
+Vereinfachtes Chinesisch：
+Gebaut von: {0}
+</Options_Page14_About>
+
+<OptionsDialog>
+QTTabBar Optionen
+Alle Optionen auf dieser Seite auf ihre Standardwerte zurücksetzen?
+Alle Optionen auf ihre Standardwerte zurücksetzen? Dies hat keine Auswirkungen auf Gruppen, Anwendungen oder Plugins.
+Konfirmation
+</OptionsDialog>
+
+<PayPalURL>
+https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg
+</PayPalURL>
+
+<ShortcutKeys_ActionNames>
+Zurückgehen
+Vorwärts gehen
+Zurück zum Start
+Vorwärts bis Ende
+Nächste Registerkarte wählen
+Vorherige Registerkarte auswählen
+Erste Registerkarte auswählen
+Letzte Registerkarte auswählen
+Wechsel zur zuletzt aktivierten Registerkarte
+Neue Registerkarte öffnen
+Neues Fenster öffnen
+Registerkarten aus anderen Fenstern zusammenführen
+Aktuelle Registerkarte schließen
+Alle schließen, außer aktive
+Links schließen
+Rechts schließen
+Fenster schließen
+Schließen rückgängig machen
+Aktuelle Registerkarte klonen
+Aktuellen Ordner in neuem Fenster öffnen
+Strom sperren / entsperren
+Alle sperren / entsperren
+Ordner durchsuchen
+Neue Gruppe erstellen
+Optionsdialog öffnen
+Menü der Symbolleiste anzeigen
+Aktuelles Registerkartenmenü anzeigen
+Gruppenmenü anzeigen (Schaltflächenleiste)
+Menü "Letzte Ordner" anzeigen (Schaltflächenleiste)
+Menü der Benutzeranwendung anzeigen (Schaltflächenleiste)
+Menü "Letzte Dateien" anzeigen (Schaltflächenleiste)
+Neue leere Datei erstellen
+Neuen Ordner erstellen
+Pfad der ausgewählten Dateien kopieren
+Name der ausgewählten Dateien kopieren
+Aktuellen Ordnerpfad kopieren
+Aktuellen Ordnernamen kopieren
+MD5 der ausgewählten Dateien prüfen
+Fenster ganz nach oben bringen
+Transparenz +
+Transparenz -
+Fokus-Dateiliste
+Fokus-Suchleiste (Explorer)
+Fokus-Suchfeld (Schaltflächenleiste)
+Unterordner-Tippmenü für ausgewählten Ordner anzeigen
+Fenster an Taskleiste senden
+Fokussieren der Registerkartenleiste
+Registerkarten nach Namen sortieren
+Registerkarten nach Pfad sortieren
+Registerkarten nach letzter Aktivierung sortieren
+Nichts
+Eine Ebene höher
+Aktualisieren
+Einfügen
+Maximieren Sie
+Minimieren
+In neuer Registerkarte öffnen
+In neuer Registerkarte öffnen, ohne zu aktivieren
+In neuem Fenster öffnen
+Schneiden
+Kopieren
+Löschen
+Eigenschaften
+Pfad kopieren
+Name kopieren
+Prüfsumme anzeigen
+Register schließen
+Registerkarten nach links schließen
+Registerkarten nach rechts schließen
+Eine Ebene höher
+Schloss
+Kontextmenü anzeigen
+In neuem Fenster öffnen
+Klonen
+Pfad kopieren
+Eigenschaften
+Menü "Unterverzeichnis anzeigen" Tipp
+Alle schließen, außer diesem
+CMD öffnen
+Ausgewählte Ordner in neuer Registerkarte öffnen, ohne sie zu aktivieren
+</ShortcutKeys_ActionNames>
+
+<ShortcutKeys_Groups>
+QTTabBar
+{0} (Plugin)
+</ShortcutKeys_Groups>
+
+<SiteURL>
+https://github.com/indiff/qttabbar
+</SiteURL>
+
+<TabBar_Menu>
+Schließen
+Rechts schließen
+Links schließen
+Alle schließen, außer diesem
+Zur Gruppe hinzufügen
+Neue Gruppe erstellen
+Schloss
+Klonen Sie dies
+Neues Fenster
+Pfad kopieren
+Eigenschaften
+Registerkarte Historie
+Gruppen
+Rückgängig geschlossen
+Zuletzt aktiviert
+Zuletzt geöffnete Dateien
+Ordner durchsuchen
+Alle schließen, außer Strom
+Fenster schließen
+Optionen
+freischalten
+Zum Anwendungsmenü hinzufügen :
+Artikel
+Abbrechen
+Zweige
+Diesen Punkt aus dem Menü entfernen
+&amp;Öffne enthaltender Ordner
+Registerkarte "Etikett
+Tabulator-Reihenfolge
+Name
+Pfad
+Aktiv
+Sperren der Symbolleisten
+Registerkarten anderer Fenster zusammenführen
+Invertieren
+CMD öffnen
+</TabBar_Menu>
+
+<TabBar_Message>
+Es trat ein Fehler auf bei den Versuch \r\n\r\n "{0}" zu öffnen.
+</TabBar_Message>
+
+<TabBar_NewGroup>
+Neue Gruppe erstellen
+Name der Gruppe:
+Alle Registerkarten hinzufügen
+</TabBar_NewGroup>
+
+<TabBar_Option_Genre>
+Fenster
+Registerkarten
+Tweaks
+Tooltips
+Allgemein
+Erscheinungsbild
+Maus
+Tasten
+Gruppen
+Anwendungen
+Tastenleiste
+Plugins
+Sprache
+Über
+</TabBar_Option_Genre>
+
+<TaskBar_Menu>
+Taskleiste
+Desktop
+Elemente sperren
+Titelhintergrund zeichnen
+Menü mit einem Klick
+Tastenkombinationen für Anwendungen aktivieren
+</TaskBar_Menu>
+
+<TaskBar_Titles>
+Gruppen
+Rückgängig geschlossen
+Anwendungen
+Zuletzt geöffnete Dateien
+</TaskBar_Titles>
+
+<TrayIcon>
+1 Fenster
+{0} Fenster
+</TrayIcon>
+
+<UpdateCheck>
+Es wurde eine neue Version von QTTabBar veröffentlicht:
+Drücken Sie OK, um die Website aufzurufen.
+Ihre Version von QTTabBar ist auf dem neuesten Stand.
+Neue Entwicklungsversion gefunden:
+Versionsdatei nicht gefunden (404).
+Unbekannter Netzwerkfehler.
+Server nicht gefunden.
+Server hat falsche Zeichenfolgen zurückgegeben.
+</UpdateCheck>
+
+<!-- data end -->
+
+</root>
