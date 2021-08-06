@@ -29,7 +29,7 @@
 - 资源管理器中，组织—>布局—>菜单栏  【win10以下】
 - 右键菜单栏右方的空白地区—>勾选QTTabBar等工具栏—>按Alt+M—>重启explorer或重启计算机
 ![启用qttabbar](https://user-images.githubusercontent.com/501276/72576075-907fb980-3909-11ea-9dc2-9a1ea0ca2f8e.png)
-
+- 报错日志路径 C:\Users\Administrator\AppData\Roaming\QTTabBar\QTTabBarException.log
 
 # 编译/Build
 * 安装 [wix311.exe](https://github.com/wixtoolset/wix3/releases)
