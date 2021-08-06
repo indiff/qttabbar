@@ -58,9 +58,12 @@
 * [Donation List](https://github.com/indiff/qttabbar/wiki/Thanks-%E9%B8%A3%E8%B0%A2%E6%8D%90%E5%8A%A9)
 * [Donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
 * Recruit volunteers for a long time and send an email to indiff@126.com Or add wechat adgmtt
-* Thanks [JetBrains](https://www.jetbrains.com/?from=QtTabBar), Support for open source projects
-![jetbrains](https://images.gitee.com/uploads/images/2020/0714/114152_d335c2f1_416720.png "jetbrains.png")
+# Thanks for free JetBrains Open Source license
+
+<a href="https://www.jetbrains.com/?from=QtTabBar" target="_blank">
+<img src="https://user-images.githubusercontent.com/501276/128459507-b98484a4-f20d-4224-80e3-d16886ea9365.png" height="200"/></a>
+
 # TODOS
-* Migration VS2019
-* Add boommark
-* Enhanced Preview
+- Migration VS2019
+- Add boommark
+- Enhanced Preview
