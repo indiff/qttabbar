@@ -28,7 +28,7 @@
 - In Explorer, organization > layout > menu bar  [xp,win7]
 - Right click the blank area on the right side of the menu bar - > check qttabbar and other toolbars - > Press Alt + m - > Restart Explorer or restart the computer
 ![Enable qttabbar](https://user-images.githubusercontent.com/501276/72576075-907fb980-3909-11ea-9dc2-9a1ea0ca2f8e.png)
-
+- Error log path C:\Users\Administrator\AppData\Roaming\QTTabBar\QTTabBarException.log
 
 # Build
 * Install [wix311.exe](https://github.com/wixtoolset/wix3/releases)
