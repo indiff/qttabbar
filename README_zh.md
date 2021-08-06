@@ -59,6 +59,7 @@
 * [捐助列表](https://github.com/indiff/qttabbar/wiki/Thanks-%E9%B8%A3%E8%B0%A2%E6%8D%90%E5%8A%A9)
 * [Donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8)
 * 感谢[JetBrains](https://www.jetbrains.com/?from=QtTabBar) 对开源的支持
+* 长期招募志愿者加入,发送邮件到indiff@126.com 或者添加微信 adgmtt
 ![jetbrains](https://images.gitee.com/uploads/images/2020/0714/114152_d335c2f1_416720.png "jetbrains.png")
 # 待办/TODOS
 * 迁移VS2019
