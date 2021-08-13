@@ -663,6 +663,7 @@ namespace QTTabBarLib {
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.TearOffCurrent}
                 };
                 LinkActions = new Dictionary<MouseChord, BindAction> {
+                       {MouseChord.None, BindAction.ItemsOpenInNewTabNoSel},
                     {MouseChord.Middle, BindAction.ItemOpenInNewTab},
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewWindow}
                 };
@@ -744,18 +745,25 @@ namespace QTTabBarLib {
             public int BuiltInLangSelectedIndex { get; set; }
             public _Lang() {
                 UseLangFile = false;
-                BuiltInLang = "English";
                 LangFile = "";
                 PluginLangFiles = new string[0];
                 // WorkingConfig.lang.BuiltInLangSelectedIndex;
-                // modify by qwop  at http://q.cnblogs.com/q/14857/
+                // modify by qwop  at http://q.cnblogs.com/q/14857/  // en-US
                 if (System.Globalization.CultureInfo.InstalledUICulture.Name.Equals("zh-CN"))
                 {
-                    BuiltInLangSelectedIndex = 1;
-                    // Console.WriteLine(System.Globalization.CultureInfo.InstalledUICulture.NativeName);
+                   // BuiltInLangSelectedIndex = 1;
+                   // BuiltInLang = "简体中文";
+
+                    BuiltInLangSelectedIndex = 2;
+                    BuiltInLang = "German";
+                } else if (System.Globalization.CultureInfo.InstalledUICulture.Name.Equals("de-DE"))
+                {
+                    BuiltInLangSelectedIndex = 2;
+                    BuiltInLang = "German";
                 }
                 else {
                     BuiltInLangSelectedIndex = 0;
+                    BuiltInLang = "English";
                 }
 
               //  BuiltInLangSelectedIndex = 0;// English version

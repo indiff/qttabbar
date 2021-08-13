@@ -187,7 +187,7 @@
     <value>Plugins von Drittanbietern verwalten.;Plugin installieren;(Deaktiviert);von {0};{0} wurde entfernt.;Dieses Plugin wird installiert, wenn Sie auf OK oder Übernehmen drücken.;Dieses Plugin wird aktiviert, wenn Sie auf OK oder Übernehmen drücken.;Dieses Plugin wird deaktiviert, wenn Sie auf OK oder Übernehmen drücken.;Die Deinstallation dieses Plugins deinstalliert auch die folgenden Plugins:;Fortfahren?;Aktivieren;Deaktivieren</value>
   </data>
   <data name="Options_Page13_Language" xml:space="preserve">
-    <value>Sprache ändern;Hauptsprache;Eingebaute Sprache verwenden:;Sprachdatei verwenden:;Plugin-Sprachdateien;Sprachdatei-Editor;Spracheditor anzeigen...;Original;Übersetzt;Alle Einträge auf ihren ursprünglichen Wert zurücksetzen?;Fehler beim Speichern der Datei.;简体中文</value>
+    <value>Sprache ändern;Hauptsprache;Eingebaute Sprache verwenden:;Sprachdatei verwenden:;Plugin-Sprachdateien;Sprachdatei-Editor;Spracheditor anzeigen...;Original;Übersetzt;Alle Einträge auf ihren ursprünglichen Wert zurücksetzen?;Fehler beim Speichern der Datei.;简体中文;English;German</value>
   </data>
   <data name="Options_Page14_About" xml:space="preserve">
     <value>Credits und Versionsinformationen anzeigen:;Originalcode von {0};Hauptentwickler:;Andere Entwickler:;Symbole und Grafiken:;Wenn Sie QTTabBar nützlich finden, ziehen Sie bitte eine kleine Spende in Betracht.;汉化修改：;Build by: {0}</value>

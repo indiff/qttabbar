@@ -3498,7 +3498,15 @@ namespace QTTabBarLib {
             }
         }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
+
         private void InitializeComponent() {
+            // ²âÊÔDPI¼æÈÝ indiff
+            if (Environment.OSVersion.Version.Major >= 6 )
+                SetProcessDPIAware();
+
+
             components = new Container();
             buttonNavHistoryMenu = new ToolStripDropDownButton();
             tabControl1 = new QTabControl();

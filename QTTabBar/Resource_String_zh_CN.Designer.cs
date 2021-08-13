@@ -19,7 +19,7 @@ namespace QTTabBarLib {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "2.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource_String_zh_CN {
@@ -259,7 +259,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 改变语言。;主体语言;使用内置的语言：;使用语言文件：;插件语言文件;语言文件编辑器;显示语言编辑器...;原;翻译;其原始值重置所有条目？;保存文件时发生错误。;简体中文 的本地化字符串。
+        ///   查找类似 改变语言。;主体语言;使用内置的语言：;使用语言文件：;插件语言文件;语言文件编辑器;显示语言编辑器...;原;翻译;其原始值重置所有条目？;保存文件时发生错误。;简体中文;英文;德语 的本地化字符串。
         /// </summary>
         internal static string Options_Page13_Language {
             get {
