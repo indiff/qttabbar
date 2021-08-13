@@ -7,6 +7,8 @@
 - [Gitee主页](https://gitee.com/qwop/qttabbar)
 
 # 版本更新/Changes
+- [1.5.5.2-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta) 添加内置德语;修正版本号错误
+- [1.5.5.1-beta(2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta) 添加德语安装包，修复大量翻译错误
 - [1.5.5(2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta) 修复点击选项后explorer崩溃；添加插件鼠标悬浮激活标签
 - [1.5.4(2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta) 默认内置所有插件，支持一键启用，一键禁用;修复锁定功能bug
 - [1.5.3(2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta) 增加自定义按钮图片，支持按钮换肤功能；添加新功能，支持新开标签页，默认取剪贴板的路径；增加支持视频预览图片功能
