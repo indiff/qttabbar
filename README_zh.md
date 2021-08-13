@@ -5,6 +5,7 @@
 3. [为什么会有这个软件分支](https://github.com/indiff/qttabbar/wiki/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E8%BF%99%E4%B8%AA%E8%BD%AF%E4%BB%B6%E5%88%86%E6%94%AF%EF%BC%9F)
 - [GitHub主页](https://indiff.github.io/qttabbar)
 - [Gitee主页](https://gitee.com/qwop/qttabbar)
+- [SourceForge主页](https://sourceforge.net/projects/qttabbar2/)
 
 # 版本更新/Changes
 - [1.5.5.2-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta) 添加内置德语;修正版本号错误
@@ -20,8 +21,10 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) 内置汉化语言选项
 
 # 下载地址/Download
-* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta)
+* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta)
+* [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
 * [qttabbar国内镜像](https://gitee.com/qwop/qttabbar/attach_files)
+* [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * 请安装 net framework 3.5/Please install net framework 3.5 [下载/download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 * ![请安装 net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
 
