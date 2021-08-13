@@ -2,9 +2,9 @@
 # Introduction [中文版本](https://github.com/indiff/qttabbar/blob/master/README_zh.md)
 1. Qttabbar domestic optimized version is based on sf.net/projects/qttabbar/ (2012-06-17). The original author of this version has not released it. I don't know why. Adding some Chinese features is mainly for the convenience of domestic users; in addition, the capture window of quizo official website maintained by Japanese authors is not used to all the time, so this version retains the easy-to-use function of capture window.
 2. Qttabbar is a small tool that allows you to use tab multi label function in Windows Explorer. Since then, there are no windows folder and awesome folder preview functions, which greatly improves the efficiency of your work. It's like IE 7, and it's like Firefox and opera. Qttabbar also provides some plug-ins, such as file operation tool, tree directory, display status bar and so on.
-- [GitHub](https://indiff.github.io/qttabbar)
-- [Gitee](https://gitee.com/qwop/qttabbar)
-
+- [GitHub Mirror](https://indiff.github.io/qttabbar)
+- [Gitee Mirror](https://gitee.com/qwop/qttabbar)
+- [SourceForge Mirror](https://sourceforge.net/projects/qttabbar2/)
 # Changes
 - [1.5.5.2-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta) Add built-in German; Fix version number error
 - [1.5.5.1-beta(2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta) Gewidmet deutschen Freunden, deutsches Installationspaket (Google Translate)
@@ -19,8 +19,9 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) Built in Chinese Language Options
 
 # Download
-* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta)
+* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta)
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
+* [SourceForge Mirror]([![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 * ![Install net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
 
