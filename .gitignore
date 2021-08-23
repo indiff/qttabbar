@@ -818,4 +818,3 @@ MigrationBackup/
 /.sonarlint
 /BandObjectLib/*.ruleset
 *.ruleset
-Plugins/QTFileTools/Resources/Thumbs.db
