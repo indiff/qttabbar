@@ -142,4 +142,10 @@
   <data name="ResStrs_zh" xml:space="preserve">
     <value>窗口管理器选项;放大窗口;收缩窗口;加宽窗口;缩小窗口;加高窗口;降低窗口;恢复初始大小;向左移动窗口;向右移动窗口;向上移动窗口;向下移动窗口;最大化窗口;最小化窗口;恢复窗口;窗口管理器</value>
   </data>
+  <data name="ResStrs_de" xml:space="preserve">
+    <value>Fenstermanager Option;Fenster vergrössern;Fenster verkleinern;Fenster verbreitern;Fenster verkleinern;Fenster vergrößern;Fenster verkleinern;Fenster verkleinern;Fenster verkleinern;Fenster wiederherstellen;Fenster nach links bewegen;Fenster nach rechts bewegen;Fenster nach oben bewegen;Fenster nach unten bewegen;Fenster maximieren;Fenster minimieren;Fenster wiederherstellen;Fenstermanager</value>
+  </data>
+  <data name="ResStrs_Options_de" xml:space="preserve">
+    <value>Startgröße;Startposition;Größe wiederherstellen;Position wiederherstellen;Position bei Größenänderung automatisch anpassen;Größe ändern/verschieben;Voreinstellung;Setzen;Löschen;OK;Abbrechen;Aktuelle Position abrufen;Aktuelle Größe abrufen;Startvoreinstellung;Abrufen</value>
+  </data>  
 </root>
