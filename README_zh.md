@@ -1,5 +1,7 @@
 > [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 # 软件介绍/Introduction
+![qttabbar2](https://user-images.githubusercontent.com/501276/131287626-fe8f1fdd-a894-43f8-9620-b7145d70936d.gif)
+
 1. QTTabBar国内优化版是基于  sf.net/projects/qttabbar/ (2012-06-17)  提交的最新代码改版的。这个版本原作者没有发布过，具体不知道什么原因。增添一些汉化特性，主要是为了方便国内用户使用；另外日本作者维护的Quizo官网版本的捕获窗口一直用着不习惯，所以该版本保留了捕获窗口这个好用的功能。
 2. QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功能的小工具。从此以后工作时不再遍布文件夹窗口，还有给力的文件夹预览功能，大大提高了你工作的效率。就像IE 7和Firefox、Opera那样的。QTTabBar还提供了一些功能插件，如：文件操作工具、树型目录、显示状态栏等等。
 3. [为什么会有这个软件分支](https://github.com/indiff/qttabbar/wiki/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E8%BF%99%E4%B8%AA%E8%BD%AF%E4%BB%B6%E5%88%86%E6%94%AF%EF%BC%9F)
