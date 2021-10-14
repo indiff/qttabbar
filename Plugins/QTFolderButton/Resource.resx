@@ -133,4 +133,7 @@
   <data name="strQTFolderButton_zh" xml:space="preserve">
     <value>显示或者隐藏目录树;目录;关注文件夹树</value>
   </data>
+  <data name="strQTFolderButton_de" xml:space="preserve">
+    <value>Ordnerstruktur ein- oder ausblenden;Ordner;Fokus auf Ordnerstruktur</value>
+  </data>  
 </root>

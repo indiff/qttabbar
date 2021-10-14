@@ -139,4 +139,7 @@
   <data name="str_zh" xml:space="preserve">
     <value>关重复;排序</value>
   </data>
+  <data name="str_de" xml:space="preserve">
+    <value>Wiederholung schließen;sortieren</value>
+  </data>
 </root>

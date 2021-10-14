@@ -126,4 +126,7 @@
   <data name="str_zh" xml:space="preserve">
     <value>显示/隐藏文件夹备忘录;如果存在则显示;始终显示;停止</value>
   </data>
+  <data name="str_de" xml:space="preserve">
+    <value>Ordner-Memo ein-/ausblenden;Anzeigen, wenn vorhanden;Immer anzeigen;Stopp</value>
+  </data>
 </root>
