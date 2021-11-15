@@ -74,6 +74,13 @@
 <a href="https://www.jetbrains.com/?from=QtTabBar" target="_blank">
 <img src="https://user-images.githubusercontent.com/501276/128459507-b98484a4-f20d-4224-80e3-d16886ea9365.png" height="200"/></a>
 
+# 扫码微信群
+<table>
+    <tr>
+        <td>扫码邀请入微信群</td>
+        <td><img src="https://user-images.githubusercontent.com/501276/141719517-a6f28c27-3d8b-4b35-87f3-0c326789745e.jpg" width="120"/></td>
+    </tr>
+</table>
 
 # 待办/TODOS
 - 迁移VS2019
