@@ -3794,6 +3794,7 @@ namespace QTTabBarLib {
             }
         }
 
+        // °²×°¹³×Ó
         private void InstallHooks() {
             hookProc_Key = new HookProc(CallbackKeyboardProc);
             hookProc_Mouse = new HookProc(CallbackMouseProc);

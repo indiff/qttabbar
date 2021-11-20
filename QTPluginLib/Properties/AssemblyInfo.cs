@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
 [assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyFileVersion("1.5.5.2")]
+[assembly: AssemblyFileVersion("1.5.5.3")]
 
 // ComVisible を false に設定すると、このアセンブリ内の型は COM コンポーネントには 
 // 参照不可能になります。COM からこのアセンブリ内の型にアクセスする場合は、 
@@ -48,4 +48,4 @@ using System.Runtime.InteropServices;
 //
 // すべての値を指定するか、下のように '*' を使ってリビジョンおよびビルド番号を 
 // 既定値にすることができます:
-[assembly: AssemblyVersion("1.5.5.2")]
+[assembly: AssemblyVersion("1.5.5.3")]
