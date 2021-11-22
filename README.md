@@ -12,6 +12,7 @@
 - [Gitee Mirror](https://gitee.com/qwop/qttabbar)
 - [SourceForge Mirror](https://sourceforge.net/projects/qttabbar2/)
 # Changes
+- [1.5.5.3-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3) Add SetHome Tool/Add language Portuguese of Brazil Latest
 - [1.5.5.2-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta) Add built-in German; Fix version number error
 - [1.5.5.1-beta(2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta) Gewidmet deutschen Freunden, deutsches Installationspaket (Google Translate)
 - [1.5.5(2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.5.1-beta) Fix the known problem. Fix the Explorer crash after clicking the option; Add plug-in mouse suspension activation label
@@ -25,7 +26,7 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) Built in Chinese Language Options
 
 # Download
-* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta)
+* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3)
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
