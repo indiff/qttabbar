@@ -1,7 +1,7 @@
 > [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 
  [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
- [![GitHub release (latest by date)](https://img.shields.io/github/downloads/indiff/qttabbar/latest/total)](https://github.com/indiff/qttabbar/releases)
+![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)
 # 软件介绍/Introduction
 ![qttabbar2](https://user-images.githubusercontent.com/501276/131287626-fe8f1fdd-a894-43f8-9620-b7145d70936d.gif)
 
@@ -13,6 +13,7 @@
 - [SourceForge主页](https://sourceforge.net/projects/qttabbar2/)
 
 # 版本更新/Changes
+- [1.5.5.3-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3) 添加设置Java工具集环境变量工具;添加巴西语支持
 - [1.5.5.2-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta) 添加内置德语;修正版本号错误
 - [1.5.5.1-beta(2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta) 添加德语安装包，修复大量翻译错误
 - [1.5.5(2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta) 修复点击选项后explorer崩溃；添加插件鼠标悬浮激活标签
@@ -26,7 +27,7 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) 内置汉化语言选项
 
 # 下载地址/Download
-* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta)
+* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3)
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
 * [qttabbar国内镜像](https://gitee.com/qwop/qttabbar/attach_files)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
