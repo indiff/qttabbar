@@ -5,8 +5,8 @@ name: QTTabBar
 on:
   push:
     branches: [ vs2019 ]
-    tags:
-    - 'v*'
+   # tags:
+    #- 'v*'
 
 jobs:
 
