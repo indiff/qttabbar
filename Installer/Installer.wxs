@@ -23,13 +23,13 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.5.3" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.5.3 Beta(2021)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define ProductVersion="1.5.5" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.5.5(2021)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
-    <?define StrongName="QTTabBar, Version=1.5.5.3, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
+    <?define StrongName="QTTabBar, Version=1.5.5.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
     <?define MyLanguage="1033"?>  
     <!-- Language code page 1252 1033
       语言                              语言-国家     Language      Codepage
@@ -94,12 +94,23 @@ Language="1033"
                             <netfx:NativeImage Id="ngen_QTTabBar.dll" Priority="0" Platform="all" />
                         </File>
                     </Component>
+
+					<Component Id="HookLibrary" Win64="yes" Guid="27af1a85-9a06-4c79-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
+						<File Id="f5" Name="QTHookLib.dll" Source="..\QTHookLib\bin\Release\QTHookLib.dll" KeyPath="yes" />
+					</Component>
+					
+					
+				<!---
+				
+				
                   <Component Id="HookLibrary32" Win64="yes" Guid="27af1a85-9a06-4c79-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f5" Name="QTHookLib32.dll" Source="..\QTHookLib\bin\Release\QTHookLib32.dll" KeyPath="yes" />
                   </Component>
+					
                   <Component Id="HookLibrary64" Win64="yes" Guid="27af1a85-9a07-4c79-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f6" Name="QTHookLib64.dll" Source="..\QTHookLib\bin\Release\QTHookLib64.dll" KeyPath="yes" />
                   </Component>
+				  -->
 
                   <!-- Add by qwop start -->
                   <Component Id="QTQuick" Win64="yes" Guid="27af1a85-9a08-4c07-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
@@ -246,11 +257,12 @@ Language="1033"
                                     <RegistryKey Key="InprocServer32" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                         <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                         <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
-                                        <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />
-                                        <RegistryKey Key="1.0.0.0" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
+                                        <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                                        <RegistryKey Key="$(var.ProductVersion)" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                             <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                             <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
-                                            <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />
+                                           <!--- <RegistryValue Name="RuntimeVersion" Value="[RUNTIMEVERSION]" Type="string" Action="write" />-->
+                                            <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
                                         </RegistryKey>
                                     </RegistryKey>
                                 </RegistryKey>
@@ -266,9 +278,12 @@ Language="1033"
             <ComponentRef Id="ShellLibrary" />
             <ComponentRef Id="BandObjectLib" />
             <ComponentRef Id="QTPluginLib" />
-            <ComponentRef Id="QTTabBar" />
+            <ComponentRef Id="QTTabBar"  />
+			 <ComponentRef Id="HookLibrary" />	  
+			 <!-- add by qwop 
             <ComponentRef Id="HookLibrary32" />
             <ComponentRef Id="HookLibrary64" />
+			-->
             <!-- add by qwop -->
             <ComponentRef Id="QTQuick" />
             <ComponentRef Id="TurnOffRepeat" />
