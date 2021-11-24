@@ -1,4 +1,11 @@
-﻿//    This file is part of QTTabBar, a shell extension for Microsoft
+﻿/* File Info 
+ * Author:      your name 
+ * CreateTime:  2021/1/5下午1:58:08 
+ * LastEditor:  your name 
+ * ModifyTime:  2021/8/28下午7:47:22 
+ * Description: 
+*/ 
+//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
 //    Copyright (C) 2007-2010  Quizo, Paul Accisano
 //
@@ -54,6 +61,9 @@ namespace QTTabBarLib {
         }
     }
 
+   /* 
+    * @描述: 标签位置
+    */     
     public enum TabPos {
         Rightmost,
         Right,
@@ -62,12 +72,18 @@ namespace QTTabBarLib {
         LastActive,
     }
 
+   /* 
+    * @描述: 拉伸模式
+    */   
     public enum StretchMode {
         Full,
         Real,
         Tile,
     }
 
+   /* 
+    * @描述: 鼠标的目标
+    */   
     public enum MouseTarget {
         Anywhere,
         Tab,
@@ -77,6 +93,9 @@ namespace QTTabBarLib {
         ExplorerBackground
     }
 
+   /* 
+    * @描述: 鼠标弦
+    */  
     [Flags]
     public enum MouseChord {
         None    =   0,
@@ -91,6 +110,9 @@ namespace QTTabBarLib {
         X2      = 256,
     }
 
+    /* 
+    * @描述: 绑定动作
+    */  
     // WARNING
     // reordering these will break existing settings.
     public enum BindAction
@@ -198,9 +220,6 @@ namespace QTTabBarLib {
 
     [Serializable]
     public class Config {
-/*插件管理*/
-/*语言配置*/
-/*关于信息*/       
 		// Shortcuts to the loaded config, for convenience.
         public static _Window Window    { get { return ConfigManager.LoadedConfig.window; } }	/*窗口行为*/
         public static _Tabs Tabs        { get { return ConfigManager.LoadedConfig.tabs; } }		/*标签行为*/
@@ -213,7 +232,7 @@ namespace QTTabBarLib {
         public static _Keys Keys        { get { return ConfigManager.LoadedConfig.keys; } }		/*快捷操作*/
         public static _Plugin Plugin    { get { return ConfigManager.LoadedConfig.plugin; } }	/*插件管理*/
         public static _Lang Lang        { get { return ConfigManager.LoadedConfig.lang; } }		/*语言配置*/
-        public static _Desktop Desktop  { get { return ConfigManager.LoadedConfig.desktop; } }
+        public static _Desktop Desktop { get { return ConfigManager.LoadedConfig.desktop; } }   /*关于信息*/
 
         public _Window window   { get; set; }
         public _Tabs tabs       { get; set; }
@@ -646,34 +665,42 @@ namespace QTTabBarLib {
 
                 /* qwop's default value. */
                 MouseScrollsHotWnd = false;
-                GlobalMouseActions = new Dictionary<MouseChord, BindAction> {
+                // 全局鼠标动作
+               GlobalMouseActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.X1, BindAction.GoBack},
                     {MouseChord.X2, BindAction.GoForward},
                     {MouseChord.X1 | MouseChord.Ctrl, BindAction.GoFirst},
                     {MouseChord.X2 | MouseChord.Ctrl, BindAction.GoLast}
                 };
+               // 标签动作
                 TabActions = new Dictionary<MouseChord, BindAction> { 
                     {MouseChord.Middle, BindAction.CloseTab},
                     {MouseChord.Ctrl | MouseChord.Left, BindAction.LockTab},
                     {MouseChord.Double, BindAction.UpOneLevelTab},
                 };
-                BarActions = new Dictionary<MouseChord, BindAction> {
+                // 标签Bar处动作
+               BarActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.Double, BindAction.NewTab},
                     {MouseChord.Middle, BindAction.RestoreLastClosed},
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.TearOffCurrent}
                 };
+                // 文件夹链接动作
                 LinkActions = new Dictionary<MouseChord, BindAction> {
+                    {MouseChord.None, BindAction.ItemsOpenInNewTabNoSel},
                     {MouseChord.Middle, BindAction.ItemOpenInNewTab},
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewWindow}
                 };
-                ItemActions = new Dictionary<MouseChord, BindAction> {
+                // 资源管理器空白处
+               ItemActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.Middle, BindAction.ItemOpenInNewTab},
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewTabNoSel}                        
                 };
-                MarginActions = new Dictionary<MouseChord, BindAction> {
+               // 资源管理器空白处
+               MarginActions = new Dictionary<MouseChord, BindAction> {
                     { MouseChord.Double, BindAction.UpOneLevel}
                     // add by qwop //
                     ,{ MouseChord.Middle, BindAction.BrowseFolder}
+                    // ctrl + 双击 打开命令提示符
                     ,{ ( MouseChord) 66, BindAction.OpenCmd } // ===  {MouseChord.Ctrl | MouseChord.Double, BindAction.OpenCmd}
                     ,{ MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemsOpenInNewTabNoSel}
                     // add by qwop //
@@ -744,18 +771,25 @@ namespace QTTabBarLib {
             public int BuiltInLangSelectedIndex { get; set; }
             public _Lang() {
                 UseLangFile = false;
-                BuiltInLang = "English";
                 LangFile = "";
                 PluginLangFiles = new string[0];
                 // WorkingConfig.lang.BuiltInLangSelectedIndex;
-                // modify by qwop  at http://q.cnblogs.com/q/14857/
+                // modify by qwop  at http://q.cnblogs.com/q/14857/  // en-US
                 if (System.Globalization.CultureInfo.InstalledUICulture.Name.Equals("zh-CN"))
                 {
                     BuiltInLangSelectedIndex = 1;
-                    // Console.WriteLine(System.Globalization.CultureInfo.InstalledUICulture.NativeName);
+                    BuiltInLang = "简体中文";
+
+                  //  BuiltInLangSelectedIndex = 2;
+                  //  BuiltInLang = "German";
+                } else if (System.Globalization.CultureInfo.InstalledUICulture.Name.Equals("de-DE"))
+                {
+                    BuiltInLangSelectedIndex = 2;
+                    BuiltInLang = "German";
                 }
                 else {
                     BuiltInLangSelectedIndex = 0;
+                    BuiltInLang = "English";
                 }
 
               //  BuiltInLangSelectedIndex = 0;// English version

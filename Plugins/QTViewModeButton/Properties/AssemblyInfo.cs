@@ -22,11 +22,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ViewModeButton")]
-[assembly: AssemblyDescription("Button to change folder viewmode.")]
+[assembly: AssemblyDescription("修改文件显示方式")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("ViewModeButton")]
-[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

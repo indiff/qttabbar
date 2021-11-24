@@ -151,4 +151,7 @@
   <data name="viewModes_zh" xml:space="preserve">
     <value>幻灯;缩略图;平铺;图标;列表;详细信息;查看</value>
   </data>
+  <data name="viewModes_de" xml:space="preserve">
+    <value>Filmstreifen;Miniaturansicht;Kacheln;Symbole;Liste;Details;Ansicht</value>
+  </data>
 </root>

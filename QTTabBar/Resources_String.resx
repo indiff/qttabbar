@@ -187,7 +187,7 @@
     <value>Manage third-party plugins.;Install a Plugin;(Disabled);by {0};{0} has been removed.;This plugin will be installed when you press OK or Apply.;This plugin will be enabled when you press OK or Apply.;This plugin will be disabled when you press OK or Apply.;Uninstalling this plugin will also uninstall the following plugins:;Proceed?;Enable;Disable</value>
   </data>
   <data name="Options_Page13_Language" xml:space="preserve">
-    <value>Change the language.;Main language;Use built-in language:;Use language file:;Plugin language files;Language File Editor;Show Language Editor...;Original;Translated;Reset all entries to their original value?;Error saving file.;简体中文</value>
+    <value>Change the language.;Main language;Use built-in language:;Use language file:;Plugin language files;Language File Editor;Show Language Editor...;Original;Translated;Reset all entries to their original value?;Error saving file.;简体中文;English;German</value>
   </data>
   <data name="Options_Page14_About" xml:space="preserve">
     <value>View credits and version information.;Original code by {0};Lead Developer:;Other Developers:;Icons and graphics:;If you find QTTabBar useful, please consider making a small donation.;汉化修改：;Build by: {0}</value>

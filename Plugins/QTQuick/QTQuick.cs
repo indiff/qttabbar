@@ -25,10 +25,19 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security;
 using QTPlugin;
 using QTPlugin.Interop;
 using QTTabBarLib;
 using System.IO;
+
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
+using System.Management;
+using System.Threading;
+using Microsoft.Win32;
 
 namespace Qwop {
     /// <summary>
@@ -54,7 +63,14 @@ namespace Qwop {
 
         private bool fFirstMenuDropDown = true;
         private string text = "快捷";
+        private string REG_ENV_PATH = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
         private List<Address> lstSelectedItems = new List<Address>();
+
+        const int HWND_BROADCAST = 0xffff;
+        const uint WM_SETTINGCHANGE = 0x001a;
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern bool SendNotifyMessage(IntPtr hWnd, uint Msg, UIntPtr wParam, string lParam);
 
 
         public static void Uninstall() {
@@ -227,10 +243,19 @@ namespace Qwop {
             if(fFirstMenuDropDown) {
                 menu.Items.Add(new ToolStripMenuItem("我的文档"));
                 menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\系统"));
-                menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\个性化"));
-                menu.Items.Add(new ToolStripMenuItem("设置当前目录JAVA_HOME"));
-                menu.Items.Add(new ToolStripMenuItem("设置当前目录M2_HOME"));
+                menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\个性化"));   
+                menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\网络连接"));
+              //  menu.Items.Add(new ToolStripMenuItem("设置当前目录JAVA_HOME"));
+              //  menu.Items.Add(new ToolStripMenuItem("设置当前目录M2_HOME"));
                 menu.Items.Add(new ToolStripMenuItem("查看系统信息"));
+                menu.Items.Add(new ToolStripMenuItem("重启资源管理器")); 
+                menu.Items.Add(new ToolStripMenuItem("关机"));
+
+              //  menu.Items.Add(new ToolStripMenuItem("设置当前目录ANT_HOME"));
+             //   menu.Items.Add(new ToolStripMenuItem("设置当前目录MVND_HOME"));
+
+                menu.Items.Add(new ToolStripMenuItem("启动设置Path"));
+
                 // menu.Items.Add(new ToolStripMenuItem("Test selection"));
                 
                 fFirstMenuDropDown = false;
@@ -296,7 +321,63 @@ namespace Qwop {
                                 path = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{21EC2020-3AEA-1069-A2DD-08002B30309D}";
                             break;
                     }
+
                     case 3:
+                        {
+                            // 3. 网络连接
+                            if (IsWin7)
+                                path = "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}";
+                            else if (IsXP)
+                                path = "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}";
+                            break;
+                        }
+                    case 444: {
+                        string selectedPath = pluginServer.SelectedTab.Address.Path;
+                        string binPath = Path.Combine(selectedPath, "bin");
+                        string libPath = Path.Combine(selectedPath, "lib");
+                        string toolsJar = Path.Combine(libPath, "tools.jar");
+                        string dtJar = Path.Combine(libPath, "dt.jar");
+
+
+                        if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
+                        {
+                            MessageBox.Show("当前目录已经删除");
+                            SystemSounds.Hand.Play();
+                            return;
+                        }
+
+
+                        if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
+                        {
+                            MessageBox.Show("bin目录不存在");
+                            SystemSounds.Hand.Play();
+                            return;
+                        }
+
+
+
+                        if (String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath))
+                        {
+                            MessageBox.Show("lib目录不存在");
+                            SystemSounds.Hand.Play();
+                            return;
+                        }
+
+                        using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
+                        {
+                            string oldPath = getOldPath(envKey);
+                            envKey.SetValue("JAVA_HOME", selectedPath);
+                            envKey.SetValue("PATH", joinDevPath(oldPath)  );
+                            if (File.Exists(toolsJar) && File.Exists(dtJar))
+                            {
+                                envKey.SetValue("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;" );
+                            }
+                            SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                            MessageBox.Show("设置JAVA_HOME成功");
+                        }
+                        break;
+                    }
+                    case 44:
                         {
                             // 3. 设置当前目录JAVA_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
@@ -327,7 +408,7 @@ namespace Qwop {
                                 return;
                             }
 
-
+                            /*
  
                             if(String.IsNullOrEmpty(toolsJar) || !File.Exists(toolsJar)) {
                                 MessageBox.Show("toolsJar不存在");
@@ -342,24 +423,49 @@ namespace Qwop {
                                 SystemSounds.Hand.Play();
                                 return;
                             }
-                            Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
-                            Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;", EnvironmentVariableTarget.Machine);
+                            */
+
+
+                          //  Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
+                           // Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;", EnvironmentVariableTarget.Machine);
                             // 去重， 判断是否有 java home 删掉
                             string oldpath = filterEmpty( "java.exe" );
-                            Environment.SetEnvironmentVariable("PATH", @"%JAVA_HOME%\bin;" + oldpath, EnvironmentVariableTarget.Machine);
-                            MessageBox.Show("设置JAVA_HOME成功");
+                           // Environment.SetEnvironmentVariable("PATH", @"%JAVA_HOME%\bin;" + oldpath, EnvironmentVariableTarget.Machine);
 
+
+                            PowerShell.Create().AddCommand("setx")
+                                               .AddParameter("JAVA_HOME", selectedPath)
+                                               .AddParameter("/M")
+                                               .Invoke();
+                            Thread.Sleep( 800 );
+
+
+                            if (File.Exists(toolsJar) && File.Exists(dtJar))
+                            {
+                                PowerShell.Create().AddCommand("setx")
+                                              .AddParameter("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;")
+                                              .AddParameter("/M")
+                                              .Invoke();
+                                Thread.Sleep(800);
+                            }
+
+
+
+                            PowerShell.Create().AddCommand("setx")
+                                               .AddParameter("PATH", @"%JAVA_HOME%\bin;" + oldpath)
+                                               .AddParameter("/M")
+                                               .Invoke();
+                            Thread.Sleep(800);
+
+                            MessageBox.Show("设置JAVA_HOME成功");
                             break;
                         }
-                    case 4:
+                    case 55:
                         {
-                            // 4. 设置当前目录M2_HOME
-
-                            // 3. 设置当前目录JAVA_HOME
+                            // 5. 设置当前目录M2_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string mvnCmd = Path.Combine(binPath, "mvn.cmd");
-
 
 
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
@@ -387,23 +493,206 @@ namespace Qwop {
                                 return;
                             }
 
-                            Environment.SetEnvironmentVariable("M2_HOME", selectedPath, EnvironmentVariableTarget.Machine);
-                            string oldpath = filterEmpty("mvn.cmd");
-                            Environment.SetEnvironmentVariable("PATH", @"%M2_HOME%\bin;" + oldpath, EnvironmentVariableTarget.Machine);
-                            MessageBox.Show("设置M2_HOME成功");
+                           // Environment.SetEnvironmentVariable("M2_HOME", selectedPath, EnvironmentVariableTarget.Machine);
+                            /*
+                            PowerShell.Create().AddCommand("setx")
+                                            .AddParameter("M2_HOME", selectedPath )
+                                            .AddParameter("/M")
+                                            .Invoke();
+                            Thread.Sleep(800);
 
+                            string oldpath = filterEmpty("mvn.cmd");
+                          //  Environment.SetEnvironmentVariable("PATH", @"%M2_HOME%\bin;" + oldpath, EnvironmentVariableTarget.Machine);
+
+                            PowerShell.Create().AddCommand("setx")
+                                              .AddParameter("PATH", @"%M2_HOME%\bin;" + oldpath)
+                                              .AddParameter("/M")
+                                              .Invoke();
+                            Thread.Sleep(800);
+                            */
+
+                            using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
+                            {
+                                string oldPath = getOldPath(envKey);
+                                envKey.SetValue("PATH", joinDevPath(oldPath));
+
+                                envKey.SetValue("M2_HOME", selectedPath);
+
+                                SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                                MessageBox.Show("设置M2_HOME成功");
+                            }
                             break;
                         }
-                    case 5:
+                    case 4:
                         {
-                            // 5. 查看系统信息
+                            // 4. 查看系统信息
                             string msinfo32 = Environment.GetEnvironmentVariable("systemroot") + "\\System32\\msinfo32.exe";
                             Process.Start(msinfo32);
                             break;
                         }
+                    case 5:
+                        {
+                            // 5. 重启资源管理器
+                            /*
+                            foreach (Process p in Process.GetProcesses())
+                            {
+                                if (p.MainModule.ModuleName.Contains("explorer") == true)
+                                    p.Kill();
+                            }
+                            Process.Start("explorer.exe");
+                            */
+                            IntPtr handle = GetWin10ExplorerWnd();
+                            CloseExplorer(handle, 1);
+                            // PInvoke.PostMessage(hwndExplr, WM.CLOSE, IntPtr.Zero, (IntPtr)nCode)
+                            Thread.Sleep(800);
+                            Process.Start("explorer.exe");
+                            break;
+                        }
+                    case 6:
+                        {
+                            // 6. 关机
+                            IntPtr handle = GetShellTrayWnd();
+                            CloseExplorer(handle, 1);
+                            // PInvoke.PostMessage(hwndExplr, WM.CLOSE, IntPtr.Zero, (IntPtr)nCode)
+                            Thread.Sleep(800);
+                            break;
+                        }
+                    case 9:
+                        {
+                            // 9. 设置当前目录ANT_HOME
+                            string selectedPath = pluginServer.SelectedTab.Address.Path;
+                            string binPath = Path.Combine(selectedPath, "bin");
+                            string antCmd = Path.Combine(binPath, "ant.cmd");
 
-                        
-         
+                            if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
+                            {
+                                MessageBox.Show("当前目录已经删除");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+                            if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
+                            {
+                                MessageBox.Show("bin目录不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+                            if (String.IsNullOrEmpty(antCmd) || !File.Exists(antCmd))
+                            {
+                                MessageBox.Show("antCmd不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+                            using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
+                            {
+                                string oldPath = getOldPath(envKey);
+                                envKey.SetValue("ANT_HOME", selectedPath);
+                                envKey.SetValue("PATH", joinDevPath(oldPath));
+                                SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                                MessageBox.Show("设置ANT_HOME成功");
+                            }
+                            break;
+                        }
+                    case 10:
+                        {
+                            // 10. 设置当前目录MVND_HOME
+                            string selectedPath = pluginServer.SelectedTab.Address.Path;
+                            string binPath = Path.Combine(selectedPath, "bin");
+                            string mvndexe = Path.Combine(binPath, "mvnd.exe");
+
+                            if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
+                            {
+                                MessageBox.Show("当前目录已经删除");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+                            if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
+                            {
+                                MessageBox.Show("bin目录不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+                            if (String.IsNullOrEmpty(mvndexe) || !File.Exists(mvndexe))
+                            {
+                                MessageBox.Show("mvndexe不存在");
+                                SystemSounds.Hand.Play();
+                                return;
+                            }
+
+
+                            using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
+                            {
+                                string oldPath = getOldPath(envKey);
+                                envKey.SetValue("MVND_HOME", selectedPath);
+                                envKey.SetValue("PATH", joinDevPath(oldPath));
+                                SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                                MessageBox.Show("设置MVND_HOME成功");
+                            }
+                            break;
+                        }
+
+
+                    case 7:
+                        {
+                            // 11. 管理员方式启动
+                            string selectedPath = pluginServer.SelectedTab.Address.Path;
+                            string binPath = Path.Combine(selectedPath, "bin");
+                            string mvndexe = Path.Combine(binPath, "mvnd.exe");
+                            // string exePath = Path.Combine(Environment.ExpandEnvironmentVariables("%PROGRAMDATA%"), @"\QTTabBar\SetHome.exe");
+                            //  string exePath = @"%PROGRAMDATA%\QTTabBar\SetHome.exe";
+
+                            string exePath = @"C:\ProgramData\QTTabBar\SetHome.exe";
+                            if (!File.Exists(exePath))
+                            {
+                                exePath = @"D:\ProgramData\QTTabBar\SetHome.exe";
+                            }
+                            if (!File.Exists(exePath))
+                            {
+                                exePath = @"E:\ProgramData\QTTabBar\SetHome.exe";
+                            }
+                            if (!File.Exists(exePath))
+                            {
+                                exePath = @"F:\ProgramData\QTTabBar\SetHome.exe";
+                            }
+                            if (!File.Exists(exePath))
+                            {
+                                exePath = @"G:\ProgramData\QTTabBar\SetHome.exe";
+                            }
+                            if (!File.Exists(exePath))
+                            {
+                                exePath = @"H:\ProgramData\QTTabBar\SetHome.exe";
+                            }
+
+
+                            if (File.Exists(exePath))
+                            {
+                                var process = new Process
+                                 {
+                                     StartInfo =
+                                     {
+                                         WorkingDirectory = selectedPath,
+                                         UseShellExecute = true,
+                                         FileName = exePath,
+                                         CreateNoWindow = true,
+                                         Verb = "runas"
+                                     }
+                                 };
+                                process.Start();
+                            }
+                            else {
+                                MessageBox.Show( "未找到可执行文件SetHome");
+                            }
+                            break;
+                        }
                 }
                 
                 // pluginServer.CreateTab(new Address(mydocument), -1, false, true);
@@ -470,8 +759,80 @@ namespace Qwop {
             }*/
         }
 
+        private static string joinDevPath(string oldPath)
+        {
+            return oldPath
+                    + @"%JAVA_HOME%\bin;"
+                    + @"%M2_HOME%\bin;"
+                    + @"%MVND_HOME%\bin;"
+                    + @"%ANT_HOME%\bin;";
+        }
+
+        private static string getOldPath(RegistryKey envKey)
+        {
+            object value = envKey.GetValue("PATH");
+            string oldPath = value.ToString();
+            oldPath = oldPath.Replace(@"%JAVA_HOME%\bin;", "");
+            oldPath = oldPath.Replace(@"%M2_HOME%\bin;", "");
+            oldPath = oldPath.Replace(@"%ANT_HOME%\bin;", "");
+            oldPath = oldPath.Replace(@"%MVND_HOME%\bin;", "");
+            
+
+            oldPath = oldPath.Replace(@"%JAVA_HOME%\bin", "");
+            oldPath = oldPath.Replace(@"%M2_HOME%\bin", "");
+            oldPath = oldPath.Replace(@"%ANT_HOME%\bin", "");
+            oldPath = oldPath.Replace(@"%MVND_HOME%\bin", "");
+            
+
+            if (!oldPath.EndsWith(";"))
+            {
+                oldPath = oldPath + ";";
+            }
+            return oldPath;
+        }
+
         #endregion
 
+    //    internal static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
+     //   internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
+
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        public const Int32 CLOSE = 0x0010;
+
+
+
+        // 关闭资源管理器，发送关闭消息
+        public static void CloseExplorer(IntPtr hwndExplr, int nCode, bool doAsync = false)
+        {
+            if (IsXP && nCode == 0) nCode = 3;
+            if (IsXP || doAsync)
+            {
+                PostMessage(hwndExplr, CLOSE, IntPtr.Zero, (IntPtr)nCode);
+            }
+            else
+            {
+                SendMessage(hwndExplr, CLOSE, IntPtr.Zero, (IntPtr)nCode);
+            }
+        }
+
+        public static IntPtr GetShellTrayWnd()
+        {
+            return FindWindowEx(IntPtr.Zero, IntPtr.Zero, "Shell_TrayWnd", null);
+        }
+
+        public static IntPtr GetWin10ExplorerWnd()
+        {
+            return FindWindowEx(IntPtr.Zero, IntPtr.Zero, "CabinetWClass", null);
+        }
+        
 
         #region Event handlers
 

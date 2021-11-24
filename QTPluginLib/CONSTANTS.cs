@@ -17,7 +17,7 @@
 
 namespace QTPlugin {
     public static class CONSTANTS {
-        public const string REGISTRY_PLUGIN = @"Software\Quizo\QTTabBar\Plugins";
-        public const string REGISTRY_PLUGINSETTINGS = @"Software\Quizo\QTTabBar\Plugins\Settings";
+        public const string REGISTRY_PLUGIN = @"Software\QTTabBar\Plugins";
+        public const string REGISTRY_PLUGINSETTINGS = @"Software\QTTabBar\Plugins\Settings";
     }
 }

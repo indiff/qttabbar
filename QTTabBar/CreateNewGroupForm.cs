@@ -29,7 +29,7 @@ namespace QTTabBarLib {
         private string newPath;
         private QTabControl.QTabCollection Tabs;
         private TextBox textBox1;
-
+        
         public CreateNewGroupForm(string currentPath, QTabControl.QTabCollection tabs) {
             newPath = currentPath;
             Tabs = tabs;

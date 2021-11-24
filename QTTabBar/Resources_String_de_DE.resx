@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ButtonBar_BtnName" xml:space="preserve">
+    <value>Trennzeichen;Zurückgehen;Vorwärtsgehen;Gruppen;Kürzlich geschlossen;Anwendungen;Neues Fenster;Dies klonen;Sperren;Kopierwerkzeug;Oberste;Schließen;Alles außer dem aktuellen schließen;Fenster schließen;Links schließen;Rechts schließen;Eine Ebene höher;Neu laden;Suchen;Deckkraft;Suchfeld;Optionen</value>
+  </data>
+  <data name="ButtonBar_Misc" xml:space="preserve">
+    <value>Pfad;Name;Aktueller Ordnerpfad;Aktueller Ordnername;MD5; Elemente;Pfade aller geöffneten Registerkarten</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Liste;Details;Kacheln;Standard</value>
+  </data>
+  <data name="DialogButtons" xml:space="preserve">
+    <value>OK;Abbrechen;&amp;Übernehmen;&amp;Standard;Zurücksetzen &amp;Seite;&amp;Alles Zurücksetzen;Zurücksetzen;Hinzufügen;Hinzufügen...;Entfernen;Optionen;Aktivieren;Deaktivieren;Rückgängig;Laden...;Speichern...</value>
+  </data>
+  <data name="DragDropToolTip" xml:space="preserve">
+    <value>Kopieren nach:;Verschieben nach:;Verknüpfung erstellen in:</value>
+  </data>
+  <data name="ErrorDialogs" xml:space="preserve">
+    <value>Operation fehlgeschlagen.\r\nBitte stellen Sie sicher, dass die Datei oder das Ziel der Verknüpfung existiert:\r\n\r\n{0};Fehler - QTTabBar;Warnung:  Die QTTabBar konnte nicht automatisch aktiviert werden. Um sie manuell zu aktivieren, drücken Sie die Alt-Taste, lassen Sie sie los und wählen Sie QTTabBar aus dem Menü Ansicht/Symbolleisten.;Konnte nicht aktiviert werden;Fehler;QTTabBar-Hook-Bibliothek konnte nicht geladen werden.;QTTabBar-Hook-Bibliothek konnte nicht initialisiert werden.;Einige Funktionen sind möglicherweise nicht funktionsfähig. Um dies zu beheben, müssen Sie möglicherweise die Anwendung neu installieren.;Hooking des Desktops fehlgeschlagen. Bitte aktivieren Sie das QT Tab Desktop-Tool erneut.;Der Vorgang ist fehlgeschlagen.\r\nBitte stellen Sie sicher, dass der Ordner existiert oder dass Sie die Berechtigung haben, darauf zuzugreifen:\r\n\r\n\t{0}</value>
+  </data>
+  <data name="FileFilters" xml:space="preserve">
+    <value>Bilddateien;Sprachdateien;Plugin-Dateien</value>
+  </data>
+  <data name="FileHashComputer" xml:space="preserve">
+    <value>Pfad;Hash;Schließen;Löschen;Aktualisieren;Immer im Vordergrund;Ergebnis anzeigen;Löschen beim Schließen;Vollständiger Pfad;(Jetzt berechnen...)</value>
+  </data>
+  <data name="MarginDropDown" xml:space="preserve">
+    <value>Alle;Links;Oben;Rechts;Unten</value>
+  </data>
+  <data name="Misc_Strings" xml:space="preserve">
+    <value>Desktop Suche;Bilddatei ist ungültig.\r\n\r\nBitte geben Sie eine 432 x 40 px große Bilddatei an.;Suchergebnisse in;Verknüpfung;Wählen Sie Ihre Datei;Wählen Sie Ihren Ordner;Experimentell;Dummy</value>
+  </data>
+  <data name="OptionsDialog" xml:space="preserve">
+    <value>QTTabBar Einstellungen;Alle Einstellungen auf dieser Seite auf ihre Standardwerte zurücksetzen?;Alle Einstellungen auf ihre Standardwerte zurücksetzen?  Dies wirkt sich nicht auf Gruppen, Anwendungen oder Plugins aus.;Bestätigung</value>
+  </data>
+  <data name="Options_Page01_Window" xml:space="preserve">
+    <value>Ändern Sie das Verhalten von Explorer-Fenstern; Einzelfenstermodus; Erfassen neuer Explorer-Fenster als neue Registerkarten; Neue Explorer-Fenster nicht erfassen; Standardspeicherort für neue Fenster und Registerkarten; Sitzungsspeicherung; Starten Sie jedes Mal eine neue Sitzung; Wiederherstellen aller Registerkarten aus der vorherigen Sitzung; Wiederherstellen nur der gesperrten Registerkarten aus der vorherigen Sitzung; Wenn die Schließen-Schaltfläche angeklickt wird; Schließen Sie das Fenster; Schließen Sie die aktuelle Registerkarte; Schließen Sie alle nicht gesperrten Registerkarten; Senden Sie das Fenster in den Systemtray; Schließen; Minimieren; Blaue Plus-Schaltfläche</value>
+  </data>
+  <data name="Options_Page02_Tabs" xml:space="preserve">
+    <value>Ändern Sie die Optionen für die Registerkarten. Neue Registerkarten öffnen:;Wenn die aktuelle Registerkarte geschlossen wird, wechseln Sie zu der Registerkarte: ;Sofort zu neuen Tabs wechseln;Vorhandene Tabs wiederverwenden;Mehrdeutige Tabs umbenennen;Beim Ziehen über einen Tab zu diesem wechseln;Menü Unterordner-Inhalt anzeigen;Tab-Symbole;Ordnersymbole auf Tabs anzeigen;Menü Unterordner-Inhalt anzeigen, wenn auf das Symbol geklickt wird;Laufwerksbuchstabe auf dem Symbol anzeigen;Schließen-Schaltfläche;Schließen-Schaltfläche auf Tabs anzeigen;Nur bei gedrückter Alt-Taste;Nur bei Mausbewegung; Registerkartenleiste;Navigationsschaltflächen auf der Registerkartenleiste anzeigen;Links;Rechts;Mehrere Reihen von Registerkarten zulassen;Die Reihe mit der aktiven Registerkarte immer unten anordnen;Links von der aktuellen Registerkarte;Rechts von der aktuellen Registerkarte;Ganz links;Ganz rechts;Registerkarte nach links;Registerkarte nach rechts;Ganz links;Ganz rechts;Zuletzt aktivierte Registerkarte;Verhalten</value>
+  </data>
+  <data name="Options_Page03_Tweaks" xml:space="preserve">
+    <value>Aktivieren oder Deaktivieren von Tweaks für die Listenansicht des Explorers. Tweaks, die mit beiden Listenansichten verwendet werden können; Anzeige von Spaltenüberschriften in allen Ansichtsmodi (Windows Vista/7); Verwendung der Standard-Dateisystemansicht für Bibliotheksordner (Windows 7); Abwählen der Dateierweiterung beim Umbenennen von Dateien (Windows XP); Auswahl mit F2 beim Umbenennen umschalten; Umdrehen beim Verschieben der Auswahl mit den Pfeiltasten; Rücktaste geht eine Ebene nach oben (Windows Vista/7);Scrollen mit Mausrad bei gedrückter Umschalttaste scrollt horizontal;Tweaks, die nur mit der älteren Listenansicht verwendet werden können;Aktivieren der älteren Listenansicht-Steuerung (Windows 7);Vollständige Zeilenauswahl in der Detailansicht;Gitterlinien in der Detailansicht anzeigen;Alternative Zeilenfarben in der Detailansicht;Vordergrundfarbe: ;Hintergrundfarbe:</value>
+  </data>
+  <data name="Options_Page04_Tooltips" xml:space="preserve">
+    <value>Ändern Sie das Verhalten von Unterordner- und Vorschau-Tooltips;Unterordner-Inhalte;Unterordner-Inhalte aktivieren;Nur bei gedrückter Umschalttaste;Dateien anzeigen;Vorschau-Tooltips anzeigen, wenn Sie mit der Maus über Menüpunkte fahren;Vorschau-Tooltips;Vorschau-Tooltips aktivieren;Nur bei gedrückter Umschalttaste;Dateiinformationen unter Bildern anzeigen;Maximale Breite x Höhe:;Schriftart:;Textdateitypen;Bild- und Videodateitypen</value>
+  </data>
+  <data name="Options_Page05_General" xml:space="preserve">
+    <value>Allgemeine Einstellungen für das Verhalten von QTTabBar;Taskleisten-Integration;Registerkartenvorschau in der Taskleiste anzeigen;Verlauf;Verlauf geschlossener Registerkarten behalten;Jetzt löschen;Verlauf geöffneter Dateien behalten;Netzwerk;Netzwerk-Timeout (geben Sie 0 für die Systemvorgabe ein):;Regelmäßig nach Updates suchen;Jetzt prüfen;Exportieren;Einstellungen exportieren...;Dateiverlauf löschen?;Registerkartenverlauf löschen?</value>
+  </data>
+  <data name="Options_Page06_Appearance" xml:space="preserve">
+    <value>Ändern Sie das Aussehen von Registerkarten oder der Registerkartenleiste. Registerkartenbild;Benutzerdefiniertes Registerkartenbild verwenden:;Größenränder:;Überlappungsbereich:;Inhaltsränder:;Transparente Bereiche testen;Registerkartengröße;Höhe:;Minimale Breite:;Maximale Breite:;Größenmodus:;Volle Breite;Gleiche Größe;Registerkartentext;Textfarben:;Schattenfarben:;Aktive Farbe;Inaktive Farbe;Mouseover-Farbe;Textschrift:;Ausrichtung:;Links;Zentriert;Symbolleistenhintergrund;Bild;Volltonfarbe;Bild für jede Leiste einzeln;Dehnungsmodus:;Größenränder:;Skin-Datei;Skin importieren. ..;Skin exportieren...;Strecken;Echte Größe;Kacheln</value>
+  </data>
+  <data name="Options_Page07_Mouse" xml:space="preserve">
+    <value>Weisen Sie verschiedenen Mausaktionen Befehle zu;Um eine Mausbindung hinzuzufügen, führen Sie eine Mausaktion auf dem Plus-Symbol links neben dem entsprechenden Zieltyp aus.  Um eine Bindung zu entfernen, markieren Sie sie in der Liste und drücken Sie die Entf-Taste.;Weitere Mausoptionen;Mausrad rollt das Fenster unter der Maus;Mausakkord;Aktion;Überall;Tabulator;Tab-Leisten-Hintergrund;Ordner-Link;Datei oder Ordner;Explorer-Hintergrund;Linksklick;Rechtsklick;Mittelklick;Doppelklick;X1-Klick;X2-Klick;Diese Maustaste kann für dieses Ziel nicht verwendet werden.;Die gültigen Maustasten für dieses Ziel sind:;Ungültige Taste</value>
+  </data>
+  <data name="Options_Page08_Keys" xml:space="preserve">
+    <value>Tastenkombinationen ändern;Wählen Sie eine Aktion aus der Liste aus und drücken Sie die Tastenkombination, die Sie damit verbinden möchten.  Drücken Sie Escape, um die Bindung zu löschen.;Andere Tastaturoptionen;Tabulatorwechsel-Fenster anzeigen, wenn Strg + Tab gedrückt wird;Aktion;Tastendruck;Diese Taste ist bereits zugewiesen an:;Soll sie neu zugewiesen werden?;Tastenkonflikt</value>
+  </data>
+  <data name="Options_Page09_Groups" xml:space="preserve">
+    <value>Erstellen und Verwalten von Registerkartengruppen;Um einer Gruppe ein Tastenkürzel zuzuweisen, wählen Sie sie aus und drücken Sie die entsprechende Tastengeste.  Drücken Sie Escape, um die Bindung zu löschen.;Neue Gruppe erstellen;Ordner;Start;Tastenkürzel;Neue Gruppe;Gruppe "{0}" öffnen</value>
+  </data>
+  <data name="Options_Page10_Apps" xml:space="preserve">
+    <value>Erstellen Sie Verknüpfungen zu häufig verwendeten Dateien oder Anwendungen.;Um einer Anwendung eine Verknüpfung zuzuweisen, wählen Sie sie aus und drücken Sie die entsprechende Tastenkombination.  Drücken Sie Escape, um die Verknüpfung zu löschen.;Neuen Ordner erstellen;Pfad:;Argumente:;Arbeitsverzeichnis:;Anwendung;Verknüpfungstaste;Die folgenden Schlüsselwörter werden zur Laufzeit durch Pfadangaben in doppelten Anführungszeichen ersetzt.;Ausgewählte Dateien.;Ausgewählte Ordner.;Ausgewählte Dateien und Ordner.;Aktueller Ordner.;Aktueller Ordner, wenn keine Auswahl, sonst ausgewählter Ordner.;Neuer Ordner;Diesen Ordner und seinen Inhalt entfernen?;Anwendung "{0}" starten</value>
+  </data>
+  <data name="Options_Page11_ButtonBar" xml:space="preserve">
+    <value>Anpassen der Schaltflächenleiste;Schaltflächen;Optionen für die Schaltflächenleiste;Große Symbole;Beschriftungen auf Schaltflächen anzeigen;Reihenfolge der Dropdown-Schaltflächenmenüs festlegen;Größe des Suchfelds festlegen;Benutzerdefinierte Schaltflächen-Icons</value>
+  </data>
+  <data name="Options_Page12_Plugins" xml:space="preserve">
+    <value>Plugins von Drittanbietern verwalten.;Plugin installieren;(Deaktiviert);von {0};{0} wurde entfernt.;Dieses Plugin wird installiert, wenn Sie auf OK oder Übernehmen drücken.;Dieses Plugin wird aktiviert, wenn Sie auf OK oder Übernehmen drücken.;Dieses Plugin wird deaktiviert, wenn Sie auf OK oder Übernehmen drücken.;Die Deinstallation dieses Plugins deinstalliert auch die folgenden Plugins:;Fortfahren?;Aktivieren;Deaktivieren</value>
+  </data>
+  <data name="Options_Page13_Language" xml:space="preserve">
+    <value>Sprache ändern;Hauptsprache;Eingebaute Sprache verwenden:;Sprachdatei verwenden:;Plugin-Sprachdateien;Sprachdatei-Editor;Spracheditor anzeigen...;Original;Übersetzt;Alle Einträge auf ihren ursprünglichen Wert zurücksetzen?;Fehler beim Speichern der Datei.;简体中文;English;German</value>
+  </data>
+  <data name="Options_Page14_About" xml:space="preserve">
+    <value>Credits und Versionsinformationen anzeigen:;Originalcode von {0};Hauptentwickler:;Andere Entwickler:;Symbole und Grafiken:;Wenn Sie QTTabBar nützlich finden, ziehen Sie bitte eine kleine Spende in Betracht.;汉化修改：;Build by: {0}</value>
+  </data>
+  <data name="PayPalURL" xml:space="preserve">
+    <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>
+  </data>
+  <data name="ShortcutKeys_ActionNames" xml:space="preserve">
+    <value>Zurück;Vorwärts;Zurück zum Anfang;Vorwärts zum Ende;Nächste Registerkarte auswählen;Vorherige Registerkarte auswählen;Erste Registerkarte auswählen;Letzte Registerkarte auswählen;Zur zuletzt aktivierten Registerkarte wechseln;Neue Registerkarte öffnen;Neues Fenster öffnen;Registerkarten aus anderen Fenstern zusammenführen;Aktuelle Registerkarte schließen;Alle außer der aktuellen schließen;Links schließen;Rechts schließen;Fenster schließen;Schließen rückgängig machen;Aktuelle Registerkarte klonen;Aktuellen Ordner in neuem Fenster öffnen;Aktuelle sperren / entsperren; Alle sperren / entsperren;Ordner durchsuchen;Neue Gruppe erstellen;Optionsdialog öffnen;Menü der Symbolleiste anzeigen;Menü der aktuellen Registerkarte anzeigen;Menü der Gruppe anzeigen (Buttonleiste);Menü des letzten Ordners anzeigen (Buttonleiste);Menü der Benutzeranwendung anzeigen (Buttonleiste);Menü der letzten Dateien anzeigen (Buttonleiste);Neue leere Datei erstellen;Neuen Ordner erstellen;Pfad der ausgewählten Dateien kopieren;Name der ausgewählten Dateien kopieren;Pfad des aktuellen Ordners kopieren; Aktuellen Ordnernamen kopieren;MD5 der ausgewählten Dateien prüfen;Fenster ganz nach oben bringen;Transparenz +;Transparenz -;Dateiliste fokussieren;Suchleiste (Explorer) fokussieren;Suchfeld (Buttonleiste) fokussieren;Unterordner-Inhalt-Menü für ausgewählten Ordner anzeigen;Fenster an Taskleiste senden;Tab-Leiste fokussieren;Tabs nach Namen sortieren;Tabs nach Pfad sortieren;Tabs nach letzter Aktivierung sortieren;Nichts;Eine Ebene höher;Aktualisieren;Einfügen;Maximieren; Minimieren;In neuer Registerkarte öffnen;In neuer Registerkarte ohne Aktivierung öffnen;In neuem Fenster öffnen;Ausschneiden;Kopieren;Löschen;Eigenschaften;Pfad kopieren;Name kopieren;Prüfsumme anzeigen;Registerkarte schließen; Registerkarte links schließen;Registerkarte rechts schließen;Eine Ebene höher;Sperren;Kontextmenü anzeigen;In neuem Fenster öffnen;Klonen;Pfad kopieren;Eigenschaften;Inhalt-Menü für Unterverzeichnisse anzeigen;Alles außer diesem schließen;CMD öffnen;Ausgewählte Ordner in neuer Registerkarte ohne Aktivierung öffnen</value>
+  </data>
+  <data name="ShortcutKeys_Groups" xml:space="preserve">
+    <value>QTTabBar;{0} (Plugin)</value>
+  </data>
+  <data name="SiteURL" xml:space="preserve">
+    <value>https://github.com/indiff/qttabbar</value>
+  </data>
+  <data name="TabBar_Menu" xml:space="preserve">
+    <value>Schließen;Rechts schließen;Links schließen;Alles außer diesem schließen;Zu Gruppe hinzufügen;Neue Gruppe erstellen;Sperren;Dies klonen;Neues Fenster;Pfad kopieren;Eigenschaften;Tab-Historie;Gruppen;Geschlossen rückgängig machen;Zuletzt aktiviert;Kürzlich geöffnete Dateien;Ordner durchsuchen;Alles außer dem aktuellen schließen;Fenster schließen;Optionen;Entsperren;Zum Anwendungsmenü hinzufügen : ;Einträge;Abbrechen;Entwicklungszweig;Diesen Eintrag aus dem Menü entfernen;O&amp;pen, der den Ordner enthält;Tab-Label;Tab-Reihenfolge;Name;Pfad;Aktiv;Symbolleisten sperren;Tabs anderer Fenster zusammenführen;Invertieren;CMD öffnen</value>
+  </data>
+  <data name="TabBar_Message" xml:space="preserve">
+    <value>QTTabBar konnte nicht geöffnet werden
+
+ "{0}".</value>
+  </data>
+  <data name="TabBar_NewGroup" xml:space="preserve">
+    <value>Neue Gruppe erstellen;Gruppenname:;Alle Registerkarten hinzufügen</value>
+  </data>
+  <data name="TabBar_Option_Genre" xml:space="preserve">
+    <value>Fenster;Registerkarten;Tweaks;Tooltips;Allgemein;Aussehen;Maus;Tasten;Gruppen;Anwendungen;Tastenleiste;Plugins;Sprache;Über</value>
+  </data>
+  <data name="TaskBar_Menu" xml:space="preserve">
+    <value>Taskleiste;Desktop;Elemente sperren;Titelhintergrund zeichnen;Menü mit einem Klick;Tastenkombinationen für Anwendungen aktivieren</value>
+  </data>
+  <data name="TaskBar_Titles" xml:space="preserve">
+    <value>Gruppen;Geschlossen rückgängig machen;Anwendungen;Zuletzt geöffnete Dateien</value>
+  </data>
+  <data name="TrayIcon" xml:space="preserve">
+    <value>1 Fenster;{0} Fenster</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Eine neue Version von QTTabBar wurde veröffentlicht:;Drücken Sie OK, um zur Website zu gelangen.;Ihre Version von QTTabBar ist auf dem neuesten Stand.;Neue Entwicklungsversion gefunden:;Versionsdatei nicht gefunden (404).;Unbekannter Netzwerkfehler.;Server nicht gefunden.;Server hat falsche Zeichenfolgen zurückgegeben.</value>
+  </data>
+</root>

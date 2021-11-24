@@ -1567,9 +1567,17 @@ namespace QTTabBarLib {
                 ddmrUserAppButton.Close(ToolStripDropDownCloseReason.AppClicked);
             }
             QTTabBarClass tabbar = InstanceManager.GetThreadTabBar();
-            int index = tabbar.SelectedTabIndex;
-            int count = tabbar.TabCount;
+            int index = 0;
+            int count = 0;
+            // 判断tabbar不为空
+            if (null != tabbar && !tabbar.IsDisposed) {
+                index = tabbar.SelectedTabIndex;
+                count = tabbar.TabCount;
+            }
+            // 判断 toolStrip  Items不为空
+            if ( null != toolStrip && toolStrip.Items != null && toolStrip.Items.Count > 0 )
             foreach(ToolStripItem item in toolStrip.Items) {
+                if (item == null) continue;
                 if(item.Tag == null) continue;
                 switch((int)item.Tag) {
                     case BII_NAVIGATION_BACK:

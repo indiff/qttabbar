@@ -6,4 +6,7 @@ for /f "delims=" %%i in ('dir /ad /b' ) do @if exist "%CD%\%%i\bin" @rmdir /s /q
 for /f "delims=" %%i in ('dir /ad /b' ) do @if exist "%CD%\%%i\obj" @rmdir /s /q "%CD%\%%i\obj"
 del  /f /s /q *.plg
 del /f /s /q *.aps
+del /f /s /q *.cache
+del /f /s /q *.dll
+
 pause

@@ -73,8 +73,8 @@ namespace QTTabBarLib {
             msg = null;
             string str = null;
             // HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Resources_String.SiteURL + "/files/latestversion.txt");
-            // HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://raw.githubusercontent.com/indiff/qttabbar/master/latestversion.txt");
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://gitee.com/qwop/qttabbar/raw/master/latestversion.txt");
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://raw.githubusercontent.com/indiff/qttabbar/master/latestversion.txt");
+             // HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://gitee.com/qwop/qttabbar/raw/master/latestversion.txt");
             
             req.Timeout = 5000;
 

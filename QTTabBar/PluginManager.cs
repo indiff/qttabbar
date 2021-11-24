@@ -76,7 +76,8 @@ namespace QTTabBarLib {
                 Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTViewModeButton.dll", 
                 Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTWindowManager.dll", 
                // Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\SampleSplitButton.dll",                 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\ShowStatusBar.dll"
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\ShowStatusBar.dll", 
+                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\ActivateByMouseHover.dll"
             };
 
             List<string> lists = new List<string>();

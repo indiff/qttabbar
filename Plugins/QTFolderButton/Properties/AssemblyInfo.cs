@@ -22,11 +22,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("QTFolderButton")]
-[assembly: AssemblyDescription("Show folder tree for XP")]
+[assembly: AssemblyDescription("为XP显示文件夹树形结构")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTFolderButton")]
-[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

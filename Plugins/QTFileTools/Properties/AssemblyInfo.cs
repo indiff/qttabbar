@@ -22,11 +22,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FileTools")]
-[assembly: AssemblyDescription("Plugin set for file operations")]
+[assembly: AssemblyDescription("文件操作的插件集")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTFileTools")]
-[assembly: AssemblyCopyright("Copyright (C)  2007-2020")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

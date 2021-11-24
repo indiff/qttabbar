@@ -3498,7 +3498,15 @@ namespace QTTabBarLib {
             }
         }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
+
         private void InitializeComponent() {
+            // 测试DPI兼容 indiff
+            if (Environment.OSVersion.Version.Major >= 6 )
+                SetProcessDPIAware();
+
+
             components = new Container();
             buttonNavHistoryMenu = new ToolStripDropDownButton();
             tabControl1 = new QTabControl();
@@ -3786,6 +3794,7 @@ namespace QTTabBarLib {
             }
         }
 
+        // 安装钩子
         private void InstallHooks() {
             hookProc_Key = new HookProc(CallbackKeyboardProc);
             hookProc_Mouse = new HookProc(CallbackMouseProc);
@@ -5700,7 +5709,13 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             }
         }
 
+        // 鼠标在标签上操作
         private void tabControl1_MouseUp(object sender, MouseEventArgs e) {
+            if (null == tabControl1 || tabControl1.IsDisposed)
+            {
+                // 如果是最后一个标签，则出现bug
+                return;
+            }
             QTabItem tabMouseOn = tabControl1.GetTabMouseOn();
             if(NowTabDragging && e.Button == MouseButtons.Left) {
                 Keys modifierKeys = ModifierKeys;

@@ -36,7 +36,7 @@ using QTTabBarLib.Interop;
 namespace QTTabBarLib {
     internal static class QTUtility {
         internal static readonly Version BetaRevision = new Version(0, 3);
-        internal static readonly Version CurrentVersion = new Version(1, 5, 0, 0);
+        internal static readonly Version CurrentVersion = new Version(1, 5, 5, 0);
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal const int FLAG_KEYENABLED = 0x100000;
         internal const string IMAGEKEY_FOLDER = "folder";
@@ -718,6 +718,23 @@ namespace QTTabBarLib {
             value = ValidateMinMax(value, min, max);
         }
 
+        // 判断是否为暗黑模式  Environment.OSVersion.Version.Major
+        public static bool InNightMode
+        {
+            get
+            {
+                if (Environment.OSVersion.Version.Major > 9)
+                {
+                    using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"))
+                    {
+                        if (rk != null)
+                            return QTUtility2.GetValueSafe<int>(rk, "AppsUseLightTheme", 1) == 0;
+                    }
+                }
+                return false;
+            }
+        }
+
         public static int ValidateMinMax(int value, int min, int max) {
             int a = Math.Min(min, max);
             int b = Math.Max(min, max);
@@ -755,6 +772,7 @@ namespace QTTabBarLib {
             {
                 case 0: keyValuePairs = Resources_String.ResourceManager.GetResourceStrings(); break;
                 case 1: keyValuePairs = Resource_String_zh_CN.ResourceManager.GetResourceStrings(); break;
+                case 2: keyValuePairs = Resources_String_de_DE.ResourceManager.GetResourceStrings(); break;
             }
 
             // 如果加载为空， 则读取默认的应用语言

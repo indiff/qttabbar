@@ -187,4 +187,7 @@
   <data name="str_zh" xml:space="preserve">
     <value>剪切;复制;粘贴;删除;复制到文件夹;移动到文件夹;撤消;发送到父级;属性</value>
   </data>
+  <data name="str_de" xml:space="preserve">
+    <value>Ausschneiden;Kopieren;Einfügen;Löschen;In Ordner kopieren;In Ordner verschieben;Rückgängig machen;An übergeordnete Stelle senden;Eigenschaften</value>
+  </data>  
 </root>

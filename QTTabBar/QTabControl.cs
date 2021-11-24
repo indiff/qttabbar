@@ -121,14 +121,29 @@ namespace QTTabBarLib {
             sfTypoGraphic = StringFormat.GenericTypographic;
             sfTypoGraphic.FormatFlags |= StringFormatFlags.NoWrap;
             sfTypoGraphic.Trimming = StringTrimming.EllipsisCharacter;
-            colorSet = new Color[] {
-                Config.Skin.TabTextActiveColor,
-                Config.Skin.TabTextInactiveColor,
-                Config.Skin.TabTextHotColor,
-                Config.Skin.TabShadActiveColor,
-                Config.Skin.TabShadInactiveColor,
-                Config.Skin.TabShadHotColor
-            };
+            if (QTUtility.InNightMode)
+            {
+                this.colorSet = new Color[]
+                {
+                    ShellColors.NightModeTextColor,
+                    ShellColors.NightModeDisabledColor,
+                    Config.Skin.TabTextHotColor,
+                    ShellColors.NightModeTextShadow,
+                     Config.Skin.TabShadInactiveColor,
+                    ShellColors.NightModeColor
+                };
+            }
+            else {
+                colorSet = new Color[] 
+                {
+                    Config.Skin.TabTextActiveColor,
+                    Config.Skin.TabTextInactiveColor,
+                    Config.Skin.TabTextHotColor,
+                    Config.Skin.TabShadActiveColor,
+                    Config.Skin.TabShadInactiveColor,
+                    Config.Skin.TabShadHotColor
+                };
+            }
             brshActive = new SolidBrush(colorSet[0]);
             brshInactv = new SolidBrush(colorSet[1]);
             timerSuppressDoubleClick = new Timer(components);
@@ -758,6 +773,17 @@ namespace QTTabBarLib {
         }
 
         public QTabItem GetTabMouseOn() {
+            if (this == null || this.IsDisposed)
+             {
+                 if (tabPages.Count == 1)
+                 {
+                     return tabPages[0];
+                 }
+                 return null;
+             }
+             if (tabPages.Count == 1) {
+                 return tabPages[0];
+             }
             Point pt = PointToClient(MousePosition);
             if(((upDown != null) && upDown.Visible) && upDown.Bounds.Contains(pt)) {
                 return null;

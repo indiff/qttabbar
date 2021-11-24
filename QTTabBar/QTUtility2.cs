@@ -489,6 +489,13 @@ namespace QTTabBarLib {
             }
         }
 
+        public static T GetValueSafe<T>(RegistryKey rk, string valName, T defaultVal)
+        {
+            object obj1 = rk.GetValue(valName, (object) defaultVal);
+            return obj1 != null && obj1 is T ? (T) obj1 : defaultVal;
+        }
+
+
         public static string SanitizePathString(string path) {
             if(path == null) {
                 return null;
@@ -550,6 +557,7 @@ namespace QTTabBarLib {
             }
             return "";
         }
+        // 字符串通过分隔符连接
         public static string StringJoin<T>(this IEnumerable<T> list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -560,7 +568,7 @@ namespace QTTabBarLib {
             }
             return sb.ToString();
         }
-
+        // 字符串通过分隔符连接
         public static string StringJoin(this IEnumerable list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -689,5 +697,7 @@ namespace QTTabBarLib {
                 rk.SetValue(valName, (long)hwnd, RegistryValueKind.QWord);
             }
         }
+
+
     }
 }
