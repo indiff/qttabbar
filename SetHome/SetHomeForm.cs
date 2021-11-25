@@ -106,10 +106,10 @@ namespace SetHome
             }
             return oldPath;
         }
-
+        // 设置当前目录JAVA_HOME
         private void button1_Click(object sender, EventArgs e)
         {
-            // 3. 设置当前目录JAVA_HOME
+            
             string selectedPath = this.curTextBox.Text.Trim();
             string binPath = Path.Combine(selectedPath, "bin");
             string libPath = Path.Combine(selectedPath, "lib");
@@ -149,6 +149,9 @@ namespace SetHome
                 if (File.Exists(toolsJar) && File.Exists(dtJar))
                 {
                     envKey.SetValue("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;");
+                } else
+                {
+                    envKey.SetValue("CLASSPATH", @".;");
                 }
                 SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
                 MessageBox.Show("设置JAVA_HOME成功");

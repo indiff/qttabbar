@@ -12,7 +12,7 @@ on:
       - 'lib/xdg/**'
       - 'snap/**'
       - 'qttabbar/build/**'
-    branches: [ vs2019 ]
+    branches: [ vs2022 ]
   pull_request:
     paths-ignore:
       - 'docs/**'
@@ -24,7 +24,7 @@ on:
       - 'lib/xdg/**'
       - 'snap/**'
       - 'qttabbar/build/**'
-    branches: [ vs2019 ]
+    branches: [ vs2022 ]
 
 jobs:
   build:
@@ -37,7 +37,7 @@ jobs:
       - name: Set up environment paths.
         shell: bash
         run: |
-          echo "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\Build\\" >> $GITHUB_PATH
+          echo "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Auxiliary\\Build\\" >> $GITHUB_PATH
           mkdir Libraries && cd Libraries
           echo "Convert unix path to win path."
           p=`pwd | sed 's#^/[d]#d:#g' |sed 's#/#\\\\#g'`

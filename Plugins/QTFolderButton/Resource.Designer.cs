@@ -19,7 +19,7 @@ namespace QuizoPlugins {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -86,6 +86,15 @@ namespace QuizoPlugins {
         internal static string strQTFolderButton {
             get {
                 return ResourceManager.GetString("strQTFolderButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Ordnerstruktur ein- oder ausblenden;Ordner;Fokus auf Ordnerstruktur 的本地化字符串。
+        /// </summary>
+        internal static string strQTFolderButton_de {
+            get {
+                return ResourceManager.GetString("strQTFolderButton_de", resourceCulture);
             }
         }
         

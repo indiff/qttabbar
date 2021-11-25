@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTQuick")]
 [assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
