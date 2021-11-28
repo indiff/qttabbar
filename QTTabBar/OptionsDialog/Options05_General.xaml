@@ -153,7 +153,7 @@
             Content="{qt:Resx Key=Options_Page05_General, Index=15}"
             Style="{StaticResource SectionHeaderStyle}"/>
         <CheckBox x:Name="SoundBox"
-            Content="{qt:Resx Key=Options_Page01_Window, Index=16}"
+            Content="{qt:Resx Key=Options_Page05_General, Index=16}"
             IsChecked="{Binding Path=SoundBox}"
             Style="{StaticResource CheckStyle}"/>
     </StackPanel>
