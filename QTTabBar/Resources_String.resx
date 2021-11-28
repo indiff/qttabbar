@@ -163,7 +163,7 @@
     <value>Change the behavior of Subfolder and Preview tooltips.;Subfolder Tips;Enable Subfolder Tips;Only with the Shift key is down;Show files;Show preview tooltips when mousing over menu items;Preview tooltips;Enable preview tooltips;Only with the Shift key is down;Show file information below images;Maximum Width x Height:;Font:;Text filetypes;Image and Video filetypes</value>
   </data>
   <data name="Options_Page05_General" xml:space="preserve">
-    <value>General options for QTTabBar's behavoir.;Taskbar integration;Show tab previews on the Taskbar;History;Keep history of closed tabs;Clear now;Keep history of opened files;Network;Network timeout (Enter 0 for system default):;Check for updates periodically;Check now;Export;Export Settings...;Clear file history?;Clear tab history?</value>
+    <value>General options for QTTabBar's behavoir.;Taskbar integration;Show tab previews on the Taskbar;History;Keep history of closed tabs;Clear now;Keep history of opened files;Network;Network timeout (Enter 0 for system default):;Check for updates periodically;Check now;Export;Export Settings...;Clear file history?;Clear tab history?;Sound;Enable Sound</value>
   </data>
   <data name="Options_Page06_Appearance" xml:space="preserve">
     <value>Change the appearance of tabs or the tab bar.;Tab image;Use custom tab image:;Sizing margins:;Overlap area:;Content margins:;Hit test transparent areas;Tab size;Height:;Min Width:;Max Width:;Sizing mode:;Full width;Same size;Tab text;Text Colors:;Shadow Colors:;Active Color;Inactive Color;Mouseover Color;Text Font:;Alignment:;Left;Center;Toolbar Background;Image;Solid color;Image each bar separately;Stretch mode:;Sizing margins:;Skin file;Import Skin...;Export Skin...;Stretch;True size;Tile</value>

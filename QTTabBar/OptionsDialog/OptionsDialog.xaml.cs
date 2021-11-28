@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -518,7 +518,7 @@ namespace QTTabBarLib {
                 // case Keys.Alt | Keys.Left:
                 // case Keys.Alt | Keys.Right:
                 case Keys.Alt | Keys.F4:
-                    System.Media.SystemSounds.Hand.Play();
+                    QTUtility.SoundPlay();
                     return false;
             }
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -176,9 +176,9 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="AfterBuild">
-    <MSBuild Condition="'$(Platform)'=='Win32'" Projects="..\MinHook\libMinHook.vcxproj;..\QTHookLib\QTHookLib.vcxproj" Properties="Configuration=$(Configuration);Platform=x64" BuildInParallel="False"/>
+    <MSBuild Condition="'$(Platform)'=='Win32'" Projects="..\MinHook\libMinHook.vcxproj;..\QTHookLib\QTHookLib.vcxproj" Properties="Configuration=$(Configuration);Platform=x64" BuildInParallel="False" />
   </Target>
   <Target Name="AfterClean">
-    <MSBuild Condition="'$(Platform)'=='Win32'" Projects="..\MinHook\libMinHook.vcxproj;..\QTHookLib\QTHookLib.vcxproj" Properties="Configuration=$(Configuration);Platform=x64" Targets="Clean" BuildInParallel="False"/>
+    <MSBuild Condition="'$(Platform)'=='Win32'" Projects="..\MinHook\libMinHook.vcxproj;..\QTHookLib\QTHookLib.vcxproj" Properties="Configuration=$(Configuration);Platform=x64" Targets="Clean" BuildInParallel="False" />
   </Target>
 </Project>

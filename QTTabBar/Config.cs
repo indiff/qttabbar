@@ -7,7 +7,7 @@
 */ 
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -485,6 +485,7 @@ namespace QTTabBarLib {
             public int FileHistoryCount          { get; set; }
             public int NetworkTimeout            { get; set; }
             public bool AutoUpdate               { get; set; }
+            public bool SoundBox                 { get; set; }
 
             public _Misc() {
                 TaskbarThumbnails = false;
@@ -494,6 +495,8 @@ namespace QTTabBarLib {
                 FileHistoryCount = 15;
                 NetworkTimeout = 0;
                 AutoUpdate = true;
+                // 默认关闭声音播放
+                SoundBox = false;
             }
         }
 

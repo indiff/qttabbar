@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using QTPlugin;
 using QTTabBarLib.Interop;
+using System.Media;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
@@ -577,6 +578,23 @@ namespace QTTabBarLib {
                 return null;
             }
         }
+        public static void AsteriskPlay()
+        {
+            if (Config.Misc.SoundBox) {
+                QTUtility.SoundPlay();
+            }
+        }
+
+
+
+        public static void SoundPlay()
+        {
+            if (Config.Misc.SoundBox)
+            {
+                QTUtility.SoundPlay();
+            }
+        }
+
 
         public static void RefreshLockedTabsList() {
             using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {

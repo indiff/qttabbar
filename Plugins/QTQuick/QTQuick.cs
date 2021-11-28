@@ -342,7 +342,7 @@ namespace Qwop {
                         if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                         {
                             MessageBox.Show("当前目录已经删除");
-                            SystemSounds.Hand.Play();
+                            QTUtility.SoundPlay();
                             return;
                         }
 
@@ -350,7 +350,7 @@ namespace Qwop {
                         if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                         {
                             MessageBox.Show("bin目录不存在");
-                            SystemSounds.Hand.Play();
+                            QTUtility.SoundPlay();
                             return;
                         }
 
@@ -359,7 +359,7 @@ namespace Qwop {
                         if (String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath))
                         {
                             MessageBox.Show("lib目录不存在");
-                            SystemSounds.Hand.Play();
+                            QTUtility.SoundPlay();
                             return;
                         }
 
@@ -389,14 +389,14 @@ namespace Qwop {
 
                             if(String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath)) {
                                 MessageBox.Show("当前目录已经删除");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
  
                             if(String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath)) {
                                 MessageBox.Show("bin目录不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -404,7 +404,7 @@ namespace Qwop {
  
                             if(String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath)) {
                                 MessageBox.Show("lib目录不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -412,7 +412,7 @@ namespace Qwop {
  
                             if(String.IsNullOrEmpty(toolsJar) || !File.Exists(toolsJar)) {
                                 MessageBox.Show("toolsJar不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -420,7 +420,7 @@ namespace Qwop {
  
                             if(String.IsNullOrEmpty(toolsJar) || !File.Exists(dtJar)) {
                                 MessageBox.Show("dtJar不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
                             */
@@ -471,7 +471,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
                                 MessageBox.Show("当前目录已经删除");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -479,7 +479,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
                                 MessageBox.Show("bin目录不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -489,7 +489,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(mvnCmd) || !File.Exists(mvnCmd))
                             {
                                 MessageBox.Show("mvnCmd不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -567,7 +567,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
                                 MessageBox.Show("当前目录已经删除");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -575,7 +575,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
                                 MessageBox.Show("bin目录不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -583,7 +583,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(antCmd) || !File.Exists(antCmd))
                             {
                                 MessageBox.Show("antCmd不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -608,7 +608,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
                                 MessageBox.Show("当前目录已经删除");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -616,7 +616,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
                                 MessageBox.Show("bin目录不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -624,7 +624,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(mvndexe) || !File.Exists(mvndexe))
                             {
                                 MessageBox.Show("mvndexe不存在");
-                                SystemSounds.Hand.Play();
+                                QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -703,7 +703,7 @@ namespace Qwop {
             }
             else if (mouseButton == MouseButtons.Right)
             {
-                //SystemSounds.Asterisk.Play();
+                //QTUtility.AsteriskPlay();
 
                  // MessageBox.Show("Hello World");
 
@@ -750,7 +750,7 @@ namespace Qwop {
                     pluginServer.CreateTab(new Address(mydocument), -1, false, true);
                 }
                 else if(mouseButton == MouseButtons.Right) {
-                    SystemSounds.Asterisk.Play();
+                    QTUtility.AsteriskPlay();
                 }
             }
             else if(item.Text == "Test selection") {

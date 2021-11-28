@@ -125,7 +125,6 @@ namespace QuizoPlugins {
                 if(pIDL != IntPtr.Zero)
                     Marshal.FreeCoTaskMem(pIDL);
             }
-
             SystemSounds.Hand.Play();
         }
 

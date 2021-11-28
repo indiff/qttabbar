@@ -187,7 +187,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 General options for QTTabBar&apos;s behavoir.;Taskbar integration;Show tab previews on the Taskbar;History;Keep history of closed tabs;Clear now;Keep history of opened files;Network;Network timeout (Enter 0 for system default):;Check for updates periodically;Check now;Export;Export Settings...;Clear file history?;Clear tab history? 的本地化字符串。
+        ///   查找类似 General options for QTTabBar&apos;s behavoir.;Taskbar integration;Show tab previews on the Taskbar;History;Keep history of closed tabs;Clear now;Keep history of opened files;Network;Network timeout (Enter 0 for system default):;Check for updates periodically;Check now;Export;Export Settings...;Clear file history?;Clear tab history?;Sound;Enable Sound 的本地化字符串。
         /// </summary>
         public static string Options_Page05_General {
             get {

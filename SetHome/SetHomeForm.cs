@@ -25,7 +25,8 @@ namespace SetHome
         static extern bool SendNotifyMessage(IntPtr hWnd, uint Msg,
             UIntPtr wParam, string lParam);
         private string REG_ENV_PATH = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
-
+        private string QTTabBar = @"Software\QTTabBar";
+        
         public SetHomeForm(string[] args)
         {
             this.args = args;
@@ -43,7 +44,74 @@ namespace SetHome
                 // 获取当前 工作目录
                 this.curTextBox.Text = System.Environment.CurrentDirectory;
             }
-            
+            // 如果是自动配置
+
+            using (var envKey = Registry.CurrentUser.OpenSubKey(QTTabBar, true))
+            {
+                if (envKey != null) {
+                    var flag = envKey.GetValue("AutoSetHome");
+                    if (null != flag && flag.Equals("true"))
+                    {
+                        this.autoBox.Checked = true;
+                    }
+                    else
+                    {
+                        this.autoBox.Checked = false;
+                    }
+                }
+                
+                else {
+                    this.autoBox.Checked = false;
+                }
+            }
+
+            if (this.autoBox.Checked) { 
+                // guess current dir
+                string selectedPath = this.curTextBox.Text.Trim();
+                if (Directory.Exists(selectedPath)) {
+                    string binPath = Path.Combine(selectedPath, "bin");
+                    if (Directory.Exists(binPath))
+                    {
+                        string javaPath = Path.Combine(binPath, "java.exe");
+                        string mvnCmd = Path.Combine(binPath, "mvn.cmd");
+                        string mvndexe = Path.Combine(binPath, "mvnd.exe");
+                        string antCmd = Path.Combine(binPath, "ant.cmd");
+                        string gradleBat = Path.Combine(binPath, "gradle.bat");
+                        bool isRun = false;
+                        if (File.Exists(javaPath))
+                        {
+                            java_Click(null, null);
+                            isRun = true;
+                        }
+                        else if (File.Exists(mvnCmd))
+                        {
+                            mvn_Click(null, null);
+                            isRun = true;
+                        }
+                        else if (File.Exists(mvndexe))
+                        {
+                            mvnd_Click(null, null);
+                            isRun = true;
+                        }
+                        else if (File.Exists(antCmd))
+                        {
+                            ant_Click(null, null);
+                            isRun = true;
+                        }
+                        else if (File.Exists(gradleBat))
+                        {
+                            gradle_Click(null, null);
+                            isRun = true;
+                        }
+
+                        if (isRun) {
+                            Dispose();
+                            Application.Exit();
+                        }
+                        
+                    }
+                }
+            }
         }
 
 
@@ -87,6 +155,26 @@ namespace SetHome
         {
             object value = envKey.GetValue("PATH");
             string oldPath = value.ToString();
+            var javaHome = Environment.GetEnvironmentVariable("JAVA_HOME");
+            var m2Home = Environment.GetEnvironmentVariable("M2_HOME");
+            var antHome = Environment.GetEnvironmentVariable("ANT_HOME");
+            var mvndHome = Environment.GetEnvironmentVariable("MVND_HOME");
+            var gradleHome = Environment.GetEnvironmentVariable("GRADLE_HOME");
+           // MessageBox.Show(javaHome + @"\bin;");
+
+            oldPath = oldPath.Replace(javaHome + @"\bin;", "");
+            oldPath = oldPath.Replace(m2Home + @"\bin;", "");
+            oldPath = oldPath.Replace(antHome + @"\bin;", "");
+            oldPath = oldPath.Replace(mvndHome + @"\bin;", "");
+            oldPath = oldPath.Replace(gradleHome + @"\bin;", "");
+
+
+            oldPath = oldPath.Replace(javaHome + @"\bin", "");
+            oldPath = oldPath.Replace(m2Home + @"\bin", "");
+            oldPath = oldPath.Replace(antHome + @"\bin", "");
+            oldPath = oldPath.Replace(mvndHome + @"\bin", "");
+            oldPath = oldPath.Replace(gradleHome + @"\bin", "");
+
             oldPath = oldPath.Replace(@"%JAVA_HOME%\bin;", "");
             oldPath = oldPath.Replace(@"%M2_HOME%\bin;", "");
             oldPath = oldPath.Replace(@"%ANT_HOME%\bin;", "");
@@ -107,12 +195,13 @@ namespace SetHome
             return oldPath;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void java_Click(object sender, EventArgs e)
         {
             // 3. 设置当前目录JAVA_HOME
             string selectedPath = this.curTextBox.Text.Trim();
             string binPath = Path.Combine(selectedPath, "bin");
             string libPath = Path.Combine(selectedPath, "lib");
+            string javaPath = Path.Combine(binPath, "java.exe");
             string toolsJar = Path.Combine(libPath, "tools.jar");
             string dtJar = Path.Combine(libPath, "dt.jar");
 
@@ -132,6 +221,13 @@ namespace SetHome
                 return;
             }
 
+
+            if (String.IsNullOrEmpty(javaPath) || !File.Exists(javaPath))
+            {
+                MessageBox.Show("Java不存在");
+                SystemSounds.Hand.Play();
+                return;
+            }
 
 
             if (String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath))
@@ -155,7 +251,7 @@ namespace SetHome
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void mvn_Click(object sender, EventArgs e)
         {
             string selectedPath = this.curTextBox.Text.Trim();
             string binPath = Path.Combine(selectedPath, "bin");
@@ -196,7 +292,7 @@ namespace SetHome
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void mvnd_Click(object sender, EventArgs e)
         {
             // 10. 设置当前目录MVND_HOME
             string selectedPath = this.curTextBox.Text.Trim();
@@ -237,7 +333,7 @@ namespace SetHome
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void ant_Click(object sender, EventArgs e)
         {
             // 设置当前目录ANT_HOME
             string selectedPath = this.curTextBox.Text.Trim();
@@ -278,7 +374,7 @@ namespace SetHome
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void gradle_Click(object sender, EventArgs e)
         {
             // 设置当前目录ANT_HOME
             string selectedPath = this.curTextBox.Text.Trim();
@@ -316,6 +412,19 @@ namespace SetHome
                 envKey.SetValue("PATH", joinDevPath(oldPath));
                 SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
                 MessageBox.Show("设置GRADLE_HOME成功");
+            }
+        }
+
+        private void autoBox_CheckedChanged(object sender, EventArgs e)
+        {
+            using (var envKey = Registry.CurrentUser.OpenSubKey(QTTabBar, true))
+            {
+                if (autoBox.Checked) {
+                    envKey.SetValue("AutoSetHome", "true");
+                }
+                else {
+                    envKey.SetValue("AutoSetHome", "true");
+                }
             }
         }
     }
