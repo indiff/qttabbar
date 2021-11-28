@@ -578,11 +578,17 @@ namespace QTTabBarLib {
                 return null;
             }
         }
+       // private string QTTabBar = @"Software\QTTabBar\Config\Misc";
+     
+
+        
         public static void AsteriskPlay()
         {
             if (Config.Misc.SoundBox) {
-                QTUtility.SoundPlay();
+                SystemSounds.Asterisk.Play();
             }
+
+           
         }
 
 
@@ -591,7 +597,7 @@ namespace QTTabBarLib {
         {
             if (Config.Misc.SoundBox)
             {
-                QTUtility.SoundPlay();
+                SystemSounds.Hand.Play();
             }
         }
 
