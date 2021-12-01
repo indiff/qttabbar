@@ -30,7 +30,7 @@
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
-* ![Install net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
+![Install net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
 
 # Usage
 - Run the installation package file to install qttabbar 
@@ -39,6 +39,7 @@
 - Right click the blank area on the right side of the menu bar - > check qttabbar and other toolbars - > Press Alt + m - > Restart Explorer or restart the computer
 ![Enable qttabbar](https://user-images.githubusercontent.com/501276/72576075-907fb980-3909-11ea-9dc2-9a1ea0ca2f8e.png)
 - Error log path C:\Users\Administrator\AppData\Roaming\QTTabBar\QTTabBarException.log
+- [Setting for Windows 11](https://github.com/indiff/qttabbar/wiki/Windows11%E6%98%BE%E7%A4%BA%E5%B7%A5%E5%85%B7%E6%A0%8F%E7%9A%84%E6%96%B9%E6%B3%95)
 
 # Build
 * Install [wix311.exe](https://github.com/wixtoolset/wix3/releases)
