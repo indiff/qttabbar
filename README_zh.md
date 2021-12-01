@@ -32,7 +32,7 @@
 * [qttabbar国内镜像](https://gitee.com/qwop/qttabbar/attach_files)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * 请安装 net framework 3.5/Please install net framework 3.5 [下载/download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
- ![请安装 net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
+![请安装 net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
 
 # 使用方法/Usage
 - 运行安装包文件，安装QTTabBar 
