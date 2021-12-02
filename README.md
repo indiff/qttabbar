@@ -30,7 +30,7 @@
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
-![Install net framework3.5 ](https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png)
+<img src="https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png" />
 
 # Usage
 - Run the installation package file to install qttabbar 
