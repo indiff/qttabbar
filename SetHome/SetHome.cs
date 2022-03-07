@@ -49,9 +49,6 @@ namespace SetHome
                  //退出
                  Application.Exit();
              }
-
-
-            
         }
     }
 }
