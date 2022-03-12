@@ -9,6 +9,7 @@
 2. QTTabBar是一款可以让你在Windows资源管理器中使用Tab多标签功能的小工具。从此以后工作时不再遍布文件夹窗口，还有给力的文件夹预览功能，大大提高了你工作的效率。就像IE 7和Firefox、Opera那样的。QTTabBar还提供了一些功能插件，如：文件操作工具、树型目录、显示状态栏等等。
 3. [为什么会有这个软件分支](https://github.com/indiff/qttabbar/wiki/%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E8%BF%99%E4%B8%AA%E8%BD%AF%E4%BB%B6%E5%88%86%E6%94%AF%EF%BC%9F)
 4. [Windows11安装qttabbar](https://github.com/indiff/qttabbar/wiki/Windows11%E5%AE%89%E8%A3%85qttabbar)
+5. [Windows11暗黑模式皮肤](https://github.com/StickySli/qttabbar-dark-mode-skin)
 - [GitHub主页](https://indiff.github.io/qttabbar)
 - [Gitee主页](https://gitee.com/qwop/qttabbar)
 - [SourceForge主页](https://sourceforge.net/projects/qttabbar2/)
