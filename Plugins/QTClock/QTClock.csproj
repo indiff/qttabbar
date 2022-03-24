@@ -43,7 +43,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClockSample.cs" />
+    <Compile Include="ChineseCalendar.cs" />
+    <Compile Include="Clock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

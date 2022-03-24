@@ -33,9 +33,9 @@ using QTPlugin.Interop;
 using QTTabBarLib;
 using System.IO;
 
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
-using System.Management;
+//using System.Management.Automation;
+//using System.Management.Automation.Runspaces;
+//using System.Management;
 using System.Threading;
 using Microsoft.Win32;
 
@@ -255,6 +255,7 @@ namespace Qwop {
              //   menu.Items.Add(new ToolStripMenuItem("设置当前目录MVND_HOME"));
 
                 menu.Items.Add(new ToolStripMenuItem("启动设置Path"));
+                menu.Items.Add(new ToolStripMenuItem("删除QTTabGroup（启动项）"));
 
                 // menu.Items.Add(new ToolStripMenuItem("Test selection"));
                 
@@ -342,7 +343,7 @@ namespace Qwop {
                         if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                         {
                             MessageBox.Show("当前目录已经删除");
-                            QTUtility.SoundPlay();
+                           // QTUtility.SoundPlay();
                             return;
                         }
 
@@ -350,7 +351,7 @@ namespace Qwop {
                         if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                         {
                             MessageBox.Show("bin目录不存在");
-                            QTUtility.SoundPlay();
+                           // QTUtility.SoundPlay();
                             return;
                         }
 
@@ -359,7 +360,7 @@ namespace Qwop {
                         if (String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath))
                         {
                             MessageBox.Show("lib目录不存在");
-                            QTUtility.SoundPlay();
+                          //  QTUtility.SoundPlay();
                             return;
                         }
 
@@ -389,14 +390,14 @@ namespace Qwop {
 
                             if(String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath)) {
                                 MessageBox.Show("当前目录已经删除");
-                                QTUtility.SoundPlay();
+                               // QTUtility.SoundPlay();
                                 return;
                             }
 
  
                             if(String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath)) {
                                 MessageBox.Show("bin目录不存在");
-                                QTUtility.SoundPlay();
+                              //  QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -404,7 +405,7 @@ namespace Qwop {
  
                             if(String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath)) {
                                 MessageBox.Show("lib目录不存在");
-                                QTUtility.SoundPlay();
+                              //  QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -430,31 +431,32 @@ namespace Qwop {
                            // Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;", EnvironmentVariableTarget.Machine);
                             // 去重， 判断是否有 java home 删掉
                             string oldpath = filterEmpty( "java.exe" );
-                           // Environment.SetEnvironmentVariable("PATH", @"%JAVA_HOME%\bin;" + oldpath, EnvironmentVariableTarget.Machine);
 
 
-                            PowerShell.Create().AddCommand("setx")
-                                               .AddParameter("JAVA_HOME", selectedPath)
-                                               .AddParameter("/M")
-                                               .Invoke();
+                          //  PowerShell.Create().AddCommand("setx")
+                          //                     .AddParameter("JAVA_HOME", selectedPath)
+                          //                     .AddParameter("/M")
+                           //                    .Invoke();
                             Thread.Sleep( 800 );
 
 
                             if (File.Exists(toolsJar) && File.Exists(dtJar))
                             {
-                                PowerShell.Create().AddCommand("setx")
-                                              .AddParameter("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;")
-                                              .AddParameter("/M")
-                                              .Invoke();
+                               Environment.SetEnvironmentVariable("PATH", @"%JAVA_HOME%\bin;" + oldpath, EnvironmentVariableTarget.Machine);
+
+                              //    PowerShell.Create().AddCommand("setx")
+                              //                  .AddParameter("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;")
+                               //                 .AddParameter("/M")
+                               //               .Invoke();
                                 Thread.Sleep(800);
                             }
 
 
 
-                            PowerShell.Create().AddCommand("setx")
-                                               .AddParameter("PATH", @"%JAVA_HOME%\bin;" + oldpath)
-                                               .AddParameter("/M")
-                                               .Invoke();
+                           //   PowerShell.Create().AddCommand("setx")
+                             //                    .AddParameter("PATH", @"%JAVA_HOME%\bin;" + oldpath)
+                             //                    .AddParameter("/M")
+                            //                    .Invoke();
                             Thread.Sleep(800);
 
                             MessageBox.Show("设置JAVA_HOME成功");
@@ -471,7 +473,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
                                 MessageBox.Show("当前目录已经删除");
-                                QTUtility.SoundPlay();
+                               // QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -479,7 +481,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
                                 MessageBox.Show("bin目录不存在");
-                                QTUtility.SoundPlay();
+                             //   QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -489,7 +491,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(mvnCmd) || !File.Exists(mvnCmd))
                             {
                                 MessageBox.Show("mvnCmd不存在");
-                                QTUtility.SoundPlay();
+                              //  QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -567,7 +569,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
                                 MessageBox.Show("当前目录已经删除");
-                                QTUtility.SoundPlay();
+                               // QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -575,7 +577,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
                                 MessageBox.Show("bin目录不存在");
-                                QTUtility.SoundPlay();
+                               // QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -583,7 +585,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(antCmd) || !File.Exists(antCmd))
                             {
                                 MessageBox.Show("antCmd不存在");
-                                QTUtility.SoundPlay();
+                              //  QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -608,7 +610,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
                                 MessageBox.Show("当前目录已经删除");
-                                QTUtility.SoundPlay();
+                               // QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -616,7 +618,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
                                 MessageBox.Show("bin目录不存在");
-                                QTUtility.SoundPlay();
+                             //   QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -624,7 +626,7 @@ namespace Qwop {
                             if (String.IsNullOrEmpty(mvndexe) || !File.Exists(mvndexe))
                             {
                                 MessageBox.Show("mvndexe不存在");
-                                QTUtility.SoundPlay();
+                             //   QTUtility.SoundPlay();
                                 return;
                             }
 
@@ -690,6 +692,22 @@ namespace Qwop {
                             }
                             else {
                                 MessageBox.Show( "未找到可执行文件SetHome");
+                            }
+                            break;
+                        }
+
+                    case 8:  // 删除group文件
+                        {
+                            string startUpFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+                            try
+                            {
+                                string[] groupFiles = Directory.GetFiles(startUpFolderPath, "*.QTTabGroup");
+                                foreach (string groupFile in groupFiles) {
+                                    File.Delete(groupFile);
+                                }
+                            }
+                            catch (Exception e) {
+                                QTUtility2.MakeErrorLog(e);
                             }
                             break;
                         }

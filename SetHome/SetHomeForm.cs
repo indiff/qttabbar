@@ -10,6 +10,7 @@ using System.IO;
 using System.Media;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using System.Reflection;
 
 namespace SetHome
 {
@@ -31,6 +32,8 @@ namespace SetHome
         {
             this.args = args;
             InitializeComponent();
+            //Assembly.GetExecutingAssembly().get
+            this.Text = this.Text + Application.ProductVersion;
         }
 
         private void SetHomeForm_Load(object sender, EventArgs e)

@@ -207,6 +207,17 @@ namespace QTTabBarLib {
 
             ////////////////////////////////////////
             // generateInitConfig();
+            // 设置默认的title 和版本
+            string str = QTUtility.CurrentVersion.ToString();
+            if (QTUtility.BetaRevision.Major > 0)
+            {
+                str = str + " Beta " + QTUtility.BetaRevision.Major;
+            }
+            else if (QTUtility.BetaRevision.Minor > 0)
+            {
+                str = str + " Alpha " + QTUtility.BetaRevision.Minor;
+            }
+            this.Title += this.Title + "_" + str + "_" +  QTUtility2.MakeVersionString();
         }
 
         /// <summary>

@@ -20,11 +20,12 @@ using System.Drawing;
 using System.Windows.Forms;
 using QTPlugin;
 using QTPlugin.Interop;
+using Microsoft.Win32;
 
 namespace QuizoPlugins {
   //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "SampleClock", Version = "0.9.0.0", Description = "Sample clock plugin")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "时钟", Version = "0.9.0.1", Description = "时钟插件")]
-    public class ClockSample : IBarCustomItem {
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "时钟", Version = "0.9.0.2", Description = "时钟插件")]
+    public class Clock : IBarCustomItem {
         private ToolStripLabel labelTime;
         private Timer timer;
         private bool fOn;
@@ -93,6 +94,7 @@ namespace QuizoPlugins {
 
         #endregion
 
+        private string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
         private void timer_Tick(object sender, EventArgs e) {
             DateTime dt = DateTime.Now;
@@ -104,8 +106,38 @@ namespace QuizoPlugins {
             string sep = fOn ? " " : ":";
 
             labelTime.Text = h + sep + (m < 10 ? "0" : String.Empty) + m + "(" + _m + "." + _d + ")";
-            labelTime.ToolTipText = dt.ToLongDateString();
+            ChineseCalendar cc = new ChineseCalendar(DateTime.Today);
+            string chineseHoliday = "";
+            if (cc.ChineseCalendarHoliday.Length > 0) {
+                chineseHoliday = " " + cc.ChineseCalendarHoliday;
+            }
 
+            labelTime.ToolTipText = dt.ToLongDateString() + chineseHoliday;
+            // HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
+            using (var envKey = Registry.CurrentUser.OpenSubKey(REG_PERSONALIZE, true))
+            {
+                object value = envKey.GetValue("AppsUseLightTheme");
+                if (value != null)
+                {
+                    string useTheme = value.ToString();
+                    if ("1".Equals(useTheme))
+                    {
+                        // the light
+                        labelTime.ForeColor = Color.Black;
+                    }
+                    else
+                    {
+                        // the dark mode
+                        labelTime.ForeColor = Color.White;
+                    }
+                }
+                else { 
+                    // default is light
+                    labelTime.ForeColor = Color.Black;
+                }
+                
+            }
+           // labelTime.BackColor
             fOn = !fOn;
         }
     }
