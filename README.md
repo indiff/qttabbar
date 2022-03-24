@@ -15,6 +15,7 @@
 - [Gitee Mirror](https://gitee.com/qwop/qttabbar)
 - [SourceForge Mirror](https://sourceforge.net/projects/qttabbar2/)
 # Changes
+- [1.5.5.4-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta) Ignore control panel capture
 - [1.5.5.3-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3) Add SetHome Tool/Add language Portuguese of Brazil Latest
 - [1.5.5.2-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta) Add built-in German; Fix version number error
 - [1.5.5.1-beta(2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.2021-beta) Gewidmet deutschen Freunden, deutsches Installationspaket (Google Translate)
