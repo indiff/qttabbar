@@ -217,7 +217,7 @@ namespace QTTabBarLib {
             {
                 str = str + " Alpha " + QTUtility.BetaRevision.Minor;
             }
-            this.Title += this.Title + "_" + str + "_" +  QTUtility2.MakeVersionString();
+            this.Title += str; //  +"_" + QTUtility2.MakeVersionString();
         }
 
         /// <summary>

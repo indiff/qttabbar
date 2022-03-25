@@ -105,14 +105,15 @@ namespace QuizoPlugins {
             int _d = dt.Day;
             string sep = fOn ? " " : ":";
 
-            labelTime.Text = h + sep + (m < 10 ? "0" : String.Empty) + m + "(" + _m + "." + _d + ")";
-            ChineseCalendar cc = new ChineseCalendar(DateTime.Today);
+             ChineseCalendar cc = new ChineseCalendar(DateTime.Today);
             string chineseHoliday = "";
             if (cc.ChineseCalendarHoliday.Length > 0) {
                 chineseHoliday = " " + cc.ChineseCalendarHoliday;
             }
 
             labelTime.ToolTipText = dt.ToLongDateString() + chineseHoliday;
+           // labelTime.Text = h + sep + (m < 10 ? "0" : String.Empty) + m + "(" + _m + "." + _d + ")";
+            labelTime.Text = h + sep + (m < 10 ? "0" : String.Empty) + m + "(" + dt.ToLongDateString() + chineseHoliday + ")";
             // HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
             using (var envKey = Registry.CurrentUser.OpenSubKey(REG_PERSONALIZE, true))
             {

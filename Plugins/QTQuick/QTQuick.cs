@@ -707,7 +707,7 @@ namespace Qwop {
                                 }
                             }
                             catch (Exception e) {
-                                QTUtility2.MakeErrorLog(e);
+                               // QTUtility2.MakeErrorLog(e);
                             }
                             break;
                         }

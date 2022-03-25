@@ -36,7 +36,7 @@ using System.Media;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
-        internal static readonly Version BetaRevision = new Version(0, 4);
+        internal static readonly Version BetaRevision = new Version(4, 0); // 主版本 beta  次版本 alpha
         internal static readonly Version CurrentVersion = new Version(1, 5, 5, 0);
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal const int FLAG_KEYENABLED = 0x100000;
