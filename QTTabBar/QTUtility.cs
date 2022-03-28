@@ -36,7 +36,7 @@ using System.Media;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
-        internal static readonly Version BetaRevision = new Version(4, 0); // 主版本 beta  次版本 alpha
+        internal static readonly Version BetaRevision = new Version(5, 0); // 主版本 beta  次版本 alpha
         internal static readonly Version CurrentVersion = new Version(1, 5, 5, 0);
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal const int FLAG_KEYENABLED = 0x100000;
@@ -155,11 +155,11 @@ namespace QTTabBarLib {
                     }
                 }
                 // default add ::{20D04FE0-3AEA-1069-A2D8-08002B30309D};::{26EE0668-A00A-44D7-9371-BEB064C98683}
-                NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}");
-                NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // 控制面板
-                NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // 控制面板
-                NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}");
-                NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");
+                NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}"); // 控制面板
+               // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // 我的电脑
+                NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // 所有控制面板
+               // NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}");
+                NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");// 网络连接
                 // 回收站      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
                 /*
                                                回收站 – {645FF040-5081-101B-9F08-00AA002F954E}

@@ -24,7 +24,7 @@ using Microsoft.Win32;
 
 namespace QuizoPlugins {
   //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "SampleClock", Version = "0.9.0.0", Description = "Sample clock plugin")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "时钟", Version = "0.9.0.2", Description = "时钟插件")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "时钟", Version = "0.9.0.3", Description = "时钟插件")]
     public class Clock : IBarCustomItem {
         private ToolStripLabel labelTime;
         private Timer timer;
@@ -105,10 +105,37 @@ namespace QuizoPlugins {
             int _d = dt.Day;
             string sep = fOn ? " " : ":";
 
-             ChineseCalendar cc = new ChineseCalendar(DateTime.Today);
+            ChineseCalendar cc = new ChineseCalendar(DateTime.Today);
+
+            
             string chineseHoliday = "";
             if (cc.ChineseCalendarHoliday.Length > 0) {
-                chineseHoliday = " " + cc.ChineseCalendarHoliday;
+                string happyStr = "";
+                switch (DateTime.Today.DayOfWeek)
+                {
+                    case DayOfWeek.Sunday:
+                        happyStr = "Happy Sunday";
+                        break;
+                    case DayOfWeek.Monday:
+                        happyStr = "星期一";
+                        break;
+                    case DayOfWeek.Tuesday:
+                        happyStr = "星期二";
+                        break;
+                    case DayOfWeek.Wednesday:
+                        happyStr = "星期三";
+                        break;
+                    case DayOfWeek.Thursday:
+                        happyStr = "星期四";
+                        break;
+                    case DayOfWeek.Friday:
+                        happyStr =  "Happy Friday";
+                        break;
+                    default:
+                        happyStr = "Happy Saturday";
+                        break;
+                }
+                chineseHoliday = " " + cc.ChineseCalendarHoliday + " " + cc.DateString;
             }
 
             labelTime.ToolTipText = dt.ToLongDateString() + chineseHoliday;

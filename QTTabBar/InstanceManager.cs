@@ -237,6 +237,10 @@ namespace QTTabBarLib {
         private class CommClient : ICommClient {
             public void Execute(byte[] encodedAction) {
                 try {
+                    // add by indiff fix bug
+                    if (null == encodedAction || encodedAction.Length == 0 ) {
+                        return;
+                    }
                     ByteToDel(encodedAction).DynamicInvoke();
                 }
                 catch(Exception ex) {

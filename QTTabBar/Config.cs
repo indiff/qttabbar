@@ -737,8 +737,9 @@ namespace QTTabBarLib {
                     {BindAction.CloseCurrent,       Key.W     | Key.Control},
                     {BindAction.CloseAllButCurrent, Key.W     | Key.Control | Key.Shift},
                     {BindAction.RestoreLastClosed,  Key.Z     | Key.Control | Key.Shift},
-                    {BindAction.LockCurrent,        Key.L     | Key.Control},
-                    {BindAction.LockAll,            Key.L     | Key.Control | Key.Shift},
+                    // 取消锁定键盘快捷键
+                   // {BindAction.LockCurrent,        Key.L     | Key.Control},
+                   // {BindAction.LockAll,            Key.L     | Key.Control | Key.Shift},
                     {BindAction.BrowseFolder,       Key.O     | Key.Control},
                     {BindAction.ShowOptions,        Key.O     | Key.Alt},
                     {BindAction.ShowToolbarMenu,    Key.Oemcomma  | Key.Alt},
