@@ -135,7 +135,7 @@ namespace QuizoPlugins {
                         happyStr = "Happy Saturday";
                         break;
                 }
-                chineseHoliday = " " + cc.ChineseCalendarHoliday + " " + cc.DateString;
+                chineseHoliday = " " + cc.ChineseCalendarHoliday + " " + happyStr;
             }
 
             labelTime.ToolTipText = dt.ToLongDateString() + chineseHoliday;
