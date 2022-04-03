@@ -210,7 +210,7 @@ Language="1033"
                         <?endif?>
                         <RegistryKey Root="HKLM" Key="Software\QTTabBar" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                           <!-- 不捕获控制面板-->
-                          <RegistryValue Name="NoCaptureAt" Value="::{26EE0668-A00A-44D7-9371-BEB064C98683}" Type="string" Action="write" KeyPath ="yes" />
+                          <RegistryValue Name="NoCaptureAt" Value="::{26EE0668-A00A-44D7-9371-BEB064C98683};::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0" Type="string" Action="write" KeyPath ="yes" />
                         </RegistryKey>
                       </Component>            
                   

@@ -155,9 +155,10 @@ namespace QTTabBarLib {
                     }
                 }
                 // default add ::{20D04FE0-3AEA-1069-A2D8-08002B30309D};::{26EE0668-A00A-44D7-9371-BEB064C98683}
-                NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}"); // 控制面板
+                NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}"); // 控制面板 ::{26EE0668-A00A-44D7-9371-BEB064C98683} ::{26EE0668-A00A-44D7-9371-BEB064C98683}\0
+                NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\0");
                // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // 我的电脑
-                NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // 所有控制面板
+              //  NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // 所有控制面板
                // NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}");
                 NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");// 网络连接
                 // 回收站      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
