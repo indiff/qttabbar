@@ -1,8 +1,8 @@
 - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 - [Generate chm db document modify by indiff](https://github.com/indiff/DBCHM)
 
- [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/v1.5.5.3/QTTabBar%20Setup_1.5.5.3Beta_en%282021%29.zip/download)
-![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)
+ [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/1.5.5.4-beta/QTTabBar%20Setup_1.5.5.4Beta_zh%282022%29.zip/download)
+[![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta)
  
 # Introduction [中文版本](https://github.com/indiff/qttabbar/blob/master/README_zh.md)
 ![qttabbar2](https://user-images.githubusercontent.com/501276/131287626-fe8f1fdd-a894-43f8-9620-b7145d70936d.gif)
