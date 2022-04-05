@@ -144,97 +144,104 @@ namespace QTTabBarLib {
 
         public override void InitializeConfig() {
             // Initialize the button bar tab.
-            imageStripLarge = new ImageStrip(new Size(24, 24));
-            imageStripSmall = new ImageStrip(new Size(16, 16));
-            if ( null != WorkingConfig.bbar.ImageStripPath && WorkingConfig.bbar.ImageStripPath.Length > 0 )
-            {
-                Bitmap bitmap;
-                Bitmap bitmap2;
-                if (LoadExternalImage(WorkingConfig.bbar.ImageStripPath, out bitmap, out bitmap2))
-                {
-                    imageStripLarge.AddStrip(bitmap);
-                    imageStripSmall.AddStrip(bitmap2);
-                    bitmap.Dispose();
-                    bitmap2.Dispose();
-                    if (Path.GetExtension(WorkingConfig.bbar.ImageStripPath ).PathEquals(".bmp"))
-                    {
-                        imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Magenta;
-                    }
-                    else
-                    {
-                        imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Empty;
-                    }
-                }
-            } else
-            {
-                using (Bitmap b = Resources_Image.ButtonStrip24)
-                {
-                    imageStripLarge.AddStrip(b);
-                }
+            try {
+                imageStripLarge = new ImageStrip(new Size(24, 24));
                 imageStripSmall = new ImageStrip(new Size(16, 16));
-                using (Bitmap b = Resources_Image.ButtonStrip16)
+                if ( null != WorkingConfig.bbar.ImageStripPath && WorkingConfig.bbar.ImageStripPath.Length > 0 )
                 {
-                    imageStripSmall.AddStrip(b);
-                }
-            }
-            
-            ButtonPool = new ObservableCollection<ButtonEntry>();
-            CurrentButtons = new ObservableCollection<ButtonEntry>();
-
-            // Create a list of all the plugin buttons.
-            int order = QTButtonBar.INTERNAL_BUTTON_COUNT;
-            var lstPluginIDs = new List<string>();
-            var dicPluginButtons = new Dictionary<string, ButtonEntry[]>();
-            foreach(PluginInformation pi in PluginManager.PluginInformations.Where(pi => pi.Enabled).OrderBy(pi => pi.Name)) {
-                if(pi.PluginType == PluginType.Interactive) {
-                    lstPluginIDs.Add(pi.PluginID);
-                    dicPluginButtons[pi.PluginID] = new ButtonEntry[] { new ButtonEntry(this, order++, 0, pi) };
-                }
-                else if(pi.PluginType == PluginType.BackgroundMultiple) {
-                    Plugin plugin;
-                    if(PluginManager.TryGetStaticPluginInstance(pi.PluginID, out plugin)) {
-                        IBarMultipleCustomItems bmci = plugin.Instance as IBarMultipleCustomItems;
-                        try {
-                            if(bmci != null && bmci.Count > 0) {
-                                lstPluginIDs.Add(pi.PluginID);
-                                dicPluginButtons[pi.PluginID] = 
-                                    bmci.Count.RangeSelect(i => new ButtonEntry(this, order++, i, pi)).ToArray();
-                            }
+                    Bitmap bitmap;
+                    Bitmap bitmap2;
+                    if (LoadExternalImage(WorkingConfig.bbar.ImageStripPath, out bitmap, out bitmap2))
+                    {
+                        imageStripLarge.AddStrip(bitmap);
+                        imageStripSmall.AddStrip(bitmap2);
+                        bitmap.Dispose();
+                        bitmap2.Dispose();
+                        if (Path.GetExtension(WorkingConfig.bbar.ImageStripPath ).PathEquals(".bmp"))
+                        {
+                            imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Magenta;
                         }
-                        catch { }
+                        else
+                        {
+                            imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Empty;
+                        }
+                    }
+                } else
+                {
+                    using (Bitmap b = Resources_Image.ButtonStrip24)
+                    {
+                        imageStripLarge.AddStrip(b);
+                    }
+                    imageStripSmall = new ImageStrip(new Size(16, 16));
+                    using (Bitmap b = Resources_Image.ButtonStrip16)
+                    {
+                        imageStripSmall.AddStrip(b);
                     }
                 }
-            }
+            
+                ButtonPool = new ObservableCollection<ButtonEntry>();
+                CurrentButtons = new ObservableCollection<ButtonEntry>();
 
-            // Add the current buttons (right pane)
-            foreach(int i in WorkingConfig.bbar.ButtonIndexes) {
-                int pluginIndex = i.HiWord() - 1;
-                if(pluginIndex >= 0) {
-                    string id = WorkingConfig.bbar.ActivePluginIDs[pluginIndex];
-                    ButtonEntry[] buttons;
-                    if(dicPluginButtons.TryGetValue(id, out buttons) && i.LoWord() < buttons.Length) {
-                        CurrentButtons.Add(buttons[i.LoWord()]);
+                // Create a list of all the plugin buttons.
+                int order = QTButtonBar.INTERNAL_BUTTON_COUNT;
+                var lstPluginIDs = new List<string>();
+                var dicPluginButtons = new Dictionary<string, ButtonEntry[]>();
+                foreach(PluginInformation pi in PluginManager.PluginInformations.Where(pi => pi.Enabled).OrderBy(pi => pi.Name)) {
+                    if(pi.PluginType == PluginType.Interactive) {
+                        lstPluginIDs.Add(pi.PluginID);
+                        dicPluginButtons[pi.PluginID] = new ButtonEntry[] { new ButtonEntry(this, order++, 0, pi) };
+                    }
+                    else if(pi.PluginType == PluginType.BackgroundMultiple) {
+                        Plugin plugin;
+                        if(PluginManager.TryGetStaticPluginInstance(pi.PluginID, out plugin)) {
+                            IBarMultipleCustomItems bmci = plugin.Instance as IBarMultipleCustomItems;
+                            try {
+                                if(bmci != null && bmci.Count > 0) {
+                                    lstPluginIDs.Add(pi.PluginID);
+                                    dicPluginButtons[pi.PluginID] = 
+                                        bmci.Count.RangeSelect(i => new ButtonEntry(this, order++, i, pi)).ToArray();
+                                }
+                            }
+                            catch { }
+                        }
                     }
                 }
-                else {
-                    CurrentButtons.Add(new ButtonEntry(this, i, i));
-                }
-            }
 
-            // Add the rest of the buttons to the button pool (left pane)
-            ButtonPool.Add(new ButtonEntry(this, 0, QTButtonBar.BII_SEPARATOR));
-            for(int i = 1; i < QTButtonBar.INTERNAL_BUTTON_COUNT; i++) {
-                if(!WorkingConfig.bbar.ButtonIndexes.Contains(i)) {
-                    ButtonPool.Add(new ButtonEntry(this, i, i));
+                // Add the current buttons (right pane)
+                foreach(int i in WorkingConfig.bbar.ButtonIndexes) {
+                    int pluginIndex = i.HiWord() - 1;
+                    if(pluginIndex >= 0) {
+                        string id = WorkingConfig.bbar.ActivePluginIDs[pluginIndex];
+                        ButtonEntry[] buttons;
+                        if(dicPluginButtons.TryGetValue(id, out buttons) && i.LoWord() < buttons.Length) {
+                            CurrentButtons.Add(buttons[i.LoWord()]);
+                        }
+                    }
+                    else {
+                        CurrentButtons.Add(new ButtonEntry(this, i, i));
+                    }
                 }
-            }
 
-            foreach(ButtonEntry entry in lstPluginIDs.SelectMany(pid => dicPluginButtons[pid]).Except(CurrentButtons)) {
-                ButtonPool.Add(entry);
-            }
-            lstButtonBarPool.ItemsSource = ButtonPool;
-            lstButtonBarCurrent.ItemsSource = CurrentButtons;
-        }
+                // Add the rest of the buttons to the button pool (left pane)
+                ButtonPool.Add(new ButtonEntry(this, 0, QTButtonBar.BII_SEPARATOR));
+                for(int i = 1; i < QTButtonBar.INTERNAL_BUTTON_COUNT; i++) {
+                    if(!WorkingConfig.bbar.ButtonIndexes.Contains(i)) {
+                        ButtonPool.Add(new ButtonEntry(this, i, i));
+                    }
+                }
+
+                foreach(ButtonEntry entry in lstPluginIDs.SelectMany(pid => dicPluginButtons[pid]).Except(CurrentButtons)) {
+                    ButtonPool.Add(entry);
+                }
+                lstButtonBarPool.ItemsSource = ButtonPool;
+                lstButtonBarCurrent.ItemsSource = CurrentButtons;
+             }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options11_ButtonBar InitializeConfig");
+
+            }     
+       }
 
         public override void ResetConfig() {
             DataContext = WorkingConfig.bbar = new Config._BBar();
@@ -242,48 +249,55 @@ namespace QTTabBarLib {
         }
 
         public override void CommitConfig() {
-            List<string> activeIDs = new List<string>();
-            WorkingConfig.bbar.ButtonIndexes = CurrentButtons.Select(entry => {
-                int p = 0;
-                if(entry.PluginInfo != null) {
-                    p = activeIDs.IndexOf(entry.PluginInfo.PluginID) + 1;
-                    if(p == 0) {
-                        activeIDs.Add(entry.PluginInfo.PluginID);
-                        p = activeIDs.Count;
+            try {
+                List<string> activeIDs = new List<string>();
+                WorkingConfig.bbar.ButtonIndexes = CurrentButtons.Select(entry => {
+                    int p = 0;
+                    if(entry.PluginInfo != null) {
+                        p = activeIDs.IndexOf(entry.PluginInfo.PluginID) + 1;
+                        if(p == 0) {
+                            activeIDs.Add(entry.PluginInfo.PluginID);
+                            p = activeIDs.Count;
+                        }
+                        p <<= 16;
+
                     }
-                    p <<= 16;
+                    return p + entry.Index;
+                }).ToArray();
+                WorkingConfig.bbar.ActivePluginIDs = activeIDs.ToArray();
+                // TODO: Validate image strip
 
-                }
-                return p + entry.Index;
-            }).ToArray();
-            WorkingConfig.bbar.ActivePluginIDs = activeIDs.ToArray();
-            // TODO: Validate image strip
-
-            // MessageBox.Show("image:" + WorkingConfig.bbar.ImageStripPath);
+                // MessageBox.Show("image:" + WorkingConfig.bbar.ImageStripPath);
           
-            if (null != WorkingConfig.bbar.ImageStripPath && WorkingConfig.bbar.ImageStripPath.Trim().Length > 0)
-            {
-                imageStripLarge = new ImageStrip(new Size(24, 24));
-                imageStripSmall = new ImageStrip(new Size(16, 16));
-
-                Bitmap bitmap;
-                Bitmap bitmap2;
-                if (LoadExternalImage(WorkingConfig.bbar.ImageStripPath, out bitmap, out bitmap2))
+                if (null != WorkingConfig.bbar.ImageStripPath && WorkingConfig.bbar.ImageStripPath.Trim().Length > 0)
                 {
-                    imageStripLarge.AddStrip(bitmap);
-                    imageStripSmall.AddStrip(bitmap2);
-                    bitmap.Dispose();
-                    bitmap2.Dispose();
-                    if (Path.GetExtension(WorkingConfig.bbar.ImageStripPath).PathEquals(".bmp"))
+                    imageStripLarge = new ImageStrip(new Size(24, 24));
+                    imageStripSmall = new ImageStrip(new Size(16, 16));
+
+                    Bitmap bitmap;
+                    Bitmap bitmap2;
+                    if (LoadExternalImage(WorkingConfig.bbar.ImageStripPath, out bitmap, out bitmap2))
                     {
-                        imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Magenta;
-                    }
-                    else
-                    {
-                        imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Empty;
+                        imageStripLarge.AddStrip(bitmap);
+                        imageStripSmall.AddStrip(bitmap2);
+                        bitmap.Dispose();
+                        bitmap2.Dispose();
+                        if (Path.GetExtension(WorkingConfig.bbar.ImageStripPath).PathEquals(".bmp"))
+                        {
+                            imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Magenta;
+                        }
+                        else
+                        {
+                            imageStripLarge.TransparentColor = imageStripSmall.TransparentColor = Color.Empty;
+                        }
                     }
                 }
-            }
+             }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options11_ButtonBar CommitConfig");
+
+            }     
         }
 
         private void btnBBarAdd_Click(object sender, RoutedEventArgs e) {

@@ -37,12 +37,30 @@ namespace QTTabBarLib {
         }
 
         public override void InitializeConfig() {
-            lstTextFileTypes.ItemsSource = TextFileTypes = new ObservableCollection<FileTypeEntry>(
-                    WorkingConfig.tips.TextExt.Select(ext => new FileTypeEntry(this, ext)));
-            lstMediaFileTypes.ItemsSource = MediaFileTypes = new ObservableCollection<FileTypeEntry>(
-                    WorkingConfig.tips.ImageExt.Select(ext => new FileTypeEntry(this, ext)));
-            lstTextFileTypes.ScrollIntoView(TextFileTypes.First());
-            lstMediaFileTypes.ScrollIntoView(MediaFileTypes.First());
+
+            try
+            {
+                lstTextFileTypes.ItemsSource = TextFileTypes = new ObservableCollection<FileTypeEntry>(
+                   WorkingConfig.tips.TextExt.Select(ext => new FileTypeEntry(this, ext)));
+                lstMediaFileTypes.ItemsSource = MediaFileTypes = new ObservableCollection<FileTypeEntry>(
+                        WorkingConfig.tips.ImageExt.Select(ext => new FileTypeEntry(this, ext)));
+                if (null != MediaFileTypes && MediaFileTypes.Count > 0) {
+                    lstMediaFileTypes.ScrollIntoView(MediaFileTypes.FirstOrDefault());
+                }
+
+                if (null != TextFileTypes && TextFileTypes.Count > 0)
+                {
+                    lstTextFileTypes.ScrollIntoView(TextFileTypes.FirstOrDefault());
+                }
+                
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options04_Tooltips InitializeConfig");
+               
+            }
+
+           
         }
 
         public override void ResetConfig() {
@@ -51,8 +69,33 @@ namespace QTTabBarLib {
         }
 
         public override void CommitConfig() {
-            WorkingConfig.tips.TextExt = TextFileTypes.Select(entry => entry.DotExtension).ToList();
-            WorkingConfig.tips.ImageExt = MediaFileTypes.Select(entry => entry.DotExtension).ToList();
+            
+            try
+            {
+                if (null != TextFileTypes && TextFileTypes.Count > 0) {
+                    WorkingConfig.tips.TextExt = TextFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
+                }
+                else if (null == TextFileTypes || TextFileTypes.Count ==  0 ) {
+                    WorkingConfig.tips.TextExt = new List<string> { };
+                }
+                
+                
+
+                if (null != MediaFileTypes && MediaFileTypes.Count > 0)
+                {
+                    WorkingConfig.tips.ImageExt = MediaFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
+                }
+                else if (null == MediaFileTypes || MediaFileTypes.Count == 0)
+                {
+                    WorkingConfig.tips.ImageExt = new List<string> { };
+                }
+                
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options04_Tooltips CommitConfig");
+
+            }
         }
 
         private void AddNewFileType(ListBox control) {

@@ -37,12 +37,19 @@ namespace QTTabBarLib {
         }
 
         public override void InitializeConfig() {
-            CurrentPlugins = new ObservableCollection<PluginEntry>();
-            foreach(PluginAssembly assembly in PluginManager.PluginAssemblies) {
-                CreatePluginEntry(assembly, false);
-            }
-            lstPluginView.ItemsSource = CurrentPlugins;
-        }
+            try {
+                CurrentPlugins = new ObservableCollection<PluginEntry>();
+                foreach(PluginAssembly assembly in PluginManager.PluginAssemblies) {
+                    CreatePluginEntry(assembly, false);
+                }
+                lstPluginView.ItemsSource = CurrentPlugins;
+             }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options12_Plugins InitializeConfig");
+
+            }     
+         }
 
         public override void ResetConfig() {
             // Should we do anything here?
@@ -51,47 +58,54 @@ namespace QTTabBarLib {
         /// 提交配置信息
         /// </summary>
         public override void CommitConfig() {
-            HashSet<string> paths = new HashSet<string>();
-            HashSet<PluginAssembly> toDispose = new HashSet<PluginAssembly>();
+            try {
+                HashSet<string> paths = new HashSet<string>();
+                HashSet<PluginAssembly> toDispose = new HashSet<PluginAssembly>();
 
-            // Don't dispose the assemblies here.  That will be done by the plugin manager
-            // when the plugins are unloaded.
-            for(int i = 0; i < CurrentPlugins.Count; ++i) {
-                if(CurrentPlugins[i].UninstallOnClose) {
-                    CurrentPlugins[i].Enabled = false;
-                    CurrentPlugins.RemoveAt(i--);
+                // Don't dispose the assemblies here.  That will be done by the plugin manager
+                // when the plugins are unloaded.
+                for(int i = 0; i < CurrentPlugins.Count; ++i) {
+                    if(CurrentPlugins[i].UninstallOnClose) {
+                        CurrentPlugins[i].Enabled = false;
+                        CurrentPlugins.RemoveAt(i--);
+                    }
                 }
-            }
 
-            List<string> enabled = new List<string>();
-            foreach(PluginEntry entry in CurrentPlugins) {
-                paths.Add(entry.PluginAssembly.Path);
-                if(entry.DisableOnClose) {
-                    entry.Enabled = false;
-                }
-                else if(entry.EnableOnClose) {
-                    entry.Enabled = true;
-                }
-                else if(entry.InstallOnClose) {
-                    entry.Enabled = true;
-                    toDispose.Add(entry.PluginAssembly);
-                    // Newly installed PluginAssemblies are loaded by the options dialog.
-                    // They will also be loaded by the PluginManager, so we have to 
-                    // dispose of the ones we loaded here.
-                }
-                entry.EnableOnClose = entry.DisableOnClose = entry.InstallOnClose = false;
+                List<string> enabled = new List<string>();
+                foreach(PluginEntry entry in CurrentPlugins) {
+                    paths.Add(entry.PluginAssembly.Path);
+                    if(entry.DisableOnClose) {
+                        entry.Enabled = false;
+                    }
+                    else if(entry.EnableOnClose) {
+                        entry.Enabled = true;
+                    }
+                    else if(entry.InstallOnClose) {
+                        entry.Enabled = true;
+                        toDispose.Add(entry.PluginAssembly);
+                        // Newly installed PluginAssemblies are loaded by the options dialog.
+                        // They will also be loaded by the PluginManager, so we have to 
+                        // dispose of the ones we loaded here.
+                    }
+                    entry.EnableOnClose = entry.DisableOnClose = entry.InstallOnClose = false;
 
-                if(entry.Enabled) enabled.Add(entry.PluginID);
-            }
-            WorkingConfig.plugin.Enabled = enabled.ToArray();
-            foreach(PluginAssembly asm in toDispose) {
-                asm.Dispose();
-            }
-            PluginManager.SavePluginAssemblyPaths(paths.ToList());
+                    if(entry.Enabled) enabled.Add(entry.PluginID);
+                }
+                WorkingConfig.plugin.Enabled = enabled.ToArray();
+                foreach(PluginAssembly asm in toDispose) {
+                    asm.Dispose();
+                }
+                PluginManager.SavePluginAssemblyPaths(paths.ToList());
             
-            // Entries are invalid now, some assemblies may have been Disposed.
-            CurrentPlugins = new ObservableCollection<PluginEntry>();
-        }
+                // Entries are invalid now, some assemblies may have been Disposed.
+                CurrentPlugins = new ObservableCollection<PluginEntry>();
+             }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options12_Plugins CommitConfig");
+
+            }     
+         }
 
         private void btnPluginOptions_Click(object sender, RoutedEventArgs e) {
             PluginEntry entry = (PluginEntry)((Button)sender).DataContext;

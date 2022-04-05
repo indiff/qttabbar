@@ -136,6 +136,7 @@ namespace QTTabBarLib {
         #endregion
 
         private OptionsDialog() {
+            try {
             Initialized += (sender, args) => Topmost = true;
             ContentRendered += (sender, args) => Topmost = false;
             InitializeComponent();
@@ -189,7 +190,13 @@ namespace QTTabBarLib {
 
             //////////// setting by qwop .
             setByQwop();
-        }
+             }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options13_Language InitializeConfig");
+
+            }
+}
 
 
         #region setting by qwop

@@ -33,38 +33,45 @@ namespace QTTabBarLib {
         }
 
         public override void InitializeConfig() {
-            int[] keys = WorkingConfig.keys.Shortcuts;
-            HotkeyEntries = new List<HotkeyEntry>();
-            for(int i = 0; i < (int)BindAction.KEYBOARD_ACTION_COUNT; ++i) {
-                HotkeyEntries.Add(new HotkeyEntry(keys, i));
-            }
+            try {
+                int[] keys = WorkingConfig.keys.Shortcuts;
+                HotkeyEntries = new List<HotkeyEntry>();
+                for(int i = 0; i < (int)BindAction.KEYBOARD_ACTION_COUNT; ++i) {
+                    HotkeyEntries.Add(new HotkeyEntry(keys, i));
+                }
 
-            var PluginShortcuts = new Dictionary<string, int[]>();
-            foreach(var info in PluginManager.PluginInformations) {
-                Plugin p;
-                if(!PluginManager.TryGetStaticPluginInstance(info.PluginID, out p) || !p.PluginInformation.Enabled) continue;
-                string[] actions = null;
-                try {
-                    if(!p.Instance.QueryShortcutKeys(out actions)) actions = null;
+                var PluginShortcuts = new Dictionary<string, int[]>();
+                foreach(var info in PluginManager.PluginInformations) {
+                    Plugin p;
+                    if(!PluginManager.TryGetStaticPluginInstance(info.PluginID, out p) || !p.PluginInformation.Enabled) continue;
+                    string[] actions = null;
+                    try {
+                        if(!p.Instance.QueryShortcutKeys(out actions)) actions = null;
+                    }
+                    catch {
+                    }
+                    if(actions == null) continue;
+                    if(WorkingConfig.keys.PluginShortcuts.TryGetValue(info.PluginID, out keys)) {
+                        Array.Resize(ref keys, actions.Length);
+                        PluginShortcuts[info.PluginID] = keys;
+                    }
+                    else {
+                        PluginShortcuts[info.PluginID] = new int[actions.Length];
+                    }
+                    HotkeyEntries.AddRange(actions.Select((act, i) => new HotkeyEntry(keys, i, act, p.PluginInformation.Name)));
                 }
-                catch {
-                }
-                if(actions == null) continue;
-                if(WorkingConfig.keys.PluginShortcuts.TryGetValue(info.PluginID, out keys)) {
-                    Array.Resize(ref keys, actions.Length);
-                    PluginShortcuts[info.PluginID] = keys;
-                }
-                else {
-                    PluginShortcuts[info.PluginID] = new int[actions.Length];
-                }
-                HotkeyEntries.AddRange(actions.Select((act, i) => new HotkeyEntry(keys, i, act, p.PluginInformation.Name)));
-            }
-            WorkingConfig.keys.PluginShortcuts = PluginShortcuts;
+                WorkingConfig.keys.PluginShortcuts = PluginShortcuts;
 
-            ICollectionView view = CollectionViewSource.GetDefaultView(HotkeyEntries);
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("PluginName");
-            view.GroupDescriptions.Add(groupDescription);
-            lvwHotkeys.ItemsSource = view;
+                ICollectionView view = CollectionViewSource.GetDefaultView(HotkeyEntries);
+                PropertyGroupDescription groupDescription = new PropertyGroupDescription("PluginName");
+                view.GroupDescriptions.Add(groupDescription);
+                lvwHotkeys.ItemsSource = view;
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options08_Keys InitializeConfig");
+
+            }
         }
 
         public override void ResetConfig() {

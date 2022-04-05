@@ -25,6 +25,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Image = System.Drawing.Image;
 using Keys = System.Windows.Forms.Keys;
+using System;
 
 namespace QTTabBarLib {
     internal partial class Options09_Groups : OptionsDialogTab, IHotkeyContainer {
@@ -36,9 +37,16 @@ namespace QTTabBarLib {
         }
 
         public override void InitializeConfig() {
+            try {
             tvwGroups.ItemsSource = CurrentGroups = new ParentedCollection<GroupEntry>(null,
                     GroupsManager.Groups.Select(g => new GroupEntry(
                     g.Name, g.ShortcutKey, g.Startup, g.Paths.Select(p => new FolderEntry(p)))));
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options09_Groups InitializeConfig");
+
+            }
         }
 
         public override void ResetConfig() {
@@ -46,9 +54,16 @@ namespace QTTabBarLib {
         }
 
         public override void CommitConfig() {
+            try {
             GroupsManager.Groups = new List<Group>(
                     CurrentGroups.Select(g => new Group(
                     g.Name, g.ShortcutKey, g.Startup, g.Folders.Select(f => f.Path).ToList())));
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options09_Groups CommitConfig");
+
+            }
 
         }
 
