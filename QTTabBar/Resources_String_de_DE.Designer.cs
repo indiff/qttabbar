@@ -187,7 +187,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 Allgemeine Einstellungen für das Verhalten von QTTabBar;Taskleisten-Integration;Registerkartenvorschau in der Taskleiste anzeigen;Verlauf;Verlauf geschlossener Registerkarten behalten;Jetzt löschen;Verlauf geöffneter Dateien behalten;Netzwerk;Netzwerk-Timeout (geben Sie 0 für die Systemvorgabe ein):;Regelmäßig nach Updates suchen;Jetzt prüfen;Exportieren;Einstellungen exportieren...;Dateiverlauf löschen?;Registerkartenverlauf löschen? 的本地化字符串。
+        ///   查找类似 Allgemeine Einstellungen für das Verhalten von QTTabBar;Taskleisten-Integration;Registerkartenvorschau in der Taskleiste anzeigen;Verlauf;Verlauf geschlossener Registerkarten behalten;Jetzt löschen;Verlauf geöffneter Dateien behalten;Netzwerk;Netzwerk-Timeout (geben Sie 0 für die Systemvorgabe ein):;Regelmäßig nach Updates suchen;Jetzt prüfen;Exportieren;Einstellungen exportieren...;Dateiverlauf löschen?;Registerkartenverlauf löschen?;Sound;Enable Sound 的本地化字符串。
         /// </summary>
         public static string Options_Page05_General {
             get {

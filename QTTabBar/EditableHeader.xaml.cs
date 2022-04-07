@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -20,13 +20,11 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace QTTabBarLib
-{
+namespace QTTabBarLib {
     /// <summary>
     /// Interaction logic for EditableHeader.xaml
     /// </summary>
-    public partial class EditableHeader : UserControl
-    {
+    public partial class EditableHeader : UserControl {
 
         private bool preparing = false;
         private string originalText;

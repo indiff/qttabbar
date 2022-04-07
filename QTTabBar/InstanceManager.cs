@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -236,18 +236,36 @@ namespace QTTabBarLib {
         [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
         private class CommClient : ICommClient {
             public void Execute(byte[] encodedAction) {
+                Delegate thedel = null;
                 try {
-                    ByteToDel(encodedAction).DynamicInvoke();
+                    // add by indiff fix bug
+                    if (null == encodedAction || encodedAction.Length == 0 ) {
+                        return;
+                    }
+                    thedel = ByteToDel(encodedAction);
+
+                    if (thedel != null && thedel.Method != null )
+                    {
+                         thedel.DynamicInvoke();
+                    }
                 }
                 catch(Exception ex) {
-                    QTUtility2.MakeErrorLog(ex);
+                    string errStr = null;
+                    if (thedel != null && thedel.Method != null)
+                    {
+                        errStr = "delegate name:" + thedel.GetType()  + " ";
+                        errStr += "method name:" + thedel.Method.Name + " daynamic invoke error";
+                    }
+                    QTUtility2.MakeErrorLog(ex, errStr);
+                    // re initialize 
+                    Initialize();
                 }
             }
         }
 
         #endregion
 
-        #region Utility Methods/工具方法
+        #region Utility Methods
 
         private static byte[] DelToByte(Delegate del) {
             return QTUtility.ObjectToByteArray(new SerializeDelegate(del));

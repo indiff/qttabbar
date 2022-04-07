@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -40,42 +40,64 @@ namespace QTTabBarLib {
 
             // This goes in the constructor rather than InitializeConfig because it should
             // not be affected by Apply.
-            string[] metatags = {
-                "Author",
-                "Language",
-                "Country",
-                "Version_QTTabBar",
-                "Version_LangFile",
-                "DateModified"
-            };
-            LangItems.Add(new LangEntry("Author", -1));
-            LangItems.Add(new LangEntry("Language", -1));
-            LangItems.Add(new LangEntry("Country", -1));
-            foreach(var kv in QTUtility.TextResourcesDic.OrderBy(kv => kv.Key)) {
-                if(metatags.Contains(kv.Key)) continue;
-                for(int i = 0; i < kv.Value.Length; i++) {
-                    LangItems.Add(new LangEntry(kv.Key, i));
-                }
-            }
 
-            ICollectionView view = CollectionViewSource.GetDefaultView(LangItems);
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Location");
-            view.GroupDescriptions.Add(groupDescription);
-            lvwLangEditor.ItemsSource = view;
+            try {
+                string[] metatags = {
+                    "Author",
+                    "Language",
+                    "Country",
+                    "Version_QTTabBar",
+                    "Version_LangFile",
+                    "DateModified"
+                };
+                LangItems.Add(new LangEntry("Author", -1));
+                LangItems.Add(new LangEntry("Language", -1));
+                LangItems.Add(new LangEntry("Country", -1));
+                foreach(var kv in QTUtility.TextResourcesDic.OrderBy(kv => kv.Key)) {
+                    if(metatags.Contains(kv.Key)) continue;
+                    for(int i = 0; i < kv.Value.Length; i++) {
+                        LangItems.Add(new LangEntry(kv.Key, i));
+                    }
+                }
+
+                ICollectionView view = CollectionViewSource.GetDefaultView(LangItems);
+                PropertyGroupDescription groupDescription = new PropertyGroupDescription("Location");
+                view.GroupDescriptions.Add(groupDescription);
+                lvwLangEditor.ItemsSource = view;
+             }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options13_Language ");
+
+            }           
         }
 
         public override void InitializeConfig() {
-            lstPluginFiles.ItemsSource = PluginFiles = 
-                    new ObservableCollection<string>(WorkingConfig.lang.PluginLangFiles);
-        }
+            try {
+                lstPluginFiles.ItemsSource = PluginFiles = 
+                        new ObservableCollection<string>(WorkingConfig.lang.PluginLangFiles);
+              }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options13_Language InitializeConfig");
+
+            }           
+       }
 
         public override void ResetConfig() {
             InitializeConfig();
         }
 
         public override void CommitConfig() {
-            WorkingConfig.lang.PluginLangFiles = PluginFiles.ToArray();
-        }
+            try {
+                 WorkingConfig.lang.PluginLangFiles = PluginFiles.ToArray();
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options13_Language InitializeConfig");
+
+            }           
+       }
 
         private void btnPluginAdd_Click(object sender, RoutedEventArgs e) {
             using(OpenFileDialog ofd = new OpenFileDialog()) {

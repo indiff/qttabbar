@@ -27,3 +27,5 @@ assignees: indiff
  - 操作系统: [e.g. win10]
  - .net framework: [e.g. 3.5]
  - 软件版本: [e.g. 1.5.3]
+**上传报错日志(C:\Users\Administrator\AppData\Roaming\QTTabBar\QTTabBarException.log):**
+

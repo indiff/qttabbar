@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -206,33 +206,41 @@ namespace QTTabBarLib {
         }
 
         public override void InitializeConfig() {
-            MouseBindings = new ObservableCollection<MouseEntry>();
-            foreach(var p in WorkingConfig.mouse.GlobalMouseActions) {
-                MouseBindings.Add(new MouseEntry(MouseTarget.Anywhere, p.Key, p.Value));
-            }
-            foreach(var p in WorkingConfig.mouse.MarginActions) {
-                MouseBindings.Add(new MouseEntry(MouseTarget.ExplorerBackground, p.Key, p.Value));
-            }
-            foreach(var p in WorkingConfig.mouse.ItemActions) {
-                MouseBindings.Add(new MouseEntry(MouseTarget.ExplorerItem, p.Key, p.Value));
-            }
-            foreach(var p in WorkingConfig.mouse.LinkActions) {
-                MouseBindings.Add(new MouseEntry(MouseTarget.FolderLink, p.Key, p.Value));
-            }
-            foreach(var p in WorkingConfig.mouse.TabActions) {
-                MouseBindings.Add(new MouseEntry(MouseTarget.Tab, p.Key, p.Value));
-            }
-            foreach(var p in WorkingConfig.mouse.BarActions) {
-                MouseBindings.Add(new MouseEntry(MouseTarget.TabBarBackground, p.Key, p.Value));
-            }
-            ICollectionView view = CollectionViewSource.GetDefaultView(MouseBindings);
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("TargetIdx");
-            foreach(MouseTarget target in Enum.GetValues(typeof(MouseTarget))) {
-                groupDescription.GroupNames.Add(MouseTargetResx[target]);
-            }
+            try
+            {
+                        MouseBindings = new ObservableCollection<MouseEntry>();
+                        foreach(var p in WorkingConfig.mouse.GlobalMouseActions) {
+                            MouseBindings.Add(new MouseEntry(MouseTarget.Anywhere, p.Key, p.Value));
+                        }
+                        foreach(var p in WorkingConfig.mouse.MarginActions) {
+                            MouseBindings.Add(new MouseEntry(MouseTarget.ExplorerBackground, p.Key, p.Value));
+                        }
+                        foreach(var p in WorkingConfig.mouse.ItemActions) {
+                            MouseBindings.Add(new MouseEntry(MouseTarget.ExplorerItem, p.Key, p.Value));
+                        }
+                        foreach(var p in WorkingConfig.mouse.LinkActions) {
+                            MouseBindings.Add(new MouseEntry(MouseTarget.FolderLink, p.Key, p.Value));
+                        }
+                        foreach(var p in WorkingConfig.mouse.TabActions) {
+                            MouseBindings.Add(new MouseEntry(MouseTarget.Tab, p.Key, p.Value));
+                        }
+                        foreach(var p in WorkingConfig.mouse.BarActions) {
+                            MouseBindings.Add(new MouseEntry(MouseTarget.TabBarBackground, p.Key, p.Value));
+                        }
+                        ICollectionView view = CollectionViewSource.GetDefaultView(MouseBindings);
+                        PropertyGroupDescription groupDescription = new PropertyGroupDescription("TargetIdx");
+                        foreach(MouseTarget target in Enum.GetValues(typeof(MouseTarget))) {
+                            groupDescription.GroupNames.Add(MouseTargetResx[target]);
+                        }
 
-            view.GroupDescriptions.Add(groupDescription);
-            lvwMouseBindings.ItemsSource = view;
+                        view.GroupDescriptions.Add(groupDescription);
+                        lvwMouseBindings.ItemsSource = view;
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options07_Mouse InitializeConfig");
+
+            }
         }
 
         public override void ResetConfig() {
@@ -241,24 +249,32 @@ namespace QTTabBarLib {
         }
 
         public override void CommitConfig() {
-            WorkingConfig.mouse.GlobalMouseActions = MouseBindings
-                    .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.Anywhere)
-                    .ToDictionary(e => e.Chord, e => e.Action);
-            WorkingConfig.mouse.MarginActions = MouseBindings
-                    .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.ExplorerBackground)
-                    .ToDictionary(e => e.Chord, e => e.Action);
-            WorkingConfig.mouse.ItemActions = MouseBindings
-                    .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.ExplorerItem)
-                    .ToDictionary(e => e.Chord, e => e.Action);
-            WorkingConfig.mouse.LinkActions = MouseBindings
-                    .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.FolderLink)
-                    .ToDictionary(e => e.Chord, e => e.Action);
-            WorkingConfig.mouse.TabActions = MouseBindings
-                    .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.Tab)
-                    .ToDictionary(e => e.Chord, e => e.Action);
-            WorkingConfig.mouse.BarActions = MouseBindings
-                    .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.TabBarBackground)
-                    .ToDictionary(e => e.Chord, e => e.Action);
+            try
+            {
+                WorkingConfig.mouse.GlobalMouseActions = MouseBindings
+                        .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.Anywhere)
+                        .ToDictionary(e => e.Chord, e => e.Action);
+                WorkingConfig.mouse.MarginActions = MouseBindings
+                        .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.ExplorerBackground)
+                        .ToDictionary(e => e.Chord, e => e.Action);
+                WorkingConfig.mouse.ItemActions = MouseBindings
+                        .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.ExplorerItem)
+                        .ToDictionary(e => e.Chord, e => e.Action);
+                WorkingConfig.mouse.LinkActions = MouseBindings
+                        .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.FolderLink)
+                        .ToDictionary(e => e.Chord, e => e.Action);
+                WorkingConfig.mouse.TabActions = MouseBindings
+                        .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.Tab)
+                        .ToDictionary(e => e.Chord, e => e.Action);
+                WorkingConfig.mouse.BarActions = MouseBindings
+                        .Where(e => e.Action != BindAction.Nothing && e.Target == MouseTarget.TabBarBackground)
+                        .ToDictionary(e => e.Chord, e => e.Action);
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options07_Mouse CommitConfig");
+
+            }
         }
 
 

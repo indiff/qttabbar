@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ using System.Windows.Input;
 using Image = System.Drawing.Image;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using Keys = System.Windows.Forms.Keys;
+using System;
 
 namespace QTTabBarLib {
     internal partial class Options10_Apps : OptionsDialogTab, IHotkeyContainer {
@@ -37,10 +38,17 @@ namespace QTTabBarLib {
         }
 
         public override void InitializeConfig() {
+            try {
             tvwApps.ItemsSource = CurrentApps = new ParentedCollection<AppEntry>(null,
                     AppsManager.BuildNestedStructure(
                     app => new AppEntry(app),
                     (folderName, children) => new AppEntry(folderName, children)));
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options10_Apps InitializeConfig");
+
+            }     
         }
 
         public override void ResetConfig() {
@@ -48,13 +56,20 @@ namespace QTTabBarLib {
         }
 
         public override void CommitConfig() {
+            try {
             AppsManager.SetUserAppsFromNestedStructure(
                     CurrentApps,
                     entry => entry.IsFolder 
                         ? new UserApp(entry.Name) 
                         : new UserApp(entry.Name, entry.Path, entry.Args, entry.WorkingDir, entry.ShortcutKey),
                     entry => entry.Children);
-        }
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options10_Apps CommitConfig");
+
+            }     
+         }
 
         private static IEnumerable<AppEntry> FlattenAppList(IEnumerable<AppEntry> AppRoot) {
             foreach(AppEntry app in AppRoot) {

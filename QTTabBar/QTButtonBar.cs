@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -769,7 +769,7 @@ namespace QTTabBarLib {
             return false;
         }
 
-  internal static bool LoadExternalImage(string path, out Bitmap bmpLarge, out Bitmap bmpSmall)
+        internal static bool LoadExternalImage(string path, out Bitmap bmpLarge, out Bitmap bmpSmall)
         {
             bmpLarge = (bmpSmall = null);
             if (File.Exists(path))
@@ -1162,7 +1162,7 @@ namespace QTTabBarLib {
                                 regex = new Regex(str.Substring(1, str.Length - 2), RegexOptions.IgnoreCase);
                             }
                             catch {
-                                SystemSounds.Asterisk.Play();
+                                QTUtility.AsteriskPlay();
                                 return false;
                             }
                         }

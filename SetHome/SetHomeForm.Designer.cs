@@ -36,6 +36,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.autoBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -46,7 +47,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "设置JavaHome";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.java_Click);
             // 
             // label1
             // 
@@ -72,7 +73,7 @@
             this.button2.TabIndex = 4;
             this.button2.Text = "设置M2_HOME";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.mvn_Click);
             // 
             // button3
             // 
@@ -82,7 +83,7 @@
             this.button3.TabIndex = 5;
             this.button3.Text = "设置MVND_HOME";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.mvnd_Click);
             // 
             // button4
             // 
@@ -92,7 +93,7 @@
             this.button4.TabIndex = 6;
             this.button4.Text = "设置ANT_HOME";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.ant_Click);
             // 
             // button5
             // 
@@ -102,13 +103,25 @@
             this.button5.TabIndex = 7;
             this.button5.Text = "设置GRADLE_HOME";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.gradle_Click);
+            // 
+            // autoBox
+            // 
+            this.autoBox.AutoSize = true;
+            this.autoBox.Location = new System.Drawing.Point(162, 130);
+            this.autoBox.Name = "autoBox";
+            this.autoBox.Size = new System.Drawing.Size(72, 16);
+            this.autoBox.TabIndex = 8;
+            this.autoBox.Text = "自动设置";
+            this.autoBox.UseVisualStyleBackColor = true;
+            this.autoBox.CheckedChanged += new System.EventHandler(this.autoBox_CheckedChanged);
             // 
             // SetHomeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(471, 270);
+            this.Controls.Add(this.autoBox);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -134,6 +147,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.CheckBox autoBox;
     }
 }
 

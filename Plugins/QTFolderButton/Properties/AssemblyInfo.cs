@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTFolderButton")]
-[assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

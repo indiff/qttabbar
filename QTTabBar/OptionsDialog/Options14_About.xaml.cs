@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -25,18 +25,37 @@ namespace QTTabBarLib {
         }
 
         public override void InitializeConfig() {
-            lblVersion.Content = "QTTabBar " + QTUtility2.MakeVersionString();
-            runSite.Text = Resources_String.SiteURL;
-            hypSite.NavigateUri = new Uri(Resources_String.SiteURL);
-            hypSite.RequestNavigate += (sender, args) => Process.Start(Resources_String.SiteURL);
+            try {
+                // 设置默认的title 和版本
+                string str = QTUtility.CurrentVersion.ToString();
+                if (QTUtility.BetaRevision.Major > 0)
+                {
+                    str = str + " Beta " + QTUtility.BetaRevision.Major;
+                }
+                else if (QTUtility.BetaRevision.Minor > 0)
+                {
+                    str = str + " Alpha " + QTUtility.BetaRevision.Minor;
+                }
+                
+                lblVersion.Content = "QTTabBar " + str + " " + QTUtility2.MakeVersionString();
+                runSite.Text = Resources_String.SiteURL;
+                hypSite.NavigateUri = new Uri(Resources_String.SiteURL);
+                hypSite.RequestNavigate += (sender, args) => Process.Start(Resources_String.SiteURL);
 
-            // add by qwop 2012/06/16 http://qwop.iteye.com
-            //string mySite = "http://code.google.com/p/qwop-software/"; 
-			string mySite = "https://github.com/indiff/qttabbar"; 
+                // add by qwop 2012/06/16 http://qwop.iteye.com
+                //string mySite = "http://code.google.com/p/qwop-software/"; 
+			    // string mySite = "https://github.com/indiff/qttabbar";
+                string mySite = "https://www.paypal.com/donate/?cmd=_donations&business=qwop%40live.cn&item_name=QTTabBar&return=https%3A%2F%2Findiff.github.io%2Fqttabbar%2F&cancel_return=https%3A%2F%2Findiff.github.io%2Fqttabbar%2F&no_shipping=1&on0=msg&os0=&currency_code=USD&submit.x=154&submit.y=31"; 
 			
-            runQwopSite.Text = mySite;
-			qwopSite.NavigateUri = new Uri( mySite );
-            qwopSite.RequestNavigate += (sender, args) => Process.Start( mySite );
+                runQwopSite.Text = "Make a donation to support qttabbar";
+			    qwopSite.NavigateUri = new Uri( mySite );
+                qwopSite.RequestNavigate += (sender, args) => Process.Start( mySite );
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "Options13_Language InitializeConfig");
+
+            }         
         }
 
         public override void ResetConfig() {    

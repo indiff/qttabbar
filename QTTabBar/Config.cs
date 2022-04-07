@@ -7,7 +7,7 @@
 */ 
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -393,17 +393,24 @@ namespace QTTabBarLib {
                 AltRowBackgroundColor = QTUtility2.MakeColor(0xfaf5f1); */
 
                 /* qwop's default value.*/
-                AlwaysShowHeaders = true;  // 显示列标题
-                RedirectLibraryFolders = true; // 使用库文件夹
+                if (QTUtility.IsWin7)
+                {
+                    AlwaysShowHeaders = true;  // 显示列标题
+                }
+                else {
+                    AlwaysShowHeaders = false;  // 显示列标题
+                }
+                
+                RedirectLibraryFolders = false; // 使用库文件夹
                 KillExtWhileRenaming = true;  // 重命名时候，不使用扩展名
                 F2Selection = false; // 禁用F2重命名周期选择
                 WrapArrowKeySelection = true; // 使用箭头键时候环绕选择文件夹
                 BackspaceUpLevel = true;  // backupspace 键回到上一级目录
-                HorizontalScroll = true;  // 
-                ForceSysListView = true;
-                ToggleFullRowSelect = QTUtility.IsXP;
-                DetailsGridLines = true;
-                AlternateRowColors = true;
+                HorizontalScroll = true;  // 同时按住shift滚轮水平滚动
+                ForceSysListView = false; // 启用旧版列表视图控件
+                ToggleFullRowSelect = QTUtility.IsXP; // 详细视图选中整行
+                DetailsGridLines = false;  // 网格线
+                AlternateRowColors = false;// 交替行颜色
                 AltRowForegroundColor = SystemColors.WindowText;
                 AltRowBackgroundColor = QTUtility2.MakeColor(0xfaf5f1);
             }
@@ -485,6 +492,7 @@ namespace QTTabBarLib {
             public int FileHistoryCount          { get; set; }
             public int NetworkTimeout            { get; set; }
             public bool AutoUpdate               { get; set; }
+            public bool SoundBox                 { get; set; }
 
             public _Misc() {
                 TaskbarThumbnails = false;
@@ -494,6 +502,8 @@ namespace QTTabBarLib {
                 FileHistoryCount = 15;
                 NetworkTimeout = 0;
                 AutoUpdate = true;
+                // 默认关闭声音播放
+                SoundBox = false;
             }
         }
 
@@ -611,7 +621,7 @@ namespace QTTabBarLib {
                 ShowButtonLabels = false;
                 ImageStripPath = ""; */
 
-                /* qwop's default. */
+                /* indiff 's default. */
                 ButtonIndexes	=	QTUtility.IsXP
                         ? new int[] { 1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 21, 9, 20  }
                         : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 21, 9, 19, 10 };
@@ -727,8 +737,9 @@ namespace QTTabBarLib {
                     {BindAction.CloseCurrent,       Key.W     | Key.Control},
                     {BindAction.CloseAllButCurrent, Key.W     | Key.Control | Key.Shift},
                     {BindAction.RestoreLastClosed,  Key.Z     | Key.Control | Key.Shift},
-                    {BindAction.LockCurrent,        Key.L     | Key.Control},
-                    {BindAction.LockAll,            Key.L     | Key.Control | Key.Shift},
+                    // 取消锁定键盘快捷键
+                   // {BindAction.LockCurrent,        Key.L     | Key.Control},
+                   // {BindAction.LockAll,            Key.L     | Key.Control | Key.Shift},
                     {BindAction.BrowseFolder,       Key.O     | Key.Control},
                     {BindAction.ShowOptions,        Key.O     | Key.Alt},
                     {BindAction.ShowToolbarMenu,    Key.Oemcomma  | Key.Alt},

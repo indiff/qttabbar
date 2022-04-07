@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -2009,7 +2009,7 @@ namespace QTTabBarLib {
 
                 if (String.IsNullOrEmpty(path) || !Directory.Exists(path))
                 {
-                    SystemSounds.Hand.Play();
+                    QTUtility.SoundPlay();
                     return;
                 }
 
@@ -2059,7 +2059,7 @@ namespace QTTabBarLib {
                     Marshal.FreeCoTaskMem(pIDL);
             }
 
-            SystemSounds.Hand.Play();
+            QTUtility.SoundPlay();
        
         }
         /***** add by qwop end   ***/
@@ -2525,15 +2525,18 @@ namespace QTTabBarLib {
                         }
                     }
                     SyncTravelState();
-                    if(QTUtility.IsXP) {
-                        if(CurrentAddress.StartsWith(QTUtility.PATH_SEARCHFOLDER)) {
+                    if (QTUtility.IsXP)
+                    {
+                        if (CurrentAddress.StartsWith(QTUtility.PATH_SEARCHFOLDER))
+                        {
                             ShowSearchBar(true);
                         }
-                        else if(QTUtility.fExplorerPrevented) {
+                        else if (QTUtility.fExplorerPrevented)
+                        {
                             ShowFolderTree(true);
                             QTUtility.fExplorerPrevented = false;
                         }
-                    }
+                    }                    
                     if(CurrentAddress.StartsWith("::")) {
                         CurrentTab.ToolTipText = CurrentTab.Text;
                         QTUtility.DisplayNameCacheDic[CurrentAddress] = CurrentTab.Text;
@@ -3352,7 +3355,7 @@ namespace QTTabBarLib {
                                     OpenNewWindow(wrapper);
                                 }
                                 else {
-                                    SystemSounds.Hand.Play();
+                                    QTUtility.SoundPlay();
                                 }
                             }
                             else if(modKeys == (Keys.Alt | Keys.Control | Keys.Shift)) {
@@ -3374,7 +3377,7 @@ namespace QTTabBarLib {
                                         tabControl1.SetRedraw(true);
                                     }
                                     else {
-                                        SystemSounds.Hand.Play();
+                                        QTUtility.SoundPlay();
                                     }
                                 }
                             }
@@ -3992,7 +3995,7 @@ namespace QTTabBarLib {
                 StaticReg.ExecutedPathsList.Add(toolTipText);
             }
             catch {
-                SystemSounds.Hand.Play();
+                QTUtility.SoundPlay();
             }
         }
 
@@ -4644,7 +4647,7 @@ namespace QTTabBarLib {
         internal bool OpenNewTab(IDLWrapper idlwGiven, bool blockSelecting = false, bool fForceNew = false) {
             // Check that the folder exists and is navigable.
             if(idlwGiven == null || !idlwGiven.Available || !idlwGiven.HasPath || !idlwGiven.IsReadyIfDrive || idlwGiven.IsLinkToDeadFolder) {
-                SystemSounds.Hand.Play();
+                QTUtility.SoundPlay();
                 return false;
             }
 
@@ -4654,7 +4657,7 @@ namespace QTTabBarLib {
 
                 // Recheck a few things
                 if(!idlw.Available || !idlw.HasPath || !idlw.IsReadyIfDrive || !idlw.IsFolder) {
-                    SystemSounds.Hand.Play();
+                    QTUtility.SoundPlay();
                     return false;
                 }
 
@@ -4753,7 +4756,7 @@ namespace QTTabBarLib {
         internal void OpenNewWindow(IDLWrapper idlwGiven) {
             // Check that the folder exists and is navigable.
             if(idlwGiven == null || !idlwGiven.Available || !idlwGiven.HasPath || !idlwGiven.IsReadyIfDrive || idlwGiven.IsLinkToDeadFolder) {
-                SystemSounds.Hand.Play();
+                QTUtility.SoundPlay();
                 return;
             }
             
@@ -4763,7 +4766,7 @@ namespace QTTabBarLib {
 
                 // Recheck a few things
                 if(!idlw.Available || !idlw.HasPath || !idlw.IsReadyIfDrive || !idlw.IsFolder) {
-                    SystemSounds.Hand.Play();
+                    QTUtility.SoundPlay();
                     return;
                 }
 

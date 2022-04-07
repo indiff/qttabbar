@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     This file is part of QTTabBar, a shell extension for Microsoft Windows Explorer.
-    Copyright (C) 2007-2010  Quizo, Paul Accisano
+    Copyright (C) 2007-2021  Quizo, Paul Accisano
     Copyright (C) 2011-2021  indiff
 
     QTTabBar is free software: you can redistribute it and/or modify
@@ -23,13 +23,13 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.5.3" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.5.3 Beta(2021)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define ProductVersion="1.5.5.5" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.5.5.5 Beta(2022)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
-    <?define StrongName="QTTabBar, Version=1.5.5.3, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
+    <?define StrongName="QTTabBar, Version=1.5.5.5, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
     <?define MyLanguage="1033"?>  
     <!-- Language code page 1252 1033
       语言                              语言-国家     Language      Codepage
@@ -189,8 +189,8 @@ Language="1033"
                             <RegistryKey Root="HKLM" Key="Software\Microsoft\Internet Explorer\Toolbar"  ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                 <RegistryValue Name="{d2bf470e-ed1c-487f-a333-2bd8835eb6ce}" Value="QTTabBar" Type="string" Action="write" KeyPath="yes" />
                             </RegistryKey>
-                          
                         </Component>
+                  
                         <Component Id="QTButtonBarReg_$(var.arch)" Win64="$(var.win64)" DisableRegistryReflection="$(var.win64)">
                             <?if $(var.arch) = x64?>
                                 <Condition>VersionNT64</Condition>
@@ -212,10 +212,19 @@ Language="1033"
                                 <Condition>VersionNT64</Condition>
                             <?endif?>
                             <RegistryKey Root="HKLM" Key="Software\QTTabBar" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
-                                <RegistryValue Name="InstallDate" Value="[Date] [Time]" Type="string" Action="write" KeyPath ="yes" />
+                              <RegistryValue Name="InstallDate" Value="[Date] [Time]" Type="string" Action="write" KeyPath ="yes" />
                             </RegistryKey>
                         </Component>
-                    
+                      <Component Id="NoCaptureAt_$(var.arch)" Win64="$(var.win64)" DisableRegistryReflection="$(var.win64)">
+                        <?if $(var.arch) = x64?>
+                        <Condition>VersionNT64</Condition>
+                        <?endif?>
+                        <RegistryKey Root="HKLM" Key="Software\QTTabBar" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
+                          <!-- 不捕获控制面板-->
+                          <RegistryValue Name="NoCaptureAt" Value="::{26EE0668-A00A-44D7-9371-BEB064C98683};::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0" Type="string" Action="write" KeyPath ="yes" />
+                        </RegistryKey>
+                      </Component>            
+                  
                         <!-- COM Objects  计算机\HKEY_CLASSES_ROOT\CLSID\{D2BF470E-ED1C-487F-A777-2BD8835EB6CE}
                         计算机\HKEY_CURRENT_USER\Software\QTTabBar
                         -->
@@ -258,6 +267,8 @@ Language="1033"
                                         <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                         <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
                                         <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                                         <!--- v2.0.50727 v4.0.30319 --> 
+                                        <RegistryValue Name="RuntimeVersion" Value="v2.0.50727" Type="string" Action="write" />
                                         <RegistryKey Key="$(var.ProductVersion)" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
                                             <RegistryValue Name="Class" Value="QTTabBarLib.$(var.compName)" Type="string" Action="write" />
                                             <RegistryValue Name="Assembly" Value="$(var.StrongName)" Type="string" Action="write" />
@@ -279,11 +290,8 @@ Language="1033"
             <ComponentRef Id="BandObjectLib" />
             <ComponentRef Id="QTPluginLib" />
             <ComponentRef Id="QTTabBar"  />
-			 <ComponentRef Id="HookLibrary" />	  
-			 <!-- add by qwop 
             <ComponentRef Id="HookLibrary32" />
             <ComponentRef Id="HookLibrary64" />
-			-->
             <!-- add by qwop -->
             <ComponentRef Id="QTQuick" />
             <ComponentRef Id="TurnOffRepeat" />
@@ -308,8 +316,9 @@ Language="1033"
                 <ComponentRef Id="QTButtonBarReg_$(var.arch)" />
                 <ComponentRef Id="AutoLoaderReg_$(var.arch)" />
                 <ComponentRef Id="InstallDate_$(var.arch)" />
-            
-                <!-- COM Objects -->
+                <ComponentRef Id="NoCaptureAt_$(var.arch)" />
+
+          <!-- COM Objects -->
                 <ComponentRef Id="QTTabBarClass_$(var.arch)" />
                 <ComponentRef Id="QTCoTaskBarClass_$(var.arch)" />
                 <ComponentRef Id="QTButtonBar_$(var.arch)" />

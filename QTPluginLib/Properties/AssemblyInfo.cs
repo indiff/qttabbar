@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2010  Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTTabBar")]
-[assembly: AssemblyCopyright("Copyright (C)  2007-2021")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2022")]
 [assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyFileVersion("1.5.5.3")]
