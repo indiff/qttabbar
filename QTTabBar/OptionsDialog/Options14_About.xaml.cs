@@ -37,7 +37,7 @@ namespace QTTabBarLib {
                     str = str + " Alpha " + QTUtility.BetaRevision.Minor;
                 }
                 
-                lblVersion.Content = "QTTabBar " + str + "_" + QTUtility2.MakeVersionString();
+                lblVersion.Content = "QTTabBar " + str + " " + QTUtility2.MakeVersionString();
                 runSite.Text = Resources_String.SiteURL;
                 hypSite.NavigateUri = new Uri(Resources_String.SiteURL);
                 hypSite.RequestNavigate += (sender, args) => Process.Start(Resources_String.SiteURL);

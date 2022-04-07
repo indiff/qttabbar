@@ -236,15 +236,29 @@ namespace QTTabBarLib {
         [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
         private class CommClient : ICommClient {
             public void Execute(byte[] encodedAction) {
+                Delegate thedel = null;
                 try {
                     // add by indiff fix bug
                     if (null == encodedAction || encodedAction.Length == 0 ) {
                         return;
                     }
-                    ByteToDel(encodedAction).DynamicInvoke();
+                    thedel = ByteToDel(encodedAction);
+
+                    if (thedel != null && thedel.Method != null )
+                    {
+                         thedel.DynamicInvoke();
+                    }
                 }
                 catch(Exception ex) {
-                    QTUtility2.MakeErrorLog(ex);
+                    string errStr = null;
+                    if (thedel != null && thedel.Method != null)
+                    {
+                        errStr = "delegate name:" + thedel.GetType()  + " ";
+                        errStr += "method name:" + thedel.Method.Name + " daynamic invoke error";
+                    }
+                    QTUtility2.MakeErrorLog(ex, errStr);
+                    // re initialize 
+                    Initialize();
                 }
             }
         }

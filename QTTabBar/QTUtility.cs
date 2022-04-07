@@ -154,13 +154,31 @@ namespace QTTabBarLib {
                         }
                     }
                 }
+                string[] theNoCaptures = { "::{26EE0668-A00A-44D7-9371-BEB064C98683}",
+                                           "::{26EE0668-A00A-44D7-9371-BEB064C98683}\0",
+                                           "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}" };
+                foreach (var item in theNoCaptures)
+                {
+                    if (!NoCapturePathsList.Contains(item))
+                    {
+                        NoCapturePathsList.Add(item);
+                    } 
+                }
+                
                 // default add ::{20D04FE0-3AEA-1069-A2D8-08002B30309D};::{26EE0668-A00A-44D7-9371-BEB064C98683}
-                NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}"); // 控制面板 ::{26EE0668-A00A-44D7-9371-BEB064C98683} ::{26EE0668-A00A-44D7-9371-BEB064C98683}\0
+                /*
+                NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}");
                 NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\0");
+
+                NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");// 网络连接
+                */
+
+                // 控制面板 ::{26EE0668-A00A-44D7-9371-BEB064C98683} ::{26EE0668-A00A-44D7-9371-BEB064C98683}\0
+              
                // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // 我的电脑
               //  NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // 所有控制面板
                // NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}");
-                NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");// 网络连接
+                
                 // 回收站      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
                 /*
                                                回收站 – {645FF040-5081-101B-9F08-00AA002F954E}
@@ -763,8 +781,11 @@ namespace QTTabBarLib {
             }
         }
         
+        // 判断图片列表不能为空
         private static void SetImageKey(string key, string itemPath) {
-            if(!ImageListGlobal.Images.ContainsKey(key)) {
+            if( null != ImageListGlobal.Images && 
+                ImageListGlobal.Images.Count > 0 && // add by indiff check Images
+                !ImageListGlobal.Images.ContainsKey(key)) {
                 ImageListGlobal.Images.Add(key, GetIcon(itemPath, false));
             }
         }

@@ -2525,15 +2525,18 @@ namespace QTTabBarLib {
                         }
                     }
                     SyncTravelState();
-                    if(QTUtility.IsXP) {
-                        if(CurrentAddress.StartsWith(QTUtility.PATH_SEARCHFOLDER)) {
+                    if (QTUtility.IsXP)
+                    {
+                        if (CurrentAddress.StartsWith(QTUtility.PATH_SEARCHFOLDER))
+                        {
                             ShowSearchBar(true);
                         }
-                        else if(QTUtility.fExplorerPrevented) {
+                        else if (QTUtility.fExplorerPrevented)
+                        {
                             ShowFolderTree(true);
                             QTUtility.fExplorerPrevented = false;
                         }
-                    }
+                    }                    
                     if(CurrentAddress.StartsWith("::")) {
                         CurrentTab.ToolTipText = CurrentTab.Text;
                         QTUtility.DisplayNameCacheDic[CurrentAddress] = CurrentTab.Text;
