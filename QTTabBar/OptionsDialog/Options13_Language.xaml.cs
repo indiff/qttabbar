@@ -81,7 +81,7 @@ namespace QTTabBarLib {
             {
                 QTUtility2.MakeErrorLog(exception, "Options13_Language InitializeConfig");
 
-            }           
+            } 
        }
 
         public override void ResetConfig() {

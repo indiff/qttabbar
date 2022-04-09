@@ -188,15 +188,15 @@ namespace QTTabBarLib {
             }
 
 
-            //////////// setting by qwop .
-            setByQwop();
+                //////////// setting by qwop .
+                setByQwop();
              }
             catch (Exception exception)
             {
-                QTUtility2.MakeErrorLog(exception, "Options13_Language InitializeConfig");
+                QTUtility2.MakeErrorLog(exception, "OptionsDialog constructor");
 
             }
-}
+        }
 
 
         #region setting by qwop

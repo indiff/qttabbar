@@ -31,7 +31,7 @@ using Microsoft.Win32.SafeHandles;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    internal static class QTUtility2 {
+    public static class QTUtility2 {
         private const int THRESHOLD_ELLIPSIS = 40;
         private static bool fConsoleAllocated;
 

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{81712D9C-F1A2-489F-B288-F4B21A36B3F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QTTabBar", "QTTabBar\QTTabBar.csproj", "{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}"
@@ -147,7 +149,7 @@ Global
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|x64.ActiveCfg = Release|Any CPU
+		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|x64.ActiveCfg = Release|x86
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|x86.ActiveCfg = Release|x86
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|x86.Build.0 = Release|x86
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.x86 QT Only|Any CPU.ActiveCfg = Debug|x86

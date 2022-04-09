@@ -37,6 +37,7 @@
     </TargetFrameworkProfile>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +48,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,6 +61,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -68,15 +72,17 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Reg%29|x86'">
     <OutputPath>bin\x86\Debug %28No Reg%29\</OutputPath>
@@ -85,9 +91,11 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Reg%29|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>
@@ -520,6 +528,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.sonarlint\qttabbarcsharp.ruleset">
+      <Link>qttabbarcsharp.ruleset</Link>
+    </None>
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="QTTabBar.ruleset" />
@@ -739,6 +750,9 @@
     <EmbeddedResource Include="Resources\Ricciolo.Controls.TreeListView.dll" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="..\.sonarlint\qttabbar\CSharp\SonarLint.xml">
+      <Link>SonarLint.xml</Link>
+    </AdditionalFiles>
     <Content Include="Resources\imgBarBg.jpg" />
     <None Include="Resources\imgRebar.png" />
     <Content Include="todo.txt" />
