@@ -1,6 +1,7 @@
-- [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
-- [Generate chm db document modify by indiff](https://github.com/indiff/DBCHM)
 - 🎉🎉🎉**公告：迁移net4.0工作已经完成，近期会发布最新版本，修复适配dpi、迁移vs2022编译、打开文件选中等功能,同时性能会有所提升**
+- - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
+- [Generate chm db document modify by indiff](https://github.com/indiff/DBCHM)
+
 
  [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/1.5.5.4-beta/QTTabBar%20Setup_1.5.5.4Beta_zh%282022%29.zip/download)
 [![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta)
