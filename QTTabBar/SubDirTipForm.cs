@@ -810,7 +810,7 @@ namespace QTTabBarLib {
             lblSubDirBtn.Location = new Point(0, 0);
             lblSubDirBtn.Size = new Size(0x10, 0x10);
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(15, 15);
             Controls.Add(lblSubDirBtn);
             FormBorderStyle = FormBorderStyle.None;

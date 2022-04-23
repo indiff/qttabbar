@@ -203,6 +203,20 @@ namespace QTTabBarLib {
         public static int MakeCOLORREF(Color clr) {
             return ((clr.R | (clr.G << 8)) | (clr.B << 0x10));
         }
+        public static void log(string optional)
+        {
+            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appdataQT = Path.Combine(appdata, "QTTabBar");
+            if (!Directory.Exists(appdataQT))
+            {
+                Directory.CreateDirectory(appdataQT);
+            }
+            string path = Path.Combine(appdataQT, "QTTabBarException.log");
+            using (StreamWriter writer = new StreamWriter(path, true))
+            {
+                writer.WriteLine(DateTime.Now.ToString() + " " + optional );
+            }
+        }
 
         public static void MakeErrorLog(Exception ex, string optional = null) {
             try {
@@ -241,7 +255,7 @@ namespace QTTabBarLib {
                     writer.WriteLine("--------------");
                     writer.WriteLine();
                 }
-                SystemSounds.Exclamation.Play();
+               // SystemSounds.Exclamation.Play();
             }
             catch {
             }

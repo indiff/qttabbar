@@ -22,7 +22,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:qt="clr-namespace:QTTabBarLib"
-    xmlns:r="clr-namespace:Ricciolo.Controls;assembly=Ricciolo.Controls.TreeListView"
+    xmlns:r="clr-namespace:Ricciolo.Controls"
     x:Class="QTTabBarLib.Options09_Groups"
     x:ClassModifier="internal">
     <UserControl.Resources>

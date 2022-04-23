@@ -4432,25 +4432,28 @@ namespace QTTabBarLib {
         }
 
         protected override void OnExplorerAttached() {
-            ExplorerHandle = (IntPtr)Explorer.HWND;
-            try {
-                object obj2;
-                object obj3;
-                _IServiceProvider bandObjectSite = (_IServiceProvider)BandObjectSite;
-                bandObjectSite.QueryService(ExplorerGUIDs.IID_IShellBrowser, ExplorerGUIDs.IID_IUnknown, out obj2);
-                ShellBrowser = new ShellBrowserEx((IShellBrowser)obj2);
-                HookLibManager.InitShellBrowserHook(ShellBrowser.GetIShellBrowser());
-                if(Config.Tweaks.ForceSysListView) {
-                    ShellBrowser.SetUsingListView(true);
-                }
-                bandObjectSite.QueryService(ExplorerGUIDs.IID_ITravelLogStg, ExplorerGUIDs.IID_ITravelLogStg, out obj3);
-                TravelLog = (ITravelLogStg)obj3;
+            try { 
+                    ExplorerHandle = (IntPtr)Explorer.HWND;
+   
+                    object obj2;
+                    object obj3;
+                    _IServiceProvider bandObjectSite = (_IServiceProvider)BandObjectSite;
+                    bandObjectSite.QueryService(ExplorerGUIDs.IID_IShellBrowser, ExplorerGUIDs.IID_IUnknown, out obj2);
+                    ShellBrowser = new ShellBrowserEx((IShellBrowser)obj2);
+                    HookLibManager.InitShellBrowserHook(ShellBrowser.GetIShellBrowser());
+                    if(Config.Tweaks.ForceSysListView) {
+                        ShellBrowser.SetUsingListView(true);
+                    }
+                    bandObjectSite.QueryService(ExplorerGUIDs.IID_ITravelLogStg, ExplorerGUIDs.IID_ITravelLogStg, out obj3);
+                    TravelLog = (ITravelLogStg)obj3;
+
+                    Explorer.BeforeNavigate2 += Explorer_BeforeNavigate2;
+                    Explorer.NavigateComplete2 += Explorer_NavigateComplete2;
+            } 
+            catch( Exception ex )
+            {
+                QTUtility2.MakeErrorLog(ex, "QTTabBarClass OnExplorerAttached");
             }
-            catch(COMException exception) {
-                QTUtility2.MakeErrorLog(exception);
-            }
-            Explorer.BeforeNavigate2 += Explorer_BeforeNavigate2;
-            Explorer.NavigateComplete2 += Explorer_NavigateComplete2;
         }
 
         protected override void OnPaintBackground(PaintEventArgs e) {

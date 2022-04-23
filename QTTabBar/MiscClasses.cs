@@ -201,7 +201,10 @@ namespace QTTabBarLib {
         }
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
-            info.AddValue("delegateType", Delegate.GetType());
+            if(Delegate != null) {
+                info.AddValue("delegateType", Delegate.GetType());
+            }
+            
 
             //If it's an "simple" delegate we can serialize it directly
             if(Delegate != null && (Delegate.Target == null || Delegate.Method.DeclaringType.GetCustomAttributes(
@@ -212,8 +215,11 @@ namespace QTTabBarLib {
             //otherwise, serialize anonymous class
             else {
                 info.AddValue("isSerializable", false);
-                info.AddValue("method", Delegate.Method);
-                info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
+                if (Delegate != null)
+                {
+                    info.AddValue("method", Delegate.Method);
+                    info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
+                }
             }
         }
 

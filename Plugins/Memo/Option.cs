@@ -62,7 +62,7 @@ namespace QuizoPlugins {
             buttonCancel.UseVisualStyleBackColor = true;
             AcceptButton = buttonOK;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi;
             CancelButton = buttonCancel;
             ClientSize = new Size(0xfd, 0x6b);
             Controls.Add(buttonCancel);

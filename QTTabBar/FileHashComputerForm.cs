@@ -453,7 +453,7 @@ namespace QTTabBarLib {
             chbFullPath.UseVisualStyleBackColor = true;
             chbFullPath.CheckedChanged += checkBoxFullPath_CheckedChanged;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(0x1bf, 0xab);
             Controls.Add(dgvHash);
             Controls.Add(panel1);

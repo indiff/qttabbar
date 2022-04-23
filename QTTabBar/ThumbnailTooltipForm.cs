@@ -337,7 +337,7 @@ namespace QTTabBarLib {
             lblText.Size = new Size(0x100, 0x80);
             lblText.UseMnemonic = false;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = SystemColors.Info;
             ClientSize = new Size(0x100, 0x80);
             Controls.Add(lblText);

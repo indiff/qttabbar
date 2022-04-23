@@ -339,7 +339,7 @@ namespace QuizoPlugins {
             button1.Text = "Search";
             button1.Click += button1_Click;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(0xe1, 0xe1);
             Controls.Add(richTextBox1);
             Controls.Add(listView1);

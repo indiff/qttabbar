@@ -309,7 +309,7 @@ namespace QTTabBarLib {
             SuspendLayout();
             toolTipSwitcher.ShowAlways = true;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(0x110, 0x130);
             ControlBox = false;
             MaximizeBox = false;

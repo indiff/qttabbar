@@ -38,7 +38,7 @@ namespace QTTabBarLib {
 
         public override void InitializeConfig() {
             try {
-            tvwGroups.ItemsSource = CurrentGroups = new ParentedCollection<GroupEntry>(null,
+                tvwGroups.ItemsSource = CurrentGroups = new ParentedCollection<GroupEntry>(null,
                     GroupsManager.Groups.Select(g => new GroupEntry(
                     g.Name, g.ShortcutKey, g.Startup, g.Paths.Select(p => new FolderEntry(p)))));
             }

@@ -22,7 +22,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -887,18 +886,22 @@ namespace QTTabBarLib {
         }
 
         protected override void OnExplorerAttached() {
-            ExplorerHandle = (IntPtr)Explorer.HWND;
-            InstanceManager.RegisterButtonBar(this);
-            dropTargetWrapper = new DropTargetWrapper(this);
-            QTTabBarClass tabBar = InstanceManager.GetThreadTabBar();
+            try { 
+                ExplorerHandle = (IntPtr)Explorer.HWND;
+                InstanceManager.RegisterButtonBar(this);
+                dropTargetWrapper = new DropTargetWrapper(this);
+                QTTabBarClass tabBar = InstanceManager.GetThreadTabBar();
 
-            // If the TabBar and its PluginManager already exist, that means
-            // the ButtonBar must have been closed when the Explorer window
-            // opened, so we won't get an initialization message.  Do 
-            // initialization now.
-            if(tabBar != null && tabBar.pluginServer != null) {
-                // todo check
-                CreateItems();
+                // If the TabBar and its PluginManager already exist, that means
+                // the ButtonBar must have been closed when the Explorer window
+                // opened, so we won't get an initialization message.  Do 
+                // initialization now.
+                if(tabBar != null && tabBar.pluginServer != null) {
+                    // todo check
+                    CreateItems();
+                }
+            } catch(Exception ex) {
+                QTUtility2.MakeErrorLog(ex, "QTButtonBar OnExplorerAttached");
             }
         }
 

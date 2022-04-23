@@ -173,7 +173,7 @@ namespace QTTabBarLib {
             labelCounter.Location = new Point(0x19, 130);
             labelCounter.Size = new Size(0x23, 13);
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(0x195, 0xa2);
             Controls.Add(labelCounter);
             Controls.Add(panel1);

@@ -50,6 +50,7 @@ namespace QTTabBarLib {
         }
 
         public void SetSite(object site) {
+          //  MessageBox.Show(" setsite");
             explorer = site as IWebBrowser2;
             if(explorer == null || Process.GetCurrentProcess().ProcessName == "iexplore") {
                 Marshal.ThrowExceptionForHR(E_FAIL);
