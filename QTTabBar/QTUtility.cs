@@ -33,6 +33,7 @@ using Microsoft.Win32;
 using QTPlugin;
 using QTTabBarLib.Interop;
 using System.Media;
+using System.Runtime.Serialization;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
@@ -101,6 +102,7 @@ namespace QTTabBarLib {
                     if(stream == null) return null;
                     byte[] assemblyData = new byte[stream.Length];
                     stream.Read(assemblyData, 0, assemblyData.Length);
+                    QTUtility2.Close(stream);
                     return Assembly.Load(assemblyData);
                 }
             };
@@ -218,12 +220,29 @@ namespace QTTabBarLib {
             }
         }
 
+
         public static object ByteArrayToObject(byte[] arrBytes) {
-            using(MemoryStream memStream = new MemoryStream()) {
-                memStream.Write(arrBytes, 0, arrBytes.Length);
-                memStream.Seek(0, SeekOrigin.Begin);
-                return new BinaryFormatter().Deserialize(memStream);                
+            if (arrBytes != null && arrBytes.Length > 0)
+            {
+                try
+                {
+                    using (MemoryStream memStream = new MemoryStream())
+                    {
+                        memStream.Write(arrBytes, 0, arrBytes.Length);
+                        memStream.Seek(0, SeekOrigin.Begin);
+                        BinaryFormatter binaryFormatter = new BinaryFormatter();
+                        binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
+                        object obj = binaryFormatter.Deserialize(memStream);
+                        QTUtility2.Close(memStream);
+                        return obj;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "ByteArrayToObject");
+                }
             }
+            return null;
         }
 
         private readonly static string[] strIconExt = new string[] { ".exe", ".lnk", ".ico", ".url", ".sln" };
@@ -414,9 +433,7 @@ namespace QTTabBarLib {
                 stream.Read(buf, 0, 2048);
             }
             finally {
-                if(stream != null) {
-                    stream.Close();
-                }
+                QTUtility2.Close(stream);
             }
 
             int offset = BitConverter.ToInt32(buf, c_PeHeaderOffset);
@@ -567,6 +584,7 @@ namespace QTTabBarLib {
             if(obj == null) return null;
             using(MemoryStream ms = new MemoryStream()) {
                 new BinaryFormatter().Serialize(ms, obj);
+                QTUtility2.Close(ms);
                 return ms.ToArray();
             }
         }

@@ -376,14 +376,18 @@ namespace QTTabBarLib {
                         if(ImageAnimator.CanAnimate(bitmap)) {
                             MemoryStream stream = new MemoryStream();
                             bitmap.Save(stream, bitmap.RawFormat);
-                            return new ImageData(new Bitmap(stream), stream, path, dtLastWriteTime, sizeRaw, sizeActual);
+                            var imgObj = new ImageData(new Bitmap(stream), stream, path, dtLastWriteTime, sizeRaw, sizeActual);
+                            QTUtility2.Close(stream);
+                            return imgObj;
                         }
                         return new ImageData(new Bitmap(bitmap, width, height), null, path, dtLastWriteTime, sizeRaw, sizeActual);
                     }
                     sizeActual = sizeRaw;
                     MemoryStream stream2 = new MemoryStream();
                     bitmap.Save(stream2, bitmap.RawFormat);
-                    return new ImageData(new Bitmap(stream2), stream2, path, dtLastWriteTime, sizeRaw, sizeRaw);
+                    var imgObj2 =  new ImageData(new Bitmap(stream2), stream2, path, dtLastWriteTime, sizeRaw, sizeRaw);
+                    QTUtility2.Close(stream2);
+                    return imgObj2;
                 }
             }
             return null;
@@ -430,7 +434,12 @@ namespace QTTabBarLib {
             {
                 reVal = Encoding.Unicode;
             }
-            r.Close();
+            if (r != null) {
+                r.Close();
+                r.Dispose();
+            }
+            
+           // QTUtility2.Close(streamReader);
             return reVal;
 
         } 
@@ -488,6 +497,7 @@ namespace QTTabBarLib {
                 int readCnt = sr.Read(chars, 0, count);
                 string text = new string(chars, 0 , readCnt );
                 fLoadedAll = false;
+                QTUtility2.Close(sr);
                 return text;
             }
         }
@@ -498,6 +508,7 @@ namespace QTTabBarLib {
             {
                 string textall = sr.ReadToEnd();
                 fLoadedAll = true;
+                QTUtility2.Close(sr);
                 return textall;
             }
         }

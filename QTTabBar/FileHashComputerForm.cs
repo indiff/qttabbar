@@ -222,8 +222,10 @@ namespace QTTabBarLib {
                         }
                         if(stream.IsAborted) {
                             cell.CalculatingStatus = HashCalcStatus.Aborted;
+                            QTUtility2.Close(stream);
                             return;
                         }
+                        QTUtility2.Close(stream);
                     }
                     StringBuilder builder = new StringBuilder(buffer.Length);
                     for(int j = 0; j < buffer.Length; j++) {

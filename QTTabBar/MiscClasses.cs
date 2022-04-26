@@ -45,7 +45,11 @@ namespace QTTabBarLib {
                     // reg file is encoded by UTF16LE with BOM
                     using(StreamWriter sw = new StreamWriter(fs, new UnicodeEncoding(false, true))) {
                         sw.Write(sb.ToString());
+                       // sw.Close();
+
+                        QTUtility2.Close(sw);
                     }
+                    QTUtility2.Close(fs);
                 }
             }
         }

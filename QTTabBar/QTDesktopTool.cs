@@ -2370,6 +2370,7 @@ namespace QTTabBarLib {
         private void OpenGroup(string group) {
             bool fForceNewWindow = (ModifierKeys == Keys.Control);
             if(!fForceNewWindow && Config.Window.CaptureNewWindows && InstanceManager.GetTotalInstanceCount() > 0) {
+                QTUtility2.log("BeginInvokeMain OpenGroup");
                 InstanceManager.BeginInvokeMain(tabbar => tabbar.OpenGroup(@group, false));
             }
             else {
@@ -2402,6 +2403,8 @@ namespace QTTabBarLib {
         private static void OpenFolders(List<byte[]> lstIDLs, bool fForceTab = false) {
             if(lstIDLs.Count == 0) return;
             if((fForceTab || Config.Window.CaptureNewWindows) && InstanceManager.GetTotalInstanceCount() > 0) {
+                QTUtility2.log("BeginInvokeMain OpenFolders OpenNewTab");
+
                 InstanceManager.BeginInvokeMain(tabbar => {
                     bool first = true;
                     foreach(byte[] idl in lstIDLs) {

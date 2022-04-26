@@ -389,6 +389,7 @@ namespace BandObjectLib {
                     }
                     writer.WriteLine("--------------");
                     writer.WriteLine();
+                    writer.Close();
                 }
                 // SystemSounds.Exclamation.Play();
             }

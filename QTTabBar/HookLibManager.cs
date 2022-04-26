@@ -144,7 +144,8 @@ namespace QTTabBarLib {
                 IDL = wrapper.IDL;
             }
             InstanceManager.BeginInvokeMain(tabbar => {
-                using(IDLWrapper wrapper = new IDLWrapper(IDL)) {
+                QTUtility2.log("BeginInvokeMain OpenNewTabOrWindow");
+                using (IDLWrapper wrapper = new IDLWrapper(IDL)) {
                     tabbar.OpenNewTabOrWindow(wrapper, true);
                 }
             });

@@ -2297,28 +2297,50 @@ namespace QTTabBarLib {
                     InitializeOpenedWindow();
                     return;
                 }
-				// add by qwop 
+				// add by qwop 微信打开所在目录
 				// 1. set capture new window
 				// 2. ctrl key not pressed.
 				// 3. instsance count > 0 
                 if(Config.Window.CaptureNewWindows && ModifierKeys != Keys.Control && InstanceManager.GetTotalInstanceCount() > 0) {
-                    string selectMe = GetNameToSelectFromCommandLineArg();
-                    InstanceManager.BeginInvokeMain(tabbar => {
-                        tabbar.OpenNewTab(path);
-                        if(selectMe != "") {
-                            tabbar.ShellBrowser.TrySetSelection(
-                                    new Address[] { new Address(selectMe) }, null, true);    
+                    string cmd = GetCommandLine();
+                    if (!String.IsNullOrEmpty(cmd) )
+                    {
+                       string lcmd = cmd.ToLower();
+                       if ( lcmd.Contains("/select") || lcmd.Contains(",select"))
+                        {
+                             string selectMe = GetNameToSelectFromCommandLineArg(cmd);
+                            QTUtility2.log("BeginInvokeMain GetNameToSelectFromCommandLineArg OpenNewTab ：" + path + " selectMe：" + selectMe);
+                            InstanceManager.BeginInvokeMain(tabbar =>
+                            {
+                                tabbar.OpenNewTab(path);
+                                if (selectMe != "")
+                                {
+                                    QTUtility2.log("selectMe " + selectMe);
+                                    tabbar.ShellBrowser.TrySetSelection(
+                                            new Address[] { new Address(selectMe) }, null, true);
+                                }
+                                tabbar.RestoreWindow();
+                            });
+
+                            fNowQuitting = true;
+                            if (QTUtility.IsXP)
+                            {
+                                WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                            }
+                            else
+                            {
+                                Explorer.Quit();
+                            }
+                            return;
+                        } else
+                        {
+                            // 暂时无法捕获 factory 命令行的语法, 暂时忽略不处理
+
+                            // This just starts a separated Explorer.exe, so if one crashes the other stays alive. :-)
+
+                            // Marshal.PtrToStringUni ：C:\WINDOWS\explorer.exe /factory,{75dff2b7-6936-4c06-a8bb-676a7b00b24b} -Embedding command: 4226600
                         }
-                        tabbar.RestoreWindow();
-                    });
-                    fNowQuitting = true;
-                    if(QTUtility.IsXP) {
-                        WindowUtils.CloseExplorer(ExplorerHandle, 0);
                     }
-                    else {
-                        Explorer.Quit();
-                    }
-                    return;
                 }
                 AddStartUpTabs(string.Empty, path);
                 InitializeOpenedWindow();
@@ -2414,16 +2436,28 @@ namespace QTTabBarLib {
         }
 
         private void Explorer_BeforeNavigate2(object pDisp, ref object URL, ref object Flags, ref object TargetFrameName, ref object PostData, ref object Headers, ref bool Cancel) {
-           // DebugUtil.WriteLine("QTTabBarClass Explorer_BeforeNavigate2:" ); // add by qwop.
+            // DebugUtil.WriteLine("QTTabBarClass Explorer_BeforeNavigate2:" ); // add by qwop.
+            QTUtility2.log("QTTabBarClass Explorer_BeforeNavigate2  pDisp :" + pDisp
+                 + " URL :" + (string)URL
+                 + " Flags :" + Flags
+                    + " TargetFrameName :" + TargetFrameName
+                   + " PostData :" + PostData
+                  + " Headers :" + Headers
+                 + " Cancel :" + Cancel
 
+                );
             if(!IsShown) {
                 DoFirstNavigation(true, (string)URL);
             }
         }
 
         private void Explorer_NavigateComplete2(object pDisp, ref object URL) {
-           // DebugUtil.WriteLine("QTTabBarClass Explorer_NavigateComplete2 URL:" + URL); // add by qwop.
-          
+            // DebugUtil.WriteLine("QTTabBarClass Explorer_NavigateComplete2 URL:" + URL); // add by qwop.
+
+            QTUtility2.log("QTTabBarClass Explorer_BeforeNavigate2  pDisp :" + pDisp
+                 + " URL :" + (string)URL
+            );
+
             string path = (string)URL;
             lastCompletedBrowseObjectIDL = lastAttemptedBrowseObjectIDL;
             ShellBrowser.OnNavigateComplete();
@@ -2922,8 +2956,13 @@ namespace QTTabBarLib {
                     curTabCloning ?? (curTabCloning = CreateCursor(Resources_Image.imgCurTabCloning));
         }
 
-        private static string GetNameToSelectFromCommandLineArg() {
+        private static string GetCommandLine()
+        {
             string str = Marshal.PtrToStringUni(PInvoke.GetCommandLine());
+            return str;
+        }
+        private static string GetNameToSelectFromCommandLineArg(string str) {
+            QTUtility2.log("Marshal.PtrToStringUni ：" + str   );
             if(!string.IsNullOrEmpty(str)) {
                 int index = str.IndexOf("/select,", StringComparison.CurrentCultureIgnoreCase);
                 if(index == -1) {

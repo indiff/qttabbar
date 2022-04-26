@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.Text;
 using System.Threading;
 using QTTabBarLib.Interop;
 
@@ -124,6 +125,7 @@ namespace QTTabBarLib {
             public void SelectTabOnOtherTabBar(IntPtr tabBarHandle, int index) {
                 ICommClient comm;
                 if(sdInstances.TryGetValue(tabBarHandle, out comm)) {
+                    QTUtility2.log("SelectTabOnOtherTabBar comm.Execute");
                     comm.Execute(DelToByte(new Action(() => {
                         using(new Keychain(rwLockTabBar, false)) {
                             QTTabBarClass tabbar;
@@ -145,6 +147,7 @@ namespace QTTabBarLib {
                 }
                 ICommClient callback = sdInstances.Peek();
                 if(doAsync) {
+                    QTUtility2.log("ExecuteOnMainProcess doAsync callback.Execute");
                     AsyncHelper.BeginInvoke(new Action(() => {
                         try {
                             if(!IsDead(callback)) {
@@ -156,30 +159,40 @@ namespace QTTabBarLib {
                     }));
                 }
                 else {
+                    QTUtility2.log("ExecuteOnMainProcess callback.Execute");
                     callback.Execute(encodedAction);
                 }
                 return false;
             }
 
             public void ExecuteOnServerProcess(byte[] encodedAction, bool doAsync) {
-                Delegate action = ByteToDel(encodedAction);
-                if(doAsync) {
-                    AsyncHelper.BeginInvoke(action);
+                try
+                {
+                    Delegate action = ByteToDel(encodedAction);
+                    if (action != null)
+                    {
+                        if (doAsync)
+                        {
+                            AsyncHelper.BeginInvoke(action);
+                        }
+                        else
+                        {
+                            action.DynamicInvoke();
+                        }
+                    }
                 }
-                else {
-                    try {
-                        action.DynamicInvoke();
-                    }
-                    catch(Exception ex) {
-                        QTUtility2.MakeErrorLog(ex);
-                    }
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex);
                 }
             }
 
             public object GetFromServerProcess(byte[] encodedAction) {
-                Delegate action = ByteToDel(encodedAction);
                 try {
-                    return action.DynamicInvoke();
+                    Delegate action = ByteToDel(encodedAction);
+                    if ( action != null)
+                    { return action.DynamicInvoke(); }
+                    return null;
                 }
                 catch(Exception ex) {
                     QTUtility2.MakeErrorLog(ex);
@@ -192,13 +205,18 @@ namespace QTTabBarLib {
                 CheckConnections();
                 List<ICommClient> targets = callbacks.Where(c => c != sender).ToList();
                 AsyncHelper.BeginInvoke(new Action(() => {
+                    int i = 0;
                     foreach(ICommClient target in targets) {
                         try {
-                            if(!IsDead(target)) {
+                            i++;
+                            QTUtility2.log("CommService Broadcast count : " + targets.Count + " handle index: " + i);
+                            if (!IsDead(target)) {
                                 target.Execute(encodedAction);
                             }
                         }
-                        catch {
+                        catch (Exception ex)
+                        {
+                            QTUtility2.MakeErrorLog(ex);
                         }
                     }
                 }));
@@ -238,15 +256,17 @@ namespace QTTabBarLib {
             public void Execute(byte[] encodedAction) {
                 Delegate thedel = null;
                 try {
+                    
+                    QTUtility2.log("InstanceManager CommClient Execute : " + encodedAction + " Length: " + encodedAction.Length + " str " + Encoding.Default.GetString(encodedAction) );
                     // add by indiff fix bug
                     if (null == encodedAction || encodedAction.Length == 0 ) {
                         return;
                     }
                     thedel = ByteToDel(encodedAction);
-
                     if (thedel != null && thedel.Method != null )
                     {
-                         thedel.DynamicInvoke();
+                        QTUtility2.log( "InstanceManager CommClient DynamicInvoke action: " + thedel );
+                        thedel.DynamicInvoke();
                     }
                 }
                 catch(Exception ex) {
@@ -272,7 +292,9 @@ namespace QTTabBarLib {
         }
 
         private static Delegate ByteToDel(byte[] buf) {
-            return ((SerializeDelegate)QTUtility.ByteArrayToObject(buf)).Delegate;
+            if (buf == null || buf.Length == 0 ) { return null; }
+            object v = QTUtility.ByteArrayToObject(buf);
+            return ((SerializeDelegate)v).Delegate;
         }
 
         #endregion
@@ -397,15 +419,18 @@ namespace QTTabBarLib {
         public static bool EnsureMainProcess(Action action) {
             ICommService service = GetChannel();
             if(service != null && service.IsMainProcess()) return true;
+            QTUtility2.log("EnsureMainProcess ExecuteOnMainProcess");
             ExecuteOnMainProcess(action, false);
             return false;
         }
 
         public static void InvokeMain(Action<QTTabBarClass> action) {
+            QTUtility2.log("EnsureMainProcess InvokeMain");
             ExecuteOnMainProcess(() => LocalInvokeMain(action), false);
         }
 
         public static void BeginInvokeMain(Action<QTTabBarClass> action) {
+            QTUtility2.log("EnsureMainProcess BeginInvokeMain");
             ExecuteOnMainProcess(() => LocalInvokeMain(action, true), true);
         }
 

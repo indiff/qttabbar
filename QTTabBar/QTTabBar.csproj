@@ -185,6 +185,7 @@
     <Compile Include="PluginServer.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="PreMergeToMergedDeserializationBinder.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -539,6 +540,30 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Ricciolo.Controls\themes\aero.normalcolor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ricciolo.Controls\themes\classic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ricciolo.Controls\themes\generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ricciolo.Controls\themes\luna.homestead.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ricciolo.Controls\themes\luna.metallic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Ricciolo.Controls\themes\luna.normalcolor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Spinner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -773,7 +798,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="quizo\" />
-    <Folder Include="Ricciolo.Controls\themes\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

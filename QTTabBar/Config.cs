@@ -932,6 +932,7 @@ namespace QTTabBarLib {
                                         var ser = new DataContractJsonSerializer(t);
                                         value = ser.ReadObject(stream);
                                     }
+                                    stream.Close();
                                 }
                             }
 
@@ -1030,7 +1031,13 @@ namespace QTTabBarLib {
                                 QTUtility2.MakeErrorLog(e);
                             }
                             stream.Position = 0;
-                            value = new StreamReader(stream).ReadToEnd();
+                            StreamReader streamReader = new StreamReader(stream);
+                            value = streamReader.ReadToEnd();
+
+                            QTUtility2.Close(streamReader);
+                            QTUtility2.Close(stream);
+                           // if (streamReader != null) { streamReader.Close(); }
+                           // if (stream != null) { stream.Close(); }
                         }
                     }
                     key.SetValue(setting.name,value);
