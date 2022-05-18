@@ -886,6 +886,7 @@ Global
 		{02E9733C-7267-47B3-A524-4736AC6A648B}.Installer|x86.ActiveCfg = Release|x86
 		{02E9733C-7267-47B3-A524-4736AC6A648B}.Installer|x86.Build.0 = Release|x86
 		{02E9733C-7267-47B3-A524-4736AC6A648B}.Release|Any CPU.ActiveCfg = Release|x86
+		{02E9733C-7267-47B3-A524-4736AC6A648B}.Release|Any CPU.Build.0 = Release|x86
 		{02E9733C-7267-47B3-A524-4736AC6A648B}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{02E9733C-7267-47B3-A524-4736AC6A648B}.Release|Mixed Platforms.Build.0 = Release|x86
 		{02E9733C-7267-47B3-A524-4736AC6A648B}.Release|x64.ActiveCfg = Release|x86

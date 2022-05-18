@@ -25,7 +25,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -35,7 +36,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\.sonarlint\qttabbarcsharp.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>pen.ico</ApplicationIcon>
@@ -83,9 +85,6 @@
       <DependentUpon>SetHomeForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="..\.sonarlint\qttabbarcsharp.ruleset">
-      <Link>qttabbarcsharp.ruleset</Link>
-    </None>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -98,9 +97,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="..\.sonarlint\qttabbar\CSharp\SonarLint.xml">
-      <Link>SonarLint.xml</Link>
-    </AdditionalFiles>
     <Content Include="pen.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

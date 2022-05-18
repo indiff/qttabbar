@@ -47,6 +47,11 @@
     <Compile Include="PInvoke_QTWM.cs" />
     <Compile Include="QTWindowManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="SettingWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +63,7 @@
     <EmbeddedResource Include="Resource.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingWindow.resx">
       <SubType>Designer</SubType>

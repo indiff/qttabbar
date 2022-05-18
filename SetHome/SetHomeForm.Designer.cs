@@ -119,7 +119,7 @@
             // SetHomeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(471, 270);
             this.Controls.Add(this.autoBox);
             this.Controls.Add(this.button5);

@@ -44,6 +44,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resource.Designer.cs" />
     <Compile Include="TurnOffRepeat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
