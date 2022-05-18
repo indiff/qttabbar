@@ -149,7 +149,7 @@ Global
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|x64.ActiveCfg = Release|x86
+		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|x64.ActiveCfg = Release|Any CPU
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|x86.ActiveCfg = Release|x86
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.Release|x86.Build.0 = Release|x86
 		{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}.x86 QT Only|Any CPU.ActiveCfg = Debug|x86

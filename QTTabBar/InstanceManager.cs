@@ -147,14 +147,15 @@ namespace QTTabBarLib {
                 }
                 ICommClient callback = sdInstances.Peek();
                 if(doAsync) {
-                    QTUtility2.log("ExecuteOnMainProcess doAsync callback.Execute");
+                    QTUtility2.log("ExecuteOnMainProcess callback.Execute doAsync");
                     AsyncHelper.BeginInvoke(new Action(() => {
                         try {
                             if(!IsDead(callback)) {
                                 callback.Execute(encodedAction);
                             }
                         }
-                        catch {
+                        catch(Exception e) {
+                            QTUtility2.MakeErrorLog(e, "AsyncHelper.BeginInvoke");
                         }
                     }));
                 }
@@ -265,7 +266,7 @@ namespace QTTabBarLib {
                     thedel = ByteToDel(encodedAction);
                     if (thedel != null && thedel.Method != null )
                     {
-                        QTUtility2.log( "InstanceManager CommClient DynamicInvoke action: " + thedel );
+                        QTUtility2.log( "InstanceManager CommClient DynamicInvoke action: " + thedel  + " method:" + thedel.Method);
                         thedel.DynamicInvoke();
                     }
                 }
@@ -441,9 +442,11 @@ namespace QTTabBarLib {
             }
             if(instance == null) return;
             if(doAsync) {
+                QTUtility2.log("EnsureMainProcess LocalInvokeMain instance.BeginInvoke doAsync  instance:" + instance );
                 instance.BeginInvoke(action, instance);    
             }
             else {
+                QTUtility2.log("EnsureMainProcess LocalInvokeMain instance.Invoke instance:" + instance);
                 instance.Invoke(action, instance);   
             }
         }

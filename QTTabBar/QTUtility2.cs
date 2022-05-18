@@ -36,7 +36,7 @@ namespace QTTabBarLib {
         private const int THRESHOLD_ELLIPSIS = 40;
         private static bool fConsoleAllocated;
         // 判断是否启用日志，发布改为false， 调试启用
-        private static bool ENABLE_LOGGER = false;
+        private static bool ENABLE_LOGGER = true;
 
         public static void AllocDebugConsole() {
             if(fConsoleAllocated) {
@@ -62,6 +62,7 @@ namespace QTTabBarLib {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(ms, obj);
                 ms.Position = 0;
+                QTUtility2.Close(ms);
                 return (T)formatter.Deserialize(ms);
             }
         }
@@ -210,32 +211,33 @@ namespace QTTabBarLib {
         }
         public static void log(string optional)
         {
-            if (!ENABLE_LOGGER ) { return; }
-            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string appdataQT = Path.Combine(appdata, "QTTabBar");
-            if (!Directory.Exists(appdataQT))
-            {
-                Directory.CreateDirectory(appdataQT);
-            }
-            string path = Path.Combine(appdataQT, "QTTabBarException.log");
-            using (StreamWriter writer = new StreamWriter(path, true))
-            {
-                writer.WriteLine("[log]" + DateTime.Now.ToString() + " " + optional + "\n" );
-                // 打印方法调用栈
-                /*
-                var stackTrace = new StackTrace();
-                for (int i = 0; i < stackTrace.FrameCount; i++)
+            if ( ENABLE_LOGGER ) { 
+                string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string appdataQT = Path.Combine(appdata, "QTTabBar");
+                if (!Directory.Exists(appdataQT))
                 {
-                    var method = stackTrace.GetFrame(i).GetMethod();
-                    writer.WriteLine(
-                           "\nmethod ---\n{0}", method);
+                    Directory.CreateDirectory(appdataQT);
                 }
+                string path = Path.Combine(appdataQT, "QTTabBarException.log");
+                using (StreamWriter writer = new StreamWriter(path, true))
+                {
+                    writer.WriteLine("[log]" + DateTime.Now.ToString() + " " + optional + "\n" );
+                    // 打印方法调用栈
+                    /*
+                    var stackTrace = new StackTrace();
+                    for (int i = 0; i < stackTrace.FrameCount; i++)
+                    {
+                        var method = stackTrace.GetFrame(i).GetMethod();
+                        writer.WriteLine(
+                               "\nmethod ---\n{0}", method);
+                    }
 
-                writer.WriteLine(
-                            "\nStackTrace ---\n{0}", stackTrace);
-                */
+                    writer.WriteLine(
+                                "\nStackTrace ---\n{0}", stackTrace);
+                    */
 
-                Close(writer);
+                    Close(writer);
+                }
             }
         }
 
@@ -256,28 +258,35 @@ namespace QTTabBarLib {
         }
 
         public static void MakeErrorLog(Exception ex, string optional = null) {
-            try {
+            try
+            {
                 string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 string appdataQT = Path.Combine(appdata, "QTTabBar");
-                if(!Directory.Exists(appdataQT)) {
+                if (!Directory.Exists(appdataQT))
+                {
                     Directory.CreateDirectory(appdataQT);
                 }
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
-                using(StreamWriter writer = new StreamWriter(path, true)) {
+                using (StreamWriter writer = new StreamWriter(path, true))
+                {
                     writer.WriteLine(DateTime.Now.ToString());
                     writer.WriteLine(".NET 版本: " + Environment.Version);
                     writer.WriteLine("操作系统版本: " + Environment.OSVersion.Version);
                     writer.WriteLine("QT 版本: " + MakeVersionString());
-                    if(!String.IsNullOrEmpty(optional)) {
+                    if (!String.IsNullOrEmpty(optional))
+                    {
                         writer.WriteLine("错误信息: " + optional);
                     }
-                    if(ex == null) {
+                    if (ex == null)
+                    {
                         writer.WriteLine("Exception: None");
-                        writer.WriteLine(Environment.StackTrace);
+                        if (Environment.StackTrace != null)
+                        {
+                            writer.WriteLine(Environment.StackTrace);
+                        }
                     }
-                    else {
-                       // writer.WriteLine(ex.ToString());
-
+                    else
+                    {
                         writer.WriteLine("\nMessage ---\n{0}", ex.Message);
                         writer.WriteLine(
                             "\nHelpLink ---\n{0}", ex.HelpLink);
@@ -286,16 +295,16 @@ namespace QTTabBarLib {
                             "\nStackTrace ---\n{0}", ex.StackTrace);
                         writer.WriteLine(
                             "\nTargetSite ---\n{0}", ex.TargetSite);
-
-
-                    }                        
+                    }
                     writer.WriteLine("--------------");
                     writer.WriteLine();
                     Close(writer);
                 }
-               // SystemSounds.Exclamation.Play();
+                // SystemSounds.Exclamation.Play();
             }
             catch {
+            }
+            finally {
             }
         }
 
@@ -744,7 +753,8 @@ namespace QTTabBarLib {
                 using(MemoryStream stream = new MemoryStream()) {
                     formatter.Serialize(stream, array);
                     buffer = stream.GetBuffer();
-                    stream.Close();
+                   // stream.Close();
+                    QTUtility2.Close(stream);
                 }
                 int num = 0;
                 for(int i = 0; i < buffer.Length; i++) {
@@ -770,7 +780,7 @@ namespace QTTabBarLib {
                     rkUserApps.SetValue(regValueName, buffer2);
                 }
             }
-            rkUserApps.Close();
+            // rkUserApps.Close();
         }
 
         public static void WriteRegHandle(string valName, RegistryKey rk, IntPtr hwnd) {

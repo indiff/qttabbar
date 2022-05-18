@@ -35,7 +35,7 @@ namespace QTTabBarLib {
                 BindingFlags bindingAttr = BindingFlags.NonPublic | BindingFlags.Instance;
                 try {
                     typeof(ToolStrip).GetMethod("UpdateToolTip", bindingAttr).Invoke(this, new object[1]);
-                    Type type = Type.GetType("System.Windows.Forms.MouseHoverTimer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+                    Type type = Type.GetType("System.Windows.Forms.MouseHoverTimer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb");
                     PropertyInfo property = typeof(ToolStrip).GetProperty("MouseHoverTimer", bindingAttr);
                     type.GetMethod("Cancel", Type.EmptyTypes).Invoke(property.GetValue(this, null), null);
                 }

@@ -10,9 +10,8 @@
 
 namespace QTTabBarLib {
     using System;
-    using System.Drawing;
-
-
+    
+    
     /// <summary>
     ///   一个强类型的资源类，用于查找本地化的字符串等。
     /// </summary>
@@ -24,7 +23,7 @@ namespace QTTabBarLib {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources_Image {
-        internal static Bitmap imgRebar;
+        
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
@@ -357,6 +356,16 @@ namespace QTTabBarLib {
         public static System.Drawing.Bitmap imgPlugin24 {
             get {
                 object obj = ResourceManager.GetObject("imgPlugin24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        public static System.Drawing.Bitmap imgRebar {
+            get {
+                object obj = ResourceManager.GetObject("imgRebar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

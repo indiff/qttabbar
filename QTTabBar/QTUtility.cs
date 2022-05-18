@@ -234,12 +234,14 @@ namespace QTTabBarLib {
                         binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
                         object obj = binaryFormatter.Deserialize(memStream);
                         QTUtility2.Close(memStream);
+                        QTUtility2.log("ByteArrayToObject obj:" + obj);
                         return obj;
                     }
                 }
                 catch (Exception exception)
                 {
                     QTUtility2.MakeErrorLog(exception, "ByteArrayToObject");
+                    return null;
                 }
             }
             return null;

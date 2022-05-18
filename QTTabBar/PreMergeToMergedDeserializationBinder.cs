@@ -19,10 +19,9 @@ namespace QTTabBarLib
             // a different type, set typeToDeserialize to the desired type.
             String exeAssembly = Assembly.GetExecutingAssembly().FullName;
 
-
+            QTUtility2.log("PreMergeToMergedDeserializationBinder exeAssembly:" + exeAssembly + " typeName: " + typeName );
             // The following line of code returns the type.
-            typeToDeserialize = Type.GetType(String.Format("{0}, {1}",
-                typeName, exeAssembly));
+            typeToDeserialize = Type.GetType(String.Format("{0}, {1}", typeName, exeAssembly));
 
             return typeToDeserialize;
         }

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb</value>
   </resheader>
   <data name="ButtonBar_BtnName" xml:space="preserve">
     <value>分隔线;后退;前进;标签组;最近关闭标签;应用程序;新窗口;复制标签;锁定;复制工具;顶层显示;关标签;关其他;关窗口;关左侧;关右侧;上移;重载;搜索;半透明;搜索框;选项</value>

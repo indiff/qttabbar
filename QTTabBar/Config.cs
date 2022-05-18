@@ -932,7 +932,7 @@ namespace QTTabBarLib {
                                         var ser = new DataContractJsonSerializer(t);
                                         value = ser.ReadObject(stream);
                                     }
-                                    stream.Close();
+                                    QTUtility2.Close(stream);
                                 }
                             }
 

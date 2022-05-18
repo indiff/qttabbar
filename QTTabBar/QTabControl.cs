@@ -24,6 +24,7 @@ using System.Windows.Forms.VisualStyles;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
+    [Serializable]
     internal sealed class QTabControl : Control
     {
         private Bitmap bmpCloseBtn_Cold;

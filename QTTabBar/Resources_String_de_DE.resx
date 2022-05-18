@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb</value>
   </resheader>
   <data name="ButtonBar_BtnName" xml:space="preserve">
     <value>Trennzeichen;Zurückgehen;Vorwärtsgehen;Gruppen;Kürzlich geschlossen;Anwendungen;Neues Fenster;Dies klonen;Sperren;Kopierwerkzeug;Oberste;Schließen;Alles außer dem aktuellen schließen;Fenster schließen;Links schließen;Rechts schließen;Eine Ebene höher;Neu laden;Suchen;Deckkraft;Suchfeld;Optionen</value>

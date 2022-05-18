@@ -28,6 +28,7 @@ using Microsoft.Win32;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
+    [Serializable]
     internal class RebarController : IDisposable {
         private QTTabBarClass tabbar;
         private IOleCommandTarget bandObjectSite;

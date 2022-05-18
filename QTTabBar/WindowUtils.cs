@@ -27,6 +27,14 @@ namespace QTTabBarLib {
             PInvoke.ShowWindow(hwndExplr, PInvoke.IsIconic(hwndExplr) ? 9 : 5);
             PInvoke.SetForegroundWindow(hwndExplr);
         }
+
+        public static void BringExplorerToFront()
+        {
+            IntPtr hwndExplr = PInvoke.GetForegroundWindow();
+            PInvoke.ShowWindow(hwndExplr, PInvoke.IsIconic(hwndExplr) ? 9 : 5);
+            PInvoke.SetForegroundWindow(hwndExplr);
+        }
+
         // 关闭资源管理器，发送关闭消息
         public static void CloseExplorer(IntPtr hwndExplr, int nCode, bool doAsync = false) {
             if(QTUtility.IsXP && nCode == 0) nCode = 3;

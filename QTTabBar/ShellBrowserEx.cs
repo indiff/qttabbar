@@ -335,6 +335,7 @@ namespace QTTabBarLib {
                     using(IDLWrapper wrapper = new IDLWrapper(pathToFocus)) {
                         IntPtr pIDLFOCUSCHILD = PInvoke.ILFindLastID(wrapper.PIDL);
                         shellView.SelectItem(pIDLFOCUSCHILD, SVSIF.FOCUSED | SVSIF.ENSUREVISIBLE);
+                        QTUtility2.log("TrySetSelection success:" + pathToFocus);
                     }
                 }
                 return true;
@@ -342,6 +343,7 @@ namespace QTTabBarLib {
             catch(Exception ex) {
                 QTUtility2.MakeErrorLog(ex);
             }
+            QTUtility2.log("TrySetSelection fail:" + pathToFocus);
             return false;
         }
     }
