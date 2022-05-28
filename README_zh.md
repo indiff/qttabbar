@@ -65,8 +65,9 @@
 * [英文配置文件/English Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_en.xml)
 * [中文配置文件/Chinese Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_zh.xml)
 
-# QQ交流群/QQ Group
+# QQ交流群/QQ Group（1群已满）🦚
 * 群号: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=AGA5sh_6eCEYIwofpvazRxMFin8jmVI2&jump_from=webapi)
+* 2群（1群已满）: [963211351](https://jq.qq.com/?_wv=1027&k=VCPD2zLH)
 
 # 鸣谢/Thanks
 * [原作者Quizo](https://twitter.com/QTTabBar)
