@@ -67,7 +67,8 @@
 * [Chinese Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_zh.xml)
 
 # QQ Group
-* Group: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=AGA5sh_6eCEYIwofpvazRxMFin8jmVI2&jump_from=webapi)
+* Group: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=fPZlN22xK_Y7NU60ZGMm8gIjH_u_8PVE&jump_from=webapi)
+* Group2: [963211351](https://jq.qq.com/?_wv=1027&k=VCPD2zLH)
 
 # Thanks
 * [Original author Quizo](https://twitter.com/QTTabBar) 
