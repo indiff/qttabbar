@@ -84,6 +84,7 @@ namespace QTTabBarLib {
                     if(stream != null) {
                         using(StreamReader sr = new StreamReader(stream, Encoding.UTF8)) {
                             str = sr.ReadToEnd();
+                            QTUtility2.Close(sr);
                         }                        
                     }
                 }

@@ -16,7 +16,6 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Resources;
 //

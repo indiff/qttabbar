@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 using BandObjectLib;
 using QTPlugin;
 using QTTabBarLib.Interop;
+using System.Windows;
 
 namespace QTTabBarLib {
     public class ShellBrowserEx : IDisposable {
@@ -71,12 +72,12 @@ namespace QTTabBarLib {
 
         public void Dispose() {
             if(shellBrowser != null) {
-                Marshal.FinalReleaseComObject(shellBrowser);
-                shellBrowser = null;
+              Marshal.FinalReleaseComObject(shellBrowser);
+              shellBrowser = null;
             }
             if(folderView != null) {
-                Marshal.ReleaseComObject(folderView);
-                folderView = null;
+               Marshal.ReleaseComObject(folderView);
+               folderView = null;
             }
         }
         
@@ -89,6 +90,7 @@ namespace QTTabBarLib {
 
         public int GetFocusedIndex() {
             int focusedIndex;
+           //  QTUtility2.log("GetFocusedIndex  folderView " + folderView);
             return folderView != null && folderView.GetFocusedItem(out focusedIndex) == 0 
                     ? focusedIndex : -1;
         }
@@ -106,7 +108,10 @@ namespace QTTabBarLib {
             if(folderView == null) return new IDLWrapper();
             IntPtr ppidl = IntPtr.Zero;
             try {
-                folderView.Item(idx, out ppidl);
+               //  QTUtility2.log("GetItem  folderView " + folderView + " idx " + idx );
+                if (folderView != null) {
+                    folderView.Item(idx, out ppidl);
+                }
                 if(noAppend || ppidl == IntPtr.Zero) {
                     return new IDLWrapper(ppidl);
                 }
@@ -119,7 +124,6 @@ namespace QTTabBarLib {
                     PInvoke.CoTaskMemFree(ppidl);
                 }
             }
-            
         }
 
         public int GetItemCount() {
@@ -257,13 +261,16 @@ namespace QTTabBarLib {
             path = null;
             try {
                 using(IDLWrapper wrapper = GetItem(iItem, true)) {
-                    if(wrapper.Available) {
+                    if (null != wrapper && wrapper.Available)
+                    {
                         if(!string.IsNullOrEmpty(matchName) && matchName != wrapper.ParseName) {
+                          //  QTUtility2.log("TryGetHotTrackPath not match " + matchName + " wrapper.ParseName " + wrapper.ParseName);
                             return false;
                         }
                         using(IDLWrapper wrapper2 = ILAppend(wrapper.PIDL)) {
                             path = wrapper2.ParseName;
                             if(!string.IsNullOrEmpty(path) && path.IndexOfAny(Path.GetInvalidPathChars()) < 0) {
+                              //  QTUtility2.log("TryGetHotTrackPath  path " + path + " wrapper.ParseName " + wrapper2.ParseName);
                                 return true;
                             }
                             path = null;
@@ -289,9 +296,27 @@ namespace QTTabBarLib {
             return true;
         }
 
-        public bool TryGetSelection(out Address[] adSelectedItems, out string pathFocused, bool fDisplayName) {
-            using(IDLWrapper wrapper = GetFocusedItem()) {
-                pathFocused = wrapper.ParseName;
+        public bool TryGetSelection(out Address[] adSelectedItems, out string pathFocused, bool fDisplayName, ShellBrowserEx argShell = null) {
+            // fix bug indiff
+            if (folderView != null)
+            {
+                using (IDLWrapper wrapper = GetFocusedItem())
+                {
+                    pathFocused = wrapper.ParseName;
+                }
+            }
+            else {
+                if (argShell != null)
+                {
+                    using (IDLWrapper wrapper = argShell.GetFocusedItem())
+                    {
+                        pathFocused = wrapper.ParseName;
+                    }
+                }
+                else {
+                    // no folderView
+                    pathFocused = "";
+                }
             }
             return TryGetSelection(out adSelectedItems, fDisplayName);
         }
@@ -335,6 +360,8 @@ namespace QTTabBarLib {
                     using(IDLWrapper wrapper = new IDLWrapper(pathToFocus)) {
                         IntPtr pIDLFOCUSCHILD = PInvoke.ILFindLastID(wrapper.PIDL);
                         shellView.SelectItem(pIDLFOCUSCHILD, SVSIF.FOCUSED | SVSIF.ENSUREVISIBLE);
+
+                        QTUtility2.log("TrySetSelection success:" + pathToFocus);
                     }
                 }
                 return true;
@@ -342,6 +369,7 @@ namespace QTTabBarLib {
             catch(Exception ex) {
                 QTUtility2.MakeErrorLog(ex);
             }
+            QTUtility2.log("TrySetSelection fail:" + pathToFocus);
             return false;
         }
     }

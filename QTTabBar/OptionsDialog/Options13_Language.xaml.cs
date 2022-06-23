@@ -213,6 +213,7 @@ namespace QTTabBarLib {
                     writer.WriteWhitespace(Environment.NewLine);
                     writer.WriteEndElement();
                     writer.WriteWhitespace(Environment.NewLine);
+                    writer.Close();
                 }
             }
             catch(XmlException) {

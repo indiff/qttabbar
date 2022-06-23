@@ -36,6 +36,7 @@ namespace QTTabBarLib {
                 {
                     str = str + " Alpha " + QTUtility.BetaRevision.Minor;
                 }
+
                 
                 lblVersion.Content = "QTTabBar " + str + " " + QTUtility2.MakeVersionString();
                 runSite.Text = Resources_String.SiteURL;

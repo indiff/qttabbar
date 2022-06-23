@@ -370,5 +370,9 @@ namespace QTTabBarLib.Interop {
         public static extern bool ValidateRect(IntPtr hWnd, IntPtr lpRect);
         [DllImport("user32.dll")]
         public static extern IntPtr WindowFromPoint(Point Point);
+
+        [DllImport("user32.dll")]
+        public static extern void SetProcessDPIAware();
+
     }
 }

@@ -92,17 +92,22 @@ namespace QTTabBarLib {
         private bool fSuppressEvent;
 
         public event EventHandler ValueChanged;
-
+        
+        /**
+         * ¹¤¾ßÀ¸
+         */
         public ToolStripTrackBar()
             : base(new TrackBar()) {
             TrackBar control = (TrackBar)Control;
-            control.MaximumSize = new Size(80, 0x16);
+            // control.MaximumSize = new Size(80, 0x16);
+            control.MaximumSize = new Size(800, 1000);
             control.Maximum = 0xff;
             control.Minimum = 20;
             control.Value = 0xff;
             control.SmallChange = 15;
             control.LargeChange = 0x1a;
             control.TickFrequency = 0x1a;
+            control.AutoSize = false;
         }
 
         protected override void OnSubscribeControlEvents(Control control) {

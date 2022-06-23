@@ -18,10 +18,10 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
 using BandObjectLib;
 using Microsoft.Win32;
+using QTTabBarLib.Interop;
 using SHDocVw;
 
 namespace QTTabBarLib {
@@ -36,11 +36,12 @@ namespace QTTabBarLib {
         public static void Register(Type t) {
             string name = t.GUID.ToString("B");
             using(RegistryKey key = Registry.ClassesRoot.CreateSubKey(@"CLSID\" + name)) {
-                key.SetValue(null, "QT TabBar AutoLoader");
-                key.SetValue("MenuText", "QT TabBar AutoLoader");
-                key.SetValue("HelpText", "QT TabBar AutoLoader");
+                key.SetValue(null, "QTTabBar AutoLoader");
+                key.SetValue("MenuText", "QTTabBar AutoLoader");
+                key.SetValue("HelpText", "QTTabBar AutoLoader");
             }
             Registry.LocalMachine.CreateSubKey(BHOKEYNAME + name);
+            QTUtility2.log( "AutoLoader 注册表 QTTabBar 自动加载(安装)");
         }
 
         [ComUnregisterFunction]
@@ -48,14 +49,24 @@ namespace QTTabBarLib {
             using(RegistryKey key = Registry.LocalMachine.CreateSubKey(BHOKEYNAME)) {
                 key.DeleteSubKey(t.GUID.ToString("B"), false);
             }
+            QTUtility2.log( "AutoLoader 注册表 QTTabBar 自动加载(卸载)");
         }
 
         public void SetSite(object site) {
+            
+            // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
+            PInvoke.SetProcessDPIAware();
+
+            QTUtility2.log("QTUtility AutoLoader SetSite SetProcessDPIAware 不兼容XP");
+
             explorer = site as IWebBrowser2;
+            QTUtility2.log( "QTTabBar AutoLoader SetSite " );
             if(explorer == null || Process.GetCurrentProcess().ProcessName == "iexplore") {
+                QTUtility2.log( "QTTabBar AutoLoader SetSite Throw Exception " );
                 Marshal.ThrowExceptionForHR(E_FAIL);
             }
             else {
+                QTUtility2.log( "QTTabBar AutoLoader SetSite ActivateIt " );
                 ActivateIt();
             }
         }
@@ -81,7 +92,9 @@ namespace QTTabBarLib {
                 object pvarShow = true;
                 object pvarSize = null;
                 try {
+                    QTUtility2.log( "QTTabBar 显示标签" );
                     explorer.ShowBrowserBar(pvaTabBar, pvarShow, pvarSize);
+                    QTUtility2.log( "QTTabBar 显示工具栏" );
                     explorer.ShowBrowserBar(pvaButtonBar, pvarShow, pvarSize);
                 }
                 catch(COMException) {

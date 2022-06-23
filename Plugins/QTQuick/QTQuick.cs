@@ -812,9 +812,9 @@ namespace Qwop {
         #endregion
 
     //    internal static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
-     //   internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
+        //   internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
 
-
+        #region  引入dll
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
@@ -824,7 +824,7 @@ namespace Qwop {
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
         public const Int32 CLOSE = 0x0010;
-
+        #endregion
 
 
         // 关闭资源管理器，发送关闭消息

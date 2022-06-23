@@ -492,7 +492,8 @@ namespace QTTabBarLib {
             public int FileHistoryCount          { get; set; }
             public int NetworkTimeout            { get; set; }
             public bool AutoUpdate               { get; set; }
-            public bool SoundBox                 { get; set; }
+            public bool SoundBox { get; set; }
+            public bool EnableLog { get; set; }
 
             public _Misc() {
                 TaskbarThumbnails = false;
@@ -504,6 +505,8 @@ namespace QTTabBarLib {
                 AutoUpdate = true;
                 // 默认关闭声音播放
                 SoundBox = false;
+                // 默认不启用日志功能 
+                EnableLog = false;
             }
         }
 
@@ -932,6 +935,7 @@ namespace QTTabBarLib {
                                         var ser = new DataContractJsonSerializer(t);
                                         value = ser.ReadObject(stream);
                                     }
+                                    QTUtility2.Close(stream);
                                 }
                             }
 
@@ -1030,10 +1034,15 @@ namespace QTTabBarLib {
                                 QTUtility2.MakeErrorLog(e);
                             }
                             stream.Position = 0;
-                            value = new StreamReader(stream).ReadToEnd();
+                            StreamReader streamReader = new StreamReader(stream);
+                            value = streamReader.ReadToEnd();
+
+                            QTUtility2.Close(streamReader);
+                            QTUtility2.Close(stream);
+                           // if (streamReader != null) { streamReader.Close(); }
+                           // if (stream != null) { stream.Close(); }
                         }
                     }
-
                     key.SetValue(setting.name,value);
                 }
             }

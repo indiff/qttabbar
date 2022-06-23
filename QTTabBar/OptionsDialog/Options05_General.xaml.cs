@@ -17,6 +17,7 @@
 
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using DialogResult = System.Windows.Forms.DialogResult;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 
@@ -76,6 +77,13 @@ namespace QTTabBarLib {
                 }
             }
         }
+        private void EnableLog_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox enableLogBox = (CheckBox)e.Source;
+            QTUtility2.ENABLE_LOGGER = enableLogBox.IsChecked.Value;
+        }       
+        
+        
 
         #region ---------- Binding Classes ----------
         // INotifyPropertyChanged is implemented automatically by Notify Property Weaver!

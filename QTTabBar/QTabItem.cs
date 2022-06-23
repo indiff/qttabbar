@@ -36,7 +36,8 @@ namespace QTTabBarLib {
         private static Font font;
         private static Font fontSubText;
         private static RectangleF rctMeasure = new RectangleF(0f, 0f, 512f, 50f);
-
+        
+        // 标签字体
         public static Font TabFont {
             set {
                 if(font != null) {
@@ -51,7 +52,7 @@ namespace QTTabBarLib {
             }
         }
 
-        // Events
+        // 标签事件
         [field: NonSerialized]
         public event EventHandler Closed;
 

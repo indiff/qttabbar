@@ -114,7 +114,20 @@ namespace QTTabBarLib {
         public QTabControl() {
             fNeedPlusButton = Config.Tabs.NeedPlusButton;
             //SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
-            SetStyle(ControlStyles.UserPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, value: true);
+            
+            // ControlStyles.UserPaint//使用自定义的绘制方式
+            // |ControlStyles.ResizeRedraw//当控件大小发生变化时就重新绘制
+            // |ControlStyles.SupportsTransparentBackColor//则控件接受 alpha 组件数小于 255 个的 BackColor 来模拟透明度
+            // | ControlStyles.AllPaintingInWmPaint//则控件忽略窗口消息 WM_ERASEBKGND 以减少闪烁
+            // | ControlStyles.OptimizedDoubleBuffer//则控件将首先绘制到缓冲区而不是直接绘制到屏幕，这可以减少闪烁
+       
+            SetStyle(ControlStyles.UserPaint 
+                     | ControlStyles.ResizeRedraw//当控件大小发生变化时就重新绘制
+                     | ControlStyles.AllPaintingInWmPaint //则控件忽略窗口消息 WM_ERASEBKGND 以减少闪烁
+                     | ControlStyles.SupportsTransparentBackColor//则控件接受 alpha 组件数小于 255 个的 BackColor 来模拟透明度
+                     | ControlStyles.OptimizedDoubleBuffer //则控件将首先绘制到缓冲区而不是直接绘制到屏幕，这可以减少闪烁
+            , value: true);
+            
             components = new Container();
             tabPages = new QTabCollection(this);
             BackColor = Color.Transparent;
@@ -559,125 +572,151 @@ namespace QTTabBarLib {
             }
         }
 
+        // 43 补丁bug
+        /*
+         * 
+            Message ---
+            未将对象引用设置到对象的实例。
+
+            HelpLink ---
+
+
+            Source ---
+            QTTabBar
+
+            StackTrace ---
+               在 QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
+               在 QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
+
+            TargetSite ---
+            Void DrawTab(System.Drawing.Graphics, System.Drawing.Rectangle, Int32, QTTabBarLib.QTabItem, Boolean)
+         * */
         private void DrawTab(Graphics g, Rectangle itemRct, int index, QTabItem tabHot, bool fVisualStyle) {
-            Rectangle rectangle2;
-            Rectangle rctItem = rectangle2 = itemRct;
-            QTabItem base2 = tabPages[index];
-            bool bSelected = iSelectedIndex == index;
-            bool fHot = base2 == tabHot;
-            rectangle2.X += 2;
-            if(bSelected) {
-                rctItem.Width += 4;
-            }
-            else {
-                rctItem.X += 2;
-                rctItem.Y += 2;
-                rctItem.Height -= 2;
-                rectangle2.Y += 2;
-            }
-            DrawBackground(g, bSelected, fHot, rctItem, base2.Edge, fVisualStyle, index);
-            int num = (rctItem.Height - 0x10) / 2;
-            if(fDrawFolderImg && QTUtility.ImageListGlobal.Images.ContainsKey(base2.ImageKey)) {
-                Rectangle rect = new Rectangle(rctItem.X + (bSelected ? 7 : 5), rctItem.Y + num, 0x10, 0x10);
-                rectangle2.X += 0x18;
-                rectangle2.Width -= 0x18;
-                if((fNowMouseIsOnIcon && (iTabMouseOnButtonsIndex == index)) || (iTabIndexOfSubDirShown == index)) {
-                    if(fSubDirShown && (iTabIndexOfSubDirShown == index)) {
-                        rect.X++;
-                        rect.Y++;
-                    }
-                    if(bmpFolIconBG == null) {
-                        bmpFolIconBG = Resources_Image.imgFolIconBG;
-                    }
-                    g.DrawImage(bmpFolIconBG, new Rectangle(rect.X - 2, rect.Y - 2, rect.Width + 4, rect.Height + 4));
-                }
-                g.DrawImage(QTUtility.ImageListGlobal.Images[base2.ImageKey], rect);
-                if(Config.Tabs.ShowDriveLetters) {
-                    string pathInitial = base2.PathInitial;
-                    if(pathInitial.Length > 0) {
-                        DrawDriveLetter(g, pathInitial, fntDriveLetter, rect, bSelected);
-                    }
-                }
-            }
-            else {
-                rectangle2.X += 4;
-                rectangle2.Width -= 4;
-            }
-            if(base2.TabLocked) { // 如果锁定则绘制锁定图片
-                Rectangle rectangle4 = new Rectangle(rctItem.X + (bSelected ? 6 : 4), rctItem.Y + num, 9, 11);
-                if(fDrawFolderImg) {
-                    rectangle4.X += 9;
-                    rectangle4.Y += 5;
+            try
+            {
+                Rectangle rectangle2;
+                Rectangle rctItem = rectangle2 = itemRct;
+                QTabItem base2 = tabPages[index];
+                bool bSelected = iSelectedIndex == index;
+                bool fHot = base2 == tabHot;
+                rectangle2.X += 2;
+                if(bSelected) {
+                    rctItem.Width += 4;
                 }
                 else {
-                    rectangle4.Y += 2;
-                    rectangle2.X += 10;
-                    rectangle2.Width -= 10;
+                    rctItem.X += 2;
+                    rctItem.Y += 2;
+                    rctItem.Height -= 2;
+                    rectangle2.Y += 2;
                 }
-                if(bmpLocked == null) {
-                    bmpLocked = Resources_Image.imgLocked;
-                }
-                g.DrawImage(bmpLocked, rectangle4);
-            }
-            bool flag3 = base2.Comment.Length > 0;
-            if((fDrawCloseButton && !fCloseBtnOnHover) && !fNowShowCloseBtnAlt) {
-                rectangle2.Width -= 15;
-            }
-            float num2 = flag3 ? ((base2.TitleTextSize.Width + base2.SubTitleTextSize.Width) + 4f) : (base2.TitleTextSize.Width + 2f);
-            float num3 = Math.Max(((rectangle2.Height - base2.TitleTextSize.Height) / 2f), 0f);
-            float num4 = (tabTextAlignment == StringAlignment.Center) ? Math.Max(((rectangle2.Width - num2) / 2f), 0f) : 0f;
-            RectangleF rct = new RectangleF(rectangle2.X + num4, rectangle2.Y + num3, Math.Min((base2.TitleTextSize.Width + 2f), (rectangle2.Width - num4)), rectangle2.Height);
-            if(fDrawShadow) {
-                DrawTextWithShadow(g, base2.Text, bSelected ? colorSet[0] : colorSet[1], bSelected ? colorSet[3] : colorSet[4], (bSelected && fActiveTxtBold) ? (base2.Underline ? fntBold_Underline : fntBold) : (base2.Underline ? fnt_Underline : Font), rct, sfTypoGraphic);
-            }
-            else {
-                g.DrawString(base2.Text, (bSelected && fActiveTxtBold) ? (base2.Underline ? fntBold_Underline : fntBold) : (base2.Underline ? fnt_Underline : Font), bSelected ? brshActive : brshInactv, rct, sfTypoGraphic);
-            }
-            if(iFocusedTabIndex == index) {
-                Rectangle rectangle = rctItem;
-                rectangle.Inflate(-2, -1);
-                rectangle.Y++;
-                rectangle.Width--;
-                ControlPaint.DrawFocusRectangle(g, rectangle);
-            }
-            if(flag3 && (rectangle2.Width > base2.TitleTextSize.Width)) {
-                float num5 = Math.Max(((rectangle2.Height - base2.SubTitleTextSize.Height) / 2f), 0f);
-                RectangleF ef2 = new RectangleF(rct.Right, rectangle2.Y + num5, Math.Min((base2.SubTitleTextSize.Width + 2f), (rectangle2.Width - ((base2.TitleTextSize.Width + num4) + 4f))), rectangle2.Height);
-                if(fDrawShadow) {
-                    DrawTextWithShadow(g, (fAutoSubText ? "@ " : ": ") + base2.Comment, colorSet[1], colorSet[4], fntSubText, ef2, sfTypoGraphic);
-                }
-                else {
-                    g.DrawString((fAutoSubText ? "@ " : ": ") + base2.Comment, fntSubText, brshInactv, ef2, sfTypoGraphic);
-                }
-            }
-            if(fDrawCloseButton && (!fCloseBtnOnHover || fHot)) {
-                Rectangle closeButtonRectangle = GetCloseButtonRectangle(base2.TabBounds, bSelected);
-                if(fNowMouseIsOnCloseBtn && (iTabMouseOnButtonsIndex == index)) {
-                    if(MouseButtons == MouseButtons.Left) {
-                        if(bmpCloseBtn_Pressed == null) {
-                            bmpCloseBtn_Pressed = Resources_Image.imgCloseButton_Press;
+                DrawBackground(g, bSelected, fHot, rctItem, base2.Edge, fVisualStyle, index);
+                int num = (rctItem.Height - 0x10) / 2;
+                if(fDrawFolderImg && QTUtility.ImageListGlobal.Images.ContainsKey(base2.ImageKey)) {
+                    Rectangle rect = new Rectangle(rctItem.X + (bSelected ? 7 : 5), rctItem.Y + num, 0x10, 0x10);
+                    rectangle2.X += 0x18;
+                    rectangle2.Width -= 0x18;
+                    if((fNowMouseIsOnIcon && (iTabMouseOnButtonsIndex == index)) || (iTabIndexOfSubDirShown == index)) {
+                        if(fSubDirShown && (iTabIndexOfSubDirShown == index)) {
+                            rect.X++;
+                            rect.Y++;
                         }
-                        g.DrawImage(bmpCloseBtn_Pressed, closeButtonRectangle);
+                        if(bmpFolIconBG == null) {
+                            bmpFolIconBG = Resources_Image.imgFolIconBG;
+                        }
+                        g.DrawImage(bmpFolIconBG, new Rectangle(rect.X - 2, rect.Y - 2, rect.Width + 4, rect.Height + 4));
+                    }
+                    g.DrawImage(QTUtility.ImageListGlobal.Images[base2.ImageKey], rect);
+                    if(Config.Tabs.ShowDriveLetters) {
+                        string pathInitial = base2.PathInitial;
+                        if(pathInitial.Length > 0) {
+                            DrawDriveLetter(g, pathInitial, fntDriveLetter, rect, bSelected);
+                        }
+                    }
+                }
+                else {
+                    rectangle2.X += 4;
+                    rectangle2.Width -= 4;
+                }
+                if(base2.TabLocked) { // 如果锁定则绘制锁定图片
+                    Rectangle rectangle4 = new Rectangle(rctItem.X + (bSelected ? 6 : 4), rctItem.Y + num, 9, 11);
+                    if(fDrawFolderImg) {
+                        rectangle4.X += 9;
+                        rectangle4.Y += 5;
                     }
                     else {
-                        if(bmpCloseBtn_Hot == null) {
-                            bmpCloseBtn_Hot = Resources_Image.imgCloseButton_Hot;
-                        }
-                        g.DrawImage(bmpCloseBtn_Hot, closeButtonRectangle);
+                        rectangle4.Y += 2;
+                        rectangle2.X += 10;
+                        rectangle2.Width -= 10;
                     }
+                    if(bmpLocked == null) {
+                        bmpLocked = Resources_Image.imgLocked;
+                    }
+                    g.DrawImage(bmpLocked, rectangle4);
                 }
-                else if(fNowShowCloseBtnAlt || fCloseBtnOnHover) {
-                    if(bmpCloseBtn_ColdAlt == null) {
-                        bmpCloseBtn_ColdAlt = Resources_Image.imgCloseButton_ColdAlt;
-                    }
-                    g.DrawImage(bmpCloseBtn_ColdAlt, closeButtonRectangle);
+                bool flag3 = base2.Comment.Length > 0;
+                if((fDrawCloseButton && !fCloseBtnOnHover) && !fNowShowCloseBtnAlt) {
+                    rectangle2.Width -= 15;
+                }
+                float num2 = flag3 ? ((base2.TitleTextSize.Width + base2.SubTitleTextSize.Width) + 4f) : (base2.TitleTextSize.Width + 2f);
+                float num3 = Math.Max(((rectangle2.Height - base2.TitleTextSize.Height) / 2f), 0f);
+                float num4 = (tabTextAlignment == StringAlignment.Center) ? Math.Max(((rectangle2.Width - num2) / 2f), 0f) : 0f;
+                RectangleF rct = new RectangleF(rectangle2.X + num4, rectangle2.Y + num3, Math.Min((base2.TitleTextSize.Width + 2f), (rectangle2.Width - num4)), rectangle2.Height);
+                if(fDrawShadow) {
+                    DrawTextWithShadow(g, base2.Text, bSelected ? colorSet[0] : colorSet[1], bSelected ? colorSet[3] : colorSet[4], (bSelected && fActiveTxtBold) ? (base2.Underline ? fntBold_Underline : fntBold) : (base2.Underline ? fnt_Underline : Font), rct, sfTypoGraphic);
                 }
                 else {
-                    if(bmpCloseBtn_Cold == null) {
-                        bmpCloseBtn_Cold = Resources_Image.imgCloseButton_Cold;
-                    }
-                    g.DrawImage(bmpCloseBtn_Cold, closeButtonRectangle);
+                    g.DrawString(base2.Text, (bSelected && fActiveTxtBold) ? (base2.Underline ? fntBold_Underline : fntBold) : (base2.Underline ? fnt_Underline : Font), bSelected ? brshActive : brshInactv, rct, sfTypoGraphic);
                 }
+                if(iFocusedTabIndex == index) {
+                    Rectangle rectangle = rctItem;
+                    rectangle.Inflate(-2, -1);
+                    rectangle.Y++;
+                    rectangle.Width--;
+                    ControlPaint.DrawFocusRectangle(g, rectangle);
+                }
+                if(flag3 && (rectangle2.Width > base2.TitleTextSize.Width)) {
+                    float num5 = Math.Max(((rectangle2.Height - base2.SubTitleTextSize.Height) / 2f), 0f);
+                    RectangleF ef2 = new RectangleF(rct.Right, rectangle2.Y + num5, Math.Min((base2.SubTitleTextSize.Width + 2f), (rectangle2.Width - ((base2.TitleTextSize.Width + num4) + 4f))), rectangle2.Height);
+                    if(fDrawShadow) {
+                        DrawTextWithShadow(g, (fAutoSubText ? "@ " : ": ") + base2.Comment, colorSet[1], colorSet[4], fntSubText, ef2, sfTypoGraphic);
+                    }
+                    else {
+                        g.DrawString((fAutoSubText ? "@ " : ": ") + base2.Comment, fntSubText, brshInactv, ef2, sfTypoGraphic);
+                    }
+                }
+                if(fDrawCloseButton && (!fCloseBtnOnHover || fHot)) {
+                    Rectangle closeButtonRectangle = GetCloseButtonRectangle(base2.TabBounds, bSelected);
+                    if(fNowMouseIsOnCloseBtn && (iTabMouseOnButtonsIndex == index)) {
+                        if(MouseButtons == MouseButtons.Left) {
+                            if(bmpCloseBtn_Pressed == null) {
+                                bmpCloseBtn_Pressed = Resources_Image.imgCloseButton_Press;
+                            }
+                            g.DrawImage(bmpCloseBtn_Pressed, closeButtonRectangle);
+                        }
+                        else {
+                            if(bmpCloseBtn_Hot == null) {
+                                bmpCloseBtn_Hot = Resources_Image.imgCloseButton_Hot;
+                            }
+                            g.DrawImage(bmpCloseBtn_Hot, closeButtonRectangle);
+                        }
+                    }
+                    else if(fNowShowCloseBtnAlt || fCloseBtnOnHover) {
+                        if(bmpCloseBtn_ColdAlt == null) {
+                            bmpCloseBtn_ColdAlt = Resources_Image.imgCloseButton_ColdAlt;
+                        }
+                        g.DrawImage(bmpCloseBtn_ColdAlt, closeButtonRectangle);
+                    }
+                    else {
+                        if(bmpCloseBtn_Cold == null) {
+                            bmpCloseBtn_Cold = Resources_Image.imgCloseButton_Cold;
+                        }
+                        g.DrawImage(bmpCloseBtn_Cold, closeButtonRectangle);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "DrawTab");
             }
         }
 

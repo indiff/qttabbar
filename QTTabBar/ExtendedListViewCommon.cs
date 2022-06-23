@@ -457,7 +457,8 @@ namespace QTTabBarLib {
         }
 
         protected void OnItemCountChanged() {
-            if(ItemCountChanged != null) {
+            if (ItemCountChanged != null && ShellBrowser != null)
+            {
                 ItemCountChanged(ShellBrowser.GetItemCount());
             }
         }

@@ -156,5 +156,10 @@
             Content="{qt:Resx Key=Options_Page05_General, Index=16}"
             IsChecked="{Binding Path=SoundBox}"
             Style="{StaticResource CheckStyle}"/>
+        <CheckBox x:Name="EnableLog"
+            Click="EnableLog_Click"
+            Content="{qt:Resx Key=Options_Page05_General, Index=17}"
+            IsChecked="{Binding Path=EnableLog}"
+            Style="{StaticResource CheckStyle}"/>
     </StackPanel>
 </qt:OptionsDialogTab>

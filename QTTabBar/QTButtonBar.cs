@@ -716,6 +716,8 @@ namespace QTTabBarLib {
             toolStrip = new ToolStripClasses();
             toolStrip.SuspendLayout();
             SuspendLayout();
+            AutoScaleMode = AutoScaleMode.Dpi;
+            
             toolStrip.Dock = DockStyle.Fill;
             toolStrip.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip.ImeMode = ImeMode.Disable;
@@ -726,6 +728,7 @@ namespace QTTabBarLib {
             toolStrip.MouseDoubleClick += toolStrip_MouseDoubleClick;
             toolStrip.MouseActivated += toolStrip_MouseActivated;
             toolStrip.PreviewKeyDown += toolStrip_PreviewKeyDown;
+            
             Controls.Add(toolStrip);
             Height = BarHeight;
             MinSize = new Size(20, BarHeight);
@@ -887,18 +890,22 @@ namespace QTTabBarLib {
         }
 
         protected override void OnExplorerAttached() {
-            ExplorerHandle = (IntPtr)Explorer.HWND;
-            InstanceManager.RegisterButtonBar(this);
-            dropTargetWrapper = new DropTargetWrapper(this);
-            QTTabBarClass tabBar = InstanceManager.GetThreadTabBar();
+            try { 
+                ExplorerHandle = (IntPtr)Explorer.HWND;
+                InstanceManager.RegisterButtonBar(this);
+                dropTargetWrapper = new DropTargetWrapper(this);
+                QTTabBarClass tabBar = InstanceManager.GetThreadTabBar();
 
-            // If the TabBar and its PluginManager already exist, that means
-            // the ButtonBar must have been closed when the Explorer window
-            // opened, so we won't get an initialization message.  Do 
-            // initialization now.
-            if(tabBar != null && tabBar.pluginServer != null) {
-                // todo check
-                CreateItems();
+                // If the TabBar and its PluginManager already exist, that means
+                // the ButtonBar must have been closed when the Explorer window
+                // opened, so we won't get an initialization message.  Do 
+                // initialization now.
+                if(tabBar != null && tabBar.pluginServer != null) {
+                    // todo check
+                    CreateItems();
+                }
+            } catch(Exception ex) {
+                QTUtility2.MakeErrorLog(ex, "QTButtonBar OnExplorerAttached");
             }
         }
 

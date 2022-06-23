@@ -87,7 +87,7 @@ namespace QTTabBarLib {
             chkAllTabs.TabIndex = 3;
             AcceptButton = buttonOK;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi ;
             CancelButton = buttonCancel;
             ClientSize = new Size(0x133, 0x73);
             Controls.Add(chkAllTabs);

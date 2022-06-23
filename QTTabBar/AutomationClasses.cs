@@ -27,6 +27,8 @@ namespace QTTabBarLib {
     // All interaction with AutomationElements MUST be done in a thread other
     // than the UI thread.  Use this class to execute code in the Automation 
     // thread.
+    // 与AutomationElements的所有交互必须在另一个线程中完成
+    // 而不是UI线程。使用此类在自动化中执行代码
     // http://msdn.microsoft.com/en-us/library/ee671692%28VS.85%29.aspx
 
     public static class AutomationManager {

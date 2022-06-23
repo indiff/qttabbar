@@ -378,9 +378,10 @@ namespace QuizoPlugins {
                             Opacity = store.Opacity;
                         }
                         txtDic = store.TxtDictionary;
+                        stream.Close();
                     }
                 }
-                catch(Exception) {
+                catch(Exception e) {
                 }
             }
             else {

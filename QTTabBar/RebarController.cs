@@ -74,6 +74,7 @@ namespace QTTabBarLib {
         public RebarController(QTTabBarClass tabbar, IntPtr hwndReBar, IOleCommandTarget bandObjectSite) {
             this.tabbar = tabbar;
             this.bandObjectSite = bandObjectSite;
+            
             ExplorerHandle = PInvoke.GetAncestor(hwndReBar, 2);
             Handle = hwndReBar;
             rebarController = new NativeWindowController(hwndReBar);
@@ -130,8 +131,9 @@ namespace QTTabBarLib {
                         }
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
+                    QTUtility2.MakeErrorLog(ex, "RebarController CreateRebarImage");
                 }
             }
             
@@ -160,7 +162,11 @@ namespace QTTabBarLib {
                 tabbar.SuspendLayout();
                 if(bandObjectSite != null) {
                     Guid pguidCmdGroup = ExplorerGUIDs.CGID_DeskBand;
-                    bandObjectSite.Exec(ref pguidCmdGroup, DBID_BANDINFOCHANGED, OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+                    bandObjectSite.Exec(ref pguidCmdGroup, 
+                        DBID_BANDINFOCHANGED, 
+                        OLECMDEXECOPT_DODEFAULT, 
+                        IntPtr.Zero, 
+                        IntPtr.Zero);
                     if(QTUtility.IsXP) {
                         RECT rect;
                         PInvoke.GetWindowRect(ExplorerHandle, out rect);

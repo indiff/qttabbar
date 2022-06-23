@@ -222,8 +222,10 @@ namespace QTTabBarLib {
                         }
                         if(stream.IsAborted) {
                             cell.CalculatingStatus = HashCalcStatus.Aborted;
+                            QTUtility2.Close(stream);
                             return;
                         }
+                        QTUtility2.Close(stream);
                     }
                     StringBuilder builder = new StringBuilder(buffer.Length);
                     for(int j = 0; j < buffer.Length; j++) {
@@ -453,7 +455,7 @@ namespace QTTabBarLib {
             chbFullPath.UseVisualStyleBackColor = true;
             chbFullPath.CheckedChanged += checkBoxFullPath_CheckedChanged;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(0x1bf, 0xab);
             Controls.Add(dgvHash);
             Controls.Add(panel1);

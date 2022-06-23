@@ -104,13 +104,13 @@
                 <Label Content="indiff(indiff@126.com QQ:531299332 交流群:157604022)"/>
             </StackPanel>
 
-            <Label
-                Height="28">
-                <Hyperlink x:Name="qwopSite" >
+            <Label Height="28">
+                <Hyperlink x:Name="qwopSite"  >
                     <Run x:Name="runQwopSite"/>
                 </Hyperlink>
             </Label>
 			<!-- add by qwop end -->
+            
 
 
         </StackPanel>

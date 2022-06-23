@@ -91,6 +91,7 @@ namespace QTTabBarLib {
             // Maybe I should...
             String processName = Process.GetCurrentProcess().ProcessName.ToLower();
             if(processName == "iexplore" || processName == "regasm" || processName == "gacutil") {
+                QTUtility2.log("QTUtility return :" + processName);
                 return;
             }
 
@@ -101,27 +102,36 @@ namespace QTTabBarLib {
                     if(stream == null) return null;
                     byte[] assemblyData = new byte[stream.Length];
                     stream.Read(assemblyData, 0, assemblyData.Length);
+                    QTUtility2.Close(stream);
                     return Assembly.Load(assemblyData);
                 }
             };
 
             try {
+
                 // Load the config
                 ConfigManager.Initialize();
-
+                QTUtility2.log("QTUtility 加载配置");
+                
                 // Initialize the instance manager
                 InstanceManager.Initialize();
+                QTUtility2.log("QTUtility 初始化InstanceManager");
 
                 // Create and enable the API hooks
                 HookLibManager.Initialize();
+                QTUtility2.log("QTUtility 创建并且启用 API hooks");
 
                 // Create the global imagelist
                 ImageListGlobal = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
                 ImageListGlobal.Images.Add("folder", GetIcon(string.Empty, false));
+                QTUtility2.log("QTUtility 创建全局文件夹图片列表");
 
                 // Load groups/apps
                 GroupsManager.LoadGroups();
+                QTUtility2.log("QTUtility 加载分组完成");
+                
                 AppsManager.LoadApps();
+                QTUtility2.log("QTUtility 创建全局文件夹图片列表");
 
                 if(Config.Lang.UseLangFile && File.Exists(Config.Lang.LangFile)) {
                     TextResourcesDic = ReadLanguageFile(Config.Lang.LangFile);
@@ -154,6 +164,9 @@ namespace QTTabBarLib {
                         }
                     }
                 }
+
+                // 配置不捕获控制面板
+                QTUtility2.log("QTUtility 加载忽略的路径 控制面板 网络连接");
                 string[] theNoCaptures = { "::{26EE0668-A00A-44D7-9371-BEB064C98683}",
                                            "::{26EE0668-A00A-44D7-9371-BEB064C98683}\0",
                                            "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}" };
@@ -206,11 +219,12 @@ namespace QTTabBarLib {
                                打印机和传真 – {2227A280-3AEA-1069-A2DE-08002B30309D}
                                                */
                 
-                // 配置不捕获控制面板
                 GetShellClickMode();
+                QTUtility2.log("QTUtility Get Shell Click Mode");
 
                 // Initialize plugins
                 PluginManager.Initialize();
+                QTUtility2.log("QTUtility 加载所有插件");
             }
             catch(Exception exception) {
                 // TODO: Any errors here would be very serious.  Alert the user as such.
@@ -218,12 +232,29 @@ namespace QTTabBarLib {
             }
         }
 
+
         public static object ByteArrayToObject(byte[] arrBytes) {
-            using(MemoryStream memStream = new MemoryStream()) {
-                memStream.Write(arrBytes, 0, arrBytes.Length);
-                memStream.Seek(0, SeekOrigin.Begin);
-                return new BinaryFormatter().Deserialize(memStream);                
+            if (arrBytes != null && arrBytes.Length > 0)
+            {
+                try
+                {
+                    using (MemoryStream memStream = new MemoryStream())
+                    {
+                        memStream.Write(arrBytes, 0, arrBytes.Length);
+                        memStream.Seek(0, SeekOrigin.Begin);
+                        BinaryFormatter binaryFormatter = new BinaryFormatter();
+                       //  binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
+                        object obj = binaryFormatter.Deserialize(memStream);
+                        QTUtility2.Close(memStream);
+                        return obj;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "ByteArrayToObject");
+                }
             }
+            return null;
         }
 
         private readonly static string[] strIconExt = new string[] { ".exe", ".lnk", ".ico", ".url", ".sln" };
@@ -414,9 +445,7 @@ namespace QTTabBarLib {
                 stream.Read(buf, 0, 2048);
             }
             finally {
-                if(stream != null) {
-                    stream.Close();
-                }
+                QTUtility2.Close(stream);
             }
 
             int offset = BitConverter.ToInt32(buf, c_PeHeaderOffset);
@@ -567,6 +596,7 @@ namespace QTTabBarLib {
             if(obj == null) return null;
             using(MemoryStream ms = new MemoryStream()) {
                 new BinaryFormatter().Serialize(ms, obj);
+                QTUtility2.Close(ms);
                 return ms.ToArray();
             }
         }

@@ -24,6 +24,7 @@ using SHDocVw;
 
 
 namespace BandObjectLib {
+    // Band 对象扩展资源管理器
     public class BandObject : UserControl, IDeskBand, IDockingWindow, IInputObject, IObjectWithSite, IOleWindow, IPersistStream {
         private Size _minSize = new Size(-1, -1);
         protected IInputObjectSite BandObjectSite;

@@ -187,7 +187,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 QTTabBar常规选项;任务栏整合;任务栏显示标签预览;历史;保持关闭标签的历史;立即清除;保持打开文件的历史;网络;网络超时（系统默认输入为0）：;定期检查更新;现在检查;导出;导出设置...;清除文​​件历史？;清除历史标签？;声音;是否启用声音提示 的本地化字符串。
+        ///   查找类似 QTTabBar常规选项;任务栏整合;任务栏显示标签预览;历史;保持关闭标签的历史;立即清除;保持打开文件的历史;网络;网络超时（系统默认输入为0）：;定期检查更新;现在检查;导出;导出设置...;清除文​​件历史？;清除历史标签？;声音;是否启用声音提示;是否启用日志功能 的本地化字符串。
         /// </summary>
         internal static string Options_Page05_General {
             get {
@@ -331,7 +331,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 QTTabBar 无法打开\r\n\r\n  &quot;{0}&quot;。 的本地化字符串。
+        ///   查找类似 QTTabBar 无法打开 &quot;{0}&quot;。 的本地化字符串。
         /// </summary>
         internal static string TabBar_Message {
             get {
