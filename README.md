@@ -1,10 +1,12 @@
+- 🎉🎉🎉**公告：迁移net4.0工作已经完成，近期会发布最新版本，修复适配dpi、迁移vs2022编译、打开文件选中等功能,同时性能会有所提升**
 - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 - [Generate chm db document modify by indiff](https://github.com/indiff/DBCHM)
+
 
  [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/1.5.5.4-beta/QTTabBar%20Setup_1.5.5.4Beta_zh%282022%29.zip/download)
 [![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta)
  
-# Introduction [中文版本](https://github.com/indiff/qttabbar/blob/master/README_zh.md)
+# Introduction [中文版本](README_zh.md)
 ![qttabbar2](https://user-images.githubusercontent.com/501276/131287626-fe8f1fdd-a894-43f8-9620-b7145d70936d.gif)
 
 1. Qttabbar domestic optimized version is based on sf.net/projects/qttabbar/ (2012-06-17). The original author of this version has not released it. I don't know why. Adding some Chinese features is mainly for the convenience of domestic users; in addition, the capture window of quizo official website maintained by Japanese authors is not used to all the time, so this version retains the easy-to-use function of capture window.
@@ -30,7 +32,7 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) Built in Chinese Language Options
 
 # Download
-* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3)
+* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta)
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
@@ -65,7 +67,8 @@
 * [Chinese Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_zh.xml)
 
 # QQ Group
-* Group: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=AGA5sh_6eCEYIwofpvazRxMFin8jmVI2&jump_from=webapi)
+* Group: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=fPZlN22xK_Y7NU60ZGMm8gIjH_u_8PVE&jump_from=webapi)
+* Group2: [963211351](https://jq.qq.com/?_wv=1027&k=VCPD2zLH)
 
 # Thanks
 * [Original author Quizo](https://twitter.com/QTTabBar) 
@@ -87,6 +90,4 @@
 </table>
 
 # TODOS
-- Migration VS2019
-- Add boommark
 - Enhanced Preview
