@@ -3,8 +3,8 @@
 - [Generate chm db document modify by indiff](https://github.com/indiff/DBCHM)
 
 
- [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/1.5.5.4-beta/QTTabBar%20Setup_1.5.5.4Beta_zh%282022%29.zip/download)
-[![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases/tag/1.5.5.5-beta)
+ [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/v1.5.5.5-beta/QTTabBar%20Setup_1.5.5.5Beta_zh%282022%29.zip/download)
+[![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta)
  
 # Introduction [中文版本](README_zh.md)
 ![qttabbar2](https://user-images.githubusercontent.com/501276/131287626-fe8f1fdd-a894-43f8-9620-b7145d70936d.gif)
@@ -17,6 +17,7 @@
 - [Gitee Mirror](https://gitee.com/qwop/qttabbar)
 - [SourceForge Mirror](https://sourceforge.net/projects/qttabbar2/)
 # Changes
+- [1.5.5.5-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta) Enable debug log/Adjust the windows DPI
 - [1.5.5.4-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta) Ignore control panel capture
 - [1.5.5.3-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3) Add SetHome Tool/Add language Portuguese of Brazil Latest
 - [1.5.5.2-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta) Add built-in German; Fix version number error
@@ -32,7 +33,7 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) Built in Chinese Language Options
 
 # Download
-* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta)
+* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta)
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
