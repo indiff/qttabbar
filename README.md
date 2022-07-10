@@ -1,4 +1,3 @@
-- 🎉🎉🎉**公告：迁移net4.0工作已经完成，近期会发布最新版本，修复适配dpi、迁移vs2022编译、打开文件选中等功能,同时性能会有所提升**
 - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 - [Generate chm db document modify by indiff](https://github.com/indiff/DBCHM)
 - [KB5012643 Problem/KB5012643补丁问题](https://github.com/indiff/qttabbar/issues/215)
