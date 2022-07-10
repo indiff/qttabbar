@@ -4,6 +4,8 @@
 
  [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/v1.5.5.5-beta/QTTabBar%20Setup_1.5.5.5Beta_zh%282022%29.zip/download)
 [![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta)
+[![Github Stars](https://img.shields.io/github/stars/indiff/qttabbar?logo=github)](https://gitee.com/qwop/qttabbar)
+[![Gitee Stars](https://gitee.com/qwop/qttabbar/badge/star.svg)](https://github.com/indiff/qttabbar)
 [![.Net Framework 3.5](https://img.shields.io/badge/.NET%3D3.5-red.svg)](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 
  
