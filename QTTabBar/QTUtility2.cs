@@ -62,7 +62,9 @@ namespace QTTabBarLib {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(ms, obj);
                 ms.Position = 0;
-                return (T)formatter.Deserialize(ms);
+                var deserialize = (T)formatter.Deserialize(ms);
+                Close( ms );
+                return deserialize;
             }
         }
 
@@ -355,6 +357,7 @@ namespace QTTabBarLib {
                    
                     writer.WriteLine("--------------");
                     writer.WriteLine();
+                    Close( writer );
                 }
                 SystemSounds.Exclamation.Play();
             }
@@ -382,7 +385,9 @@ namespace QTTabBarLib {
 
         public static Color MakeModColor(Color clr) {
             float num = 0.875f;
-            return Color.FromArgb(((int)((0xff - clr.R) * num)) + clr.R, ((int)((0xff - clr.G) * num)) + clr.G, ((int)((0xff - clr.B) * num)) + clr.B);
+            return Color.FromArgb(((int)((0xff - clr.R) * num)) + clr.R, 
+                ((int)((0xff - clr.G) * num)) + clr.G,
+                ((int)((0xff - clr.B) * num)) + clr.B);
         }
 
         public static string MakeNameEllipsis(string name) {
@@ -752,7 +757,7 @@ namespace QTTabBarLib {
                 using(MemoryStream stream = new MemoryStream()) {
                     formatter.Serialize(stream, array);
                     buffer = stream.GetBuffer();
-                    stream.Close();
+                    Close( stream );
                 }
                 int num = 0;
                 for(int i = 0; i < buffer.Length; i++) {

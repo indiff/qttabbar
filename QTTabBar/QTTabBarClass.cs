@@ -3583,10 +3583,15 @@ namespace QTTabBarLib {
             SetProcessDPIAware();
 
             AutoScaleMode = AutoScaleMode.Dpi;
-            
             components = new Container();
+            /*
+             提供当单击 ToolStripDropDown、ToolStripDropDownButton 或 ToolStripMenuItem 控件时，显示 ToolStripSplitButton 的控件的基本功能。
+             按钮工具栏
+             */
             buttonNavHistoryMenu = new ToolStripDropDownButton();
+            // 用于放置标签栏
             tabControl1 = new QTabControl();
+            // 当前的标签
             CurrentTab = new QTabItem(string.Empty, string.Empty, tabControl1);
             contextMenuTab = new ContextMenuStripEx(components, false);
             contextMenuSys = new ContextMenuStripEx(components, false);
@@ -3594,6 +3599,7 @@ namespace QTTabBarLib {
             contextMenuSys.SuspendLayout();
             contextMenuTab.SuspendLayout();
             SuspendLayout();
+            // 判断是否显示按钮工具栏
             bool flag = Config.Tabs.ShowNavButtons;
             if(flag) {
                 InitializeNavBtns(false);
@@ -3606,7 +3612,10 @@ namespace QTTabBarLib {
             buttonNavHistoryMenu.DropDown.ItemClicked += NavigationButton_DropDownMenu_ItemClicked;
             buttonNavHistoryMenu.DropDownOpening += NavigationButtons_DropDownOpening;
             buttonNavHistoryMenu.DropDown.ImageList = QTUtility.ImageListGlobal;
+            
+            
             tabControl1.SetRedraw(false);
+            // 添加当前标签
             tabControl1.TabPages.Add(CurrentTab);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.ContextMenuStrip = contextMenuTab;
@@ -3646,6 +3655,7 @@ namespace QTTabBarLib {
             MinSize = new Size(150, Config.Skin.TabHeight + 2);
             Height = Config.Skin.TabHeight + 2;
             ContextMenuStrip = contextMenuSys;
+            // 注册鼠标双击事件
             MouseDoubleClick += QTTabBarClass_MouseDoubleClick;
             MouseUp += QTTabBarClass_MouseUp;
             tabControl1.ResumeLayout(false);
@@ -3671,7 +3681,9 @@ namespace QTTabBarLib {
             QTUtility2.log("QTTabBarClass InitializeInstallation  pDisp :" + null + " locationURL :" + (string)locationURL);
             Explorer_NavigateComplete2(null, ref locationURL);
         }
-
+        /**
+         * 初始化工具栏
+         */
         private void InitializeNavBtns(bool fSync) {
             toolStrip = new ToolStripClasses();
             buttonBack = new ToolStripButton();
@@ -3706,12 +3718,17 @@ namespace QTTabBarLib {
             buttonForward.Size = new Size(0x15, 0x15);
             buttonForward.Click += NavigationButtons_Click;
         }
-
+        /**
+         * 初始化已经打开的窗口
+         */
         private void InitializeOpenedWindow() {
             IsShown = true;
             InstanceManager.PushTabBarInstance(this);
             InstallHooks();
+            QTUtility2.log("QTTabBarClass InitializeOpenedWindow  InstallHooks 安装钩子");
+
             pluginServer = new PluginServer(this);
+            QTUtility2.log("QTTabBarClass PluginServer 插件服务构造方法");
             if(!TryCallButtonBar(bbar => bbar.CreateItems())) {
                 // Try again in 2 seconds
                 Timer timer = new Timer { Interval = 2000 };
@@ -3751,8 +3768,12 @@ namespace QTTabBarLib {
             bool flag = false;
             if(tsmiGroups == null) {
                 flag = true;
+                // 初始化系统工具栏
+                // 标签组
                 tsmiGroups = new ToolStripMenuItem(QTUtility.ResMain[12]);
+                // 最近关闭
                 tsmiUndoClose = new ToolStripMenuItem(QTUtility.ResMain[13]);
+                // 最近关闭
                 tsmiLastActiv = new ToolStripMenuItem(QTUtility.ResMain[14]);
                 tsmiExecuted = new ToolStripMenuItem(QTUtility.ResMain[15]);
                 tsmiBrowseFolder = new ToolStripMenuItem(QTUtility.ResMain[0x10] + "...");
