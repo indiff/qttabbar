@@ -1,47 +1,54 @@
-======= 1.5.4 Beta(2021)=====
+======= 1.5.5.6 Beta(2022)=====
 Bugs Fixed:
-	�޸���һЩ��֪��bug��
+	修复了一些已知的bug。
 
 New Features:
-	Ĭ���������в����֧��һ�����ã�һ������
-	��ɫ�ӺŰ�ť�¹��ܣ�֧������Ĭ��·����������������·��������ת
-	���ò������
-	��װ�����Ŀ�ԴЭ�����
-	�޸���������bug
-	�޸�������ͼƬ���ñ�������bug
-	����������ͼƬ��ѹ�������������ťͼƬ��ʽ
+	
+	
+======= 1.5.4 Beta(2021)=====
+Bugs Fixed:
+	修复了一些已知的bug。
+
+New Features:
+	默认内置所有插件，支持一键启用，一键禁用
+	蓝色加号按钮新功能，支持配置默认路径，剪贴板的如果有路径，则跳转
+	内置插件汉化
+	安装包中文开源协议调整
+	修复锁定功能bug
+	修复工具栏图片配置报错功能bug
+	调整工具栏图片，压缩包内置了三款按钮图片款式
 ======= 1.5.3 Beta 2 =======
 Bugs Fixed:
-	�޸���һЩ��֪��bug��
+	修复了一些已知的bug。
 	
 New Features:
-	�����Զ��尴ťͼƬ��֧�ְ�ť��������
-	�����¹��ܣ�֧���¿���ǩҳ��Ĭ��ȡ�������·��
-	�����쳣��־��ӡ
-	��װ����������
-	Ĭ���������Ż�����
-	����֧����ƵԤ��ͼƬ����
+	增加自定义按钮图片，支持按钮换肤功能
+	添加新功能，支持新开标签页，默认取剪贴板的路径
+	调整异常日志打印
+	安装包调整汉化
+	默认配置项优化调整
+	增加支持视频预览图片功能
 ======= 1.5.2.x Beta 2 =======
 Todos:
-	��ǩ���Ҳ��������ť�ܷ�����һ��ѡ���Կ����Ƿ�ȥ���ء� #28
-	��ť�Զ���ͼƬ������Ч #29
-	�����ǩ�رհ�ť��������ť��ͼ���Զ���ѡ�� #26
+	标签栏右侧的两个按钮能否添加一个选项以控制是否去掉呢。 #28
+	按钮自定义图片功能无效 #29
+	加入标签关闭按钮和锁定按钮的图标自定义选项 #26
 Bugs Fixed:
-	fix bug ������Ч GetTextSize qtabitem.cs(331)��
+	fix bug 参数无效 GetTextSize qtabitem.cs(331)。
 	
 New Features:
-	���ӵ���Ƥ��
-	(Ĭ�����ùرհ�ť��ʾ)��ǩ���Ҳ��������ť�ܷ�����һ��ѡ���Կ����Ƿ�ȥ���ء�#28
-	�����Զ���ͼƬ #29
+	增加导出皮肤
+	(默认配置关闭按钮显示)标签栏右侧的两个按钮能否添加一个选项以控制是否去掉呢。#28
+	启用自定义图片 #29
 	
 	======= 1.5.2.0 Beta 2 =======
 Bugs Fixed:
-    �޸���������ʾ���쳣/Fixed open cmd error.
+    修复打开命令提示符异常/Fixed open cmd error.
 	
 	
 New Features:
-    �쳣��־������չ��Ϣ��ʾ/Show more info for exception log.
-	�������������ļ�/Add language config file.
+    异常日志添加扩展信息提示/Show more info for exception log.
+	添加语言配置文件/Add language config file.
 	
 	
 ======= 1.5.0.0 Beta 2 =======
@@ -68,7 +75,7 @@ Bugs Fixed:
     Fixed crash when uninstalling plugins.
     Installer installs for all users now, not just a single user.
     Fixed Subdirectory Tip display in details mode on Windows XP (for good this time).
-    Fixed bug where OK/Cancel buttons in Control Panel windows don�t work.
+    Fixed bug where OK/Cancel buttons in Control Panel windows don抰 work.
     Moved the Exception log from the Desktop to %APPDATA%\QTTabBar.
 
 New Features:
