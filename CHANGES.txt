@@ -1,9 +1,11 @@
 ======= 1.5.5.6 Beta(2022)=====
 Bugs Fixed:
 	修复了一些已知的bug。
-
 New Features:
-	
+	默认支持ctrl+d调用分组功能
+	集成Everything
+	添加四国国际化(Brazil,French,Turkiye,España)
+
 	
 ======= 1.5.4 Beta(2021)=====
 Bugs Fixed:
