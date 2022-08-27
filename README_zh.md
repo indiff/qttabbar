@@ -22,6 +22,7 @@
 - [SourceForge主页](https://sourceforge.net/projects/qttabbar2/)
 
 # 版本更新/Changes
+- [1.5.5.6-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.6) 支持语言 (Brazil Spanish French Turkish)
 - [1.5.5.5-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta) 可启用Debug日志/适配DPI
 - [1.5.5.4-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.4-beta) 忽略控制面板捕获
 - [1.5.5.3-beta(2021)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3) 添加设置Java工具集环境变量工具;添加巴西语支持
@@ -38,8 +39,8 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) 内置汉化语言选项
 
 # 下载地址/Download
-* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta)
-* [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
+* [qttabbar最新版本](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.6)
+* [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/releases)
 * [qttabbar国内镜像](https://gitee.com/qwop/qttabbar/attach_files)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * 请安装 net framework 3.5/Please install net framework 3.5 [下载/download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
@@ -97,6 +98,4 @@
 </table>
 
 # 待办/TODOS
-- 迁移VS2019
-- 添加书签功能
 - 增强预览功能
