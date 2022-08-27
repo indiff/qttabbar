@@ -37,7 +37,7 @@
 
 # Download
 * [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta)
-* [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/attach_files)
+* [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/releases)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 * Please install net framework 3.5 [Download](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
 <img src="https://user-images.githubusercontent.com/501276/84343198-16aedc00-abda-11ea-8872-a654d011631f.png" />
