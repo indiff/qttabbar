@@ -666,6 +666,10 @@ namespace QTTabBarLib {
 
         private bool ShowThumbnailTooltip(int iItem, Point pnt, bool fKey) {
             string linkTargetPath;
+            if (ShellBrowser == null) // 导致空指针问题 by indiff
+            {
+                return false;
+            }
             if(ShellBrowser.TryGetHotTrackPath(iItem, out linkTargetPath)) {
                 if((linkTargetPath.StartsWith("::") || linkTargetPath.StartsWith(@"\\")) || linkTargetPath.ToLower().StartsWith(@"a:\")) {
                     return false;

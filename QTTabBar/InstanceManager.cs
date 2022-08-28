@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.Text;
 using System.Threading;
 using QTTabBarLib.Interop;
 
@@ -148,16 +147,20 @@ namespace QTTabBarLib {
                 ICommClient callback = sdInstances.Peek();
                 if(doAsync) {
                     QTUtility2.log("ExecuteOnMainProcess callback.Execute doAsync");
-                    AsyncHelper.BeginInvoke(new Action(() => {
-                        try {
-                            if(!IsDead(callback)) {
-                                callback.Execute(encodedAction);
+                    // if (!IsDead( callback ))
+                    // {
+                        AsyncHelper.BeginInvoke(new Action(() => {
+                            try {
+                                if (!IsDead(callback))
+                                {
+                                    callback.Execute(encodedAction);
+                                }
                             }
-                        }
-                        catch(Exception e) {
-                            QTUtility2.MakeErrorLog(e, "AsyncHelper.BeginInvoke");
-                        }
-                    }));
+                            catch(Exception e) {
+                                QTUtility2.MakeErrorLog(e, "AsyncHelper.BeginInvoke");
+                            }
+                        }));
+                    // }
                 }
                 else {
                     QTUtility2.log("ExecuteOnMainProcess callback.Execute");
@@ -257,8 +260,11 @@ namespace QTTabBarLib {
             public void Execute(byte[] encodedAction) {
                 Delegate thedel = null;
                 try {
-                    
-                    QTUtility2.log("InstanceManager CommClient Execute : " + encodedAction + " Length: " + encodedAction.Length + " str " + Encoding.Default.GetString(encodedAction) );
+                    QTUtility2.log("InstanceManager CommClient Execute : "
+                                   // +  encodedAction + 
+                                   // " Length: " + encodedAction.Length + 
+                                   // " str " + Encoding.Default.GetString(encodedAction)
+                                   );
                     // add by indiff fix bug
                     if (null == encodedAction || encodedAction.Length == 0 ) {
                         return;
@@ -295,7 +301,9 @@ namespace QTTabBarLib {
         private static Delegate ByteToDel(byte[] buf) {
             if (buf == null || buf.Length == 0 ) { return null; }
             object v = QTUtility.ByteArrayToObject(buf);
+            if (v == null) { return null; }
             return ((SerializeDelegate)v).Delegate;
+            // return BinaryPack.BinaryConverter.Deserialize<SerializeDelegate>(buf);
         }
 
         #endregion
@@ -556,7 +564,10 @@ namespace QTTabBarLib {
 
         public static void RemoveFromTrayIcon(IntPtr tabBarHandle) {
             ICommService service = GetChannel();
-            if(service != null) service.RemoveFromTrayIcon(tabBarHandle);
+            if (service != null)
+            {
+                service.RemoveFromTrayIcon(tabBarHandle);
+            }
         }
 
         public static void SelectTabOnOtherTabBar(IntPtr tabBarHandle, int index) {

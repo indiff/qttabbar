@@ -247,12 +247,14 @@ namespace QTTabBarLib {
         }
 
         private void dropTargetWrapper_DragDropEnd(object sender, EventArgs e) {
+            QTUtility2.log("QTTabBarClass DropDownMenuDropTarget dropTargetWrapper_DragDropEnd");
             CancelClosingAncestors(false, false);
             ShowItemToolTips = true;
             Close(ToolStripDropDownCloseReason.AppFocusChange);
         }
 
         private int dropTargetWrapper_DragFileDrop(out IntPtr hwnd, out byte[] idlReal) {
+            QTUtility2.log("QTTabBarClass DropDownMenuDropTarget dropTargetWrapper_DragFileDrop");
             fRespondModKeys = fRespondModKeysTemp;
             fEnableShiftKey = fEnableShiftKeyTemp;
             hwnd = IntPtr.Zero;
@@ -277,7 +279,9 @@ namespace QTTabBarLib {
             return -1;
         }
 
-        private DragDropEffects dropTargetWrapper_DragFileEnter(IntPtr hDrop, Point pnt, int grfKeyState) {
+        private DragDropEffects dropTargetWrapper_DragFileEnter(IntPtr hDrop, Point pnt, int grfKeyState)
+        {
+            QTUtility2.log("QTTabBarClass DropDownMenuDropTarget dropTargetWrapper_DragFileEnter");
             fRespondModKeysTemp = fRespondModKeys;
             fEnableShiftKeyTemp = fEnableShiftKey;
             fRespondModKeys = false;
@@ -304,6 +308,7 @@ namespace QTTabBarLib {
         }
 
         private void dropTargetWrapper_DragFileLeave(object sender, EventArgs e) {
+            QTUtility2.log("QTTabBarClass DropDownMenuDropTarget dropTargetWrapper_DragFileLeave");
             fRespondModKeys = fRespondModKeysTemp;
             fEnableShiftKey = fEnableShiftKeyTemp;
             strDraggingDrive = null;
@@ -325,6 +330,7 @@ namespace QTTabBarLib {
         }
 
         private void dropTargetWrapper_DragFileOver(object sender, DragEventArgs e) {
+            QTUtility2.log("QTTabBarClass DropDownMenuDropTargets dropTargetWrapper_DragFileOver " );
             int iSourceState = -1;
             Point point = PointToClient(new Point(e.X, e.Y));
             ToolStripItem itemAt = GetItemAt(point);

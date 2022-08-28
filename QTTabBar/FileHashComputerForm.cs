@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text;
@@ -201,7 +200,6 @@ namespace QTTabBarLib {
                 }
                 else if(cMatched_Prv != num2) {
                     QTUtility.AsteriskPlay();
-                   // QTUtility.AsteriskPlay();
                 }
                 else if(cErr_Prv != count) {
                     QTUtility.SoundPlay();
@@ -380,7 +378,11 @@ namespace QTTabBarLib {
             dgvHash.ReadOnly = true;
             dgvHash.RowHeadersVisible = false;
             dgvHash.RowTemplate.Height = 0x15;
-            dgvHash.Size = new Size(0x1bf, 0x6c);
+            // 355 * 162  0x133 0x73  宽度设置为屏幕 1/3 高度为屏幕 1/6
+            int width = Screen.PrimaryScreen.WorkingArea.Size.Width / 2;
+            int height = Screen.PrimaryScreen.WorkingArea.Size.Height / 5;
+            // ClientSize = new Size(0x1bf, 0xab);
+            dgvHash.Size = new Size(width, height - 10);
             dgvHash.MouseDown += dataGridView1_MouseDown;
             dgvHash.KeyDown += dataGridView1_KeyDown;
             dgvHash.CellStateChanged += dataGridView1_CellStateChanged;
@@ -455,8 +457,10 @@ namespace QTTabBarLib {
             chbFullPath.UseVisualStyleBackColor = true;
             chbFullPath.CheckedChanged += checkBoxFullPath_CheckedChanged;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(0x1bf, 0xab);
+            AutoScaleMode = AutoScaleMode.Font;
+
+            ClientSize = new Size(width, height);
+            // ClientSize = new Size(0x1bf, 0xab);
             Controls.Add(dgvHash);
             Controls.Add(panel1);
             MinimumSize = new Size(320, 0xd5);

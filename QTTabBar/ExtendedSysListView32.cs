@@ -203,7 +203,9 @@ namespace QTTabBarLib {
             return false;
         }
 
-        private void SetStyleFlags() {
+        private void SetStyleFlags()
+        {
+            if (ShellBrowser == null) return;  // qt desktop tool 启用空指针问题 https://www.yuque.com/indiff/lc0r1g/kqgkr0
             if(ShellBrowser.ViewMode != FVM.DETAILS) return;
             uint flags = 0;
             if(Config.Tweaks.DetailsGridLines) {
