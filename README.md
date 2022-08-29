@@ -2,8 +2,8 @@
 - [Generate chm db document modify by indiff](https://github.com/indiff/DBCHM)
 - [KB5012643 Problem/KB5012643补丁问题](https://github.com/indiff/qttabbar/issues/215)
 
- [![Download qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files/v1.5.5.5-beta/QTTabBar%20Setup_1.5.5.5Beta_zh%282022%29.zip/download)
-[![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta)
+[![Download sf qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files)
+[![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases)
 [![Github Stars](https://img.shields.io/github/stars/indiff/qttabbar?logo=github)](https://github.com/indiff/qttabbar)
 [![Gitee Stars](https://gitee.com/qwop/qttabbar/badge/star.svg)](https://gitee.com/qwop/qttabbar)
 [![.Net Framework 3.5](https://img.shields.io/badge/.NET%3D3.5-red.svg)](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
