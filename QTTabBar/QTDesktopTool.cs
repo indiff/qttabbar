@@ -310,6 +310,9 @@ namespace QTTabBarLib {
                 Marshal.ReleaseComObject(BandObjectSite);
             }
             BandObjectSite = (IInputObjectSite)pUnkSite;
+            // 测试DPI兼容 indiff
+            PInvoke.SetProcessDPIAware();
+
             Application.EnableVisualStyles();
 
             ReadSetting();
@@ -2370,6 +2373,7 @@ namespace QTTabBarLib {
         private void OpenGroup(string group) {
             bool fForceNewWindow = (ModifierKeys == Keys.Control);
             if(!fForceNewWindow && Config.Window.CaptureNewWindows && InstanceManager.GetTotalInstanceCount() > 0) {
+                QTUtility2.log("BeginInvokeMain OpenGroup");
                 InstanceManager.BeginInvokeMain(tabbar => tabbar.OpenGroup(@group, false));
             }
             else {
@@ -2663,7 +2667,9 @@ namespace QTTabBarLib {
                     rkClass.DeleteSubKeyTree(t.GUID.ToString("B"));
                 }
             }
-            catch {
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "Unregister");
             }
         }
 

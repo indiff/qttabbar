@@ -91,7 +91,9 @@ namespace QTTabBarLib.Interop {
             try {
                 zero = Marshal.AllocCoTaskMem(length);
             }
-            catch {
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "CreateIDL");
                 return zero;
             }
             Marshal.Copy(data, 0, zero, length);
@@ -248,7 +250,9 @@ namespace QTTabBarLib.Interop {
                     }
                     return uint.MaxValue;
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "GetAttributes");
                 }
                 finally {
                     if(ppv != null) {
@@ -284,7 +288,9 @@ namespace QTTabBarLib.Interop {
                 }
                 return pszBuf.ToString();
             }
-            catch {
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "ShellMethods GetDisplayNameOf");
             }
             finally {
                 if(ppv != null) {
@@ -336,7 +342,9 @@ namespace QTTabBarLib.Interop {
                 ((IShellLinkW)o).GetIDList(out ptr);
                 return ptr;
             }
-            catch {
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "ShellMethods _ShellLinkObject");
             }
             finally {
                 if(o != null) {
@@ -356,7 +364,10 @@ namespace QTTabBarLib.Interop {
                 kw.GetPath(pszFile, 260, IntPtr.Zero, 0);
                 return pszFile.ToString();
             }
-            catch {
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "ShellMethods GetLinkTargetPath");
+
             }
             finally {
                 if(o != null) {
@@ -417,7 +428,9 @@ namespace QTTabBarLib.Interop {
                     return (0 == ppshf.BindToObject(pIDLFolder, IntPtr.Zero, ref riid, out shellFolder));
                 }
             }
-            catch {
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "ShellMethods GetShellFolder");
             }
             finally {
                 if(ppshf != null) {
@@ -506,7 +519,9 @@ namespace QTTabBarLib.Interop {
                     return new FileInfo(linkTargetPath);
                 }
             }
-            catch {
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "ShellMethods GetTargetIfFolderLink");
             }
             return di;
         }
@@ -518,7 +533,9 @@ namespace QTTabBarLib.Interop {
                         return true;
                     }
                 }
-                catch {
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, "ShellMethods IsTargetPathContained");
                 }
             }
             return false;
@@ -648,7 +665,9 @@ namespace QTTabBarLib.Interop {
                 }
                 PInvoke.SHFreeShared(hData, num);
             }
-            catch {
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "ShellMethods ShellGetPath2");
             }
             return zero;
         }

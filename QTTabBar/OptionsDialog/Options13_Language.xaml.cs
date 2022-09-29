@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -53,13 +54,27 @@ namespace QTTabBarLib {
                 LangItems.Add(new LangEntry("Author", -1));
                 LangItems.Add(new LangEntry("Language", -1));
                 LangItems.Add(new LangEntry("Country", -1));
-                foreach(var kv in QTUtility.TextResourcesDic.OrderBy(kv => kv.Key)) {
+                LangItems.Add(new LangEntry("Version_QTTabBar", -1));
+                LangItems.Add(new LangEntry("Version_LangFile", -1));
+                LangItems.Add(new LangEntry("DateModified", -1));
+
+                /*
+                 *  case 0: keyValuePairs = Resources_String.ResourceManager.GetResourceStrings(); break;
+                case 1: keyValuePairs = Resource_String_zh_CN.ResourceManager.GetResourceStrings(); break;
+                case 2: keyValuePairs = Resources_String_de_DE.ResourceManager.GetResourceStrings(); break;
+                 */
+
+                foreach (var kv in
+                            QTUtility.TextResourcesDic.OrderBy(kv => kv.Key))
+                {
                     if(metatags.Contains(kv.Key)) continue;
                     for(int i = 0; i < kv.Value.Length; i++) {
-                        LangItems.Add(new LangEntry(kv.Key, i));
+                        var langEntry = new LangEntry(kv.Key, i);
+                        LangItems.Add(langEntry);
                     }
                 }
 
+                QTUtility2.log("init LangEntry success count: " + QTUtility.TextResourcesDic.Count);
                 ICollectionView view = CollectionViewSource.GetDefaultView(LangItems);
                 PropertyGroupDescription groupDescription = new PropertyGroupDescription("Location");
                 view.GroupDescriptions.Add(groupDescription);
@@ -68,7 +83,6 @@ namespace QTTabBarLib {
             catch (Exception exception)
             {
                 QTUtility2.MakeErrorLog(exception, "Options13_Language ");
-
             }           
         }
 
@@ -139,7 +153,41 @@ namespace QTTabBarLib {
                 ofd.RestoreDirectory = true;
                 if(DialogResult.OK != ofd.ShowDialog()) return;
                 var dict = QTUtility.ReadLanguageFile(ofd.FileName);
-                QTUtility.ValidateTextResources(ref dict);
+                QTUtility2.log("read file: " + ofd.FileName + " dict count:" + dict.Count);
+                // QTUtility.ValidateTextResources(ref dict);
+                LangItems.Clear();
+                // reload LangItems;
+                string[] metatags = {
+                    "Author",
+                    "Language",
+                    "Country",
+                    "Version_QTTabBar",
+                    "Version_LangFile",
+                    "DateModified"
+                };
+                LangItems.Add(new LangEntry("Author", -1));
+                LangItems.Add(new LangEntry("Language", -1));
+                LangItems.Add(new LangEntry("Country", -1));
+                LangItems.Add(new LangEntry("Version_QTTabBar", -1));
+                LangItems.Add(new LangEntry("Version_LangFile", -1));
+                LangItems.Add(new LangEntry("DateModified", -1));
+                /*
+                 *  case 0: keyValuePairs = Resources_String.ResourceManager.GetResourceStrings(); break;
+                case 1: keyValuePairs = Resource_String_zh_CN.ResourceManager.GetResourceStrings(); break;
+                case 2: keyValuePairs = Resources_String_de_DE.ResourceManager.GetResourceStrings(); break;
+                 */
+                
+                foreach (var kv in
+                         dict.OrderBy(kv => kv.Key))
+                {
+                    if (metatags.Contains(kv.Key)) continue;
+                    for (int i = 0; i < kv.Value.Length; i++)
+                    {
+                        var langEntry = new LangEntry(kv.Key, i);
+                        LangItems.Add(langEntry);
+                    }
+                }
+
                 foreach(LangEntry entry in LangItems) {
                     if(entry.Index >= 0) {
                         entry.Translated = dict[entry.Key][entry.Index];
@@ -148,6 +196,66 @@ namespace QTTabBarLib {
                         entry.Translated = dict[entry.Key][0];
                     }
                 }
+            }
+        }
+
+
+        private void btnSaveTxt_Click(object sender, RoutedEventArgs e)
+        {
+            string path;
+            using(SaveFileDialog sfd = new SaveFileDialog()) {
+                sfd.Filter = QTUtility.TextResourcesDic["FileFilters"][1] + "|*.txt";
+                sfd.RestoreDirectory = true;
+                sfd.FileName = "Lng_QTTabBar_" + LangItems[1].Translated + ".txt";
+                if(DialogResult.OK != sfd.ShowDialog()) return;
+                path = sfd.FileName;
+            }
+            
+            try {
+                var resources = new StringBuilder();
+                using (TextWriter writer = File.CreateText(path))
+                {
+                    //  resources.AppendFormat("\"{0}\",\"{1}\"\n", p.Name, p.GetValue(null));
+                    //  resources.AppendLine();
+                    //   writer.WriteStartDocument();
+                //    writer.WriteWhitespace(Environment.NewLine);
+                //    writer.WriteStartElement("root");
+                //    writer.WriteWhitespace(Environment.NewLine);
+                    for(int i = 0; i < 3; i++) {
+                        LangEntry entry = LangItems[i];
+                        if(entry.Translated == "") continue;
+                        resources.AppendFormat("{0}={1}\n", entry.Key, entry.Translated);
+                        resources.AppendLine();
+                    }
+
+                    resources.AppendFormat("{0}={1}\n", "Version_QTTabBar", QTUtility2.MakeVersionString());
+                    resources.AppendLine();
+
+
+                    resources.AppendFormat("{0}={1}\n", "DateModified", DateTime.Now.ToString("MM/dd/yyyy"));
+                    resources.AppendLine();
+
+                   // writer.WriteComment(" data start ");
+                  //  writer.WriteWhitespace(Environment.NewLine);
+                    RefInt r = new RefInt { i = 3 };
+                    while(r.i < LangItems.Count) {
+                        string key = LangItems[r.i].Key;
+                        string line = GetStrings(key, r).StringJoin(";");
+                        resources.AppendFormat("{0}={1}\n", key, line);
+                        resources.AppendLine();
+                    }
+                    resources.AppendLine();
+                    resources.AppendLine();
+
+                    writer.Write(resources.ToString());
+                    writer.Close();
+                }
+            }
+            catch(XmlException) {
+                MessageBox.Show(QTUtility.TextResourcesDic["Options_Page13_Language"][10]);
+            }
+            catch(Exception exception2) {
+                QTUtility2.MakeErrorLog(exception2);
             }
         }
 
@@ -263,32 +371,76 @@ namespace QTTabBarLib {
 
         private class LangEntry : INotifyPropertyChanged, IEditableEntry {
             public event PropertyChangedEventHandler PropertyChanged;
-            public string Original { get { return Index < 0 ? Key : QTUtility.TextResourcesDic[Key][Index]; } }
+            public string Original { get
+                {
+                    var strArr = QTUtility.TextResourcesDic[Key];
+                    if (Index > QTUtility.TextResourcesDic[Key].Length - 1)
+                    {
+                        return "";
+                    }
+                    return  Index < 0 ? Key : QTUtility.TextResourcesDic[Key][Index];
+                }
+            }
             public int Index { get; set; }
             public bool IsEditing { get; set; }
             public string Location { get {
                 return Index < 0 ? "** Metadata **" : Key;
-                // todo
             }}
 
             public string Key { get; set; }
             public string Translated { get; set; }
 
-            public LangEntry(string key, int index) {
+            public LangEntry(string key, int index)
+            {
                 Key = key;
                 Index = index;
                 Reset();
             }
 
-            public void Reset() {
+            public void Reset()
+            {
                 string[] res;
-                if(Index >= 0) {
-                    Translated = Original;
+                /*
+                IEnumerable<KeyValuePair<string, string>> keyValuePairs = null;
+                switch (Config.Lang.BuiltInLangSelectedIndex)
+                {
+                    case 0: keyValuePairs = Resources_String.ResourceManager.GetResourceStrings(); break;
+                    case 1: keyValuePairs = Resource_String_zh_CN.ResourceManager.GetResourceStrings(); break;
+                    case 2: keyValuePairs = Resources_String_de_DE.ResourceManager.GetResourceStrings(); break;
                 }
-                else if(QTUtility.TextResourcesDic.TryGetValue(Key, out res)) {
+
+                // 如果加载为空， 则读取默认的应用语言
+                if (null == keyValuePairs)
+                {
+                    keyValuePairs = Resources_String.ResourceManager.GetResourceStrings();
+                }
+
+
+                // 判断是否未使用内置语言,如果是的话，则直接遍历 内置语言
+                if (!Config.Lang.UseLangFile)
+                {
+                    foreach (var pair in keyValuePairs)
+                    {
+                        dict[pair.Key] = pair.Value.Split(SEPARATOR_CHAR);
+                    }
+                }
+                if (System.Globalization.CultureInfo.InstalledUICulture.Name.Equals("zh-CN"))
+                {
+                    var keyValuePairs = Resource_String_zh_CN.ResourceManager.GetResourceStrings();
+                    var keyValuePair = keyValuePairs[Key];
                     Translated = res[0];
                 }
-                else {
+                */
+                if (Index >= 0)
+                {
+                    Translated = Original;
+                } 
+                else if (QTUtility.TextResourcesDic.TryGetValue(Key, out res))
+                {
+                    Translated = res[0];
+                }
+                else
+                {
                     Translated = "";
                 }
             }

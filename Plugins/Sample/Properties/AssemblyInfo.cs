@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SampleSplitButton")]
-[assembly: AssemblyDescription("Sample plugin.")]
+[assembly: AssemblyDescription("²å¼þÀý×Ó")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("SampleSplitButton")]

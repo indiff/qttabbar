@@ -24,7 +24,7 @@
     <SuppressValidation>False</SuppressValidation>
     <SuppressIces>ICE80</SuppressIces>
     <SuppressSpecificWarnings>1076;1118</SuppressSpecificWarnings>
-    <Cultures>en-US;zh-CN;de-DE;pt-BR</Cultures>
+    <Cultures>en-US;zh-CN;de-DE;tr-TR;pt-BR;es-ES</Cultures>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CustomWelcomeEulaDlg.wxs" />
@@ -43,7 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="lang.wxl" />
+    <EmbeddedResource Include="lang_es_ES.wxl" />
     <EmbeddedResource Include="lang_pt_BR.wxl" />
+    <EmbeddedResource Include="lang_tr_TR.wxl" />
     <EmbeddedResource Include="lang_zh_CN.wxl" />
     <EmbeddedResource Include="lang_de_DE.wxl" />
   </ItemGroup>
@@ -51,6 +53,9 @@
   <PropertyGroup>
     <RunWixToolsOutOfProc>true</RunWixToolsOutOfProc>
     <SetMsiAssemblyNameFileVersion>true</SetMsiAssemblyNameFileVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent />
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

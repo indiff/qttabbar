@@ -130,7 +130,9 @@ namespace QTTabBarLib {
                     new VisualStyleRenderer(VisualStyleElement.ProgressBar.Chunk.Normal).DrawBackground(graphics, bounds);
                     goto Label_00E1;
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "PaintBackGround");
                     goto Label_00E1;
                 }
             }

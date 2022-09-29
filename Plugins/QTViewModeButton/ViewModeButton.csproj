@@ -86,7 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\imgIcon.png" />
-    <None Include="ViewModeButton.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\imgDetails.png" />

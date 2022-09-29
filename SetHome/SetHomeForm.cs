@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,12 +20,63 @@ namespace SetHome
         private string[] args;
 
 
-        const int HWND_BROADCAST = 0xffff;
-        const uint WM_SETTINGCHANGE = 0x001a;
-
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         static extern bool SendNotifyMessage(IntPtr hWnd, uint Msg,
             UIntPtr wParam, string lParam);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern bool SendNotifyMessage(IntPtr hWnd, uint Msg, UIntPtr wParam,
+            IntPtr lParam);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessageTimeout(IntPtr hWnd,
+            uint Msg, UIntPtr wParam, string lParam,
+            SendMessageTimeoutFlags fuFlags,
+            uint uTimeout, out UIntPtr lpdwResult);
+
+        private enum SendMessageTimeoutFlags : uint
+        {
+            SMTO_NORMAL = 0x0, SMTO_BLOCK = 0x1,
+            SMTO_ABORTIFHUNG = 0x2, SMTO_NOTIMEOUTIFNOTHUNG = 0x8
+        }
+
+        private static void UpdateEnvPath()
+        {
+            // SEE: https://support.microsoft.com/en-us/help/104011/how-to-propagate-environment-variables-to-the-system
+            // Need to send WM_SETTINGCHANGE Message to 
+            //    propagage changes to Path env from registry
+
+            
+            IntPtr HWND_BROADCAST = (IntPtr)0xffff;
+            const UInt32 WM_SETTINGCHANGE = 0x001A;
+            var sendNotifyMessage = SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+            // var sendNotifyMessage = true;
+            if (!sendNotifyMessage)
+            {
+                UIntPtr result;
+                IntPtr settingResult
+                    = SendMessageTimeout((IntPtr)HWND_BROADCAST,
+                        WM_SETTINGCHANGE, (UIntPtr)0,
+                        "Environment",
+                        SendMessageTimeoutFlags.SMTO_ABORTIFHUNG,
+                        1000, out result);
+
+                if (settingResult == IntPtr.Zero)
+                {
+                    SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                }
+            }
+
+            // Environment.SetEnvironmentVariable("count", "1", EnvironmentVariableTarget.Machine);
+            // Process.Start(@"C:\Windows\System32\cmd.exe"   + " /c setx /M PATH " + @"%PATH%;1");
+
+            /*PowerShell.Create().AddCommand("setx")
+                               .AddParameter("JAVA_HOME", selectedPath)
+                               .AddParameter("/M")
+                              .Invoke();*/
+        }
+
+
         private string REG_ENV_PATH = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
         private string QTTabBar = @"Software\QTTabBar";
         
@@ -243,15 +295,40 @@ namespace SetHome
             using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
             {
                 string oldPath = getOldPath(envKey);
+                oldPath = kill(oldPath, "java");
                 envKey.SetValue("JAVA_HOME", selectedPath);
                 envKey.SetValue("PATH", joinDevPath(oldPath));
                 if (File.Exists(toolsJar) && File.Exists(dtJar))
                 {
                     envKey.SetValue("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;");
                 }
-                SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                
+                
                 MessageBox.Show("设置JAVA_HOME成功");
+                UpdateEnvPath();
             }
+        }
+
+        private string kill(string oldPath, string fileName)
+        {
+            var paths = oldPath.Split(';');
+            if (paths != null && paths.Length > 0)
+            {
+                for (var i = paths.Length - 1; i >= 0; i--)
+                {
+                    var tempPath = paths[i];
+                    if (!string.IsNullOrEmpty(tempPath))
+                    {
+                        var combine = Path.Combine(tempPath, fileName );
+                        if (File.Exists(combine))
+                        {
+                            oldPath = oldPath.Replace(tempPath, "");
+                        }
+                    }
+                }
+            }
+
+            return oldPath;
         }
 
         private void mvn_Click(object sender, EventArgs e)
@@ -286,12 +363,16 @@ namespace SetHome
             using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
             {
                 string oldPath = getOldPath(envKey);
+                oldPath = kill(oldPath, "mvn.cmd");
+
                 envKey.SetValue("PATH", joinDevPath(oldPath));
 
                 envKey.SetValue("M2_HOME", selectedPath);
 
-                SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                
+                
                 MessageBox.Show("设置M2_HOME成功");
+                UpdateEnvPath();
             }
         }
 
@@ -329,10 +410,13 @@ namespace SetHome
             using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
             {
                 string oldPath = getOldPath(envKey);
+                oldPath = kill(oldPath, "mvnd.exe");
                 envKey.SetValue("MVND_HOME", selectedPath);
                 envKey.SetValue("PATH", joinDevPath(oldPath));
-                SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                
+                
                 MessageBox.Show("设置MVND_HOME成功");
+                UpdateEnvPath();
             }
         }
 
@@ -370,10 +454,13 @@ namespace SetHome
             using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
             {
                 string oldPath = getOldPath(envKey);
+                oldPath = kill(oldPath, "ant.cmd");
                 envKey.SetValue("ANT_HOME", selectedPath);
                 envKey.SetValue("PATH", joinDevPath(oldPath));
-                SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                
+                
                 MessageBox.Show("设置ANT_HOME成功");
+                UpdateEnvPath();
             }
         }
 
@@ -411,10 +498,12 @@ namespace SetHome
             using (var envKey = Registry.LocalMachine.OpenSubKey(REG_ENV_PATH, true))
             {
                 string oldPath = getOldPath(envKey);
+                oldPath = kill(oldPath, "gradle.bat");
                 envKey.SetValue("GRADLE_HOME", selectedPath);
                 envKey.SetValue("PATH", joinDevPath(oldPath));
-                SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
+                
                 MessageBox.Show("设置GRADLE_HOME成功");
+                UpdateEnvPath();
             }
         }
 

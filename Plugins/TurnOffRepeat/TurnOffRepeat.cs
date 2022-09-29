@@ -153,6 +153,7 @@ namespace QuizoPlugins {
     [Plugin(PluginType.Interactive, Author = "indiff", Name = "≈≈–Ú", Version = "1.0.0.0", Description = "≈≈–ÚTab")]
     public class SortButton : IBarButton {
         private IPluginServer pluginServer;
+        private IShellBrowser shellBrowser;
         private string[] ResStr;
 
 
@@ -160,6 +161,7 @@ namespace QuizoPlugins {
 
         public void Open(IPluginServer pluginServer, IShellBrowser shellBrowser) {
             this.pluginServer = pluginServer;
+            this.shellBrowser = shellBrowser; // µº÷¬ºÙ«–±®¥Ì
 
             if(!pluginServer.TryGetLocalizedStrings(this, 1, out ResStr)) {
                 ResStr = new string[] { StringResources.ButtonNames[1] };

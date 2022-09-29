@@ -93,6 +93,12 @@
   <ItemGroup>
     <Content Include="pen.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QTTabBar\QTTabBar.csproj">
+      <Project>{E36E7A44-8F1D-4CFF-A65A-C3207A17CDED}</Project>
+      <Name>QTTabBar</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

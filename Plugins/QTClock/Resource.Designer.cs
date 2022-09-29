@@ -63,6 +63,26 @@ namespace QuizoPlugins {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Clock16 {
+            get {
+                object obj = ResourceManager.GetObject("Clock16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Clock24 {
+            get {
+                object obj = ResourceManager.GetObject("Clock24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap ClockSample_large {
             get {
                 object obj = ResourceManager.GetObject("ClockSample_large", resourceCulture);

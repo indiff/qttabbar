@@ -48,24 +48,40 @@ namespace QuizoPlugins {
 
         private const int WM_COMMAND = 0x0111;
 
+        private const bool ENABLE_LOGGER = false;
+
 
         public static void FileOperation(FileOpActions action, IntPtr hwndExplr, IShellBrowser shellBrowser) {
-            IntPtr hwnd = fVista ? FindWindowEx(hwndExplr, IntPtr.Zero, new StringBuilder("ShellTabWindowClass"), null) : hwndExplr;
+            IntPtr hwnd = fVista ? 
+                FindWindowEx(hwndExplr, 
+                    IntPtr.Zero, 
+                    new StringBuilder("ShellTabWindowClass"), 
+                    null) : hwndExplr;
 
-            if(fVista)
+            if (fVista)
+            {
+                // log("SendMessage hwnd " + hwnd );
                 SendMessage(hwnd, WM_COMMAND, (IntPtr)action, IntPtr.Zero);
+            }
             else
+            {
+                // log("PostMessage hwnd " + hwnd);
                 PostMessage(hwnd, WM_COMMAND, (IntPtr)action, IntPtr.Zero);
+            }
 
             // make selected icons transparent and refresh them immediately.
             // ( when NO-FULLROW-SELECT setting is ON, vista's explorer won't redraw items... )
-            if(fVista && action == FileOpActions.Cut && shellBrowser != null)
+            if (fVista && action == FileOpActions.Cut && shellBrowser != null)
+            {
                 RefreshItems(shellBrowser);
+            }
+                
         }
 
         private static void RefreshItems(IShellBrowser shellBrowser) {
             IShellView shellView = null;
             IShellFolderView shellFolderView = null;
+            // log(" RefreshItems start " );
             try {
                 if(0 == shellBrowser.QueryActiveShellView(out shellView)) {
                     shellFolderView = (IShellFolderView)shellView;
@@ -83,6 +99,7 @@ namespace QuizoPlugins {
                                 Marshal.Copy(p, pIDLs, 0, items);
 
                                 for(int i = 0; i < items; i++) {
+                                    log(" RefreshObject i " + i);
                                     shellFolderView.RefreshObject(pIDLs[i], out ui);
                                 }
                             }
@@ -90,15 +107,113 @@ namespace QuizoPlugins {
                         }
                     }
                 }
+                // log(" RefreshItems end ");
             }
-            catch {
+            catch(Exception e) {
+                MakeErrorLog(e, "RefreshItems");
             }
             finally {
-                if(shellView != null)
-                    Marshal.ReleaseComObject(shellView);
+                // 修复剪切插件， 以下代码执行有问题
+                if (shellView != null)
+                {
+                    // log(" ReleaseComObject shellView " + shellView);
+                    // Marshal.ReleaseComObject(shellView);
+                }
 
-                if(shellFolderView != null)
-                    Marshal.ReleaseComObject(shellFolderView);
+                if (shellFolderView != null)
+                {
+                    // log(" ReleaseComObject shellFolderView " + shellFolderView);
+                    // Marshal.ReleaseComObject(shellFolderView);
+                }
+                    
+            }
+        }
+
+
+        
+        public static void log(string optional)
+        {
+            if (ENABLE_LOGGER)
+            {
+                string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string appdataQT = Path.Combine(appdata, "QTTabBar");
+                if (!Directory.Exists(appdataQT))
+                {
+                    Directory.CreateDirectory(appdataQT);
+                }
+                string path = Path.Combine(appdataQT, "QTTabBarException.log");
+                using (StreamWriter writer = new StreamWriter(path, true))
+                {
+                    writer.WriteLine("[log]" + DateTime.Now.ToString() + " " + optional + "\n");
+                    // 打印方法调用栈
+                    /*
+                    var stackTrace = new StackTrace();
+                    for (int i = 0; i < stackTrace.FrameCount; i++)
+                    {
+                        var method = stackTrace.GetFrame(i).GetMethod();
+                        writer.WriteLine(
+                               "\nmethod ---\n{0}", method);
+                    }
+
+                    writer.WriteLine(
+                                "\nStackTrace ---\n{0}", stackTrace);
+                    */
+
+                    writer.Close();
+                }
+            }
+        }
+
+        public static void MakeErrorLog(Exception ex, string optional = null)
+        {
+            try
+            {
+                string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string appdataQT = Path.Combine(appdata, "QTTabBar");
+                if (!Directory.Exists(appdataQT))
+                {
+                    Directory.CreateDirectory(appdataQT);
+                }
+                string path = Path.Combine(appdataQT, "QTTabBarException.log");
+                using (StreamWriter writer = new StreamWriter(path, true))
+                {
+                    writer.WriteLine(DateTime.Now.ToString());
+                    writer.WriteLine(".NET 版本: " + Environment.Version);
+                    writer.WriteLine("操作系统版本: " + Environment.OSVersion.Version + " Major: " + Environment.OSVersion.Version.Major);
+                    if (!String.IsNullOrEmpty(optional))
+                    {
+                        writer.WriteLine("错误信息: " + optional);
+                    }
+                    if (ex == null)
+                    {
+                        writer.WriteLine("Exception: None");
+                        if (Environment.StackTrace != null)
+                        {
+                            writer.WriteLine(Environment.StackTrace);
+                        }
+                    }
+                    else
+                    {
+                        writer.WriteLine("\nMessage ---\n{0}", ex.Message);
+                        writer.WriteLine(
+                            "\nHelpLink ---\n{0}", ex.HelpLink);
+                        writer.WriteLine("\nSource ---\n{0}", ex.Source);
+                        writer.WriteLine(
+                            "\nStackTrace ---\n{0}", ex.StackTrace);
+                        writer.WriteLine(
+                            "\nTargetSite ---\n{0}", ex.TargetSite);
+                    }
+                    writer.WriteLine("--------------");
+                    writer.WriteLine();
+                    writer.Close();
+                }
+                // SystemSounds.Exclamation.Play();
+            }
+            catch
+            {
+            }
+            finally
+            {
             }
         }
 

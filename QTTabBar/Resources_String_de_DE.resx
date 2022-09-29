@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Author" xml:space="preserve">
+    <value>leveltrauma</value>
+  </data>
   <data name="ButtonBar_BtnName" xml:space="preserve">
     <value>Trennzeichen;Zurückgehen;Vorwärtsgehen;Gruppen;Kürzlich geschlossen;Anwendungen;Neues Fenster;Dies klonen;Sperren;Kopierwerkzeug;Oberste;Schließen;Alles außer dem aktuellen schließen;Fenster schließen;Links schließen;Rechts schließen;Eine Ebene höher;Neu laden;Suchen;Deckkraft;Suchfeld;Optionen</value>
   </data>
   <data name="ButtonBar_Misc" xml:space="preserve">
     <value>Pfad;Name;Aktueller Ordnerpfad;Aktueller Ordnername;MD5; Elemente;Pfade aller geöffneten Registerkarten</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Germany</value>
+  </data>
+  <data name="DateModified" xml:space="preserve">
+    <value>08/29/2022</value>
   </data>
   <data name="Desktop" xml:space="preserve">
     <value>Liste;Details;Kacheln;Standard</value>
@@ -196,7 +205,7 @@
     <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>
   </data>
   <data name="ShortcutKeys_ActionNames" xml:space="preserve">
-    <value>Zurück;Vorwärts;Zurück zum Anfang;Vorwärts zum Ende;Nächste Registerkarte auswählen;Vorherige Registerkarte auswählen;Erste Registerkarte auswählen;Letzte Registerkarte auswählen;Zur zuletzt aktivierten Registerkarte wechseln;Neue Registerkarte öffnen;Neues Fenster öffnen;Registerkarten aus anderen Fenstern zusammenführen;Aktuelle Registerkarte schließen;Alle außer der aktuellen schließen;Links schließen;Rechts schließen;Fenster schließen;Schließen rückgängig machen;Aktuelle Registerkarte klonen;Aktuellen Ordner in neuem Fenster öffnen;Aktuelle sperren / entsperren; Alle sperren / entsperren;Ordner durchsuchen;Neue Gruppe erstellen;Optionsdialog öffnen;Menü der Symbolleiste anzeigen;Menü der aktuellen Registerkarte anzeigen;Menü der Gruppe anzeigen (Buttonleiste);Menü des letzten Ordners anzeigen (Buttonleiste);Menü der Benutzeranwendung anzeigen (Buttonleiste);Menü der letzten Dateien anzeigen (Buttonleiste);Neue leere Datei erstellen;Neuen Ordner erstellen;Pfad der ausgewählten Dateien kopieren;Name der ausgewählten Dateien kopieren;Pfad des aktuellen Ordners kopieren; Aktuellen Ordnernamen kopieren;MD5 der ausgewählten Dateien prüfen;Fenster ganz nach oben bringen;Transparenz +;Transparenz -;Dateiliste fokussieren;Suchleiste (Explorer) fokussieren;Suchfeld (Buttonleiste) fokussieren;Unterordner-Inhalt-Menü für ausgewählten Ordner anzeigen;Fenster an Taskleiste senden;Tab-Leiste fokussieren;Tabs nach Namen sortieren;Tabs nach Pfad sortieren;Tabs nach letzter Aktivierung sortieren;Nichts;Eine Ebene höher;Aktualisieren;Einfügen;Maximieren; Minimieren;In neuer Registerkarte öffnen;In neuer Registerkarte ohne Aktivierung öffnen;In neuem Fenster öffnen;Ausschneiden;Kopieren;Löschen;Eigenschaften;Pfad kopieren;Name kopieren;Prüfsumme anzeigen;Registerkarte schließen; Registerkarte links schließen;Registerkarte rechts schließen;Eine Ebene höher;Sperren;Kontextmenü anzeigen;In neuem Fenster öffnen;Klonen;Pfad kopieren;Eigenschaften;Inhalt-Menü für Unterverzeichnisse anzeigen;Alles außer diesem schließen;CMD öffnen;Ausgewählte Ordner in neuer Registerkarte ohne Aktivierung öffnen</value>
+    <value>Zurück;Vorwärts;Zurück zum Anfang;Vorwärts zum Ende;Nächste Registerkarte auswählen;Vorherige Registerkarte auswählen;Erste Registerkarte auswählen;Letzte Registerkarte auswählen;Zur zuletzt aktivierten Registerkarte wechseln;Neue Registerkarte öffnen;Neues Fenster öffnen;Registerkarten aus anderen Fenstern zusammenführen;Aktuelle Registerkarte schließen;Alle außer der aktuellen schließen;Links schließen;Rechts schließen;Fenster schließen;Schließen rückgängig machen;Aktuelle Registerkarte klonen;Aktuellen Ordner in neuem Fenster öffnen;Aktuelle sperren / entsperren; Alle sperren / entsperren;Ordner durchsuchen;Neue Gruppe erstellen;Optionsdialog öffnen;Menü der Symbolleiste anzeigen;Menü der aktuellen Registerkarte anzeigen;Menü der Gruppe anzeigen (Buttonleiste);Menü des letzten Ordners anzeigen (Buttonleiste);Menü der Benutzeranwendung anzeigen (Buttonleiste);Menü der letzten Dateien anzeigen (Buttonleiste);Neue leere Datei erstellen;Neuen Ordner erstellen;Pfad der ausgewählten Dateien kopieren;Name der ausgewählten Dateien kopieren;Pfad des aktuellen Ordners kopieren; Aktuellen Ordnernamen kopieren;MD5 der ausgewählten Dateien prüfen;Fenster ganz nach oben bringen;Transparenz +;Transparenz -;Dateiliste fokussieren;Suchleiste (Explorer) fokussieren;Suchfeld (Buttonleiste) fokussieren;Unterordner-Inhalt-Menü für ausgewählten Ordner anzeigen;Fenster an Taskleiste senden;Tab-Leiste fokussieren;Tabs nach Namen sortieren;Tabs nach Pfad sortieren;Tabs nach letzter Aktivierung sortieren;Nichts;Eine Ebene höher;Aktualisieren;Einfügen;Maximieren; Minimieren;In neuer Registerkarte öffnen;In neuer Registerkarte ohne Aktivierung öffnen;In neuem Fenster öffnen;Ausschneiden;Kopieren;Löschen;Eigenschaften;Pfad kopieren;Name kopieren;Prüfsumme anzeigen;Registerkarte schließen; Registerkarte links schließen;Registerkarte rechts schließen;Eine Ebene höher;Sperren;Kontextmenü anzeigen;In neuem Fenster öffnen;Klonen;Pfad kopieren;Eigenschaften;Inhalt-Menü für Unterverzeichnisse anzeigen;Alles außer diesem schließen;CMD öffnen;Ausgewählte Ordner in neuer Registerkarte ohne Aktivierung öffnen;Add to group</value>
   </data>
   <data name="ShortcutKeys_Groups" xml:space="preserve">
     <value>QTTabBar;{0} (Plugin)</value>
@@ -229,5 +238,8 @@
   </data>
   <data name="UpdateCheck" xml:space="preserve">
     <value>Eine neue Version von QTTabBar wurde veröffentlicht:;Drücken Sie OK, um zur Website zu gelangen.;Ihre Version von QTTabBar ist auf dem neuesten Stand.;Neue Entwicklungsversion gefunden:;Versionsdatei nicht gefunden (404).;Unbekannter Netzwerkfehler.;Server nicht gefunden.;Server hat falsche Zeichenfolgen zurückgegeben.</value>
+  </data>
+  <data name="Version_QTTabBar" xml:space="preserve">
+    <value>DevBuild: 2022/8/15 19:01:42 (2.0.50727.9164)</value>
   </data>
 </root>

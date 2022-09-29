@@ -2,8 +2,7 @@
 <WixLocalization Culture="de-de" xmlns="http://schemas.microsoft.com/wix/2006/localization">
 	<String Id="YOURLOCID">Ihre lokalisierte Zeichenfolge</String>
   <String Id="READ_INFO">Bitte lesen Sie die folgenden Informationen.</String>
-  <String Id="CLOSE_TABS">Bitte lesen Sie die folgenden Informationen.
-Schließen Sie alle Explorer-Fenster und öffnen Sie sie erneut als Registerkarten</String>
+  <String Id="CLOSE_TABS">Bitte lesen Sie die folgenden Informationen.Schließen Sie alle Explorer-Fenster und öffnen Sie sie erneut als Registerkarten</String>
   <String Id="COMPILE_IMG">Lokale Bilder kompilieren</String>
   <String Id="GPL_FILE">GPL3.rtf</String>
   <String Id="STANDARD_BUTTONS">QTTab Standard-Schaltflächen</String>

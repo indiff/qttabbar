@@ -53,12 +53,9 @@ namespace QTTabBarLib {
         }
 
         public void SetSite(object site) {
-            
             // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
             PInvoke.SetProcessDPIAware();
-
-            QTUtility2.log("QTUtility AutoLoader SetSite SetProcessDPIAware 不兼容XP");
-
+            // QTUtility2.log("QTUtility AutoLoader SetSite SetProcessDPIAware 不兼容XP");
             explorer = site as IWebBrowser2;
             QTUtility2.log( "QTTabBar AutoLoader SetSite " );
             if(explorer == null || Process.GetCurrentProcess().ProcessName == "iexplore") {

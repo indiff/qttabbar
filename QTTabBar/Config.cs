@@ -141,6 +141,8 @@ namespace QTTabBarLib {
         LockAll,
         BrowseFolder,
         CreateNewGroup,
+        /***** add by indiff end *****/
+       // AddToGroup,  // 新增到标签组 ， 添加一个新操作有问题
         ShowOptions,
         ShowToolbarMenu,
         ShowTabMenuCurrent,
@@ -203,19 +205,21 @@ namespace QTTabBarLib {
         TabProperties,
         ShowTabSubfolderMenu,
         CloseAllButThis,
-        
-        /******* add by qwop start *****/
-        // add by qwop 2012 08 10
-        OpenCmd
-        ,ItemsOpenInNewTabNoSel //add bool qwop 2012 08 12
-        /***** add by qwop end *****/
 
-          /******* add by qwop start *****/
-        // add by qwop 2019 12 16 19:27
+        /******* add by indiff start *****/
+        // add by indiff 2012 08 10
+        OpenCmd
+        ,
+        ItemsOpenInNewTabNoSel //add bool indiff 2012 08 12
+            /***** add by indiff end *****/
+
+          /******* add by indiff start *****/
+            // add by indiff 2019 12 16 19:27
         , SortTab 
         , TurnOffRepeat
-        //add bool qwop 2019 12 16 19:27
-        /***** add by qwop end *****/
+        //add bool indiff 2019 12 16 19:27
+        
+        , KEYBOARD_ACTION_COUNT2
     }
 
     [Serializable]
@@ -751,18 +755,36 @@ namespace QTTabBarLib {
                     {BindAction.ShowUserAppsMenu,   Key.H     | Key.Alt},
                     {BindAction.ShowRecentTabsMenu, Key.U     | Key.Alt},
                     {BindAction.ShowRecentFilesMenu,Key.F     | Key.Alt},
+                    
 
-                    // Bug fix 热键冲突， 调整 by qwop 
+
+                    // Bug fix 热键冲突， 调整 by indiff 
                     // {BindAction.NewFile,            Key.N     | Key.Control},
                     {BindAction.NewFile,            Key.N     | Key.Control | Key.Alt},
                     // {BindAction.NewFolder,          Key.N     | Key.Control | Key.Shift},
                    //  {BindAction.NewFolder,          Key.N     | Key.Shift }, // 系统默认自带
+                   // 创建标签组
+                   {BindAction.CreateNewGroup,     Key.D    | Key.Control},
+                   // 添加到标签组
+                 //  {BindAction.AddToGroup,         Key.D    | Key.Control  },
+                   // {BindAction.AddToGroup,         Key.G    | Key.Control | Key.Alt },
                 };
-                Shortcuts = new int[(int)BindAction.KEYBOARD_ACTION_COUNT];
+                // 修复数组越界问题 by indiff
+                var keyboardActionCount = (int)BindAction.KEYBOARD_ACTION_COUNT;
+                Shortcuts = new int[keyboardActionCount];
+                // 插件快捷键
                 PluginShortcuts = new Dictionary<string, int[]>();
-                foreach(var pair in dict) {
-                    Shortcuts[(int)pair.Key] = (int)pair.Value | QTUtility.FLAG_KEYENABLED;
+                foreach(var pair in dict)
+                {
+                    var pairKey = (int)pair.Key;
+                    // 修复数组越界问题 by indiff
+                    if (pairKey > keyboardActionCount - 1)
+                    {
+                        continue;
+                    }
+                    Shortcuts[pairKey] = (int)pair.Value | QTUtility.FLAG_KEYENABLED;
                 }
+                // 启用标签切换器
                 UseTabSwitcher = true;
             }
         }
@@ -789,23 +811,42 @@ namespace QTTabBarLib {
                 PluginLangFiles = new string[0];
                 // WorkingConfig.lang.BuiltInLangSelectedIndex;
                 // modify by qwop  at http://q.cnblogs.com/q/14857/  // en-US
-                if (System.Globalization.CultureInfo.InstalledUICulture.Name.Equals("zh-CN"))
+                var uiCulture = System.Globalization.CultureInfo.InstalledUICulture.Name;
+                var lUiCulture = uiCulture.ToLower();
+                if (uiCulture.Equals("zh-CN") || lUiCulture.Equals("zh") || lUiCulture.Equals("cn"))
                 {
                     BuiltInLangSelectedIndex = 1;
                     BuiltInLang = "简体中文";
-
-                  //  BuiltInLangSelectedIndex = 2;
-                  //  BuiltInLang = "German";
-                } else if (System.Globalization.CultureInfo.InstalledUICulture.Name.Equals("de-DE"))
+                }
+                else if (uiCulture.Equals("de_DE") || lUiCulture.Equals("de"))
                 {
                     BuiltInLangSelectedIndex = 2;
                     BuiltInLang = "German";
+                }
+                else if (uiCulture.Equals("pt_BR") || lUiCulture.Equals("br") ||  lUiCulture.Equals("pt"))
+                {
+                    BuiltInLangSelectedIndex = 3;
+                    BuiltInLang = "Brazil";
+                }
+                else if (uiCulture.Equals("es_ES") || lUiCulture.Equals("es") )
+                {
+                    BuiltInLangSelectedIndex = 4;
+                    BuiltInLang = "Spanish";
+                }
+                else if (uiCulture.Equals("fr_FR") || lUiCulture.Equals("fr"))
+                {
+                    BuiltInLangSelectedIndex = 5;
+                    BuiltInLang = "French";
+                }
+                else if (uiCulture.Equals("tr_TR") || lUiCulture.Equals("tr"))
+                {
+                    BuiltInLangSelectedIndex = 6;
+                    BuiltInLang = "Turkish";
                 }
                 else {
                     BuiltInLangSelectedIndex = 0;
                     BuiltInLang = "English";
                 }
-
               //  BuiltInLangSelectedIndex = 0;// English version
             }
         }
@@ -867,8 +908,9 @@ namespace QTTabBarLib {
 
         public static void Initialize() {
             LoadedConfig = new Config();
+            QTUtility2.log("初始化配置信息成功");
             ReadConfig();
-
+            QTUtility2.log("注册表读取配置信息成功");
         }
 
         public static void UpdateConfig(bool fBroadcast = true) {
@@ -892,109 +934,126 @@ namespace QTTabBarLib {
         }
 
         public static void ReadConfig() {
-            const string RegPath = RegConst.Root + RegConst.Config;
+            try
+            {
+                const string RegPath = RegConst.Root + RegConst.Config;
 
-            var categories =
-                from categoryProperty in typeof(Config).GetProperties()
-                where categoryProperty.CanWrite
-                let categoryType = categoryProperty.PropertyType
-                let categoryObject = categoryProperty.GetValue(LoadedConfig, null)
-                select new {
-                    keyPath = RegPath + categoryType.Name.Substring(1),
-                    categoryObject, 
-                    settings = (
-                        from settingProperty in categoryType.GetProperties()
-                        select new {
-                            name = settingProperty.Name,
-                            type = settingProperty.PropertyType,
-                            value = settingProperty.GetValue(categoryObject, null),
-                            property = settingProperty
-                        }
-                    )
-                };
-
-            foreach(var category in categories) {
-                using (var key=Registry.CurrentUser.CreateSubKey(category.keyPath)) {
-                    foreach(var setting in category.settings) {
-                        object value = key.GetValue(setting.name);
-                        if (value == null) { continue;}
-
-                        Type t = setting.type;
-                        try {
-                            if (t == typeof(bool)) {
-                                value = (int)value != 0;
-                            } else if (t.IsEnum) {
-                                value = Enum.Parse(t, value.ToString());
-                            } else if (t != typeof(int) && t != typeof(string)) {
-                                using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(value.ToString()))) {
-                                    if (t == typeof(Font)) {
-                                        var ser = new DataContractJsonSerializer(typeof(XmlSerializableFont));
-                                        var xsf = ser.ReadObject(stream) as XmlSerializableFont;
-                                        value = xsf == null ? null : xsf.ToFont();
-                                    } else {
-                                        var ser = new DataContractJsonSerializer(t);
-                                        value = ser.ReadObject(stream);
-                                    }
-                                    QTUtility2.Close(stream);
-                                }
+                var categories =
+                    from categoryProperty in typeof(Config).GetProperties()
+                    where categoryProperty.CanWrite
+                    let categoryType = categoryProperty.PropertyType
+                    let categoryObject = categoryProperty.GetValue(LoadedConfig, null)
+                    select new {
+                        keyPath = RegPath + categoryType.Name.Substring(1),
+                        categoryObject, 
+                        settings = (
+                            from settingProperty in categoryType.GetProperties()
+                            select new {
+                                name = settingProperty.Name,
+                                type = settingProperty.PropertyType,
+                                value = settingProperty.GetValue(categoryObject, null),
+                                property = settingProperty
                             }
+                        )
+                    };
 
-                            setting.property.SetValue(category.categoryObject, value, null);
-                        } catch {}
+                foreach(var category in categories) {
+                    using (var key=Registry.CurrentUser.CreateSubKey(category.keyPath)) {
+                        foreach(var setting in category.settings) {
+                            object value = key.GetValue(setting.name);
+                            if (value == null) { continue;}
+
+                            Type t = setting.type;
+
+                                if (t == typeof(bool))
+                                {
+                                    value = (int)value != 0;
+                                }
+                                else if (t.IsEnum)
+                                {
+                                    value = Enum.Parse(t, value.ToString());
+                                }
+                                else if (t != typeof(int) && t != typeof(string))
+                                {
+                                    using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(value.ToString())))
+                                    {
+                                        if (t == typeof(Font))
+                                        {
+                                            var ser = new DataContractJsonSerializer(typeof(XmlSerializableFont));
+                                            var xsf = ser.ReadObject(stream) as XmlSerializableFont;
+                                            value = xsf == null ? null : xsf.ToFont();
+                                        }
+                                        else
+                                        {
+                                            var ser = new DataContractJsonSerializer(t);
+                                            value = ser.ReadObject(stream);
+                                        }
+
+                                        QTUtility2.Close(stream);
+                                    }
+                                }
+
+                                setting.property.SetValue(category.categoryObject, value, null);
+                            
+                           
+                        }
                     }
                 }
-            }
 
-            using(IDLWrapper wrapper = new IDLWrapper(Config.Window.DefaultLocation)) {
-                if(!wrapper.Available) {
-                    Config.Window.DefaultLocation = new Config._Window().DefaultLocation;
+                using(IDLWrapper wrapper = new IDLWrapper(Config.Window.DefaultLocation)) {
+                    if(!wrapper.Available) {
+                        Config.Window.DefaultLocation = new Config._Window().DefaultLocation;
+                    }
                 }
+                Config.Tips.PreviewFont = Config.Tips.PreviewFont ?? Control.DefaultFont;
+                Config.Tips.PreviewMaxWidth = QTUtility.ValidateMinMax(Config.Tips.PreviewMaxWidth, 128, 1920);
+                Config.Tips.PreviewMaxHeight = QTUtility.ValidateMinMax(Config.Tips.PreviewMaxHeight, 96, 1200);
+                Config.Misc.TabHistoryCount = QTUtility.ValidateMinMax(Config.Misc.TabHistoryCount, 1, 30);
+                Config.Misc.FileHistoryCount = QTUtility.ValidateMinMax(Config.Misc.FileHistoryCount, 1, 30);
+                Config.Misc.NetworkTimeout = QTUtility.ValidateMinMax(Config.Misc.NetworkTimeout, 0, 120);
+                Config.Skin.TabHeight = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 10, 50);
+                Config.Skin.TabMinWidth = QTUtility.ValidateMinMax(Config.Skin.TabMinWidth, 10, 50);
+                Config.Skin.TabMaxWidth = QTUtility.ValidateMinMax(Config.Skin.TabMaxWidth, 50, 999);
+                Config.Skin.OverlapPixels = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 0, 20);
+                Config.Skin.TabTextFont = Config.Skin.TabTextFont ?? Control.DefaultFont;
+                Func<Padding, Padding> validatePadding = p => {
+                    p.Left   = QTUtility.ValidateMinMax(p.Left,   0, 99);
+                    p.Top    = QTUtility.ValidateMinMax(p.Top,    0, 99);
+                    p.Right  = QTUtility.ValidateMinMax(p.Right,  0, 99);
+                    p.Bottom = QTUtility.ValidateMinMax(p.Bottom, 0, 99);
+                    return p;
+                };
+                Config.Skin.RebarSizeMargin = validatePadding(Config.Skin.RebarSizeMargin);
+                Config.Skin.TabContentMargin = validatePadding(Config.Skin.TabContentMargin);
+                Config.Skin.TabSizeMargin = validatePadding(Config.Skin.TabSizeMargin);
+                using(IDLWrapper wrapper = new IDLWrapper(Config.Skin.TabImageFile)) {
+                    if(!wrapper.Available) Config.Skin.TabImageFile = "";
+                }
+                using(IDLWrapper wrapper = new IDLWrapper(Config.Skin.RebarImageFile)) {
+                    if(!wrapper.Available) Config.Skin.RebarImageFile = "";
+                }
+                using(IDLWrapper wrapper = new IDLWrapper(Config.BBar.ImageStripPath)) {
+                    // todo: check dimensions
+                    if(!wrapper.Available) Config.BBar.ImageStripPath = "";
+                }
+                List<int> blist = Config.BBar.ButtonIndexes.ToList();
+                blist.RemoveAll(i => (i.HiWord() - 1) >= Config.BBar.ActivePluginIDs.Length);
+                Config.BBar.ButtonIndexes = blist.ToArray();
+                var keys = Config.Keys.Shortcuts;
+                Array.Resize(ref keys, (int)BindAction.KEYBOARD_ACTION_COUNT);
+                Config.Keys.Shortcuts = keys;
+                foreach(var pair in Config.Keys.PluginShortcuts.Where(p => p.Value == null).ToList()) {
+                    Config.Keys.PluginShortcuts.Remove(pair.Key);
+                }
+                if(QTUtility.IsXP) Config.Tweaks.AlwaysShowHeaders = false;
+                if(!QTUtility.IsWin7) Config.Tweaks.RedirectLibraryFolders = false;
+                if(!QTUtility.IsXP) Config.Tweaks.KillExtWhileRenaming = true;
+                if(QTUtility.IsXP) Config.Tweaks.BackspaceUpLevel = true;
+                if(!QTUtility.IsWin7) Config.Tweaks.ForceSysListView = true;
+            } catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "ReadConfig foreach category");
             }
-            Config.Tips.PreviewFont = Config.Tips.PreviewFont ?? Control.DefaultFont;
-            Config.Tips.PreviewMaxWidth = QTUtility.ValidateMinMax(Config.Tips.PreviewMaxWidth, 128, 1920);
-            Config.Tips.PreviewMaxHeight = QTUtility.ValidateMinMax(Config.Tips.PreviewMaxHeight, 96, 1200);
-            Config.Misc.TabHistoryCount = QTUtility.ValidateMinMax(Config.Misc.TabHistoryCount, 1, 30);
-            Config.Misc.FileHistoryCount = QTUtility.ValidateMinMax(Config.Misc.FileHistoryCount, 1, 30);
-            Config.Misc.NetworkTimeout = QTUtility.ValidateMinMax(Config.Misc.NetworkTimeout, 0, 120);
-            Config.Skin.TabHeight = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 10, 50);
-            Config.Skin.TabMinWidth = QTUtility.ValidateMinMax(Config.Skin.TabMinWidth, 10, 50);
-            Config.Skin.TabMaxWidth = QTUtility.ValidateMinMax(Config.Skin.TabMaxWidth, 50, 999);
-            Config.Skin.OverlapPixels = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 0, 20);
-            Config.Skin.TabTextFont = Config.Skin.TabTextFont ?? Control.DefaultFont;
-            Func<Padding, Padding> validatePadding = p => {
-                p.Left   = QTUtility.ValidateMinMax(p.Left,   0, 99);
-                p.Top    = QTUtility.ValidateMinMax(p.Top,    0, 99);
-                p.Right  = QTUtility.ValidateMinMax(p.Right,  0, 99);
-                p.Bottom = QTUtility.ValidateMinMax(p.Bottom, 0, 99);
-                return p;
-            };
-            Config.Skin.RebarSizeMargin = validatePadding(Config.Skin.RebarSizeMargin);
-            Config.Skin.TabContentMargin = validatePadding(Config.Skin.TabContentMargin);
-            Config.Skin.TabSizeMargin = validatePadding(Config.Skin.TabSizeMargin);
-            using(IDLWrapper wrapper = new IDLWrapper(Config.Skin.TabImageFile)) {
-                if(!wrapper.Available) Config.Skin.TabImageFile = "";
-            }
-            using(IDLWrapper wrapper = new IDLWrapper(Config.Skin.RebarImageFile)) {
-                if(!wrapper.Available) Config.Skin.RebarImageFile = "";
-            }
-            using(IDLWrapper wrapper = new IDLWrapper(Config.BBar.ImageStripPath)) {
-                // todo: check dimensions
-                if(!wrapper.Available) Config.BBar.ImageStripPath = "";
-            }
-            List<int> blist = Config.BBar.ButtonIndexes.ToList();
-            blist.RemoveAll(i => (i.HiWord() - 1) >= Config.BBar.ActivePluginIDs.Length);
-            Config.BBar.ButtonIndexes = blist.ToArray();
-            var keys = Config.Keys.Shortcuts;
-            Array.Resize(ref keys, (int)BindAction.KEYBOARD_ACTION_COUNT);
-            Config.Keys.Shortcuts = keys;
-            foreach(var pair in Config.Keys.PluginShortcuts.Where(p => p.Value == null).ToList()) {
-                Config.Keys.PluginShortcuts.Remove(pair.Key);
-            }
-            if(QTUtility.IsXP) Config.Tweaks.AlwaysShowHeaders = false;
-            if(!QTUtility.IsWin7) Config.Tweaks.RedirectLibraryFolders = false;
-            if(!QTUtility.IsXP) Config.Tweaks.KillExtWhileRenaming = true;
-            if(QTUtility.IsXP) Config.Tweaks.BackspaceUpLevel = true;
-            if(!QTUtility.IsWin7) Config.Tweaks.ForceSysListView = true;
         }
 
         public static void WriteConfig(bool DesktopOnly = false) {

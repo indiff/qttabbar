@@ -21,11 +21,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ShowStatusBar")]
-[assembly: AssemblyDescription("show status bar by key")]
+[assembly: AssemblyTitle("active by mouse hover")]
+[assembly: AssemblyDescription("通过鼠标进行激活标签")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
-[assembly: AssemblyProduct("ShowStatusBar")]
+[assembly: AssemblyProduct("indiff")]
 [assembly: AssemblyCopyright("Copyright (C)  2007-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

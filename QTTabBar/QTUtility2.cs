@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -31,8 +32,7 @@ using Microsoft.Win32.SafeHandles;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    internal static class QTUtility2
-    {
+    public static class QTUtility2 {
         private const int THRESHOLD_ELLIPSIS = 40;
         private static bool fConsoleAllocated;
         // 判断是否启用日志，发布改为false， 调试启用. 默认是关闭的，在常规选项里面可以设置启用
@@ -210,39 +210,21 @@ namespace QTTabBarLib {
         public static int MakeCOLORREF(Color clr) {
             return ((clr.R | (clr.G << 8)) | (clr.B << 0x10));
         }
+
         public static void log(string optional)
         {
-            if ( ENABLE_LOGGER ) { 
-                string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                string appdataQT = Path.Combine(appdata, "QTTabBar");
-                if (!Directory.Exists(appdataQT))
-                {
-                    Directory.CreateDirectory(appdataQT);
-                }
-                string path = Path.Combine(appdataQT, "QTTabBarException.log");
-                using (StreamWriter writer = new StreamWriter(path, true))
-                {
-                    writer.WriteLine("[log]" + DateTime.Now.ToString() + " " + optional + "\n" );
-                    // 打印方法调用栈
-                    /*
-                    var stackTrace = new StackTrace();
-                    for (int i = 0; i < stackTrace.FrameCount; i++)
-                    {
-                        var method = stackTrace.GetFrame(i).GetMethod();
-                        writer.WriteLine(
-                               "\nmethod ---\n{0}", method);
-                    }
-
-                    writer.WriteLine(
-                                "\nStackTrace ---\n{0}", stackTrace);
-                    */
-
-                    Close(writer);
-                }
-            }
+            if (ENABLE_LOGGER)
+                log("log", optional);
         }
 
         public static void err(string optional)
+        {
+            if ( ENABLE_LOGGER )
+                log("err", optional);
+
+        }
+
+        public static void log(string level, string optional)
         {
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string appdataQT = Path.Combine(appdata, "QTTabBar");
@@ -251,12 +233,17 @@ namespace QTTabBarLib {
                 Directory.CreateDirectory(appdataQT);
             }
             string path = Path.Combine(appdataQT, "QTTabBarException.log");
-            using (StreamWriter writer = new StreamWriter(path, true))
-            {
-                writer.WriteLine("[err]" + DateTime.Now.ToString() + " " + optional);
-                Close(writer);
-            }
+            var formatLogLine = new StringBuilder();
+            formatLogLine
+                .Append("[")
+                .Append(level)
+                .Append("]")
+                .Append(DateTime.Now.ToString())
+                .Append(" ")
+                .Append(optional);
+            writeStr(path, formatLogLine);
         }
+
 
         public static void MakeErrorLog(Exception ex, string optional = null) {
             try
@@ -268,45 +255,84 @@ namespace QTTabBarLib {
                     Directory.CreateDirectory(appdataQT);
                 }
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
-                using (StreamWriter writer = new StreamWriter(path, true))
+                var formatLogLine = new StringBuilder();
+                formatLogLine.AppendLine(DateTime.Now.ToString());
+                formatLogLine.AppendLine(".NET 版本: " + Environment.Version);
+                formatLogLine.AppendLine("操作系统版本: " + Environment.OSVersion.Version + " Major: " + Environment.OSVersion.Version.Major);
+                formatLogLine.AppendLine("QT 版本: " + MakeVersionString());
+                if (!String.IsNullOrEmpty(optional))
                 {
-                    writer.WriteLine(DateTime.Now.ToString());
-                    writer.WriteLine(".NET 版本: " + Environment.Version);
-                    writer.WriteLine("操作系统版本: " + Environment.OSVersion.Version);
-                    writer.WriteLine("QT 版本: " + MakeVersionString());
-                    if (!String.IsNullOrEmpty(optional))
-                    {
-                        writer.WriteLine("错误信息: " + optional);
-                    }
-                    if (ex == null)
-                    {
-                        writer.WriteLine("Exception: None");
-                        if (Environment.StackTrace != null)
-                        {
-                            writer.WriteLine(Environment.StackTrace);
-                        }
-                    }
-                    else
-                    {
-                        writer.WriteLine("\nMessage ---\n{0}", ex.Message);
-                        writer.WriteLine(
-                            "\nHelpLink ---\n{0}", ex.HelpLink);
-                        writer.WriteLine("\nSource ---\n{0}", ex.Source);
-                        writer.WriteLine(
-                            "\nStackTrace ---\n{0}", ex.StackTrace);
-                        writer.WriteLine(
-                            "\nTargetSite ---\n{0}", ex.TargetSite);
-                    }
-                    writer.WriteLine("--------------");
-                    writer.WriteLine();
-                    Close(writer);
+                    formatLogLine.AppendLine("错误信息: " + optional);
                 }
-                // SystemSounds.Exclamation.Play();
+                if (ex == null)
+                {
+                    formatLogLine.AppendLine("Exception: None");
+                    if (Environment.StackTrace != null)
+                    {
+                        formatLogLine.AppendLine(Environment.StackTrace);
+                    }
+                }
+                else
+                {
+                    formatLogLine.AppendFormat("\nMessage ---\n{0}", ex.Message);
+                    formatLogLine.AppendFormat(
+                        "\nHelpLink ---\n{0}", ex.HelpLink);
+                    formatLogLine.AppendFormat("\nSource ---\n{0}", ex.Source);
+                    formatLogLine.AppendFormat(
+                        "\nStackTrace ---\n{0}", ex.StackTrace);
+                    formatLogLine.AppendFormat(
+                        "\nTargetSite ---\n{0}", ex.TargetSite);
+
+                    if (ex.InnerException != null)
+                    {
+                        formatLogLine.AppendLine("****************InnnerExcetpion");
+                        formatLogLine.AppendFormat("\n  InnerMessage ---\n{0}", ex.InnerException.Message);
+                        formatLogLine.AppendFormat(
+                            "\n InnerHelpLink ---\n{0}", ex.InnerException.HelpLink);
+                        formatLogLine.AppendFormat("\n  InnerSource ---\n{0}", ex.InnerException.Source);
+                        formatLogLine.AppendFormat(
+                            "\n InnerStackTrace ---\n{0}", ex.InnerException.StackTrace);
+                        formatLogLine.AppendFormat(
+                            "\n InnerTargetSite ---\n{0}", ex.InnerException.TargetSite);
+                    }
+                }
+                formatLogLine.AppendLine("--------------");
+                formatLogLine.AppendLine();
+
+                writeStr(path, formatLogLine);
             }
             catch {
             }
             finally {
             }
+        }
+
+        private static void writeStr(string path, StringBuilder formatLogLine)
+        {
+            using (StreamWriter writer = new StreamWriter(path, true))
+            {
+                writer.WriteLine(formatLogLine);
+            }
+            /*if (File.Exists(path))
+            {
+                using (FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    StreamWriter writer = new StreamWriter(fs);
+                    writer.WriteLine(formatLogLine);
+                    // Close(writer);
+                    // Close(fs);
+                }
+            }
+            else
+            {
+                using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    StreamWriter writer = new StreamWriter(fs);
+                    writer.WriteLine(formatLogLine);
+                    // Close(writer);
+                    // Close(fs);
+                }
+            }*/
         }
 
         public static void Close(TextReader sr)
@@ -450,7 +476,9 @@ namespace QTTabBarLib {
                     }
                     return fileName;
                 }
-                catch {
+                catch (Exception e)
+                {
+                    QTUtility2.MakeErrorLog(e, "check http ftp");
                 }
             }
             return path;
@@ -502,7 +530,9 @@ namespace QTTabBarLib {
                 try {
                     drive = new DriveInfo(Path.GetPathRoot(path));
                 }
-                catch {
+                catch (Exception e)
+                {
+                    QTUtility2.MakeErrorLog(e, "new DriveInfo");
                     return false;
                 }
                 switch(drive.DriveType) {
@@ -551,7 +581,9 @@ namespace QTTabBarLib {
             try {
                 buffer = (byte[])rkUserApps.GetValue(regValueName, null);
             }
-            catch {
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "ReadRegBinary");
                 return null;
             }
             if((buffer != null) && (buffer.Length > 0)) {
@@ -625,7 +657,9 @@ namespace QTTabBarLib {
                 Clipboard.SetDataObject(str, true);
                 QTUtility.AsteriskPlay();
             }
-            catch {
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "SetStringClipboard");
                 QTUtility.SoundPlay();
             }
         }

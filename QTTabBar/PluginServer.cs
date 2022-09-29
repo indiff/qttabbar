@@ -30,6 +30,8 @@ namespace QTTabBarLib {
         internal sealed class PluginServer : IPluginServer, IDisposable {
             private Dictionary<string, string[]> dicLocalizingStrings;
             private QTPlugin.Interop.IShellBrowser shellBrowser;
+            // private ExplorerManager explorerManager;
+            // private InstanceManager instanceManager;
             private QTTabBarClass tabBar;
             private Dictionary<string, Plugin> dicPluginInstances = new Dictionary<string, Plugin>();
             
@@ -439,6 +441,11 @@ namespace QTTabBarLib {
                 }
             }
 
+            public void MakeErrorLog(Exception ex, string optional )
+            {
+                QTUtility2.MakeErrorLog(ex, optional);
+            }
+
             public void RefreshPlugins() {
                 ClearFilterEngines();
                 foreach(PluginInformation information in PluginManager.PluginInformations) {
@@ -604,9 +611,26 @@ namespace QTTabBarLib {
 
             public void UpdateItem(IBarButton barItem, bool fEnabled, bool fRefreshImage) {
                 string pid = InstanceToFullName(barItem, false);
-                if(pid.Length > 0) TryCallButtonBar(bbar => 
-                    bbar.UpdatePluginItem(pid, barItem, fEnabled, fRefreshImage));
+                if(pid.Length > 0) 
+                    TryCallButtonBar(bbar =>
+                    {
+                        bbar.UpdatePluginItem(pid, barItem, fEnabled, fRefreshImage);
+                    });
             }
+
+            /*public ITab SelectedTabInFocusedView
+            {
+                get
+                {
+                    
+                    TargetView targetView;
+                    shellBrowser.GetFocusedView(out targetView);
+                    TabBarBase tabBar = this.explorerManager.Toolbars.GetTabBar(targetView);
+                    if (tabBar != null)
+                        return (ITab)TabBarBase.TabWrapper.CreateTabWrapper(tabBar.TabManager.ActiveTab, tabBar);
+                    return targetView == TargetView.Default ? this.createVirtualTab() : (ITab)null;
+                }
+            }*/
 
             public void UnloadPluginInstance(string pluginID, EndCode code) {
                 Plugin plugin;

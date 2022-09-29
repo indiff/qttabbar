@@ -18,13 +18,13 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using SHDocVw;
 
 
 namespace BandObjectLib {
-    // Band 对象扩展资源管理器
     public class BandObject : UserControl, IDeskBand, IDockingWindow, IInputObject, IObjectWithSite, IOleWindow, IPersistStream {
         private Size _minSize = new Size(-1, -1);
         protected IInputObjectSite BandObjectSite;
@@ -259,8 +259,9 @@ namespace BandObjectLib {
                     Explorer = (WebBrowserClass)Marshal.CreateWrapperOfType(obj2 as IWebBrowser, typeof(WebBrowserClass));
                     OnExplorerAttached();
                 }
-                catch(COMException ) { // exception
-                    // QTUtility2.MakeErrorLog(exception, "MSG:" + exception.Message);
+                catch {
+                    // (COMException exception) { // exception
+                   // QTUtility2.MakeErrorLog(exception, "MSG:" + exception.Message);
                 }
             }
             try {
@@ -343,4 +344,59 @@ namespace BandObjectLib {
             return E_NOTIMPL;
         }
     }
+
+    /*internal class QTUtility2
+    {
+        internal static void MakeErrorLog(Exception ex, string optional = null)
+        {
+            try
+            {
+                string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string appdataQT = Path.Combine(appdata, "QTTabBar");
+                if (!Directory.Exists(appdataQT))
+                {
+                    Directory.CreateDirectory(appdataQT);
+                }
+                string path = Path.Combine(appdataQT, "QTTabBarException.log");
+                using (StreamWriter writer = new StreamWriter(path, true))
+                {
+                    writer.WriteLine(DateTime.Now.ToString());
+                    writer.WriteLine(".NET 版本: " + Environment.Version);
+                    writer.WriteLine("操作系统版本: " + Environment.OSVersion.Version);
+                    //writer.WriteLine("QT 版本: " + MakeVersionString());
+                    if (!String.IsNullOrEmpty(optional))
+                    {
+                        writer.WriteLine("错误信息: " + optional);
+                    }
+                    if (ex == null)
+                    {
+                        writer.WriteLine("Exception: None");
+                        writer.WriteLine(Environment.StackTrace);
+                    }
+                    else
+                    {
+                        // writer.WriteLine(ex.ToString());
+
+                        writer.WriteLine("\nMessage ---\n{0}", ex.Message);
+                        writer.WriteLine(
+                            "\nHelpLink ---\n{0}", ex.HelpLink);
+                        writer.WriteLine("\nSource ---\n{0}", ex.Source);
+                        writer.WriteLine(
+                            "\nStackTrace ---\n{0}", ex.StackTrace);
+                        writer.WriteLine(
+                            "\nTargetSite ---\n{0}", ex.TargetSite);
+
+
+                    }
+                    writer.WriteLine("--------------");
+                    writer.WriteLine();
+                    writer.Close();
+                }
+                // SystemSounds.Exclamation.Play();
+            }
+            catch
+            {
+            }
+        }
+    }*/
 }

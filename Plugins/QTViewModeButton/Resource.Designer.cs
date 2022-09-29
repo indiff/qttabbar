@@ -150,6 +150,13 @@ namespace QuizoPlugins {
         }
         
         /// <summary>
+        ///   查找类似 Filmstreifen;Miniaturansicht;Kacheln;Symbole;Liste;Details;Ansicht 的本地化字符串。
+        /// </summary>
+        internal static string viewModes_de {
+            get {
+                return ResourceManager.GetString("viewModes_de", resourceCulture);
+            }
+        }
         ///   查找类似 写真;縮小版;並べて表示;アイコン;一覧;詳細;表示モード 的本地化字符串。
         /// </summary>
         internal static string viewModes_Ja {

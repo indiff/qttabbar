@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ namespace QuizoPlugins {
     /// Cut button
     /// </summary>
    // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Cut", Version = "1.0.0.0", Description = "Cut files")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "¼ôÇÐ", Version = "1.0.0.0", Description = "¼ôÇÐÎÄ¼þ")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "¼ôÇÐ", Version = "1.0.0.1", Description = "¼ôÇÐÎÄ¼þ;ÐÞ¸´¼ôÇÐ²å¼þÑÏÖØbug")]
     public class CutButton : IBarButton {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
@@ -86,20 +86,35 @@ namespace QuizoPlugins {
         }
 
         public void OnButtonClick() {
+           // SendKeys.SendWait("^{X}");
+            
             FileOps.FileOperation(FileOpActions.Cut, pluginServer.ExplorerHandle, shellBrowser);
-        }
+            /*
+			var view = this.pluginServer.FocusedView;
+			if( view == QTPlugin.View.None )
+			{
+				view = QTPlugin.View.Default;
+			}
 
-        public bool ShowTextLabel {
-            get {
-                return true;
-            }
-        }
+			this.pluginServer.InvokeCommand( QCommand.Cut, (int)view );
+            */
+		}
 
-        public string Text {
-            get {
-                return ResStr[0];
-            }
-        }
+		public bool ShowTextLabel
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public string Text
+		{
+			get
+			{
+				return this.ResStr[0];
+			}
+		}
 
         #endregion
 
@@ -116,6 +131,23 @@ namespace QuizoPlugins {
             Address[] addresses;
             if(pluginServer.TryGetSelection(out addresses)) {
                 pluginServer.UpdateItem(this, addresses.Length > 0, false);
+            }
+			// Helper.EnableIfFocusedViewHasSelection( this.pluginServer, this );
+        }
+    }
+
+    static class Helper
+    {
+        public static void EnableIfFocusedViewHasSelection(IPluginServer pluginServer, IBarButton barButton)
+        {
+            var tab = pluginServer.SelectedTab;
+            if (tab != null)
+            {
+                pluginServer.UpdateItem(barButton, true , false);
+            }
+            else
+            {
+                pluginServer.UpdateItem(barButton, false, false);
             }
         }
     }

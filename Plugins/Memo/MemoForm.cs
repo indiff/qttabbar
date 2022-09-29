@@ -372,6 +372,7 @@ namespace QuizoPlugins {
                     using(FileStream stream = new FileStream(PATH_DAT, FileMode.Open)) {
                         BinaryFormatter formatter = new BinaryFormatter();
                         MemoStore store = (MemoStore)formatter.Deserialize(stream);
+
                         rtfDic = store.Dictionary;
                         Bounds = store.Bounds;
                         if(store.Opacity > 0.2) {
@@ -381,7 +382,7 @@ namespace QuizoPlugins {
                         stream.Close();
                     }
                 }
-                catch(Exception e) {
+                catch(Exception) {
                 }
             }
             else {
@@ -455,6 +456,12 @@ namespace QuizoPlugins {
             BinaryFormatter formatter = new BinaryFormatter();
             using(FileStream stream = new FileStream(PATH_DAT, FileMode.Create)) {
                 formatter.Serialize(stream, graph);
+               
+                if (stream != null)
+                {
+                    stream.Close();
+                    stream.Dispose();
+                }
             }
         }
 

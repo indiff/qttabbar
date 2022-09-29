@@ -59,7 +59,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="QTFolderButton.ruleset" />
     <None Include="Resources\QTFolderButton_small.png" />
   </ItemGroup>
   <ItemGroup>

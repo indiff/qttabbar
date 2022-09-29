@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Repeat16.png" />
-    <None Include="TurnOffRepeat.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Repeat24.png" />

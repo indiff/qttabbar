@@ -1,0 +1,620 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+<Author>
+Damián Roig
+</Author>
+
+<Language>
+español
+</Language>
+
+<Country>
+España
+</Country>
+
+<Version_QTTabBar>
+DevBuild: 23/06/2022 08:45:37 (2.0.50727.9164)
+</Version_QTTabBar>
+
+<DateModified>
+08/13/2022
+</DateModified>
+
+<!-- data start -->
+
+<ButtonBar_BtnName>
+Separador
+Atrás
+Adelante
+Grupos
+Cerrado recientemente
+Aplicaciones
+Nueva ventana
+Clonar pestaña
+Bloquear
+Herramienta de copia
+Encima de todo
+Cerrar pestaña
+Cerrar todas menos la actual
+Cerrar la ventana
+Cerrar pestañas a la izquierda
+Cerrar pestañas a la derecha
+Subir un nivel
+Recargar
+Buscar
+Opacidad
+Cuadro de búsqueda
+Opciones
+</ButtonBar_BtnName>
+
+<ButtonBar_Misc>
+Ruta
+Nombre
+Ruta de la carpeta actual
+Nombre de la carpeta actual
+MD5
+ elementos
+Rutas de todas las pestañas abiertas
+</ButtonBar_Misc>
+
+<Desktop>
+Lista
+Detalles
+Mosaicos
+Predeterminado
+</Desktop>
+
+<DialogButtons>
+Aceptar
+Cancelar
+&amp;Aplicar
+&amp;Predeterminado
+Rest. &amp;Página
+&amp;Rest. Todo
+Restaurar
+Añadir
+Añadir...
+Eliminar
+Opciones
+Activar
+Desactivar
+Deshacer
+Cargar...
+Guardar...
+</DialogButtons>
+
+<DragDropToolTip>
+Copiar a:
+Mover a:
+Crear acceso directo en:
+</DragDropToolTip>
+
+<ErrorDialogs>
+La operación ha fallado.\r\nPor favor, asegúrese de que el archivo o el destino del enlace existe:\r\n\r\n{0}
+Error - QTTabBar
+Advertencia:  No se ha podido activar automáticamente QTTabBar. Para activarla manualmente, en ventana de Panel de Control, pulse y suelte la tecla Alt, y seleccione QTTabBar en el menú Ver/Barra de herramientas.
+No se ha podido activar
+Error
+No se ha podido cargar la librería de enganche/hook de QTTabBar.
+No se ha podido inicializar la biblioteca de enganche/hook de QTTabBar.
+Algunas características pueden no ser funcionales. Para resolverlo, es posible que tenga que reinstalar la aplicación.
+No se ha podido enganchar/hook el Escritorio. Por favor, vuelva a habilitar la herramienta QT Tab Desktop.
+La operación ha fallado.\r\nPor favor, asegúrese de que la carpeta existe o tiene permiso para acceder a:\r\n\r\n\t{0}
+</ErrorDialogs>
+
+<FileFilters>
+Archivos de imagen
+Archivos de idioma
+Archivos de complementos
+</FileFilters>
+
+<FileHashComputer>
+Ruta
+Hash
+Cerrar
+Borrar
+Actualizar
+Siempre arriba
+Mostrar resultado
+Borrar al cerrar
+Ruta completa
+(Calculando...)
+</FileHashComputer>
+
+<MarginDropDown>
+Todo
+Izquierda
+Arriba
+Derecha
+Abajo
+</MarginDropDown>
+
+<Misc_Strings>
+Búsqueda en el escritorio
+El archivo de imagen no es válido\r\n\r\nPor favor, especifique un archivo de imagen de 432 x 40 px.
+Resultados de la búsqueda en
+acceso directo
+Elija su archivo
+Elija su carpeta
+Experimental
+dummy
+</Misc_Strings>
+
+<Options_Page01_Window>
+Cambia el comportamiento de las ventanas del Explorador de Windows.
+Modo de ventana única
+Capturar ventanas del Explorador como pestañas
+No capturar ventanas del Explorador
+Ubicación predeterminada de las nuevas ventanas y pestañas
+Guardar la sesión
+Iniciar una nueva sesión cada vez
+Restablecer todas las pestañas de la sesión anterior
+Restablecer solo las pestañas bloqueadas de la sesión anterior
+Al hacer clic en el botón cerrar de la ventana
+Cerrar la ventana
+Cerrar la pestaña actual
+Cerrar todas las pestañas no bloqueadas
+Enviar la ventana a la bandeja del sistema al
+Cerrar
+Minimizar
+Mostrar botón nueva pestaña (+)
+</Options_Page01_Window>
+
+<Options_Page02_Tabs>
+Cambia las opciones relacionadas con las pestañas.
+Abrir nuevas pestañas:
+Al cerrar la pestaña actual, cambiar a la:
+Cambiar a nuevas pestañas inmediatamente
+Reutilizar las pestañas existentes
+Renombrar pestañas ambiguas (equívocas)
+Al arrastrar el cursor sobre una pestaña,
+Cambiar a ella
+Mostrar el menú de consejos
+Iconos de pestañas
+Mostrar los iconos de las carpetas en las pestañas
+Mostrar el menú de la carpeta al hacer clic en el icono
+Mostrar la letra de la unidad en el icono
+Botón cerrar
+Mostrar el botón cerrar en las pestañas
+Solo con la tecla Alt pulsada
+Solo al pasar el ratón por encima
+Barra de pestañas
+Mostrar botones de navegación en la barra de pestañas
+A la izquierda
+A la derecha
+Permitir varias filas de pestañas
+La fila con la pestaña activa siempre en la parte inferior 
+A la izquierda de la actual
+A la derecha de la actual
+Al principio a la izquierda
+Al final a la derecha
+Pestaña a la izquierda
+Pestaña a la derecha
+Pestaña más a la izquierda
+Pestaña más a la derecha
+Última pestaña activada
+Comportamiento
+</Options_Page02_Tabs>
+
+<Options_Page03_Tweaks>
+Activa o desactiva los ajustes de la Vista de Lista del Explorador.
+Ajustes que se pueden utilizar con cualquiera de las Vistas de Lista
+Mostrar las cabeceras de las columnas en todos los modos de vista (Windows Vista/7)
+Utilizar la vista estándar del sistema de archivos para las carpetas de la Biblioteca (Windows 7)
+No seleccionar la extensión del archivo al cambiar nombre (Windows XP)
+Alternar selección entre partes del nombre del archivo con F2 al cambiar nombre 
+Envolver al mover la selección con las teclas de flecha
+Subir un nivel con la tecla Retroceso (Windows Vista/7)
+Desplazarse horizontalmente con la rueda del ratón manteniendo presionada la tecla Mayús
+Ajustes que solo se pueden utilizar con la antigua vista de lista
+Habilitar el antiguo control de la vista de Lista (Windows 7)
+Seleccionar la fila completa en la vista de Detalles
+Mostrar las líneas de la cuadrícula en la vista de Detalles
+Alternar los colores de las filas en la vista de Detalles
+Color de primer plano:
+Color de fondo:
+</Options_Page03_Tweaks>
+
+<Options_Page04_Tooltips>
+Cambia el comportamiento de la información sobre herramientas de la subcarpeta y de la vista previa.
+Consejos en la subcarpeta
+Activar los consejos en la subcarpeta
+Solo con la tecla Mayús presionada
+Mostrar archivos
+Mostrar información de la vista previa al sobreponer el cursor en los elementos del menú
+Información sobre la vista previa
+Activar la información sobre la vista previa
+Sólo con la tecla Mayús pulsada
+Mostrar la información del archivo debajo de las imágenes
+Ancho x Alto máximo:
+Fuente:
+Tipos de archivo de texto
+Tipos de archivo imagen/vídeo
+</Options_Page04_Tooltips>
+
+<Options_Page05_General>
+Opciones generales para el comportamiento de QTTabBar.
+Integración en la Barra de Tareas
+Mostrar vistas previas de las pestañas en la Barra de Tareas
+Historial
+Máximo de pestañas cerradas en historial
+Borrar ahora
+Máximo de archivos abiertos en el historial
+Red
+Tiempo de espera de red (introduzca 0 para el sistema por defecto):
+Comprobar las actualizaciones periódicamente
+Comprobar
+Exportar
+Exportar Ajustes...
+¿Borrar el historial de archivos?
+¿Borrar el historial de pestañas?
+Sonido
+Activar sonido
+Activar el registro
+</Options_Page05_General>
+
+<Options_Page06_Appearance>
+Cambia la apariencia de las pestañas o de la Barra de Pestañas.
+Imagen de la pestaña
+Usar una imagen de pestaña personalizada:
+Márgenes de tamaño:
+Área de superposición:
+Márgenes de contenido:
+Prueba de impacto de áreas transparentes
+Tamaño de la pestaña
+Altura:
+Anchura mínima:
+Anchura máxima:
+Modo de tamaño:
+Anchura completa
+Mismo tamaño
+Texto de la pestaña
+Colores del texto:
+Colores de sombra:
+Color activo
+Color inactivo
+Color al pasar el ratón
+Fuente del texto:
+Alineación:
+Izquierda
+Centro
+Fondo de la barra de herramientas
+Imagen
+Color sólido
+Imagen de cada barra por separado
+Modo de estiramiento:
+Márgenes de tamaño:
+Archivo de pieles
+Importar piel...
+Exportar piel...
+Estirado
+Tamaño real
+Mosaico
+</Options_Page06_Appearance>
+
+<Options_Page07_Mouse>
+Asigna comandos a diferentes acciones del ratón.
+Para añadir un vínculo al ratón, pulse sobre el gesto de la izquierda y seleccione la acción en el desplegable de la derecha. Para eliminar un vínculo, seleccione el gesto y pulse la tecla Supr.
+Otras opciones del ratón
+La rueda del ratón desplaza la ventana bajo el ratón
+Gestos del ratón
+Acción
+Dondequiera
+Pestaña
+Fondo Barra de Pestañas
+Enlaces Carpetas (Link Folder)
+Archivo o Carpeta
+Fondo Explorador
+Clic izquierdo
+Clic derecho
+Clic medio
+Doble clic
+X1 Clic
+X2 Clic
+Este botón del ratón no se puede utilizar para este objetivo.
+Los botones del ratón válidos para este objetivo son:
+Botón no válido
+</Options_Page07_Mouse>
+
+<Options_Page08_Keys>
+Cambia los atajos de teclado.
+Seleccione una acción de la lista y pulse el atajo de teclado que le desea vincular. Pulse Esc para borrar la vinculación.
+Otras opciones de teclado
+Mostrar la ventana del Selector de Pestañas al pulsar Ctrl + Tab
+Acción
+Atajo de teclado
+El atajo ya está asignado a:
+¿Desea reasignarlo?
+Conflicto en el atajo de teclado
+</Options_Page08_Keys>
+
+<Options_Page09_Groups>
+Crea y gestiona grupos de pestañas.
+Para asignar un atajo de teclado a un grupo, selecciónelo y pulse el atajo correspondiente.  Pulse Esc para borrar la vinculación.
+Crear Nuevo Grupo
+Carpeta
+Inicio
+Atajo de teclado
+Nuevo Grupo
+Abrir grupo "{0}"
+</Options_Page09_Groups>
+
+<Options_Page10_Apps>
+Crea accesos directos a los archivos o aplicaciones más utilizados.
+Para asignar un atajo de teclado a una aplicación, selecciónela y pulse el atajo correspondiente.  Pulse Esc para borrar la vinculación.
+Crear Nueva Carpeta
+Ruta:
+Argumentos:
+Directorio de trabajo:
+Aplicación
+Tecla de acceso directo
+Las siguientes palabras clave se sustituyen por cadenas de ruta con comillas dobles en tiempo de ejecución.
+Archivos seleccionados.
+Carpetas seleccionadas.
+Archivos y carpetas seleccionados.
+Carpeta actual.
+Carpeta actual si no hay selección, en caso contrario, carpeta seleccionada.
+Nueva carpeta
+¿Eliminar esta carpeta y su contenido?
+Lanzar la aplicación "{0}"
+</Options_Page10_Apps>
+
+<Options_Page11_ButtonBar>
+Personaliza la Barra de Botones.
+Botones
+Opciones de la Barra de Botones
+Iconos grandes
+Mostrar etiquetas en los botones
+Bloquear el orden de los menús de los botones con desplegable
+Bloquear el tamaño del cuadro de búsqueda
+Imágenes de botones personalizadas
+</Options_Page11_ButtonBar>
+
+<Options_Page12_Plugins>
+Gestiona los complementos de terceros.
+Instalar
+(Desactivado)
+por {0}
+{0} ha sido eliminado.
+Este complemento se instalará cuando pulse Aceptar o Aplicar.
+Este complemento se activará cuando pulse Aceptar o Aplicar.
+Este complemento se desactivará cuando pulse Aceptar o Aplicar.
+La desinstalación de este complemento también desinstalará los siguientes:
+¿Proceder?
+Activar
+Desactivar
+</Options_Page12_Plugins>
+
+<Options_Page13_Language>
+Cambia el idioma.
+Idioma principal
+Utilizar el idioma incorporado:
+Utilizar archivo de idioma:
+Archivos de idioma de los complementos
+Editor de archivos de idioma
+Mostrar el editor de idiomas...
+Original
+Traducido
+¿Restaurar todas las entradas a su valor original?
+Error al guardar el archivo.
+Chino simplificado
+Inglés
+Alemán
+</Options_Page13_Language>
+
+<Options_Page14_About>
+Muestra créditos e información de la versión.
+Código original de {0}
+Desarrolladores principales:
+Otros desarrolladores:
+Iconos y gráficos:
+Si encuentra útil QTTabBar, por favor considere hacer una pequeña donación.
+Modificación del chino.
+Realizado por: {0}
+</Options_Page14_About>
+
+<OptionsDialog>
+Opciones de QTTabBar
+¿Restaurar todas las opciones de esta página a sus valores por defecto?
+¿Restaurar todas las opciones a sus valores por defecto?  Esto no afectará a los Grupos, Aplicaciones o Plugins.
+Confirmación
+</OptionsDialog>
+
+<PayPalURL>
+https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg
+</PayPalURL>
+
+<ShortcutKeys_ActionNames>
+Atrás
+Adelante
+Atrás al inicio
+Adelante al final
+Seleccionar la pestaña siguiente
+Seleccionar la pestaña anterior
+Seleccionar la primera pestaña
+Seleccionar la última pestaña
+Cambiar a la última pestaña activada
+Abrir una nueva pestaña
+Abrir una nueva ventana
+Combinar pestañas de otras ventanas
+Cerrar la pestaña actual
+Cerrar todas menos la actual
+Cerrar pestañas a la izquierda
+Cerrar pestañas a la derecha
+Cerrar ventana
+Deshacer cierre
+Clonar la pestaña actual
+Abrir la carpeta actual en una nueva ventana
+Bloquear / desbloquear la actual
+Bloquear / desbloquear todo
+Examinar la carpeta
+Crear un nuevo grupo
+Abrir diálogo de opciones
+Mostrar el menú de la barra de herramientas
+Mostrar el menú de la pestaña actual
+Mostrar el menú de grupo (Barra de Botones)
+Mostrar el menú de carpetas recientes (Barra de Botones)
+Mostrar el menú de la aplicación del usuario (Barra de Botones)
+Mostrar el menú de archivos recientes (Barra de Botones)
+Crear un nuevo archivo vacío
+Crear una nueva carpeta
+Copiar la ruta de los archivos seleccionados
+Copiar el nombre de los archivos seleccionados
+Copiar la ruta de la carpeta actual
+Copiar el nombre de la carpeta actual
+Comprobar MD5 de los archivos seleccionados
+Colocar la ventana encima de todas
+Transparencia +
+Transparencia -
+Enfocar la lista de archivos
+Enfocar la barra de búsqueda (Explorador)
+Enfocar el cuadro de búsqueda (Barra de Botones)
+Mostrar menú de consejos de subcarpetas para la carpeta seleccionada
+Enviar la ventana a la Bandeja del Sistema
+Enfocar la barra de pestañas
+Ordenar las pestañas por nombre
+Ordenar pestañas por ruta
+Ordenar las pestañas por la última activación
+Nada
+Subir un nivel
+Actualizar
+Pegar
+Maximizar
+Minimizar
+Abrir en una nueva pestaña
+Abrir en una nueva pestaña sin activar
+Abrir en una nueva ventana
+Cortar
+Copiar
+Borrar
+Propiedades
+Copiar ruta
+Copiar nombre
+Ver suma de comprobación
+Cerrar pestaña
+Cerrar pestañas a la izquierda
+Cerrar pestañas a la derecha
+Subir un nivel
+Bloquear
+Mostrar el menú contextual
+Abrir en una nueva ventana
+Clonar
+Copiar ruta
+Propiedades
+Mostrar el menú de consejos del subdirectorio
+Cerrar todas menos esta
+Abrir CMD
+Abrir las carpetas seleccionadas en una nueva pestaña sin activar
+</ShortcutKeys_ActionNames>
+
+<ShortcutKeys_Groups>
+QTTabBar
+{0} (Plugin)
+</ShortcutKeys_Groups>
+
+<SiteURL>
+https://github.com/indiff/qttabbar
+</SiteURL>
+
+<TabBar_Menu>
+Cerrar pestaña
+Cerrar pestañas a la derecha
+Cerrar pestañas a la izquierda
+Cerrar todas menos esta
+Añadir al grupo
+Crear un nuevo grupo
+Bloquear
+Clonar pestaña
+Nueva ventana
+Copiar ruta
+Propiedades
+Historial de pestañas
+Grupos
+Deshacer cierre de pestaña
+Ir a la última pestaña activada
+Archivos abiertos recientemente
+Buscar carpeta y abrir en pestaña
+Cerrar todas menos la pestaña actual
+Cerrar la ventana
+Opciones
+Desbloquear
+Añadir al menú de la aplicación : 
+elementos
+Cancelar
+Ramas
+Eliminar este elemento del menú
+A&amp;brir carpeta contenedora
+Etiqueta de la pestaña
+Ordenar pestañas por
+Nombre
+Ruta de acceso
+Activación
+Bloquear las barras de herramientas
+Combinar pestañas de otras ventanas
+Invertir
+Abrir CMD
+</TabBar_Menu>
+
+<TabBar_Message>
+QTTabBar ha fallado al abrir\r\n\r\n "{0}".
+</TabBar_Message>
+
+<TabBar_NewGroup>
+Crear nuevo grupo
+Nombre del grupo:
+Añadir todas las pestañas
+</TabBar_NewGroup>
+
+<TabBar_Option_Genre>
+Ventana
+Pestañas
+Ajustes
+Herramientas
+General
+Apariencia
+Ratón
+Teclado
+Grupos
+Aplicaciones
+Barra de botones
+Complementos
+Idioma
+Acerca de
+</TabBar_Option_Genre>
+
+<TaskBar_Menu>
+Barra de Tareas
+Escritorio
+Bloquear elementos
+Dibujo del fondo del título
+Menú con un solo clic
+Habilitar las teclas de acceso directo a las aplicaciones
+</TaskBar_Menu>
+
+<TaskBar_Titles>
+Grupos
+Deshacer el cierre
+Aplicaciones
+Archivos abiertos recientemente
+</TaskBar_Titles>
+
+<TrayIcon>
+1 ventana
+{0} ventanas
+</TrayIcon>
+
+<UpdateCheck>
+Se ha publicado una nueva versión de QTTabBar:
+Pulse OK para ir a la página web.
+Su versión de QTTabBar está actualizada.
+Se ha encontrado una nueva versión de desarrollo:
+Archivo de versión no encontrado (404).
+Error de red desconocido.
+Servidor no encontrado.
+El servidor devolvió cadenas erróneas.
+</UpdateCheck>
+
+<!-- data end -->
+
+</root>

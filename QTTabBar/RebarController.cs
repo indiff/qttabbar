@@ -28,6 +28,7 @@ using Microsoft.Win32;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
+    [Serializable]
     internal class RebarController : IDisposable {
         private QTTabBarClass tabbar;
         private IOleCommandTarget bandObjectSite;
@@ -74,7 +75,6 @@ namespace QTTabBarLib {
         public RebarController(QTTabBarClass tabbar, IntPtr hwndReBar, IOleCommandTarget bandObjectSite) {
             this.tabbar = tabbar;
             this.bandObjectSite = bandObjectSite;
-            
             ExplorerHandle = PInvoke.GetAncestor(hwndReBar, 2);
             Handle = hwndReBar;
             rebarController = new NativeWindowController(hwndReBar);

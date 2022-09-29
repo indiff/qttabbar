@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -33,12 +33,15 @@ using Microsoft.Win32;
 using QTPlugin;
 using QTTabBarLib.Interop;
 using System.Media;
+using System.Runtime.Serialization;
+using System.Text;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
-        internal static readonly Version BetaRevision = new Version(6, 0); // 主版本 beta  次版本 alpha
+        internal static readonly Version BetaRevision = new Version(7, 0); // 主版本 beta  次版本 alpha
         internal static readonly Version CurrentVersion = new Version(1, 5, 5, 0);
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
+        // 快捷键启用标识
         internal const int FLAG_KEYENABLED = 0x100000;
         internal const string IMAGEKEY_FOLDER = "folder";
         internal const string IMAGEKEY_MYNETWORK = "mynetwork";
@@ -166,7 +169,7 @@ namespace QTTabBarLib {
                 }
 
                 // 配置不捕获控制面板
-                QTUtility2.log("QTUtility 加载忽略的路径 控制面板 网络连接");
+                /*QTUtility2.log("QTUtility 加载忽略的路径 控制面板 网络连接");
                 string[] theNoCaptures = { "::{26EE0668-A00A-44D7-9371-BEB064C98683}",
                                            "::{26EE0668-A00A-44D7-9371-BEB064C98683}\0",
                                            "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}" };
@@ -176,7 +179,7 @@ namespace QTTabBarLib {
                     {
                         NoCapturePathsList.Add(item);
                     } 
-                }
+                }*/
                 
                 // default add ::{20D04FE0-3AEA-1069-A2D8-08002B30309D};::{26EE0668-A00A-44D7-9371-BEB064C98683}
                 /*
@@ -195,30 +198,15 @@ namespace QTTabBarLib {
                 // 回收站      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
                 /*
                                                回收站 – {645FF040-5081-101B-9F08-00AA002F954E}
-
- 
-
                                控制面板 – {21EC2020-3AEA-1069-A2DD-08002B30309D}
- 
-
                                运行 – {2559A1F3-21D7-11D4-BDAF-00C04F60B9F0}
- 
-
                                搜索 – {2559A1F0-21D7-11D4-BDAF-00C04F60B9F0}
- 
-
                                Internet Explorer – {871C5380-42A0-1069-A2EA-08002B30309D}
- 
-
                                管理工具 – {D20EA4E1-3957-11D2-A40B-0C5020524153}
- 
-
                                网络连接 – {7007ACC7-3202-11D1-AAD2-00805FC1270E}
- 
-
                                打印机和传真 – {2227A280-3AEA-1069-A2DE-08002B30309D}
                                                */
-                
+                // 配置不捕获控制面板
                 GetShellClickMode();
                 QTUtility2.log("QTUtility Get Shell Click Mode");
 
@@ -243,15 +231,20 @@ namespace QTTabBarLib {
                         memStream.Write(arrBytes, 0, arrBytes.Length);
                         memStream.Seek(0, SeekOrigin.Begin);
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
-                       //  binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
+                        binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
                         object obj = binaryFormatter.Deserialize(memStream);
-                        QTUtility2.Close(memStream);
+                        // QTUtility2.Close(memStream);
+                        QTUtility2.log("ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
+                        if (obj != null)
+                        {
+                            QTUtility2.log("obj:" + obj.GetType());
+                        }
                         return obj;
                     }
                 }
                 catch (Exception exception)
                 {
-                    QTUtility2.MakeErrorLog(exception, "ByteArrayToObject");
+                    QTUtility2.MakeErrorLog(exception, "ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
                 }
             }
             return null;
@@ -592,13 +585,14 @@ namespace QTTabBarLib {
             return button;
         }
 
-        public static byte[] ObjectToByteArray(Object obj) {
+        public static byte[] ObjectToByteArray(SerializeDelegate obj) {
             if(obj == null) return null;
             using(MemoryStream ms = new MemoryStream()) {
                 new BinaryFormatter().Serialize(ms, obj);
                 QTUtility2.Close(ms);
                 return ms.ToArray();
             }
+            // return BinaryPack.BinaryConverter.Serialize(obj);
         }
 
         private static Regex singleLinebreakAtStart = new Regex(@"^(\r\n)?");
@@ -671,10 +665,7 @@ namespace QTTabBarLib {
             if (Config.Misc.SoundBox) {
                 SystemSounds.Asterisk.Play();
             }
-
-           
         }
-
 
 
         public static void SoundPlay()
@@ -684,7 +675,6 @@ namespace QTTabBarLib {
                 SystemSounds.Hand.Play();
             }
         }
-
 
         public static void RefreshLockedTabsList() {
             using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
@@ -884,6 +874,10 @@ namespace QTTabBarLib {
                 case 0: keyValuePairs = Resources_String.ResourceManager.GetResourceStrings(); break;
                 case 1: keyValuePairs = Resource_String_zh_CN.ResourceManager.GetResourceStrings(); break;
                 case 2: keyValuePairs = Resources_String_de_DE.ResourceManager.GetResourceStrings(); break;
+                case 3: keyValuePairs = Resources_String_pt_BR.ResourceManager.GetResourceStrings(); break;
+                case 4: keyValuePairs = Resources_String_es_ES.ResourceManager.GetResourceStrings(); break;
+                case 5: keyValuePairs = Resources_String_fr_FR.ResourceManager.GetResourceStrings(); break;
+                case 6: keyValuePairs = Resources_String_tr_TR.ResourceManager.GetResourceStrings(); break;
             }
 
             // 如果加载为空， 则读取默认的应用语言
@@ -891,7 +885,6 @@ namespace QTTabBarLib {
             {
                 keyValuePairs = Resources_String.ResourceManager.GetResourceStrings();
             }
-
 
             // 判断是否未使用内置语言,如果是的话，则直接遍历 内置语言
             if ( !Config.Lang.UseLangFile )

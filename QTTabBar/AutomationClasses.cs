@@ -67,7 +67,9 @@ namespace QTTabBarLib {
                     }
                 }), DispatcherPriority.Normal);                
             }
-            catch {
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "DoQuery");
                 return default(T);
             }
         }

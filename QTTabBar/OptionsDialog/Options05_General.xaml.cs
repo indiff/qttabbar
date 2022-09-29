@@ -16,6 +16,7 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using DialogResult = System.Windows.Forms.DialogResult;
@@ -63,6 +64,7 @@ namespace QTTabBarLib {
 
         private void btnUpdateNow_Click(object sender, RoutedEventArgs e) {
             UpdateChecker.Check(true);
+            btnUpdateNow.IsEnabled = false;
         }
 
         private void btnExport_Click(object sender, RoutedEventArgs e) {

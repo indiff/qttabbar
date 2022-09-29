@@ -231,7 +231,9 @@ namespace QTTabBarLib {
                     }
                     Invoke(new HashInvoker2(SetRowSync), new object[] { paths[i], builder.ToString(), rows[i] });
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "ComputeHashCore");
                     Invoke(new HashInvoker2(SetRowSync), new object[] { paths[i], VALUE_ERROR, rows[i] });
                 }
                 if(fCancellationPending) {

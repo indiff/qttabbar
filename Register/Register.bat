@@ -29,3 +29,7 @@ REG ADD HKLM\SOFTWARE\QTTabBar /v InstallPath /t REG_SZ /d "%cd%" /f /reg:32
 REG ADD HKLM\SOFTWARE\QTTabBar /v InstallPath /t REG_SZ /d "%cd%" /f /reg:64
 
 cd ..\..\..\Register
+
+rem taskkill explorer.exe
+
+rem start explorer.exe

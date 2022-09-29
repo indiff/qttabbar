@@ -298,7 +298,9 @@ namespace QTTabBarLib {
                 try {
                     typeof(ToolStripDropDownMenu).GetField("DefaultImageMarginWidth", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, fVista ? 0x1f : 0x19);
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "SetImageMargin");
                 }
             }
         }
@@ -339,7 +341,9 @@ namespace QTTabBarLib {
                         return true;
                     }
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "UpdateToolTip_OnTheEdge");
                 }
             }
             return false;

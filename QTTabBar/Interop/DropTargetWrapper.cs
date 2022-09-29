@@ -58,22 +58,32 @@ namespace QTTabBarLib.Interop {
 
         public int DragDrop(IDataObject pDataObj, int grfKeyState, Point pt, ref DragDropEffects pdwEffect) {
             try {
-                if(DragFileOver != null) {
-                    DragEventArgs e = new DragEventArgs(null, grfKeyState, pt.X, pt.Y, DragDropEffects.Move | DragDropEffects.Copy | DragDropEffects.Scroll, pdwEffect);
+                QTUtility2.log("QTTabBarClass DropTargetWrapper DragDrop" );
+                if(DragFileOver != null) { 
+                    // 如果拖拽放下的事件不为空，则进行事件的操作
+                    QTUtility2.log("QTTabBarClass DropTargetWrapper DragFileOver " + DragFileOver);
+                    DragEventArgs e = new DragEventArgs(null, grfKeyState, 
+                                        pt.X, pt.Y, 
+                        DragDropEffects.Move | 
+                                        DragDropEffects.Copy | 
+                                        DragDropEffects.Scroll, 
+                                pdwEffect);
                     DragFileOver(null, e);
                     pdwEffect = e.Effect;
                 }
                 else {
+                    QTUtility2.log("QTTabBarClass DropTargetWrapper DragFileOver pdwEffect " + DragDropEffects.Copy);
+                    // 设置拖拽的操作效果为复制
                     pdwEffect = DragDropEffects.Copy;
                 }
                 if(pdwEffect != DragDropEffects.None) {
+                    // 如果拖拽事件操作
                     if(DragFileDrop != null) {
                         IntPtr ptr;
                         byte[] buffer;
                         switch(DragFileDrop(out ptr, out buffer)) {
                             case -1:
                                 return 0;
-
                             case 0: {
                                     IShellFolder ppv = null;
                                     object obj2 = null;
@@ -86,7 +96,8 @@ namespace QTTabBarLib.Interop {
                                                 if(PInvoke.SHBindToParent(wrapper.PIDL, riid, out ppv, out ptr2) == 0) {
                                                     uint rgfReserved = 0;
                                                     IntPtr[] apidl = new IntPtr[] { ptr2 };
-                                                    if(ppv.GetUIObjectOf(ptr, 1, apidl, ref guid2, ref rgfReserved, out obj2) == 0) {
+                                                    if(ppv.GetUIObjectOf(ptr, 1, apidl, ref guid2, ref rgfReserved, out obj2) == 0)
+                                                    {
                                                         _IDropTarget target = obj2 as _IDropTarget;
                                                         if(target != null) {
                                                             DragDropEffects effects = pdwEffect;
@@ -94,7 +105,9 @@ namespace QTTabBarLib.Interop {
                                                                 effects = pdwEffect;
                                                                 if(target.DragOver(iLastKeyState, pt, ref effects) == 0) {
                                                                     if((iLastKeyState & 2) != 0) {
-                                                                        pdwEffect = DragDropEffects.Link | DragDropEffects.Move | DragDropEffects.Copy;
+                                                                        pdwEffect = DragDropEffects.Link | 
+                                                                                    DragDropEffects.Move | 
+                                                                                    DragDropEffects.Copy;
                                                                     }
                                                                     return target.DragDrop(pDataObj, iLastKeyState, pt, ref pdwEffect);
                                                                 }
@@ -103,7 +116,9 @@ namespace QTTabBarLib.Interop {
                                                     }
                                                 }
                                             }
-                                            catch {
+                                            catch (Exception exception)
+                                            {
+                                                QTUtility2.MakeErrorLog(exception, "QTTabBarClass DropTargetWrapper DragFileDrop 0");
                                             }
                                             finally {
                                                 if(ppv != null) {
@@ -133,7 +148,9 @@ namespace QTTabBarLib.Interop {
                         pDataObj.GetData(ref format, out medium);
                         PInvoke.SendMessage(hwnd, 0x233, medium.unionmember, IntPtr.Zero);
                     }
-                    catch {
+                    catch (Exception exception)
+                    {
+                        QTUtility2.MakeErrorLog(exception, "QTTabBarClass DropTargetWrapper PInvoke.SendMessage0x233");
                     }
                     finally {
                         PInvoke.ReleaseStgMedium(ref medium);
@@ -150,6 +167,7 @@ namespace QTTabBarLib.Interop {
 
         public int DragEnter(IDataObject pDataObj, int grfKeyState, Point pt, ref DragDropEffects pdwEffect) {
             try {
+                QTUtility2.log("QTTabBarClass DropTargetWrapper DragEnter");
                 if(DragFileEnter != null) {
                     FORMATETC format = new FORMATETC();
                     format.cfFormat = 15;
@@ -164,7 +182,9 @@ namespace QTTabBarLib.Interop {
                                 pDataObj.GetData(ref format, out medium);
                                 pdwEffect = DragFileEnter(medium.unionmember, pt, grfKeyState);
                             }
-                            catch {
+                            catch (Exception exception)
+                            {
+                                QTUtility2.MakeErrorLog(exception, "QTTabBarClass DropTargetWrapper DragEnter");
                                 pdwEffect = DragDropEffects.None;
                             }
                             goto Label_00A0;
@@ -189,6 +209,7 @@ namespace QTTabBarLib.Interop {
         }
 
         public int DragLeave() {
+            QTUtility2.log("QTTabBarClass DropTargetWrapper DragLeave");
             if(DragFileLeave != null) {
                 DragFileLeave(null, EventArgs.Empty);
             }
@@ -196,6 +217,7 @@ namespace QTTabBarLib.Interop {
         }
 
         public int DragOver(int grfKeyState, Point pt, ref DragDropEffects pdwEffect) {
+            QTUtility2.log("QTTabBarClass DropTargetWrapper DragOver");
             iLastKeyState = grfKeyState;
             if(DragFileOver != null) {
                 DragEventArgs e = new DragEventArgs(null, grfKeyState, pt.X, pt.Y, DragDropEffects.Move | DragDropEffects.Copy | DragDropEffects.Scroll, DragDropEffects.None);
@@ -209,6 +231,7 @@ namespace QTTabBarLib.Interop {
         }
 
         public static DragDropEffects MakeEffect(int grfKeyState, int iSourceState) {
+            QTUtility2.log("QTTabBarClass DropTargetWrapper DragDropEffects");
             switch((grfKeyState & 0x2c)) {
                 case 12:
                 case 0x20:

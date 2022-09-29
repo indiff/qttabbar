@@ -630,7 +630,9 @@ namespace QTTabBarLib {
                     }
                 }
             }
-            catch {
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "ExtendedListViewCommon ShowAndClickSubDirTip");
             }
         }
 
@@ -657,7 +659,9 @@ namespace QTTabBarLib {
                     subDirTip.ShowSubDirTip(str, null, pnt);
                     flag = true;
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "ExtendedListViewCommon ShowSubDirTip");
                 }
                 return flag;
             }

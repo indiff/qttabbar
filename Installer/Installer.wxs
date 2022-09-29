@@ -2,7 +2,7 @@
 <!--
     This file is part of QTTabBar, a shell extension for Microsoft Windows Explorer.
     Copyright (C) 2007-2021  Quizo, Paul Accisano
-    Copyright (C) 2011-2021  indiff
+    Copyright (C) 2011-2022  indiff
 
     QTTabBar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,13 +23,13 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.5.5" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.5.5 Beta(2022)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define ProductVersion="1.5.5.7" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.5.5.7 Beta(2022)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
-    <!-- Quizo and Paul Accisano -->
+    <!-- Quizo and Paul Accisano and indiff -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
-    <?define StrongName="QTTabBar, Version=1.5.5.5, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
+    <?define StrongName="QTTabBar, Version=1.5.5.6, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
     <?define MyLanguage="1033"?>  
     <!-- Language code page 1252 1033
       语言                              语言-国家     Language      Codepage
@@ -49,7 +49,7 @@ Language="1033"
                  Description="$(var.SkuName) $(var.VersionString)"
                  ReadOnly="yes"/>
         <Media Id="1" Cabinet="$(var.SkuName).cab" EmbedCab="yes" />
-		<Icon Id="icon.ico" SourceFile="QTTabBar.ico"/>
+		    <Icon Id="QTTabBar.ico" SourceFile="QTTabBar.ico"/>
 
         <WixVariable Id="WixUILicenseRtf" Value="!(loc.GPL_FILE)" />
 
@@ -204,15 +204,17 @@ Language="1033"
                               <RegistryValue Name="InstallDate" Value="[Date] [Time]" Type="string" Action="write" KeyPath ="yes" />
                             </RegistryKey>
                         </Component>
+                      <!-- ignore nocaptureat
+                      
                       <Component Id="NoCaptureAt_$(var.arch)" Win64="$(var.win64)" DisableRegistryReflection="$(var.win64)">
                         <?if $(var.arch) = x64?>
                         <Condition>VersionNT64</Condition>
                         <?endif?>
                         <RegistryKey Root="HKLM" Key="Software\QTTabBar" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
-                          <!-- 不捕获控制面板-->
+                          ~1~ 不捕获控制面板@1@
                           <RegistryValue Name="NoCaptureAt" Value="::{26EE0668-A00A-44D7-9371-BEB064C98683};::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0" Type="string" Action="write" KeyPath ="yes" />
                         </RegistryKey>
-                      </Component>            
+                      </Component> -->           
                   
                         <!-- COM Objects  计算机\HKEY_CLASSES_ROOT\CLSID\{D2BF470E-ED1C-487F-A777-2BD8835EB6CE}
                         计算机\HKEY_CURRENT_USER\Software\QTTabBar
@@ -303,7 +305,7 @@ Language="1033"
                 <ComponentRef Id="QTButtonBarReg_$(var.arch)" />
                 <ComponentRef Id="AutoLoaderReg_$(var.arch)" />
                 <ComponentRef Id="InstallDate_$(var.arch)" />
-                <ComponentRef Id="NoCaptureAt_$(var.arch)" />
+                <!--<ComponentRef Id="NoCaptureAt_$(var.arch)" />-->
 
           <!-- COM Objects -->
                 <ComponentRef Id="QTTabBarClass_$(var.arch)" />

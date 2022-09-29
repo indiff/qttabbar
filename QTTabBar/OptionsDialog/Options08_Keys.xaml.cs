@@ -36,9 +36,15 @@ namespace QTTabBarLib {
             try {
                 int[] keys = WorkingConfig.keys.Shortcuts;
                 HotkeyEntries = new List<HotkeyEntry>();
+				// (int)BindAction.KEYBOARD_ACTION_COUNT keys.Length
                 for(int i = 0; i < (int)BindAction.KEYBOARD_ACTION_COUNT; ++i) {
                     HotkeyEntries.Add(new HotkeyEntry(keys, i));
                 }
+                /*
+                 for(int i = 0; i < (int)BindAction.KEYBOARD_ACTION_COUNT; ++i) {
+                    HotkeyEntries.Add(new HotkeyEntry(keys, i));
+                 }
+                 */
 
                 var PluginShortcuts = new Dictionary<string, int[]>();
                 foreach(var info in PluginManager.PluginInformations) {
@@ -48,7 +54,9 @@ namespace QTTabBarLib {
                     try {
                         if(!p.Instance.QueryShortcutKeys(out actions)) actions = null;
                     }
-                    catch {
+                    catch (Exception ex)
+                    {
+                        QTUtility2.MakeErrorLog(ex, "!p.Instance.QueryShortcutKeys");
                     }
                     if(actions == null) continue;
                     if(WorkingConfig.keys.PluginShortcuts.TryGetValue(info.PluginID, out keys)) {
@@ -132,9 +140,17 @@ namespace QTTabBarLib {
                 get { return QTUtility2.MakeKeyString(ShortcutKey); }
             }
             public string PluginName { get; set; }
-            public string KeyActionText { get {
-                return PluginName == "" 
-                        ? QTUtility.TextResourcesDic["ShortcutKeys_ActionNames"][Index] 
+            public string KeyActionText { get
+            {
+                var actionNames = QTUtility.TextResourcesDic["ShortcutKeys_ActionNames"];
+                var actionName = "unknown action";
+                if (Index <= actionNames.Length - 1)
+                {
+                    actionName = actionNames[Index];
+                }
+                var emptyPlugin = PluginName == null || PluginName.Trim().Length == 0;
+                return emptyPlugin
+                        ? actionName
                         : pluginAction;
             } }
             public int Index { get; set; }

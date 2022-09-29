@@ -62,6 +62,7 @@ namespace QTPlugin {
         bool TryGetSelection(out Address[] selectedItems);
         bool TrySetSelection(Address[] itemsToSelect, bool fDeselectOthers);
         void UpdateItem(IBarButton barItem, bool fEnabled, bool fRefreshImage);
+        void MakeErrorLog(Exception ex, string optional = null);
 
         IntPtr ExplorerHandle { get; }
 

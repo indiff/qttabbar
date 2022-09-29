@@ -61,7 +61,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="QTFileTools.ruleset" />
     <None Include="Resources\imgCopy24.png" />
   </ItemGroup>
   <ItemGroup>

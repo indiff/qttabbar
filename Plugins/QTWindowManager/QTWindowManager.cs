@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
    // [Plugin(PluginType.Background, Author = "Quizo", Name = "QT Window Manager", Version = "1.1.0.0", Description = "Window manager")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "QT窗口管理", Version = "1.1.0.0", Description = "窗口管理")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "QT窗口管理", Version = "1.1.0.1", Description = "窗口管理;修复空指针")]
     public class QTWindowManager : IBarDropButton {
         private IPluginServer pluginServer;
         private string[] ResStrs;
@@ -39,7 +39,7 @@ namespace QuizoPlugins {
         private Dictionary<string, Rectangle> dicPresets = new Dictionary<string, Rectangle>();
         private string startingPreset = String.Empty;
 
-        private const int RES_COUNT = 15;
+        private  int RES_COUNT = 15;
         private const uint SWP_NOSIZE = 0x0001;
         private const uint SWP_NOMOVE = 0x0002;
         private const uint SWP_NOZORDER = 0x0004;
@@ -82,6 +82,14 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
+            if (CultureInfo.CurrentCulture.Parent.Name == "ja")
+                ResStrs = Resource.ResStrs_ja.Split(new char[] { ';' });
+            else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+                ResStrs = Resource.ResStrs_zh.Split(new char[] { ';' });
+            else
+                ResStrs = Resource.ResStrs.Split(new char[] { ';' });
+            RES_COUNT = ResStrs.Length;
+
             actions = new string[RES_COUNT + dicPresets.Count];
 
             for(int i = 0; i < RES_COUNT; i++) {
@@ -630,7 +638,8 @@ namespace QuizoPlugins {
                 }
             }
             catch(Exception ex) {
-                MessageBox.Show(ex.ToString());
+                pluginServer.MakeErrorLog(ex, "QTWindowManager ShowSettingWindow");
+              //  MessageBox.Show(ex.ToString());
             }
         }
 

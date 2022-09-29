@@ -151,7 +151,9 @@ namespace QTTabBarLib {
                             try {
                                 path = System.IO.Path.GetFileName(path);
                             }
-                            catch {
+                            catch (Exception exception)
+                            {
+                                QTUtility2.MakeErrorLog(exception, "CopyFileNames");
                             }
                         }
                         if(!string.IsNullOrEmpty(path)) {
@@ -175,7 +177,9 @@ namespace QTTabBarLib {
                             str = str + System.IO.Path.GetFileName(str3) + Environment.NewLine;
                             continue;
                         }
-                        catch {
+                        catch (Exception exception)
+                        {
+                            QTUtility2.MakeErrorLog(exception, "CopyFileNames foreach");
                             continue;
                         }
                     }
@@ -242,7 +246,9 @@ namespace QTTabBarLib {
             try {
                 miUnselect = typeof(ToolStripItem).GetMethod("Unselect", BindingFlags.NonPublic | BindingFlags.Instance);
             }
-            catch {
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "DropDownMenuDropTarget_HandleCreated");
             }
         }
 
@@ -511,7 +517,9 @@ namespace QTTabBarLib {
                 fThisPathExists = Directory.Exists(Path);
                 fContainsFileDropList = ShellMethods.ClipboardContainsFileDropList(hwndDialogParent);
             }
-            catch {
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "DropDownMeanuDropTarget OnOpened");
             }
             if(((((OwnerItem == null) || (OwnerItem.Owner == null)) || !OwnerItem.Owner.RectangleToScreen(OwnerItem.Bounds).Contains(MousePosition)) && (!fIsRootMenu || fShownByKey)) && (((DisplayedItems.Count > 0) && !IsKeyTargetItem(DisplayedItems[0])) && fContainsFileDropList)) {
                 fKeyTargetIsThis = true;

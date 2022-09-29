@@ -97,7 +97,9 @@ namespace QTTabBarLib {
                 try {
                     Process.Start(strExecute);
                 }
-                catch {
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, "MessageForm btnOk2_Click");
                 }
             }
         }

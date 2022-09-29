@@ -16,8 +16,6 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Runtime.InteropServices;
-using BandObjectLib;
 using Microsoft.Win32;
 using QTTabBarLib.Interop;
 

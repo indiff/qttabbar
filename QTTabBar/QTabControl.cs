@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ using System.Windows.Forms.VisualStyles;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
+    [Serializable]
     internal sealed class QTabControl : Control
     {
         private Bitmap bmpCloseBtn_Cold;
@@ -109,6 +110,7 @@ namespace QTTabBarLib {
         public event QTabCancelEventHandler Selecting;
         public event QTabCancelEventHandler TabCountChanged;
         public event QTabCancelEventHandler TabIconMouseDown;
+        // 蓝色按钮事件
         public event QTabCancelEventHandler PlusButtonClicked;
 
         public QTabControl() {
@@ -1149,7 +1151,9 @@ namespace QTTabBarLib {
         }
 
         private RectangleF newRect;
-
+        /**
+         * 绘制蓝色按钮
+         */
         private void DrawPlusButton(Graphics g,Rectangle drawRect)
         {
             // Create string to draw.
@@ -1162,7 +1166,10 @@ namespace QTTabBarLib {
             // Create rectangle for drawing.
             // int defaultDpi = DpiManager.DefaultDpi;
             //  new PointF((float)defaultDpi / 96f, (float)defaultDpi / 96f);
-            newRect = new RectangleF(drawRect.X + drawRect.Width, drawRect.Y + drawRect.Height / 2 - 10, drawRect.Width / 2, drawRect.Height );
+            newRect = new RectangleF(drawRect.X + drawRect.Width, 
+                drawRect.Y + drawRect.Height / 2 - 10, 
+                drawRect.Width / 2, 
+                drawRect.Height );
             // QTUtility2.MakeErrorLog( "x:" + (drawRect.X + drawRect.Width) + ",y:" + (drawRect.Y + drawRect.Height / 2 - 10) + ",width:" + (drawRect.Width / 2) + ",height:" + (drawRect.Height));
             //  new Rectangle(num, 0, PLUSBUTTON_WIDTH, ScaledTabHeight).TranslateClient(num2, IsRightToLeft);
             // Draw rectangle to screen.
@@ -1411,43 +1418,68 @@ namespace QTTabBarLib {
                 fntBold.Dispose();
             }
             fntBold = Font;
-            try {
+            try
+            {
                 fntBold = new Font(Font, FontStyle.Bold);
             }
-            catch {}
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "SetFont fntBold");
+
+            }
             if(fnt_Underline != null) {
                 fnt_Underline.Dispose();
             }
             fnt_Underline = Font;
-            try {
+            try
+            {
                 fnt_Underline = new Font(Font, FontStyle.Underline);
             }
-            catch {}
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "SetFont fnt_Underline");
+
+            }
             if(fntBold_Underline != null) {
                 fntBold_Underline.Dispose();
             }
             fntBold_Underline = fntBold;
-            try {
-                fntBold_Underline = new Font(fntBold, FontStyle.Underline);    
+            try
+            {
+                fntBold_Underline = new Font(fntBold, FontStyle.Underline);
             }
-            catch {}
+            catch  (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "SetFont fntBold_Underline");
+
+            }
             if(fntSubText != null) {
                 fntSubText.Dispose();
             }
             float sizeInPoints = Font.SizeInPoints;
             fntSubText = Font;
-            try {
-                fntSubText = new Font(Font.FontFamily, (sizeInPoints > 8.25f) ? (sizeInPoints - 0.75f) : sizeInPoints);   
+            try
+            {
+                fntSubText = new Font(Font.FontFamily, (sizeInPoints > 8.25f) ? (sizeInPoints - 0.75f) : sizeInPoints);
             }
-            catch {}
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "SetFont sizeInPoints");
+
+            }
             if(fntDriveLetter != null) {
                 fntDriveLetter.Dispose();
             }
             fntDriveLetter = Font;
-            try {
+            try
+            {
                 fntDriveLetter = new Font(Font.FontFamily, 8.25f);
             }
-            catch {}
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "SetFont 8.25f");
+
+            }
             QTabItem.TabFont = Font;
         }
 

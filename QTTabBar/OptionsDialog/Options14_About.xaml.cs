@@ -65,8 +65,21 @@ namespace QTTabBarLib {
         public override void CommitConfig() {
         }
 
+        /**
+         * 中文方式，则进入微信
+         */
         private void imgPaypal_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            Process.Start(Resources_String.PayPalURL);
+            var uiCulture = System.Globalization.CultureInfo.InstalledUICulture.Name;
+            var lUiCulture = uiCulture.ToLower();
+            if (uiCulture.Equals("zh-CN") || lUiCulture.Equals("zh") || lUiCulture.Equals("cn"))
+            {
+                Process.Start(Resources_String.PayPalURL);
+            }
+            else
+            {
+                Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7YNCVL5P9ZDY8");
+            }
+            
         }
     }
 }

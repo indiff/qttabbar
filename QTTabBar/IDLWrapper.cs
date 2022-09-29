@@ -267,7 +267,9 @@ namespace QTTabBarLib {
                     }
                 }
             }
-            catch {
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "GetIDLHash");
             }
             finally {
                 if(ppshf != null) {
@@ -552,7 +554,9 @@ namespace QTTabBarLib {
                 try {
                     return FileExists(Path);
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "IsFileSystemFile");
                 }
                 return false;
             }
@@ -563,7 +567,9 @@ namespace QTTabBarLib {
                 try {
                     return DirectoryExists(Path);
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "IsFileSystemFolder");
                 }
                 return false;
             }
@@ -613,7 +619,9 @@ namespace QTTabBarLib {
                     }
                     flag = !QTUtility2.IsShellPathButNotFileSystem(linkTargetPath) && !DirectoryExists(linkTargetPath);
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "IsLinkToDeadFolder");
                 }
                 return flag;
             }
@@ -625,7 +633,9 @@ namespace QTTabBarLib {
                     try {
                         return new DriveInfo(path).IsReady;
                     }
-                    catch {
+                    catch (Exception exception)
+                    {
+                        QTUtility2.MakeErrorLog(exception, "IsReadyIfDrive");
                     }
                 }
                 return true;

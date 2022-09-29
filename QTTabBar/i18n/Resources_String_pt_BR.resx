@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Author" xml:space="preserve">
+    <value>JNylson</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>pt_BR</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Brazil</value>
+  </data>
+  <data name="Version_QTTabBar" xml:space="preserve">
+    <value>DevBuild: 2022/8/15 19:01:42 (2.0.50727.9164)</value>
+  </data>
+  <data name="DateModified" xml:space="preserve">
+    <value>08/15/2022</value>
+  </data>
+  <data name="ButtonBar_BtnName" xml:space="preserve">
+    <value>Separador;Voltar;Avançar;Grupo;Recentes;Aplicativos;Nova janela;Fechar essa;Bloquear;Copiar;Sempre visível;Fechar;Fechar outras;Fechar janela;Fechar a esquerda;Fechar a direita;Subir um nível;Recarregar;Procurar;Opacidade;Caixa de pesquisa;Opções</value>
+  </data>
+  <data name="ButtonBar_Misc" xml:space="preserve">
+    <value>Caminho;Nome;Caminho atual da pasta;Nome da pasta atual;MD5; itens;Caminhos de todas as abas abertas</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Lista;Detalhes;Lado a lado;Padrão</value>
+  </data>
+  <data name="DialogButtons" xml:space="preserve">
+    <value>OK;Cancelar;&amp;Aplicar;Pa&amp;drão;Resetar &amp;Página;&amp;Resetar Todos;Resetar;Adicionar;Adicionar...;Remover;Opções;Ativar;Desativar;Desfazer;Carregar...;Salvar...</value>
+  </data>
+  <data name="DragDropToolTip" xml:space="preserve">
+    <value>Copiar para:;Mover para:;Criar atalho em:</value>
+  </data>
+  <data name="ErrorDialogs" xml:space="preserve">
+    <value>Operação falhou.
+Certifique-se de que o arquivo ou o alvo do link exista:
+
+{0};Erro - QTTabBar;Aviso: Não foi possível ativar automaticamente o QTTabBar. Para habilitá-lo manualmente, pressione e solte a tecla Alt e selecione QTTabBar no menu Exibir/Barras de ferramentas.;Não foi possível ativar;Erro;Não é possível carregar a biblioteca hook do QTTabBar.;Não é possível inicializar a biblioteca hook do QTTabBar.;Alguns recursos podem não ser funcionais. Para resolver isso, você pode precisar reinstalar o aplicativo.;Falha de hook do Desktop. Por favor, re-habilite a ferramenta QT Tab Desktop.;Operação falhou.
+Por favor, certifique-se de que a pasta existe ou você tem permissão para acessar:
+
+	{0}</value>
+  </data>
+  <data name="FileFilters" xml:space="preserve">
+    <value>Arquivos de Imagem;Arquivos de Idioma;Arquivos de Plugin</value>
+  </data>
+  <data name="FileHashComputer" xml:space="preserve">
+    <value>Caminho;Hash;Fechar;Limpar;Atualizar;Sempre visível;Mostrar resultados;Limpar ao sair;Caminho completo;(Calculando agora...)</value>
+  </data>
+  <data name="MarginDropDown" xml:space="preserve">
+    <value>Todos;Esquerda;Superior;Direita;Inferior</value>
+  </data>
+  <data name="Misc_Strings" xml:space="preserve">
+    <value>Pesquisa da Área de trabalho;O arquivo de imagem é inválido.
+
+Por favor, especifique arquivo de imagem 432 x 40 px.;Resultados da Pesquisa em;atalho;Escolha o arquivo;Escolha a pasta;Experimental;dummy</value>
+  </data>
+  <data name="Options_Page01_Window" xml:space="preserve">
+    <value>Altera como o Explorer do Windows se comporta.;Modo de janela única;Capturar novas janelas do Explorer como novas abas;Não capturar novas janelas do Explorer;Local padrão para novas janelas e abas;Salvando sessão;Iniciar uma nova sessão a cada vez;Restaurar todas as abas da sessão anterior;Restaurar apenas as abas bloqueadas da sessão anterior;Quando o botão fechar é clicado;Fechar janela;Fechar aba atual;Fechar todas as abas desbloqueadas;Enviar janela para a bandeja de tarefas;Fechar;Minimizar;Botão azul mais</value>
+  </data>
+  <data name="Options_Page02_Tabs" xml:space="preserve">
+    <value>Altera as opções relacionadas a abas.;Abrir novas abas:;Quando a aba atual é fechada, alterne para:;Alternar para novas abas imediatamente;Reutilizar as abas existentes;Renomear abas ambíguas;Ao arrastar, pairando sobre uma aba,;Alternar para essa;Mostrar menu de subpastas;Ícones da aba;Mostrar Ícones de pastas em abas;Mostrar menu de dica da subpasta quando o ícone é clicado;Mostrar a letra da unidade no ícone;Botão fechar;Mostrar botão fechar nas abas;Apenas com a tecla Alt pressionada;Apenas ao passar o mouse;Barra de abas;Mostrar botões de navegação na barra de abas;Na esquerda;Na direita;Permitir várias linhas de abas;Sempre colocar linha com a aba ativa na parte inferior;A esquerda da aba atual;A direita da aba atual;Na posição mais à esquerda;Na posição mais à direita;Aba para a esquerda;Aba para a direita;Aba mais a esquerda;Aba mais a direita;Última aba ativada;Comportamento</value>
+  </data>
+  <data name="Options_Page03_Tweaks" xml:space="preserve">
+    <value>Ativa ou desativa os ajustes da Visualização da Lista do Explorer.;Ajustes que podem ser usados ​​com a Visualização em Lista;Exibir cabeçalhos de coluna em todos os modos de visualização (Windows Vista/7);Usar visualização padrão do sistema de arquivos para pastas de Biblioteca (Windows 7);Desmarcar a extensão do arquivo ao renomear arquivos (Windows XP);Seleção de ciclo com F2 durante a renomeação;Enrole ao redor ao mover a seleção com as teclas de seta;Backspace sobe um nível (Windows Vista/7);Rolagem com roda do mouse enquanto segura Shift horizontalmente;Ajustes que só podem ser usados com a Visualização em Listas mais antiga;Ativar controle da Visualização em Lista mais antiga (Windows 7);Selecionar linha completa na Visualização em Detalhes;Mostrar linhas de grade na Visualização em Detalhes;Cores de linha alternadas na Visualização em Detalhes;Cor de primeiro plano:;Cor de segundo plano:</value>
+  </data>
+  <data name="Options_Page04_Tooltips" xml:space="preserve">
+    <value>Altera o comportamento da ferramenta de menu de subpastas e pré-visualização.;Dicas de subpastas;Ativar dicas de subpasta;Apenas com a tecla Shift pressionada;Mostrar arquivos;Mostrar dicas de ferramentas ao passar mouse sobre itens;Visualizar dicas de ferramentas;Ativar visualizar de dicas;Apenas com a tecla Shift pressionada;Mostrar Informações do arquivo abaixo das imagens;Largura x altura máxima:;Fonte:;Tipos de arquivos de texto;Tipos de arquivos de imagem e vídeo</value>
+  </data>
+  <data name="Options_Page05_General" xml:space="preserve">
+    <value>Opções gerais para o comportamento do Qttabbar.;Integração da barra de tarefas;Mostrar visualizações de abas na Barra de tarefas;Histórico;Manter histórico de abas fechadas;Limpar;Manter histórico de arquivos abertos;Rede;Tempo limite de rede (Digite 0 para o padrão do sistema):;Verifique se há atualizações periodicamente;Verificar;Exportar;Exportar Configurações;Limpar histórico de arquivos?;Limpar histórico de abas?</value>
+  </data>
+  <data name="Options_Page06_Appearance" xml:space="preserve">
+    <value>Altere a aparência das abas ou da barra de abas.;Imagem da aba;Imagem da aba personalizada:;Tamanho da margens:;Sobreposição da área:;Conteúdo da margens:;Acertar áreas transparentes de teste;Tamanho da aba;Altura:;Largura mín.:;Largura máx.:;Modo de tamanho:;Largura completa;Mesmo tamanho;Texto da aba;Cores do texto:;Cores de sombra:;Cor ativa;Cor inativa;Cor do realce;Fonte de texto:;Alinhamento:;Esquerda;Centro;Fundo da barra de ferramentas;Imagem;Cor sólida;Imagem para cada barra separada;Modo de esticar:;Tamanho das margens:;Arquivo de skin;Importar skin...;Exportar skin...;Esticar;Tamanho verdadeiro;Lado a lado</value>
+  </data>
+  <data name="Options_Page07_Mouse" xml:space="preserve">
+    <value>Atribui comandos a diferentes ações do mouse.;Para adicionar um vinculo do mouse, execute uma ação do mouse no ícone de adição à esquerda do tipo de destino apropriado. Para remover um vinculo, selecione-a na lista e pressione a tecla Delete.;Outras opções do mouse;Roda do mouse rola a janela sob o mouse;Acordar mouse;Ação;Em qualquer lugar;Aba;Histórico da barra de abas;Link de Pasta;Arquivo ou Pasta;Fundo do Explorer;Clique Direito;Clique direito;Clique do Meio;Duplo Clique;X1 Clique;X2 Clique;Este botão do mouse não pode ser usado para este alvo.;Os botões válidos do mouse para este alvo são:;Botão inválido</value>
+  </data>
+  <data name="Options_Page08_Keys" xml:space="preserve">
+    <value>Altera os atalhos de teclado.;Selecione uma ação da lista e pressione o gesto de tecla que você gostaria de vincular a ela.  Pressione Escape para limpar a ligação.;Outras opções de teclado;Mostrar a janela do Alternador de Abas quando Ctrl + Tab é pressionado;Ação;Teclas;Esta tecla já está atribuída a:;Deveria ser reatribuído?;Conflito de teclas</value>
+  </data>
+  <data name="Options_Page09_Groups" xml:space="preserve">
+    <value>Cria e gerencia grupos de abas.;Para atribuir uma tecla de atalho a um grupo, selecione-o e pressione o gesto de tecla apropriada. Pressione Escape para limpar a ligação.;Criar novo grupo;Pasta;Inicialização;Tecla de atalho;Novo grupo;Abrir grupo "{0}"</value>
+  </data>
+  <data name="Options_Page10_Apps" xml:space="preserve">
+    <value>Cria atalhos para arquivos ou aplicativos comumente usados.;Para atribuir uma tecla de atalho a um aplicativo, selecione-o e pressione o gesto de tecla apropriado. Pressione Escape para limpar a ligação.;Criar Nova Pasta;Caminho:;Argumentos:;Diretório de Trabalho:;Aplicativo;Tecla de atalho;As seguintes palavras-chave são substituídas por strings de caminho duplo em tempo de execução.;Arquivos selecionados.;Pastas selecionadas.;Arquivos e pastas selecionados.;Pasta atual.;Pasta atual se não houver seleção, de outra forma a pasta selecionada.;Nova pasta;Remova esta pasta e seu conteúdo?;Aplicativo executado "{0}"</value>
+  </data>
+  <data name="Options_Page11_ButtonBar" xml:space="preserve">
+    <value>Personaliza a barra de botão.;Botões;Opções da barra de botão;Ícones grandes;Mostrar rótulos dos botões;Bloquear ordem dos menus do botão suspenso;Bloqueie tamanho da caixa de pesquisa;Imagens de botão personalizadas</value>
+  </data>
+  <data name="Options_Page12_Plugins" xml:space="preserve">
+    <value>Gerencia os plugins de terceiros.;Instalar plugin;(Desativado);por {0};{0} foi removido.;Este plugin será instalado quando você pressionar OK ou Aplicar.;Este plugin será ativado quando você pressionar OK ou Aplicar.;Este plugin será desativado quando você pressionar OK ou Aplicar.;Desinstalar este plug-in também desinstalará os seguintes plugins:;Proceder?;Ativar;Desativar</value>
+  </data>
+  <data name="Options_Page13_Language" xml:space="preserve">
+    <value>Altera o idioma.;Idioma principal;Usar idioma integrado:;Usar arquivo de idioma:;Arquivos de idiomas de plugin;Editor de arquivos de idioma;Mostrar Editor de Idiomas...;Original;Traduzido;Redefinir todas as entradas ao seu valor original?;Erro ao salvar o arquivo.;Chinês simplificado;Inglês;Alemão</value>
+  </data>
+  <data name="Options_Page14_About" xml:space="preserve">
+    <value>Exibe as informações de créditos e da versão.;Código original por {0};Desenvolvedor Chefe:;Outros Desenvolvedores:;Ícones e gráficos:;Se você achou o Qttabbar útil, por favor considere fazer uma pequena doação.;汉化修改：;Criado por: {0}</value>
+  </data>
+  <data name="OptionsDialog" xml:space="preserve">
+    <value>Opções do QTTabBar;Redefinir todas as opções nesta página para seus valores padrão?;Redefinir todas as opções para seus valores padrão? Isso não afetará grupos, aplicativos ou plugins.;Confirmações</value>
+  </data>
+  <data name="PayPalURL" xml:space="preserve">
+    <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>
+  </data>
+  <data name="ShortcutKeys_ActionNames" xml:space="preserve">
+    <value>Voltar;Avançar;Volte para início;Avançar para o fim;Selecionar próxima aba;Selecionar aba anterior;Selecionar primeira aba;Selecionar última aba;Alternar para a última aba ativada;Abrir nova aba;Abrir nova janela;Mesclar abas de outras janelas;Fechar aba atual;Fechar todas mais atual;Fechar esquerda;Fechar direita;Fechar janela;Desfazer perto;Clonar aba atual;Abrir pasta atual em uma nova janela;Bloquear / desbloquear atual;Bloquear / desbloquear todas;Procurar pasta;Criar novo grupo;Abrir diálogo de opção;Mostrar menu da barra de ferramentas;Mostrar menu da aba atual;Mostrar menu de grupo (Barra de botão);Mostrar menu de pasta recente (Barra de botão);Mostrar menu de aplicativos do usuário (Barra de botão);Mostrar menu de arquivos recentes (Barra de botão);Criar novo arquivo vazio;Criar nova pasta;Copiar caminho dos arquivos selecionados;Copiar nome dos arquivos selecionados;Copiar caminho da pasta atual;Copiar nome da pasta atual;Verificar MD5 dos arquivos selecionados;Tornar janela sempre visível;Transparência +;Transparência -;Focar lista de arquivos;Focar barra de pesquisa (Explorer);Focar caixa de pesquisa (Barra de botão);Mostrar menu de subpasta para pasta selecionada;Enviar janela para bandeja de tarefas;Focar a barra de abas;Ordenar abas por nome;Ordenar abas pelo caminho;Ordenar abas por última ativação;Nada;Subir um nível;Atualizar;Colar;Maximizar;Minimizar;Abrir em uma nova aba;Abrir em uma nova aba sem ativar;Abrir em uma nova janela;Recortar;Copiar;Excluir;Propriedades;Copiar caminho;Copiar nome;Exibir checksum;Fechar aba;Fechar abas a esquerda;Fechar abas a direita;Subir um nível;Bloquear;Mostrar menu de contexto;Abrir em uma nova janela;Clonar;Copiar caminho;Propriedades;Mostrar menu de dicas do subdiretório;Fechar todas menos essa;Abrir CMD;Abrir pastas selecionadas na nova aba sem ativação</value>
+  </data>
+  <data name="ShortcutKeys_Groups" xml:space="preserve">
+    <value>QTTabBar;{0} (Plugin)</value>
+  </data>
+  <data name="SiteURL" xml:space="preserve">
+    <value>https://github.com/indiff/qttabbar</value>
+  </data>
+  <data name="TabBar_Menu" xml:space="preserve">
+    <value>Fechar;Fechar a direita;Fechar esquerda;Fechar todas menos essa;Adicionar para o grupo;Criar novo grupo;Bloquear;Duplicar;Nova janela;Copiar caminho;Propriedades;Histórico de abas;Grupos;Desfazer fechado;Última ativada;Arquivos abertos recentes;Procurar pasta;Fechar todas mais atual;Fechar janela;Opções;Desbloquear;Adicionar ao menu de aplicativos : ;itens;Cancelar;Ramos;Remova este item do menu;A&amp;brir conteúdo da pasta;Rótulo da aba;Ordenar aba por;Nome;Caminho;Ativa;Bloqueie barras de ferramentas;Mesclar abas de outras janelas;Inverter;Abrir CMD</value>
+  </data>
+  <data name="TabBar_Message" xml:space="preserve">
+    <value>QTTabBar falhou ao abrir
+
+ "{0}".</value>
+  </data>
+  <data name="TabBar_NewGroup" xml:space="preserve">
+    <value>Criar um novo grupo;Nome do grupo:;Adicionar todas abas</value>
+  </data>
+  <data name="TabBar_Option_Genre" xml:space="preserve">
+    <value>Janela;Abas;Ajustes;Dicas de ferramentas;Geral;Aparência;Mouse;Teclas;Grupos;Aplicativos;Barra de Botão;Plugins;Idioma;Sobre</value>
+  </data>
+  <data name="TaskBar_Menu" xml:space="preserve">
+    <value>Barra de tarefas;Área de trabalho;Bloquear itens;Desenhar fundo do título;Menu de clique único;Ativar teclas de atalho de aplicativo</value>
+  </data>
+  <data name="TaskBar_Titles" xml:space="preserve">
+    <value>Grupos;Desfazer fechado;Aplicativos;Arquivos abertos recente</value>
+  </data>
+  <data name="TrayIcon" xml:space="preserve">
+    <value>1 janela;{0} janelas</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Uma nova versão do Qttabbar foi lançada:;Pressione OK para ir ao site.;Sua versão do QTTabBar está atualizada.;Nova versão de desenvolvimento encontrada:;Arquivo de versão não encontrado (404).;Erro de rede desconhecido.;Servidor não encontrado.;O servidor retornou as strings erradas.</value>
+  </data>
+</root>

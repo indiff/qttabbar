@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ButtonBar_BtnName" xml:space="preserve">
+    <value>Separator;Go back;Go forward;Groups;Recently Closed;Applications;New window;Clone this;Lock;Copy Tool;TopMost;Close;Close all but current;Close window;Close left;Close right;Up one level;Reload;Search;Opacity;Search Box;Options</value>
+  </data>
+  <data name="ButtonBar_Misc" xml:space="preserve">
+    <value>Path;Name;Current folder path;Current folder name;MD5; items;Paths of all open tabs</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>List;Details;Tiles;Default</value>
+  </data>
+  <data name="DialogButtons" xml:space="preserve">
+    <value>OK;Cancel;&amp;Apply;&amp;Default;Reset &amp;Page;&amp;Reset All;Reset;Add;Add...;Remove;Options;Enable;Disable;Undo;Load...;Save...</value>
+  </data>
+  <data name="DragDropToolTip" xml:space="preserve">
+    <value>Copy to:;Move to:;Create shortcut in:</value>
+  </data>
+  <data name="ErrorDialogs" xml:space="preserve">
+    <value>Operation failed.\r\nPlease make sure the file or the target of link exists:\r\n\r\n{0};Error - QTTabBar;Warning:  Could not automatically enable QTTabBar. To enable it manually, press and release the Alt key, then select QTTabBar from the View/Toolbars menu.;Could not enable;Error;Unable to load QTTabBar hook library.;Unable to initialize QTTabBar hook library.;Some features might not be functional. To resolve this, you may need to reinstall the application.;Failed to hook Desktop. Please re-enable QT Tab Desktop tool.;Operation failed.\r\nPlease make sure the folder exists or you have permission to access to:\r\n\r\n\t{0}</value>
+  </data>
+  <data name="FileFilters" xml:space="preserve">
+    <value>Image Files;Language Files;Plugin Files</value>
+  </data>
+  <data name="FileHashComputer" xml:space="preserve">
+    <value>Path;Hash;Close;Clear;Refresh;Always on top;Show result;Clear on close;Full path;(Now calculating...)</value>
+  </data>
+  <data name="MarginDropDown" xml:space="preserve">
+    <value>All;Left;Top;Right;Bottom</value>
+  </data>
+  <data name="Misc_Strings" xml:space="preserve">
+    <value>Desktop Search;Image file is invalid.\r\n\r\nPlease specify 432 x 40 px image file.;Search Results in;shortcut;Choose your file;Choose your folder;Experimental;dummy</value>
+  </data>
+  <data name="OptionsDialog" xml:space="preserve">
+    <value>QTTabBar Options;Reset all options on this page to their default values?;Reset all options to their default values?  This will not affect Groups, Applications, or Plugins.;Confirmation</value>
+  </data>
+  <data name="Options_Page01_Window" xml:space="preserve">
+    <value>Change how Explorer Windows behave.;Single Window mode;Capture new Explorer windows as new tabs;Do not capture new Explorer windows;Default location for new windows and tabs;Session saving;Start a new session each time;Restore all tabs from the previous session;Restore only the locked tabs from the previous session;When the close button is clicked;Close the window;Close the current tab;Close all unlocked tabs;Send the window to the Task Tray on;Close;Minimize;Blue Plus Button</value>
+  </data>
+  <data name="Options_Page02_Tabs" xml:space="preserve">
+    <value>Change options related to tabs.;Open new tabs:;When the current tab is closed, switch to the:;Switch to new tabs immediately;Reuse existing tabs;Rename ambiguous tabs;When drag-hovering over a tab,;Switch to it;Show the Subfolder Tip menu;Tab icons;Show folder icons on tabs;Show the Subfolder Tip menu when the icon is clicked;Show the drive letter on the icon;Close button;Show close button on tabs;Only with the Alt key down;Only on mouse hover;Tab Bar;Show navigation buttons on the tab bar;On the left;On the right;Allow multiple rows of tabs;Always put the row with the active tab on the bottom;Left of the current tab;Right of the current tab;In the leftmost position;In the rightmost position;Tab to the left;Tab to the right;Leftmost tab;Rightmost tab;Last activated tab;Behavior</value>
+  </data>
+  <data name="Options_Page03_Tweaks" xml:space="preserve">
+    <value>Enable or disable tweaks to Explorer's List View.;Tweaks that can be used with either List View;Display column headers in all view modes (Windows Vista/7);Use the standard filesystem view for Library folders (Windows 7);Deselect file extension when renaming files (Windows XP);Cycle selection with F2 while renaming;Wrap around when moving the selection with the arrow keys;Backspace goes up one level (Windows Vista/7);Scrolling with mouse wheel while holding shift scrolls horizontally;Tweaks that can only be used with the older List View;Enable the older List View control (Windows 7);Full row selection in Details view;Show grid lines in Details view;Alternate row colors in Details view;Foreground color:;Background color:</value>
+  </data>
+  <data name="Options_Page04_Tooltips" xml:space="preserve">
+    <value>Change the behavior of Subfolder and Preview tooltips.;Subfolder Tips;Enable Subfolder Tips;Only with the Shift key is down;Show files;Show preview tooltips when mousing over menu items;Preview tooltips;Enable preview tooltips;Only with the Shift key is down;Show file information below images;Maximum Width x Height:;Font:;Text filetypes;Image and Video filetypes</value>
+  </data>
+  <data name="Options_Page05_General" xml:space="preserve">
+    <value>General options for QTTabBar's behavoir.;Taskbar integration;Show tab previews on the Taskbar;History;Keep history of closed tabs;Clear now;Keep history of opened files;Network;Network timeout (Enter 0 for system default):;Check for updates periodically;Check now;Export;Export Settings...;Clear file history?;Clear tab history?;Sound;Enable Sound;Enable Log</value>
+  </data>
+  <data name="Options_Page06_Appearance" xml:space="preserve">
+    <value>Change the appearance of tabs or the tab bar.;Tab image;Use custom tab image:;Sizing margins:;Overlap area:;Content margins:;Hit test transparent areas;Tab size;Height:;Min Width:;Max Width:;Sizing mode:;Full width;Same size;Tab text;Text Colors:;Shadow Colors:;Active Color;Inactive Color;Mouseover Color;Text Font:;Alignment:;Left;Center;Toolbar Background;Image;Solid color;Image each bar separately;Stretch mode:;Sizing margins:;Skin file;Import Skin...;Export Skin...;Stretch;True size;Tile</value>
+  </data>
+  <data name="Options_Page07_Mouse" xml:space="preserve">
+    <value>Assign commands to different mouse actions.;To add a mouse binding, perform a mouse action on the plus icon to the left of the appropriate target type.  To remove a binding, select it in the list and press the Delete key.;Other mouse options;Mouse wheel scrolls the window under the mouse;Mouse Chord;Action;Anywhere;Tab;Tab Bar Background;Folder Link;File or Folder;Explorer Background;Left Click;Right Click;Middle Click;Double Click;X1 Click;X2 Click;This mouse button cannot be used for this target.;The valid mouse buttons for this target are:;Invalid Button</value>
+  </data>
+  <data name="Options_Page08_Keys" xml:space="preserve">
+    <value>Change keyboard shortcuts.;Select an action from the list and press the key gesture you would like to bind to it.  Press Escape to clear the binding.;Other keyboard options;Show the Tab Switcher window when Ctrl + Tab is pressed;Action;Keystroke;This key is already assigned to:;Should it be reassigned?;Keystroke conflict</value>
+  </data>
+  <data name="Options_Page09_Groups" xml:space="preserve">
+    <value>Create and manage tab groups.;To assign a Shortcut Key to a group, select it and press the appropriate key gesture.  Press Escape to clear the binding.;Create New Group;Folder;Startup;Shortcut Key;New Group;Open group "{0}"</value>
+  </data>
+  <data name="Options_Page10_Apps" xml:space="preserve">
+    <value>Create shortcuts to commonly used files or applications.;To assign a Shortcut Key to an application, select it and press the appropriate key gesture.  Press Escape to clear the binding.;Create New Folder;Path:;Arguments:;Working Directory:;Application;Shortcut Key;The following keywords are replaced with double-quoted path strings at runtime.;Selected files.;Selected folders.;Selected files and folders.;Current folder.;Current folder if no selection, otherwise selected folder.;New Folder;Remove this folder and its contents?;Launch application "{0}"</value>
+  </data>
+  <data name="Options_Page11_ButtonBar" xml:space="preserve">
+    <value>Customize the Button Bar.;Buttons;Button Bar Options;Large icons;Show labels on buttons;Lock the order of dropdown button menus;Lock the size of the search box;Custom Button Images</value>
+  </data>
+  <data name="Options_Page12_Plugins" xml:space="preserve">
+    <value>Manage third-party plugins.;Install a Plugin;(Disabled);by {0};{0} has been removed.;This plugin will be installed when you press OK or Apply.;This plugin will be enabled when you press OK or Apply.;This plugin will be disabled when you press OK or Apply.;Uninstalling this plugin will also uninstall the following plugins:;Proceed?;Enable;Disable</value>
+  </data>
+  <data name="Options_Page13_Language" xml:space="preserve">
+    <value>Change the language.;Main language;Use built-in language:;Use language file:;Plugin language files;Language File Editor;Show Language Editor...;Original;Translated;Reset all entries to their original value?;Error saving file.;简体中文;English;German</value>
+  </data>
+  <data name="Options_Page14_About" xml:space="preserve">
+    <value>View credits and version information.;Original code by {0};Lead Developer:;Other Developers:;Icons and graphics:;If you find QTTabBar useful, please consider making a small donation.;汉化修改：;Build by: {0}</value>
+  </data>
+  <data name="PayPalURL" xml:space="preserve">
+    <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>
+  </data>
+  <data name="ShortcutKeys_ActionNames" xml:space="preserve">
+    <value>Go back;Go forward;Go back to start;Go forward to end;Select next tab;Select previous tab;Select first tab;Select last tab;Switch to last activated tab;Open new tab;Open new window;Merge tabs from other windows;Close current tab;Close all but current;Close left;Close right;Close window;Undo close;Clone current tab;Open current folder in new window;Lock / unlock current;Lock / unlock all;Browse folder;Create new group;Open option dialog;Show toolbar menu;Show current tab menu;Show group menu (Button Bar);Show recent folder menu (Button Bar);Show user application menu (Button Bar);Show recent files menu (Button Bar);Create new empty file;Create new folder;Copy selected files path;Copy selected files name;Copy current folder path;Copy current folder name;Check MD5 of selected files;Bring window to topmost;Transparency +;Transparency -;Focus file list;Focus search bar (Explorer);Focus search box (Button Bar);Show Subfolder Tip Menu for selected folder;Send window to Task Tray;Focus the Tab Bar;Sort tabs by name;Sort tabs by path;Sort tabs by last activation;Nothing;Up one level;Refresh;Paste;Maximize;Minimize;Open in new tab;Open in new tab without activating;Open in new window;Cut;Copy;Delete;Properties;Copy path;Copy name;View checksum;Close tab;Close tabs to left;Close tabs to right;Up one level;Lock;Show context menu;Open in new window;Clone;Copy path;Properties;Show Subdirectory Tip menu;Close all but this;Open CMD;Open selected folders in new tab without activating</value>
+  </data>
+  <data name="ShortcutKeys_Groups" xml:space="preserve">
+    <value>QTTabBar;{0} (Plugin)</value>
+  </data>
+  <data name="SiteURL" xml:space="preserve">
+    <value>https://github.com/indiff/qttabbar</value>
+  </data>
+  <data name="TabBar_Menu" xml:space="preserve">
+    <value>Close;Close right;Close left;Close all but this;Add to Group;Create new Group;Lock;Clone this;New window;Copy path;Properties;Tab history;Groups;Undo closed;Last activated;Recently opened files;Browse folder;Close all but current;Close Window;Options;Unlock;Add to Application menu : ;items;Cancel;Branches;Remove this item from menu;O&amp;pen containing folder;Tab label;Tab order;Name;Path;Active;Lock the Toolbars;Merge tabs of other windows;Invert;Open CMD</value>
+  </data>
+  <data name="TabBar_Message" xml:space="preserve">
+    <value>QTTabBar failed to open
+
+ "{0}".</value>
+  </data>
+  <data name="TabBar_NewGroup" xml:space="preserve">
+    <value>Create New Group;Group name:;Add all tabs</value>
+  </data>
+  <data name="TabBar_Option_Genre" xml:space="preserve">
+    <value>Window;Tabs;Tweaks;Tooltips;General;Appearance;Mouse;Keys;Groups;Applications;Button Bar;Plugins;Language;About</value>
+  </data>
+  <data name="TaskBar_Menu" xml:space="preserve">
+    <value>Taskbar;Desktop;Lock items;Draw title background;Menu by one click;Enable application shortcut keys</value>
+  </data>
+  <data name="TaskBar_Titles" xml:space="preserve">
+    <value>Groups;Undo closed;Applications;Recently opened files</value>
+  </data>
+  <data name="TrayIcon" xml:space="preserve">
+    <value>1 window;{0} windows</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>A new version of QTTabBar has been released:;Press OK to go to the web site.;Your version of QTTabBar is up to date.;New development version found:;Version file not found (404).;Unknown network error.;Server not found.;Server returned wrong strings.</value>
+  </data>
+</root>

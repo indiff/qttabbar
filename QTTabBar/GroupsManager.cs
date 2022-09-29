@@ -15,6 +15,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -80,7 +81,9 @@ namespace QTTabBarLib {
                             }
                             groupList.Add(new Group(name, shortcut, startup, paths));
                         }
-                        catch {
+                        catch (Exception exception)
+                        {
+                            QTUtility2.MakeErrorLog(exception, "LoadGroups");
                         }
                     }
                 }

@@ -17,6 +17,7 @@
 
 using System;
 using System.Drawing;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security;
@@ -143,6 +144,107 @@ namespace QTTabBarLib.Interop {
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
         [DllImport("user32.dll")]
         public static extern int GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        /// <summary>
+        /// 打开进程
+        /// </summary>
+        /// <param name="dwDesiredAccess"></param>
+        /// <param name="bInheritHandle"></param>
+        /// <param name="dwProcessId"></param>
+        /// <returns></returns>
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool CloseHandle(IntPtr hObject);
+
+        /*[DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress,
+            int dwSize, AllocationType dwFreeType);*/
+
+      [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        public static unsafe extern bool VirtualFreeEx(
+            IntPtr hProcess, byte* pAddress,
+            int size, AllocationType freeType);
+
+        [Flags]
+        public enum MemoryProtection
+        {
+            Execute = 0x10,
+            ExecuteRead = 0x20,
+            ExecuteReadWrite = 0x40,
+            ExecuteWriteCopy = 0x80,
+            NoAccess = 0x01,
+            ReadOnly = 0x02,
+            ReadWrite = 0x04,
+            WriteCopy = 0x08,
+            GuardModifierflag = 0x100,
+            NoCacheModifierflag = 0x200,
+            WriteCombineModifierflag = 0x400
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        public static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, AllocationType flAllocationType, MemoryProtection flProtect);
+
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool ReadProcessMemory(
+            IntPtr hProcess,
+            IntPtr lpBaseAddress,
+            [Out] byte[] lpBuffer,
+            int dwSize,
+            out IntPtr lpNumberOfBytesRead);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool ReadProcessMemory(
+            IntPtr hProcess,
+            IntPtr lpBaseAddress,
+            [Out, MarshalAs(UnmanagedType.AsAny)] object lpBuffer,
+            int dwSize,
+            out IntPtr lpNumberOfBytesRead);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool ReadProcessMemory(
+            IntPtr hProcess,
+            IntPtr lpBaseAddress,
+            IntPtr lpBuffer,
+            int dwSize,
+            out IntPtr lpNumberOfBytesRead);
+
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool WriteProcessMemory(
+            IntPtr hProcess,
+            IntPtr lpBaseAddress,
+            byte[] lpBuffer,
+            Int32 nSize,
+            out IntPtr lpNumberOfBytesWritten);
+
+        /*[DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool WriteProcessMemory(
+            IntPtr hProcess,
+            IntPtr lpBaseAddress,
+            [MarshalAs(UnmanagedType.AsAny)] object lpBuffer,
+            int dwSize,
+            out IntPtr lpNumberOfBytesWritten);*/
+
+        [Flags]
+        public enum AllocationType
+        {
+            Commit = 0x1000,
+            Reserve = 0x2000,
+            Decommit = 0x4000,
+            Release = 0x8000,
+            Reset = 0x80000,
+            Physical = 0x400000,
+            TopDown = 0x100000,
+            WriteWatch = 0x200000,
+            LargePages = 0x20000000
+        }
+
         [DllImport("kernel32.dll")]
         public static extern IntPtr GlobalAlloc(uint uFlags, IntPtr dwBytes);
         [DllImport("kernel32.dll")]
@@ -153,6 +255,22 @@ namespace QTTabBarLib.Interop {
         public static int HiWord(int dwValue) {
             return (dwValue >> 16) & 0xFFFF;
         }
+
+        [DllImport("shell32.dll")]
+        public unsafe static extern void SHParseDisplayName([MarshalAs(UnmanagedType.LPWStr)] string name, IntPtr bindingContext, out IntPtr pidl, uint sfgaoIn, out uint psfgaoOut);
+
+        [DllImport("shell32.dll")]
+        public unsafe static extern int SHOpenFolderAndSelectItems(IntPtr pidlFolder, uint cidl, [MarshalAs(UnmanagedType.LPArray)] IntPtr[] apidl, uint dwFlags);
+
+        /*
+        [DllImport("shell32.dll")]
+        public static extern void SHParseDisplayName(
+            [MarshalAs(UnmanagedType.LPWStr)] string name, 
+            IntPtr bindingContext, 
+            [Out()] out IntPtr pidl, 
+            uint sfgaoIn,
+            [Out()] out uint psfgaoOut);*/
+
 
         [DllImport("shell32.dll")]
         public static extern IntPtr ILClone(IntPtr pidl);
@@ -245,6 +363,15 @@ namespace QTTabBarLib.Interop {
         public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern unsafe IntPtr SendMessage(
+            IntPtr hWnd,
+            int Msg,
+            void* wParam,
+            void* lParam);
+
+
         public static IntPtr SendMessage<T>(IntPtr hWnd, uint Msg, IntPtr wParam, ref T lParam) {
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(lParam));
             try {
@@ -374,5 +501,7 @@ namespace QTTabBarLib.Interop {
         [DllImport("user32.dll")]
         public static extern void SetProcessDPIAware();
 
+
+       
     }
 }

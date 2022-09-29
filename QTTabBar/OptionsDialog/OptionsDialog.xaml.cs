@@ -148,62 +148,67 @@ namespace QTTabBarLib {
             
             InitializeComponent();
 
-            // 设置默认的title 和版本
-            string str = QTUtility.CurrentVersion.ToString();
-            if (QTUtility.BetaRevision.Major > 0)
-            {
-                str = str + " Beta " + QTUtility.BetaRevision.Major;
+             //   QTUtility2.log("InitializeComponent end");
+                // 设置默认的title 和版本
+                string str = QTUtility.CurrentVersion.ToString();
+                if (QTUtility.BetaRevision.Major > 0)
+                {
+                    str = str + " Beta " + QTUtility.BetaRevision.Major;
+                }
+                else if (QTUtility.BetaRevision.Minor > 0)
+                {
+                    str = str + " Alpha " + QTUtility.BetaRevision.Minor;
+                }
+                this.Title += str; //  +"_" + QTUtility2.MakeVersionString();
+
+             //   QTUtility2.log("set title end");           
+                int i = 0;
+                tabbedPanel.ItemsSource = new OptionsDialogTab[] {
+                    new Options01_Window        { Index = i++},
+                    new Options02_Tabs          { Index = i++},
+                    new Options03_Tweaks        { Index = i++},
+                    new Options04_Tooltips      { Index = i++},
+                    new Options05_General       { Index = i++},
+                    new Options06_Appearance    { Index = i++},
+                    new Options07_Mouse         { Index = i++},
+                    new Options08_Keys          { Index = i++},
+                    new Options09_Groups        { Index = i++}, // can not use dll
+                    new Options10_Apps          { Index = i++},
+                    new Options11_ButtonBar     { Index = i++},
+                    new Options12_Plugins       { Index = i++},
+                    new Options13_Language      { Index = i++},
+                    new Options14_About         { Index = i}
+                };
+
+               // QTUtility2.log("tabbedPanel.ItemsSource end");    
+
+                // For some reason, on XP, the Options dialog starts up with a blank tab
+                // This is the only way I've found to fix it
+                // TODO: Investigate and see if there's a better way
+                Loaded += (sender, args) => {
+                    tabbedPanel.SelectedIndex = 1;
+                    tabbedPanel.SelectedIndex = 0;
+                };
+
+                WorkingConfig = QTUtility2.DeepClone(ConfigManager.LoadedConfig);
+                foreach(OptionsDialogTab tab in tabbedPanel.Items) {
+                    tab.WorkingConfig = WorkingConfig;
+                    IHotkeyContainer ihc = tab as IHotkeyContainer;
+                    if(ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
+                    tab.InitializeConfig();
+                }
+              //  QTUtility2.log("InitializeConfig end");
+
+                //////////// setting by qwop .
+                setByQwop();
+              //  QTUtility2.log("利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度 end");
             }
-            else if (QTUtility.BetaRevision.Minor > 0)
-            {
-                str = str + " Alpha " + QTUtility.BetaRevision.Minor;
-            }
-            this.Title += str; //  +"_" + QTUtility2.MakeVersionString();
-
-            int i = 0;
-            tabbedPanel.ItemsSource = new OptionsDialogTab[] {
-                new Options01_Window        { Index = i++},
-                new Options02_Tabs          { Index = i++},
-                new Options03_Tweaks        { Index = i++},
-                new Options04_Tooltips      { Index = i++},
-                new Options05_General       { Index = i++},
-                new Options06_Appearance    { Index = i++},
-                new Options07_Mouse         { Index = i++},
-                new Options08_Keys          { Index = i++},
-                new Options09_Groups        { Index = i++},
-                new Options10_Apps          { Index = i++},
-                new Options11_ButtonBar     { Index = i++},
-                new Options12_Plugins       { Index = i++},
-                new Options13_Language      { Index = i++},
-                new Options14_About         { Index = i}
-            };
-
-            // For some reason, on XP, the Options dialog starts up with a blank tab
-            // This is the only way I've found to fix it
-            // TODO: Investigate and see if there's a better way
-            Loaded += (sender, args) => {
-                tabbedPanel.SelectedIndex = 1;
-                tabbedPanel.SelectedIndex = 0;
-            };
-
-            WorkingConfig = QTUtility2.DeepClone(ConfigManager.LoadedConfig);
-            foreach(OptionsDialogTab tab in tabbedPanel.Items) {
-                tab.WorkingConfig = WorkingConfig;
-                IHotkeyContainer ihc = tab as IHotkeyContainer;
-                if(ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
-                tab.InitializeConfig();
-            }
-
-
-            //////////// setting by qwop .
-            setByQwop();
-             }
             catch (Exception exception)
             {
-                QTUtility2.MakeErrorLog(exception, "Options13_Language InitializeConfig");
+                QTUtility2.MakeErrorLog(exception, "OptionsDialog constructor");
 
             }
-}
+        }
 
 
         #region setting by qwop
@@ -233,7 +238,16 @@ namespace QTTabBarLib {
 
             ////////////////////////////////////////
             // generateInitConfig();
-            
+            // 设置 Esc 关闭窗口
+            this.KeyDown += ModifyPrice_KeyDown;
+        }
+
+        private void ModifyPrice_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)//Esc键  
+            {
+                this.Close();
+            }
         }
 
         /// <summary>
@@ -787,17 +801,24 @@ namespace QTTabBarLib {
         // Common Font Chooser button click handler.
         protected void btnFontChoose_Click(object sender, RoutedEventArgs e) {
             var button = (Button)sender;
-            try {
-                using(var dialog = new System.Windows.Forms.FontDialog()) {
+            try
+            {
+                using (var dialog = new System.Windows.Forms.FontDialog())
+                {
                     dialog.Font = (Font)button.Tag;
                     dialog.ShowEffects = false;
                     dialog.AllowVerticalFonts = false;
-                    if(System.Windows.Forms.DialogResult.OK == dialog.ShowDialog()) {
+                    if (System.Windows.Forms.DialogResult.OK == dialog.ShowDialog())
+                    {
                         button.Tag = dialog.Font;
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "btnFontChoose_Click");
+
+            }
         }
 
         // Utility method to move nodes up and down in a TreeView.

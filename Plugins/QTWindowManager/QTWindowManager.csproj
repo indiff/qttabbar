@@ -71,7 +71,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="QTWindowManager.ruleset" />
     <None Include="Resources\QTWindowManager_large.png" />
   </ItemGroup>
   <ItemGroup>

@@ -40,12 +40,17 @@ namespace QTTabBarLib {
             return dicPluginAssemblies.TryGetValue(path, out asm);
         }
 
+        // 处理插件的异常
         public static void HandlePluginException(Exception ex, IntPtr hwnd, string pluginID, string strCase) {
-            MessageForm.Show(hwnd, "Error : " + strCase + "\r\nPlugin : \"" + pluginID + "\"\r\nErrorType : " + ex, "Plugin Error", MessageBoxIcon.Hand, 0x7530);
+            MessageForm.Show(hwnd, 
+                "Error : " + strCase + "\r\nPlugin : \"" + pluginID + "\"\r\nErrorType : " + ex, 
+                "Plugin Error", 
+                MessageBoxIcon.Hand, 
+                0x7530);
         }
 
         public static void Initialize() {
-            // add by qwop.
+            // add by indiff.
             InitDefaultQTConfigPlugin();    
             foreach(PluginAssembly pa in ReadAssemblyPaths().Select(LoadAssembly)) {
                 if(pa == null) continue;

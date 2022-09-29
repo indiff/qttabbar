@@ -96,6 +96,7 @@
     <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
@@ -114,6 +115,12 @@
     <Compile Include="BreadcrumbBar.cs" />
     <Compile Include="AbstractListView.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="FileRename\FileRenameDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileRename\FileRenameDialog.Designer.cs">
+      <DependentUpon>FileRenameDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interop\SHELLSTATE.cs" />
     <Compile Include="OptionsDialog\Options03_Tweaks.xaml.cs">
       <DependentUpon>Options03_Tweaks.xaml</DependentUpon>
@@ -161,21 +168,21 @@
     <Compile Include="PluginServer.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="PreMergeToMergedDeserializationBinder.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources_String_de_DE.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources_String_de_DE.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resource_String_zh_CN.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource_String_zh_CN.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Resources_Image.cs" />
+    <Compile Include="Resources_String.cs" />
+    <Compile Include="Resources_String_de_DE.cs" />
+    <Compile Include="Resources_String_es_ES.cs" />
+    <Compile Include="Resources_String_fr_FR.cs" />
+    <Compile Include="Resources_String_pt_BR.cs" />
+    <Compile Include="Resources_String_tr_TR.cs" />
+    <Compile Include="Resource_String_zh_CN.cs" />
+    <Compile Include="SFGAO.cs" />
     <Compile Include="ShellColors.cs" />
     <Compile Include="ShellContextMenu.cs" />
     <Compile Include="EditableHeader.xaml.cs">
@@ -200,16 +207,6 @@
       <DependentUpon>OptionsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="RebarController.cs" />
-    <Compile Include="Resources_Image.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources_Image.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources_String.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources_String.resx</DependentUpon>
-    </Compile>
     <Compile Include="MiscClasses.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Spinner.xaml.cs">
@@ -390,26 +387,37 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FileRename\FileRenameDialog.resx">
+      <DependentUpon>FileRenameDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources_Image.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources_Image.Designer.cs</LastGenOutput>
+      <DependentUpon>Resources_Image.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources_String.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources_String.Designer.cs</LastGenOutput>
+      <DependentUpon>Resources_String.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources_String_de_DE.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources_String_de_DE.Designer.cs</LastGenOutput>
+      <DependentUpon>Resources_String_de_DE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources_String_es_ES.resx">
+      <DependentUpon>Resources_String_es_ES.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources_String_fr_FR.resx">
+      <DependentUpon>Resources_String_fr_FR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources_String_pt_BR.resx">
+      <DependentUpon>Resources_String_pt_BR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources_String_tr_TR.resx">
+      <DependentUpon>Resources_String_tr_TR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource_String_zh_CN.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource_String_zh_CN.Designer.cs</LastGenOutput>
+      <DependentUpon>Resource_String_zh_CN.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

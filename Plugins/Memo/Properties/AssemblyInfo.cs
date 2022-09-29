@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Memo Plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
-[assembly: AssemblyProduct("QTClock")]
+[assembly: AssemblyProduct("indiff")]
 [assembly: AssemblyCopyright("Copyright (C)  2007-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

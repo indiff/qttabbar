@@ -141,7 +141,8 @@ namespace QTTabBarLib {
                                 appList.Add(new UserApp(name, path, args, wdir, shortcut));
                             }
                         }
-                        catch {
+                        catch(Exception e) {
+                            QTUtility2.MakeErrorLog(e, "LoadApps");
                         }
                     }
                 }

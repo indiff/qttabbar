@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CreateNewItem")]
-[assembly: AssemblyDescription("Create new item by key shortcut.")]
+[assembly: AssemblyDescription("通过快捷键创建项目")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("CreateNewItem")]

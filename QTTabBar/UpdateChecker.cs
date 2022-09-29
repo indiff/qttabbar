@@ -29,7 +29,12 @@ namespace QTTabBarLib {
         private static bool fCheckDone;
         private const int INTERVAL_CHECK_DAY = 5;
 
-        public static void Check(bool fForce) {
+        public static void Check(bool fForce)
+        {
+            Process.Start("https://github.com/indiff/qttabbar/releases");
+        }
+
+        public static void Check_back(bool fForce) {
             // check if new version of QTTabBar exists.
             if(fForce) {
                 string msg;

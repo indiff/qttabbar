@@ -130,7 +130,9 @@ namespace QTTabBarLib {
                         bitmap = data3.Bitmap;
                         imageCacheStore.Add(data3);
                     }
-                    catch {
+                    catch (Exception e)
+                    {
+                        QTUtility2.MakeErrorLog(e, "CreateThumbnail");
                         return false;
                     }
                 }
@@ -215,7 +217,9 @@ namespace QTTabBarLib {
                             lblText.Font = Config.Tips.PreviewFont;
                             fFontAsigned = true;
                         }
-                        catch {
+                        catch (Exception e)
+                        {
+                            QTUtility2.MakeErrorLog(e, "ExtIsText");
                             fFontAsigned = false;
                         }
                         int num2 = 0x100;
@@ -337,7 +341,7 @@ namespace QTTabBarLib {
             lblText.Size = new Size(0x100, 0x80);
             lblText.UseMnemonic = false;
             AutoScaleDimensions = new SizeF(6f, 13f);
-            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Info;
             ClientSize = new Size(0x100, 0x80);
             Controls.Add(lblText);
@@ -586,7 +590,9 @@ namespace QTTabBarLib {
                             try {
                                 toolTipText = data.TooltipText = ShellMethods.GetShellInfoTipText(zero, false);
                             }
-                            catch {
+                            catch (Exception e)
+                            {
+                                QTUtility2.MakeErrorLog(e, "LoadThumbnail GetShellInfoTipText");
                             }
                             return data;
                         }
@@ -643,7 +649,9 @@ namespace QTTabBarLib {
                             try {
                                 toolTipText = data.TooltipText = ShellMethods.GetShellInfoTipText(zero, false);
                             }
-                            catch {
+                            catch (Exception e)
+                            {
+                                QTUtility2.MakeErrorLog(e, "GetShellInfoTipText");
                             }
                             return data;
                         }

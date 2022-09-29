@@ -33,6 +33,7 @@ namespace QTTabBarLib {
         private bool fPreventSelChange;
 
         public TreeViewWrapper(IntPtr hwnd, INameSpaceTreeControl treeControl) {
+            QTUtility2.log("TreeViewWrapper init");
             this.treeControl = treeControl;
             treeController = new NativeWindowController(hwnd);
             treeController.MessageCaptured += TreeControl_MessageCaptured;
@@ -41,6 +42,7 @@ namespace QTTabBarLib {
         }
 
         private bool HandleClick(Point pt, Keys modifierKeys, bool middle) {
+            QTUtility2.log("TreeViewWrapper HandleClick");
             IShellItem item = null;
             try {
                 TVHITTESTINFO structure = new TVHITTESTINFO { pt = pt };
@@ -68,6 +70,7 @@ namespace QTTabBarLib {
         }
 
         private bool TreeControl_MessageCaptured(ref Message msg) {
+            QTUtility2.log("TreeViewWrapper TreeControl_MessageCaptured");
             switch(msg.Msg) {
                 case WM.USER:
                     fPreventSelChange = false;
@@ -90,6 +93,7 @@ namespace QTTabBarLib {
         }
 
         private bool ParentControl_MessageCaptured(ref Message msg) {
+            QTUtility2.log("TreeViewWrapper ParentControl_MessageCaptured");
             if(msg.Msg == WM.NOTIFY) {
                 NMHDR nmhdr = (NMHDR)Marshal.PtrToStructure(msg.LParam, typeof(NMHDR));
                 switch(nmhdr.code) {

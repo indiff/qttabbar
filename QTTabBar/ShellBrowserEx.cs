@@ -23,7 +23,6 @@ using System.Runtime.InteropServices;
 using BandObjectLib;
 using QTPlugin;
 using QTTabBarLib.Interop;
-using System.Windows;
 
 namespace QTTabBarLib {
     public class ShellBrowserEx : IDisposable {
@@ -33,6 +32,24 @@ namespace QTTabBarLib {
         public ShellBrowserEx(IShellBrowser shellBrowser) {
             this.shellBrowser = shellBrowser;
             OnNavigateComplete();
+        }
+
+
+        public IFolderView FolderView
+        {
+            get
+            {
+                var shellBrowserEx = InstanceManager.GetThreadTabBar().GetShellBrowser();
+                if (shellBrowserEx != null && shellBrowserEx.folderView != null)
+                {
+                    QTUtility2.log("shellBrowserEx.folderView from thread");
+                    return shellBrowserEx.folderView; 
+                }
+
+                QTUtility2.log("shellBrowserEx.folderView from field");
+                return folderView;
+            }
+            set { folderView = value; }
         }
 
         public FVM ViewMode {
@@ -77,7 +94,7 @@ namespace QTTabBarLib {
             }
             if(folderView != null) {
                Marshal.ReleaseComObject(folderView);
-               folderView = null;
+             //  folderView = null;
             }
         }
         
@@ -88,30 +105,53 @@ namespace QTTabBarLib {
             return parent != IntPtr.Zero ? parent : hwnd;
         }
 
-        public int GetFocusedIndex() {
-            int focusedIndex;
-           //  QTUtility2.log("GetFocusedIndex  folderView " + folderView);
-            return folderView != null && folderView.GetFocusedItem(out focusedIndex) == 0 
-                    ? focusedIndex : -1;
-        }
-
-        public IDLWrapper GetFocusedItem() {
-            int focusedIndex = GetFocusedIndex();
-            return focusedIndex == -1 ? new IDLWrapper() : GetItem(focusedIndex);
-        }
+        
 
         public IShellBrowser GetIShellBrowser() {
             return shellBrowser;
+        }
+
+        public int GetFocusedIndex()
+        {
+            int focusedIndex;
+            // QTUtility2.log("GetFocusedIndex  folderView " + folderView);
+            return folderView != null && folderView.GetFocusedItem(out focusedIndex) == 0
+                ? focusedIndex : -1;
+        }
+
+
+        public IDLWrapper GetFocusedItem()
+        {
+            int focusedIndex = GetFocusedIndex();
+            return focusedIndex == -1 ? new IDLWrapper() : GetItem(focusedIndex);
         }
 
         public IDLWrapper GetItem(int idx, bool noAppend = false) {
             if(folderView == null) return new IDLWrapper();
             IntPtr ppidl = IntPtr.Zero;
             try {
-               //  QTUtility2.log("GetItem  folderView " + folderView + " idx " + idx );
-                if (folderView != null) {
+                // QTUtility2.log("GetItem  folderView " + folderView + " idx " + idx );
+                /*if (InstanceManager.GetTotalInstanceCount() > 0)
+                {
+                    var shellBrowserEx = InstanceManager.GetThreadTabBar().GetShellBrowser();
+                    var exeFlag = false;
+                    if (shellBrowserEx != null && shellBrowserEx.folderView != null )
+                    {
+                        shellBrowserEx.folderView.Item(idx, out ppidl);
+                        exeFlag = true;
+                    }
+
+                    if (!exeFlag && folderView != null)
+                    {
+                        folderView.Item(idx, out ppidl);
+                    }
+                }*/
+
+                if ( folderView != null)
+                {
                     folderView.Item(idx, out ppidl);
                 }
+                
                 if(noAppend || ppidl == IntPtr.Zero) {
                     return new IDLWrapper(ppidl);
                 }
@@ -178,7 +218,9 @@ namespace QTTabBarLib {
                     return new IDLWrapper(ptr);
                 }
             }
-            catch {
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "GetShellPath");
             }
             finally {
                 if(ppv != null) {
@@ -203,19 +245,24 @@ namespace QTTabBarLib {
             IntPtr ptr;
             return IsFolderTreeVisible(out ptr);
         }
-
+        // 判断文件夹是否显示, 函数为xp操作系统
         public bool IsFolderTreeVisible(out IntPtr hwnd) {
             hwnd = IntPtr.Zero;
-            return QTUtility.IsXP && shellBrowser != null && 0 == shellBrowser.GetControlWindow(3, out hwnd);
+            return  QTUtility.IsXP && 
+                   shellBrowser != null && 
+                   0 == shellBrowser.GetControlWindow(3, out hwnd);
         }
 
         // Call this on navigate to refresh the FolderView
+        // 当导航的时候刷新文件夹视图
         public void OnNavigateComplete() {
             if(shellBrowser == null) return;
-            if(folderView != null) {
+            /*if(folderView != null) {
                 Marshal.ReleaseComObject(folderView);
                 folderView = null;
-            }
+            }*/
+
+            // 数显 folderView 实例
             IShellView ppshv;
             if(shellBrowser.QueryActiveShellView(out ppshv) == 0) {
                 folderView = ppshv as IFolderView;
@@ -228,15 +275,20 @@ namespace QTTabBarLib {
                 {
                     return shellBrowser.BrowseObject(idlw.PIDL, flags);
                 }
-                catch (COMException)
+                catch (COMException e)
                 {
+                    QTUtility2.MakeErrorLog(e, " ShellBrowserEx Navigate");
                 }
             }
             return 1;
         }
 
         public void SelectItem(int idx) {
-            if(folderView != null) folderView.SelectItem(idx, SVSIF.SELECT | SVSIF.DESELECTOTHERS | SVSIF.ENSUREVISIBLE | SVSIF.FOCUSED);
+            if(folderView != null) 
+                folderView.SelectItem(idx, SVSIF.SELECT | 
+                                            SVSIF.DESELECTOTHERS | 
+                                            SVSIF.ENSUREVISIBLE | 
+                                            SVSIF.FOCUSED);
         }
 
         internal void SetStatusText(string status) {

@@ -92,6 +92,10 @@
                     <ComboBoxItem Content="{qt:Resx Key=Options_Page13_Language, Index=12}"/>
                     <ComboBoxItem Content="{qt:Resx Key=Options_Page13_Language, Index=11}"/>
                     <ComboBoxItem Content="{qt:Resx Key=Options_Page13_Language, Index=13}"/>
+                    <ComboBoxItem Content="Brazil"/>
+                    <ComboBoxItem Content="Spanish"/>
+                    <ComboBoxItem Content="French"/>
+                    <ComboBoxItem Content="Turkish"/>
                     <!--
                     <ComboBoxItem Content="{qt:Resx Key=Options_Page13_Language, Index=11}"/>
                     <ComboBoxItem Content="English"/> modify by qwop 
@@ -169,6 +173,9 @@
                 <Button x:Name="btnSave"
                     Click="btnSave_Click"
                     Content="{qt:Resx Key=DialogButtons, Index=15}"/>
+                <Button x:Name="btnSaveTxt"
+                        Click="btnSaveTxt_Click"
+                        Content="Save Txt"/>
             </StackPanel>
         </StackPanel>
         <qt:RestrictDesiredSize

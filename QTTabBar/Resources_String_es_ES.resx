@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Author" xml:space="preserve">
+    <value>Damián Roig</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>español</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>España</value>
+  </data>
+  <data name="Version_QTTabBar" xml:space="preserve">
+    <value>DevBuild: 2022/8/15 19:01:42 (2.0.50727.9164)</value>
+  </data>
+  <data name="DateModified" xml:space="preserve">
+    <value>08/15/2022</value>
+  </data>
+  <data name="ButtonBar_BtnName" xml:space="preserve">
+    <value>Separador;Atrás;Adelante;Grupos;Cerrado recientemente;Aplicaciones;Nueva ventana;Clonar pestaña;Bloquear;Herramienta de copia;Encima de todo;Cerrar pestaña;Cerrar todas menos la actual;Cerrar la ventana;Cerrar pestañas a la izquierda;Cerrar pestañas a la derecha;Subir un nivel;Recargar;Buscar;Opacidad;Cuadro de búsqueda;Opciones</value>
+  </data>
+  <data name="ButtonBar_Misc" xml:space="preserve">
+    <value>Ruta;Nombre;Ruta de la carpeta actual;Nombre de la carpeta actual;MD5; elementos;Rutas de todas las pestañas abiertas</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Lista;Detalles;Mosaicos;Predeterminado</value>
+  </data>
+  <data name="DialogButtons" xml:space="preserve">
+    <value>Aceptar;Cancelar;&amp;Aplicar;&amp;Predeterminado;Rest. &amp;Página;&amp;Rest. Todo;Restaurar;Añadir;Añadir...;Eliminar;Opciones;Activar;Desactivar;Deshacer;Cargar...;Guardar...</value>
+  </data>
+  <data name="DragDropToolTip" xml:space="preserve">
+    <value>Copiar a:;Mover a:;Crear acceso directo en:</value>
+  </data>
+  <data name="ErrorDialogs" xml:space="preserve">
+    <value>La operación ha fallado.
+Por favor, asegúrese de que el archivo o el destino del enlace existe:
+
+{0};Error - QTTabBar;Advertencia:  No se ha podido activar automáticamente QTTabBar. Para activarla manualmente, en ventana de Panel de Control, pulse y suelte la tecla Alt, y seleccione QTTabBar en el menú Ver/Barra de herramientas.;No se ha podido activar;Error;No se ha podido cargar la librería de enganche/hook de QTTabBar.;No se ha podido inicializar la biblioteca de enganche/hook de QTTabBar.;Algunas características pueden no ser funcionales. Para resolverlo, es posible que tenga que reinstalar la aplicación.;No se ha podido enganchar/hook el Escritorio. Por favor, vuelva a habilitar la herramienta QT Tab Desktop.;La operación ha fallado.
+Por favor, asegúrese de que la carpeta existe o tiene permiso para acceder a:
+
+	{0}</value>
+  </data>
+  <data name="FileFilters" xml:space="preserve">
+    <value>Archivos de imagen;Archivos de idioma;Archivos de complementos</value>
+  </data>
+  <data name="FileHashComputer" xml:space="preserve">
+    <value>Ruta;Hash;Cerrar;Borrar;Actualizar;Siempre arriba;Mostrar resultado;Borrar al cerrar;Ruta completa;(Calculando...)</value>
+  </data>
+  <data name="MarginDropDown" xml:space="preserve">
+    <value>Todo;Izquierda;Arriba;Derecha;Abajo</value>
+  </data>
+  <data name="Misc_Strings" xml:space="preserve">
+    <value>Búsqueda en el escritorio;El archivo de imagen no es válido
+
+Por favor, especifique un archivo de imagen de 432 x 40 px.;Resultados de la búsqueda en;acceso directo;Elija su archivo;Elija su carpeta;Experimental;dummy</value>
+  </data>
+  <data name="Options_Page01_Window" xml:space="preserve">
+    <value>Cambia el comportamiento de las ventanas del Explorador de Windows.;Modo de ventana única;Capturar ventanas del Explorador como pestañas;No capturar ventanas del Explorador;Ubicación predeterminada de las nuevas ventanas y pestañas;Guardar la sesión;Iniciar una nueva sesión cada vez;Restablecer todas las pestañas de la sesión anterior;Restablecer solo las pestañas bloqueadas de la sesión anterior;Al hacer clic en el botón cerrar de la ventana;Cerrar la ventana;Cerrar la pestaña actual;Cerrar todas las pestañas no bloqueadas;Enviar la ventana a la bandeja del sistema al;Cerrar;Minimizar;Mostrar botón nueva pestaña (+)</value>
+  </data>
+  <data name="Options_Page02_Tabs" xml:space="preserve">
+    <value>Cambia las opciones relacionadas con las pestañas.;Abrir nuevas pestañas:;Al cerrar la pestaña actual, cambiar a la:;Cambiar a nuevas pestañas inmediatamente;Reutilizar las pestañas existentes;Renombrar pestañas ambiguas (equívocas);Al arrastrar el cursor sobre una pestaña,;Cambiar a ella;Mostrar el menú de consejos;Iconos de pestañas;Mostrar los iconos de las carpetas en las pestañas;Mostrar el menú de la carpeta al hacer clic en el icono;Mostrar la letra de la unidad en el icono;Botón cerrar;Mostrar el botón cerrar en las pestañas;Solo con la tecla Alt pulsada;Solo al pasar el ratón por encima;Barra de pestañas;Mostrar botones de navegación en la barra de pestañas;A la izquierda;A la derecha;Permitir varias filas de pestañas;La fila con la pestaña activa siempre en la parte inferior ;A la izquierda de la actual;A la derecha de la actual;Al principio a la izquierda;Al final a la derecha;Pestaña a la izquierda;Pestaña a la derecha;Pestaña más a la izquierda;Pestaña más a la derecha;Última pestaña activada;Comportamiento</value>
+  </data>
+  <data name="Options_Page03_Tweaks" xml:space="preserve">
+    <value>Activa o desactiva los ajustes de la Vista de Lista del Explorador.;Ajustes que se pueden utilizar con cualquiera de las Vistas de Lista;Mostrar las cabeceras de las columnas en todos los modos de vista (Windows Vista/7);Utilizar la vista estándar del sistema de archivos para las carpetas de la Biblioteca (Windows 7);No seleccionar la extensión del archivo al cambiar nombre (Windows XP);Alternar selección entre partes del nombre del archivo con F2 al cambiar nombre ;Envolver al mover la selección con las teclas de flecha;Subir un nivel con la tecla Retroceso (Windows Vista/7);Desplazarse horizontalmente con la rueda del ratón manteniendo presionada la tecla Mayús;Ajustes que solo se pueden utilizar con la antigua vista de lista;Habilitar el antiguo control de la vista de Lista (Windows 7);Seleccionar la fila completa en la vista de Detalles;Mostrar las líneas de la cuadrícula en la vista de Detalles;Alternar los colores de las filas en la vista de Detalles;Color de primer plano:;Color de fondo:</value>
+  </data>
+  <data name="Options_Page04_Tooltips" xml:space="preserve">
+    <value>Cambia el comportamiento de la información sobre herramientas de la subcarpeta y de la vista previa.;Consejos en la subcarpeta;Activar los consejos en la subcarpeta;Solo con la tecla Mayús presionada;Mostrar archivos;Mostrar información de la vista previa al sobreponer el cursor en los elementos del menú;Información sobre la vista previa;Activar la información sobre la vista previa;Sólo con la tecla Mayús pulsada;Mostrar la información del archivo debajo de las imágenes;Ancho x Alto máximo:;Fuente:;Tipos de archivo de texto;Tipos de archivo imagen/vídeo</value>
+  </data>
+  <data name="Options_Page05_General" xml:space="preserve">
+    <value>Opciones generales para el comportamiento de QTTabBar.;Integración en la Barra de Tareas;Mostrar vistas previas de las pestañas en la Barra de Tareas;Historial;Máximo de pestañas cerradas en historial;Borrar ahora;Máximo de archivos abiertos en el historial;Red;Tiempo de espera de red (introduzca 0 para el sistema por defecto):;Comprobar las actualizaciones periódicamente;Comprobar;Exportar;Exportar Ajustes...;¿Borrar el historial de archivos?;¿Borrar el historial de pestañas?;Sonido;Activar sonido;Activar el registro</value>
+  </data>
+  <data name="Options_Page06_Appearance" xml:space="preserve">
+    <value>Cambia la apariencia de las pestañas o de la Barra de Pestañas.;Imagen de la pestaña;Usar una imagen de pestaña personalizada:;Márgenes de tamaño:;Área de superposición:;Márgenes de contenido:;Prueba de impacto de áreas transparentes;Tamaño de la pestaña;Altura:;Anchura mínima:;Anchura máxima:;Modo de tamaño:;Anchura completa;Mismo tamaño;Texto de la pestaña;Colores del texto:;Colores de sombra:;Color activo;Color inactivo;Color al pasar el ratón;Fuente del texto:;Alineación:;Izquierda;Centro;Fondo de la barra de herramientas;Imagen;Color sólido;Imagen de cada barra por separado;Modo de estiramiento:;Márgenes de tamaño:;Archivo de pieles;Importar piel...;Exportar piel...;Estirado;Tamaño real;Mosaico</value>
+  </data>
+  <data name="Options_Page07_Mouse" xml:space="preserve">
+    <value>Asigna comandos a diferentes acciones del ratón.;Para añadir un vínculo al ratón, pulse sobre el gesto de la izquierda y seleccione la acción en el desplegable de la derecha. Para eliminar un vínculo, seleccione el gesto y pulse la tecla Supr.;Otras opciones del ratón;La rueda del ratón desplaza la ventana bajo el ratón;Gestos del ratón;Acción;Dondequiera;Pestaña;Fondo Barra de Pestañas;Enlaces Carpetas (Link Folder);Archivo o Carpeta;Fondo Explorador;Clic izquierdo;Clic derecho;Clic medio;Doble clic;X1 Clic;X2 Clic;Este botón del ratón no se puede utilizar para este objetivo.;Los botones del ratón válidos para este objetivo son:;Botón no válido</value>
+  </data>
+  <data name="Options_Page08_Keys" xml:space="preserve">
+    <value>Cambia los atajos de teclado.;Seleccione una acción de la lista y pulse el atajo de teclado que le desea vincular. Pulse Esc para borrar la vinculación.;Otras opciones de teclado;Mostrar la ventana del Selector de Pestañas al pulsar Ctrl + Tab;Acción;Atajo de teclado;El atajo ya está asignado a:;¿Desea reasignarlo?;Conflicto en el atajo de teclado</value>
+  </data>
+  <data name="Options_Page09_Groups" xml:space="preserve">
+    <value>Crea y gestiona grupos de pestañas.;Para asignar un atajo de teclado a un grupo, selecciónelo y pulse el atajo correspondiente.  Pulse Esc para borrar la vinculación.;Crear Nuevo Grupo;Carpeta;Inicio;Atajo de teclado;Nuevo Grupo;Abrir grupo "{0}"</value>
+  </data>
+  <data name="Options_Page10_Apps" xml:space="preserve">
+    <value>Crea accesos directos a los archivos o aplicaciones más utilizados.;Para asignar un atajo de teclado a una aplicación, selecciónela y pulse el atajo correspondiente.  Pulse Esc para borrar la vinculación.;Crear Nueva Carpeta;Ruta:;Argumentos:;Directorio de trabajo:;Aplicación;Tecla de acceso directo;Las siguientes palabras clave se sustituyen por cadenas de ruta con comillas dobles en tiempo de ejecución.;Archivos seleccionados.;Carpetas seleccionadas.;Archivos y carpetas seleccionados.;Carpeta actual.;Carpeta actual si no hay selección, en caso contrario, carpeta seleccionada.;Nueva carpeta;¿Eliminar esta carpeta y su contenido?;Lanzar la aplicación "{0}"</value>
+  </data>
+  <data name="Options_Page11_ButtonBar" xml:space="preserve">
+    <value>Personaliza la Barra de Botones.;Botones;Opciones de la Barra de Botones;Iconos grandes;Mostrar etiquetas en los botones;Bloquear el orden de los menús de los botones con desplegable;Bloquear el tamaño del cuadro de búsqueda;Imágenes de botones personalizadas</value>
+  </data>
+  <data name="Options_Page12_Plugins" xml:space="preserve">
+    <value>Gestiona los complementos de terceros.;Instalar;(Desactivado);por {0};{0} ha sido eliminado.;Este complemento se instalará cuando pulse Aceptar o Aplicar.;Este complemento se activará cuando pulse Aceptar o Aplicar.;Este complemento se desactivará cuando pulse Aceptar o Aplicar.;La desinstalación de este complemento también desinstalará los siguientes:;¿Proceder?;Activar;Desactivar</value>
+  </data>
+  <data name="Options_Page13_Language" xml:space="preserve">
+    <value>Cambia el idioma.;Idioma principal;Utilizar el idioma incorporado:;Utilizar archivo de idioma:;Archivos de idioma de los complementos;Editor de archivos de idioma;Mostrar el editor de idiomas...;Original;Traducido;¿Restaurar todas las entradas a su valor original?;Error al guardar el archivo.;Chino simplificado;Inglés;Alemán</value>
+  </data>
+  <data name="Options_Page14_About" xml:space="preserve">
+    <value>Muestra créditos e información de la versión.;Código original de {0};Desarrolladores principales:;Otros desarrolladores:;Iconos y gráficos:;Si encuentra útil QTTabBar, por favor considere hacer una pequeña donación.;Modificación del chino.;Realizado por: {0}</value>
+  </data>
+  <data name="OptionsDialog" xml:space="preserve">
+    <value>Opciones de QTTabBar;¿Restaurar todas las opciones de esta página a sus valores por defecto?;¿Restaurar todas las opciones a sus valores por defecto?  Esto no afectará a los Grupos, Aplicaciones o Plugins.;Confirmación</value>
+  </data>
+  <data name="PayPalURL" xml:space="preserve">
+    <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>
+  </data>
+  <data name="ShortcutKeys_ActionNames" xml:space="preserve">
+    <value>Atrás;Adelante;Atrás al inicio;Adelante al final;Seleccionar la pestaña siguiente;Seleccionar la pestaña anterior;Seleccionar la primera pestaña;Seleccionar la última pestaña;Cambiar a la última pestaña activada;Abrir una nueva pestaña;Abrir una nueva ventana;Combinar pestañas de otras ventanas;Cerrar la pestaña actual;Cerrar todas menos la actual;Cerrar pestañas a la izquierda;Cerrar pestañas a la derecha;Cerrar ventana;Deshacer cierre;Clonar la pestaña actual;Abrir la carpeta actual en una nueva ventana;Bloquear / desbloquear la actual;Bloquear / desbloquear todo;Examinar la carpeta;Crear un nuevo grupo;Abrir diálogo de opciones;Mostrar el menú de la barra de herramientas;Mostrar el menú de la pestaña actual;Mostrar el menú de grupo (Barra de Botones);Mostrar el menú de carpetas recientes (Barra de Botones);Mostrar el menú de la aplicación del usuario (Barra de Botones);Mostrar el menú de archivos recientes (Barra de Botones);Crear un nuevo archivo vacío;Crear una nueva carpeta;Copiar la ruta de los archivos seleccionados;Copiar el nombre de los archivos seleccionados;Copiar la ruta de la carpeta actual;Copiar el nombre de la carpeta actual;Comprobar MD5 de los archivos seleccionados;Colocar la ventana encima de todas;Transparencia +;Transparencia -;Enfocar la lista de archivos;Enfocar la barra de búsqueda (Explorador);Enfocar el cuadro de búsqueda (Barra de Botones);Mostrar menú de consejos de subcarpetas para la carpeta seleccionada;Enviar la ventana a la Bandeja del Sistema;Enfocar la barra de pestañas;Ordenar las pestañas por nombre;Ordenar pestañas por ruta;Ordenar las pestañas por la última activación;Nada;Subir un nivel;Actualizar;Pegar;Maximizar;Minimizar;Abrir en una nueva pestaña;Abrir en una nueva pestaña sin activar;Abrir en una nueva ventana;Cortar;Copiar;Borrar;Propiedades;Copiar ruta;Copiar nombre;Ver suma de comprobación;Cerrar pestaña;Cerrar pestañas a la izquierda;Cerrar pestañas a la derecha;Subir un nivel;Bloquear;Mostrar el menú contextual;Abrir en una nueva ventana;Clonar;Copiar ruta;Propiedades;Mostrar el menú de consejos del subdirectorio;Cerrar todas menos esta;Abrir CMD;Abrir las carpetas seleccionadas en una nueva pestaña sin activar;Add to group</value>
+  </data>
+  <data name="ShortcutKeys_Groups" xml:space="preserve">
+    <value>QTTabBar;{0} (Plugin)</value>
+  </data>
+  <data name="SiteURL" xml:space="preserve">
+    <value>https://github.com/indiff/qttabbar</value>
+  </data>
+  <data name="TabBar_Menu" xml:space="preserve">
+    <value>Cerrar pestaña;Cerrar pestañas a la derecha;Cerrar pestañas a la izquierda;Cerrar todas menos esta;Añadir al grupo;Crear un nuevo grupo;Bloquear;Clonar pestaña;Nueva ventana;Copiar ruta;Propiedades;Historial de pestañas;Grupos;Deshacer cierre de pestaña;Ir a la última pestaña activada;Archivos abiertos recientemente;Buscar carpeta y abrir en pestaña;Cerrar todas menos la pestaña actual;Cerrar la ventana;Opciones;Desbloquear;Añadir al menú de la aplicación : ;elementos;Cancelar;Ramas;Eliminar este elemento del menú;A&amp;brir carpeta contenedora;Etiqueta de la pestaña;Ordenar pestañas por;Nombre;Ruta de acceso;Activación;Bloquear las barras de herramientas;Combinar pestañas de otras ventanas;Invertir;Abrir CMD</value>
+  </data>
+  <data name="TabBar_Message" xml:space="preserve">
+    <value>QTTabBar ha fallado al abrir
+
+ "{0}".</value>
+  </data>
+  <data name="TabBar_NewGroup" xml:space="preserve">
+    <value>Crear nuevo grupo;Nombre del grupo:;Añadir todas las pestañas</value>
+  </data>
+  <data name="TabBar_Option_Genre" xml:space="preserve">
+    <value>Ventana;Pestañas;Ajustes;Herramientas;General;Apariencia;Ratón;Teclado;Grupos;Aplicaciones;Barra de botones;Complementos;Idioma;Acerca de</value>
+  </data>
+  <data name="TaskBar_Menu" xml:space="preserve">
+    <value>Barra de Tareas;Escritorio;Bloquear elementos;Dibujo del fondo del título;Menú con un solo clic;Habilitar las teclas de acceso directo a las aplicaciones</value>
+  </data>
+  <data name="TaskBar_Titles" xml:space="preserve">
+    <value>Grupos;Deshacer el cierre;Aplicaciones;Archivos abiertos recientemente</value>
+  </data>
+  <data name="TrayIcon" xml:space="preserve">
+    <value>1 ventana;{0} ventanas</value>
+  </data>
+  <data name="UpdateCheck" xml:space="preserve">
+    <value>Se ha publicado una nueva versión de QTTabBar:;Pulse OK para ir a la página web.;Su versión de QTTabBar está actualizada.;Se ha encontrado una nueva versión de desarrollo:;Archivo de versión no encontrado (404).;Error de red desconocido.;Servidor no encontrado.;El servidor devolvió cadenas erróneas.</value>
+  </data>
+</root>

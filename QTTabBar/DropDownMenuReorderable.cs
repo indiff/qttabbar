@@ -215,7 +215,9 @@ namespace QTTabBarLib {
                 upButton = (ToolStripControlHost)piScrollButtonUp.GetValue(this, null);
                 downButton = (ToolStripControlHost)piScrollButtonDn.GetValue(this, null);
             }
-            catch {
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "DropDownMeanuDropTarget GetScrollButtons");
             }
         }
 
@@ -500,7 +502,9 @@ namespace QTTabBarLib {
                         GetScrollButtons();
                     }
                 }
-                catch {
+                catch (Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "DropDownMeanuDropTarget OnLayout");
                 }
             }
         }

@@ -150,7 +150,10 @@
                 </Grid.ColumnDefinitions>
                 <ListBox x:Name="lstButtonBarPool"
                     Grid.RowSpan="2"
-                    ItemTemplate="{StaticResource ButtonBarItemTemplate}"/>
+                    ItemTemplate="{StaticResource ButtonBarItemTemplate}">
+                    <ListBox.MouseDoubleClick>listBoxMouseDoubleClick</ListBox.MouseDoubleClick>
+                    <!--<ListBox.Selected>LstButtonBarCurrent_OnSelected</ListBox.Selected>-->
+                </ListBox>
                 <Button x:Name="btnBBarAdd"
                     Click="btnBBarAdd_Click" 
                     Grid.Column="1"
@@ -183,14 +186,17 @@
                 <ListBox x:Name="lstButtonBarCurrent"
                     Grid.Column="2"
                     Grid.RowSpan="2"
-                    ItemTemplate="{StaticResource ButtonBarItemTemplate}"/>
+                    ItemTemplate="{StaticResource ButtonBarItemTemplate}">
+                    <ListBox.MouseDoubleClick>listBoxMouseDoubleClick</ListBox.MouseDoubleClick>
+                    <!--<ListBox.Selected>LstButtonBarCurrent_OnSelected</ListBox.Selected>-->
+                </ListBox>
                 <Button x:Name="btnBBarUp"
-                    Click="btnBBarUp_Click" 
-                    Content="&#9650;"
-                    Grid.Column="3"
-                    Margin="8,4"
-                    VerticalAlignment="Bottom"
-                    Width="30"/>
+                        Click="btnBBarUp_Click" 
+                        Content="&#9650;"
+                        Grid.Column="3"
+                        Margin="8,4"
+                        VerticalAlignment="Bottom"
+                        Width="30"/>
                 <Button x:Name="btnBBarDown"
                     Click="btnBBarDown_Click"
                     Content="&#9660;"

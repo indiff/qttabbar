@@ -716,7 +716,9 @@ namespace QTTabBarLib {
             toolStrip = new ToolStripClasses();
             toolStrip.SuspendLayout();
             SuspendLayout();
-            AutoScaleMode = AutoScaleMode.Dpi;
+
+            // AutoScaleMode.Dpi  / by indiff dpi
+            // AutoScaleMode = AutoScaleMode.Dpi;
             
             toolStrip.Dock = DockStyle.Fill;
             toolStrip.GripStyle = ToolStripGripStyle.Hidden;
@@ -1006,7 +1008,9 @@ namespace QTTabBarLib {
                     }
                 }
             }
-            catch {
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "RearrangeFolderView");
             }
             finally {
                 if(ppshv != null) {
@@ -1036,7 +1040,9 @@ namespace QTTabBarLib {
                     }
                 }
             }
-            catch {
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "RefreshSearchBox");
             }
             lstPUITEMIDCHILD.Clear();
             if(fBrowserRefreshRequired) {
@@ -1155,7 +1161,7 @@ namespace QTTabBarLib {
                         }
                     }
                     if(zero == IntPtr.Zero) {
-                        QTUtility2.MakeErrorLog(null, "failed current pidl");
+                        QTUtility2.MakeErrorLog(null, "ShellViewIncrementalSearch failed current pidl");
                         return false;
                     }
                     view2.ItemCount(SVGIO.ALLVIEW, out num);
@@ -1168,7 +1174,9 @@ namespace QTTabBarLib {
                             try {
                                 regex = new Regex(str.Substring(1, str.Length - 2), RegexOptions.IgnoreCase);
                             }
-                            catch {
+                            catch (Exception e)
+                            {
+                                QTUtility2.MakeErrorLog(e, "ShellViewIncrementalSearch new Regex");
                                 QTUtility.AsteriskPlay();
                                 return false;
                             }
@@ -1536,14 +1544,18 @@ namespace QTTabBarLib {
                     key.DeleteValue(name, false);
                 }
             }
-            catch {
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "Unregister Toolbar");
             }
             try {
                 using(RegistryKey key2 = Registry.ClassesRoot.CreateSubKey("CLSID")) {
                     key2.DeleteSubKeyTree(name);
                 }
             }
-            catch {
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "Unregister CLSID");
             }
         }
 

@@ -183,8 +183,9 @@ namespace QTTabBarLib {
     // Normally, delegates are only serializable if they don't include any
     // stack variables.  But using this class, we can serialize any delegate.
     [Serializable]
+    // [BinarySerialization(SerializationMode.Properties | SerializationMode.NonPublicMembers)]
     public class SerializeDelegate : ISerializable {
-        public Delegate Delegate { get; private set; }
+        public Delegate Delegate { get; set; }
         public SerializeDelegate(Delegate del) {
             Delegate = del;
         }
@@ -192,8 +193,11 @@ namespace QTTabBarLib {
         public SerializeDelegate(SerializationInfo info, StreamingContext context) {
             Type delType = (Type)info.GetValue("delegateType", typeof(Type));
 
+            // Type classType = (Type)info.GetValue("classType", typeof(Type));
+            // obj = Activator.CreateInstance(classType);
+
             //If it's a "simple" delegate we just read it straight off
-            if(info.GetBoolean("isSerializable")) {
+            if (info.GetBoolean("isSerializable")) {
                 Delegate = (Delegate)info.GetValue("delegate", delType);
             }
             //otherwise, we need to read its anonymous class
@@ -205,9 +209,17 @@ namespace QTTabBarLib {
         }
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
-            if(Delegate != null) {
+            /*if(Delegate != null) {
                 info.AddValue("delegateType", Delegate.GetType());
             }
+            else
+            {
+                info.AddValue("delegateType", null);
+            }*/
+			if(Delegate != null) {
+
+            	info.AddValue("delegateType", Delegate.GetType());
+			}
             
 
             //If it's an "simple" delegate we can serialize it directly
@@ -224,6 +236,18 @@ namespace QTTabBarLib {
                     info.AddValue("method", Delegate.Method);
                     info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
                 }
+                /*
+                // https://www.yuque.com/indiff/lc0r1g/zbdbz5
+                else
+                {
+                    info.AddValue("method", null);
+                    info.AddValue("class", null);
+                }*/
+
+                // 导致某些方法都不执行，界面空白 https://www.yuque.com/indiff/lc0r1g/vu0lyb
+                // info.AddValue("isSerializable", false);
+                // info.AddValue("method", Delegate.Method);
+                // info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
             }
         }
 
@@ -266,7 +290,7 @@ namespace QTTabBarLib {
                         info.AddValue(field.Name, new SerializeDelegate((Delegate)field.GetValue(obj)));
                     }
                     else if(!field.FieldType.IsSerializable) {
-                        Debug.Assert(field.Name.Contains("<>")); // compiler-generated only
+                        // Debug.Assert(field.Name.Contains("<>")); // compiler-generated only  断言报错问题 by indiff
                         info.AddValue(field.Name, new AnonymousClassWrapper(field.FieldType, field.GetValue(obj)));
                     }
                     else {
@@ -378,6 +402,7 @@ namespace QTTabBarLib {
     // Delegate.BeginInvoke is stupid because it leaks if you don't call EndInvoke.
     // This class implements fire-and-forget functionality.
     internal static class AsyncHelper {
+       // [Serializable]
         private class TargetInfo {
             public TargetInfo(Delegate d, object[] args, int delay) {
                 Target = d;
@@ -397,11 +422,21 @@ namespace QTTabBarLib {
             ThreadPool.QueueUserWorkItem(DynamicInvokeCallback, new TargetInfo(d, args, 0));
         }
 
-        private static void DynamicInvokeCallback(object state) {
+        private static void DynamicInvokeCallback(object state){
+            if (state == null)
+            {
+                return; 
+            }
             TargetInfo ti = (TargetInfo)state;
             try {
-                if(ti.Delay > 0) Thread.Sleep(ti.Delay);
-                ti.Target.DynamicInvoke(ti.Args);
+                if (ti.Delay > 0)
+                {
+                    Thread.Sleep(ti.Delay);
+                }
+                if (ti.Target != null)
+                {
+                    ti.Target.DynamicInvoke(ti.Args);
+                }
             }
             catch(Exception ex) {
                 QTUtility2.MakeErrorLog(ex, "AsyncHelper");

@@ -33,9 +33,9 @@ using QTPlugin.Interop;
 using QTTabBarLib;
 using System.IO;
 
-//using System.Management.Automation;
-//using System.Management.Automation.Runspaces;
-//using System.Management;
+// using System.Management.Automation;
+// using System.Management.Automation.Runspaces;
+// using System.Management;
 using System.Threading;
 using Microsoft.Win32;
 
@@ -256,11 +256,10 @@ namespace Qwop {
 
                 menu.Items.Add(new ToolStripMenuItem("启动设置Path"));
                 menu.Items.Add(new ToolStripMenuItem("删除QTTabGroup（启动项）"));
+                menu.Items.Add(new ToolStripMenuItem("打开QTTabBar异常日志"));
 
                 // menu.Items.Add(new ToolStripMenuItem("Test selection"));
-                
                 fFirstMenuDropDown = false;
-
             }
            
         }
@@ -559,7 +558,7 @@ namespace Qwop {
                             Thread.Sleep(800);
                             break;
                         }
-                    case 9:
+                    case 99:
                         {
                             // 9. 设置当前目录ANT_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
@@ -689,6 +688,17 @@ namespace Qwop {
                                      }
                                  };
                                 process.Start();
+
+                                /*new Thread(() =>
+                                {
+                                    Thread.Sleep( 3000 );
+
+                                    
+                                    PowerShell.Create().AddCommand("setx")
+                                        .AddParameter("JAVA_HOME", selectedPath)
+                                        .AddParameter("/M")
+                                        .Invoke();
+                                }).Start();*/
                             }
                             else {
                                 MessageBox.Show( "未找到可执行文件SetHome");
@@ -707,10 +717,39 @@ namespace Qwop {
                                 }
                             }
                             catch (Exception e) {
-                                QTUtility2.MakeErrorLog(e);
+                               // QTUtility2.MakeErrorLog(e);
                             }
                             break;
                         }
+
+                    case 9:  // 删除group文件
+                    {
+                        
+                        string notepadExe = GuessNotepadPath();
+
+                        string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                        string appdataQT = Path.Combine(appdata, "QTTabBar");
+                        if (!Directory.Exists(appdataQT))
+                        {
+                            Directory.CreateDirectory(appdataQT);
+                        }
+                        string logPath = Path.Combine(appdataQT, "QTTabBarException.log");
+
+                        try
+                        {
+                            System.Diagnostics.Process process = new System.Diagnostics.Process();
+                            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                            process.StartInfo.FileName = notepadExe;
+                            process.StartInfo.Arguments = " " + logPath;
+                            process.StartInfo.WorkingDirectory = appdataQT;
+                            process.Start();
+                        }
+                        catch (Exception e)
+                        {
+                            // QTUtility2.MakeErrorLog(e);
+                        }
+                        break;
+                    }
                 }
                 
                 // pluginServer.CreateTab(new Address(mydocument), -1, false, true);
@@ -775,6 +814,22 @@ namespace Qwop {
                 if(lstSelectedItems.Count > 0)
                     pluginServer.TrySetSelection(lstSelectedItems.ToArray(), false);
             }*/
+        }
+
+        private string GuessNotepadPath()
+        {
+            var guessPath = @"Program Files\Notepad++\notepad++.exe";
+            var pans = new[] { @"c:\", @"d:\", @"e:\", @"f:\", @"g:\", @"h:\" };
+            foreach (var pan in pans)
+            {
+                var newGuessFilePath = pan + guessPath;
+                if (File.Exists(newGuessFilePath))
+                {
+                    return newGuessFilePath;
+                }
+            }
+
+            return "notepad.exe";
         }
 
         private static string joinDevPath(string oldPath)

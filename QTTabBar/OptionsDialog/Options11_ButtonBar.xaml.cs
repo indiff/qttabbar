@@ -24,7 +24,10 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using QTPlugin;
+using Image = System.Drawing.Image;
 using Size = System.Drawing.Size;
 
 namespace QTTabBarLib {
@@ -195,14 +198,20 @@ namespace QTTabBarLib {
                         Plugin plugin;
                         if(PluginManager.TryGetStaticPluginInstance(pi.PluginID, out plugin)) {
                             IBarMultipleCustomItems bmci = plugin.Instance as IBarMultipleCustomItems;
-                            try {
-                                if(bmci != null && bmci.Count > 0) {
+                            try
+                            {
+                                if (bmci != null && bmci.Count > 0)
+                                {
                                     lstPluginIDs.Add(pi.PluginID);
-                                    dicPluginButtons[pi.PluginID] = 
+                                    dicPluginButtons[pi.PluginID] =
                                         bmci.Count.RangeSelect(i => new ButtonEntry(this, order++, i, pi)).ToArray();
                                 }
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                QTUtility2.MakeErrorLog(ex, "dicPluginButtons");
+
+                            }
                         }
                     }
                 }
@@ -304,6 +313,8 @@ namespace QTTabBarLib {
             int sel = lstButtonBarPool.SelectedIndex;
             if(sel == -1) return;
             ButtonEntry entry = ButtonPool[sel];
+            btnAdd(entry, sel);
+			/*
             if(entry.Order == QTButtonBar.BII_SEPARATOR) {
                 entry = new ButtonEntry(this, 0, QTButtonBar.BII_SEPARATOR);
             }
@@ -324,12 +335,38 @@ namespace QTTabBarLib {
                 lstButtonBarCurrent.SelectedIndex++;
             }
             lstButtonBarCurrent.ScrollIntoView(lstButtonBarCurrent.SelectedItem);
+			*/
         }
+		
+		private void btnAdd(ButtonEntry entry,int sel) {
+            if(entry.Order == QTButtonBar.BII_SEPARATOR) {
+                entry = new ButtonEntry(this, 0, QTButtonBar.BII_SEPARATOR);
+            }
+            else {
+                ButtonPool.RemoveAt(sel);
+                if(sel == ButtonPool.Count) --sel;
+                if(sel >= 0) {
+                    lstButtonBarPool.SelectedIndex = sel;
+                    lstButtonBarPool.ScrollIntoView(lstButtonBarPool.SelectedItem);
+                }
+            }
+            if(lstButtonBarCurrent.SelectedIndex == -1) {
+                CurrentButtons.Add(entry);
+                lstButtonBarCurrent.SelectedIndex = CurrentButtons.Count - 1;
+            }
+            else {
+                CurrentButtons.Insert(lstButtonBarCurrent.SelectedIndex + 1, entry);
+                lstButtonBarCurrent.SelectedIndex++;
+            }
+            lstButtonBarCurrent.ScrollIntoView(lstButtonBarCurrent.SelectedItem);
+		}
 
         private void btnBBarRemove_Click(object sender, RoutedEventArgs e) {
             int sel = lstButtonBarCurrent.SelectedIndex;
             if(sel == -1) return;
             ButtonEntry entry = CurrentButtons[sel];
+			btnRemove(entry,sel);
+			/*
             CurrentButtons.RemoveAt(sel);
             if(sel == CurrentButtons.Count) --sel;
             if(sel >= 0) {
@@ -346,7 +383,28 @@ namespace QTTabBarLib {
                 lstButtonBarPool.SelectedIndex = 0;
             }
             lstButtonBarPool.ScrollIntoView(lstButtonBarPool.SelectedItem);
+			*/
         }
+
+        private void btnRemove(ButtonEntry entry, int sel)
+        {
+			CurrentButtons.RemoveAt(sel);
+            if(sel == CurrentButtons.Count) --sel;
+            if(sel >= 0) {
+                lstButtonBarCurrent.SelectedIndex = sel;
+                lstButtonBarCurrent.ScrollIntoView(lstButtonBarCurrent.SelectedItem);
+            }
+            if(entry.Order != QTButtonBar.BII_SEPARATOR) {
+                int i = 0;
+                while(i < ButtonPool.Count && ButtonPool[i].Order < entry.Order) ++i;
+                ButtonPool.Insert(i, entry);
+                lstButtonBarPool.SelectedIndex = i;
+            }
+            else {
+                lstButtonBarPool.SelectedIndex = 0;
+            }
+            lstButtonBarPool.ScrollIntoView(lstButtonBarPool.SelectedItem);
+		}
 
         private void btnBBarUp_Click(object sender, RoutedEventArgs e) {
             int sel = lstButtonBarCurrent.SelectedIndex;
@@ -383,10 +441,15 @@ namespace QTTabBarLib {
                     if(PluginInfo.PluginType == PluginType.BackgroundMultiple) {
                         Plugin plugin;
                         if(PluginManager.TryGetStaticPluginInstance(PluginInfo.PluginID, out plugin)) {
-                            try {
+                            try
+                            {
                                 return ((IBarMultipleCustomItems)plugin.Instance).GetName(Index);
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                QTUtility2.MakeErrorLog(ex, "PluginButtonText");
+
+                            }
                         }
                     }
                     return PluginInfo.Name;
@@ -400,10 +463,15 @@ namespace QTTabBarLib {
                     if(PluginInfo.PluginType == PluginType.BackgroundMultiple) {
                         Plugin plugin;
                         if(PluginManager.TryGetStaticPluginInstance(PluginInfo.PluginID, out plugin)) {
-                            try {
+                            try
+                            {
                                 return ((IBarMultipleCustomItems)plugin.Instance).GetImage(large, Index);
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                QTUtility2.MakeErrorLog(ex, "getImage");
+
+                            }
                         }
                     }
                     return large
@@ -429,6 +497,67 @@ namespace QTTabBarLib {
         }
 
         #endregion
+
+        private void listBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == lstButtonBarCurrent)
+            {
+                int sel = lstButtonBarCurrent.SelectedIndex;
+                if (sel == -1) return;
+                ButtonEntry entry = CurrentButtons[sel];
+                btnRemove(entry, sel);
+            }
+            else
+            {
+                int sel = lstButtonBarPool.SelectedIndex;
+                if (sel == -1) return;
+                ButtonEntry entry = ButtonPool[sel];
+                btnAdd(entry, sel);
+            }
+        }
+
+        /*private void LstButtonBarCurrent_OnSelected(object sender, RoutedEventArgs e)
+        {
+            ButtonEntry entry = null;
+            if (sender == lstButtonBarCurrent)
+            {
+                int sel = lstButtonBarCurrent.SelectedIndex;
+                if (sel == -1) return;
+                entry = CurrentButtons[sel];
+                
+            }
+            else
+            {
+                int sel = lstButtonBarPool.SelectedIndex;
+                if (sel == -1) return;
+                entry = ButtonPool[sel];
+            }
+
+            if ( entry != null )
+            {
+                if (toolTip1 == null)
+                {
+                    toolTip1 = new ToolTip { Content = Content, IsOpen = true, StaysOpen = true };
+                }
+                else
+                {
+                    toolTip1.Opacity = 0.9;
+                    toolTip1.Content = entry.PluginInfo.Description;
+                    toolTip1.StaysOpen = true;
+                    toolTip1.IsOpen = true;
+
+                }
+            }
+            else
+            {
+                if (toolTip1 == null)
+                {
+                    toolTip1.IsOpen = false;
+                }
+            }
+        }
+
+        private ToolTip toolTip1;*/
 
     }
 }

@@ -119,6 +119,7 @@ namespace QTTabBarLib {
                     p.Instance.OnOption();
                 }
                 catch(Exception ex) {
+                    QTUtility2.MakeErrorLog(ex, "btnPluginOptions_Click");
                     PluginManager.HandlePluginException(ex, new WindowInteropHelper(Window.GetWindow(this)).Handle,
                             entry.Name, "Open plugin option.");
                 }

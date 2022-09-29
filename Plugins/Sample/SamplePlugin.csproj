@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shell32_268-006.png" />
-    <None Include="SamplePlugin.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shell32_268-008.png" />

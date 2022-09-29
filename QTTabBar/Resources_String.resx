@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Author" xml:space="preserve">
+    <value>indiff</value>
+  </data>
   <data name="ButtonBar_BtnName" xml:space="preserve">
     <value>Separator;Go back;Go forward;Groups;Recently Closed;Applications;New window;Clone this;Lock;Copy Tool;TopMost;Close;Close all but current;Close window;Close left;Close right;Up one level;Reload;Search;Opacity;Search Box;Options</value>
   </data>
   <data name="ButtonBar_Misc" xml:space="preserve">
     <value>Path;Name;Current folder path;Current folder name;MD5; items;Paths of all open tabs</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="DateModified" xml:space="preserve">
+    <value>08/29/2022</value>
   </data>
   <data name="Desktop" xml:space="preserve">
     <value>List;Details;Tiles;Default</value>
@@ -196,7 +205,7 @@
     <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>
   </data>
   <data name="ShortcutKeys_ActionNames" xml:space="preserve">
-    <value>Go back;Go forward;Go back to start;Go forward to end;Select next tab;Select previous tab;Select first tab;Select last tab;Switch to last activated tab;Open new tab;Open new window;Merge tabs from other windows;Close current tab;Close all but current;Close left;Close right;Close window;Undo close;Clone current tab;Open current folder in new window;Lock / unlock current;Lock / unlock all;Browse folder;Create new group;Open option dialog;Show toolbar menu;Show current tab menu;Show group menu (Button Bar);Show recent folder menu (Button Bar);Show user application menu (Button Bar);Show recent files menu (Button Bar);Create new empty file;Create new folder;Copy selected files path;Copy selected files name;Copy current folder path;Copy current folder name;Check MD5 of selected files;Bring window to topmost;Transparency +;Transparency -;Focus file list;Focus search bar (Explorer);Focus search box (Button Bar);Show Subfolder Tip Menu for selected folder;Send window to Task Tray;Focus the Tab Bar;Sort tabs by name;Sort tabs by path;Sort tabs by last activation;Nothing;Up one level;Refresh;Paste;Maximize;Minimize;Open in new tab;Open in new tab without activating;Open in new window;Cut;Copy;Delete;Properties;Copy path;Copy name;View checksum;Close tab;Close tabs to left;Close tabs to right;Up one level;Lock;Show context menu;Open in new window;Clone;Copy path;Properties;Show Subdirectory Tip menu;Close all but this;Open CMD;Open selected folders in new tab without activating</value>
+    <value>Go back;Go forward;Go back to start;Go forward to end;Select next tab;Select previous tab;Select first tab;Select last tab;Switch to last activated tab;Open new tab;Open new window;Merge tabs from other windows;Close current tab;Close all but current;Close left;Close right;Close window;Undo close;Clone current tab;Open current folder in new window;Lock / unlock current;Lock / unlock all;Browse folder;Create new group;Open option dialog;Show toolbar menu;Show current tab menu;Show group menu (Button Bar);Show recent folder menu (Button Bar);Show user application menu (Button Bar);Show recent files menu (Button Bar);Create new empty file;Create new folder;Copy selected files path;Copy selected files name;Copy current folder path;Copy current folder name;Check MD5 of selected files;Bring window to topmost;Transparency +;Transparency -;Focus file list;Focus search bar (Explorer);Focus search box (Button Bar);Show Subfolder Tip Menu for selected folder;Send window to Task Tray;Focus the Tab Bar;Sort tabs by name;Sort tabs by path;Sort tabs by last activation;Nothing;Up one level;Refresh;Paste;Maximize;Minimize;Open in new tab;Open in new tab without activating;Open in new window;Cut;Copy;Delete;Properties;Copy path;Copy name;View checksum;Close tab;Close tabs to left;Close tabs to right;Up one level;Lock;Show context menu;Open in new window;Clone;Copy path;Properties;Show Subdirectory Tip menu;Close all but this;Open CMD;Open selected folders in new tab without activating;Add to group</value>
   </data>
   <data name="ShortcutKeys_Groups" xml:space="preserve">
     <value>QTTabBar;{0} (Plugin)</value>
@@ -229,5 +238,8 @@
   </data>
   <data name="UpdateCheck" xml:space="preserve">
     <value>A new version of QTTabBar has been released:;Press OK to go to the web site.;Your version of QTTabBar is up to date.;New development version found:;Version file not found (404).;Unknown network error.;Server not found.;Server returned wrong strings.</value>
+  </data>
+  <data name="Version_QTTabBar" xml:space="preserve">
+    <value>DevBuild: 2022/8/15 19:01:42 (2.0.50727.9164)</value>
   </data>
 </root>

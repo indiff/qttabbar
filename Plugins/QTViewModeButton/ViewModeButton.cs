@@ -181,7 +181,8 @@ namespace QuizoPlugins {
                     }
                 }
             }
-            catch {
+            catch (Exception e){
+                pluginServer.MakeErrorLog(e, "ViewModeButton GetCurrentViewMode");
             }
             finally {
                 if(shellView != null)
@@ -194,12 +195,17 @@ namespace QuizoPlugins {
         /// <summary>
         /// ∏¸–¬∞¥≈•Õº∆¨
         /// –ﬁ∏¥∆§∑Ù≈‰÷√ø’Õº∆¨±®¥Ì
+        /// check mode & button is null ?
         /// </summary>
         /// <param name="mode"></param>
         private void UpdateButtonImage(FOLDERVIEWMODE mode) {
+            if (mode == null || null == button )
+            {
+                return;
+            }
             switch(mode) {
                 case FOLDERVIEWMODE.FVM_THUMBSTRIP:
-                    if ( null != Resource.imgFilm )
+                    if (null != Resource.imgFilm)
                      button.Image = Resource.imgFilm;
                     break;
                 case FOLDERVIEWMODE.FVM_THUMBNAIL:

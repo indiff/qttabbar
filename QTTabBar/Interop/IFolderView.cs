@@ -30,6 +30,7 @@ namespace QTTabBarLib.Interop {
         [PreserveSig]
         int GetFolder(ref Guid riid, out IPersistFolder2 ppv);
         [PreserveSig]
+        // int Item(int iItemIndex, ref IntPtr ppidl);
         int Item(int iItemIndex, out IntPtr ppidl);
         [PreserveSig]
         int ItemCount(SVGIO uFlags, out int pcItems);

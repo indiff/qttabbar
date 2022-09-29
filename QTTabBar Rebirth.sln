@@ -87,6 +87,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActivateByMouseHover", "Plu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetHome", "SetHome\SetHome.csproj", "{02E9733C-7267-47B3-A524-4736AC6A648B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{D2560F19-A854-471A-ADD7-D34697734767}"
+	ProjectSection(SolutionItems) = preProject
+		url.txt = url.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (No Plugins)|Any CPU = Debug (No Plugins)|Any CPU
@@ -697,8 +702,8 @@ Global
 		{65021938-D251-46FA-BC3D-85C385D4C06D}.Installer|x86.ActiveCfg = Release|x64
 		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|Any CPU.ActiveCfg = Release|Win32
 		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|Any CPU.Build.0 = Release|Win32
-		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|Mixed Platforms.Build.0 = Release|x64
+		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|x64.ActiveCfg = Release|Win32
 		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|x64.Build.0 = Release|Win32
 		{65021938-D251-46FA-BC3D-85C385D4C06D}.Release|x86.ActiveCfg = Release|x64
@@ -737,11 +742,11 @@ Global
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Installer|x86.ActiveCfg = Release|x64
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|Any CPU.ActiveCfg = Release|Win32
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|Any CPU.Build.0 = Release|Win32
-		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|Mixed Platforms.Build.0 = Release|x64
+		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|x64.ActiveCfg = Release|Win32
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|x64.Build.0 = Release|Win32
-		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|x86.ActiveCfg = Release|x64
+		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.Release|x86.ActiveCfg = Release|Win32
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.x86 QT Only|Any CPU.ActiveCfg = Release|Win32
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.x86 QT Only|Mixed Platforms.ActiveCfg = Release|x64
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B}.x86 QT Only|Mixed Platforms.Build.0 = Release|x64
@@ -779,7 +784,7 @@ Global
 		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|x64.ActiveCfg = Release|Any CPU
 		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|x64.Build.0 = Release|Any CPU
-		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|x86.ActiveCfg = Release|x64
+		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.Release|x86.ActiveCfg = Release|Any CPU
 		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|Any CPU.ActiveCfg = Release|x64
 		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|Mixed Platforms.ActiveCfg = Release|x64
 		{CF1EBF84-1A85-4D45-91C3-6A353DBB2A1F}.x86 QT Only|Mixed Platforms.Build.0 = Release|x64

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
+using QTTabBarLib.Interop;
 
 namespace SetHome
 {
@@ -13,6 +12,8 @@ namespace SetHome
         [STAThread]
         static void Main(string[] args)
         {
+            // 测试DPI兼容 indiff
+            PInvoke.SetProcessDPIAware();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
