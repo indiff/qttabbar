@@ -1,7 +1,6 @@
 - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 - [生成chm格式数据库文档 modify by indiff](https://github.com/indiff/DBCHM)
 - [KB5012643 Problem/KB5012643补丁问题](https://github.com/indiff/qttabbar/issues/215)
-- [1.5.5.7-beta内测](https://www.yuque.com/indiff/qttabbar/yb52t8)
 
 [![Download sf qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files)
 [![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases)
@@ -23,6 +22,7 @@
 - [SourceForge主页](https://sourceforge.net/projects/qttabbar2/)
 
 # 版本更新/Changes
+- [1.5.5.7-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.7) 适配暗黑模式，支持设置背景图片
 - [1.5.5.6-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.6) 支持语言 (Brazil Spanish French Turkish)
 - [1.5.5.5-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta) 可启用Debug日志/适配DPI
 - [1.5.5.4-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.4-beta) 忽略控制面板捕获
