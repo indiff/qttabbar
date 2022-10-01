@@ -20,6 +20,7 @@
 - [Gitee Mirror](https://gitee.com/qwop/qttabbar)
 - [SourceForge Mirror](https://sourceforge.net/projects/qttabbar2/)
 # Changes
+- [1.5.5.7-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.7) Adapts to dark mode and supports setting background pictures
 - [1.5.5.6-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.6) Support Language (Brazil Spanish French Turkish)
 - [1.5.5.5-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta) Enable debug log/Adjust the windows DPI
 - [1.5.5.4-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta) Ignore control panel capture
