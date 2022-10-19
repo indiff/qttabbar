@@ -1,6 +1,6 @@
+- [QTTabBar文档](https://www.yuque.com/indiff/qttabbar/zqtdig)
 - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 - [生成chm格式数据库文档 modify by indiff](https://github.com/indiff/DBCHM)
-- [KB5012643 Problem/KB5012643补丁问题](https://github.com/indiff/qttabbar/issues/215)
 
 [![Download sf qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files)
 [![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases)
@@ -97,6 +97,3 @@
         <td><img src="https://user-images.githubusercontent.com/501276/141719517-a6f28c27-3d8b-4b35-87f3-0c326789745e.jpg" width="120"/></td>
     </tr>
 </table>
-
-# 待办/TODOS
-- 增强预览功能
