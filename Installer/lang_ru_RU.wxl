@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="ru-ru" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="YOURLOCID">Переведенная строка</String>
+  <String Id="READ_INFO">Пожалуйста, прочитайте следующую информацию.</String>
+  <String Id="CLOSE_TABS">Закрыть все окна Проводника и переоткрыть их как вкладки</String>
+  <String Id="COMPILE_IMG">Сборка платформоспецифичных образов</String>
+  <String Id="GPL_FILE">GPL3.rtf</String>
+  <String Id="STANDARD_BUTTONS">Обычные кнопки QTTab</String>
+  <String Id="DESKTOP_TOOL">QTTab Desktop Tool</String>
+
+  <String Id="QTTABBAR_ATUOLOADER">Автозагрузчик QTTabBar</String>
+
+  <String Id="ALREADY_INSTALLED">Новая версия уже установлена.</String>
+  <String Id="DETECTED_OLD_VERSION">Программа установки обнаружила, что установлена устаревшая версия QTTabBar.  В связи с изменениями в программе установки, вы должны вручную удалить старую версию и перезапустить Проводник.  Пожалуйста, запустите программу установки снова после выполнения этих действий.</String>
+  <String Id="STILL_OLD_VERSION">Похоже, устаревшая версия QTTabBar всё ещё используется Проводником Windows.  Пожалуйста, перезапустите Проводник через Диспетчер задачи или перезагрузите компьютер.</String>
+  <String Id="REQUIRE_NET_FRAMEWORK">Этому приложению требуется .NET Framework версии не ниже 3.5. Пожалуйста, установите .NET Framework и запустите программу установки снова.</String>
+</WixLocalization>
