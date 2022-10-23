@@ -196,7 +196,7 @@ namespace QTTabBarLib {
         }
         
         /// <summary>
-        ///   查找类似 Ändern Sie das Aussehen von Registerkarten oder der Registerkartenleiste. Registerkartenbild;Benutzerdefiniertes Registerkartenbild verwenden:;Größenränder:;Überlappungsbereich:;Inhaltsränder:;Transparente Bereiche testen;Registerkartengröße;Höhe:;Minimale Breite:;Maximale Breite:;Größenmodus:;Volle Breite;Gleiche Größe;Registerkartentext;Textfarben:;Schattenfarben:;Aktive Farbe;Inaktive Farbe;Mouseover-Farbe;Textschrift:;Ausrichtung:;Links;Zentriert;Symbolleistenhintergrund;Bild;Volltonfarbe;Bild für jede  [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///   查找类似 Ändern Sie das Aussehen der Registerkarten und der Registerkartenleiste;Tab Bild;Benutzerdefiniertes Bild：;Dimensionierung von Rändern：;Überlappungsbereich：;Inhaltsränder：;Hit-Test transparenter Bereich;Tab Größe;Höhe：;Minimale Breite：;Maximale Breite：;Skalierungsmodus：;Volle Breite;Gleiche Größe;Tab Text;Text Farben：;Schatten Farben：;Aktive Farbe;Inaktive Farbe;Hover-Farbe;Schriftart：;Ausrichtung：;Links;Zentriert;Hintergrund der Symbolleiste;Benutzerdefiniertes Bild;Einheitsfarbe;Die Bilder werden von jedem Symbolleistenbereich ausgefüllt;Speicherort des Bildes：;Dimensionierung von Rändern：;Skin-Dateien;Skin importieren...;Skin exportieren...;Dehnen;Anpassung;Gekachelt。
         /// </summary>
         public static string Options_Page06_Appearance {
             get {
