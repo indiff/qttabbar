@@ -1,6 +1,6 @@
 - [QTTabBar Document](https://www.yuque.com/indiff/qttabbar/zqtdig)
 - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
-- [Generate chm db document modify by indiff](https://github.com/indiff/DBCHM)
+- [Generate chm db document(Support Group By Module) modify by indiff](https://github.com/indiff/DBCHM)
 - [beta.8 Update Log](https://www.yuque.com/indiff/qttabbar/yml0h3)
 
 [![Download sf qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files)
