@@ -21,14 +21,31 @@ using System.Security;
 using BandObjectLib;
 
 namespace QTTabBarLib.Interop {
-    [ComImport, SuppressUnmanagedCodeSecurity, Guid("79D16DE4-ABEE-4021-8D9D-9169B261D657"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport, 
+     SuppressUnmanagedCodeSecurity,
+     Guid("79D16DE4-ABEE-4021-8D9D-9169B261D657"), 
+     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDeskBand2 {
+        // IOleWindow methods
+        [PreserveSig]
         void GetWindow(out IntPtr phwnd);
+
+        [PreserveSig]
         void ContextSensitiveHelp([In] bool fEnterMode);
+
+        // IDockingWindow methods
+        [PreserveSig]
         void ShowDW([In] bool fShow);
+        [PreserveSig]
         void CloseDW([In] uint dwReserved);
+        [PreserveSig]
         void ResizeBorderDW(IntPtr prcBorder, [In, MarshalAs(UnmanagedType.IUnknown)] object punkToolbarSite, bool fReserved);
+
+        // IDeskBand methods
+        [PreserveSig]
         void GetBandInfo(uint dwBandID, uint dwViewMode, ref DESKBANDINFO pdbi);
+
+        // IDeskband2 methods
         void CanRenderComposited(out bool pfCanRenderComposited);
         void SetCompositionState(bool fCompositionEnabled);
         void GetCompositionState(out bool pfCompositionEnabled);

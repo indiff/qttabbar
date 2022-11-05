@@ -18,14 +18,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
@@ -211,37 +214,243 @@ namespace QTTabBarLib {
             return ((clr.R | (clr.G << 8)) | (clr.B << 0x10));
         }
 
+        /**
+         * force log
+         */
+        public static void flog(string optional)
+        {
+            StackTrace trace = new StackTrace();
+            Dictionary<String, String> dic = new Dictionary<String, String>();
+            if (trace != null)
+            {
+                StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
+                if (frame != null)
+                {
+                    MethodBase method = frame.GetMethod();
+                    if (method != null)
+                    {
+                        dic.Add("methodName", method.Name);
+                        if (method.ReflectedType != null)
+                        {
+                            String className = method.ReflectedType.Name;
+                            dic.Add("className", className);
+                        }
+                    }
+                }
+            }
+            log("flog", optional, dic);
+        }
+
         public static void log(string optional)
         {
             if (ENABLE_LOGGER)
+            {
+                StackTrace trace = new StackTrace();
+                Dictionary<String, String> dic = new Dictionary<String, String>();
+                if (trace == null)
+                {
+                    // trace = Environment.StackTrace;
+                }
+
+                if (trace != null)
+                {
+                    StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
+                    if (frame != null)
+                    {
+                        MethodBase method = frame.GetMethod();
+                        if (method != null)
+                        {
+                            dic.Add( "methodName", method.Name);
+                            if (method.ReflectedType != null)
+                            {
+                                String className = method.ReflectedType.Name;
+                                dic.Add("className", className);
+                            }
+                        }
+                    }
+                }
+                log("log", optional, dic);
+            }
+        }
+
+
+        public static void log2(string optional)
+        {
+            if (ENABLE_LOGGER)
+            {
                 log("log", optional);
+            }
         }
 
         public static void err(string optional)
         {
-            if ( ENABLE_LOGGER )
-                log("err", optional);
+            if (ENABLE_LOGGER)
+            {
+                StackTrace trace = new StackTrace();
+                Dictionary<String, String> dic = new Dictionary<String, String>();
+                if (trace == null)
+                {
+                    // trace = Environment.StackTrace;
+                }
 
+                if (trace != null)
+                {
+                    StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
+                    if (frame != null)
+                    {
+                        MethodBase method = frame.GetMethod();
+                        if (method != null)
+                        {
+                            dic.Add("methodName", method.Name);
+                            if (method.ReflectedType != null)
+                            {
+                                String className = method.ReflectedType.Name;
+                                dic.Add("className", className);
+                            }
+                        }
+                    }
+                }
+                log("err", optional, dic);
+            }
         }
 
-        public static void log(string level, string optional)
+        // private static DateTime dateTime ;
+        private static Dictionary<int, DateTime> dictTime = new Dictionary<int, DateTime>();
+        // 忽略一些添加 日志
+        private static string[] IGNORES = { "ReleaseComObject" };
+        
+        public static void log(string level, string optional,Dictionary<String, String> dic=null)
         {
+            // ignore 
+            if (null != IGNORES && IGNORES.Length > 0)
+            {
+                foreach (var ignore in IGNORES)
+                {
+                    var lower1 = ignore.ToLower();
+                    var lower2 = optional.ToLower();
+                    if (lower2.Contains(lower1))
+                    {
+                        return; // ignore ;
+                    }
+                }
+            }
+
+            /*
+             var useTime = "";
+             if (null != dateTime)
+            {
+                DateTime oldTime = dateTime;
+                dateTime = DateTime.Now;
+                useTime = "" + ((dateTime - oldTime).TotalMilliseconds) + "毫秒";
+            }
+            else
+            {
+                dateTime = DateTime.Now;
+            }*/
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string appdataQT = Path.Combine(appdata, "QTTabBar");
             if (!Directory.Exists(appdataQT))
             {
                 Directory.CreateDirectory(appdataQT);
             }
+
+            Process process = Process.GetCurrentProcess();
+            var cThreadId = Thread.CurrentThread.ManagedThreadId;
+            var currentThreadId = AppDomain.GetCurrentThreadId();
+            if (null == cThreadId)
+            {
+                cThreadId = currentThreadId;
+            } 
+
+            var useTime = "";
+            if (null != cThreadId)
+            {
+                if (null != dictTime)
+                {
+                    if (!dictTime.ContainsKey(cThreadId))
+                    {
+                        dictTime[cThreadId] = DateTime.Now;
+                    }
+                    var oldTime = dictTime[cThreadId];
+                    if (null != oldTime)
+                    {
+                        useTime = "" + ((DateTime.Now - oldTime).TotalMilliseconds) + "毫秒";
+                        dictTime[cThreadId] = DateTime.Now;
+                    }
+                }
+                else
+                {
+                    ;
+                    dictTime[cThreadId] = DateTime.Now;
+                }
+            } 
+
             string path = Path.Combine(appdataQT, "QTTabBarException.log");
-            var formatLogLine = new StringBuilder();
-            formatLogLine
+            var line = new StringBuilder();
+            line
                 .Append("[")
                 .Append(level)
-                .Append("]")
+                .Append("]");
+
+            // add className and methodName debug
+            if (null != dic && dic.Count > 0 && dic.ContainsKey("methodName") && dic.ContainsKey("className"))
+            {
+                // 输出类名和方法名
+                if (dic.ContainsKey("className"))
+                {
+                    var className = dic["className"];
+                    if (!string.IsNullOrEmpty(className))
+                    {
+                        line
+                            .Append(" C:")
+                            .Append(className);
+                    }
+                }
+
+                if (dic.ContainsKey("methodName"))
+                {
+                    var methodName = dic["methodName"];
+                    if (!string.IsNullOrEmpty(methodName))
+                    {
+                        line
+                            .Append(" M:")
+                            .Append(methodName);
+                    }
+                }
+            }
+            // 进程ID
+            if (process != null)
+            {
+                line
+                    .Append(" P:")
+                    .Append(process.Id);
+            }
+            // 线程 ID
+            if (cThreadId != null)
+            {
+                line
+                    .Append(" T:")
+                    .Append(cThreadId);
+            }
+            else if (currentThreadId != null)
+            {
+                line
+                    .Append(" T:")
+                    .Append(currentThreadId);
+            }
+
+            if (!string.IsNullOrEmpty(useTime))
+            {
+                line
+                    .Append(" cost:")
+                    .Append( useTime );
+            }
+            line
+                .Append(" ")
                 .Append(DateTime.Now.ToString())
                 .Append(" ")
                 .Append(optional);
-            writeStr(path, formatLogLine);
+            writeStr(path, line);
         }
 
 
@@ -255,51 +464,54 @@ namespace QTTabBarLib {
                     Directory.CreateDirectory(appdataQT);
                 }
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
-                var formatLogLine = new StringBuilder();
-                formatLogLine.AppendLine(DateTime.Now.ToString());
-                formatLogLine.AppendLine(".NET 版本: " + Environment.Version);
-                formatLogLine.AppendLine("操作系统版本: " + Environment.OSVersion.Version + " Major: " + Environment.OSVersion.Version.Major);
-                formatLogLine.AppendLine("QT 版本: " + MakeVersionString());
+                var line = new StringBuilder();
+                line.AppendLine(DateTime.Now.ToString());
+                line.AppendLine(".NET 版本: " + Environment.Version);
+                line.AppendLine("操作系统版本: " + Environment.OSVersion.Version + 
+                                " Major: " + Environment.OSVersion.Version.Major +
+                                " 环境: " + getEnv()
+                                );
+                line.AppendLine("QT 版本: " + MakeVersionString());
                 if (!String.IsNullOrEmpty(optional))
                 {
-                    formatLogLine.AppendLine("错误信息: " + optional);
+                    line.AppendLine("错误信息: " + optional);
                 }
                 if (ex == null)
                 {
-                    formatLogLine.AppendLine("Exception: None");
+                    line.AppendLine("Exception: None");
                     if (Environment.StackTrace != null)
                     {
-                        formatLogLine.AppendLine(Environment.StackTrace);
+                        line.AppendLine(Environment.StackTrace);
                     }
                 }
                 else
                 {
-                    formatLogLine.AppendFormat("\nMessage ---\n{0}", ex.Message);
-                    formatLogLine.AppendFormat(
+                    line.AppendFormat("\nMessage ---\n{0}", ex.Message);
+                    line.AppendFormat(
                         "\nHelpLink ---\n{0}", ex.HelpLink);
-                    formatLogLine.AppendFormat("\nSource ---\n{0}", ex.Source);
-                    formatLogLine.AppendFormat(
+                    line.AppendFormat("\nSource ---\n{0}", ex.Source);
+                    line.AppendFormat(
                         "\nStackTrace ---\n{0}", ex.StackTrace);
-                    formatLogLine.AppendFormat(
+                    line.AppendFormat(
                         "\nTargetSite ---\n{0}", ex.TargetSite);
 
                     if (ex.InnerException != null)
                     {
-                        formatLogLine.AppendLine("****************InnnerExcetpion");
-                        formatLogLine.AppendFormat("\n  InnerMessage ---\n{0}", ex.InnerException.Message);
-                        formatLogLine.AppendFormat(
+                        line.AppendLine("****************InnnerExcetpion");
+                        line.AppendFormat("\n  InnerMessage ---\n{0}", ex.InnerException.Message);
+                        line.AppendFormat(
                             "\n InnerHelpLink ---\n{0}", ex.InnerException.HelpLink);
-                        formatLogLine.AppendFormat("\n  InnerSource ---\n{0}", ex.InnerException.Source);
-                        formatLogLine.AppendFormat(
+                        line.AppendFormat("\n  InnerSource ---\n{0}", ex.InnerException.Source);
+                        line.AppendFormat(
                             "\n InnerStackTrace ---\n{0}", ex.InnerException.StackTrace);
-                        formatLogLine.AppendFormat(
+                        line.AppendFormat(
                             "\n InnerTargetSite ---\n{0}", ex.InnerException.TargetSite);
                     }
                 }
-                formatLogLine.AppendLine("--------------");
-                formatLogLine.AppendLine();
+                line.AppendLine("--------------");
+                line.AppendLine();
 
-                writeStr(path, formatLogLine);
+                writeStr(path, line);
             }
             catch {
             }
@@ -307,11 +519,61 @@ namespace QTTabBarLib {
             }
         }
 
+        private static string getEnv()
+        {
+            if (4 == IntPtr.Size)
+            {
+                return "32";
+            } else if (8 == IntPtr.Size)
+            {
+                return "64";
+            }
+            return "unknown";
+        }
+
+        /*
+        public static object lockObject = new object();
+        //读写锁，锁定文件写入权限，每个线程依次等待上个写入完成
+        static ReaderWriterLockSlim LogWriteLock = new ReaderWriterLockSlim();
+        */
+
+
+        /*
+        互斥锁Mutex
+        定义：
+            private static readonly Mutex mutex = new Mutex();
+            使用：
+            mutex.WaitOne();
+            mutex.ReleaseMutex();
+            作用：将会锁住代码块的内容，并阻止其他线程进入该代码块，直到该代码块运行完成，释放该锁。
+         * Mutex本身是可以系统级别的，所以是可以跨越进程的。
+         */
+        private static readonly Mutex M_MUTEX = new Mutex();
+
         private static void writeStr(string path, StringBuilder formatLogLine)
         {
-            using (StreamWriter writer = new StreamWriter(path, true))
+
+            try
             {
-                writer.WriteLine(formatLogLine);
+                M_MUTEX.WaitOne();
+                //设置读写锁为写入模式独占资源
+                //因写入模式的进入与释放在同一个代码块内，请保证在块内进入写入模式前不会触发异常，否则会因为进入与释放次数不符从而触发异常
+                //请勿长时间占用读写锁否则会导致其他线程饥饿。
+                // LogWriteLock.EnterWriteLock();
+                // lock (lockObject) {
+                    using (StreamWriter writer = new StreamWriter(path, true))
+                    {
+                        writer.WriteLine(formatLogLine);
+                    }
+                // }
+            }
+            finally
+            {
+                //退出写入模式，释放资源占用
+                //注意释放与进入次数相同否则会触发异常
+                // LogWriteLock.ExitWriteLock();
+
+                M_MUTEX.ReleaseMutex();
             }
             /*if (File.Exists(path))
             {

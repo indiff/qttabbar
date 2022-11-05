@@ -92,13 +92,17 @@ namespace QTTabBarLib {
                 PreviousListView = CurrentListView;
             }
 
-            if(hwndListView == IntPtr.Zero) {
+            if(hwndListView == IntPtr.Zero)
+            {
+                QTUtility2.log("ListViewMonitor AbstractListView ");
                 CurrentListView = new AbstractListView();
             }
             else if(fIsSysListView) {
+                QTUtility2.log("ListViewMonitor ExtendedSysListView32 ");
                 CurrentListView = new ExtendedSysListView32(ShellBrowser, hwndShellView, hwndListView, hwndSubDirTipMessageReflect);
             }
             else {
+                QTUtility2.log("ListViewMonitor ExtendedItemsView ");
                 CurrentListView = new ExtendedItemsView(ShellBrowser, hwndShellView, hwndListView, hwndSubDirTipMessageReflect);
             }
             CurrentListView.ListViewDestroyed += ListView_Destroyed;

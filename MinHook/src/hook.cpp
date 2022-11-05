@@ -1,6 +1,6 @@
 /* 
  *  MinHook - Minimalistic API Hook Library	
- *  Copyright (C) 2009 Tsuda Kageyu. All rights reserved.
+ *  Copyright (C) 2022 Tsuda Kageyu, indiff. All rights reserved.
  *  
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions

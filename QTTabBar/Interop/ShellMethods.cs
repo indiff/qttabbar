@@ -148,9 +148,11 @@ namespace QTTabBarLib.Interop {
             }
             finally {
                 if(obj2 != null) {
+                    QTUtility2.log("ReleaseComObject obj2");
                     Marshal.ReleaseComObject(obj2);
                 }
                 if(ppv != null) {
+                    QTUtility2.log("ReleaseComObject ppv");
                     Marshal.ReleaseComObject(ppv);
                 }
                 if(zero != IntPtr.Zero) {
@@ -214,9 +216,11 @@ namespace QTTabBarLib.Interop {
             }
             finally {
                 if(obj2 != null) {
+                    QTUtility2.log("ReleaseComObject obj2");
                     Marshal.ReleaseComObject(obj2);
                 }
                 if(ppv != null) {
+                    QTUtility2.log("ReleaseComObject ppv");
                     Marshal.ReleaseComObject(ppv);
                 }
                 foreach(IntPtr ptr6 in list) {
@@ -294,6 +298,7 @@ namespace QTTabBarLib.Interop {
             }
             finally {
                 if(ppv != null) {
+                    QTUtility2.log("ReleaseComObject ppv");
                     Marshal.ReleaseComObject(ppv);
                 }
             }
@@ -348,6 +353,7 @@ namespace QTTabBarLib.Interop {
             }
             finally {
                 if(o != null) {
+                    QTUtility2.log("ReleaseComObject o");
                     Marshal.ReleaseComObject(o);
                 }
             }
@@ -371,6 +377,7 @@ namespace QTTabBarLib.Interop {
             }
             finally {
                 if(o != null) {
+                    QTUtility2.log("ReleaseComObject o");
                     Marshal.ReleaseComObject(o);
                 }
             }
@@ -434,6 +441,7 @@ namespace QTTabBarLib.Interop {
             }
             finally {
                 if(ppshf != null) {
+                    QTUtility2.log("ReleaseComObject ppshf");
                     Marshal.ReleaseComObject(ppshf);
                 }
             }
@@ -465,9 +473,11 @@ namespace QTTabBarLib.Interop {
                 }
                 finally {
                     if(ppv != null) {
+                        QTUtility2.log("ReleaseComObject ppv");
                         Marshal.ReleaseComObject(ppv);
                     }
                     if(o != null) {
+                        QTUtility2.log("ReleaseComObject o");
                         Marshal.ReleaseComObject(o);
                     }
                 }

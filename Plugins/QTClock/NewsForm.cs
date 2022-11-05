@@ -14,20 +14,22 @@ namespace QuizoPlugins
     {
         private Clock.Item[] items;
         private Timer timer;
-        private Clock clock;
+
+        public Clock clock { get; set; }
+
         private static NewsForm instance;
 
         private static readonly object m_objLock = new object();
+        private static readonly int sideThickness = 4;//边缘的厚度，窗体停靠在边缘隐藏后留出来的可见部分的厚度 
 
 
-        private NewsForm(Clock clock)
+        private NewsForm()
         {
             InitializeComponent();
             // 355 * 162  0x133 0x73  宽度设置为屏幕 1/3 高度为屏幕 1/6
             // int width = Screen.PrimaryScreen.WorkingArea.Size.Width / 3;
             // int height = Screen.PrimaryScreen.WorkingArea.Size.Height - 100;
             // this.ClientSize = new System.Drawing.Size(width, height);
-            this.clock = clock;
             if (timer == null)
             {
                 timer = new Timer();
@@ -38,7 +40,7 @@ namespace QuizoPlugins
         }
 
 
-        public static NewsForm GetInstance(Clock clock)
+        public static NewsForm GetInstance()
         {
             if (instance == null || instance.IsDisposed)
             {
@@ -46,10 +48,10 @@ namespace QuizoPlugins
                 {
                     if (instance == null || instance.IsDisposed)
                     {
-                        instance = new NewsForm(clock);
+                        instance = null;
+                        instance = new NewsForm();
                     }
                 }
- 
             }
             return instance; 
         }
@@ -63,7 +65,21 @@ namespace QuizoPlugins
 
         void AutoSideHideOrShow()
         {
-            int sideThickness = 4;//边缘的厚度，窗体停靠在边缘隐藏后留出来的可见部分的厚度  
+            var bMulScreens = Screen.AllScreens.Length > 1;
+            var screenWidth = 0;
+            if (bMulScreens)
+            {
+                for (var i = 0; i < Screen.AllScreens.Length; i++)
+                {
+                    screenWidth += Screen.AllScreens[i].WorkingArea.Width;
+                }
+                this.label2.Text = "检测当前为多屏!";
+            }
+            else
+            {
+                screenWidth += Screen.PrimaryScreen.WorkingArea.Width;
+                this.label2.Text = "" ;
+            }
 
             //如果窗体最小化或最大化了则什么也不做  
             if (this.WindowState == FormWindowState.Minimized || this.WindowState == FormWindowState.Maximized)
@@ -72,7 +88,10 @@ namespace QuizoPlugins
             }
 
             //如果鼠标在窗体内  
-            if (Cursor.Position.X >= this.Left && Cursor.Position.X < this.Right && Cursor.Position.Y >= this.Top && Cursor.Position.Y < this.Bottom)
+            if (Cursor.Position.X >= this.Left &&
+                Cursor.Position.X < this.Right &&
+                Cursor.Position.Y >= this.Top &&
+                Cursor.Position.Y < this.Bottom)
             {
                 //如果窗体离屏幕边缘很近，则自动停靠在该边缘  
                 if (this.Top <= sideThickness)
@@ -83,9 +102,9 @@ namespace QuizoPlugins
                 {
                     this.Left = 0;
                 }
-                if (this.Left >= Screen.PrimaryScreen.WorkingArea.Width - this.Width - sideThickness)
+                if (this.Left >= screenWidth - this.Width - sideThickness)
                 {
-                    this.Left = Screen.PrimaryScreen.WorkingArea.Width - this.Width;
+                    this.Left = screenWidth - this.Width;
                 }
             }
             //当鼠标离开窗体以后  
@@ -97,12 +116,18 @@ namespace QuizoPlugins
                     this.Left = sideThickness - this.Width;
                 }
                 //隐藏到屏幕右边缘  
-                else if (this.Left == Screen.PrimaryScreen.WorkingArea.Width - this.Width)
+                else if (this.Left == screenWidth - this.Width)
                 {
-                    this.Left = Screen.PrimaryScreen.WorkingArea.Width - sideThickness;
+                    this.Left = screenWidth - sideThickness;
+                }
+                //隐藏到屏幕右边缘  
+                else if (this.Left < screenWidth - this.Width)
+                {
+                    // MessageBox.Show("Screen.PrimaryScreen.WorkingArea.Width - this.Width " + this.Left);
+                    this.Left = screenWidth - sideThickness;
                 }
                 //隐藏到屏幕上边缘  
-                else if (this.Top == 0 && this.Left > 0 && this.Left < Screen.PrimaryScreen.WorkingArea.Width - this.Width)
+                else if (this.Top == 0 && this.Left > 0 && this.Left < screenWidth - this.Width)
                 {
                     this.Top = sideThickness - this.Height;
                 }
@@ -111,20 +136,46 @@ namespace QuizoPlugins
 
         void AutoSideHide()
         {
-            int sideThickness = 4;//边缘的厚度，窗体停靠在边缘隐藏后留出来的可见部分的厚度  
+            var bMulScreens = Screen.AllScreens.Length > 1;
+            var screenWidth = 0;
+            this.label2.Text = "check screens...";
+            if (bMulScreens)
+            {
+                for (var i = 0; i < Screen.AllScreens.Length; i++)
+                {
+                    screenWidth += Screen.AllScreens[i].WorkingArea.Width;
+                }
+
+                // this.label2.Text = "检测当前为多屏:" + Screen.AllScreens.Length + ",width:" + screenWidth;
+                this.label2.Text = "检测当前为多屏!" ;
+            }
+            else
+            {
+                screenWidth += Screen.PrimaryScreen.WorkingArea.Width;
+                this.label2.Text = "" ;
+            }
             //隐藏到屏幕左边缘  
             if (this.Left == 0)
             {
+                // MessageBox.Show("" + this.Left);
                 this.Left = sideThickness - this.Width;
             }
             //隐藏到屏幕右边缘  
-            else if (this.Left == Screen.PrimaryScreen.WorkingArea.Width - this.Width)
+            else if (this.Left == screenWidth - this.Width)
             {
-                this.Left = Screen.PrimaryScreen.WorkingArea.Width - sideThickness;
+               // MessageBox.Show("Screen.PrimaryScreen.WorkingArea.Width - this.Width " + this.Left);
+                this.Left = screenWidth - sideThickness;
+            }
+            //隐藏到屏幕右边缘  
+            else if (this.Left < screenWidth - this.Width)
+            {
+               // MessageBox.Show("Screen.PrimaryScreen.WorkingArea.Width - this.Width " + this.Left);
+                this.Left = screenWidth - sideThickness;
             }
             //隐藏到屏幕上边缘  
-            else if (this.Top == 0 && this.Left > 0 && this.Left < Screen.PrimaryScreen.WorkingArea.Width - this.Width)
+            else if (this.Top == 0 && this.Left > 0 && this.Left < screenWidth - this.Width)
             {
+                //MessageBox.Show("Screen.PrimaryScreen.WorkingArea.Width - this.Width " + this.Left);
                 this.Top = sideThickness - this.Height;
             }
         }
@@ -132,8 +183,22 @@ namespace QuizoPlugins
 
         private void NewsForm_Load(object sender, EventArgs e)
         {
-            this.Top = 100;
-            this.Left = Screen.PrimaryScreen.Bounds.Width - 800;
+            var bMulScreens = Screen.AllScreens.Length > 1;
+            var screenWidth = 0;
+            if (bMulScreens)
+            {
+                for (var i = 0; i < Screen.AllScreens.Length; i++)
+                {
+                    screenWidth += Screen.AllScreens[i].WorkingArea.Width;
+                }
+
+            }
+            else
+            {
+                screenWidth += Screen.PrimaryScreen.WorkingArea.Width;
+            }
+            this.Top = 150;
+            this.Left = screenWidth - this.Width;
         }
 
         private void Form2_Paint(object sender, PaintEventArgs e)
@@ -178,6 +243,9 @@ namespace QuizoPlugins
                          
                      }*/
                      this.label1.Text = ("加载成功" + items.Length + "条");
+                     this.button1.Enabled = true;
+                     this.button2.Enabled = true;
+                     this.button3.Enabled = true;
                  }
             }
             else
@@ -250,7 +318,13 @@ namespace QuizoPlugins
                 this.toolTip1.Active = true;
                 if (items != null && this.listBox1.SelectedIndex < items.Length)
                 {
-                    this.toolTip1.SetToolTip(this.listBox1, items[this.listBox1.SelectedIndex].description);
+                    var description = items[this.listBox1.SelectedIndex].description;
+                    // 如果描述信息为空，则取标题
+                    if (isEmpty(description))
+                    {
+                        description = items[this.listBox1.SelectedIndex].title;
+                    }
+                    this.toolTip1.SetToolTip(this.listBox1, description);
                     var listBox1Item = this.listBox1.Items[this.listBox1.SelectedIndex];
                     
                 }
@@ -261,9 +335,17 @@ namespace QuizoPlugins
             }
         }
 
+        private bool isEmpty(string description)
+        {
+            return description == null || description.Trim().Length == 0; 
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             this.label1.Text = ("数据加载中...");
+            this.button1.Enabled = false;
+            this.button2.Enabled = false;
+            this.button3.Enabled = false;
             if (null != clock)
             {
                 new Thread(() =>
@@ -283,6 +365,13 @@ namespace QuizoPlugins
         private void button3_Click(object sender, EventArgs e)
         {
             this.AutoSideHide();
+        }
+
+        public void enableButtons( bool flag )
+        {
+            this.button1.Enabled = flag;
+            this.button2.Enabled = flag;
+            this.button3.Enabled = flag;
         }
     }
 }

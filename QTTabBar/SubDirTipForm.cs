@@ -66,6 +66,8 @@ namespace QTTabBarLib {
         public event ItemRightClickedEventHandler MenuItemRightClicked;
         public event EventHandler MultipleMenuItemsClicked;
         public event ItemRightClickedEventHandler MultipleMenuItemsRightClicked;
+        // 判断是否中键过？
+        private bool fMiddleButton = false;
 
         public SubDirTipForm(IntPtr hwndMessageReflect, bool fEnableShiftKeyOnDDMR, AbstractListView lvw) {
             listView = lvw;
@@ -434,9 +436,11 @@ namespace QTTabBarLib {
                 }
                 finally {
                     if(shellFolder != null) {
+                        QTUtility2.log("ReleaseComObject shellFolder");
                         Marshal.ReleaseComObject(shellFolder);
                     }
                     if(ppenumIDList != null) {
+                        QTUtility2.log("ReleaseComObject ppenumIDList");
                         Marshal.ReleaseComObject(ppenumIDList);
                     }
                     if(zero != IntPtr.Zero) {
@@ -475,6 +479,7 @@ namespace QTTabBarLib {
                 target.ItemRightClicked += ddmr_ItemRightClicked;
                 target.Opened += ddmr_Opened;
                 target.MenuDragEnter += ddmr_MenuDragEnter;
+                // 添加鼠标中键事件
                 item.DropDown = target;
                 item.DropDownOpening += tsmi_DropDownOpening;
                 item.DropDownItemClicked += ddmr_ItemClicked;
@@ -497,7 +502,15 @@ namespace QTTabBarLib {
             return lst;
         }
 
+
+
+        //  添加鼠标中键事件
         private void ddmr_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+            if (fMiddleButton)  // 如果是点了中键， 则不进行关闭
+            {
+                return;
+            }
+
             if(MenuItemClicked != null) {
                 if((e.ClickedItem is ToolStripMenuItem) && ((ToolStripMenuItem)e.ClickedItem).Checked) {
                     CheckedItemsClick();
@@ -1111,6 +1124,26 @@ namespace QTTabBarLib {
         }
 
         private void tsmi_MouseUp(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Middle)
+            {
+                // 中键新建标签
+                fMiddleButton = true;
+                QMenuItem item = (QMenuItem)sender;
+                var qtTabBarClass = InstanceManager.GetThreadTabBar();
+                if (null != qtTabBarClass)
+                {
+                    using (IDLWrapper wrapper3 = new IDLWrapper(item.Path))
+                    {
+                        qtTabBarClass.OpenNewTab(wrapper3, true);
+                    }
+                    QTUtility2.log("tsmi_MouseUp MouseButtons.Middle " + item.Path);
+                }
+            }
+            else
+            {
+                fMiddleButton = false;
+                QTUtility2.log("tsmi_MouseUp others");
+            }
             draggingPath = null;
             draggingItem = null;
         }

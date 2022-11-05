@@ -67,8 +67,8 @@ namespace QTTabBarLib {
         {
             ///////////// add default plugin by qwop 2012-07-10////////////////
             // the program data 's default plugin.
-            string defaultQtConfigPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll";
-            string turnOffRepeatPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll";
+            // string defaultQtConfigPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll";
+            // string turnOffRepeatPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll";
             string[] plugins = new string[] { 
                 Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll", 
                 Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll", 
@@ -121,7 +121,7 @@ namespace QTTabBarLib {
         }
 
         public static PluginAssembly LoadAssembly(string path) {
-            if(path.Length > 0) {
+            if(path.Length > 0 && File.Exists(path)) {
                 PluginAssembly pa = new PluginAssembly(path);
                 if(pa.PluginInfosExist) {
                     string[] enabled = Config.Plugin.Enabled;
@@ -161,8 +161,14 @@ namespace QTTabBarLib {
         private static IEnumerable<string> ReadAssemblyPaths() {
             using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root + @"Plugins\Paths")) {
                 if(key == null) yield break;
-                foreach(string str in key.GetValueNames()) {
-                    yield return (string)key.GetValue(str, string.Empty);
+                foreach(string str in key.GetValueNames())
+                {
+                    // 需要判断文件是否存在
+                    var path = (string)key.GetValue(str, string.Empty);
+                    if (File.Exists(path))
+                    {
+                        yield return path;
+                    }
                 }
             }
         }
@@ -170,40 +176,60 @@ namespace QTTabBarLib {
         public static void RefreshPlugins() {
             // Read in the Assemblies to refresh
             string[] enabled = Config.Plugin.Enabled;
-            List<PluginAssembly> asmsToRefresh = ReadAssemblyPaths().Select(path => {
+/*
+未将对象引用设置到对象的实例。
+HelpLink ---
+
+Source ---
+QTTabBar
+StackTrace ---
+   在 QTTabBarLib.PluginManager.<RefreshPlugins>b__e(PluginAssembly asm)
+   在 System.Linq.Enumerable.<SelectManyIterator>d__14`2.MoveNext()
+   在 System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
+   在 System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   在 System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+ */
+            var pluginAssemblies = ReadAssemblyPaths().Select(path => {
                 PluginAssembly asm;
                 if(!GetAssembly(path, out asm)) return LoadAssembly(path);
                 foreach(PluginInformation info in asm.PluginInformations
-                        .Where(info => enabled.Contains(info.PluginID))) {
+                            .Where(info
+                                => enabled.Contains(info.PluginID) &&
+                                   File.Exists( info.Path )
+                                )
+                        ) {
                     info.Enabled = true;
                     asm.Enabled = true;
                 }
                 return asm;
-            }).ToList();
-
-            // Uninstall the currently installed Assemblies that aren't in the new list
-            foreach(PluginAssembly asm in PluginAssemblies.Except(asmsToRefresh).ToList()) {
-                UninstallPluginAssembly(asm);
-            }
-
-            // Make a list of PluginIDs that are disabled and disable them
-            List<string> pidsToUnload = asmsToRefresh.SelectMany(asm => asm.PluginInformations)
-                    .Where(pi => !pi.Enabled).Select(pi => pi.PluginID).ToList();
-            foreach(string pid in pidsToUnload) { // static
-                Plugin plugin;
-                if(!dicStaticPluginInstances.TryGetValue(pid, out plugin)) continue;
-                if(plugin.PluginInformation.PluginType == PluginType.Static) plugin.Close(EndCode.Removed);
-                dicStaticPluginInstances.Remove(pid);
-            }
-            ClearIEncodingDetector();
-
-            // Refresh the existing ones.
-            foreach(PluginAssembly pa in asmsToRefresh) {
-                foreach(PluginInformation info in pa.PluginInformations) {
-                    if(info.Enabled) LoadStaticInstance(info, pa);
+            });
+            if (pluginAssemblies != null && pluginAssemblies.Count() > 0 )
+            {
+                List<PluginAssembly> asmsToRefresh = pluginAssemblies.ToList();
+                // Uninstall the currently installed Assemblies that aren't in the new list
+                foreach(PluginAssembly asm in PluginAssemblies.Except(asmsToRefresh).ToList()) {
+                    UninstallPluginAssembly(asm);
                 }
+
+                // Make a list of PluginIDs that are disabled and disable them
+                List<string> pidsToUnload = asmsToRefresh.SelectMany(asm => asm.PluginInformations)
+                    .Where(pi => !pi.Enabled).Select(pi => pi.PluginID).ToList();
+                foreach(string pid in pidsToUnload) { // static
+                    Plugin plugin;
+                    if(!dicStaticPluginInstances.TryGetValue(pid, out plugin)) continue;
+                    if(plugin.PluginInformation.PluginType == PluginType.Static) plugin.Close(EndCode.Removed);
+                    dicStaticPluginInstances.Remove(pid);
+                }
+                ClearIEncodingDetector();
+
+                // Refresh the existing ones.
+                foreach(PluginAssembly pa in asmsToRefresh) {
+                    foreach(PluginInformation info in pa.PluginInformations) {
+                        if(info.Enabled) LoadStaticInstance(info, pa);
+                    }
+                }
+                InstanceManager.LocalTabBroadcast(tabbar => tabbar.pluginServer.RefreshPlugins());
             }
-            InstanceManager.LocalTabBroadcast(tabbar => tabbar.pluginServer.RefreshPlugins());
         }
 
         public static void SavePluginAssemblyPaths(List<string> paths) {

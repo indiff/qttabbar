@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -138,7 +138,9 @@ namespace QTTabBarLib {
             }
             
         }
-
+        /**
+         * 确认按钮栏是否正确
+         */
         public void EnsureMenuBarIsCorrect() {
             bool show = MenuHasFocus || MenuBarShown;
             REBARBANDINFO structure = new REBARBANDINFO();
@@ -153,11 +155,25 @@ namespace QTTabBarLib {
             }
         }
 
-        internal void RefreshHeight() {
+
+        protected  int CalcBandHeight(int count)
+        {
+           // return count * (Graphic.ScaleBy(ExplorerManager.WindowScaling, Config.TabHeight) - 3) + 4 + (this.IsBottomBar ? 0 : Config.TabBarPadding.Vertical);
+           return -1;
+        }
+
+
+
+        /**
+         * 刷新高度 适配4k
+         */
+        internal unsafe void RefreshHeight() {
+            QTUtility2.log("QTTabBarClass RefreshHeight");
             const int DBID_BANDINFOCHANGED = 0;
             const int OLECMDEXECOPT_DODEFAULT = 0;
             const int RBN_HEIGHTCHANGE = -831;
             const int GWL_HWNDPARENT = -8;
+            
             try {
                 tabbar.SuspendLayout();
                 if(bandObjectSite != null) {
@@ -175,12 +191,60 @@ namespace QTTabBarLib {
                     }
                     else {
                         IntPtr windowLongPtr = PInvoke.GetWindowLongPtr(Handle, GWL_HWNDPARENT);
-                        NMHDR structure = new NMHDR {
+                        NMHDR nmhdr = new NMHDR {
                             hwndFrom = Handle,
                             idFrom = (IntPtr)40965, // magic id
                             code = RBN_HEIGHTCHANGE
                         };
-                        PInvoke.SendMessage(windowLongPtr, WM.NOTIFY, structure.idFrom, ref structure);
+
+                        if (!(windowLongPtr != IntPtr.Zero) || !PInvoke.IsWindow(windowLongPtr))
+                            return;
+                        PInvoke.SendMessage(windowLongPtr, WM.NOTIFY, nmhdr.idFrom, ref nmhdr);
+                        PInvoke.RedrawWindow(windowLongPtr, IntPtr.Zero, IntPtr.Zero, RDW.INVALIDATE | RDW.VALIDATE | RDW.ALLCHILDREN | RDW.ERASENOW);
+
+
+
+                        int bandCount = (int)PInvoke.SendMessage(rebarController.Handle, RB.GETBANDCOUNT, IntPtr.Zero, IntPtr.Zero);
+                        // graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        RECT rectBand = new RECT();
+                        RECT rectMargin = new RECT();
+                        for (int i = 0; i < bandCount; i++)
+                        {
+                            if (PInvoke.SendMessage(rebarController.Handle, RB.GETRECT, (IntPtr)i, ref rectBand) == IntPtr.Zero)
+                            {
+                                continue;
+                            }
+                            QTUtility2.log("Refresh Height bandIndex : " + i );
+                            PInvoke.SendMessage(rebarController.Handle, RB.GETBANDBORDERS, (IntPtr)i, ref rectMargin);
+                            rectBand.left -= !QTUtility.IsXP ? 4 : rectMargin.left;
+                            rectBand.top -= rectMargin.top;
+                            rectBand.right += rectMargin.right;
+                            rectBand.bottom += rectMargin.bottom;
+
+                            QTUtility2.log("rectBand Height: " + rectBand.Height);
+                            // rectTargets.Add(rectBand.ToRectangle());
+                        }
+
+
+                        /*REBARBANDINFO structure = new REBARBANDINFO();
+                        structure.cbSize = Marshal.SizeOf(structure);
+                        structure.fMask = RBBIM.CHILD | RBBIM.ID;
+                        int wParam = (int)PInvoke.SendMessage(Handle, RB.GETBANDCOUNT, IntPtr.Zero, IntPtr.Zero);
+
+                        RECT rect;
+                        PInvoke.GetWindowRect(ExplorerHandle, out rect);
+                        for (int i = 0; i < wParam; i++)
+                        {
+                            PInvoke.SendMessage(Handle, RB.GETBANDINFO, (IntPtr)i, ref structure);
+                            if (structure.hwndChild != menuController.Handle) continue;
+                            // PInvoke.SendMessage(Handle, RB.SHOWBAND, (IntPtr)i, show ? ((IntPtr)1) : IntPtr.Zero);
+
+
+                            PInvoke.SendMessage(Handle, 1052, (IntPtr)wParam, ref structure);
+                            structure.cyChild = rect.Height + 100;
+                            structure.cyMinChild = rect.Height + 100;
+                            PInvoke.SendMessage(Handle, 1035, (IntPtr)wParam, ref structure);
+                        }*/
                     }
                 }
             }

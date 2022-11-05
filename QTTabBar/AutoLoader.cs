@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022 indiff  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BandObjectLib;
 using Microsoft.Win32;
-using QTTabBarLib.Interop;
 using SHDocVw;
 
 namespace QTTabBarLib {
@@ -41,7 +40,7 @@ namespace QTTabBarLib {
                 key.SetValue("HelpText", "QTTabBar AutoLoader");
             }
             Registry.LocalMachine.CreateSubKey(BHOKEYNAME + name);
-            QTUtility2.log( "AutoLoader 注册表 QTTabBar 自动加载(安装)");
+            QTUtility2.flog( "AutoLoader 注册表 QTTabBar 自动加载(安装)");
         }
 
         [ComUnregisterFunction]
@@ -49,21 +48,24 @@ namespace QTTabBarLib {
             using(RegistryKey key = Registry.LocalMachine.CreateSubKey(BHOKEYNAME)) {
                 key.DeleteSubKey(t.GUID.ToString("B"), false);
             }
-            QTUtility2.log( "AutoLoader 注册表 QTTabBar 自动加载(卸载)");
+            QTUtility2.flog("AutoLoader 注册表 QTTabBar 自动加载(卸载)");
         }
 
         public void SetSite(object site) {
             // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
-            PInvoke.SetProcessDPIAware();
+            // PInvoke.SetProcessDPIAware();
             // QTUtility2.log("QTUtility AutoLoader SetSite SetProcessDPIAware 不兼容XP");
             explorer = site as IWebBrowser2;
-            QTUtility2.log( "QTTabBar AutoLoader SetSite " );
+            // QTUtility2.flog("QTTabBar AutoLoader SetSite ");
             if(explorer == null || Process.GetCurrentProcess().ProcessName == "iexplore") {
-                QTUtility2.log( "QTTabBar AutoLoader SetSite Throw Exception " );
+                QTUtility2.log("QTTabBar AutoLoader SetSite Throw Exception ");
+                // QTUtility2.flog("QTTabBar AutoLoader SetSite Throw Exception ");
+                // 基于指定的 IErrorInfo 接口，用特定失败 HRESULT 引发异常
                 Marshal.ThrowExceptionForHR(E_FAIL);
             }
             else {
-                QTUtility2.log( "QTTabBar AutoLoader SetSite ActivateIt " );
+                QTUtility2.log("QTTabBar AutoLoader SetSite ActivateIt ");
+                // QTUtility2.flog("QTTabBar AutoLoader SetSite ActivateIt ");
                 ActivateIt();
             }
         }
@@ -89,12 +91,14 @@ namespace QTTabBarLib {
                 object pvarShow = true;
                 object pvarSize = null;
                 try {
-                    QTUtility2.log( "QTTabBar 显示标签" );
                     explorer.ShowBrowserBar(pvaTabBar, pvarShow, pvarSize);
-                    QTUtility2.log( "QTTabBar 显示工具栏" );
+                    QTUtility2.log("QTTabBar AutoLoader 显示标签");
+                    
                     explorer.ShowBrowserBar(pvaButtonBar, pvarShow, pvarSize);
+                    QTUtility2.log("QTTabBar AutoLoader 显示工具栏");
                 }
-                catch(COMException) {
+                catch(COMException e) {
+                    QTUtility2.MakeErrorLog(e, "ActivateIt");
                     MessageForm.Show(
                         IntPtr.Zero,
                         QTUtility.TextResourcesDic["ErrorDialogs"][2],
@@ -105,7 +109,9 @@ namespace QTTabBarLib {
                         true
                     );
                 }
+
                 key.SetValue("ActivationDate", installDateString);
+                QTUtility2.flog("QTTabBar AutoLoader add ActivationDate");
             }
         }
     }

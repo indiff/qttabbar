@@ -1,13 +1,13 @@
 ﻿/* File Info 
- * Author:      your name 
+ * Author:      indiff
  * CreateTime:  2021/1/5下午1:58:08 
- * LastEditor:  your name 
+ * LastEditor:  indiff
  * ModifyTime:  2021/8/28下午7:47:22 
  * Description: 
-*/ 
+*/
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Linq;
@@ -218,7 +217,6 @@ namespace QTTabBarLib {
         , SortTab 
         , TurnOffRepeat
         //add bool indiff 2019 12 16 19:27
-        
         , KEYBOARD_ACTION_COUNT2
     }
 
@@ -275,6 +273,7 @@ namespace QTTabBarLib {
             public bool CloseBtnClosesSingleTab  { get; set; }
             public bool TrayOnClose              { get; set; }
             public bool TrayOnMinimize           { get; set; }
+            public bool AutoHookWindow           { get; set; }
            
             public byte[] DefaultLocation        { get; set; }
 
@@ -295,8 +294,8 @@ namespace QTTabBarLib {
                 CloseBtnClosesSingleTab = true;
                 TrayOnClose = false;
                 TrayOnMinimize = false;
-                
-
+                // 默认关闭自动启动hook
+                AutoHookWindow = false;
   //              string idl = Environment.OSVersion.Version >= new Version(6, 1)
   //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
   //                     : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // Computer
@@ -477,6 +476,12 @@ namespace QTTabBarLib {
                     ,".sql"
                     ,".csv"
                     ,".md" 
+
+                    ,".m" 
+                    ,".reg" 
+
+                    ,".wxl" 
+                    ,".wxs" 
                     
                     ,".py", ".rb"
                     ,".jsp", ".asp", ".php",".aspx"
@@ -527,6 +532,7 @@ namespace QTTabBarLib {
             public int TabMaxWidth               { get; set; }
             public bool FixedWidthTabs           { get; set; }
             public Font TabTextFont              { get; set; }
+            public Color ToolBarTextColor        { get; set; }
             public Color TabTextActiveColor      { get; set; }
             public Color TabTextInactiveColor    { get; set; }
             public Color TabTextHotColor         { get; set; }
@@ -543,6 +549,7 @@ namespace QTTabBarLib {
             public bool RebarImageSeperateBars   { get; set; }
             public Padding RebarSizeMargin       { get; set; }
             public bool ActiveTabInBold          { get; set; }
+            public bool SkinAutoColorChangeClose              { get; set; }
 
             public _Skin() {
                 /* UseTabSkin = false;
@@ -585,24 +592,110 @@ namespace QTTabBarLib {
                 TabMaxWidth = 200;
                 FixedWidthTabs = false;
                 TabTextFont = new Font(new FontFamily("微软雅黑"), 9f);
+                ToolBarTextColor = Color.Black;  // 工具栏文本颜色
                 TabTextActiveColor = Color.Black;
                 TabTextInactiveColor = Color.Black;
                 TabTextHotColor = Color.Black;
-                TabShadActiveColor = Color.Gray;
-                TabShadInactiveColor = Color.White;
-                TabShadHotColor = Color.White;
-                TabTitleShadows = false;
-                TabTextCentered = false;
-                UseRebarBGColor = false;
+                // TabShadActiveColor = Color.Gray;
+                TabShadActiveColor = Color.WhiteSmoke;
+                TabShadInactiveColor = Color.WhiteSmoke;
+                TabShadHotColor = Color.WhiteSmoke;
+                RebarColor = Color.WhiteSmoke;
                 // RebarColor = Color.FromArgb(230,230,230);
                 // 设置标签背景色
-                RebarColor = Color.FromArgb(245,246,247);
+                // RebarColor = Color.FromArgb(245, 246, 247);
+                TabTitleShadows = true;  // 标签文本阴影是否启用
+                TabTextCentered = true; // 标签文本是否居中
+                UseRebarBGColor = true;  // 是否启用配置背景颜色
                 UseRebarImage = false;  // 是否工具栏自定义图片,启用自定义图片
-                RebarStretchMode = StretchMode.Tile;
+                RebarStretchMode = StretchMode.Tile;  // 布局方式
                 RebarImageFile = "";  // 工具栏自定义图片
                 RebarImageSeperateBars = false;
                 RebarSizeMargin = Padding.Empty;
                 ActiveTabInBold = true;
+                SkinAutoColorChangeClose = false;  // 是否关闭自动变色？
+            }
+
+            internal void SwitchNighMode(bool isNighMode)
+            {
+                if (this.SkinAutoColorChangeClose)
+                {
+                    return;
+                }
+
+                if (isNighMode)
+                {
+                    QTUtility2.log("change nightMode white skinChanged " + this.SkinAutoColorChangeClose);
+                    // UseTabSkin = false;  // 标签背景
+                    // TabImageFile = "";  // 标签背景文件
+                    // TabSizeMargin = Padding.Empty;  // 设置边缘
+                    // TabContentMargin = Padding.Empty; // 内容边缘
+                    // OverlapPixels = 0;  // 
+                    // HitTestTransparent = false;
+                    // TabHeight = 24;
+                    // TabMinWidth = 50;
+                    // TabMaxWidth = 200;
+                    // FixedWidthTabs = false;
+                    // TabTextFont = new Font(new FontFamily("微软雅黑"), 9f );
+                    ToolBarTextColor = Color.White;
+                    TabTextActiveColor = Color.White;
+                    TabTextInactiveColor = Color.White;
+                    TabTextHotColor = Color.White;
+                    TabShadActiveColor = Color.Black;
+                    TabShadInactiveColor = Color.Black;
+                    TabShadHotColor = Color.Black;
+                    RebarColor = Color.Black;
+                    UseRebarBGColor = true;
+                    // TabTitleShadows = false;
+                    // TabTextCentered = false;
+                    // UseRebarBGColor = false;
+                    // RebarColor = Color.FromArgb(230,230,230);
+                    // 设置标签背景色
+                    
+                    // UseRebarImage = false;  // 是否工具栏自定义图片,启用自定义图片
+                    // RebarStretchMode = StretchMode.Tile;
+                    // RebarImageFile = "";  // 工具栏自定义图片
+                    // RebarImageSeperateBars = false;
+                    // RebarSizeMargin = Padding.Empty;
+                    // ActiveTabInBold = true;
+                }
+                else
+                {
+                    // UseTabSkin = false;  // 标签背景
+                    // TabImageFile = "";  // 标签背景文件
+                    // TabSizeMargin = Padding.Empty;  // 设置边缘
+                    // TabContentMargin = Padding.Empty; // 内容边缘
+                    // OverlapPixels = 0;  // 
+                    // HitTestTransparent = false;
+                    // TabHeight = 24;
+                    // TabMinWidth = 50;
+                    // TabMaxWidth = 200;
+                    // FixedWidthTabs = false;
+                    // TabTextFont = new Font(new FontFamily("微软雅黑"), 9f);
+                    QTUtility2.log("change nightMode black skinChanged " + this.SkinAutoColorChangeClose);
+                    ToolBarTextColor = Color.Black;
+                    TabTextActiveColor = Color.Black;
+                    TabTextInactiveColor = Color.Black;
+                    TabTextHotColor = Color.Black;
+                    // TabShadActiveColor = Color.FromArgb(245, 246, 247);
+                    TabShadActiveColor = Color.White;
+                    TabShadInactiveColor = Color.White;
+                    TabShadHotColor = Color.White;
+                    // RebarColor = Color.FromArgb(245, 246, 247);
+                    RebarColor = Color.White;
+                    // TabTitleShadows = false;
+                    // TabTextCentered = false;
+                    UseRebarBGColor = true;
+                    // // RebarColor = Color.FromArgb(230,230,230);
+                    // // 设置标签背景色
+                    // UseRebarImage = false;  // 是否工具栏自定义图片,启用自定义图片
+                    // RebarStretchMode = StretchMode.Tile;
+                    // RebarImageFile = "";  // 工具栏自定义图片
+                    // RebarImageSeperateBars = false;
+                    // RebarSizeMargin = Padding.Empty;
+                    // ActiveTabInBold = true;
+                }
+                SkinAutoColorChangeClose = false;
             }
         }
 
@@ -630,8 +723,11 @@ namespace QTTabBarLib {
 
                 /* indiff 's default. */
                 ButtonIndexes	=	QTUtility.IsXP
-                        ? new int[] { 1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 21, 9, 20  }
-                        : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 21, 9, 19, 10 };
+                        // ? new int[] { 1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 21, 9, 20  }
+                        // : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 21, 9, 19, 10 };
+                // 去掉分割线
+                        ? new int[] { 1, 2,  3, 4, 5,  6, 7,  11, 13, 12, 14, 15,  21, 9, 20  }
+                        : new System.Int32[] { 3, 4, 5, 6, 7,  17, 11, 12, 14, 15, 13,  21, 9, 19, 10 };
                 ActivePluginIDs = new string[0];
                 LargeButtons	= true;  // 是否显示大按钮
                 LockSearchBarWidth	=	true;  // 锁定搜索框大小
@@ -683,7 +779,7 @@ namespace QTTabBarLib {
                 /* qwop's default value. */
                 MouseScrollsHotWnd = false;
                 // 全局鼠标动作
-               GlobalMouseActions = new Dictionary<MouseChord, BindAction> {
+                GlobalMouseActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.X1, BindAction.GoBack},
                     {MouseChord.X2, BindAction.GoForward},
                     {MouseChord.X1 | MouseChord.Ctrl, BindAction.GoFirst},
@@ -707,11 +803,12 @@ namespace QTTabBarLib {
                     {MouseChord.Middle, BindAction.ItemOpenInNewTab},
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewWindow}
                 };
-                // 资源管理器空白处
+                // 资源管理器项目空白处
                ItemActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.Middle, BindAction.ItemOpenInNewTab},
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewTabNoSel}                        
                 };
+
                // 资源管理器空白处
                MarginActions = new Dictionary<MouseChord, BindAction> {
                     { MouseChord.Double, BindAction.UpOneLevel}
@@ -842,6 +939,11 @@ namespace QTTabBarLib {
                 {
                     BuiltInLangSelectedIndex = 6;
                     BuiltInLang = "Turkish";
+                }
+                else if (uiCulture.Equals("ru_RU") || lUiCulture.Equals("ru_RU"))
+                {
+                    BuiltInLangSelectedIndex = 7;
+                    BuiltInLang = "Russian";
                 }
                 else {
                     BuiltInLangSelectedIndex = 0;

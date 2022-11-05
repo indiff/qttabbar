@@ -57,10 +57,7 @@ namespace QTTabBarLib {
             catch (Exception exception)
             {
                 QTUtility2.MakeErrorLog(exception, "Options04_Tooltips InitializeConfig");
-               
             }
-
-           
         }
 
         public override void ResetConfig() {
@@ -68,33 +65,36 @@ namespace QTTabBarLib {
             InitializeConfig();
         }
 
+        /**
+         * 当预览文件类型变动时候，自动更新当前使用的配置
+         */
         public override void CommitConfig() {
-            
             try
             {
                 if (null != TextFileTypes && TextFileTypes.Count > 0) {
                     WorkingConfig.tips.TextExt = TextFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
+                    Config.Tips.TextExt = TextFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
                 }
                 else if (null == TextFileTypes || TextFileTypes.Count ==  0 ) {
                     WorkingConfig.tips.TextExt = new List<string> { };
+                    Config.Tips.TextExt = new List<string> { };
                 }
-                
                 
 
                 if (null != MediaFileTypes && MediaFileTypes.Count > 0)
                 {
                     WorkingConfig.tips.ImageExt = MediaFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
+                    Config.Tips.ImageExt = MediaFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
                 }
                 else if (null == MediaFileTypes || MediaFileTypes.Count == 0)
                 {
                     WorkingConfig.tips.ImageExt = new List<string> { };
+                    Config.Tips.ImageExt = new List<string> { };
                 }
-                
             }
             catch (Exception exception)
             {
                 QTUtility2.MakeErrorLog(exception, "Options04_Tooltips CommitConfig");
-
             }
         }
 

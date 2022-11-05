@@ -16,7 +16,27 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace QTTabBarLib.Interop {
     public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+
+
+    public delegate IntPtr CreateWindowExWHookProc(int exStyle,
+        string lpszClassName,
+        string lpszWindowName,
+        int style,
+        int x,
+        int y,
+        int width,
+        int height,
+        IntPtr hWndParent,
+        IntPtr hMenu,
+        IntPtr hInst,
+        IntPtr pvParam);
+
+    public delegate int FillRectHookProc(
+        IntPtr hDC, 
+        [In] ref RECT lprc, 
+        IntPtr hbr);
 }

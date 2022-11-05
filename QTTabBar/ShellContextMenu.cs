@@ -160,11 +160,14 @@ namespace QTTabBarLib {
             catch {
             }
             finally {
-                if(shellFolderParent != null) {
+                if(shellFolderParent != null)
+                {
+                    QTUtility2.log("ReleaseComObject shellFolderParent");
                     Marshal.ReleaseComObject(shellFolderParent);
                 }
 
                 if(pIContextMenu2 != null) {
+                    QTUtility2.log("ReleaseComObject pIContextMenu2");
                     Marshal.ReleaseComObject(pIContextMenu2);
                     pIContextMenu2 = null;
                 }
@@ -252,6 +255,7 @@ namespace QTTabBarLib {
             }
             finally {
                 if(shellFolder != null) {
+                    QTUtility2.log("ReleaseComObject shellFolder");
                     Marshal.ReleaseComObject(shellFolder);
                 }
                 if(pIDLFirst != IntPtr.Zero) {
@@ -261,6 +265,7 @@ namespace QTTabBarLib {
                     PInvoke.CoTaskMemFree(pIDL);
                 }
                 if(pIContextMenu2 != null) {
+                    QTUtility2.log("ReleaseComObject pIContextMenu2");
                     Marshal.ReleaseComObject(pIContextMenu2);
                     pIContextMenu2 = null;
                 }
@@ -271,6 +276,7 @@ namespace QTTabBarLib {
         
         public void Dispose() {
             if(pIContextMenu2 != null) {
+                QTUtility2.log("ReleaseComObject pIContextMenu2");
                 Marshal.FinalReleaseComObject(pIContextMenu2);
                 pIContextMenu2 = null;
             }

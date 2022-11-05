@@ -21,6 +21,7 @@ using System.Windows.Forms;
 namespace QTTabBarLib {
     public sealed class NativeWindowController : NativeWindow {
         internal event MessageEventHandler MessageCaptured;
+        private bool fNoMoreImmersiveColorSet;
 
         public NativeWindowController(IntPtr hwnd) {
             AssignHandle(hwnd);
@@ -29,6 +30,51 @@ namespace QTTabBarLib {
         protected override void WndProc(ref Message m) {
             bool consumed = false;
             if(MessageCaptured != null) {
+                /*switch (m.Msg)
+                {
+                    case 26:
+                        QTUtility2.log("NativeWindowController WndProc 26");
+                        string str = string.Empty;
+                        try
+                        {
+                            if (m.LParam != IntPtr.Zero)
+                                str = Marshal.PtrToStringUni(m.LParam);
+                        }
+                        catch
+                        {
+                        }
+                        if (!(str == "Environment"))
+                        {
+                            if (str == "ImmersiveColorSet")
+                            {
+                                if (!this.fNoMoreImmersiveColorSet)
+                                {
+                                    QTUtility.RefreshShellStateValues();
+                                    ShellColors.Refresh();
+                                    InstanceManager.SyncToolbarColorThreads();
+                                    this.fNoMoreImmersiveColorSet = true;
+                                    ActionDelayer.Add((Action)(() => this.fNoMoreImmersiveColorSet = false), 3000);
+                                }
+                            }
+                            else
+                            {
+                                QTUtility.RefreshShellStateValues();
+                            }
+                        }
+                        else
+                        {
+                           //  LauncherManager.SetDirty();
+                        }
+                            
+
+                        if ((int)(long)m.WParam == 20)
+                        {
+                           //  CompatibleView.UpdateDesktopFocusedColor();
+                        }
+                            
+                        m.Result = IntPtr.Zero;
+                        break;
+                }*/
                 try {
                     consumed = MessageCaptured(ref m);
                 }

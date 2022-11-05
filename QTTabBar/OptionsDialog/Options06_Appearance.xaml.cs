@@ -16,13 +16,15 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Color = System.Drawing.Color;
+using Image = System.Windows.Controls.Image;
+using Point = System.Windows.Point;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace QTTabBarLib {
     internal partial class Options06_Appearance : OptionsDialogTab {
@@ -41,10 +43,38 @@ namespace QTTabBarLib {
         }
 
         public override void ResetConfig() {
-            DataContext = WorkingConfig.skin = new Config._Skin();
+            WorkingConfig.skin = new Config._Skin();
+            // 修复颜色重置导致暗黑模式混乱问题
+            WorkingConfig.skin.SkinAutoColorChangeClose = false;
+            Config.Skin.SkinAutoColorChangeClose = false;
+            QTUtility2.log("reset SwitchNighMode");
+            WorkingConfig.skin.SwitchNighMode( QTUtility.getNightMode() );
+            DataContext = WorkingConfig.skin;
         }
 
-        public override void CommitConfig() {
+        public static Color GetMenuItemColor(MenuItem item)
+        {
+            var rect = (Rectangle)item.Tag;
+            ColorDialogEx cd = new ColorDialogEx { Color = (System.Drawing.Color)rect.Tag };
+            return cd.Color;
+        }
+        public override void CommitConfig()
+        {
+            /*var oldSkin = new Config._Skin();
+            var activeColor = GetMenuItemColor(miTabTextActiveColor);
+            var inactiveColor = GetMenuItemColor(miTabTextInactiveColor);
+            var hotColor = GetMenuItemColor(miTabTextHotColor);
+            var barColor = GetMenuItemColor(miToolBarTextColor);
+            if (
+                !activeColor.Equals(oldSkin.TabTextActiveColor) ||
+                !inactiveColor.Equals(oldSkin.TabShadInactiveColor) ||
+                !hotColor.Equals(oldSkin.TabTextHotColor) ||
+                !barColor.Equals(oldSkin.ToolBarTextColor) 
+                )
+            {
+                Config.Skin.SkinAutoColorChangeClose = true;
+                WorkingConfig.skin.SkinAutoColorChangeClose = true;
+            }*/
             // Not needed; everything is done through bindings
         }
 

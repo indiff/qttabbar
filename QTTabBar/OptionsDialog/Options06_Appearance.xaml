@@ -246,7 +246,7 @@
                 HorizontalContentAlignment="Stretch"
                 IsChecked="{Binding ElementName=ctxTabTextColor, Path=IsOpen, Mode=TwoWay}"
                 Margin="10,5,30,5"
-                Width="100"
+                Width="134"
                 VerticalAlignment="Center">
                 <DockPanel LastChildFill="True">
                     <TextBlock
@@ -270,6 +270,10 @@
                             Style="{StaticResource ColorTileStyle}"
                             Fill="{Binding Path=Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource ColorToBrushConverter}}"
                             Tag="{Binding Path=TabTextHotColor, Mode=TwoWay}"/>
+                        <Rectangle x:Name="rectToolBarTextColor"
+                            Style="{StaticResource ColorTileStyle}"
+                            Fill="{Binding Path=Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource ColorToBrushConverter}}"
+                            Tag="{Binding Path=ToolBarTextColor, Mode=TwoWay}"/>
                     </StackPanel>
                 </DockPanel>
                 <ToggleButton.ContextMenu>
@@ -287,6 +291,10 @@
                             Click="miColorMenuEntry_OnClick"
                             Header="{qt:Resx Key=Options_Page06_Appearance, Index=19}"
                             Tag="{Binding ElementName=rectTabTextHotColor}"/>
+                        <MenuItem x:Name="miToolBarTextColor"
+                            Click="miColorMenuEntry_OnClick"
+                            Header="Tool Bar Text Color"
+                            Tag="{Binding ElementName=rectToolBarTextColor}"/>
                     </ContextMenu>
                 </ToggleButton.ContextMenu>
             </ToggleButton>
@@ -325,6 +333,7 @@
                             Fill="{Binding Path=Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource ColorToBrushConverter}}"
                             Tag="{Binding Path=TabShadHotColor, Mode=TwoWay}"/>
                     </StackPanel>
+
                 </DockPanel>
                 <ToggleButton.ContextMenu>
                     <ContextMenu x:Name="ctxShadowTextColor" 
@@ -373,14 +382,19 @@
                     Content="{qt:Resx Key=Options_Page06_Appearance, Index=22}"
                     Height="16"
                     IsChecked="{Binding Path=TabTextCentered, Converter={StaticResource BoolInverterConverter}}"
-                    Margin="10, 5"
+                    Margin="6, 3"
                     VerticalAlignment="Center"/>
                 <qt:RadioButtonEx x:Name="radTabTextCenteredYes"
                     Content="{qt:Resx Key=Options_Page06_Appearance, Index=23}"
                     Height="16"
                     IsChecked="{Binding Path=TabTextCentered}"
-                    Margin="10, 5"
+                    Margin="6, 3"
                     VerticalAlignment="Center"/>
+				<CheckBox x:Name="SkinAutoColorChangeClose"
+							Content="Close Auto Color"
+							Height="16"
+							Margin="6, 3"
+							IsChecked="{Binding Path=SkinAutoColorChangeClose}"/>	
             </StackPanel>
         </Grid>
         <Label

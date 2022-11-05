@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ using Microsoft.Win32;
 
 namespace QuizoPlugins {
     // [Plugin(PluginType.Background, Author = "Quizo", Name = "Show StatusBar", Version = "0.9.0.0", Description = "ShowStatusBar")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "鼠标悬浮激活标签", Version = "1.0.0.0", Description = "鼠标悬浮激活标签")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "鼠标悬浮激活标签", Version = "1.0.0.1", Description = "鼠标悬浮激活标签;调整悬停5秒生效")]
     public class ActivateByMouseHover : IPluginClient
     {
         private IPluginServer pluginServer;
@@ -35,7 +35,7 @@ namespace QuizoPlugins {
         private System.Windows.Forms.Timer timer;
 
         private ITab previousTab;
-        private static int mouseHoverTime = 700;
+        private static int mouseHoverTime = 5000;
 
         private const string REGNAME = "ActivateByMouseHover";
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -157,7 +157,7 @@ namespace QuizoPlugins {
 			{
 				if( rkPlugin != null )
 				{
-					var obj  =  rkPlugin.GetValue( "MouseHoverTime", 700 );
+					var obj  =  rkPlugin.GetValue( "MouseHoverTime", 5000 );
 					if( obj is int )
 					{
 						mouseHoverTime = (int)obj;

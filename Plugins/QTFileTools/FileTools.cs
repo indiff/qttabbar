@@ -49,7 +49,7 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = null;
+            actions = new string[] {};
             return false;
         }
 
@@ -176,7 +176,7 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = null;
+            actions = new string[] { };
             return false;
         }
 
@@ -448,7 +448,7 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = new string[] { ResStr[0] };
+            actions = new string[] { StringResources.ButtonNames[4] };
             return true;
         }
 
@@ -543,7 +543,7 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = new string[] { ResStr[0] };
+            actions = new string[] { StringResources.ButtonNames[5] };
             return true;
         }
 
@@ -713,7 +713,7 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = new string[] { ResStr[0] };
+            actions = new string[] { StringResources.ButtonNames[7] };
             return true;
         }
 
@@ -817,7 +817,7 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = new string[] { ResStr[0] };
+            actions = new string[] { StringResources.ButtonNames[8] };
             return true;
         }
 

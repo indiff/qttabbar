@@ -357,6 +357,7 @@ namespace QTTabBarLib {
                 }
             }
             else {
+                // 添加分组的的路径列表
                 foreach(string path in g.Paths) {
                     string displayName;
                     if(path.StartsWith(@"\\")) {

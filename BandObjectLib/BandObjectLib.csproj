@@ -107,6 +107,13 @@
     <Compile Include="BandObject.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Dpi\DpiAwareControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dpi\DpiManager.cs" />
+    <Compile Include="Dpi\IDpiAwareObject.cs" />
+    <Compile Include="Dpi\IObjectWithDpi.cs" />
+    <Compile Include="Dpi\MCR.cs" />
     <Compile Include="Interop\DBIM.cs" />
     <Compile Include="Interop\DBIMF.cs" />
     <Compile Include="Interop\DESKBANDINFO.cs" />
@@ -152,6 +159,12 @@
       <Isolated>False</Isolated>
     </COMReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BandObject.resx">
+      <DependentUpon>BandObject.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

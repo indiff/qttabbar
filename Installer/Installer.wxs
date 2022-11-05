@@ -23,17 +23,18 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.5.7" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.5.7 Beta(2022)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define ProductVersion="1.5.5.8" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.5.5.8 Beta(2022)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano and indiff -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
-    <?define StrongName="QTTabBar, Version=1.5.5.6, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
-    <?define MyLanguage="1033"?>  
+    <!-- 重点这里一定要改 -->
+    <?define StrongName="QTTabBar, Version=1.5.5.8, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
+    <?define MyLanguage="1033"?>
     <!-- Language code page 1252 1033
-      语言                              语言-国家     Language      Codepage
-English                            en-us             1033               1252
+语言                         语言-国家     Language      Codepage
+English                       en-us             1033               1252
 Simplified Chinese            zh-cn              2052               936
 Traditional Chinese           zh-tw              1028                950
 Language="1033"
@@ -45,12 +46,12 @@ Language="1033"
              Version="$(var.ProductVersion)"
              Manufacturer="$(var.Manufacturer)">
         <Package InstallerVersion="200" 
+               Keywords="$(var.SkuName),$(var.VersionString)"
                  Compressed="yes"
                  Description="$(var.SkuName) $(var.VersionString)"
                  ReadOnly="yes"/>
         <Media Id="1" Cabinet="$(var.SkuName).cab" EmbedCab="yes" />
-		    <Icon Id="QTTabBar.ico" SourceFile="QTTabBar.ico"/>
-
+		    <!--<Icon Id="QTTabBar.ico" SourceFile="QTTabBar.ico"/>-->
         <WixVariable Id="WixUILicenseRtf" Value="!(loc.GPL_FILE)" />
 
         <Upgrade Id="$(var.UpgradeCode)">
@@ -60,38 +61,37 @@ Language="1033"
         <Binary Id="InstallerHelper" SourceFile="..\InstallerHelper\bin\Release\InstallerHelper.dll" />
         <PropertyRef Id="NETFRAMEWORK35"/>
         <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
-		<!-- 应用程序的更新通道的 URL。 -->
-		<Property Id="ARPAUTHORIZEDCDFPREFIX" Value="https://github.com/indiff/qttabbar/releases" />
-		<!-- 应用程序帮助 URL。 -->
-		<Property Id="ARPHELPLINK" Value="https://github.com/indiff/qttabbar" />
-        
-		<!-- 应用程序主页的 URL。 -->
-		<Property Id="ARPCOMMENTS" Value="https://indiff.github.io/qttabbar/" />
-		<!-- 	应用程序更新信息的 URL。 -->
-		<Property Id="ARPURLINFOABOUT" Value="https://github.com/indiff/qttabbar" />
-        
+		    <!-- 应用程序的更新通道的 URL。 -->
+		    <Property Id="ARPAUTHORIZEDCDFPREFIX" Value="https://github.com/indiff/qttabbar/releases" />
+		    <!-- 应用程序帮助 URL。 -->
+		    <Property Id="ARPHELPLINK" Value="https://github.com/indiff/qttabbar" />
+		    <!-- 应用程序主页的 URL。 -->
+		    <Property Id="ARPCOMMENTS" Value="https://indiff.github.io/qttabbar/" />
+		    <!-- 	应用程序更新信息的 URL。 -->
+		    <Property Id="ARPURLINFOABOUT" Value="https://github.com/indiff/qttabbar" />
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="CommonAppDataFolder">
                 <Directory Id="INSTALLLOCATION" Name="$(var.SkuName)">
                     <!-- Files -->
                     <Component Id="ShellLibrary" Guid="27af1a85-9a01-4c79-bdeb-d73fd4bd9574" Win64="yes" DisableRegistryReflection="yes">
                         <File Id="f1" Assembly=".net" KeyPath="yes" Name="Interop.SHDocVw.dll" Source="..\BandObjectLib\bin\Release\Interop.SHDocVw.dll">
-                            <netfx:NativeImage Id="ngen_Interop.SHDocVw.dll" Priority="0" Platform="all" />
+                          <!-- 32bit 64bit all AppBaseDirectory="INSTALLDIR" Dependencies="no"-->
+                          <netfx:NativeImage Id="ngen_Interop.SHDocVw.dll" Priority="1" Platform="64bit" Dependencies="no"/>
                         </File>
                     </Component>
                     <Component Id="BandObjectLib" Guid="27af1a85-9a02-4c79-bdeb-d73fd4bd9574"  Win64="yes" DisableRegistryReflection="yes">
                         <File Id="f2" Assembly=".net" KeyPath="yes" Name="BandObjectLib.dll" Source="..\BandObjectLib\bin\Release\BandObjectLib.dll">
-                            <netfx:NativeImage Id="ngen_BandObjectLib.dll" Priority="0" Platform="all" />
+                            <netfx:NativeImage Id="ngen_BandObjectLib.dll" Priority="1" Platform="64bit" Dependencies="no"/>
                         </File>
                     </Component>
                     <Component Id="QTPluginLib" Guid="27af1a85-9a03-4c79-bdeb-d73fd4bd9574"  Win64="yes" DisableRegistryReflection="yes">
                         <File Id="f3" Assembly=".net" KeyPath="yes" Name="QTPluginLib.dll" Source="..\QTPluginLib\bin\Release\QTPluginLib.dll">
-                            <netfx:NativeImage Id="ngen_QTPluginLib.dll" Priority="0" Platform="all" />
+                            <netfx:NativeImage Id="ngen_QTPluginLib.dll" Priority="1" Platform="64bit" Dependencies="no"/>
                         </File>
                     </Component>
                     <Component Id="QTTabBar" Guid="27af1a85-9a04-4c79-bdeb-d73fd4bd9574"  Win64="yes" DisableRegistryReflection="yes">
                         <File Id="f4" Assembly=".net" KeyPath="yes" Name="QTTabBar.dll" Source="..\QTTabBar\bin\Release\QTTabBar.dll">
-                            <netfx:NativeImage Id="ngen_QTTabBar.dll" Priority="0" Platform="all" />
+                            <netfx:NativeImage Id="ngen_QTTabBar.dll" Priority="1" Platform="64bit" Dependencies="no"/>
                         </File>
                     </Component>
                   <Component Id="HookLibrary32" Win64="yes" Guid="27af1a85-9a06-4c79-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
@@ -153,6 +153,15 @@ Language="1033"
                   <Component Id="SetHome" Win64="yes" Guid="27af1a85-9a08-4c18-bdeb-d73fd4bd9571" DisableRegistryReflection="yes">
                     <File Id="f19" Name="SetHome.exe" Source="..\SetHome\bin\Release\SetHome.exe" KeyPath="yes" />
                   </Component>
+
+                  <Component Id="config" Win64="yes" Guid="27af1a85-9a08-4c18-bdeb-d73fd4bd9572" DisableRegistryReflection="yes">
+                      <File Id="f20" Name="config.ini" Source="config.ini" KeyPath="yes" />
+                  </Component>
+
+                  <Component Id="libai" Win64="yes" Guid="27af1a85-9a08-4c18-bdeb-d73fd4bd9573" DisableRegistryReflection="yes">
+                    <File Id="f21" Name="libai.png" Source="libai.png" KeyPath="yes" />
+                  </Component>
+
                   <!--
 
                   <Component Id="ActivateByMouseHover" Win64="yes" Guid="27af1a85-9a08-4c19-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
@@ -294,11 +303,12 @@ Language="1033"
             <ComponentRef Id="QTViewModeButton" />
           <!--<ComponentRef Id="SampleSplitButton" /> -->
             <ComponentRef Id="ShowStatusBar" />
-          <ComponentRef Id="ActivateByMouseHover" />
-          <ComponentRef Id="SetHome" />
+            <ComponentRef Id="ActivateByMouseHover" />
+            <ComponentRef Id="SetHome" />
+            <ComponentRef Id="config" />
+            <ComponentRef Id="libai" />
           
           <!-- add by qwop -->
-
             <?foreach arch in x86;x64 ?>
                 <!-- RegKeys -->
                 <ComponentRef Id="QTTabBarReg_$(var.arch)" />
@@ -328,11 +338,19 @@ Language="1033"
             <![CDATA[Installed OR NETFRAMEWORK35 OR NETFRAMEWORK40CLIENT]]>
         </Condition>
 
-        <InstallExecuteSequence>
+        <!--<InstallExecuteSequence>
             <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
             <Custom Action="HideBars" Before="InstallValidate">(NOT UPGRADINGPRODUCTCODE) AND REMOVE</Custom>
-            <RemoveExistingProducts After="InstallInitialize" />
-        </InstallExecuteSequence>
+          ~1~- After="InstallInitialize"@1@
+            <RemoveExistingProducts Overridable="no"  Before="InstallInitialize" />
+        </InstallExecuteSequence>-->
+
+      <InstallExecuteSequence>
+        <!-- AppSearch must be done before RemoveExistingProducts and before FindRelatedProducts -->
+        <AppSearch Sequence="1"></AppSearch>
+        <RemoveExistingProducts After="InstallValidate">PREVIOUSVERSIONSINSTALLED</RemoveExistingProducts>
+        <ScheduleReboot After="RegisterProduct" />
+      </InstallExecuteSequence>
         
         <InstallUISequence>
             <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>

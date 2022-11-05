@@ -169,6 +169,7 @@ namespace QTTabBarLib {
             }
             finally {
                 if(shellFolder != null) {
+                    QTUtility2.log("ReleaseComObject shellFolder");
                     Marshal.ReleaseComObject(shellFolder);
                 }   
             }
@@ -273,6 +274,7 @@ namespace QTTabBarLib {
             }
             finally {
                 if(ppshf != null) {
+                    QTUtility2.log("ReleaseComObject ppshf");
                     Marshal.ReleaseComObject(ppshf);
                 }
             }

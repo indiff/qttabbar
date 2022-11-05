@@ -20,12 +20,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using BandObjectLib;
 using QTPlugin;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    public class ShellBrowserEx : IDisposable {
+    public class ShellBrowserEx : NativeWindow {
         private IShellBrowser shellBrowser;
         private IFolderView folderView;
 
@@ -89,10 +90,12 @@ namespace QTTabBarLib {
 
         public void Dispose() {
             if(shellBrowser != null) {
+              QTUtility2.log("ReleaseComObject shellBrowser");
               Marshal.FinalReleaseComObject(shellBrowser);
               shellBrowser = null;
             }
             if(folderView != null) {
+                QTUtility2.log("ReleaseComObject folderView");
                Marshal.ReleaseComObject(folderView);
              //  folderView = null;
             }
@@ -197,6 +200,7 @@ namespace QTTabBarLib {
             }
             finally {
                 if(list != null) {
+                    QTUtility2.log("ReleaseComObject list");
                     Marshal.ReleaseComObject(list);
                 }
             }
@@ -224,6 +228,7 @@ namespace QTTabBarLib {
             }
             finally {
                 if(ppv != null) {
+                    QTUtility2.log("ReleaseComObject ppv");
                     Marshal.ReleaseComObject(ppv);
                 }
             }
@@ -257,10 +262,12 @@ namespace QTTabBarLib {
         // 当导航的时候刷新文件夹视图
         public void OnNavigateComplete() {
             if(shellBrowser == null) return;
-            /*if(folderView != null) {
+            // 是否释放有问题 by indiff
+            if(folderView != null) {
+                QTUtility2.log("ReleaseComObject folderView");
                 Marshal.ReleaseComObject(folderView);
                 folderView = null;
-            }*/
+            }
 
             // 数显 folderView 实例
             IShellView ppshv;
@@ -269,10 +276,20 @@ namespace QTTabBarLib {
             }
         }
 
+        /**
+         System.NullReferenceException: 未将对象引用设置到对象的实例。
+            在 QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
+            在 QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
+            在 QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
+            
+         */
         public int Navigate(IDLWrapper idlw, SBSP flags = SBSP.SAMEBROWSER) {
             if(idlw != null && idlw.Available && shellBrowser != null) {
                 try
                 {
+                    // var qtTabBarClass = InstanceManager.GetThreadTabBar();
+                    // var shellBrowserEx = qtTabBarClass.GetShellBrowser();
+                    // shellBrowserEx.shellBrowser.BrowseObject(idlw.PIDL, flags);
                     return shellBrowser.BrowseObject(idlw.PIDL, flags);
                 }
                 catch (COMException e)

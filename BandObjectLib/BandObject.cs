@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2002-2010  Pavel Zolnikov, Quizo, Paul Accisano
+//    Copyright (C) 2002-2022  Pavel Zolnikov, Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -20,12 +20,23 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using SHDocVw;
 
 
 namespace BandObjectLib {
-    public class BandObject : UserControl, IDeskBand, IDockingWindow, IInputObject, IObjectWithSite, IOleWindow, IPersistStream {
+    public class BandObject : 
+        UserControl, 
+        IDeskBand, 
+        IDockingWindow, 
+        IInputObject, 
+        IObjectWithSite, 
+        IOleWindow,
+        IPersistStream,
+        IDpiAwareObject
+    {
         private Size _minSize = new Size(-1, -1);
         protected IInputObjectSite BandObjectSite;
         protected WebBrowserClass Explorer;
@@ -43,6 +54,9 @@ namespace BandObjectLib {
         protected const int E_NOTIMPL = -2147467263;	// _HRESULT_TYPEDEF_(0x80004001L)
         protected const int E_FAIL = -2147467259;    // _HRESULT_TYPEDEF_(0x80004005L)
 
+        // 判断是否启用日志，发布改为false， 调试启用. 默认是关闭的，在常规选项里面可以设置启用
+        // public static bool ENABLE_LOGGER = true;
+
         // We must subclass the rebar in order to fix a certain bug in 
         // Windows 7.
         internal sealed class RebarBreakFixer : NativeWindow {
@@ -58,6 +72,7 @@ namespace BandObjectLib {
             }
 
             protected override void WndProc(ref Message m) {
+                // bandLog("WndProc");
                 if(!Enabled) {
                     base.WndProc(ref m);
                     return;
@@ -67,9 +82,9 @@ namespace BandObjectLib {
                 // RBBS_BREAK set.  Catch RB_SETBANDINFO to fix this.
                 if(m.Msg == RB.SETBANDINFO) {
                     if(MonitorSetInfo) {
+                        Util2.bandLog("msg SETBANDINFO");
                         REBARBANDINFO pInfo = (REBARBANDINFO)Marshal.PtrToStructure(m.LParam, typeof(REBARBANDINFO));
                         if(pInfo.hwndChild == parent.Handle && (pInfo.fMask & RBBIM.STYLE) != 0) {
-
                             // Ask the bar if we actually want a break.
                             if(parent.ShouldHaveBreak()) {
                                 pInfo.fStyle |= RBBS.BREAK;
@@ -84,6 +99,7 @@ namespace BandObjectLib {
                 // Whenever a band is deleted, the RBBS_BREAKs come back!
                 // Catch RB_DELETEBAND to fix it.
                 else if(m.Msg == RB.DELETEBAND) {
+                    Util2.bandLog("msg DELETEBAND");
                     int del = (int)m.WParam;
                     
                     // Look for our band
@@ -140,10 +156,12 @@ namespace BandObjectLib {
         }
 
         public virtual void CloseDW(uint dwReserved) {
+            Util2.bandLog("CloseDW");
             fClosedDW = true;
             ShowDW(false);
             Dispose(true);
             if(Explorer != null) {
+                // Util2.bandLog("ReleaseComObject Explorer");
                 Marshal.ReleaseComObject(Explorer);
                 Explorer = null;
             }
@@ -188,6 +206,7 @@ namespace BandObjectLib {
         }
 
         private REBARBANDINFO GetRebarBand(int idx, int fMask) {
+            Util2.bandLog("GetRebarBand");
             REBARBANDINFO info = new REBARBANDINFO();
             info.cbSize = Marshal.SizeOf(info);
             info.fMask = fMask;
@@ -220,6 +239,7 @@ namespace BandObjectLib {
         protected override void OnGotFocus(EventArgs e) {
             base.OnGotFocus(e);
             if((!fClosedDW && (BandObjectSite != null)) && IsHandleCreated) {
+                Util2.bandLog("OnGotFocus");
                 BandObjectSite.OnFocusChangeIS(this, 1);
             }
         }
@@ -227,6 +247,7 @@ namespace BandObjectLib {
         protected override void OnLostFocus(EventArgs e) {
             base.OnLostFocus(e);
             if((!fClosedDW && (BandObjectSite != null)) && (ActiveControl == null)) {
+                Util2.bandLog("OnLostFocus");
                 BandObjectSite.OnFocusChangeIS(this, 0);
             }
         }
@@ -259,9 +280,8 @@ namespace BandObjectLib {
                     Explorer = (WebBrowserClass)Marshal.CreateWrapperOfType(obj2 as IWebBrowser, typeof(WebBrowserClass));
                     OnExplorerAttached();
                 }
-                catch {
-                    // (COMException exception) { // exception
-                   // QTUtility2.MakeErrorLog(exception, "MSG:" + exception.Message);
+                catch  (COMException exception) { // exception
+                    Util2.MakeErrorLog(exception, "QueryService CreateWrapperOfType");
                 }
             }
             try {
@@ -270,8 +290,9 @@ namespace BandObjectLib {
                     window.GetWindow(out ReBarHandle);
                 }
             }
-            catch (Exception ) // exc
+            catch (Exception e) // exc
             {
+                Util2.MakeErrorLog(e, "BandObject SetSite");
                //  logger.Log(exc);
             }
         }
@@ -343,10 +364,136 @@ namespace BandObjectLib {
             pcbSize = 0;
             return E_NOTIMPL;
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // BandObject
+            // 
+            this.ForeColor = System.Drawing.Color.Black;
+            this.Name = "BandObject";
+            this.ResumeLayout(false);
+        }
+
+        public int Dpi { get; private set; } 
+
+        public float Scaling
+        {
+            get
+            {
+               return (float) this.Dpi / 96f;
+            }
+        } 
+
+        public void NotifyDpiChanged(int oldDpi, int dpiNew)
+        {
+            Util2.bandLog("BandObject NotifyDpiChanged oldDpi " + oldDpi + " dpiNew " + dpiNew);
+            this.Dpi = dpiNew;
+            Action<Control> act = (Action<Control>) null;
+            act = (Action<Control>)(
+                control =>
+                {
+                    for (var i = 0; i < control.Controls.Count; i++)
+                    {
+                        var cc = (Control) control.Controls[i];
+
+                        if (cc is IDpiAwareObject)
+                            ((IDpiAwareObject)cc).NotifyDpiChanged(oldDpi, dpiNew);
+                        act(cc);
+                    }
+                }
+                /*.ForEach<Control>((Action<Control>) 
+                    (c =>
+                    {
+                        if (c is IDpiAwareObject )
+                            ((IDpiAwareObject)c).NotifyDpiChanged(oldDpi, dpiNew);
+                        act(c);
+                    })*/
+            );
+            act((Control) this);
+            this.OnDpiChanged(oldDpi, dpiNew);
+        }
+
+
+        protected virtual void OnDpiChanged(int oldDpi, int newDpi)
+        {
+        }
     }
 
-    /*internal class QTUtility2
+    internal class Util2
     {
+        private const bool ENABLE_LOGGER = true;
+
+
+        public static void bandLog(string optional)
+        {
+            if (ENABLE_LOGGER)
+                bandLog("bandLog", optional);
+        }
+
+        
+
+        public static void err(string optional)
+        {
+            if (ENABLE_LOGGER)
+                bandLog("err", optional);
+
+        }
+
+        private static void writeStr(string path, StringBuilder formatLogLine)
+        {
+            using (StreamWriter writer = new StreamWriter(path, true))
+            {
+                writer.WriteLine(formatLogLine);
+            }
+        }
+
+        public static void bandLog(string level, string optional)
+        {
+            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appdataQT = Path.Combine(appdata, "QTTabBar");
+            if (!Directory.Exists(appdataQT))
+            {
+                Directory.CreateDirectory(appdataQT);
+            }
+
+            Process process = Process.GetCurrentProcess();
+            var cThreadId = Thread.CurrentThread.ManagedThreadId;
+            var currentThreadId = AppDomain.GetCurrentThreadId();
+
+            string path = Path.Combine(appdataQT, "bandLog.log");
+            var formatLogLine = new StringBuilder();
+            formatLogLine
+                .Append("[")
+                .Append(level)
+                .Append("]");
+            if (process != null)
+            {
+                formatLogLine
+                    .Append(" PID:")
+                    .Append(process.Id);
+            }
+            if (cThreadId != null)
+            {
+                formatLogLine
+                    .Append(" TID:")
+                    .Append(cThreadId);
+            }
+            else if (currentThreadId != null)
+            {
+                formatLogLine
+                    .Append(" TID:")
+                    .Append(currentThreadId);
+            }
+            formatLogLine
+                .Append(" ")
+                .Append(DateTime.Now.ToString())
+                .Append(" ")
+                .Append(optional);
+            writeStr(path, formatLogLine);
+        }
+
         internal static void MakeErrorLog(Exception ex, string optional = null)
         {
             try
@@ -357,7 +504,8 @@ namespace BandObjectLib {
                 {
                     Directory.CreateDirectory(appdataQT);
                 }
-                string path = Path.Combine(appdataQT, "QTTabBarException.log");
+                // string path = Path.Combine(appdataQT, "QTTabBarBandObject.bandLog");
+                string path = Path.Combine(appdataQT, "QTTabBarBandObjectException.log");
                 using (StreamWriter writer = new StreamWriter(path, true))
                 {
                     writer.WriteLine(DateTime.Now.ToString());
@@ -398,5 +546,5 @@ namespace BandObjectLib {
             {
             }
         }
-    }*/
+    }
 }

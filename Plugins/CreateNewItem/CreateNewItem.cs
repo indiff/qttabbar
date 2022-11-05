@@ -119,11 +119,17 @@ namespace QuizoPlugins {
             catch {
             }
             finally {
-                if(shellView != null)
-                    Marshal.ReleaseComObject(shellView);
+                if (shellView != null)
+                {
+                   // Marshal.ReleaseComObject(shellView);
+                }
 
-                if(pIDL != IntPtr.Zero)
-                    Marshal.FreeCoTaskMem(pIDL);
+
+                if (pIDL != IntPtr.Zero)
+                {
+                   // Marshal.FreeCoTaskMem(pIDL);
+                }
+                    
             }
             SystemSounds.Hand.Play();
         }

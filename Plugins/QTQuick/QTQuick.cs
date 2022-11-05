@@ -52,7 +52,7 @@ namespace Qwop {
     ///		
     ///			Author, Name, Version, and Description are used in Options -> Plugins tab.
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "快捷", Version = "1.0.0.0", Description = "打开QT选项")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "快捷", Version = "1.0.0.1", Description = "打开QT选项;升级重启资源管理器")]
     public class QTQuickButton : IBarDropButton
     {
         static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
@@ -542,11 +542,44 @@ namespace Qwop {
                             }
                             Process.Start("explorer.exe");
                             */
-                            IntPtr handle = GetWin10ExplorerWnd();
+                            /*IntPtr handle = GetWin10ExplorerWnd();
                             CloseExplorer(handle, 1);
                             // PInvoke.PostMessage(hwndExplr, WM.CLOSE, IntPtr.Zero, (IntPtr)nCode)
                             Thread.Sleep(800);
-                            Process.Start("explorer.exe");
+                            Process.Start("explorer.exe");*/
+                            string MyDosComLine1, MyDosComLine2, MyDosComLine3;
+                            MyDosComLine1 = "taskkill /f /im explorer.exe";//返回根目录命令
+                            MyDosComLine2 =  "start explorer.exe";//进入MyFiles目录
+                            Process myProcess = new Process();
+
+                            myProcess.StartInfo.FileName = "cmd.exe ";//打开DOS控制平台 
+                            myProcess.StartInfo.UseShellExecute = false;
+                            myProcess.StartInfo.CreateNoWindow = true;//是否显示DOS窗口，true代表隐藏;
+                            myProcess.StartInfo.RedirectStandardInput = true;
+                            myProcess.StartInfo.RedirectStandardOutput = true;
+                            myProcess.StartInfo.RedirectStandardError = true;
+                            myProcess.Start();
+                            StreamWriter sIn = myProcess.StandardInput;//标准输入流 
+                            sIn.AutoFlush = true;
+                            StreamReader sOut = myProcess.StandardOutput;//标准输入流
+
+                            StreamReader sErr = myProcess.StandardError;//标准错误流 
+                            sIn.Write(MyDosComLine1 + System.Environment.NewLine);//第一条DOS命令 
+                            sIn.Write(MyDosComLine2 + System.Environment.NewLine);//第二条DOS命令 
+                            sIn.Write("exit" + System.Environment.NewLine);//第四条DOS命令，退出DOS窗口
+                            string s = sOut.ReadToEnd();//读取执行DOS命令后输出信息 
+                            string er = sErr.ReadToEnd();//读取执行DOS命令后错误信息
+                            if (myProcess.HasExited == false)
+                            {
+                                myProcess.Kill();
+                            }
+                            else
+                            {
+                            }
+                            sIn.Close();
+                            sOut.Close();
+                            sErr.Close();
+                            myProcess.Close();
                             break;
                         }
                     case 6:
@@ -722,7 +755,7 @@ namespace Qwop {
                             break;
                         }
 
-                    case 9:  // 删除group文件
+                    case 9:  // 删除 QTTabBarException.log
                     {
                         
                         string notepadExe = GuessNotepadPath();

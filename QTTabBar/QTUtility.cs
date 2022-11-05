@@ -35,12 +35,14 @@ using QTTabBarLib.Interop;
 using System.Media;
 using System.Runtime.Serialization;
 using System.Text;
+// using NetSerializer;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
-        internal static readonly Version BetaRevision = new Version(7, 0); // 主版本 beta  次版本 alpha
+        internal static readonly Version BetaRevision = new Version(8, 0); // 主版本 beta  次版本 alpha
         internal static readonly Version CurrentVersion = new Version(1, 5, 5, 0);
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
+        internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
         // 快捷键启用标识
         internal const int FLAG_KEYENABLED = 0x100000;
         internal const string IMAGEKEY_FOLDER = "folder";
@@ -50,6 +52,13 @@ namespace QTTabBarLib {
         internal const bool IS_DEV_VERSION = true;  // <----------------- Change me before releasing!
         internal static readonly bool IsRTL = CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
         internal static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
+        internal static readonly bool IsWin8 = Environment.OSVersion.Version.Major == 6 &&  (Environment.OSVersion.Version.Minor == 2 || Environment.OSVersion.Version.Minor == 3);
+
+        internal static readonly bool IsWin10 = (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Minor >= 0) || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 4);
+
+        internal static readonly bool IsWin11 = (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build >= 22000);
+        private static Version osVersion = Environment.OSVersion.Version;
+
         internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
         internal static readonly string PATH_MYNETWORK = IsXP
                 ? "::{208D2C60-3AEA-1069-A2D7-08002B30309D}"
@@ -86,6 +95,63 @@ namespace QTTabBarLib {
         internal static Dictionary<string, string[]> TextResourcesDic;
         internal static byte WindowAlpha = 0xff;
 
+        // 是否为暗黑模式
+        internal static bool InNightMode;
+
+        // {
+        //     get { return getNightMode(); }
+        //     set { InNightMode = value;  }
+        // }
+
+
+        ///////////////////////// 新增 by indiff ////////////////////////////////////
+        internal static bool SingleClickMode { get; private set; }
+
+        internal static bool ShowInfoTip { get; private set; }
+        /**
+         * 刷新状态
+         */
+        public static void RefreshShellStateValues()
+        {
+            // try
+            // {
+                /*bool flag1 = false;
+                bool flag2 = true;
+                using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer", false))
+                {
+                    if (registryKey != null)
+                    {
+                        var value = registryKey.GetValue("ShellState");
+                        if (value != null)
+                        {
+                            if (value.GetType().BaseType == typeof(Array))
+                            {
+                                byte[] numArray = (byte[]) value;
+                                if (numArray.Length > 3)
+                                    flag1 = ((int)numArray[4] & 32) == 0;
+                            }
+                        }
+                        
+                        using (RegistryKey rk = registryKey.OpenSubKey("Advanced", false))
+                        {
+                            if (rk != null)
+                                flag2 = QTUtility2.GetValueSafe<int>(rk, "ShowInfoTip", 1) != 0;
+                        }
+                    }
+                }
+                SingleClickMode = flag1;
+                ShowInfoTip = flag2;*/
+                InNightMode = true; // getNightMode();
+            // }
+            // catch (Exception ex)
+            // {
+            //     QTUtility2.MakeErrorLog(ex, "QTUtility.RefreshShellStateValues" );
+            // }
+        }
+        ///////////////////////// 新增 by indiff ////////////////////////////////////
+
+
+
         /// <summary>
         /// 只执行一次
         /// </summary>
@@ -111,6 +177,8 @@ namespace QTTabBarLib {
             };
 
             try {
+                QTUtility2.log("QTUtility RefreshShellStateValues");
+                // RefreshShellStateValues();
 
                 // Load the config
                 ConfigManager.Initialize();
@@ -167,6 +235,8 @@ namespace QTTabBarLib {
                         }
                     }
                 }
+
+               
 
                 // 配置不捕获控制面板
                 /*QTUtility2.log("QTUtility 加载忽略的路径 控制面板 网络连接");
@@ -233,12 +303,12 @@ namespace QTTabBarLib {
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
                         binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
                         object obj = binaryFormatter.Deserialize(memStream);
-                        // QTUtility2.Close(memStream);
-                        QTUtility2.log("ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
+                        /*QTUtility2.log("ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
                         if (obj != null)
                         {
                             QTUtility2.log("obj:" + obj.GetType());
-                        }
+                        }*/
+                        // object obj = ser.Deserialize(memStream);
                         return obj;
                     }
                 }
@@ -585,17 +655,81 @@ namespace QTTabBarLib {
             return button;
         }
 
+        // private static Serializer ser;
+
+        public static IEnumerable<Type> GetSubclasses(Type type)
+        {
+            return type.Assembly.GetTypes().Where(t => t.IsSubclassOf(type));
+        }
+
         public static byte[] ObjectToByteArray(SerializeDelegate obj) {
+
+            /*var settings = new Settings()
+            {
+                CustomTypeSerializers = new NS.ITypeSerializer[] { new TriDimArrayCustomSerializer() },
+            };*/
+            /*if (ser == null)
+            {
+                var types = new[] { typeof(SerializeDelegate) };
+                ser = new Serializer(types);
+                // ser = new Serializer(GetSubclasses(typeof(SerializeDelegate)));
+            }*/
+            
+
             if(obj == null) return null;
             using(MemoryStream ms = new MemoryStream()) {
+                // ser.Serialize(ms, obj);
                 new BinaryFormatter().Serialize(ms, obj);
-                QTUtility2.Close(ms);
                 return ms.ToArray();
             }
             // return BinaryPack.BinaryConverter.Serialize(obj);
         }
 
         private static Regex singleLinebreakAtStart = new Regex(@"^(\r\n)?");
+        private static bool IsWindows10
+        {
+            get
+            {
+                if (QTUtility.osVersion.Major >= 10)
+                    return true;
+                return QTUtility.osVersion.Major == 6 && QTUtility.osVersion.Minor == 4;
+            }
+        }
+
+        public static bool LaterThan8_1
+        {
+            get
+            {
+                return IsWindows10AndLater || IsWindows8_1;
+            }
+        }
+
+        public static bool IsWindows8_1
+        {
+            get
+            {
+                return QTUtility.osVersion.Major == 6 && QTUtility.osVersion.Minor == 3;
+            }
+        }
+
+        public static bool IsWindows10AndLater
+        {
+            get
+            {
+                if (QTUtility.osVersion.Major >= 10)
+                    return true;
+                return QTUtility.osVersion.Major == 6 && QTUtility.osVersion.Minor == 4;
+            }
+        }
+        public static bool LaterThan10Beta17666 
+        {
+            get
+            {
+                if (QTUtility.IsWindows10AndLater)
+                    return true;
+                return QTUtility.IsWindows10 && QTUtility.osVersion.Build >= 17666;
+            }
+        }
         public static Dictionary<string, string[]> ReadLanguageFile(string path) {
           //  const string linebreak = "\r\n";
           //  const string linebreakLiteral = @"\r\n";
@@ -820,21 +954,48 @@ namespace QTTabBarLib {
         }
 
         // 判断是否为暗黑模式  Environment.OSVersion.Version.Major
-        public static bool InNightMode
+        public static bool getNightMode()
         {
-            get
-            {
-                if (Environment.OSVersion.Version.Major > 9)
+            // if (Environment.OSVersion.Version.Major > 9)  {
+                /*using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"))
                 {
-                    using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"))
+                    if (rk != null)
+                        return QTUtility2.GetValueSafe<int>(rk, "AppsUseLightTheme", 1) == 0;
+                }*/
+
+                using (var envKey = Registry.CurrentUser.OpenSubKey(REG_PERSONALIZE, true))
+                {
+                    if (envKey == null)
                     {
-                        if (rk != null)
-                            return QTUtility2.GetValueSafe<int>(rk, "AppsUseLightTheme", 1) == 0;
+                        QTUtility2.log("can not get reg for personailize");
+                        return false;
+                    }
+                    object value = envKey.GetValue("AppsUseLightTheme");
+                    if (value != null)
+                    {
+                        string useTheme = value.ToString();
+                        if ("1".Equals(useTheme))
+                        {
+                            // the light
+                            return false;
+                        }
+                        else
+                        {
+                            // the dark mode
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        // default is light
+                        return false;
                     }
                 }
-                return false;
-            }
+            // }
+           return true;
         }
+
+
 
         public static int ValidateMinMax(int value, int min, int max) {
             int a = Math.Min(min, max);
@@ -878,6 +1039,7 @@ namespace QTTabBarLib {
                 case 4: keyValuePairs = Resources_String_es_ES.ResourceManager.GetResourceStrings(); break;
                 case 5: keyValuePairs = Resources_String_fr_FR.ResourceManager.GetResourceStrings(); break;
                 case 6: keyValuePairs = Resources_String_tr_TR.ResourceManager.GetResourceStrings(); break;
+                case 7: keyValuePairs = Resources_String_ru_RU.ResourceManager.GetResourceStrings(); break;
             }
 
             // 如果加载为空， 则读取默认的应用语言
@@ -918,5 +1080,46 @@ namespace QTTabBarLib {
                 }
             }
         }
+
+
+        public static bool isChinese()
+        {
+            var uiCulture = System.Globalization.CultureInfo.InstalledUICulture.Name;
+            var lUiCulture = uiCulture.ToLower();
+            if (uiCulture.Equals("zh-CN") || lUiCulture.Equals("zh") || lUiCulture.Equals("cn"))
+            {
+                return true;
+            }
+            else if (uiCulture.Equals("de_DE") || lUiCulture.Equals("de"))
+            {
+            }
+            else if (uiCulture.Equals("pt_BR") || lUiCulture.Equals("br") || lUiCulture.Equals("pt"))
+            {
+            }
+            else if (uiCulture.Equals("es_ES") || lUiCulture.Equals("es"))
+            {
+            }
+            else if (uiCulture.Equals("fr_FR") || lUiCulture.Equals("fr"))
+            {
+            }
+            else if (uiCulture.Equals("tr_TR") || lUiCulture.Equals("tr"))
+            {
+            }
+            else
+            {
+            }
+
+            return false;
+        }
+
+        internal static string DefaultNewFileName()
+        {
+            return isChinese() ? "新建文本文档" : "newDocument";
+        }
+
+
+
+       
+
     }
 }

@@ -132,6 +132,40 @@ UINT WIXAPI CloseAndReopen(MSIHANDLE hInstaller) {
     return ERROR_SUCCESS;
 }
 
+
+UINT WIXAPI CloseAndReopenAndDeletePlugins(MSIHANDLE hInstaller) {
+    std::vector<PairHwndPath> windows;
+    BOOL rollback = MsiGetMode(hInstaller, MSIRUNMODE_ROLLBACK);
+    GetExplorerWindows(windows, true);
+    if(windows.size() == 0) return ERROR_SUCCESS;
+    int length = 0;
+    for(UINT i = 0; i < windows.size(); ++i) {
+        HWND hwnd = GetParent(windows[i].hwnd);
+        if(hwnd == 0) hwnd = windows[i].hwnd;
+        SendMessage(hwnd, WM_CLOSE, 0, 0);
+        int l = _tcslen(windows[i].path);
+        if(l > 0 && i > 0) length += l + 1;
+    }
+    TCHAR* build = new TCHAR[length + 1];
+    build[0] = 0;
+    for(UINT i = 1; i < windows.size(); ++i) {
+        UINT l = _tcslen(windows[i].path);
+        _tcscat(build, windows[i].path);
+        _tcscat(build, _T(";"));
+    }
+    HKEY key;
+    // REGSAM access = KEY_SET_VALUE | KEY_CREATE_SUB_KEY | KEY_WOW64_64KEY | KEY_DELETE;
+    REGSAM access = KEY_ALL_ACCESS;
+    if(RegOpenKeyEx(HKEY_CURRENT_USER, _T("Software\\QTTabBar\\"), 0, access, &key) == ERROR_SUCCESS) {
+        RegSetValueEx(key, _T("TabsOnLastClosedWindow"), 0, REG_SZ, (LPBYTE)build, length + 1);
+		RegDeleteKey(key,_T("Plugins\\Paths"));
+    }
+    RegCloseKey(key);
+    delete[] build;
+    ShellExecute(NULL, NULL, windows[0].path, NULL, NULL, SW_SHOWNORMAL);
+    return ERROR_SUCCESS;
+}
+
 UINT WIXAPI CheckOldVersion(MSIHANDLE hInstaller) {
     HKEY key;
     REGSAM access = KEY_QUERY_VALUE | KEY_WOW64_64KEY;

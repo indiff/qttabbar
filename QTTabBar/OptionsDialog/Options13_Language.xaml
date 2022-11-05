@@ -96,6 +96,7 @@
                     <ComboBoxItem Content="Spanish"/>
                     <ComboBoxItem Content="French"/>
                     <ComboBoxItem Content="Turkish"/>
+                    <ComboBoxItem Content="Russian"/>
                     <!--
                     <ComboBoxItem Content="{qt:Resx Key=Options_Page13_Language, Index=11}"/>
                     <ComboBoxItem Content="English"/> modify by qwop 

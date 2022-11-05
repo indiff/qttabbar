@@ -111,5 +111,9 @@ namespace QTTabBarLib {
         public virtual bool SubDirTipMenuIsShowing() {
             return false;
         }
+
+        public virtual void RefreshViewWatermark(bool fClear)
+        {
+        }
     }
 }

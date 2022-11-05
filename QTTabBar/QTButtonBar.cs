@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -37,7 +36,6 @@ using QTTabBarLib.Interop;
 namespace QTTabBarLib {
     [ComVisible(true), Guid("d2bf470e-ed1c-487f-a666-2bd8835eb6ce")]
     public sealed class QTButtonBar : BandObject {
-
         internal const int BII_NAVIGATION_DROPDOWN  = -1;
 		internal const int BII_SEPARATOR			=  0;
         internal const int BII_NAVIGATION_BACK      =  1;
@@ -67,19 +65,22 @@ namespace QTTabBarLib {
         /// <summary>
         ///  内部的按钮的个数 add by qwop.
         /// </summary>
+        // internal const int INTERNAL_BUTTON_COUNT    = 50;
         internal const int INTERNAL_BUTTON_COUNT    = 22;
        
 
         private static readonly Regex reAsterisc = new Regex(@"\\\*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex reQuestion = new Regex(@"\\\?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Size sizeLargeButton = new Size(24, 24);
-        private static readonly Size sizeSmallButton = new Size(16, 16);
+        private static readonly Size sizeLargeButton = new Size(24, 24);  // 大按钮 
+        private static readonly Size sizeSmallButton = new Size(16, 16);  // 小按钮 
         private static readonly ImageStrip imageStrip_Large = new ImageStrip(sizeLargeButton);
         private static readonly ImageStrip imageStrip_Small = new ImageStrip(sizeSmallButton);
 
         private VisualStyleRenderer BackgroundRenderer;
         private const int BARHEIGHT_LARGE = 34;
         private const int BARHEIGHT_SMALL = 26;
+        private const int BARHEIGHT_LARGE_LARGE = 48;
+        private const int BARHEIGHT_LARGE_SMALL = 36;
         private IContainer components;
         private DropDownMenuReorderable ddmrGroupButton;
         private DropDownMenuReorderable ddmrRecentlyClosed;
@@ -103,15 +104,22 @@ namespace QTTabBarLib {
         private ToolStripClasses toolStrip;
 
         public QTButtonBar() {
+            // BarHeight = Config.Skin.TabHeight + 100;
             InitializeComponent();
         }
 
+        /**
+         * 当点击在 splitbutton 则进行显示
+         */
         private void ActivatedByClickOnThis() {
             Point point = toolStrip.PointToClient(MousePosition);
             ToolStripItem itemAt = toolStrip.GetItemAt(point);
             if((itemAt != null) && itemAt.Enabled) {
                 if(itemAt is ToolStripSplitButton) {
-                    if(((itemAt.Bounds.X + ((ToolStripSplitButton)itemAt).ButtonBounds.Width) + ((ToolStripSplitButton)itemAt).SplitterBounds.Width) < point.X) {
+                    if(
+                        ( (itemAt.Bounds.X + ((ToolStripSplitButton)itemAt).ButtonBounds.Width) + 
+                            ((ToolStripSplitButton)itemAt).SplitterBounds.Width
+                         ) < point.X) {
                         ((ToolStripSplitButton)itemAt).ShowDropDown();
                     }
                     else {
@@ -167,7 +175,8 @@ namespace QTTabBarLib {
         }
 
         private static int BarHeight {
-            get { return Config.BBar.LargeButtons ? BARHEIGHT_LARGE : BARHEIGHT_SMALL; }
+            // get { return Config.BBar.LargeButtons ? BARHEIGHT_LARGE : BARHEIGHT_SMALL; }
+            get { return Config.BBar.LargeButtons ? BARHEIGHT_LARGE_LARGE : BARHEIGHT_LARGE_SMALL; }
         }
 
         private void CallBackSearchBox() {
@@ -189,6 +198,7 @@ namespace QTTabBarLib {
             return false;
         }
 
+        // 清理工具栏元素
         private void ClearToolStripItems() {
             List<ToolStripItem> list = toolStrip.Items.Cast<ToolStripItem>()
                     .Except(lstPluginCustomItem).ToList();
@@ -257,6 +267,23 @@ namespace QTTabBarLib {
 
         private ToolStripDropDownButton CreateDropDownButton(int index) {
             ToolStripDropDownButton button = new ToolStripDropDownButton();
+            if (Config.Skin.UseRebarBGColor)  // 判断是否填充颜色？
+            {
+                button.BackColor = Config.Skin.RebarColor;
+                // button.ForeColor = Color.White;
+            }
+
+            /*if (QTUtility.InNightMode)
+            {
+                button.BackColor = Color.Black;
+                button.ForeColor = Color.White;
+            }
+            else
+            {
+                button.BackColor = SystemColors.ButtonFace;
+                button.ForeColor = Color.Black;
+            }*/
+           
             switch(index) {
                 case -1:
                     if(NavDropDown == null) {
@@ -320,12 +347,14 @@ namespace QTTabBarLib {
 
         internal void CreateItems()
         {
+            // 工具栏按钮标签文字
             string[] ButtonItemsDisplayName = QTUtility.TextResourcesDic["ButtonBar_BtnName"];
             ManageImageList();
             toolStrip.SuspendLayout();
             if(iSearchResultCount != -1) {
                 Explorer.Refresh();
             }
+            // 搜索框
             RefreshSearchBox(false);
             if(searchBox != null) {
                 searchBox.Dispose();
@@ -335,21 +364,24 @@ namespace QTTabBarLib {
                 timerSerachBox_Search = null;
                 timerSearchBox_Rearrange = null;
             }
+            // 清除提示组件
             ClearToolStripItems();
             toolStrip.ShowItemToolTips = true;
-            Height = Config.BBar.LargeButtons ? 34 : 26;
+            // 设置按钮的高度
+            Height = Config.BBar.LargeButtons ? BARHEIGHT_LARGE_LARGE : BARHEIGHT_LARGE_SMALL;
+            // 是否显示按钮标签
             bool showButtonLabels = Config.BBar.ShowButtonLabels;
             UnloadPluginsOnCreation();
             foreach(int index in Config.BBar.ButtonIndexes) {
                 ToolStripItem item;
                 switch(index) {
-                    case BII_SEPARATOR:
+                    case BII_SEPARATOR: // 分割
                         toolStrip.Items.Add(new ToolStripSeparator {Tag = 0});
                         continue;
 
-                    case BII_GROUP:
-                    case BII_RECENTTAB:
-                    case BII_APPLICATIONLAUNCHER:
+                    case BII_GROUP:  // 添加到分组
+                    case BII_RECENTTAB: // 最近关闭
+                    case BII_APPLICATIONLAUNCHER: // 应用程序
                         item = CreateDropDownButton(index);
                         break;
 
@@ -366,21 +398,38 @@ namespace QTTabBarLib {
                                 new ToolStripMenuItem(strArray[3]),
                                 new ToolStripMenuItem(strArray[4]),
                                 new ToolStripMenuItem(strArray[6])
+                                // 可以添加复制工具
                         });
                         base2.ItemClicked += copyButton_DropDownItemClicked;
                         base2.Opening += copyButton_Opening;
                         item = new ToolStripDropDownButton {DropDown = base2};
                         break;
 
-                    case BII_TOPMOST:
+                    case BII_TOPMOST: // 置顶
                         item = new ToolStripButton {CheckOnClick = true};
                         break;
 
-                    case BII_WINDOWOPACITY:
+                    case BII_WINDOWOPACITY:  // 窗口透明度
                         ToolStripTrackBar bar = new ToolStripTrackBar {
                             Tag = index,
-                            ToolTipText = ButtonItemsDisplayName[19]
+                            ToolTipText = ButtonItemsDisplayName[19]  // 半透明
                         };
+                        /*if (QTUtility.InNightMode)
+                        {
+                            bar.BackColor = Color.Black;
+                            bar.ForeColor = Color.White;
+                        }
+                        else
+                        {
+                            bar.BackColor = SystemColors.ButtonFace;
+                            bar.ForeColor = Color.Black;
+                        }*/
+                        bar.ForeColor = Config.Skin.ToolBarTextColor; // 适配半透明文本颜色
+                        if (Config.Skin.UseRebarBGColor)
+                        {
+                            bar.BackColor = Config.Skin.RebarColor; // 适配填充颜色
+                        }
+
                         int crKey, dwFlg;
                         byte bAlpha;
                         if(PInvoke.GetLayeredWindowAttributes(ExplorerHandle, out crKey, out bAlpha, out dwFlg)) {
@@ -390,7 +439,7 @@ namespace QTTabBarLib {
                         toolStrip.Items.Add(bar);
                         continue;
 
-                    case BII_FILTERBAR:
+                    case BII_FILTERBAR: // 搜索框
                         searchBox = new ToolStripSearchBox(
                                 Config.BBar.LargeButtons, 
                                 Config.BBar.LockSearchBarWidth,
@@ -422,17 +471,42 @@ namespace QTTabBarLib {
                 item.DisplayStyle = showButtonLabels
                         ? ToolStripItemDisplayStyle.ImageAndText
                         : ToolStripItemDisplayStyle.Image;
+                // 工具栏颜色  by indiff dark mode
+                item.ForeColor = Config.Skin.ToolBarTextColor; // 适配颜色文本颜色
+                if (Config.Skin.UseRebarBGColor)
+                {
+                    item.BackColor = Config.Skin.RebarColor; // 适配填充颜色
+                }
+                
+                /*
+                if (QTUtility.InNightMode)
+                {
+                    item.BackColor = Color.Black;
+                }
+                else
+                {
+                    item.BackColor = SystemColors.Window;
+                }*/
+                /*if (QTUtility.InNightMode)
+                {
+                    item.BackColor = Config.Skin.TabShadActiveColor;
+                }*/
                 item.ImageScaling = ToolStripItemImageScaling.None;
                 item.Text = item.ToolTipText = ButtonItemsDisplayName[index];
-                item.Image = (Config.BBar.LargeButtons ? imageStrip_Large[index - 1] : imageStrip_Small[index - 1])
-                       .Clone(new Rectangle(Point.Empty, Config.BBar.LargeButtons ? sizeLargeButton : sizeSmallButton), PixelFormat.Format32bppArgb);
+                item.Image = 
+                    (Config.BBar.LargeButtons ? imageStrip_Large[index - 1] : imageStrip_Small[index - 1])
+                       .Clone(
+                        new Rectangle(Point.Empty, Config.BBar.LargeButtons ? sizeLargeButton : sizeSmallButton), PixelFormat.Format32bppArgb);
                
-                // todo delete qwop 
-                // MessageBox.Show(index + " -> " + imageStrip_Large.LstImagesLength());
 
                 item.Tag = index;
                 toolStrip.Items.Add(item);
-                if((index == BII_NAVIGATION_BACK && Array.IndexOf(Config.BBar.ButtonIndexes, BII_NAVIGATION_FWRD) == -1) || index == BII_NAVIGATION_FWRD) {
+
+                // 添加最后一个
+                if((index == BII_NAVIGATION_BACK && 
+                    Array.IndexOf(Config.BBar.ButtonIndexes, BII_NAVIGATION_FWRD) == -1) ||
+                    index == BII_NAVIGATION_FWRD) {
+                    // 导航下拉列表
                     toolStrip.Items.Add(CreateDropDownButton(BII_NAVIGATION_DROPDOWN));
                 }
             }
@@ -482,6 +556,10 @@ namespace QTTabBarLib {
                                 ToolTipText = instance.Text,
                                 Image = instance.GetImage(Config.BBar.LargeButtons)
                         };
+
+                        
+
+
                         DropDownMenuReorderable reorder = new DropDownMenuReorderable(components);
                         reorder.ItemClicked += pluginDropDown_ItemClicked;
                         reorder.ItemRightClicked += pluginDropDown_ItemRightClicked;
@@ -542,6 +620,16 @@ namespace QTTabBarLib {
                 }
 
                 if(itemToAdd != null) {
+                    // 工具栏颜色  by indiff dark mode
+                    itemToAdd.ForeColor = Config.Skin.ToolBarTextColor; // 适配插件文本颜色
+                    // item.BackColor = Config.Skin.TabShadActiveColor;
+                    // itemToAdd.BackColor = Config.Skin.TabShadActiveColor;
+
+                    if (Config.Skin.UseRebarBGColor)
+                    {
+                        itemToAdd.BackColor = Config.Skin.RebarColor; // 适配插件填充颜色
+                    }
+
                     itemToAdd.Tag = buttonIndex;
                     toolStrip.Items.Add(itemToAdd);
                     if(pi.PluginType == PluginType.Background || pi.PluginType == PluginType.BackgroundMultiple) {
@@ -725,15 +813,26 @@ namespace QTTabBarLib {
             toolStrip.ImeMode = ImeMode.Disable;
             toolStrip.Renderer = new ToolbarRenderer();
             toolStrip.BackColor = Color.Transparent;
+            /*if (QTUtility.InNightMode)
+            {
+                this.BackColor = Color.Black;
+            }
+            else
+            {
+                this.BackColor = SystemColors.Window;
+            }*/
+            
+            // toolStrip.BackColor = Color.Pink;  // 测试扩展按钮
             toolStrip.ItemClicked += toolStrip_ItemClicked;
             toolStrip.GotFocus += toolStrip_GotFocus;
             toolStrip.MouseDoubleClick += toolStrip_MouseDoubleClick;
             toolStrip.MouseActivated += toolStrip_MouseActivated;
             toolStrip.PreviewKeyDown += toolStrip_PreviewKeyDown;
-            
+            // toolStrip.OverflowButton.BackColor = Color.Pink;
             Controls.Add(toolStrip);
-            Height = BarHeight;
-            MinSize = new Size(20, BarHeight);
+            // 配置高度 BarHeight add by indiff 
+            Height = BarHeight + 100 ;
+            MinSize = new Size(20, BarHeight + 100);
             toolStrip.ResumeLayout(false);
             ResumeLayout();
         }
@@ -741,12 +840,23 @@ namespace QTTabBarLib {
         // 加载默认的图片资源
         private static void LoadDefaultImages(bool fWriteReg) {
             imageStrip_Large.TransparentColor = imageStrip_Small.TransparentColor = Color.Empty;
-            Bitmap bmp = Resources_Image.ButtonStrip24;
-            Bitmap bitmap2 = Resources_Image.ButtonStrip16;
-            imageStrip_Large.AddStrip(bmp);
-            imageStrip_Small.AddStrip(bitmap2);
-            bmp.Dispose();
-            bitmap2.Dispose();
+            // 如果是 darkmode， 则换成白色背景
+            Bitmap bmpLarge = null;
+            Bitmap bmpSmall = null;
+            if (QTUtility.InNightMode)
+            {
+                bmpLarge = Resources_Image.ButtonStripWhite24;
+                bmpSmall = Resources_Image.ButtonStripWhite16;
+            }
+            else
+            {
+                bmpLarge = Resources_Image.ButtonStrip24;
+                bmpSmall = Resources_Image.ButtonStrip16;
+            }
+            imageStrip_Large.AddStrip(bmpLarge);
+            imageStrip_Small.AddStrip(bmpSmall);
+            bmpLarge.Dispose();
+            bmpSmall.Dispose();
             if(fWriteReg) {
                 using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
                     key.SetValue("Buttons_ImagePath", string.Empty);
@@ -894,10 +1004,20 @@ namespace QTTabBarLib {
         protected override void OnExplorerAttached() {
             try { 
                 ExplorerHandle = (IntPtr)Explorer.HWND;
+
                 InstanceManager.RegisterButtonBar(this);
+                
                 dropTargetWrapper = new DropTargetWrapper(this);
+                
                 QTTabBarClass tabBar = InstanceManager.GetThreadTabBar();
 
+                // add by indiff dark mode
+                QTUtility.InNightMode = QTUtility.getNightMode();
+                QTUtility2.log("OnExplorerAttached SwitchNighMode");
+                Config.Skin.SwitchNighMode(QTUtility.InNightMode);
+                ConfigManager.UpdateConfig(true);
+                PInvoke.SetRedraw(ExplorerHandle, true);
+                PInvoke.RedrawWindow(ExplorerHandle, IntPtr.Zero, IntPtr.Zero, 0x289);
                 // If the TabBar and its PluginManager already exist, that means
                 // the ButtonBar must have been closed when the Explorer window
                 // opened, so we won't get an initialization message.  Do 
@@ -1014,6 +1134,7 @@ namespace QTTabBarLib {
             }
             finally {
                 if(ppshv != null) {
+                    QTUtility2.log("ReleaseComObject ppshv");
                     Marshal.ReleaseComObject(ppshv);
                 }
             }
@@ -1157,6 +1278,7 @@ namespace QTTabBarLib {
                     }
                     finally {
                         if(ppv != null) {
+                            QTUtility2.log("ReleaseComObject ppv");
                             Marshal.ReleaseComObject(ppv);
                         }
                     }
@@ -1257,10 +1379,15 @@ namespace QTTabBarLib {
             }
             finally {
                 if(ppshv != null) {
+                    QTUtility2.log("ReleaseComObject ppv");
                     Marshal.ReleaseComObject(ppshv);
                 }
                 if((shellFolder != null) && (Marshal.ReleaseComObject(shellFolder) != 0)) {
                     QTUtility2.MakeErrorLog(null, "shellfolder is not released.");
+                }
+                else
+                {
+                    QTUtility2.log("ReleaseComObject shellFolder");
                 }
                 if(zero != IntPtr.Zero) {
                     PInvoke.CoTaskMemFree(zero);
@@ -1295,6 +1422,7 @@ namespace QTTabBarLib {
             }
         }
 
+        // 搜索框搜索事件
         private void timerSerachBox_Search_Tick(object sender, EventArgs e) {
             timerSerachBox_Search.Stop();
             bool flag = ShellViewIncrementalSearch(strSearch);
@@ -1342,12 +1470,18 @@ namespace QTTabBarLib {
                     return;
             }
         }
-
+        /**
+         * 半透明的事件
+         */
         private void trackBar_ValueChanged(object sender, EventArgs e) {
-            int num = ((ToolStripTrackBar)sender).Value;
+            int bAlpha = ((ToolStripTrackBar)sender).Value;
             PInvoke.SetWindowLongPtr(ExplorerHandle, -20, PInvoke.Ptr_OP_OR(PInvoke.GetWindowLongPtr(ExplorerHandle, -20), 0x80000));
-            PInvoke.SetLayeredWindowAttributes(ExplorerHandle, 0, (byte)num, 2);
-            Explorer.StatusText = (((num * 100) / 0xff)) + "%";
+            PInvoke.SetLayeredWindowAttributes(ExplorerHandle, 0, (byte)bAlpha, 2);
+            
+            if (Explorer != null)
+            {
+                Explorer.StatusText = (bAlpha * 100 / (int)byte.MaxValue).ToString() + "%"; 
+            }
         }
 
         public override int TranslateAcceleratorIO(ref MSG msg) {
@@ -1621,14 +1755,14 @@ namespace QTTabBarLib {
                     case BII_GROUP:
                         item.Enabled = GroupsManager.GroupCount > 0;
                         break;
-                    case BII_APPLICATIONLAUNCHER:
+                    case BII_APPLICATIONLAUNCHER: // 加载应用
                         item.Enabled = AppsManager.UserApps.Any();
                         break;
-                    case BII_RECENTTAB:
+                    case BII_RECENTTAB: // 最近活动标签
                         item.Enabled = StaticReg.ClosedTabHistoryList.Count > 0;
                         break;
                     // todo: recent files
-                    case BII_TOPMOST:
+                    case BII_TOPMOST: // 置顶
                         // todo: simplify this, and make CreateItems set this value correctly too.
                         ((ToolStripButton)item).Checked = PInvoke.Ptr_OP_AND(PInvoke.GetWindowLongPtr(ExplorerHandle, -20), 8) == new IntPtr(8); // todo
                         break;
@@ -1712,6 +1846,65 @@ namespace QTTabBarLib {
                     }
                 }
                 return shellBrowser;
+            }
+        }
+
+
+        protected override void OnDpiChanged(int oldDpi, int newDpi)
+        {
+            QTUtility2.log("QTButtonBar OnDpiChanged");
+            RefreshHeight();
+        }
+
+
+        /**
+         * 刷新高度 
+         */
+        internal unsafe void RefreshHeight()
+        {
+            const int DBID_BANDINFOCHANGED = 0;
+            const int OLECMDEXECOPT_DODEFAULT = 0;
+            const int RBN_HEIGHTCHANGE = -831;
+            const int GWL_HWNDPARENT = -8;
+            try
+            {
+                this.SuspendLayout();
+                /*IntPtr windowLongPtr = PInvoke.GetWindowLongPtr(Handle, GWL_HWNDPARENT);
+                NMHDR nmhdr = new NMHDR
+                {
+                    hwndFrom = Handle,
+                    idFrom = (IntPtr)40965, // magic id
+                    code = RBN_HEIGHTCHANGE
+                };
+
+                if (!(windowLongPtr != IntPtr.Zero) || !PInvoke.IsWindow(windowLongPtr))
+                    return;
+                PInvoke.SendMessage(windowLongPtr, WM.NOTIFY, nmhdr.idFrom, ref nmhdr);
+                PInvoke.RedrawWindow(windowLongPtr, IntPtr.Zero, IntPtr.Zero, RDW.INVALIDATE | RDW.VALIDATE | RDW.ALLCHILDREN | RDW.ERASENOW);
+
+                REBARBANDINFO structure = new REBARBANDINFO();
+                structure.cbSize = Marshal.SizeOf(structure);
+                structure.fMask = RBBIM.CHILD | RBBIM.ID;
+                int num = (int)PInvoke.SendMessage(Handle, RB.GETBANDCOUNT, IntPtr.Zero, IntPtr.Zero);
+                for (int i = 0; i < num; i++)
+                {
+                    PInvoke.SendMessage(Handle, RB.GETBANDINFO, (IntPtr)i, ref structure);
+                    if (structure.hwndChild == this.Handle)
+                    {
+                        structure.cyChild = BarHeight;
+                        structure.cyMinChild = BarHeight;
+
+                        // PInvoke.SendMessage(this.Handle, RB.SETBANDINFOW, (void*)wParam, ref structure);
+                    }
+                }*/
+            }
+            catch (COMException exception)
+            {
+                QTUtility2.MakeErrorLog(exception);
+            }
+            finally
+            {
+                this.ResumeLayout();
             }
         }
     }

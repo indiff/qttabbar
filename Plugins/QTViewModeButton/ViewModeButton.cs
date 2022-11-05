@@ -161,8 +161,11 @@ namespace QuizoPlugins {
             catch {
             }
             finally {
-                if(shellView != null)
-                    Marshal.ReleaseComObject(shellView);
+                if (shellView != null)
+                {
+                  //  Marshal.ReleaseComObject(shellView);
+                }
+                    
             }
         }
 
@@ -185,8 +188,11 @@ namespace QuizoPlugins {
                 pluginServer.MakeErrorLog(e, "ViewModeButton GetCurrentViewMode");
             }
             finally {
-                if(shellView != null)
-                    Marshal.ReleaseComObject(shellView);
+                if (shellView != null)
+                {
+                    // Marshal.ReleaseComObject(shellView);
+                }
+                    
             }
 
             return FOLDERVIEWMODE.FVM_ICON;

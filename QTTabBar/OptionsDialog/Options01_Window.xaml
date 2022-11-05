@@ -222,6 +222,14 @@
             Content="{qt:Resx Key=Options_Page01_Window, Index=15}"
             IsChecked="{Binding Path=TrayOnMinimize}"
             Style="{StaticResource CheckStyle}"/>
-
+			
+		<Label
+				Content="Others"
+				Style="{StaticResource SectionHeaderStyle}"/>
+			<CheckBox x:Name="ctxAutoHookWindow"
+				Content="Auto Hook(You can close it, No bg image,Must restart Explorer)"
+				IsChecked="{Binding Path=AutoHookWindow}"
+				Style="{StaticResource CheckStyle}"/>
+			
     </StackPanel>
 </qt:OptionsDialogTab>

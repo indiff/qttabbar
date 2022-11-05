@@ -38,6 +38,11 @@ namespace QuizoPlugins
         private void label1_Click(object sender, System.EventArgs e)
         {
 
+        }
+
+        private void buttonOK_Click(object sender, System.EventArgs e)
+        {
+
         }	
 	}
 }

@@ -25,13 +25,13 @@ namespace BandObjectLib {
         public const int SETPARENT          = (0x400 + 7);
         public const int HITTEST            = (0x400 + 8);
         public const int GETRECT            = (0x400 + 9);
-        public const int INSERTBANDW        = (0x400 + 10);
-        public const int SETBANDINFOW       = (0x400 + 11);
+        public const int INSERTBANDW        = (0x400 + 10); // 1024+10 = 1034
+        public const int SETBANDINFOW       = (0x400 + 11);  // 1024+10 = 1035
         public const int GETBANDCOUNT       = (0x400 + 12);
         public const int GETROWCOUNT        = (0x400 + 13);
         public const int GETROWHEIGHT       = (0x400 + 14);
         public const int IDTOINDEX          = (0x400 + 16); // wParam == id
-        public const int GETTOOLTIPS        = (0x400 + 17);
+        public const int GETTOOLTIPS        = (0x400 + 17); // 
         public const int SETTOOLTIPS        = (0x400 + 18);
         public const int SETBKCOLOR         = (0x400 + 19); // sets the default BK color
         public const int GETBKCOLOR         = (0x400 + 20); // defaults to CLR_NONE
@@ -43,8 +43,8 @@ namespace BandObjectLib {
         public const int BEGINDRAG          = (0x400 + 24);
         public const int ENDDRAG            = (0x400 + 25);
         public const int DRAGMOVE           = (0x400 + 26);
-        public const int GETBARHEIGHT       = (0x400 + 27);
-        public const int GETBANDINFOW       = (0x400 + 28);
+        public const int GETBARHEIGHT       = (0x400 + 27); // 1024+27 = 1051
+        public const int GETBANDINFOW       = (0x400 + 28); // 1024+28 = 1052
         public const int GETBANDINFOA       = (0x400 + 29);
         public const int GETBANDINFO        = GETBANDINFOW;
         public const int MINIMIZEBAND       = (0x400 + 30);

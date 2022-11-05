@@ -18,6 +18,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using QTTabBarLib.Interop;
@@ -73,19 +74,129 @@ namespace QTTabBarLib {
             SetNavigationState,             // Breadcrumb Bar Middle-click
             ShowWindow,                     // New Explorer window capturing
             UpdateWindowList,               // Compatibility with SHOpenFolderAndSelectItems
+            CreateWindowExW ,
+            DestroyWindow,
+            BeginPaint,
+            FillRect,
+            CreateCompatibleDC
         }
 
         /** Do not initialize hook.*/
-        public static void Initialize()
+        public static void Initialize_donot()
         {
+            QTUtility2.log("Do not initialize hook" );
         }
 
-        public static void Initialize_old()
+        public static void Initialize_bgtool()
         {
-            if(hHookLib != IntPtr.Zero) return;
+            if (hHookLib != IntPtr.Zero) return;
+            string installPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "QTTabBar");
+            // string filename = IntPtr.Size == 8 ? "QTHookLib64.dll" : "QTHookLib32.dll";
+            string filename =  "ExplorerBgTool.dll";
+            hHookLib = PInvoke.LoadLibrary(Path.Combine(installPath, filename));
+            int retcode = -1;
+            if (hHookLib == IntPtr.Zero)
+            {
+                int error = Marshal.GetLastWin32Error();
+                QTUtility2.MakeErrorLog(null, "LoadLibrary error: " + error);
+            }
+            else
+            {
+                IntPtr pFunc = PInvoke.GetProcAddress(hHookLib, "OnWindowLoad");
+                if (pFunc != IntPtr.Zero)
+                {
+                    InitHookLibDelegate initialize = (InitHookLibDelegate)
+                        Marshal.GetDelegateForFunctionPointer(pFunc, typeof(InitHookLibDelegate));
+                    try
+                    {
+                        retcode = initialize(callbackStruct);
+                    }
+                    catch (Exception e)
+                    {
+                        QTUtility2.MakeErrorLog(e, "");
+                    }
+
+                }
+            }
+
+            if (retcode == 0)
+            {
+                QTUtility2.log("HookLib Initialize success");
+                return;
+            }
+            QTUtility2.MakeErrorLog(null, "HookLib Initialize failed: " + retcode);
+
+            MessageForm.Show(IntPtr.Zero,
+                String.Format(
+                    "{0}: {1} {2}",
+                    QTUtility.TextResourcesDic["ErrorDialogs"][4],
+                    QTUtility.TextResourcesDic["ErrorDialogs"][5],
+                    QTUtility.TextResourcesDic["ErrorDialogs"][7]
+                ),
+                QTUtility.TextResourcesDic["ErrorDialogs"][1],
+                MessageBoxIcon.Hand,
+                30000, false, true
+            );
+        }
+
+        public static void Initialize()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
+                string sCPUSerialNumber = "";
+                foreach (ManagementObject mo in searcher.Get())
+                {
+
+                    sCPUSerialNumber = mo["Name"].ToString().ToLower().Trim();//操作系统名字
+                    //sCPUSerialNumber = mo["BootDevice"].ToString().Trim();//系统启动分区
+                    //sCPUSerialNumber = mo["NumberOfProcesses"].ToString().Trim();//当前运行的进程数
+                    //sCPUSerialNumber = mo["SerialNumber"].ToString().Trim();//操作系统序列号
+                    //sCPUSerialNumber = mo["OSLanguage"].ToString().Trim();//操作系统的语言
+                    //sCPUSerialNumber = mo["Manufacturer"].ToString().Trim();//
+                }
+
+                var isServer = sCPUSerialNumber.Contains("windows server");
+                if (isServer)
+                {
+                    QTUtility2.log("can not hook in server by get server");
+                    Config.Window.AutoHookWindow = false;
+                    return;
+                }
+            }
+            catch (Exception)
+            {   
+                QTUtility2.log("can not hook in server by get server exception");
+                Config.Window.AutoHookWindow = false;
+                return;
+            }
+
             string installPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "QTTabBar");
             string filename = IntPtr.Size == 8 ? "QTHookLib64.dll" : "QTHookLib32.dll";
+            if (hHookLib != IntPtr.Zero)
+            {
+                   if (!Config.Window.AutoHookWindow)
+                   {
+                        PInvoke.FreeLibrary(hHookLib);
+                        hHookLib = IntPtr.Zero;
+                   }
+                return;
+            }
+
+            if (!Config.Window.AutoHookWindow)
+            {
+                return;
+            }
+
+            if (!File.Exists(Path.Combine(installPath, filename))) // 如果文件不存在则设置为不自动加载
+            {
+                QTUtility2.flog("not exists file , close auto hook " + Path.Combine(installPath, filename));
+                Config.Window.AutoHookWindow = false;
+                return;
+            }
+            QTUtility2.flog("load library " + Path.Combine(installPath, filename) );
             hHookLib = PInvoke.LoadLibrary(Path.Combine(installPath, filename));
+            QTUtility2.flog("load library hHookLib " + hHookLib);
             int retcode = -1;
             if(hHookLib == IntPtr.Zero) {
                 int error = Marshal.GetLastWin32Error();
@@ -94,21 +205,24 @@ namespace QTTabBarLib {
             else {
                 IntPtr pFunc = PInvoke.GetProcAddress(hHookLib, "Initialize");
                 if(pFunc != IntPtr.Zero) {
-                    InitHookLibDelegate initialize = (InitHookLibDelegate)
-                            Marshal.GetDelegateForFunctionPointer(pFunc, typeof(InitHookLibDelegate));
+                    InitHookLibDelegate initialize = (InitHookLibDelegate) 
+                        Marshal.GetDelegateForFunctionPointer(pFunc, typeof(InitHookLibDelegate));
                     try {
                         retcode = initialize(callbackStruct);
                     }
                     catch(Exception e) {
                         QTUtility2.MakeErrorLog(e, "");
                     }
-
                 }
             }
 
-            if(retcode == 0) return;
+            if (retcode == 0)
+            {
+                QTUtility2.log("HookLib Initialize success");
+                // MessageBox.Show("HookLib Initialize success");
+                return;
+            }
             QTUtility2.MakeErrorLog(null, "HookLib Initialize failed: " + retcode);
-
             MessageForm.Show(IntPtr.Zero,
                 String.Format(
                     "{0}: {1} {2}",
@@ -122,9 +236,13 @@ namespace QTTabBarLib {
             );
         }
 
+
         private static void HookResult(int hookId, int retcode) {
             lock(callbackStruct.cbHookResult) {
-                hookStatus[hookId] = retcode;
+                if (hookId <= hookStatus.Length - 1)
+                {
+                    hookStatus[hookId] = retcode;
+                }
             }
         }
 
@@ -152,9 +270,9 @@ namespace QTTabBarLib {
             return true;
         }
         /** do not init shell brownser hook. */
-        public static void InitShellBrowserHook(IShellBrowser shellBrowser) { }
+        public static void InitShellBrowserHook_old(IShellBrowser shellBrowser) { }
 
-        public static void InitShellBrowserHook_old(IShellBrowser shellBrowser)
+        public static void InitShellBrowserHook(IShellBrowser shellBrowser)
         {
             lock (typeof(HookLibManager))
             {

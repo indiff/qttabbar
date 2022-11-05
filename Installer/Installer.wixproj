@@ -24,7 +24,7 @@
     <SuppressValidation>False</SuppressValidation>
     <SuppressIces>ICE80</SuppressIces>
     <SuppressSpecificWarnings>1076;1118</SuppressSpecificWarnings>
-    <Cultures>en-US;zh-CN;de-DE;tr-TR;pt-BR;es-ES</Cultures>
+    <Cultures>en-US;zh-CN;de-DE;tr-TR;pt-BR;es-ES;ru-RU</Cultures>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CustomWelcomeEulaDlg.wxs" />
@@ -45,9 +45,14 @@
     <EmbeddedResource Include="lang.wxl" />
     <EmbeddedResource Include="lang_es_ES.wxl" />
     <EmbeddedResource Include="lang_pt_BR.wxl" />
+    <EmbeddedResource Include="lang_ru_RU.wxl" />
     <EmbeddedResource Include="lang_tr_TR.wxl" />
     <EmbeddedResource Include="lang_zh_CN.wxl" />
     <EmbeddedResource Include="lang_de_DE.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.ini" />
+    <Content Include="libai.png" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>

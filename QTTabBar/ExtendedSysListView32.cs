@@ -442,6 +442,7 @@ namespace QTTabBarLib {
             }
         }
 
+        // 处理自定义绘制
         private bool HandleCustomDraw(ref Message msg) {
             // TODO this needs to be cleaned
             if(Config.Tweaks.AlternateRowColors && (ShellBrowser.ViewMode == FVM.DETAILS)) {
@@ -453,7 +454,9 @@ namespace QTTabBarLib {
                 switch(structure.nmcd.dwDrawStage) {
                     case CDDS.SUBITEM | CDDS.ITEMPREPAINT:
                         iListViewItemState = (int)PInvoke.SendMessage(
-                                ListViewController.Handle, LVM.GETITEMSTATE, structure.nmcd.dwItemSpec,
+                                ListViewController.Handle, 
+                                LVM.GETITEMSTATE, 
+                                structure.nmcd.dwItemSpec,
                                 (IntPtr)(LVIS.FOCUSED | LVIS.SELECTED | LVIS.DROPHILITED));
 
                         if(!QTUtility.IsXP) {
@@ -477,7 +480,8 @@ namespace QTTabBarLib {
                             if(structure.iSubItem > 0 && (!fullRowSel || !drawingHotItem)) {
                                 if(!fullRowSel || (iListViewItemState & (LVIS.SELECTED | LVIS.DROPHILITED)) == 0) {
                                     using(Graphics graphics = Graphics.FromHdc(structure.nmcd.hdc)) {
-                                        if(sbAlternate == null || sbAlternate.Color != Config.Tweaks.AltRowBackgroundColor) {
+                                        if(sbAlternate == null ||
+                                           sbAlternate.Color != Config.Tweaks.AltRowBackgroundColor) {
                                             sbAlternate = new SolidBrush(Config.Tweaks.AltRowBackgroundColor);
                                         }
                                         graphics.FillRectangle(sbAlternate, structure.nmcd.rc.ToRectangle());

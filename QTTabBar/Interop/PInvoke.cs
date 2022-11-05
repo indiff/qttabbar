@@ -154,6 +154,10 @@ namespace QTTabBarLib.Interop {
         [DllImport("kernel32.dll")]
         public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetCursorPos(out POINT point);
+
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
@@ -339,6 +343,16 @@ namespace QTTabBarLib.Interop {
 
         [DllImport("user32.dll")]
         public static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, uint flags);
+
+
+        [DllImport("user32.dll")]
+        public static extern bool RedrawWindow(
+            IntPtr hWnd,
+            IntPtr lprcUpdate,
+            IntPtr hrgnUpdate,
+            RDW flags);
+
+
         [DllImport("advapi32.dll")]
         public static extern int RegCloseKey(IntPtr hKey);
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
@@ -502,6 +516,53 @@ namespace QTTabBarLib.Interop {
         public static extern void SetProcessDPIAware();
 
 
-       
+
+
+        [DllImport("gdi32.dll")]
+        public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, int crColor);
+
+        [DllImport("gdi32.dll")]
+        public static extern IntPtr CreateSolidBrush(int crColor);
+
+        [DllImport("gdi32.dll")]
+        public static extern int Rectangle(
+            IntPtr hdc,
+            int nLeftRect,
+            int nTopRect,
+            int nRightRect,
+            int nBottomRect);
+
+
+        [DllImport("Shcore.dll")]
+        public static extern int GetDpiForMonitor(
+            IntPtr hmonitor,
+            int dpiType,
+            out int dpiX,
+            out int dpiY);
+
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr MonitorFromPoint(Point pt, int dwFlags);
+
+
+        [DllImport("user32.dll")]
+        public static extern int GetDpiForWindow(IntPtr hwnd);
+
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr MonitorFromWindow(IntPtr hwnd, int dwFlags);
+
+
+        [DllImport("gdi32.dll")]
+        public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
+
+        [DllImport("user32.dll", EntryPoint = "SendMessage", CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessageLVBKIMAGE(IntPtr hWnd, int Msg, int wParam, ref LVBKIMAGE lParam);
+
+        [DllImport("user32.dll")]
+        public static extern int FillRect(IntPtr hDC, [In] ref RECT lprc, IntPtr hbr);
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GetModuleHandle(string name); 
     }
 }

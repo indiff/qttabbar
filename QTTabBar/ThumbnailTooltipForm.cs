@@ -30,6 +30,9 @@ using BandObjectLib;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
+    /**
+     * 预览窗口
+     */
     internal sealed class ThumbnailTooltipForm : Form {
         private const string EMPTYFILE = "  *empty file";
         private bool fFontAsigned;
@@ -49,6 +52,7 @@ namespace QTTabBarLib {
         private int maxWidth = Config.Tips.PreviewMaxWidth;
         private PictureBox pictureBox1;
         private static string supportedImages;
+        // 支持的视频格式
         private static string supportedMovies = ".asx;.dvr-ms;.mp2;.flv;..mkv;.ts;.3g2;.3gp;.3gp2;.3gpp;.amr;.amv;.asf;.avi;.bdmv;.bik;.d2v;.divx;.drc;.dsa;.dsm;.dss;.dsv;.evo;.f4v;.flc;.fli;.flic;.flv;.hdmov;.ifo;.ivf;.m1v;.m2p;.m2t;.m2ts;.m2v;.m4b;.m4p;.m4v;.mkv;.mp2v;.mp4;.mp4v;.mpe;.mpeg;.mpg;.mpls;.mpv2;.mpv4;.mov;.mts;.ogm;.ogv;.pss;.pva;.qt;.ram;.ratdvd;.rm;.rmm;.rmvb;.roq;.rpm;.smil;.smk;.swf;.tp;.tpr;.ts;.vob;.vp6;.webm;.wm;.wmp;.wmv";
 
         public event QEventHandler ThumbnailVisibleChanged;
@@ -193,26 +197,35 @@ namespace QTTabBarLib {
                 }
             }
             if(ExtIsText(ext)) { // 如果预览的是文本文件
-                FileInfo info2 = new FileInfo(path);
-                if(info2.Exists) {
+                FileInfo textFileInfo = new FileInfo(path);
+                if(textFileInfo.Exists) {
                     try {
-                        SizeF ef2;
+                        SizeF sizeF;
                         bool fLoadedAll = false;
-                        bool flag7 = false;
-                        string str4;
+                        bool isEmptyText = false;
+                        string content;
                         ioException = null;
-                        if(info2.Length > 0L && info2.Length <= 1024 ) {
-                            str4 = LoadTextFile(path, out fLoadedAll);
-                        }
-                        if (info2.Length > 0L && info2.Length > 1024)
+                        // 加载预览的逻辑
+
+                        /*if (textFileInfo.Length > 0L && textFileInfo.Length <= MAX_TEXT_LENGTH)
                         {
-                            str4 = LoadTextFile(path, 0x400, out fLoadedAll);
+                            content = LoadTextFile(path, out fLoadedAll);
+                        }
+                        else if (textFileInfo.Length > 0L && textFileInfo.Length > MAX_TEXT_LENGTH)
+                        {
+                            content = LoadTextFile(path, MAX_TEXT_LENGTH, out fLoadedAll);
+                        }*/
+
+                        if (textFileInfo.Length > 0L)
+                        {
+                            content = LoadTextFile2(path, out fLoadedAll);
                         }
                         else {
-                            flag7 = true;
-                            str4 = "  *empty file";
+                            isEmptyText = true;
+                            // str4 = "  *empty file";
+                            content = EMPTYFILE;
                         }
-                        lblText.ForeColor = (ioException != null) ? Color.Red : (flag7 ? SystemColors.GrayText : SystemColors.InfoText);
+                        lblText.ForeColor = (ioException != null) ? Color.Red : (isEmptyText ? SystemColors.GrayText : SystemColors.InfoText);
                         try {
                             lblText.Font = Config.Tips.PreviewFont;
                             fFontAsigned = true;
@@ -228,17 +241,17 @@ namespace QTTabBarLib {
                             formSize.Width = num2;
                         }
                         using(Graphics graphics2 = lblText.CreateGraphics()) {
-                            ef2 = graphics2.MeasureString(str4, lblText.Font, num2);
+                            sizeF = graphics2.MeasureString(content, lblText.Font, num2);
                         }
-                        if((ef2.Height < 512f) || fLoadedAll) {
-                            formSize.Height = (int)(ef2.Height + 8f);
+                        if((sizeF.Height < 512f) || fLoadedAll) {
+                            formSize.Height = (int)(sizeF.Height + 8f);
                         }
                         else {
                             formSize.Height = 0x200;
                         }
                         SuspendLayout();
                         lblInfo.Dock = DockStyle.None;
-                        lblText.Text = str4;
+                        lblText.Text = content;
                         lblText.BringToFront();
                         ResumeLayout();
                         return true;
@@ -501,7 +514,7 @@ namespace QTTabBarLib {
                 int readCnt = sr.Read(chars, 0, count);
                 string text = new string(chars, 0 , readCnt );
                 fLoadedAll = false;
-                QTUtility2.Close(sr);
+                // QTUtility2.Close(sr);
                 return text;
             }
         }
@@ -512,14 +525,14 @@ namespace QTTabBarLib {
             {
                 string textall = sr.ReadToEnd();
                 fLoadedAll = true;
-                QTUtility2.Close(sr);
+                // QTUtility2.Close(sr);
                 return textall;
             }
         }
 
         private static string LoadTextFile2(string path, out bool fLoadedAll) {
             byte[] buffer;
-            int count = 0x400;
+            int count = MAX_TEXT_LENGTH;
             string str = string.Empty;
             fLoadedAll = false;
             try {
@@ -530,7 +543,7 @@ namespace QTTabBarLib {
                     }
                     buffer = new byte[count];
                     stream.Read(buffer, 0, count);
-                    QTUtility2.Close(stream);
+                    // QTUtility2.Close(stream);
                 }
             }
             catch(IOException exception) {
@@ -607,12 +620,15 @@ namespace QTTabBarLib {
                     PInvoke.CoTaskMemFree(zero);
                 }
                 if(ppsi != null) {
+                    QTUtility2.log("ReleaseComObject ppsi");
                     Marshal.ReleaseComObject(ppsi);
                 }
                 if(ppvThumb != null) {
+                    QTUtility2.log("ReleaseComObject ppvThumb");
                     Marshal.ReleaseComObject(ppvThumb);
                 }
                 if(o != null) {
+                    QTUtility2.log("ReleaseComObject o");
                     Marshal.ReleaseComObject(o);
                 }
             }
@@ -666,9 +682,11 @@ namespace QTTabBarLib {
                     PInvoke.CoTaskMemFree(zero);
                 }
                 if(ppv != null) {
+                    QTUtility2.log("ReleaseComObject ppv");
                     Marshal.ReleaseComObject(ppv);
                 }
                 if(obj2 != null) {
+                    QTUtility2.log("ReleaseComObject obj2");
                     Marshal.ReleaseComObject(obj2);
                 }
             }

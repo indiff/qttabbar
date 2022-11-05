@@ -40,6 +40,15 @@ using Screen = System.Windows.Forms.Screen;
 using System.Reflection;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
+using BandObjectLib;
+using Binding = System.Windows.Data.Binding;
+using Button = System.Windows.Controls.Button;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.MessageBox;
+using Point = System.Drawing.Point;
+using TreeView = System.Windows.Controls.TreeView;
+using UserControl = System.Windows.Controls.UserControl;
 
 
 namespace QTTabBarLib {
@@ -137,18 +146,13 @@ namespace QTTabBarLib {
 
         private OptionsDialog() {
             try {
-            Initialized += (sender, args) => Topmost = true;
-            ContentRendered += (sender, args) => Topmost = false;
-            
-            // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
-            PInvoke.SetProcessDPIAware();
-
-            QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");
-            
-            
-            InitializeComponent();
-
-             //   QTUtility2.log("InitializeComponent end");
+                Initialized += (sender, args) => Topmost = true;
+                ContentRendered += (sender, args) => Topmost = false;
+                // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
+                PInvoke.SetProcessDPIAware();
+                // QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");
+                InitializeComponent();
+                //   QTUtility2.log("InitializeComponent end");
                 // 设置默认的title 和版本
                 string str = QTUtility.CurrentVersion.ToString();
                 if (QTUtility.BetaRevision.Major > 0)
@@ -218,23 +222,44 @@ namespace QTTabBarLib {
         /// 方法: generateInitConfig()
         /// </summary>
         private void setByQwop() {
- /*           // 必须使用  using Rectangle = System.Drawing.Rectangle;
-            // 不然会有二义性 ambiguous
-            Rectangle rect = Screen.PrimaryScreen.Bounds;
-            // (屏幕的宽度 - 窗体宽度) / 2
-            double left = (rectangle.Width - this.Width) / 2;
-            double top = (rectangle.Height); 
-            // 向左偏移 10 个像素
-            left -= 10;
-            this.Left = left;
-*/
-            Rectangle rect = Screen.PrimaryScreen.Bounds;
-            this.Left = ((rect.Width - this.Width) / 2) - 10;
-            this.Top = 0; //  rect.Height * (0.15);
+            /*POINT point;
+            if (false && PInvoke.GetCursorPos(out point))
+            {
+                // this.Left = point.x;
+                // this.Top = point.y; //  rect.Height * (0.15);
+            }
+            else
+            {
+                Rectangle rect = Screen.PrimaryScreen.Bounds;
+                // this.Left = ((rect.Width - this.Width) / 2);
+                this.Left = rect.Width / 3;
+                this.Top = -((rect.Height) / 2);
+            }*/
 
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
+            // 双屏幕打开逻辑问题
+            /*var bMulScreens = Screen.AllScreens.Length > 1;
+            var screenWidth = 0;
+            if (bMulScreens)
+            {
+                for (var i = 0; i < Screen.AllScreens.Length; i++)
+                {
+                    screenWidth += Screen.AllScreens[i].WorkingArea.Width;
+                }
+            }
+            else
+            {
+                screenWidth += Screen.PrimaryScreen.WorkingArea.Width;
+            }
+
+            Rectangle rect = Screen.PrimaryScreen.Bounds;
+            this.Left = ((screenWidth - this.Width) / 2) - 10;
+            this.Top = 0; */
+
+            // StartPosition = FormStartPosition.CenterParent;
             ///////////////////// change last selected index.
-            //lstCategories.SelectedIndex = WorkingConfig.desktop.lstSelectedIndex;
+            // lstCategories.SelectedIndex = WorkingConfig.desktop.lstSelectedIndex;
 
             ////////////////////////////////////////
             // generateInitConfig();

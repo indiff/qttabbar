@@ -55,6 +55,13 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
+            if (CultureInfo.CurrentCulture.Parent.Name == "ja")
+                ResStrs = Resource.strQTFolderButton_ja.Split(new char[] { ';' });
+            else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+                ResStrs = Resource.strQTFolderButton_zh.Split(new char[] { ';' });
+            else
+                ResStrs = Resource.strQTFolderButton.Split(new char[] { ';' });
+
             actions = new string[] { ResStrs[0], ResStrs[2] };
             return true;
         }

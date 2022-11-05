@@ -63,6 +63,7 @@ namespace QTTabBarLib {
             }
             finally {
                 if(item != null) {
+                    QTUtility2.log("ReleaseComObject item");
                     Marshal.ReleaseComObject(item);
                 }
             }
@@ -84,6 +85,7 @@ namespace QTTabBarLib {
 
                 case WM.DESTROY:
                     if(treeControl != null) {
+                        QTUtility2.log("ReleaseComObject treeControl");
                         Marshal.ReleaseComObject(treeControl);
                         treeControl = null;
                     }
@@ -125,6 +127,7 @@ namespace QTTabBarLib {
         public void Dispose() {
             if(fDisposed) return;
             if(treeControl != null) {
+                QTUtility2.log("ReleaseComObject treeControl");
                 Marshal.ReleaseComObject(treeControl);
                 treeControl = null;
             }

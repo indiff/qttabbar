@@ -199,7 +199,11 @@ namespace QTTabBarLib
             }
             finally
             {
-                if (o != null) Marshal.ReleaseComObject(o);
+                if (o != null)
+                {
+                    QTUtility2.log("ReleaseComObject o");
+                    Marshal.ReleaseComObject(o);
+                }
             }
         }
 

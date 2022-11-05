@@ -51,8 +51,14 @@ namespace QTTabBarLib {
                     Plugin p;
                     if(!PluginManager.TryGetStaticPluginInstance(info.PluginID, out p) || !p.PluginInformation.Enabled) continue;
                     string[] actions = null;
+                    QTUtility2.log("plugin: " + p.PluginInformation.Name + " Enabled :" + p.PluginInformation.Enabled);
                     try {
-                        if(!p.Instance.QueryShortcutKeys(out actions)) actions = null;
+                        if (null != p &&
+                            null != p.Instance && // 修复空指针问题 by indiff
+                            !p.Instance.QueryShortcutKeys(out actions))
+                        {
+                            actions = null;
+                        }
                     }
                     catch (Exception ex)
                     {

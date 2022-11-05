@@ -307,6 +307,7 @@ namespace QTTabBarLib {
 
         public override void SetSite(object pUnkSite) {
             if(BandObjectSite != null) {
+                QTUtility2.log("ReleaseComObject BandObjectSite");
                 Marshal.ReleaseComObject(BandObjectSite);
             }
             BandObjectSite = (IInputObjectSite)pUnkSite;
@@ -327,6 +328,7 @@ namespace QTTabBarLib {
             // this seems not to be called on log off / shut down...
 
             if(iContextMenu2 != null) {
+                QTUtility2.log("ReleaseComObject iContextMenu2");
                 Marshal.ReleaseComObject(iContextMenu2);
                 iContextMenu2 = null;
             }
@@ -563,6 +565,7 @@ namespace QTTabBarLib {
             }
             finally {
                 if(shellWindows != null) {
+                    QTUtility2.log("ReleaseComObject shellWindows");
                     Marshal.ReleaseComObject(shellWindows);
                 }
             }

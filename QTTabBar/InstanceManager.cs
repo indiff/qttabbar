@@ -38,6 +38,9 @@ namespace QTTabBarLib {
         private static List<ICommClient> callbacks = new List<ICommClient>();
         private static StackDictionary<IntPtr, ICommClient> sdInstances = new StackDictionary<IntPtr, ICommClient>();
         private static TrayIcon trayIcon;
+        // add by indiff
+        private static ReaderWriterLockSlim rwLock = new ReaderWriterLockSlim();
+
 
         #region Comm Classes and Interfaces
 
@@ -573,6 +576,28 @@ namespace QTTabBarLib {
         public static void SelectTabOnOtherTabBar(IntPtr tabBarHandle, int index) {
             ICommService service = GetChannel();
             if(service != null) service.SelectTabOnOtherTabBar(tabBarHandle, index);
+        }
+
+
+        public static void SyncToolbarColorThreads()
+        {
+            IntPtr lParam = MCR.MAKELPARAM(1, 0);
+            /*foreach (IntPtr explorerManager in (IEnumerable<IntPtr>)InstanceManager.ExplorerManagers())
+            {
+                if (PInvoke.IsWindow(explorerManager))
+                {
+                    PInvoke.PostMessage(explorerManager, 47616, (IntPtr)9, lParam);
+                    lParam = IntPtr.Zero;
+                }
+            }*/
+            foreach(var pair in dictTabInstances) {
+
+                if (PInvoke.IsWindow(pair.Value.Handle))
+                {
+                    PInvoke.PostMessage(pair.Value.Handle, 47616, (IntPtr)9, lParam);
+                    lParam = IntPtr.Zero;
+                }
+            }
         }
     }
 }

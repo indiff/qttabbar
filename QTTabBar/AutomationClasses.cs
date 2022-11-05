@@ -207,6 +207,7 @@ namespace QTTabBarLib {
 
         public void Dispose() {
             if(pElement != null) {
+                QTUtility2.log("ReleaseComObject pElement");
                 Marshal.ReleaseComObject(pElement);
                 pElement = null;
             }
@@ -234,7 +235,11 @@ namespace QTTabBarLib {
                 return null;
             }
             finally {
-                if(walker != null) Marshal.ReleaseComObject(walker);
+                if (walker != null)
+                {
+                    QTUtility2.log("ReleaseComObject walker");
+                    Marshal.ReleaseComObject(walker);
+                }
             }
         }
 
@@ -254,7 +259,11 @@ namespace QTTabBarLib {
                 return false;
             }
             finally {
-                if(obj != null) Marshal.ReleaseComObject(obj);
+                if (obj != null)
+                {
+                    QTUtility2.log("ReleaseComObject selprov");
+                    Marshal.ReleaseComObject(obj);
+                }
             }
         }
 
@@ -303,6 +312,7 @@ namespace QTTabBarLib {
                 }
                 catch(COMException) {
                     if(elem != null) {
+                        QTUtility2.log("ReleaseComObject elem");
                         Marshal.ReleaseComObject(elem);
                     }
                     yield break;

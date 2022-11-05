@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,10 +16,12 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using QTPlugin;
 using QTTabBarLib.Interop;
 using IDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -76,14 +78,21 @@ namespace QTTabBarLib {
         private Timer timer_Thumbnail;
         protected bool fDragging;
 
+        // private IntPtr hwndListView;
+        private static string BG_IMG = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\Image\bgImage.png";
+
+
         internal ExtendedListViewCommon(ShellBrowserEx shellBrowser, IntPtr hwndShellView, IntPtr hwndListView, IntPtr hwndSubDirTipMessageReflect) {
-            ShellBrowser = shellBrowser;
+            this.ShellBrowser = shellBrowser;
             this.hwndSubDirTipMessageReflect = hwndSubDirTipMessageReflect;
+            // this.hwndListView = hwndListView;
 
             ListViewController = new NativeWindowController(hwndListView);
             ListViewController.MessageCaptured += ListViewController_MessageCaptured;
             ShellViewController = new NativeWindowController(hwndShellView);
             ShellViewController.MessageCaptured += ShellViewController_MessageCaptured;
+
+            
 
             TRACKMOUSEEVENT structure = new TRACKMOUSEEVENT();
             structure.cbSize = Marshal.SizeOf(structure);
@@ -106,11 +115,214 @@ namespace QTTabBarLib {
                 PInvoke.RevokeDragDrop(hwndListView);
                 PInvoke.RegisterDragDrop(hwndListView, dropTargetPassthrough);
             }
+
+            // RefreshViewWatermark(true);
+            // 如果文件不存在则不加载背景
+            if (File.Exists(BG_IMG))
+            {
+                SetBackgroundImage(true, true, 0, 0);
+            }
+            // SetBackgroundImage(true, true, 0, 0);
+            // InstallHooks();
+        }
+
+        private CreateWindowExWHookProc hookProc_CreateWindowExW;
+        private HookProc hookProc_FillRect;
+        private IntPtr hHook_FillRect;
+
+        public delegate int HookProc(IntPtr hDC, [In] ref RECT lprc, IntPtr hbr);
+
+        public IntPtr MyCreateWindowExWProc(
+            int exStyle,
+            string lpszClassName,
+            string lpszWindowName,
+            int style,
+            int x,
+            int y,
+            int width,
+            int height,
+            IntPtr hWndParent,
+            IntPtr hMenu,
+            IntPtr hInst,
+            IntPtr pvParam)
+        {
+            return IntPtr.Zero;
+        }
+
+        int MyFillRect(IntPtr hDC, [In] ref RECT lprc, IntPtr hbr)
+        {
+            QTUtility2.log("ExtendListViewCommon MyFillRect");
+            int ret = PInvoke.FillRect(hDC, ref lprc, hbr);
+
+            RECT pRc;
+            PInvoke.GetWindowRect(Handle, out pRc);
+            Size wndSize = new Size(lprc.right - pRc.left, lprc.bottom - pRc.top);
+            Rectangle rctDw = pRc.ToRectangle();
+            //计算图片位置 Calculate picture position
+            PInvoke.InvalidateRect(Handle, IntPtr.Zero, true);
+
+            var bgPng = @"D:\下载\Release\Release\x64\Image\bgImage1.png";
+
+            // PInvoke.SaveDC
+            if (rendererDown_Normal == null)
+            {
+                InitializeRenderer();
+            }
+            IntPtr dC = PInvoke.GetDC(ListViewController.Handle);
+            if ((dC != IntPtr.Zero))
+            {
+                using (Graphics graphics = Graphics.FromHdc(dC))
+                {
+                    VisualStyleRenderer renderer;
+                    // VisualStyleRenderer renderer2;
+                    renderer = rendererDown_Normal;
+                    // g.DrawImage(QTUtility.ImageListGlobal.Images[base2.ImageKey], rect);
+                    var dToutiaoX1080IntellijIdea3Png = @"D:\下载\Release\Release\x64\Image\bgImage.png";
+                    using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
+                    using (Bitmap bmp = freeBitmap.Clone())
+                    {
+                        Point pos = new Point(wndSize.Width - bmp.Width, wndSize.Height - bmp.Height);
+                        Size dstSize = new Size(bmp.Width, bmp.Height);
+
+                        bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
+                        graphics.DrawImage(bmp, rctDw);
+                    }
+
+                    renderer.DrawBackground(graphics, rctDw);
+                    // renderer2.DrawBackground(graphics, rctUp);
+                }
+                PInvoke.ReleaseDC(ListViewController.Handle, dC);
+                PInvoke.ValidateRect(ListViewController.Handle, IntPtr.Zero);
+                // m.Result = IntPtr.Zero;
+            }
+
+            // return PInvoke.CallNextHookEx(hHook_Key, nCode, wParam, lParam);
+            return ret;
+        }
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int dwThreadId);
+
+        private void InstallHooks()
+        {
+            // this.myCallbackDelegate = new HookProc(MyCreateWindowExWProc);
+            // hookProc_CreateWindowExW = new CreateWindowExWHookProc(MyCreateWindowExWProc);
+            hookProc_FillRect = new HookProc(MyFillRect);
+            int currentThreadId = PInvoke.GetCurrentThreadId();
+            IntPtr moduleHandle = PInvoke.GetModuleHandle(Process.GetCurrentProcess().MainModule.ModuleName);
+
+            hHook_FillRect = SetWindowsHookEx(99999 + 1, hookProc_FillRect, moduleHandle, currentThreadId);
+            QTUtility2.log("ExtendListViewCommon SetWindowsHookEx " + hHook_FillRect);
+        }
+
+
+        private unsafe void SetWaterMarkImage(Bitmap bmp)
+        {
+            if (bmp != null)
+            {
+                LVBKIMAGE* lParam = stackalloc LVBKIMAGE[1];
+                lParam->ulFlags = 805306368;
+                lParam->hBmp = bmp.GetHbitmap(Color.Black);
+                if (!(IntPtr.Zero == PInvoke.SendMessage(this.Handle, 4234, (void*)null, (void*)lParam)) || !(lParam->hBmp != IntPtr.Zero))
+                    return;
+                PInvoke.DeleteObject(lParam->hBmp);
+            }
+            else
+            {
+                LVBKIMAGE* lParam = stackalloc LVBKIMAGE[1];
+                lParam->ulFlags = 268435456;
+                PInvoke.SendMessage(this.Handle, 4234, (void*)null, (void*)lParam);
+            }
+        }
+
+        public bool SetBackgroundImage2(bool isWatermark, bool isTiled, int xOffset, int yOffset)
+        {
+            LVBKIMAGE lvbkimage = new LVBKIMAGE();
+            // IntPtr handle = ShellViewController.Handle;
+            IntPtr handle = ListViewController.Handle;
+            /*var findWindowEx = PInvoke.FindWindowEx(ListViewController.Handle, IntPtr.Zero, "DirectUIHWND", null);
+            if (handle != findWindowEx)
+            {
+                handle = findWindowEx;
+            }*/
+            // We have to clear any pre-existing background image, otherwise the attempt to set the image will fail.
+            // We don't know which type may already have been set, so we just clear both the watermark and the image.
+            lvbkimage.ulFlags = LVBKIF_TYPE_WATERMARK;
+            IntPtr result = PInvoke.SendMessageLVBKIMAGE(handle, LVM_SETBKIMAGE, 0, ref lvbkimage);
+            lvbkimage.ulFlags = LVBKIF_SOURCE_HBITMAP;
+            result = PInvoke.SendMessageLVBKIMAGE(handle, LVM_SETBKIMAGE, 0, ref lvbkimage);
+
+            var dToutiaoX1080IntellijIdea3Png = @"D:\下载\Release\Release\x64\Image\bgImage1.png";
+            // var dToutiaoX1080IntellijIdea3Png = @"D:\Users\Administrator\Documents\Tencent Files\531299332\Image\Group2\IY\S2\IYS2F)882TXGVT[JIR[`4BY.bmp";
+
+            using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
+            using (Bitmap bm = freeBitmap.Clone())
+            {
+                // bm.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
+                
+
+                lvbkimage.hBmp = bm.GetHbitmap();
+                lvbkimage.ulFlags = isWatermark ? LVBKIF_TYPE_WATERMARK : (isTiled ? LVBKIF_SOURCE_HBITMAP | LVBKIF_STYLE_TILE : LVBKIF_SOURCE_HBITMAP);
+                lvbkimage.xOffset = xOffset;
+                lvbkimage.yOffset = yOffset;
+
+                PInvoke.SendMessage(this.Handle, 4234, IntPtr.Zero, ref lvbkimage);
+                // result = PInvoke.SendMessageLVBKIMAGE(handle, LVM_SETBKIMAGE, 0, ref lvbkimage);
+            }
+            return (result != IntPtr.Zero);
         }
 
         public override IntPtr Handle {
             get { return ListViewController.Handle; }
         }
+
+        public override void RefreshViewWatermark(bool fClear)
+        {
+            // if (!this.VistaLayout)  return;
+            if ( true  
+                 // Config.Bool(Scts.ViewWatermarking)
+                 )
+            {
+                var dToutiaoX1080IntellijIdea3Png = @"D:\toutiao\1920x1080-intellij-idea3.png";
+                // var dToutiaoX1080IntellijIdea3Png = @"D:\Users\Administrator\Documents\Tencent Files\531299332\Image\Group2\IY\S2\IYS2F)882TXGVT[JIR[`4BY.bmp";
+
+                using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
+                using (Bitmap bmp = freeBitmap.Clone())
+                {
+                    bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                    QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
+                    SetWaterMarkImage(bmp);
+                }
+                /*switch (this.ViewPerceivedType)
+                {
+                    case PerceivedType.Unknown:
+                        bmp = ExplorerManager.GetWatermarkImage(BmpCacheKey.Watermark_General);
+                        break;
+                    case PerceivedType.Image:
+                        bmp = ExplorerManager.GetWatermarkImage(BmpCacheKey.Watermark_Picture);
+                        break;
+                    case PerceivedType.Audio:
+                        bmp = ExplorerManager.GetWatermarkImage(BmpCacheKey.Watermark_Music);
+                        break;
+                    case PerceivedType.Video:
+                        bmp = ExplorerManager.GetWatermarkImage(BmpCacheKey.Watermark_Movie);
+                        break;
+                    case PerceivedType.Document:
+                        bmp = ExplorerManager.GetWatermarkImage(BmpCacheKey.Watermark_Document);
+                        break;
+                }*/
+            }
+            else
+            {
+                if (!fClear)
+                    return;
+                SetWaterMarkImage((Bitmap)null);
+            }
+        }
+
+
        
         #region IDisposable Members
 
@@ -144,6 +356,12 @@ namespace QTTabBarLib {
             if(dropTargetPassthrough != null) {
                 dropTargetPassthrough.Dispose();
                 dropTargetPassthrough = null;
+            }
+
+            if (hHook_FillRect != IntPtr.Zero)
+            {
+                PInvoke.UnhookWindowsHookEx(hHook_FillRect);
+                hHook_FillRect = IntPtr.Zero;
             }
             base.Dispose(fDisposing);
         }
@@ -269,10 +487,147 @@ namespace QTTabBarLib {
         // over an item.  Otherwise, its return value is undefined.
         public abstract override bool IsTrackingItemName();
 
-        protected virtual bool ListViewController_MessageCaptured(ref Message msg) {
+        public const int LVBKIF_SOURCE_HBITMAP = 0x00000001;
+        public const int LVBKIF_STYLE_TILE = 0x00000010;
+        private const int LVBKIF_TYPE_WATERMARK = 0x10000000;
+        private const int LVBKIF_FLAG_ALPHABLEND = 0x20000000;
+        public const int LVM_FIRST = 0x1000;
+        public const int LVM_SETBKIMAGE = (LVM_FIRST + 68);
 
+
+        public  bool SetBackgroundImage(bool isWatermark, bool isTiled, int xOffset, int yOffset)
+        {
+            LVBKIMAGE lvbkimage = new LVBKIMAGE();
+            // IntPtr handle = ShellViewController.Handle;
+            IntPtr handle = ListViewController.Handle; // DirectUIHWND  SHELLDLL_DefView
+            // find parent ShellTabWindowClass  DUIViewWndClassName DirectUIHWND
+
+            // [log] PID:15516 TID:1 2022/9/22 9:17:17  parent name SHELLDLL_DefView
+            //     [log] PID:15516 TID:1 2022/9/22 9:17:17  parent name ShellTabWindowClass
+            //     [log] PID:15516 TID:1 2022/9/22 9:17:17  parent name CabinetWClass
+            var name = PInvoke.GetClassName(handle);
+            QTUtility2.log("name " + name);
+            var parent = PInvoke.GetParent(handle);
+            name = PInvoke.GetClassName(parent);
+            QTUtility2.log(" parent name " + name);
+            parent = PInvoke.GetParent(parent);
+            name = PInvoke.GetClassName(parent);
+            QTUtility2.log(" parent name " + name);
+
+            // var findWindowEx = PInvoke.FindWindowEx(parent, IntPtr.Zero, "DUIViewWndClassName", null);
+            IntPtr findWindowEx = WindowUtils.FindChildWindow(parent, hwnd => PInvoke.GetClassName(hwnd) == "DirectUIHWND");
+            if (IntPtr.Zero != findWindowEx)
+            {
+                QTUtility2.log(" found DirectUIHWND ");
+                handle = findWindowEx;
+            }
+            // parent = PInvoke.GetParent(parent);
+            // name = PInvoke.GetClassName(parent);
+            // QTUtility2.log(" parent name " + name);
+            /*handle = findParent("ShellTabWindowClass");
+            if (handle == IntPtr.Zero)
+            {   
+                QTUtility2.log("SetBackgroundImage not found class" );
+                return false;
+            }*/
+            // We have to clear any pre-existing background image, otherwise the attempt to set the image will fail.
+            // We don't know which type may already have been set, so we just clear both the watermark and the image.
+            lvbkimage.ulFlags = LVBKIF_TYPE_WATERMARK;
+            IntPtr result = PInvoke.SendMessageLVBKIMAGE(handle, LVM_SETBKIMAGE, 0, ref lvbkimage);
+            lvbkimage.ulFlags = LVBKIF_SOURCE_HBITMAP;
+            result = PInvoke.SendMessageLVBKIMAGE(handle, LVM_SETBKIMAGE, 0, ref lvbkimage);
+
+
+            if (File.Exists(BG_IMG))
+            {
+                using (FreeBitmap freeBitmap = new FreeBitmap(BG_IMG))
+                using (Bitmap bm = freeBitmap.Clone())
+                {
+                    // bm.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                    lvbkimage.hBmp = bm.GetHbitmap(Color.Black);
+                }
+            }
+            else
+            {
+                lvbkimage.hBmp = IntPtr.Zero;
+            }
+            lvbkimage.ulFlags = isWatermark ? LVBKIF_TYPE_WATERMARK : (isTiled ? LVBKIF_SOURCE_HBITMAP | LVBKIF_STYLE_TILE : LVBKIF_SOURCE_HBITMAP);
+            lvbkimage.xOffset = xOffset;
+            lvbkimage.yOffset = yOffset;
+            result = PInvoke.SendMessageLVBKIMAGE(handle, LVM_SETBKIMAGE, 0, ref lvbkimage);
+            QTUtility2.log("SetWaterMarkImage " + BG_IMG);
+            return (result != IntPtr.Zero);
+        }
+
+        private IntPtr findParent(string className)
+        {
+            int count = 0;
+            do
+            {
+                var intPtr = PInvoke.GetParent(Handle);
+                var name = PInvoke.GetClassName(intPtr);
+                if (name.Equals(className))
+                {
+                    return intPtr;
+                }
+                count++;
+            } while ( count <= 10);
+            return IntPtr.Zero;
+        }
+
+        protected virtual bool ListViewController_MessageCaptured(ref Message msg) {
             if(msg.Msg == WM_AFTERPAINT) {
                 RefreshSubDirTip(true);
+                
+                // SetBackgroundImage(true, true, 0, 0);
+                /*
+                RECT rect;
+                PInvoke.GetWindowRect(Handle, out rect);
+                Rectangle rctDw1 = new Rectangle(0, 0, 500, 1000);
+                Rectangle rctDw = rect.ToRectangle();
+                /*if ((iter->second.size.cx != wndSize.cx || iter->second.size.cy != wndSize.cy)
+                    && m_config.imgPosMode != 0)
+                {
+                    InvalidateRect(iter->second.hWnd, 0, TRUE);
+                }#1#
+
+                PInvoke.InvalidateRect(Handle, IntPtr.Zero, true);
+
+
+                //裁剪矩形 Clip rect
+                // SaveDC(hDC);
+                // IntersectClipRect(hDC, lprc->left, lprc->top, lprc->right, lprc->bottom);
+
+                // PInvoke.SaveDC
+                if (rendererDown_Normal == null)
+                {
+                    InitializeRenderer();
+                }
+                IntPtr dC = PInvoke.GetDC(ListViewController.Handle);
+                if ((dC != IntPtr.Zero))
+                {
+                    using (Graphics graphics = Graphics.FromHdc(dC))
+                    {
+                        VisualStyleRenderer renderer;
+                        // VisualStyleRenderer renderer2;
+                        renderer = rendererDown_Normal;
+                        // g.DrawImage(QTUtility.ImageListGlobal.Images[base2.ImageKey], rect);
+                        var dToutiaoX1080IntellijIdea3Png = @"D:\下载\Release\Release\x64\Image\bgImage.png";
+                        using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
+                        using (Bitmap bmp = freeBitmap.Clone())
+                        {
+                            bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                            QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
+                            graphics.DrawImage(bmp, rctDw);
+                        }
+
+                        renderer.DrawBackground(graphics, rctDw);
+                        // renderer2.DrawBackground(graphics, rctUp);
+                    }
+                    PInvoke.ReleaseDC(ListViewController.Handle, dC);
+                    PInvoke.ValidateRect(ListViewController.Handle, IntPtr.Zero);
+                    // m.Result = IntPtr.Zero;
+                }*/
                 return true;
             }
             else if(msg.Msg == WM_REGISTERDRAGDROP) {
@@ -293,6 +648,115 @@ namespace QTTabBarLib {
             }
 
             switch(msg.Msg) {
+                /*case 7:
+                    try
+                    {
+                        if ( ShellBrowser.FolderView != null)
+                        {
+                            if ( ShellBrowser.FolderView is IVisualProperties )
+                            {
+                                
+                                IVisualProperties visualProperties = (IVisualProperties)ShellBrowser.FolderView;
+                                // int pcr1;
+                                // visualProperties.GetColor(VPCOLORFLAGS.VPCF_BACKGROUND, out pcr1);
+                                // int pcr2;
+                                // visualProperties.GetColor(VPCOLORFLAGS.VPCF_SORTCOLUMN, out pcr2);
+                                // int pcr3;
+                                // visualProperties.GetColor(VPCOLORFLAGS.VPCF_TEXT, out pcr3);
+                                // QTUtility2.log("on focus changed pcr1 : " + pcr1);
+                                // QTUtility2.log("on focus changed pcr2 : " + pcr2);
+                                // QTUtility2.log("on focus changed pcr3 : " + pcr3);
+                                //
+                                // visualProperties.SetColor(VPCOLORFLAGS.VPCF_BACKGROUND, pcr1);
+                                // visualProperties.SetColor(VPCOLORFLAGS.VPCF_SORTCOLUMN, pcr2);
+                                // visualProperties.SetColor(VPCOLORFLAGS.VPCF_TEXT, pcr3);
+
+                                QTUtility2.log("on focus set water mark: " );
+                                var dToutiaoX1080IntellijIdea3Png = @"D:\toutiao\1920x1080-intellij-idea3.png";
+                                using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
+                                using (Bitmap bmp = freeBitmap.Clone())
+                                {
+                                    bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                                    QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
+                                    // LVBKIMAGE* lParam = stackalloc LVBKIMAGE[1];
+                                    // lParam->ulFlags = 805306368;
+                                    // lParam->hbm = bmp.GetHbitmap(Color.Black);
+                                    // IntPtr hbmp;
+                                    visualProperties.SetWatermark(bmp.GetHbitmap(Color.Black), VPWATERMARKFLAGS.VPWF_ALPHABLEND);
+                                    SetWaterMarkImage(bmp);
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        // if (this.ReleaseShellView && shellView != null)
+                        //     Marshal.ReleaseComObject((object) shellView);
+                    }
+
+                    // if (this.UpdateColors(true) && this.VistaLayout)
+                        // this.Invalidate();
+                    /*this.OnFocusChanged(true, msg.WParam);
+                    if (this.UpdateColors(true) && this.VistaLayout)
+                        this.Invalidate();
+                    if (this.VistaLayout)
+                    {
+                        this.compatibleView.HideFocus();
+                        break;
+                    }#1#
+                    break;*/
+
+
+                /* case WM.ERASEBKGND:
+                     RECT rect;
+                     PInvoke.GetWindowRect(Handle, out rect);
+                     Rectangle rctDw1 = new Rectangle(0, 0, 500, 1000);
+                     Rectangle rctDw = rect.ToRectangle();
+                     /*if ((iter->second.size.cx != wndSize.cx || iter->second.size.cy != wndSize.cy)
+                         && m_config.imgPosMode != 0)
+                     {
+                         InvalidateRect(iter->second.hWnd, 0, TRUE);
+                     }
+                      #1#
+ 
+                     // PInvoke.InvalidateRect(Handle, IntPtr.Zero, true);
+ 
+ 
+                     //裁剪矩形 Clip rect
+                     // SaveDC(hDC);
+                     // IntersectClipRect(hDC, lprc->left, lprc->top, lprc->right, lprc->bottom);
+ 
+                     // PInvoke.SaveDC
+                     if (rendererDown_Normal == null)
+                     {
+                         InitializeRenderer();
+                     }
+                     IntPtr dC = PInvoke.GetDC(ListViewController.Handle);
+                     if ((dC != IntPtr.Zero))
+                     {
+                         using (Graphics graphics = Graphics.FromHdc(dC))
+                         {
+                             VisualStyleRenderer renderer;
+                             // VisualStyleRenderer renderer2;
+                             renderer = rendererDown_Normal;
+                             // g.DrawImage(QTUtility.ImageListGlobal.Images[base2.ImageKey], rect);
+                             var dToutiaoX1080IntellijIdea3Png = @"D:\下载\Release\Release\x64\Image\bgImage.png";
+                             using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
+                             using (Bitmap bmp = freeBitmap.Clone())
+                             {
+                                 bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                                 QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
+                                 graphics.DrawImage(bmp, rctDw);
+                             }
+ 
+                             renderer.DrawBackground(graphics, rctDw);
+                             // renderer2.DrawBackground(graphics, rctUp);
+                         }
+                         PInvoke.ReleaseDC(ListViewController.Handle, dC);
+                         PInvoke.ValidateRect(ListViewController.Handle, IntPtr.Zero);
+                         // m.Result = IntPtr.Zero;
+                     }
+                    break;*/
                 case WM.DESTROY:
                     HideThumbnailTooltip(7);
                     HideSubDirTip(7);
@@ -301,6 +765,7 @@ namespace QTTabBarLib {
                     return true;
 
                 case WM.PAINT:
+                    // 直接在 Paint 消息内部操作不行
                     // It's very dangerous to do automation-related things
                     // during WM_PAINT.  So, use PostMessage to do it later.
                     PInvoke.PostMessage(ListViewController.Handle, WM_AFTERPAINT, IntPtr.Zero, IntPtr.Zero);
@@ -343,8 +808,27 @@ namespace QTTabBarLib {
                         HideSubDirTip(5);
                     }
                     break;
+                /*case 48648: // no walking
+                    QTUtility2.log("48648");
+                    break;*/
             }
             return false;
+        }
+
+        private VisualStyleRenderer rendererDown_Hot;
+        private VisualStyleRenderer rendererDown_Normal;
+        private VisualStyleRenderer rendererDown_Pressed;
+        private VisualStyleRenderer rendererUp_Hot;
+        private VisualStyleRenderer rendererUp_Normal;
+        private VisualStyleRenderer rendererUp_Pressed;
+        private void InitializeRenderer()
+        {
+            rendererDown_Normal = new VisualStyleRenderer(VisualStyleElement.Spin.DownHorizontal.Normal);
+            rendererUp_Normal = new VisualStyleRenderer(VisualStyleElement.Spin.UpHorizontal.Normal);
+            rendererDown_Hot = new VisualStyleRenderer(VisualStyleElement.Spin.DownHorizontal.Hot);
+            rendererUp_Hot = new VisualStyleRenderer(VisualStyleElement.Spin.UpHorizontal.Hot);
+            rendererDown_Pressed = new VisualStyleRenderer(VisualStyleElement.Spin.DownHorizontal.Pressed);
+            rendererUp_Pressed = new VisualStyleRenderer(VisualStyleElement.Spin.UpHorizontal.Pressed);
         }
 
         private DropTargetPassthrough TryMakeDTPassthrough(IntPtr pDropTarget) {
@@ -360,6 +844,7 @@ namespace QTTabBarLib {
                     }
                 }
                 finally {
+                    QTUtility2.log("ReleaseComObject obj");
                     Marshal.ReleaseComObject(obj);
                 }
             }
@@ -839,6 +1324,9 @@ namespace QTTabBarLib {
                     return wrapper.DropTarget.DragDrop(pDataObj, grfKeyState, pt, ref pdwEffect);
                 }
             }
+
+
+
 
             public void Dispose() {
                 if(passthrough != IntPtr.Zero) {

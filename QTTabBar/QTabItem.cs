@@ -328,7 +328,9 @@ namespace QTTabBarLib {
             dicFocusedItemName.TryGetValue(path, out focused);
             return addressArray;
         }
-
+        /**
+         * 获取文本的大小
+         */
         private static SizeF GetTextSize(string str, Graphics g, bool fTitle) {
             SizeF sizeF; 
             // fix bug 参数无效    

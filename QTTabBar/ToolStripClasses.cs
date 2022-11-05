@@ -18,6 +18,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Reflection;
@@ -94,7 +95,7 @@ namespace QTTabBarLib {
         public event EventHandler ValueChanged;
         
         /**
-         * 工具栏
+         * 工具栏 半透明组件
          */
         public ToolStripTrackBar()
             : base(new TrackBar()) {
@@ -138,6 +139,7 @@ namespace QTTabBarLib {
         }
     }
 
+    // 搜索框
     internal sealed class ToolStripSearchBox : ToolStripControlHost {
         private bool fLocked;
         private bool fNowDragging;
@@ -289,6 +291,37 @@ namespace QTTabBarLib {
     internal sealed class ToolbarRenderer : ToolStripSystemRenderer {
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e) {
         }
+
+        /*protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
+        {
+            if (e.ToolStrip.OverflowButton.Enabled)
+            {
+                /*if (e.ToolStrip.OverflowButton.Pressed)
+                {
+                    LinearGradientBrush lgb = new LinearGradientBrush(e.ToolStrip.OverflowButton.Bounds, ofPressedColor1, ofPressedColor2, ofPressedAngle);
+                    e.Graphics.FillRectangle(lgb, e.Graphics.ClipBounds);
+                    lgb.Dispose();
+
+                }
+                else if (e.ToolStrip.OverflowButton.Selected)
+                {
+                    LinearGradientBrush lgb = new LinearGradientBrush(e.ToolStrip.OverflowButton.Bounds, ofHighlightColor1, ofHighlightColor2, ofHighlightAngle);
+                    e.Graphics.FillRectangle(lgb, e.Graphics.ClipBounds);
+                    lgb.Dispose();
+                }#1#
+            }
+            var dToutiaoX1080IntellijIdea3Png = @"D:\toutiao\1920x1080-intellij-idea3.png";
+            // var dToutiaoX1080IntellijIdea3Png = @"D:\Users\Administrator\Documents\Tencent Files\531299332\Image\Group2\IY\S2\IYS2F)882TXGVT[JIR[`4BY.bmp";
+
+            using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
+            using (Bitmap bmp = freeBitmap.Clone())
+            {
+                bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                // QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
+                e.Graphics.DrawImage(bmp,
+                    new Rectangle(0, e.ToolStrip.OverflowButton.Height - bmp.Height, e.ToolStrip.OverflowButton.Bounds.Width, e.ToolStrip.OverflowButton.Bounds.Height));
+            }
+        }*/
     }
 
     internal sealed class VistaMenuRenderer : ToolStripSystemRenderer {
@@ -321,18 +354,26 @@ namespace QTTabBarLib {
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e) {
             if(e.ToolStrip.RightToLeft == RightToLeft.No) {
                 using(Pen pen = new Pen(clrLight)) {
-                    e.Graphics.DrawLine(pen, new Point(e.AffectedBounds.Width - 2, 0), new Point(e.AffectedBounds.Width - 2, e.AffectedBounds.Height));
+                    e.Graphics.DrawLine(pen, 
+                        new Point(e.AffectedBounds.Width - 2, 0), 
+                        new Point(e.AffectedBounds.Width - 2, e.AffectedBounds.Height));
                 }
                 using(Pen pen2 = new Pen(clrLightLight)) {
-                    e.Graphics.DrawLine(pen2, new Point(e.AffectedBounds.Width - 1, 0), new Point(e.AffectedBounds.Width - 1, e.AffectedBounds.Height));
+                    e.Graphics.DrawLine(pen2, 
+                        new Point(e.AffectedBounds.Width - 1, 0), 
+                        new Point(e.AffectedBounds.Width - 1, e.AffectedBounds.Height));
                     return;
                 }
             }
             using(Pen pen3 = new Pen(clrLight)) {
-                e.Graphics.DrawLine(pen3, new Point(e.ToolStrip.Width - e.ToolStrip.Padding.Right, 0), new Point(e.ToolStrip.Width - e.ToolStrip.Padding.Right, e.AffectedBounds.Height));
+                e.Graphics.DrawLine(pen3, 
+                    new Point(e.ToolStrip.Width - e.ToolStrip.Padding.Right, 0), 
+                    new Point(e.ToolStrip.Width - e.ToolStrip.Padding.Right, e.AffectedBounds.Height));
             }
             using(Pen pen4 = new Pen(clrLightLight)) {
-                e.Graphics.DrawLine(pen4, new Point((e.ToolStrip.Width - e.ToolStrip.Padding.Right) + 1, 0), new Point((e.ToolStrip.Width - e.ToolStrip.Padding.Right) + 1, e.AffectedBounds.Height));
+                e.Graphics.DrawLine(pen4, 
+                    new Point((e.ToolStrip.Width - e.ToolStrip.Padding.Right) + 1, 0), 
+                    new Point((e.ToolStrip.Width - e.ToolStrip.Padding.Right) + 1, e.AffectedBounds.Height));
             }
         }
 
