@@ -1,7 +1,6 @@
 - [QTTabBar Document](https://www.yuque.com/indiff/qttabbar/zqtdig)
 - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 - [Generate chm db document(Support Group By Module) modify by indiff](https://github.com/indiff/DBCHM)
-- [beta.8 Update Log](https://www.yuque.com/indiff/qttabbar/yml0h3)
 
 [![Download sf qttabbar2](https://img.shields.io/sourceforge/dt/qttabbar2.svg)](https://sourceforge.net/projects/qttabbar2/files)
 [![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases)
@@ -20,6 +19,7 @@
 - [Gitee Mirror](https://gitee.com/qwop/qttabbar)
 - [SourceForge Mirror](https://sourceforge.net/projects/qttabbar2/)
 # Changes
+- [1.5.5.8-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.8) No Plugins Mini Version
 - [1.5.5.7-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.7) Adapts to dark mode and supports setting background pictures
 - [1.5.5.6-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.6) Support Language (Brazil Spanish French Turkish)
 - [1.5.5.5-beta(2022)😊](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta) Enable debug log/Adjust the windows DPI
@@ -38,7 +38,7 @@
 - [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) Built in Chinese Language Options
 
 # Download
-* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta)
+* [qttabbar Latest version](https://github.com/indiff/qttabbar/releases)
 * [qttabbar Chinese mirror](https://gitee.com/qwop/qttabbar/releases)
 * [![Download qttabbar2](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/qttabbar2/files/latest/download)
 
@@ -64,6 +64,7 @@
 * [Tutorial](https://gitee.com/qwop/qttabbar/attach_files/581155/download)
 * [Open option flashback solution revision](https://gitee.com/qwop/qttabbar/attach_files/581136/download)
 * [New folder refresh to see the solution](https://gitee.com/qwop/qttabbar/attach_files/581159/download)
+* [Capture Windows](https://www.yuque.com/indiff/qttabbar/ardaxa)
 
 # Preview
 * [Soft Preview](https://github.com/indiff/qttabbar/issues/3)
