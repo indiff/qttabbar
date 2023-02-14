@@ -345,7 +345,7 @@ namespace QTTabBarLib {
             return button;
         }
 
-        internal void CreateItems()
+        internal bool CreateItems()
         {
             // 工具栏按钮标签文字
             string[] ButtonItemsDisplayName = QTUtility.TextResourcesDic["ButtonBar_BtnName"];
@@ -520,9 +520,9 @@ namespace QTTabBarLib {
                 tabBar.rebarController.RefreshHeight();
             }
             RefreshButtons();
-
             toolStrip.ResumeLayout();
             toolStrip.RaiseOnResize();
+            return true;
         }
 
         private void CreatePluginItem(int buttonIndex) {
@@ -719,13 +719,13 @@ namespace QTTabBarLib {
                     }
                     return;
 
-                case BII_RECENTTAB:
+                case BII_RECENTTAB: // 最近标签
                     using(IDLWrapper wrapper = new IDLWrapper(clickedItem.Path)) {
                         tabbar.OpenNewTabOrWindow(wrapper);
                     }
                     return;
 
-                case BII_APPLICATIONLAUNCHER:
+                case BII_APPLICATIONLAUNCHER:  // 启动应用
                     if(clickedItem.Target == MenuTarget.File) {
                         AppsManager.Execute(clickedItem.MenuItemArguments.App, clickedItem.MenuItemArguments.ShellBrowser);
                     }
@@ -1002,15 +1002,14 @@ namespace QTTabBarLib {
         }
 
         protected override void OnExplorerAttached() {
-            try { 
-                ExplorerHandle = (IntPtr)Explorer.HWND;
-
+            try {
+                if (Explorer != null)
+                {
+                    ExplorerHandle = (IntPtr)Explorer.HWND;
+                }
                 InstanceManager.RegisterButtonBar(this);
-                
                 dropTargetWrapper = new DropTargetWrapper(this);
-                
                 QTTabBarClass tabBar = InstanceManager.GetThreadTabBar();
-
                 // add by indiff dark mode
                 QTUtility.InNightMode = QTUtility.getNightMode();
                 QTUtility2.log("OnExplorerAttached SwitchNighMode");
@@ -1140,8 +1139,8 @@ namespace QTTabBarLib {
             }
         }
 
-        internal void RefreshSearchBox(bool fBrowserRefreshRequired) {
-            if(fRearranging) return;
+        internal bool RefreshSearchBox(bool fBrowserRefreshRequired) {
+            if(fRearranging) return false;
             if(searchBox != null) {
                 searchBox.RefreshText();
             }
@@ -1169,6 +1168,8 @@ namespace QTTabBarLib {
             if(fBrowserRefreshRequired) {
                 new WaitTimeoutCallback(QTTabBarClass.WaitTimeout).BeginInvoke(100, AsyncComplete, null);
             }
+
+            return true;
         }
 
         [ComRegisterFunction]
@@ -1700,13 +1701,15 @@ namespace QTTabBarLib {
             }
         }
 
-        internal void FocusSearchBox() {
+        internal bool FocusSearchBox() {
             if(searchBox != null) {
                 searchBox.TextBox.Focus();
             }
+
+            return true;
         }
 
-        internal void RefreshButtons() {
+        internal bool RefreshButtons() {
             if(NavDropDown != null && NavDropDown.Visible) {
                 NavDropDown.Close(ToolStripDropDownCloseReason.AppClicked);
             }
@@ -1768,18 +1771,22 @@ namespace QTTabBarLib {
                         break;
                 }
             }
+
+            return true;
         }
 
-        internal void RefreshStatusText() {
-            if(iSearchResultCount <= 0) return;
+        internal bool RefreshStatusText() {
+            if(iSearchResultCount <= 0) return false;
             int newCount = ShellBrowser.GetItemCount();
-            if(newCount >= iSearchResultCount) return;
+            if (newCount >= iSearchResultCount) return false;
             iSearchResultCount = newCount;
             ShellBrowser.SetStatusText(string.Concat(
                     iSearchResultCount,
                     " / ",
                     iSearchResultCount + lstPUITEMIDCHILD.Count,
                     QTUtility.TextResourcesDic["ButtonBar_Misc"][5]));
+
+            return true;
         }
 
         internal bool SetSearchBarText(string text) {
@@ -1789,7 +1796,7 @@ namespace QTTabBarLib {
             return true;
         }
 
-        internal bool UpdatePluginItem(string pid, IBarButton instance, bool fEnabled, bool fRefreshImage) {
+        public bool UpdatePluginItem(string pid, IBarButton instance, bool fEnabled, bool fRefreshImage) {
             int p = Array.IndexOf(Config.BBar.ActivePluginIDs, pid);
             if(p == -1) return false;
             p = (p + 1) << 16;
@@ -1852,7 +1859,7 @@ namespace QTTabBarLib {
 
         protected override void OnDpiChanged(int oldDpi, int newDpi)
         {
-            QTUtility2.log("QTButtonBar OnDpiChanged");
+            // QTUtility2.log("QTButtonBar OnDpiChanged");
             RefreshHeight();
         }
 
@@ -1922,6 +1929,8 @@ namespace QTTabBarLib {
             return lstImages.ToArray().Length;
         }
 
+        private static readonly object imgLock = new object();
+
         public void AddStrip(Bitmap bmp) {
             int width = bmp.Width;
             int num2 = 0;
@@ -1935,12 +1944,22 @@ namespace QTTabBarLib {
                 if(flag) {
                     image.MakeTransparent(transparentColor);
                 }
-                if((lstImages.Count > num2) && (lstImages[num2] != null)) {
-                    using(Graphics graphics = Graphics.FromImage(lstImages[num2])) {
-                        graphics.Clear(Color.Transparent);
-                        graphics.DrawImage(image, 0, 0);
-                        image.Dispose();
-                        goto Label_00E4;
+                /*
+                 ************** 异常文本 **************
+                System.InvalidOperationException: 对象当前正在其他地方使用。
+                   在 System.Drawing.Graphics.FromImage(Image image)
+                 */
+                lock ( imgLock ) // by indiff
+                {
+                    if ((lstImages.Count > num2) && (lstImages[num2] != null))
+                    {
+                        using (Graphics graphics = Graphics.FromImage(lstImages[num2]))
+                        {
+                            graphics.Clear(Color.Transparent);
+                            graphics.DrawImage(image, 0, 0);
+                            image.Dispose();
+                            goto Label_00E4;
+                        }
                     }
                 }
                 lstImages.Add(image);

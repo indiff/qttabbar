@@ -25,14 +25,17 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using BandObjectLib;
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
 using QTTabBarLib.Interop;
+using SHDocVw;
 
 namespace QTTabBarLib {
     public static class QTUtility2 {
@@ -40,6 +43,15 @@ namespace QTTabBarLib {
         private static bool fConsoleAllocated;
         // 判断是否启用日志，发布改为false， 调试启用. 默认是关闭的，在常规选项里面可以设置启用
         public static bool ENABLE_LOGGER = false;
+
+        public static string ExplorerPath
+        {
+            get
+            {
+                // Environment.SpecialFolder.CommonApplicationData + 1 => Environment.SpecialFolder.Windows
+                return Environment.GetFolderPath((Environment.SpecialFolder.CommonApplicationData + 1)) + Path.DirectorySeparatorChar + "explorer.exe";
+            }
+        }
 
         public static void AllocDebugConsole() {
             if(fConsoleAllocated) {
@@ -402,7 +414,7 @@ namespace QTTabBarLib {
                     if (!string.IsNullOrEmpty(className))
                     {
                         line
-                            .Append(" C:")
+                            .Append("\tC:")
                             .Append(className);
                     }
                 }
@@ -413,7 +425,7 @@ namespace QTTabBarLib {
                     if (!string.IsNullOrEmpty(methodName))
                     {
                         line
-                            .Append(" M:")
+                            .Append("\tM:")
                             .Append(methodName);
                     }
                 }
@@ -422,33 +434,33 @@ namespace QTTabBarLib {
             if (process != null)
             {
                 line
-                    .Append(" P:")
+                    .Append("\tP:")
                     .Append(process.Id);
             }
             // 线程 ID
             if (cThreadId != null)
             {
                 line
-                    .Append(" T:")
+                    .Append("\tT:")
                     .Append(cThreadId);
             }
             else if (currentThreadId != null)
             {
                 line
-                    .Append(" T:")
+                    .Append("\tT:")
                     .Append(currentThreadId);
             }
 
             if (!string.IsNullOrEmpty(useTime))
             {
                 line
-                    .Append(" cost:")
+                    .Append("\tcost:")
                     .Append( useTime );
             }
             line
-                .Append(" ")
+                .Append("\t")
                 .Append(DateTime.Now.ToString())
-                .Append(" ")
+                .Append("\t")
                 .Append(optional);
             writeStr(path, line);
         }
@@ -552,7 +564,6 @@ namespace QTTabBarLib {
 
         private static void writeStr(string path, StringBuilder formatLogLine)
         {
-
             try
             {
                 M_MUTEX.WaitOne();
@@ -561,11 +572,34 @@ namespace QTTabBarLib {
                 //请勿长时间占用读写锁否则会导致其他线程饥饿。
                 // LogWriteLock.EnterWriteLock();
                 // lock (lockObject) {
-                    using (StreamWriter writer = new StreamWriter(path, true))
+
+                // 修复 正由另一进程使用，因此该进程无法访问该文件
+                if (File.Exists(path)) {
+                    using (FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+                    {
+                        using (StreamWriter sr = new StreamWriter(fs))
+                        {
+                            sr.WriteLine(formatLogLine);
+                        }
+                    }
+                }
+                else
+                {
+                    using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                    {
+                        using (StreamWriter sr = new StreamWriter(fs))
+                        {
+                            sr.WriteLine(formatLogLine);
+                        }
+                    }
+                }
+
+                // 存在问题 正由另一进程使用，因此该进程无法访问该文件
+                    /*using (StreamWriter writer = new StreamWriter(path, true))
                     {
                         writer.WriteLine(formatLogLine);
                     }
-                // }
+                     */
             }
             finally
             {
@@ -1093,6 +1127,184 @@ namespace QTTabBarLib {
             }
         }
 
+        // [MethodImpl(MethodImplOptions.InternalCall)]
+        public static int Round(float f)
+        {
+            return (int)((double)f + ((double)f > 0.0 ? 0.5 : -0.5));
+        }
 
+        public static bool IsDrive(string path)
+        {
+            if (path != null)
+            {
+                path = ExpandEnvironmentVariables(path);
+                if (path != null)
+                {
+                    path = path.ToLower();
+                    if (path.Length == 2)
+                        return 'a' <= path[0] && path[0] <= 'z' && path[1] == ':';
+                    if (path.Length == 3 && 'a' <= path[0] && path[0] <= 'z' && path[1] == ':')
+                        return path[2] == '\\';
+                }
+            }
+            return false;
+        }
+
+        private static string ExpandEnvironmentVariables(string str)
+        {
+            try
+            {
+                if (str != null)
+                    return Environment.ExpandEnvironmentVariables(str);
+            }
+            catch
+            {
+            }
+            return str;
+        }
+
+
+        /// <summary>
+        ///     A .NET framework 3.5 way to mimic the FX4 "Has Flag" method.
+        /// </summary>
+        /// <param name="variable">The tested enum</param>
+        /// <param name="value">The value to test</param>
+        /// <returns>True if the flag is set, otherwise false</returns>
+        public static bool HasFlag(Enum variable, Enum value)
+        {
+            // check if from the same type.
+            if (variable.GetType() != value.GetType())
+                throw new ArgumentException("The checked flag is not from the same type as the checked variable.");
+
+            Convert.ToUInt64(value);
+            ulong num = Convert.ToUInt64(value);
+            ulong num2 = Convert.ToUInt64(variable);
+
+            return (num2 & num) == num;
+        }
+
+        public static string File2Text(string cTxtPath)
+        {
+            string value = "";
+            using (StreamReader streamReader = new StreamReader(cTxtPath))
+            {
+                value = streamReader.ReadToEnd();
+            }
+            return value;
+        }
+
+        /// <summary>
+        ///    用于调试消息
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void debugMessage(Message msg)
+        {
+            
+            // if (msg.LParam != null && msg.LParam.ToString().Equals(File2Text(@"c:\1.txt")))
+                if (msg.WParam != null && msg.WParam.ToString().Equals(File2Text(@"c:\1.txt")))
+            {
+                var name = Enum.GetName(typeof(MsgEnum), msg.Msg);
+                if (
+                    "WM_TIMER".Equals(name) ||
+                    "RB_GETBANDBORDERS".Equals(name) ||
+                    "WM_NCCALCSIZE".Equals(name) ||
+                    "WM_IME_SETCONTEXT".Equals(name) ||
+                    "WM_SHOWWINDOW".Equals(name)
+                )
+                {
+                    // ignore 
+                    return;
+                }
+
+                log("check msg\t " + Enum.GetName(typeof(MsgEnum), msg.Msg) + " msg int " + msg.Msg +
+                               "\tw\t" + msg.WParam + "\tl\t" + msg.LParam);
+            }
+        }
+
+        /// <summary>
+        ///    用于调试消息
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void debugMessage(MSG msg)
+        {
+            // if (msg.lParam != null && msg.lParam.ToString().Equals(File2Text(@"c:\1.txt")))
+            if (msg.wParam != null && msg.wParam.ToString().Equals(File2Text(@"c:\1.txt")))
+            {
+                var name = Enum.GetName(typeof(MsgEnum), msg.message);
+                if ( 
+                    "WM_TIMER".Equals(name) ||
+                    "RB_GETBANDBORDERS".Equals(name) ||
+                    "WM_NCCALCSIZE".Equals(name) ||
+                    "WM_IME_SETCONTEXT".Equals(name) ||
+                    "WM_SHOWWINDOW".Equals(name)
+                    )
+                {
+                    // ignore 
+                    return;
+                }
+                log("check msg\t " + name + " msg int " + msg.message +
+                    "\tw\t" + msg.wParam + "\tl\t" + msg.lParam);
+            }
+        }
+
+        public static void KillCurrentProcess()
+        {
+            // TASKKILL /T /PID 1230 /PID 1241 /PID 1253 
+            // Process process = Process.GetCurrentProcess();
+            // process.Kill();
+
+            // Process.Start("TASKKILL /F /T /PID " + process.Id);
+            /*string MyDosComLine1;
+            MyDosComLine1 = "TASKKILL /F /T /PID " + process.Id;//返回根目录命令
+            Process myProcess = new Process();
+            myProcess.StartInfo.FileName = "cmd.exe ";//打开DOS控制平台 
+            myProcess.StartInfo.UseShellExecute = false;
+            myProcess.StartInfo.CreateNoWindow = true;//是否显示DOS窗口，true代表隐藏;
+            myProcess.StartInfo.RedirectStandardInput = true;
+            myProcess.StartInfo.RedirectStandardOutput = true;
+            myProcess.StartInfo.RedirectStandardError = true;
+            myProcess.Start();
+            StreamWriter sIn = myProcess.StandardInput;//标准输入流 
+            sIn.AutoFlush = true;
+            StreamReader sOut = myProcess.StandardOutput;//标准输入流
+            StreamReader sErr = myProcess.StandardError;//标准错误流 
+            sIn.Write(MyDosComLine1 + Environment.NewLine);//第一条DOS命令
+            log("write dos command: " + MyDosComLine1);
+            sIn.Write("exit" + Environment.NewLine);//第四条DOS命令，退出DOS窗口
+            if (myProcess.HasExited == false)
+            {
+                myProcess.Kill();
+            }
+            else
+            {
+            }
+            sIn.Close();
+            sOut.Close();
+            sErr.Close();
+            myProcess.Close();*/
+        }
+
+        public static void Wait4SelectFiles(WebBrowserClass explorer)
+        {
+            if (explorer != null)
+            {
+                explorer.Quit();
+            }
+        }
+
+        public static bool IsEmpty(string text)
+        {
+            return null == text || text.Trim().Length == 0;
+        }
+
+        public static bool IsNotEmpty(string text)
+        {
+            return !IsEmpty(text);
+        }
+
+        public static int CurrentProcessId()
+        {
+            return Process.GetCurrentProcess().Id;
+        }
     }
 }

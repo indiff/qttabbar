@@ -15,6 +15,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace QTTabBarLib.Interop {
@@ -22,5 +23,13 @@ namespace QTTabBarLib.Interop {
     public struct BITMAPINFO {
         public BITMAPINFOHEADER bmiHeader;
         public RGBQUAD bmiColors;
+    }
+
+
+    public struct SFVCB_SELECTINFO
+    {
+        public uint UOldState; // 0
+        public uint UNewState; //LVIS_SELECTED, LVIS_FOCUSED,...
+        public IntPtr Pid1;
     }
 }

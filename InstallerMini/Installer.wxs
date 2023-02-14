@@ -23,14 +23,14 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.5.8" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.5.8 Beta(2022)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define ProductVersion="1.5.5.9" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.5.5.9 Beta(2022)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano and indiff -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
     <!-- 重点这里一定要改 -->
-    <?define StrongName="QTTabBar, Version=1.5.5.8, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
+    <?define StrongName="QTTabBar, Version=1.5.5.9, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
     <?define MyLanguage="1033"?>  
     <!-- Language code page 1252 1033
 语言                         语言-国家     Language      Codepage

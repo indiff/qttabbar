@@ -21,7 +21,7 @@ using System.Windows.Forms;
 namespace QTTabBarLib {
     public sealed class NativeWindowController : NativeWindow {
         internal event MessageEventHandler MessageCaptured;
-        private bool fNoMoreImmersiveColorSet;
+        // private bool fNoMoreImmersiveColorSet;
 
         public NativeWindowController(IntPtr hwnd) {
             AssignHandle(hwnd);
@@ -29,7 +29,9 @@ namespace QTTabBarLib {
 
         protected override void WndProc(ref Message m) {
             bool consumed = false;
-            if(MessageCaptured != null) {
+            if(MessageCaptured != null)
+            {
+                // QTUtility2.log("msg\t" + Enum.GetName(typeof(MsgEnum), m.Msg) + "\tw\t" + m.WParam + "\tl\t" + m.LParam);
                 /*switch (m.Msg)
                 {
                     case 26:

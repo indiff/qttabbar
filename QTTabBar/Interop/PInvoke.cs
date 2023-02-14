@@ -129,6 +129,11 @@ namespace QTTabBarLib.Interop {
         public static extern IntPtr GetStdHandle(int nStdHandle);  
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, GWL nIndex);
+
+
         public static IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex) {
             if(IntPtr.Size == 8) {
                 return GetWindowLongPtr64(hWnd, nIndex);
@@ -136,10 +141,29 @@ namespace QTTabBarLib.Interop {
             return new IntPtr(GetWindowLong(hWnd, nIndex));
         }
 
+        public static IntPtr GetWindowLongPtr(IntPtr hWnd, GWL nIndex)
+        {
+            return IntPtr.Size == 8
+                ? PInvoke.GetWindowLongPtr64(hWnd, nIndex) :
+                new IntPtr(PInvoke.GetWindowLong(hWnd, nIndex));
+        }
+
         [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
         private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
+        private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, GWL nIndex);
+
+
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hWnd, out RECT pRect);
+
+        public static System.Drawing.Rectangle GetWindowRect(IntPtr hWnd)
+        {
+            RECT pRect;
+            return PInvoke.GetWindowRect(hWnd, out pRect) ? pRect.ToRectangle() : System.Drawing.Rectangle.Empty;
+        }
+
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
         [DllImport("user32.dll")]
@@ -324,7 +348,9 @@ namespace QTTabBarLib.Interop {
         [DllImport("user32.dll")]
         public static extern bool OpenClipboard(IntPtr hWndNewOwner);
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        // public static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        public static extern bool PostMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
         [DllImport("user32.dll")]
         public static extern bool PtInRect(ref RECT lprc, Point pt);
         public static IntPtr Ptr_OP_AND(IntPtr ptr, uint ui) {
@@ -359,8 +385,11 @@ namespace QTTabBarLib.Interop {
         public static extern uint RegisterClipboardFormat(string lpszFormat);
         [DllImport("ole32.dll", CharSet = CharSet.Unicode)]
         public static extern int RegisterDragDrop(IntPtr hwnd, _IDropTarget pDropTarget);
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern uint RegisterWindowMessage(string lpString);
+        // [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern int RegisterWindowMessage([MarshalAs(UnmanagedType.LPWStr), In] string lpString);
+
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
         public static extern int RegOpenKeyEx(IntPtr hKey, string lpSubKey, int ulOptions, uint samDesired, out IntPtr phkResult);
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode)]
@@ -376,7 +405,16 @@ namespace QTTabBarLib.Interop {
         [DllImport("gdi32.dll")]
         public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
+
+        public static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam)
+        {
+           return PInvoke.SendMessage(hWnd, Msg, (IntPtr)wParam, (IntPtr)lParam);
+        }
+
+
+
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern unsafe IntPtr SendMessage(
@@ -390,7 +428,7 @@ namespace QTTabBarLib.Interop {
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(lParam));
             try {
                 Marshal.StructureToPtr(lParam, ptr, false);
-                IntPtr ret = SendMessage(hWnd, Msg, wParam, ptr);
+                IntPtr ret = SendMessage(hWnd, (int) Msg, wParam, ptr);
                 lParam = (T)Marshal.PtrToStructure(ptr, typeof(T));
                 return ret;
             }
@@ -431,6 +469,17 @@ namespace QTTabBarLib.Interop {
         private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
         [DllImport("user32.dll")]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetWindowPos(
+            IntPtr hWnd,
+            IntPtr hWndInsertAfter,
+            int X,
+            int Y,
+            int cx,
+            int cy,
+            SWP uFlags);
+
         [DllImport("user32.dll")]
         public static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int dwThreadId);
         [DllImport("user32.dll")]
@@ -563,6 +612,39 @@ namespace QTTabBarLib.Interop {
         public static extern int FillRect(IntPtr hDC, [In] ref RECT lprc, IntPtr hbr);
 
         [DllImport("kernel32.dll")]
-        public static extern IntPtr GetModuleHandle(string name); 
+        public static extern IntPtr GetModuleHandle(string name);
+
+        [DllImport("gdi32.dll")]
+        public static extern bool MoveToEx(IntPtr hdc, int X, int Y, IntPtr lpPoint);
+
+        [DllImport("gdi32.dll")]
+        public static extern bool LineTo(IntPtr hdc, int nXEnd, int nYEnd);
+
+        [DllImport("comctl32.dll")]
+        public static extern bool SetWindowSubclass(
+            IntPtr hWnd,
+            IntPtr pfnSubclass,
+            IntPtr uIdSubclass,
+            IntPtr dwRefData);
+
+        [DllImport("comctl32.dll")]
+        public static extern bool RemoveWindowSubclass(
+            IntPtr hWnd,
+            IntPtr pfnSubclass,
+            IntPtr uIdSubclass);
+
+        [DllImport("comctl32.dll")]
+        public static extern IntPtr DefSubclassProc(
+            IntPtr hWnd,
+            int uMsg,
+            IntPtr WPARAM,
+            IntPtr LPARAM);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern IntPtr DefWindowProc(
+            IntPtr hWnd,
+            int Msg,
+            IntPtr wParam,
+            IntPtr lParam);
     }
 }

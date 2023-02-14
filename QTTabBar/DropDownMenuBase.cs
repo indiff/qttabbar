@@ -598,7 +598,7 @@ namespace QTTabBarLib {
         }
     }
 
-    internal sealed class ContextMenuStripEx : ContextMenuStrip {
+    public sealed class ContextMenuStripEx : ContextMenuStrip {
         private bool fDefaultShowCheckMargin;
         private static ToolStripRenderer menuRenderer;
         private static int nCurrentRenderer;

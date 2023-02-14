@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Microsoft.WindowsAPICodePack.Shell.ExplorerBrowser">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <Members>
+      <Field Name="explorerBrowserControl" Hidden="true" />
+      <Method Name="GetFolderView" Hidden="true" />
+      <Method Name="GetFolderView2" Hidden="true" />
+      <Method Name="GetItemsArray" Hidden="true" />
+      <Method Name="GetSelectedItemsArray" Hidden="true" />
+      <Method Name="IExplorerPaneVisibility.GetPaneState" Hidden="true" />
+      <Method Name="Microsoft.WindowsAPICodePack.Shell.IServiceProvider.QueryService" Hidden="true" />
+      <Method Name="OnCreateControl" Hidden="true" />
+      <Method Name="OnHandleDestroyed" Hidden="true" />
+      <Method Name="OnPaint" Hidden="true" />
+      <Method Name="OnSizeChanged" Hidden="true" />
+      <Method Name="VisibilityToPaneState" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AADgIAAAIAgBOAEAAABAQAAAAEAACAAGAAAQcACAAAA=</HashCode>
+      <FileName>ExplorerBrowser\ExplorerBrowser.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Microsoft.WindowsAPICodePack.Shell.ExplorerBrowserContentOptions">
+    <Position X="3.5" Y="2.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAoIAgEAAggAEAAgEQAAAAACABJAAAUAAAA=</HashCode>
+      <FileName>ExplorerBrowser\ExplorerBrowserContentOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.WindowsAPICodePack.Shell.ExplorerBrowserPaneVisibility">
+    <Position X="0.5" Y="5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AABAggAAAAgJAAAAAACAABAAAAAAAAwFAAQAQAAAQBA=</HashCode>
+      <FileName>ExplorerBrowser\ExplorerBrowserPaneVisibility.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.WindowsAPICodePack.Shell.ExplorerBrowserNavigationLog">
+    <Position X="7.25" Y="4" Width="3" />
+    <Members>
+      <Method Name="ExplorerBrowserNavigationLog" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAIgAAEAAAAAAABAAAAQAAAAAAQ=</HashCode>
+      <FileName>ExplorerBrowser\ExplorerBrowserNavigationLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.WindowsAPICodePack.Shell.ExplorerBrowserNavigationOptions">
+    <Position X="2.75" Y="0.5" Width="3" />
+    <Members>
+      <Field Name="eb" Hidden="true" />
+      <Method Name="ExplorerBrowserNavigationOptions" Hidden="true" />
+      <Method Name="IsFlagSet" Hidden="true" />
+      <Method Name="SetFlag" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAABAAIAAAIAAAAEAACAAAgAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>ExplorerBrowser\ExplorerBrowserNavigationOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.WindowsAPICodePack.Shell.NavigationPendingArgs">
+    <Position X="5.75" Y="7.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAABAAAAAAAAAgAAA=</HashCode>
+      <FileName>ExplorerBrowser\ExplorerBrowserEvents.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.WindowsAPICodePack.Shell.NavigationCompleteArgs">
+    <Position X="0.75" Y="7.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ExplorerBrowser\ExplorerBrowserEvents.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Microsoft.WindowsAPICodePack.Shell.NavigationFailedArgs">
+    <Position X="3.25" Y="7.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>ExplorerBrowser\ExplorerBrowserEvents.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

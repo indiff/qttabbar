@@ -24,10 +24,10 @@ namespace QTTabBarLib.Interop {
         public int cbSize;
         public int fMask;
         public IntPtr hwnd;
-        public IntPtr lpVerb;
-        public IntPtr lpFile;
-        public IntPtr lpParameters;
-        public IntPtr lpDirectory;
+        public IntPtr lpVerb;  /* 动作，如edit,open,print... */
+        public IntPtr lpFile;  /* 根据lpVerb的值而定，常为文件名 */
+        public IntPtr lpParameters;  /* 参数字符串 */
+        public IntPtr lpDirectory; /* 路径名 */
         public int nShow;
         public IntPtr hInstApp;
         public IntPtr lpIDList;

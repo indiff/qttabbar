@@ -20,16 +20,20 @@ using System;
 namespace BandObjectLib {
     [Flags]
     public enum DBIMF : uint {
-        ADDTOFRONT = 0x200,
-        BKCOLOR = 0x40,
-        BREAK = 0x100,
-        DEBOSSED = 0x20,
-        FIXED = 1,
-        FIXEDBMP = 4,
-        NORMAL = 0,
-        TOPALIGN = 0x400,
-        UNDELETEABLE = 0x10,
-        USECHEVRON = 0x80,
-        VARIABLEHEIGHT = 8
+        NORMAL = 0x0000,
+        MINSIZE = 0x0001,
+        MAXSIZE = 0x0002,
+        INTEGRAL = 0x0004,
+        VARIABLEHEIGHT = 0x0008,
+        TITLE = 0x0010,
+        MODEFLAGS = 0x0020,
+        BKCOLOR = 0x0040,
+        USECHEVRON = 0x0080,
+        BREAK = 0x0100,
+        ADDTOFRONT = 0x0200,
+        TOPALIGN = 0x0400,
+        NOGRIPPER = 0x0800,
+        ALWAYSGRIPPER = 0x1000,
+        NOMARGINS = 0x2000
     }
 }

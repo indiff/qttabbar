@@ -1,6 +1,7 @@
 echo off
 
-call VCVarsQueryRegistry.bat 32bit 64bit
+rem call VCVarsQueryRegistry.bat 32bit 64bit
+call "D:\Visual Studio 2010 Ultimate\Common7\Tools\VCVarsQueryRegistry.bat" 32bit 64bit
 cd ..\QTTabBar\bin\%1
 IF EXIST QTTabBar.dll (
     gacutil /if QTTabBar.dll
@@ -33,10 +34,10 @@ cd ..\..\..\Register
 rem taskkill /f /im explorer.exe
 rem start explorer.exe
 
-timeout /nobreak /t 5
+rem timeout /nobreak /t 5
 
+rem cmd.exe /c start taskmgr
 start taskmgr
-
 exit 0
 rem start cmd.exe
 

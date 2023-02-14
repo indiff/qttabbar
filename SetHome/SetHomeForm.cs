@@ -10,6 +10,8 @@ using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Win32;
+using System.Windows.Shell;
+using System.Text.RegularExpressions;
 
 namespace SetHome
 {
@@ -532,8 +534,8 @@ namespace SetHome
                 // setx "Path" "%Path%;%JAVA_HOME%\bin" /m
                 // Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
                 // Environment.SetEnvironmentVariable("PATH", devPath + ";9", EnvironmentVariableTarget.Machine);
-                MessageBox.Show("设置JAVA_HOME成功");
                 UpdateEnvPath();
+                MessageBox.Show("设置JAVA_HOME成功");
             }
         }
 
@@ -547,13 +549,40 @@ namespace SetHome
                     var tempPath = paths[i];
                     if (!string.IsNullOrEmpty(tempPath))
                     {
+                        // 如果这个路径不存在则过滤掉
+                        if (!Directory.Exists(tempPath))
+                        {
+                            oldPath = oldPath.Replace(tempPath, "");
+                            continue;
+                        }
+
+                        // 判断文件是否存在，存在的话 kill 掉
                         var combine = Path.Combine(tempPath, fileName );
                         if (File.Exists(combine))
                         {
                             oldPath = oldPath.Replace(tempPath, "");
                         }
+
+                        
                     }
                 }
+            }
+            // 如果不为空的话， 则判断结尾是否包含多个分号 ;
+            if (!string.IsNullOrEmpty(oldPath))
+            {
+                /*if (oldPath.EndsWith(";;"))
+                {
+                    oldPath = oldPath.Replace(";;", ";");
+                }
+
+                if (oldPath.EndsWith(";;;"))
+                {
+                    oldPath = oldPath.Replace(";;;", ";");
+                }*/
+                // 正则替换掉，2个或者以上; 则替换成一个;
+                string pattern = @";+;+";
+                string replacement = ";";
+                oldPath = Regex.Replace(oldPath, pattern, replacement);
             }
 
             return oldPath;

@@ -20,9 +20,13 @@ using System.Runtime.InteropServices;
 using System.Security;
 
 namespace BandObjectLib {
-    [ComImport, SuppressUnmanagedCodeSecurity, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("FC4801A3-2BA9-11CF-A229-00AA003D7352")]
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid("FC4801A3-2BA9-11CF-A229-00AA003D7352")]
     public interface IObjectWithSite {
-        void SetSite([In, MarshalAs(UnmanagedType.IUnknown)] object pUnkSite);
-        void GetSite(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppvSite);
+        [PreserveSig]
+        int SetSite([In, MarshalAs(UnmanagedType.IUnknown)] object pUnkSite);
+        [PreserveSig]
+        int GetSite(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppvSite);
     }
 }

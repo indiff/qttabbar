@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("SetHome")]
-[assembly: AssemblyCopyright("Copyright (C)  2021-2022")]
+[assembly: AssemblyCopyright("Copyright (C)  2021-2023")]
 [assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
 
@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // 方法是按如下所示使用“*”:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.6")]
-[assembly: AssemblyFileVersion("1.0.0.6")]
+[assembly: AssemblyFileVersion("1.0.0.7")]

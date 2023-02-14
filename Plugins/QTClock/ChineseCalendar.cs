@@ -214,6 +214,7 @@ namespace QuizoPlugins
             new SolarHolidayStruct(3, 22, 0, "世界水日"),
             new SolarHolidayStruct(3, 24, 0, "世界防治结核病日"),
             new SolarHolidayStruct(4, 1, 0, "愚人节"),
+            new SolarHolidayStruct(4, 5, 0, "清明节"),
             new SolarHolidayStruct(4, 7, 0, "世界卫生日"),
             new SolarHolidayStruct(4, 22, 0, "世界地球日"),
             new SolarHolidayStruct(5, 1, 1, "劳动节"),

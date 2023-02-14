@@ -290,20 +290,8 @@ StackTrace ---
         }
     }
 
-    
 
-
-
-
-
-
-
-
-
-
-
-
-    internal sealed class Plugin {
+    public sealed class Plugin {
         private bool fBackgroundButtonIsEnabled;
         private bool fBackgroundButtonIsSupported;
         private IPluginClient pluginClient;
@@ -358,7 +346,7 @@ StackTrace ---
         }
     }
 
-    internal sealed class PluginInformation : IDisposable {
+    public sealed class PluginInformation : IDisposable {
         public string Author;
         public string Description;
         public bool Enabled;
@@ -394,7 +382,7 @@ StackTrace ---
         }
     }
 
-    internal sealed class PluginAssembly : IDisposable {
+    public sealed class PluginAssembly : IDisposable {
         private Assembly assembly;
         public string Author;
         public string Description;

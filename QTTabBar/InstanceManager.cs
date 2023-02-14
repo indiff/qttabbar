@@ -25,11 +25,16 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     internal static class InstanceManager {
+        private static Dictionary<string, List<string>> selectDict = new Dictionary<string, List<string>>();
         private static Dictionary<Thread, QTTabBarClass> dictTabInstances = new Dictionary<Thread, QTTabBarClass>();
         private static Dictionary<Thread, QTButtonBar> dictBBarInstances = new Dictionary<Thread, QTButtonBar>();
         private static StackDictionary<IntPtr, QTTabBarClass> sdTabHandles = new StackDictionary<IntPtr, QTTabBarClass>();
         private static ReaderWriterLock rwLockBtnBar = new ReaderWriterLock();
         private static ReaderWriterLock rwLockTabBar = new ReaderWriterLock();
+        private static ReaderWriterLock rwLockSelectDict = new ReaderWriterLock();
+
+
+
         private static DuplexClient commClient;
         private static bool isServer;
 
@@ -207,7 +212,11 @@ namespace QTTabBarLib {
                 }
             }
 
+            /**
+             *
+             */
             public void Broadcast(byte[] encodedAction) {
+                // TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                 ICommClient sender = GetCallback();
                 CheckConnections();
                 List<ICommClient> targets = callbacks.Where(c => c != sender).ToList();
@@ -216,7 +225,7 @@ namespace QTTabBarLib {
                     foreach(ICommClient target in targets) {
                         try {
                             i++;
-                            QTUtility2.log("CommService Broadcast count : " + targets.Count + " handle index: " + i);
+                            // QTUtility2.log("CommService Broadcast count : " + targets.Count + " handle index: " + i);
                             if (!IsDead(target)) {
                                 target.Execute(encodedAction);
                             }
@@ -226,7 +235,13 @@ namespace QTTabBarLib {
                             QTUtility2.MakeErrorLog(ex);
                         }
                     }
+
+                    // TimeSpan abs2 = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
+                    // QTUtility2.log(string.Format("Broadcast async cost {0} ", abs2.TotalMilliseconds));
                 }));
+
+                // TimeSpan abs = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
+                // QTUtility2.log(string.Format("Broadcast sync cost {0} ", abs.TotalMilliseconds));
             }
 
             public void DeleteInstance(IntPtr hwnd) {
@@ -468,6 +483,8 @@ namespace QTTabBarLib {
             }
         }
 
+        
+
         public static void PushTabBarInstance(QTTabBarClass tabbar) {
             IntPtr handle = tabbar.Handle;
             using(new Keychain(rwLockTabBar, true)) {
@@ -501,6 +518,95 @@ namespace QTTabBarLib {
         public static int GetTotalInstanceCount() {
             ICommService service = GetChannel();
             return service == null ? dictTabInstances.Count : service.GetTotalInstanceCount();
+        }
+        private static int inTimer = 0;
+        private static object LockSelectDict = new object();
+
+        public static void PutSelect(string key , List<string> list ) 
+        {
+            /*using(new Keychain(rwLockSelectDict, true))
+            {
+                selectDict[key] = list;
+            }*/
+            if (Interlocked.Exchange(ref inTimer, 1) != 0)
+            {
+                QTUtility2.log("拒绝进入");
+                return;
+            }
+            try
+            {
+                lock (LockSelectDict)
+                {
+                    selectDict[key] = list;
+                }
+            }
+            catch (Exception e)
+            {
+                QTUtility2.log("异常");
+            }
+            finally
+            {
+                Interlocked.Exchange(ref inTimer, 0);
+            }
+        }
+
+        public static void RemoveSelect(string key  ) 
+        {
+            /*using(new Keychain(rwLockSelectDict, true))
+            {
+                selectDict.Remove(key);
+            }*/
+            if (Interlocked.Exchange(ref inTimer, 1) != 0)
+            {
+                QTUtility2.log("拒绝进入");
+                return;
+            }
+            try
+            {
+                lock (LockSelectDict)
+                {
+                    selectDict.Remove(key);
+                }
+            }
+            catch (Exception e)
+            {
+                QTUtility2.log("异常");
+            }
+            finally
+            {
+                Interlocked.Exchange(ref inTimer, 0);
+            }
+        }
+
+        public static List<string> GetSelect(string key)
+        {
+            /*using (new Keychain(rwLockSelectDict, false))
+            {
+                List<string> list;
+                return selectDict.TryGetValue(key, out list) ? list : null;
+            }*/
+            if (Interlocked.Exchange(ref inTimer, 1) != 0)
+            {
+                QTUtility2.log("拒绝进入");
+                return null;
+            }
+            try
+            {
+                lock ( LockSelectDict  )
+                {
+                    List<string> list;
+                    return selectDict.TryGetValue(key, out list) ? list : null;
+                }
+            }
+            catch (Exception e)
+            {
+                QTUtility2.log("异常");
+                return null;
+            }
+            finally
+            {
+                Interlocked.Exchange(ref inTimer, 0);
+            }
         }
 
         public static QTTabBarClass GetThreadTabBar() {

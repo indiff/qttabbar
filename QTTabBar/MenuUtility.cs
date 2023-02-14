@@ -26,7 +26,12 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     internal static class MenuUtility {
+
+        [ThreadStatic]
+        public static bool InMenuLoop;
+
         private static Font StartUpTabFont;
+
 
         // TODO: this is absent from Quizo's sources.  Figure out why.
         private static void AddChildrenOnOpening(DirectoryMenuItem parentItem) {

@@ -166,16 +166,70 @@ UINT WIXAPI CloseAndReopenAndDeletePlugins(MSIHANDLE hInstaller) {
     return ERROR_SUCCESS;
 }
 
+
+
 UINT WIXAPI CheckOldVersion(MSIHANDLE hInstaller) {
     HKEY key;
     REGSAM access = KEY_QUERY_VALUE | KEY_WOW64_64KEY;
+	// 计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
     if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{DAD20769-75D8-4C1D-80E3-D545563FE9EF}_is1"), 0, access, &key) == ERROR_SUCCESS) {
        MsiSetProperty(hInstaller, _T("OBSOLETEVERSION"), _T("1"));
        RegCloseKey(key);
        return ERROR_SUCCESS;
     }
+	
     RegCloseKey(key);
-
+	// 遍历注册表的路径检测老版本 计算机\HKEY_CLASSES_ROOT\Installer\Products
+	HKEY hKey = NULL; //保存注册表的句柄 
+	DWORD dwIndexs = 0; //需要返回子项的索引 
+	TCHAR keyName[MAX_PATH] = { 0 }; //保存子键的名称 
+	DWORD charLength = 256;  //想要读取多少字节并返回实际读取到的字符长度
+	// auto subKey = _T("SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall");
+	auto subKey = _T("Installer\\Products");
+	// if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, subKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+	if (RegOpenKeyEx(HKEY_CLASSES_ROOT, subKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+	{
+		while (RegEnumKeyEx(hKey, dwIndexs, keyName, &charLength, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
+		{
+			//wprintf(_T("%d : %s\n"), dwIndexs, keyName);
+			// char logfilename[MAX_PATH];
+			// sprintf(logfilename, "$NTUninstKB%d$.log", unpkinfo.nKBID);
+			TCHAR data_Set[500] = { 0 };
+			_tcscat(data_Set, _T("Installer\\Products\\"));
+			_tcscat(data_Set, keyName);
+			HKEY hSubKey;
+			TCHAR lpszValue[1024];
+			DWORD dwSize = sizeof(lpszValue);
+			DWORD dwType = REG_SZ;
+			
+			if (RegOpenKeyEx(HKEY_CLASSES_ROOT, data_Set, NULL, KEY_READ, &hSubKey) == ERROR_SUCCESS)
+			{
+				delete data_Set;
+				if (RegQueryValueEx(hSubKey, _T("ProductName"), NULL, &dwType, (LPBYTE)&lpszValue, &dwSize) == ERROR_SUCCESS)
+				{
+					CharLower(lpszValue);
+					if (_tcsstr(lpszValue, _T("qttabbar")) )
+					{
+						RegCloseKey(hSubKey);
+						MsiSetProperty(hInstaller, _T("OBSOLETEVERSION"), _T("1"));
+						if (hKey != NULL)
+						{
+							RegCloseKey(hKey);
+						}
+					    return ERROR_SUCCESS;
+					} 
+					RegCloseKey(hSubKey);
+				}
+			}
+			++dwIndexs;
+			charLength = 256; // 数据必须要重置一下， 不然数据长度会有问题
+		}
+	}
+	if (hKey != NULL)
+	{
+		RegCloseKey(hKey);
+	}
+	
     // Check if it's uninstalled, but the user hasn't restarted Explorer yet.
     // Do this by making sure explorer.exe does not have our dll loaded.
     DWORD guess = 1024;

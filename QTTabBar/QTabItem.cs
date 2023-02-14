@@ -28,7 +28,7 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     [Serializable]
-    internal sealed class QTabItem {
+    public sealed class QTabItem {
         // Static stuff
         internal const string SEPARATOR_COMMENT = ": ";
         internal const string SEPARATOR_SUBTEXT = "@ ";
@@ -444,7 +444,7 @@ namespace QTTabBarLib {
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    internal struct LogData : IEquatable<LogData> {
+    public struct LogData : IEquatable<LogData> {
         public string Path;
         public byte[] IDL;
         public int Hash;

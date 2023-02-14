@@ -20,9 +20,8 @@ using System.Windows.Forms;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    class ListViewMonitor : IDisposable {
+    public class ListViewMonitor : IDisposable {
         public event EventHandler ListViewChanged;
-        
         private IntPtr hwndShellContainer;
         private NativeWindowController ContainerController;
         private ShellBrowserEx ShellBrowser;
@@ -47,7 +46,9 @@ namespace QTTabBarLib {
         public AbstractListView PreviousListView { get; private set; }
 
         private bool ContainerController_MessageCaptured(ref Message msg) {
-            if(msg.Msg == WM.PARENTNOTIFY && PInvoke.LoWord((int)msg.WParam) == WM.CREATE) {
+            // QTUtility2.debugMessage(msg);
+            if(msg.Msg == WM.PARENTNOTIFY && 
+               PInvoke.LoWord((int)msg.WParam) == WM.CREATE) {
                 string name = PInvoke.GetClassName(msg.LParam);
                 if(name == "SHELLDLL_DefView") {
                     RecaptureHandles(msg.LParam);
@@ -94,15 +95,15 @@ namespace QTTabBarLib {
 
             if(hwndListView == IntPtr.Zero)
             {
-                QTUtility2.log("ListViewMonitor AbstractListView ");
+                QTUtility2.log("new AbstractListView");
                 CurrentListView = new AbstractListView();
             }
             else if(fIsSysListView) {
-                QTUtility2.log("ListViewMonitor ExtendedSysListView32 ");
+                QTUtility2.log("new ExtendedSysListView32");
                 CurrentListView = new ExtendedSysListView32(ShellBrowser, hwndShellView, hwndListView, hwndSubDirTipMessageReflect);
             }
             else {
-                QTUtility2.log("ListViewMonitor ExtendedItemsView ");
+                QTUtility2.log("new ExtendedItemsView");
                 CurrentListView = new ExtendedItemsView(ShellBrowser, hwndShellView, hwndListView, hwndSubDirTipMessageReflect);
             }
             CurrentListView.ListViewDestroyed += ListView_Destroyed;

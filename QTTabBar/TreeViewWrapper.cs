@@ -71,21 +71,23 @@ namespace QTTabBarLib {
         }
 
         private bool TreeControl_MessageCaptured(ref Message msg) {
-            QTUtility2.log("TreeViewWrapper TreeControl_MessageCaptured");
             switch(msg.Msg) {
                 case WM.USER:
+                    QTUtility2.log("TreeViewWrapper TreeControl_MessageCaptured WM.USER");
                     fPreventSelChange = false;
                     break;
 
                 case WM.MBUTTONUP:
-                    if(treeControl != null && TreeViewClicked != null) {
+                    if (treeControl != null && TreeViewClicked != null) {
+                        QTUtility2.log("TreeViewWrapper TreeControl_MessageCaptured MBUTTONUP");
                         HandleClick(QTUtility2.PointFromLPARAM(msg.LParam), Control.ModifierKeys, true);
                     }
                     break;
 
                 case WM.DESTROY:
-                    if(treeControl != null) {
-                        QTUtility2.log("ReleaseComObject treeControl");
+                    if(treeControl != null)
+                    {
+                        QTUtility2.log("TreeViewWrapper TreeControl_MessageCaptured DESTROY");
                         Marshal.ReleaseComObject(treeControl);
                         treeControl = null;
                     }
@@ -95,12 +97,13 @@ namespace QTTabBarLib {
         }
 
         private bool ParentControl_MessageCaptured(ref Message msg) {
-            QTUtility2.log("TreeViewWrapper ParentControl_MessageCaptured");
             if(msg.Msg == WM.NOTIFY) {
+                
                 NMHDR nmhdr = (NMHDR)Marshal.PtrToStructure(msg.LParam, typeof(NMHDR));
                 switch(nmhdr.code) {
                     case -2: /* NM_CLICK */
                         if(Control.ModifierKeys != Keys.None) {
+                            QTUtility2.log("TreeViewWrapper ParentControl_MessageCaptured WM.NOTIFY NM_CLICK");
                             Point pt = Control.MousePosition;
                             PInvoke.ScreenToClient(nmhdr.hwndFrom, ref pt);
                             if(HandleClick(pt, Control.ModifierKeys, false)) {
@@ -112,6 +115,7 @@ namespace QTTabBarLib {
                         break;
 
                     case -450: /* TVN_SELECTIONCHANGING */
+                        QTUtility2.log("TreeViewWrapper ParentControl_MessageCaptured WM.NOTIFY TVN_SELECTIONCHANGING");
                         if(fPreventSelChange) {
                             msg.Result = (IntPtr)1;
                             return true;

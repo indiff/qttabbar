@@ -1,7 +1,7 @@
 @echo off
 cd /d %~dp0
-set VZ=v1.5.5-beta.8_
-set SUFFIX=.2022.zip
+set VZ=v1.5.5-beta.9_
+set SUFFIX=.2023.zip
 rem if exist ".bin\Release\zh-CN\QTTabBar Setup.msi" (
 del /f /q "%cd%\bin\Release\zh-CN\QTTabBar.Setup_%VZ%" 
 del /f /q "%cd%\bin\Release\en-US\QTTabBar.Setup_%VZ%" 

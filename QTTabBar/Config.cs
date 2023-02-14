@@ -267,6 +267,7 @@ namespace QTTabBarLib {
         [Serializable]
         public class _Window {
             public bool CaptureNewWindows        { get; set; }
+            public bool CaptureWeChatSelection   { get; set; } // 是否捕获微信、qq、钉钉的打开文件选中状态
             public bool RestoreSession           { get; set; }
             public bool RestoreOnlyLocked        { get; set; }
             public bool CloseBtnClosesUnlocked   { get; set; }
@@ -288,6 +289,7 @@ namespace QTTabBarLib {
 
                 /* qwop's default value. */
                 CaptureNewWindows = true;
+                CaptureWeChatSelection = true;
                 RestoreSession = true;
                 RestoreOnlyLocked = false;
                 CloseBtnClosesUnlocked = false;
@@ -454,11 +456,13 @@ namespace QTTabBarLib {
                 SubDirTipsWithShift = false ; // 仅当shift键按下显示子目录
                 ShowTooltipPreviews = true;
                 ShowPreviewInfo = true; // 启用文件预览
-                ShowPreviewsWithShift = false; // 仅当shift健按下, 启用文件预览
+                ShowPreviewsWithShift = true; // 仅当shift健按下, 启用文件预览
                 
-                // 文件与狼的 宽高
-                PreviewMaxWidth = 512;
-                PreviewMaxHeight = 256;
+                // 预览的宽高
+                PreviewMaxWidth = 600;
+                PreviewMaxHeight = 400;
+                //  PreviewMaxWidth = 512;
+                // PreviewMaxHeight = 256;
                 //  字体配置
                 PreviewFont = Control.DefaultFont;
                 PreviewFont = new Font(new FontFamily("微软雅黑"), 9f);
@@ -550,6 +554,8 @@ namespace QTTabBarLib {
             public Padding RebarSizeMargin       { get; set; }
             public bool ActiveTabInBold          { get; set; }
             public bool SkinAutoColorChangeClose              { get; set; }
+            public bool DrawHorizontalExplorerBarBgColor { get; set; }
+            public bool DrawVerticalExplorerBarBgColor { get; set; }
 
             public _Skin() {
                 /* UseTabSkin = false;
@@ -604,7 +610,7 @@ namespace QTTabBarLib {
                 // RebarColor = Color.FromArgb(230,230,230);
                 // 设置标签背景色
                 // RebarColor = Color.FromArgb(245, 246, 247);
-                TabTitleShadows = true;  // 标签文本阴影是否启用
+                TabTitleShadows = false;  // 标签文本阴影是否启用
                 TabTextCentered = true; // 标签文本是否居中
                 UseRebarBGColor = true;  // 是否启用配置背景颜色
                 UseRebarImage = false;  // 是否工具栏自定义图片,启用自定义图片
@@ -614,6 +620,8 @@ namespace QTTabBarLib {
                 RebarSizeMargin = Padding.Empty;
                 ActiveTabInBold = true;
                 SkinAutoColorChangeClose = false;  // 是否关闭自动变色？
+                DrawHorizontalExplorerBarBgColor = false; // 
+                DrawVerticalExplorerBarBgColor = false; // 
             }
 
             internal void SwitchNighMode(bool isNighMode)
@@ -1062,10 +1070,10 @@ namespace QTTabBarLib {
                 foreach(var category in categories) {
                     using (var key=Registry.CurrentUser.CreateSubKey(category.keyPath)) {
                         foreach(var setting in category.settings) {
-                            object value = key.GetValue(setting.name);
-                            if (value == null) { continue;}
+                                object value = key.GetValue(setting.name);
+                                if (value == null) { continue;}
 
-                            Type t = setting.type;
+                                Type t = setting.type;
 
                                 if (t == typeof(bool))
                                 {

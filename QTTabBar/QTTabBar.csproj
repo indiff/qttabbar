@@ -116,7 +116,103 @@
     <Compile Include="AutomationClasses.cs" />
     <Compile Include="BreadcrumbBar.cs" />
     <Compile Include="AbstractListView.cs" />
+    <Compile Include="Common\Blob.cs" />
+    <Compile Include="Common\CoreErrorHelper.cs" />
+    <Compile Include="Common\CoreHelpers.cs" />
+    <Compile Include="Common\CoreNativeMethods.cs" />
+    <Compile Include="Common\DefaultShellImageSizes.cs" />
+    <Compile Include="Common\DefinitionOptions.cs" />
+    <Compile Include="Common\ExplorerBrowserCOMGuids.cs" />
+    <Compile Include="Common\ExplorerBrowserCOMInterfaces.cs" />
+    <Compile Include="Common\ExplorerBrowserNativeMethods.cs" />
+    <Compile Include="Common\FileSystemKnownFolder.cs" />
+    <Compile Include="Common\FolderCategory.cs" />
+    <Compile Include="Common\FolderProperties.cs" />
+    <Compile Include="Common\FoldersIdentifiers.cs" />
+    <Compile Include="Common\FolderTypes.cs" />
+    <Compile Include="Common\IconReference.cs" />
+    <Compile Include="Common\IKnownFolder.cs" />
+    <Compile Include="Common\IShellProperty.cs" />
+    <Compile Include="Common\KnownFolderHelper.cs" />
+    <Compile Include="Common\KnownFolders.cs" />
+    <Compile Include="Common\KnownFoldersCOMGuids.cs" />
+    <Compile Include="Common\KnownFoldersCOMInterfaces.cs" />
+    <Compile Include="Common\KnownFolderSettings.cs" />
+    <Compile Include="Common\KnownFoldersNativeMethods.cs" />
+    <Compile Include="Common\LocalizedMessages.Designer.cs" />
+    <Compile Include="Common\NativePoint.cs" />
+    <Compile Include="Common\NativeRect.cs" />
+    <Compile Include="Common\NonFileSystemKnownFolder.cs" />
+    <Compile Include="Common\PROPARRAY.cs" />
+    <Compile Include="Common\PropertyKey.cs" />
+    <Compile Include="Common\PropertySystemCOMInterfaces.cs" />
+    <Compile Include="Common\PropertySystemException.cs" />
+    <Compile Include="Common\PropertySystemNativeMethods.cs" />
+    <Compile Include="Common\PropVariant.cs" />
+    <Compile Include="Common\PropVariantNativeMethods.cs" />
+    <Compile Include="Common\RedirectionCapabilities.cs" />
+    <Compile Include="Common\ShellCOMClasses.cs" />
+    <Compile Include="Common\ShellCOMGuids.cs" />
+    <Compile Include="Common\ShellCOMInterfaces.cs" />
+    <Compile Include="Common\ShellEnums.cs" />
+    <Compile Include="Common\ShellException.cs" />
+    <Compile Include="Common\ShellFile.cs" />
+    <Compile Include="Common\ShellFileSystemFolder.cs" />
+    <Compile Include="Common\ShellFolder.cs" />
+    <Compile Include="Common\ShellFolderItems.cs" />
+    <Compile Include="Common\ShellHelper.cs" />
+    <Compile Include="Common\ShellLibrary.cs" />
+    <Compile Include="Common\ShellLink.cs" />
+    <Compile Include="Common\ShellNativeMethods.cs" />
+    <Compile Include="Common\ShellNativeStructs.cs" />
+    <Compile Include="Common\ShellNonFileSystemFolder.cs" />
+    <Compile Include="Common\ShellNonFileSystemItem.cs" />
+    <Compile Include="Common\ShellObject.cs" />
+    <Compile Include="Common\ShellObjectCollection.cs" />
+    <Compile Include="Common\ShellObjectContainer.cs" />
+    <Compile Include="Common\ShellObjectFactory.cs" />
+    <Compile Include="Common\ShellObjectWatcherEnums.cs" />
+    <Compile Include="Common\ShellProperties.cs" />
+    <Compile Include="Common\ShellProperty.cs" />
+    <Compile Include="Common\ShellPropertyCollection.cs" />
+    <Compile Include="Common\ShellPropertyDescription.cs" />
+    <Compile Include="Common\ShellPropertyDescriptionsCache.cs" />
+    <Compile Include="Common\ShellPropertyEnums.cs" />
+    <Compile Include="Common\ShellPropertyEnumType.cs" />
+    <Compile Include="Common\ShellPropertyFactory.cs" />
+    <Compile Include="Common\ShellPropertyWriter.cs" />
+    <Compile Include="Common\ShellSavedSearchCollection.cs" />
+    <Compile Include="Common\ShellSearchCollection.cs" />
+    <Compile Include="Common\ShellSearchConnector.cs" />
+    <Compile Include="Common\ShellThumbnail.cs" />
+    <Compile Include="Common\ShellThumbnailEnums.cs" />
+    <Compile Include="Common\SortColumn.cs" />
+    <Compile Include="Common\StronglyTypedProperties.cs" />
+    <Compile Include="Common\SystemProperties.cs" />
+    <Compile Include="Common\TabbedThumbnailNativeMethods.cs" />
+    <Compile Include="Common\TaskbarNativeMethods.cs" />
+    <Compile Include="Common\WindowMessage.cs" />
+    <Compile Include="Common\WindowNativeMethods.cs" />
+    <Compile Include="Common\WindowUtilities.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="ExplorerBrowser\CommonControlException.cs" />
+    <Compile Include="ExplorerBrowser\ExplorerBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExplorerBrowser\ExplorerBrowser.WPF.xaml.cs">
+      <DependentUpon>ExplorerBrowser.WPF.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExplorerBrowser\ExplorerBrowserContentOptions.cs" />
+    <Compile Include="ExplorerBrowser\ExplorerBrowserEnums.cs" />
+    <Compile Include="ExplorerBrowser\ExplorerBrowserEvents.cs" />
+    <Compile Include="ExplorerBrowser\ExplorerBrowserPaneVisibility.cs" />
+    <Compile Include="ExplorerBrowser\ExplorerBrowserViewEvents.cs" />
+    <Compile Include="ExplorerBrowser\NavigationLog.cs" />
+    <Compile Include="ExplorerBrowser\NavigationLogEnums.cs" />
+    <Compile Include="ExplorerBrowser\NavigationLogEvents.cs" />
+    <Compile Include="ExplorerBrowser\NavigationOptions.cs" />
+    <Compile Include="ExplorerManager.cs" />
+    <Compile Include="ExplorerProcessCaptor.cs" />
     <Compile Include="FileRename\FileRenameDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,13 +221,63 @@
     </Compile>
     <Compile Include="FreeBitmap.cs" />
     <Compile Include="Graphic.cs" />
+    <Compile Include="ICommandInvokerWindow.cs" />
+    <Compile Include="Interop\CoreErrorHelper.cs" />
+    <Compile Include="Interop\GWL.cs" />
+    <Compile Include="Interop\IShellExecuteHook.cs" />
     <Compile Include="Interop\IVisualProperties.cs" />
     <Compile Include="Interop\LVBKIMAGE.cs" />
     <Compile Include="Interop\MCR.cs" />
     <Compile Include="Interop\RDW.cs" />
+    <Compile Include="Interop\RegisteredMessage.cs" />
     <Compile Include="Interop\SHELLSTATE.cs" />
+    <Compile Include="Interop\SUBCLASSPROC.cs" />
+    <Compile Include="Interop\SWP.cs" />
     <Compile Include="Interop\VPCOLORFLAGS.cs" />
     <Compile Include="Interop\VPWATERMARKFLAGS.cs" />
+    <Compile Include="Interop\WINDOWPOS.cs" />
+    <Compile Include="MsgEnum.cs" />
+    <Compile Include="Multilang\CMLangConvertCharset.cs" />
+    <Compile Include="Multilang\CMLangConvertCharsetClass.cs" />
+    <Compile Include="Multilang\CMLangString.cs" />
+    <Compile Include="Multilang\CMLangStringClass.cs" />
+    <Compile Include="Multilang\CMultiLanguage.cs" />
+    <Compile Include="Multilang\CMultiLanguageClass.cs" />
+    <Compile Include="Multilang\IEnumCodePage.cs" />
+    <Compile Include="Multilang\IEnumRfc1766.cs" />
+    <Compile Include="Multilang\IEnumScript.cs" />
+    <Compile Include="Multilang\IMLangCodePages.cs" />
+    <Compile Include="Multilang\IMLangConvertCharset.cs" />
+    <Compile Include="Multilang\IMLangFontLink.cs" />
+    <Compile Include="Multilang\IMLangFontLink2.cs" />
+    <Compile Include="Multilang\IMLangLineBreakConsole.cs" />
+    <Compile Include="Multilang\IMLangString.cs" />
+    <Compile Include="Multilang\IMLangStringAStr.cs" />
+    <Compile Include="Multilang\IMLangStringBufA.cs" />
+    <Compile Include="Multilang\IMLangStringBufW.cs" />
+    <Compile Include="Multilang\IMLangStringWStr.cs" />
+    <Compile Include="Multilang\IMultiLanguage.cs" />
+    <Compile Include="Multilang\IMultiLanguage2.cs" />
+    <Compile Include="Multilang\IMultiLanguage3.cs" />
+    <Compile Include="Multilang\ISequentialStream.cs" />
+    <Compile Include="Multilang\IStream.cs" />
+    <Compile Include="Multilang\tagDetectEncodingInfo.cs" />
+    <Compile Include="Multilang\tagMIMECONTF.cs" />
+    <Compile Include="Multilang\tagMIMECPINFO.cs" />
+    <Compile Include="Multilang\tagMIMECSETINFO.cs" />
+    <Compile Include="Multilang\tagMLCPF.cs" />
+    <Compile Include="Multilang\tagMLDETECTCP.cs" />
+    <Compile Include="Multilang\tagMLSTR_FLAGS.cs" />
+    <Compile Include="Multilang\tagRFC1766INFO.cs" />
+    <Compile Include="Multilang\tagSCRIPFONTINFO.cs" />
+    <Compile Include="Multilang\tagSCRIPTINFO.cs" />
+    <Compile Include="Multilang\tagSTATSTG.cs" />
+    <Compile Include="Multilang\tagUNICODERANGE.cs" />
+    <Compile Include="Multilang\_FILETIME.cs" />
+    <Compile Include="Multilang\_LARGE_INTEGER.cs" />
+    <Compile Include="Multilang\_RemotableHandle.cs" />
+    <Compile Include="Multilang\_ULARGE_INTEGER.cs" />
+    <Compile Include="Multilang\__MIDL_IWinTypes_0009.cs" />
     <Compile Include="OptionsDialog\Options03_Tweaks.xaml.cs">
       <DependentUpon>Options03_Tweaks.xaml</DependentUpon>
     </Compile>
@@ -184,9 +330,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="QTCommandBar.cs">
+    <Compile Include="QTSecondViewBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="QTTabBar\WindowSubclass.cs" />
+    <Compile Include="RegistryUtil.cs" />
     <Compile Include="Resources_Image.cs" />
     <Compile Include="Resources_String.cs" />
     <Compile Include="Resources_String_de_DE.cs" />
@@ -227,6 +375,10 @@
       <DependentUpon>Spinner.xaml</DependentUpon>
     </Compile>
     <Compile Include="StaticReg.cs" />
+    <Compile Include="TabBarBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Toolbar.cs" />
     <Compile Include="TrayIcon.cs" />
     <Compile Include="TreeViewWrapper.cs" />
     <Compile Include="Interop\INameSpaceTreeControl.cs" />
@@ -401,6 +553,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Common\LocalizedMessages.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileRename\FileRenameDialog.resx">
       <DependentUpon>FileRenameDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -429,6 +584,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources_String_ru_RU.resx">
       <DependentUpon>Resources_String_ru_RU.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources_String_tr_TR.resx">
       <DependentUpon>Resources_String_tr_TR.cs</DependentUpon>
@@ -457,6 +613,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ExplorerBrowser\ExplorerBrowser.WPF.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="OptionsDialog\Options03_Tweaks.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -540,6 +700,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ExplorerBrowser\ExplorerBrowserDiagram.cd" />
     <None Include="Resources\ButtonStrip24.png" />
   </ItemGroup>
   <ItemGroup>
@@ -774,6 +935,7 @@
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
+      <Private>False</Private>
     </COMReference>
     <COMReference Include="SHDocVw">
       <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>

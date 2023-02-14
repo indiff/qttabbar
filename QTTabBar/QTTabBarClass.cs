@@ -38,38 +38,50 @@ using QTPlugin;
 using QTTabBarLib.Interop;
 using SHDocVw;
 using Timer = System.Windows.Forms.Timer;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using QTTabBarLib.Common;
+using Control = System.Windows.Forms.Control;
+using IShellFolder = QTTabBarLib.Interop.IShellFolder;
+using IShellView = QTTabBarLib.Interop.IShellView;
+using ToolTip = System.Windows.Forms.ToolTip;
+using System.Management;
+using IDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace QTTabBarLib {
-    [ComVisible(true), Guid("d2bf470e-ed1c-487f-a333-2bd8835eb6ce"),Serializable]
-    public sealed partial class QTTabBarClass : BandObject {
-        private int BandHeight;
-        private static int BandHeightSpace = 3;
+    /**
+     sealed 应用于某个类时，sealed 修饰符可阻止其他类继承自该类。在下面的示例中，类 B 继承自类 A，但没有类可以继承自类 B。
+     class A {}
+     sealed class B : A {}
+     */
+    [ComVisible(true), Guid("d2bf470e-ed1c-487f-a333-2bd8835eb6ce")]
+    public partial class QTTabBarClass : TabBarBase
+    {
+       
         private VisualStyleRenderer bgRenderer;
         private BreadcrumbBar breadcrumbBar;
-        private ToolStripButton buttonBack;
-        private ToolStripButton buttonForward;
-        private ToolStripDropDownButton buttonNavHistoryMenu;
+        
+        
         private IContainer components;
         private ContextMenuStripEx contextMenuDropped;
         private QTabItem ContextMenuedTab;
-        private ContextMenuStripEx contextMenuSys;
-        private ContextMenuStripEx contextMenuTab;
-        private string CurrentAddress;
-        private QTabItem CurrentTab;
-        private int CurrentTravelLogIndex;
+
+        
+        
         private Cursor curTabCloning;
         private Cursor curTabDrag;
         private Rectangle DraggingDestRect;
         private QTabItem DraggingTab;
         private DropTargetWrapper dropTargetWrapper;
         private NativeWindowController explorerController;
-        private IntPtr ExplorerHandle;
+        
+        private bool fHideExplorer;
         private bool fDrivesContainedDD;
         private static bool fInitialized;
         private readonly bool fIsFirstLoad;
         private volatile bool FirstNavigationCompleted;
         private bool fAutoNavigating;
-        private bool fNavigatedByTabSelection;
+        
         private bool fNeedsNewWindowPulse;
         private bool fNowQuitting;
         private bool fNowRestoring;
@@ -89,41 +101,27 @@ namespace QTTabBarLib {
         private bool IsShown;
         private byte[] lastAttemptedBrowseObjectIDL;
         private byte[] lastCompletedBrowseObjectIDL;
-        private Dictionary<int, ITravelLogEntry> LogEntryDic = new Dictionary<int, ITravelLogEntry>();
-        private AbstractListView listView = new AbstractListView();
-        private ListViewMonitor listViewManager;
-        private List<QTabItem> lstActivatedTabs = new List<QTabItem>(0x10);
-        private List<ToolStripItem> lstPluginMenuItems_Sys;
-        private List<ToolStripItem> lstPluginMenuItems_Tab;
+        
         private static FileHashComputerForm md5Form;
         private ToolStripTextBox menuTextBoxTabAlias;
-        private int navBtnsFlag;
-        private bool NavigatedByCode;
-        private bool NowInTravelLog;
-        private bool NowModalDialogShown;
-        private bool NowOpenedByGroupOpener;
-        private bool NowTabCloned;
-        private bool NowTabCreated;
-        private bool NowTabDragging;
-        private bool NowTabsAddingRemoving;
-        private bool NowTopMost;
-        internal RebarController rebarController;
-        private ShellBrowserEx ShellBrowser;
+
+
+        
         private string strDraggingDrive;
         private string strDraggingStartPath;
         private SubDirTipForm subDirTip_Tab;
-        private QTabControl tabControl1;
+        public QTabControl tabControl1;
         private QTabItem tabForDD;
         private TabSwitchForm tabSwitcher;
         private Timer timerOnTab;
         private Timer timerSelectionChanged;
-        private ToolStripClasses toolStrip;
+        
         private ToolTip toolTipForDD;
         private NativeWindowController travelBtnController;
-        private ITravelLogStg TravelLog;
-        private IntPtr TravelToolBarHandle;
+        
+        
         private TreeViewWrapper treeViewWrapper;
-        // 添加到分组
+        /*// 添加到分组
         private ToolStripMenuItem tsmiAddToGroup;
         private ToolStripMenuItem tsmiBrowseFolder;
         private ToolStripMenuItem tsmiCloneThis;
@@ -148,27 +146,29 @@ namespace QTTabBarLib {
         private ToolStripMenuItem tsmiTabOrder;
         private ToolStripMenuItem tsmiUndoClose;
 
-        /*add by qwop 2012.07.13*/
+        /*add by qwop 2012.07.13#1#
         private ToolStripMenuItem tsmiOpenCmd;
         private ToolStripMenuItem enableApiHook;
-        /*add by qwop 2012.07.13*/
+        /*add by qwop 2012.07.13#1#
 
         private ToolStripSeparator tssep_Sys1;
         private ToolStripSeparator tssep_Sys2;
         private ToolStripSeparator tssep_Tab1;
         private ToolStripSeparator tssep_Tab2;
-        private ToolStripSeparator tssep_Tab3;
-        private readonly uint WM_NEWTREECONTROL = PInvoke.RegisterWindowMessage("QTTabBar_NewTreeControl");
-        private readonly uint WM_BROWSEOBJECT = PInvoke.RegisterWindowMessage("QTTabBar_BrowseObject");
-        private readonly uint WM_HEADERINALLVIEWS = PInvoke.RegisterWindowMessage("QTTabBar_HeaderInAllViews");
-        private readonly uint WM_LISTREFRESHED = PInvoke.RegisterWindowMessage("QTTabBar_ListRefreshed");
-        private readonly uint WM_SHOWHIDEBARS = PInvoke.RegisterWindowMessage("QTTabBar_ShowHideBars");
-        private readonly uint WM_CHECKPULSE = PInvoke.RegisterWindowMessage("QTTabBar_CheckPulse");
+        private ToolStripSeparator tssep_Tab3;*/
+        private readonly int WM_NEWTREECONTROL = PInvoke.RegisterWindowMessage("QTTabBar_NewTreeControl");
+        private readonly int WM_BROWSEOBJECT = PInvoke.RegisterWindowMessage("QTTabBar_BrowseObject");
+        private readonly int WM_HEADERINALLVIEWS = PInvoke.RegisterWindowMessage("QTTabBar_HeaderInAllViews");
+        private readonly int WM_LISTREFRESHED = PInvoke.RegisterWindowMessage("QTTabBar_ListRefreshed");
+        private readonly int WM_SHOWHIDEBARS = PInvoke.RegisterWindowMessage("QTTabBar_ShowHideBars");
+        private readonly int WM_CHECKPULSE = PInvoke.RegisterWindowMessage("QTTabBar_CheckPulse");
+        private readonly int WM_SELECTFILE = PInvoke.RegisterWindowMessage("QTTabBar_SelectFile");
 
-        internal PluginServer pluginServer { get; private set; }
+        
         internal bool CanNavigateBackward { get { return ((navBtnsFlag & 1) != 0); } }
         internal bool CanNavigateForward { get { return ((navBtnsFlag & 2) != 0); } }
         internal int TabCount { get { return tabControl1.TabCount; } }
+
         internal int SelectedTabIndex {
             get {
                 return tabControl1.TabPages.IndexOf(CurrentTab);
@@ -253,10 +253,8 @@ namespace QTTabBarLib {
         public QTTabBarClass() {
             QTUtility.Initialize();
             // QTUtility2.AllocDebugConsole();
-            Application.EnableVisualStyles();
             // Application.SetCompatibleTextRenderingDefault(false);
             // Application.DoEvents();
-            
             /*try
             {
                 ConfigurationManager.AppSettings.Set("EnableWindowsFormsHighDpiAutoResizing", "true");
@@ -273,6 +271,7 @@ namespace QTTabBarLib {
                     // 时间格式出错， 可能会导致初始化失败
                     try
                     {
+                        QTUtility2.log("installDateString " + installDateString);
                         installDate = DateTime.Parse(installDateString);
                     }
                     catch (Exception e)
@@ -282,20 +281,23 @@ namespace QTTabBarLib {
                     }
                 }
                 using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
-                     DateTime lastActivation ;
-                     // DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
+                    DateTime lastActivation;
+                    // DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
+                    var value = (string)key.GetValue("ActivationDate", minDate);
                     try
                     {
-                        lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
+                        QTUtility2.log("ActivationDate " + value);
+                        lastActivation = DateTime.Parse(value);
                     }
                     catch (Exception e)
                     {
-                        lastActivation = DateTime.ParseExact((string)key.GetValue("ActivationDate", minDate), "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
+                        lastActivation = DateTime.ParseExact(value, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
                         // ignore exception 
                     }
+
                     fIsFirstLoad = installDate.CompareTo(lastActivation) > 0;
                     // 时间格式出错， 可能会导致初始化失败
-                    if(fIsFirstLoad) 
+                    if (fIsFirstLoad)
                         key.SetValue("ActivationDate", installDateString);
                 }
             }
@@ -373,16 +375,7 @@ namespace QTTabBarLib {
             }
         }
 
-        private static void AddToHistory(QTabItem closingTab) {
-            string currentPath = closingTab.CurrentPath;
-            if((Config.Misc.KeepHistory && !string.IsNullOrEmpty(currentPath)) && !IsSearchResultFolder(currentPath)) {
-                if(QTUtility2.IsShellPathButNotFileSystem(currentPath) && (currentPath.IndexOf("???") == -1)) {
-                    currentPath = currentPath + "???" + closingTab.GetLogHash(true, 0);
-                }
-                StaticReg.ClosedTabHistoryList.Add(currentPath);
-                InstanceManager.ButtonBarBroadcast(bbar => bbar.RefreshButtons(), true);
-            }
-        }
+       
 
         /**
          * 如果拖拽多个文件，则进行新增到应用程序菜单的弹出菜单操作
@@ -428,9 +421,6 @@ namespace QTTabBarLib {
         // Return true to suppress the navigation.  Target IDL should not be relied
         // upon; it's not guaranteed to be accurate.
         private bool BeforeNavigate(IDLWrapper target, bool autonav) {
-          //  DebugUtil.WriteLine("QTTabBarClass BeforeNavigate:" + target.Path ); // add by qwop.
-            QTUtility2.log(  "QTTabBarClass BeforeNavigate  :" + target.Path );
-
             if(!IsShown) return false;
             HideSubDirTip_Tab_Menu();
             NowTabDragging = false;
@@ -465,6 +455,7 @@ namespace QTTabBarLib {
         private IntPtr CallbackGetMsgProc(int nCode, IntPtr wParam, IntPtr lParam) {
             if(nCode >= 0) {
                 MSG msg = (MSG)Marshal.PtrToStructure(lParam, typeof(MSG));
+                // QTUtility2.debugMessage(msg);
                 try {
                     if(QTUtility.IsXP) {
                         if(msg.message == WM.CLOSE) {
@@ -518,7 +509,39 @@ namespace QTTabBarLib {
                     }
                     else if(msg.message == WM_LISTREFRESHED) {
                         HandleF5();
-                        return PInvoke.CallNextHookEx(hHook_Msg, nCode, wParam, lParam);   
+                        return PInvoke.CallNextHookEx(hHook_Msg, nCode, wParam, lParam);
+                    }
+                    else if (msg.message == WM_SELECTFILE)
+                    {
+                        QTUtility2.log(" select file 1 " + " wparam " + wParam + " lparam " + lParam );
+                        // lParam: point to an array of ITEMIDLISTs;
+                        /*IShellView shellView = null;
+                        if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out shellView))
+                        {
+                            // new Guid("{0000010e-0000-0000-C000-000000000046}")
+                            var iid = new Guid("{0000010e-0000-0000-C000-000000000046}");
+                            object ppv;
+                            shellView.GetItemObject((uint)SVSIF.SELECT, ref iid, out ppv);
+                            if (ppv != null)
+                            {
+                                System.Runtime.InteropServices.ComTypes.IDataObject pDataObject = (System.Runtime.InteropServices.ComTypes.IDataObject)ppv;
+                                // var iid = new Guid(ShellIIDGuid.IShellItemArray);
+                                var shellObjectCollection = ShellObjectCollection.FromDataObject(pDataObject);
+                                if (shellObjectCollection.Count>0)
+                                {
+                                    foreach (ShellObject so in shellObjectCollection)
+                                    {
+                                        QTUtility2.log("so.Name " + so.Name);
+                                    }
+                                }
+                            }
+                        }*/
+                        // IntPtr pIDL = Marshal.ReadIntPtr(lParam);
+                        // SFVCB_SELECTINFO sel = (SFVCB_SELECTINFO)Marshal.PtrToStructure(lParam, typeof(SFVCB_SELECTINFO));
+                        // QTUtility2.log("SFVCB_SELECTINFO UOldState " + sel.UOldState);
+                        // QTUtility2.log("SFVCB_SELECTINFO UNewState " + sel.UNewState);
+                        // QTUtility2.log("SFVCB_SELECTINFO Pid1 " + sel.Pid1);
+                        return PInvoke.CallNextHookEx(hHook_Msg, nCode, wParam, lParam);
                     }
 
                     switch(msg.message) {
@@ -642,6 +665,9 @@ namespace QTTabBarLib {
             }
             return PInvoke.CallNextHookEx(hHook_Msg, nCode, wParam, lParam);
         }
+
+
+       
 
         /**
          * 注册快捷键的回调
@@ -798,35 +824,7 @@ namespace QTTabBarLib {
             NavigatedByCode = false;
         }
 
-        private void CancelFailedTabChanging(string newPath) {
-            if(!CloseTab(tabControl1.SelectedTab, true)) {
-                if(tabControl1.TabCount == 1) {
-                    WindowUtils.CloseExplorer(ExplorerHandle, 2);
-                }
-                else {
-                    ShowMessageNavCanceled(newPath, false);
-                    if(CurrentTab == null) {
-                        tabControl1.SelectedIndex = 0;
-                    }
-                }
-            }
-            else {
-                StaticReg.ClosedTabHistoryList.Remove(newPath);
-                if(tabControl1.TabCount == 0) {
-                    ShowMessageNavCanceled(newPath, true);
-                    WindowUtils.CloseExplorer(ExplorerHandle, 2);
-                }
-                else {
-                    if(CurrentTab == null) {
-                        tabControl1.SelectedIndex = 0;
-                    }
-                    else {
-                        tabControl1.SelectTab(CurrentTab);
-                    }
-                    ShowMessageNavCanceled(newPath, false);
-                }
-            }
-        }
+        
 
         private void ChangeViewMode(bool fUp) {
             FVM orig = ShellBrowser.ViewMode;
@@ -1169,100 +1167,9 @@ namespace QTTabBarLib {
                     : tabControl1.TabPages.Skip(index + 1).ToList());
         }
         
-        // TODO: Optional params
-        private bool CloseTab(QTabItem closingTab) {
-            return ((tabControl1.TabCount > 1) && CloseTab(closingTab, false));
-        }
 
-        // 关闭标签， 如果锁定则不关闭
-        private bool CloseTab(QTabItem closingTab, bool fCritical, bool fSkipSync = false) {
-            if(closingTab == null) {
-                return false;
-            }
-            if((!fCritical && closingTab.TabLocked) && QTUtility2.PathExists(closingTab.CurrentPath)) {
-                return false;
-            }
-            int index = tabControl1.TabPages.IndexOf(closingTab);
-            if(index == -1) {
-                return false;
-            }
-            lstActivatedTabs.Remove(closingTab);
-            AddToHistory(closingTab);
-            tabControl1.TabPages.Remove(closingTab);
-            closingTab.OnClose();
-            if(closingTab != CurrentTab) {
-                if(!fSkipSync) {
-                    TryCallButtonBar(bbar => bbar.RefreshButtons());
-                    QTabItem.CheckSubTexts(tabControl1);
-                }
-                return true;
-            }
-            CurrentTab = null;
-            int tabCount = tabControl1.TabCount;
-            if(tabCount == 0) return true;
-            QTabItem tabPage = null;
-            switch(Config.Tabs.NextAfterClosed) {
-                case TabPos.Right:
-                    tabPage = tabControl1.TabPages[index == tabCount ? index - 1: index];
-                    break;
 
-                case TabPos.Left:
-                    tabPage = tabControl1.TabPages[index == 0 ? 0 : index - 1];
-                    break;
-
-                case TabPos.Rightmost:
-                    tabPage = tabControl1.TabPages[tabCount - 1];
-                    break;
-
-                case TabPos.Leftmost:
-                    tabPage = tabControl1.TabPages[0];
-                    break;
-
-                case TabPos.LastActive:
-                    if(lstActivatedTabs.Count > 0) {
-                        QTabItem lastTab = lstActivatedTabs[lstActivatedTabs.Count - 1];
-                        lstActivatedTabs.RemoveAt(lstActivatedTabs.Count - 1);
-                        tabPage = tabControl1.TabPages.Contains(lastTab)
-                                ? lastTab
-                                : tabControl1.TabPages[0];
-                    }
-                    else {
-                        tabPage = tabControl1.TabPages[0];
-                    }
-                    break;
-            }
-            if(tabPage != null) {
-                tabControl1.SelectTab(tabPage);
-            }
-            else {
-                tabControl1.SelectTab(0);
-            }
-            if(!fSkipSync) {
-                TryCallButtonBar(bbar => bbar.RefreshButtons());
-            }
-            return true;
-        }
-
-        private void CloseTabs(IEnumerable<QTabItem> tabs, bool fCritical = false) {
-            tabControl1.SetRedraw(false);
-            bool closeCurrent = false;
-            foreach(QTabItem tab in tabs) {
-                if(tab == CurrentTab)
-                    closeCurrent = true;
-                else
-                    CloseTab(tab, fCritical, true);
-            }
-            if(closeCurrent) {
-                CloseTab(CurrentTab, fCritical);
-            }
-            else {
-                TryCallButtonBar(bbar => bbar.RefreshButtons());
-                QTabItem.CheckSubTexts(tabControl1);
-            }
-            if(tabControl1.TabCount > 0) {
-                tabControl1.SetRedraw(true);
-            }
-        }
+      
 
         private void contextMenuSys_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             if(e.ClickedItem == tsmiOption) {
@@ -2028,7 +1935,7 @@ namespace QTTabBarLib {
                     break;
 
                 case BindAction.FocusSearchBarBBar:
-                    TryCallButtonBar(bbar => bbar.FocusSearchBox());
+                    TryCallButtonBar(bbar => { return bbar.FocusSearchBox(); });
                     break;
 
                 case BindAction.ShowSDTSelected:
@@ -2170,14 +2077,9 @@ namespace QTTabBarLib {
             return true;
         }
 
-        // 创建新文件 add by indiff
-        /***** add by qwop start ***/
-        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr ILCreateFromPath([MarshalAs(UnmanagedType.LPTStr)] string pszPath);
-
-        [DllImport("shell32.dll")]
-        private static extern IntPtr ILFindLastID(IntPtr pidl);
-
+        /// <summary>
+        /// 创建新文件 add by indiff
+        /// </summary>
         private void createNewFile()
         {
 
@@ -2218,10 +2120,10 @@ namespace QTTabBarLib {
                 {
                     shellView.Refresh();
 
-                    pIDL = ILCreateFromPath(pathNew);
+                    pIDL = PInvoke.ILCreateFromPath(pathNew);
                     if (pIDL != IntPtr.Zero)
                     {
-                        IntPtr pIDLRltv = ILFindLastID(pIDL);
+                        IntPtr pIDLRltv = PInvoke.ILFindLastID(pIDL);
                         if (pIDLRltv != IntPtr.Zero) {
                             // 选中文件
                              shellView.SelectItem(pIDLRltv, SVSIF.SELECT | SVSIF.DESELECTOTHERS | SVSIF.ENSUREVISIBLE | SVSIF.EDIT );
@@ -2448,10 +2350,14 @@ namespace QTTabBarLib {
             return false;
         }
 
+        // 捕获的方式  select 1 / factory 2 / other 3
+        private int mCmdType = 0;
+
         // This function is either called by BeforeNavigate2 (on XP and Vista)
+        // 此函数由BeforeNavigate2调用(on XP and Vista)
         // or NavigateComplete2 (on 7)
         private void DoFirstNavigation(bool before, string path) {
-            // TODO: sort out this mess
+            // TODO: sort out this mess  把这一团糟整理好
             if(StaticReg.CreateWindowPaths.Count > 0 || StaticReg.CreateWindowIDLs.Count > 0) {
                 QTUtility2.log("DoFirstNavigation StaticReg.CreateWindowPaths.Count " + StaticReg.CreateWindowPaths.Count + " StaticReg.CreateWindowIDLs.Count:" + StaticReg.CreateWindowIDLs.Count);
                 foreach (string tpath in StaticReg.CreateWindowPaths.Where(str2 => !str2.PathEquals(path))) {
@@ -2518,23 +2424,50 @@ namespace QTTabBarLib {
                             });
                         });
                  }*/
+                // 外部打开文件加速
+                /*if (Config.Window.CaptureNewWindows &&
+                    ModifierKeys != Keys.Control &&
+                    InstanceManager.GetTotalInstanceCount() == 1)
+                {
+                    QTUtility2.log("GetTotalInstanceCount " + InstanceManager.GetTotalInstanceCount());
 
-                
+                    using (IDLWrapper wrapper3 = new IDLWrapper(path))
+                    {
+                        if (!wrapper3.Available) return;
+                        if (wrapper3.IsFolder && wrapper3.IsReadyIfDrive)
+                        {
+                            OpenNewTab(wrapper3, false, false);
+                            QTUtility2.log("外部打开文件加速2 ");
+                        }
+                    }
+                }*/
 
                 // 1. set capture new window
                 // 2. ctrl key not pressed.
                 // 3. instsance count > 0 
-                if (Config.Window.CaptureNewWindows && ModifierKeys != Keys.Control && InstanceManager.GetTotalInstanceCount() > 0) {
+                if (Config.Window.CaptureNewWindows &&
+                    ModifierKeys != Keys.Control &&
+                    InstanceManager.GetTotalInstanceCount() > 0) {
                     QTUtility2.log("DoFirstNavigation GetCommandLine");
                     string cmd = GetCommandLine();
                     if (!String.IsNullOrEmpty(cmd))
                     {
+                        /*string dirPath, selection;
+                        if (TryParseCommandlineParams(cmd, out dirPath, out selection))
+                        {
+                            if (!string.IsNullOrEmpty(selection))
+                            {
+                                QTUtility2.log(string.Format("********* TryParseCommandlineParams {0} ", selection));
+                            }
+                        }*/
+
                         string lcmd = cmd.ToLower();
                         if (lcmd.Contains("/select") || lcmd.Contains(",select"))
                         {
-                           
+                            mCmdType = 1;
                             string selectMe = GetNameToSelectFromCommandLineArg(cmd);
-                            QTUtility2.log("select cmd " + cmd + " select :" + selectMe );
+                            // QTUtility2.log("select cmd " + cmd + " select :" + selectMe );
+                            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
                                 tabbar.OpenNewTab(path);
@@ -2543,107 +2476,280 @@ namespace QTTabBarLib {
                                     tabbar.ShellBrowser.TrySetSelection(
                                           new Address[] { new Address(selectMe) }, null, true);
                                 }
-                                QTUtility2.log("select cmd BeginInvokeMain RestoreWindow");
+                                
                                 tabbar.RestoreWindow();
+                                TimeSpan abs = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
+                                QTUtility2.log(string.Format("select cmd BeginInvokeMain cost {0} ", abs.TotalMilliseconds));
                             });
                         }
-                        else if (lcmd.Contains("/factory") || lcmd.Contains("-embedding") || lcmd.Contains("{75dff2b7-6936-4c06-a8bb-676a7b00b24b}"))
+                        else if (lcmd.Contains("/factory")   ||
+                                 lcmd.Contains("-embedding") ||
+                                 lcmd.Contains("{75dff2b7-6936-4c06-a8bb-676a7b00b24b}"))
                         {
-                            QTUtility2.log("factory cmd " + cmd  );
+                            mCmdType = 2;
+                            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
                                 tabbar.OpenNewTab(path);
-                                QTUtility2.log("factory cmd BeginInvokeMain RestoreWindow");
                                 tabbar.RestoreWindow();
+                                tabbar.Wait4Select();
+                                TimeSpan abs = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
+                                QTUtility2.log(string.Format("factory cmd BeginInvokeMain cost {0} ", abs.TotalMilliseconds));
                             });
-                            /*using (IDLWrapper wrapper = new IDLWrapper(path))
-                            {
-                                if (wrapper.Available)
-                                {
-                                    CreateNewTab(wrapper);
-                                }
-                            }*/
-                            /*var qtTabBarClass = InstanceManager.GetThreadTabBar();
-                            Keys modKeys = ModifierKeys;
-                            bool fBlockSelecting = modKeys == Keys.Shift;
-                            bool fCtrl = modKeys == Keys.Control;
-                            using (IDLWrapper wrapper = new IDLWrapper(path))
-                            {
-                                if (!wrapper.Available) return;
-                                if (wrapper.IsFolder && wrapper.IsReadyIfDrive)
-                                {
-                                    // blockSelecting
-                                    NavigatedByCode = true;
-                                    fNowTravelByTree = false; // 会导致多开一个标签 by indiff
-                                                              // OpenNewTab(wrapper, true);
-                                    if (fCtrl)
-                                    {
-                                        // StaticReg.CreateWindowIDLs.Add(wrapper.IDL);
-                                        qtTabBarClass.OpenNewTab(wrapper, true);
-                                    }
-                                    else
-                                    {
-                                        qtTabBarClass.OpenNewTab(wrapper, false);
-                                    }
-                                    QTUtility2.log("QTTabBarClass Handle_MButtonUp_Tree IsFolder IsReadyIfDrive " + wrapper.Path);
-                                }
-                                else if (wrapper.IsLink)
-                                {
-                                    if (wrapper.IsLinkToDeadFolder)
-                                    {
-                                        QTUtility2.log("QTTabBarClass Handle_MButtonUp_Tree wrapper.IsLinkToDeadFolder");
-                                        return;
-                                    }
-                                    using (IDLWrapper idlwTarget = new IDLWrapper(ShellMethods.GetLinkTargetIDL(wrapper.Path)))
-                                    {
-                                        if (idlwTarget.IsFolder && idlwTarget.IsReadyIfDrive)
-                                        {
-                                            NavigatedByCode = true;
-                                            fNowTravelByTree = false; // 会导致多开一个标签 by indiff
-                                            if (fCtrl)
-                                            {
-                                                // StaticReg.CreateWindowIDLs.Add(wrapper.IDL);
-                                                qtTabBarClass.OpenNewTab(wrapper, true);
-                                            }
-                                            else
-                                            {
-                                                qtTabBarClass.OpenNewTab(wrapper, false);
-                                            }
-                                            QTUtility2.log("QTTabBarClass Handle_MButtonUp_Tree IsLink GetLinkTargetIDL" + wrapper.Path);
-                                        }
-                                    }
-                                }
-                            }*/
                         }
                         else
                         {
-                            QTUtility2.log("DoFirstNavigation other cmd " + cmd);
+                            mCmdType = 3;
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
+                                // vscode 打开的时候是同进程， 可能需要 shell捕获
                                 tabbar.OpenNewTab(path);
                                 QTUtility2.log("other cmd BeginInvokeMain RestoreWindow");
                                 tabbar.RestoreWindow();
+                                // tabbar.Wait4Select();
                             });
                         }
                     }
+
                     fNowQuitting = true;
                     if (QTUtility.IsXP)
                     {
                         QTUtility2.log("Close Explorer WindowUtils.CloseExplorer");
                         WindowUtils.CloseExplorer(ExplorerHandle, 0);
                     }
-                    else {
-                        QTUtility2.log("Close Explorer Explorer.Quit");
-                        Explorer.Quit();
+                    else
+                    {
+                        QTUtility2.log("Close Explorer Explorer.Quit1");
+                        // QTUtility2.Wait4SelectFiles(Explorer);
+                        // Wait4SelectedQuit();
+                        // Explorer.Quit();
+                        // WindowUtils.HideExplorer(ExplorerHandle);
+                        // (ExplorerHandle != PInvoke.GetForegroundWindow())) || Explorer.Busy
+                        fHideExplorer = true;
+                        
+                        if (mCmdType == 3 || !Config.Window.CaptureWeChatSelection)
+                        {
+                            Explorer.Quit();
+                            // WindowUtils.HideExplorer(ExplorerHandle);
+                            WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                        }
                     }
                     QTUtility2.log("DoFirstNavigation return");
-                    return;
-                }
+                    // return;
+                } // 捕获命令的逻辑
                 QTUtility2.log("AddStartUpTabs ");
                 AddStartUpTabs(string.Empty, path);
                 QTUtility2.log("AddStartUpTabs InitializeOpenedWindow");
                 InitializeOpenedWindow();
             }
+        }
+
+        /**
+         * 定时器方式来获取微信或者qq打开后的选中文件
+         */
+        private void Wait4Select()
+        {
+            if (!Config.Window.CaptureWeChatSelection)
+            {
+                return;
+            }
+
+            QTUtility2.log("Wait4Select");
+            int count = 1;
+            Timer timer = new Timer { Interval = 1000 };
+            timer.Tick += (sender, args) =>
+            {
+                try
+                {
+                    count++;
+                    if (count >= 10)
+                    {
+                        timer.Stop();
+                    }
+                    string SelectionPath = RegistryUtil.ReadSelection(CurrentTab.CurrentPath);
+                    QTUtility2.log(
+                        " ReadSelection key " +
+                        CurrentTab.CurrentPath +
+                        " path " + SelectionPath
+                    );
+                    if (QTUtility2.IsNotEmpty(SelectionPath) )
+                    {
+                        QTUtility2.log("find mainShellView ");
+                        IShellView mainShellView = null;
+                        bool selected = false;
+                        if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out mainShellView))
+                        {
+                            mainShellView.Refresh();
+                            QTUtility2.log("Refresh ");
+                            using (IDLWrapper wrapper = new IDLWrapper(SelectionPath))
+                            {
+                                if (wrapper.Available && wrapper.PIDL != IntPtr.Zero)
+                                {
+                                    QTUtility2.log("wrapper " + wrapper.Path);
+                                    IntPtr pIDLRltv = PInvoke.ILFindLastID(wrapper.PIDL);
+                                    if (pIDLRltv != IntPtr.Zero)
+                                    {
+                                        QTUtility2.log("SelectItem " + pIDLRltv);
+                                        // 选中文件
+                                        mainShellView.SelectItem(pIDLRltv, SVSIF.SELECT |
+                                                                           SVSIF.DESELECTOTHERS |
+                                                                           SVSIF.ENSUREVISIBLE
+                                            // | SVSIF.EDIT
+                                        );
+                                        selected = true;
+                                    }
+                                }
+                            }
+                        }
+                        if (selected)
+                        {
+                            timer.Stop();
+                            // InstanceManager.RemoveSelect(CurrentTab.CurrentPath );
+                            // InstanceManager.selectDict.Remove(CurrentTab.CurrentPath);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    QTUtility2.MakeErrorLog(e, "获取微信或者qq打开后的选中文件");
+                }
+            };
+            timer.Start();
+        }
+
+
+        private void Wait4SelectedQuit()
+        {
+            int count = 1;
+            Timer timer = new Timer { Interval = 1000 };
+            timer.Tick += (sender, args) =>
+            {
+                count++;
+                if (count >= 10)
+                {
+                    QTUtility2.log("CloseExplorer QTTabBarClass start");
+                    timer.Stop();
+                    Explorer.Quit();
+                    WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                    QTUtility2.log("CloseExplorer QTTabBarClass  end");
+                }
+
+                QTUtility2.log("QTTabBarClass timer.Tick TryGetSelection ");
+                try
+                {
+                    var tabItem = tabControl1.TabPages[0];
+                    var tabItemComment = tabItem.Text;
+                    IShellView shellView = null;
+                    List<string> select = InstanceManager.GetSelect(tabItem.CurrentPath);
+                    if (select != null)
+                    {
+                        timer.Stop();
+                        Explorer.Quit();
+                        WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                    }
+
+                    if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out shellView))
+                    {
+                        var iid = new Guid("{0000010e-0000-0000-C000-000000000046}");
+                        object ppv;
+                        shellView.GetItemObject((uint)SVSIF.SELECT, ref iid, out ppv);
+                        if (ppv != null)
+                        {
+                            IDataObject pDataObject = (IDataObject)ppv;
+                            var shellObjectCollection = ShellObjectCollection.FromDataObject(pDataObject);
+                            if (shellObjectCollection.Count > 0)
+                            {
+                                List<string> list = new List<string>();
+                                foreach (ShellObject so in shellObjectCollection)
+                                {
+                                    QTUtility2.log("add so.Name " + so.Name + " so.ParsingName " + so.ParsingName);
+                                    list.Add(so.ParsingName);
+
+                                    InstanceManager.PutSelect(tabItem.CurrentPath, list);
+                                    // InstanceManager.selectDict.Add(tabItem.CurrentPath, list);
+                                    timer.Stop();
+                                    Explorer.Quit();
+                                    WindowUtils.CloseExplorer(ExplorerHandle, 0);
+
+                                }
+
+                                /*if (list.Count > 0)
+                                    QTUtility2.log("set dict " + tabItem.CurrentPath);
+                                    InstanceManager.selectDict.Add(tabItem.CurrentPath, list);
+                                    timer.Stop();
+                                    Explorer.Quit();
+                                    WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                                }*/
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            };
+            timer.Start();
+        }
+
+        /*
+                      Address[] addressArray;
+                      if (ShellBrowser.TryGetSelection(out addressArray, false))
+                      {
+                          foreach (Address address in addressArray)
+                          {
+                              if (address.Path != null && Directory.Exists(address.Path))
+                              {
+                                  QTUtility2.log("TryGetSelection " + address.Path);
+                                  // OpenNewTab(address.Path, action == BindAction.ItemsOpenInNewTabNoSel);
+                              }
+                          }
+                      } 
+                    */
+
+
+        private static bool TryParseCommandlineParams(
+            string param,
+            out string path,
+            out string selection)
+        {
+            selection = (string)null;
+            Match match = new Regex("( ?(/|,)select, ?((?<SELQ>\"[^\"/]+\")|(?<SEL>[^,/]+))| ?(/|,)root,\\s?((?<ROOTQ>\"[^\"/]+\")|(?<ROOT>[^,/]+)))+", RegexOptions.IgnoreCase).Match(param);
+            if (match.Success) {
+                var group1 = match.Groups["SEL"];
+                var group2 = match.Groups["SELQ"];
+                var group3 = match.Groups["ROOT"];
+                var group4 = match.Groups["ROOTQ"];
+                try
+                {
+                    if (group3.Success)
+                    {
+                        path = group3.Value;
+                        return true;
+                    }
+                    if (group4.Success)
+                    {
+                        path = group4.Value.Trim('"');
+                        return true;
+                    }
+                    if (group1.Success)
+                    {
+                        selection = group1.Value;
+                        path = !QTUtility2.IsDrive(selection) ? Path.GetDirectoryName(selection) : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}";
+                        return true;
+                    }
+                    if (group2.Success)
+                    {
+                        selection = group2.Value.Trim('"');
+                        path = !QTUtility2.IsDrive(selection) ? Path.GetDirectoryName(selection) : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}";
+                        return true;
+                    }
+                }
+                catch
+                {
+                }
+            }
+            path = (string)null;
+            return false;
         }
 
         private int dropTargetWrapper_DragFileDrop(out IntPtr hwnd, out byte[] idlReal) {
@@ -2750,36 +2856,48 @@ namespace QTTabBarLib {
                     + " PostData :" + PostData
                     + " Headers :" + Headers
                     + " Cancel :" + Cancel
-
                 );
             if(!IsShown) {
                 DoFirstNavigation(true, (string)URL);
             }
         }
 
+
+
         private void Explorer_NavigateComplete2(object pDisp, ref object URL) {
             // add by indiff.
-            QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  pDisp :" 
+            /*QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  pDisp :" 
                            + pDisp
                            + " URL :" + (string)URL
-            );
+            );*/
             string path = (string)URL;
             lastCompletedBrowseObjectIDL = lastAttemptedBrowseObjectIDL;
             // 当导航的时候刷新文件夹视图
-            QTUtility2.log("QTTabBarClass ShellBrowser.OnNavigateComplete refresh the FolderView");
+            QTUtility2.log("QTTabBarClass ShellBrowser.OnNavigateComplete reset field FolderView");
             ShellBrowser.OnNavigateComplete();
             
             // if(fFinalRelease && !IsShown) {
             if(!IsShown) {
                 QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  !IsShown");
-                // QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  !IsShown IsShown:" + IsShown + " path " + path);
                 DoFirstNavigation(false, path);
             }            
 
             if(fNowQuitting)
             {
-                QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  fNowQuitting:" + fNowQuitting + " path " + path);
-                Explorer.Quit();
+                // var selectedCount = ShellBrowser.GetSelectedCount();
+                // var commandLine = GetCommandLine();
+                QTUtility2.log("fNowQuitting Close Explorer Explorer.Quit2");
+                // Explorer.Quit();
+                // QTUtility2.KillCurrentProcess();
+                // Wait4SelectedQuit();
+                // WindowUtils.HideExplorer(ExplorerHandle);
+                fHideExplorer = true;
+
+                if (mCmdType == 3)
+                {
+                    Explorer.Quit();
+                    WindowUtils.HideExplorer(ExplorerHandle);
+                }
             }
             else {
                 int hash = -1;
@@ -2966,14 +3084,13 @@ namespace QTTabBarLib {
                     tabControl1.SetRedraw(true);
                     FirstNavigationCompleted = true;
                     // this.listView
-
-                    
                     // compatibleView.SetBackColor(ColorTranslator.ToWin32(SystemColors.Window),   ColorTranslator.ToWin32(System.Drawing.Color.FromArgb(244, 248, 253)));
-                    
                     // listView.RefreshViewWatermark(false);
                 }
             }
         }
+
+
         // 消息捕获
         private bool explorerController_MessageCaptured(ref Message msg) {
             /* DebugUtil.WriteLine(
@@ -2996,26 +3113,7 @@ namespace QTTabBarLib {
                  +  ((msg.Msg == WM.DEVICECHANGE) ? ("WM.DEVICECHANGE") : (" "))
                  +  ((msg.Msg == WM.PARENTNOTIFY) ? ("WM.PARENTNOTIFY") : (" "))
                  );
-            
-             QTUtility2.log("explorerController_MessageCaptured msg.Msg " + msg.Msg
-                                 + ((msg.Msg == WM_BROWSEOBJECT) ? ("WM_BROWSEOBJECT") : (" "))
-                                 + ((msg.Msg == WM.CLOSE) ? ("CLOSE") : (" "))
-                                 + ((msg.Msg == WM_HEADERINALLVIEWS) ? ("WM_HEADERINALLVIEWS") : (" "))
-                                 + ((msg.Msg == WM_SHOWHIDEBARS) ? ("WM_SHOWHIDEBARS") : (" "))
-                                 + ((msg.Msg == WM_CHECKPULSE) ? ("WM_CHECKPULSE") : (" "))
-                                 + ((msg.Msg == WM.SETTINGCHANGE) ? ("CLOSE") : (" "))
-                                 + ((msg.Msg == WM.NCLBUTTONDOWN) ? ("WM.NCLBUTTONDOWN") : (" "))
-                                 + ((msg.Msg == WM.NCRBUTTONDOWN) ? ("WM.NCRBUTTONDOWN") : (" "))
-                                 + ((msg.Msg == WM.MOVE) ? ("WM.MOVE") : (" "))
-                                 + ((msg.Msg == WM.SIZE) ? ("WM.SIZE") : (" "))
-                                 + ((msg.Msg == WM.ACTIVATE) ? ("WM.ACTIVATE") : (" "))
-                                 + ((msg.Msg == WM.NCMBUTTONDOWN) ? ("WM.NCMBUTTONDOWN") : (" "))
-                                 + ((msg.Msg == WM.NCXBUTTONDOWN) ? ("WM.NCXBUTTONDOWN") : (" "))
-                                 +  ((msg.Msg == WM.SYSCOMMAND) ? ("WM.SYSCOMMAND") : (" "))
-                                 +  ((msg.Msg == WM.POWERBROADCAST) ? ("WM.POWERBROADCAST") : (" "))
-                                 +  ((msg.Msg == WM.DEVICECHANGE) ? ("WM.DEVICECHANGE") : (" "))
-                                 + ((msg.Msg == WM.PARENTNOTIFY) ? ("WM.PARENTNOTIFY") : (" "))
-                 );
+             
             if (msg.Msg == 793)
             {
                 // 鼠标中键的操作
@@ -3036,22 +3134,22 @@ namespace QTTabBarLib {
             }
 
             if(msg.Msg == WM_BROWSEOBJECT) {
-                QTUtility2.log("explorerController_MessageCaptured WM_BROWSEOBJECT: " );
                 SBSP flags = (SBSP)Marshal.ReadInt32(msg.WParam);
                 if((flags & SBSP.NAVIGATEBACK) != 0) {
                     msg.Result = (IntPtr)1;
-                    QTUtility2.log("explorerController_MessageCaptured flags & SBSP.NAVIGATEBACK NavigateCurrentTab true: ");
+                    QTUtility2.log("explorerController_MessageCaptured WM_BROWSEOBJECT: NAVIGATEBACK");
                     if(!NavigateCurrentTab(true) && CloseTab(CurrentTab, true) && tabControl1.TabCount == 0) {
                         WindowUtils.CloseExplorer(ExplorerHandle, 2);
                     }
                 }
                 else if((flags & SBSP.NAVIGATEFORWARD) != 0) {
-                    QTUtility2.log("explorerController_MessageCaptured flags & SBSP.NAVIGATEFORWARD NavigateCurrentTab false: ");
+                    QTUtility2.log("explorerController_MessageCaptured WM_BROWSEOBJECT: NAVIGATEFORWARD");
                     msg.Result = (IntPtr)1;
                     NavigateCurrentTab(false);
                 }
                 else {
                     QTUtility2.log("explorerController_MessageCaptured PInvoke.ILClone: ");
+                    var commandLine = GetCommandLine();
                     IntPtr pidl = IntPtr.Zero;
                     if(msg.LParam != IntPtr.Zero) {
                         pidl = PInvoke.ILClone(msg.LParam);
@@ -3091,6 +3189,12 @@ namespace QTTabBarLib {
                     msg.Result = (IntPtr)1;
                     fNeedsNewWindowPulse = false;
                 }
+                return true;
+            }
+            else if (msg.Msg == WM_SELECTFILE)
+            {
+                // MessageBox.Show("select file 2");
+                QTUtility2.log(" select file 2  wparam " + msg.WParam + " lparam " + msg.LParam);
                 return true;
             }
 
@@ -3359,9 +3463,43 @@ namespace QTTabBarLib {
         /**
          * new 是否有意隐藏？
          */
-        private new static string GetCommandLine()
+        private  static string GetCommandLine()
         {
+            Process cprocess = Process.GetCurrentProcess();
+            
+            int currentProcessId2 = cprocess.Id;
+
+            int currentProcessId = (int)PInvoke.GetCurrentProcessId();
+            var process = Process.GetProcessById( currentProcessId );
+            QTUtility2.log(" process command line 0 : " + cprocess.StartInfo.Arguments);
+            QTUtility2.log(" process command line 1 : " + process.StartInfo.Arguments);
+            
+
+            string result = null;
+            try
+            {
+                var cpid = currentProcessId;
+                if (currentProcessId2 != currentProcessId)
+                {
+                    cpid = currentProcessId2;
+                }
+                string wmiQuery = string.Format("select CommandLine from Win32_Process where ProcessID ={0}", cpid);
+                ManagementObjectSearcher managementObjectSearcher =
+                    new ManagementObjectSearcher(wmiQuery);
+                ManagementObjectCollection managementObjectCollection = managementObjectSearcher.Get();
+                
+                foreach (ManagementObject managementObject in managementObjectCollection.Cast<ManagementObject>())
+                {
+                    result = managementObject["CommandLine"] == null ? "" : managementObject["CommandLine"].ToString();
+                }
+                QTUtility2.log(" process command line 3 : " + result);
+            }
+            catch (Exception ex)
+            {
+                result = "";
+            }
             string str = Marshal.PtrToStringUni(PInvoke.GetCommandLine());
+            QTUtility2.log(" process command line 2 : " + str);
             return str;
         }
 
@@ -3858,7 +3996,7 @@ namespace QTTabBarLib {
         }
 
         private static void HandleF5() {
-            TryCallButtonBar(bbar => bbar.RefreshSearchBox(false));
+            TryCallButtonBar(bbar => { return bbar.RefreshSearchBox(false); });
         }
 
         private void HandleFileDrop(IntPtr hDrop) {
@@ -4444,12 +4582,13 @@ namespace QTTabBarLib {
             
             // 创建工具栏
             QTUtility2.log("QTTabBarClass TryCallButtonBar ");
-            if(!TryCallButtonBar(bbar => bbar.CreateItems())) {
+            if (!TryCallButtonBar(bbar => { return bbar.CreateItems(); }))
+            {
                 // Try again in 2 seconds
                 Timer timer = new Timer { Interval = 2000 };
                 timer.Tick += (sender, args) => {
                     QTUtility2.log("QTTabBarClass timer.Tick TryCallButtonBar ");
-                    TryCallButtonBar(bbar => bbar.CreateItems());
+                    TryCallButtonBar(bbar => {return bbar.CreateItems();});
                     timer.Stop();
                 };
                 timer.Start();
@@ -4474,7 +4613,6 @@ namespace QTTabBarLib {
                     breadcrumbBar.ItemClicked += FolderLinkClicked;
                 }
             }
-
             // SysTreeView32
         }
 
@@ -4678,31 +4816,16 @@ namespace QTTabBarLib {
             dropTargetWrapper.DragFileDrop += dropTargetWrapper_DragFileDrop;
         }
 
-        private static bool IsSearchResultFolder(string path) {
-            return path.PathStartsWith(QTUtility.IsXP ? QTUtility.ResMisc[2] : QTUtility.PATH_SEARCHFOLDER);
-        }
 
-        private static bool IsSpecialFolderNeedsToTravel(string path) {
-            int index = path.IndexOf("*?*?*");
-            if(index != -1) {
-                path = path.Substring(0, index);
-            }
-            if(!IsSearchResultFolder(path)) {
-                if(path.PathEquals("::{13E7F612-F261-4391-BEA2-39DF4F3FA311}")) {
-                    return true;
-                }
-                if(!path.PathStartsWith(QTUtility.ResMisc[0]) && (!path.EndsWith(QTUtility.ResMisc[0], StringComparison.OrdinalIgnoreCase) || Path.IsPathRooted(path))) {
-                    return false;
-                }
-            }
-            return true;
-        }
+
+        
 
         private void ListView_ItemCountChanged(int count) {
-            TryCallButtonBar(bbar => bbar.RefreshStatusText());
+            TryCallButtonBar(bbar => { return bbar.RefreshStatusText(); });
         }
 
         private bool ListView_SelectionActivated(Keys modKeys) {
+            QTUtility2.log("ListView_SelectionActivated");
             if(timerSelectionChanged != null) {
                 timerSelectionChanged.Enabled = false;
             }
@@ -4712,7 +4835,14 @@ namespace QTTabBarLib {
                     HandleItemActivate(modKeys, fEnqExec);
         }
 
-        private void ListView_SelectionChanged() {
+        /// <summary>
+        /// 视图选择事件发生
+        /// 添加获取选中文件数据
+        /// </summary>
+        private void ListView_SelectionChanged(/*object sender, SelectionChangedEventArgs e*/)
+        {
+            // QTUtility2.log("ListView_SelectionChanged e.AddedItems " + e.AddedItems);
+            // QTUtility2.log("ListView_SelectionChanged e.OriginalSource " + e.OriginalSource);
             if(pluginServer != null && pluginServer.SelectionChangedAttached) {
                 if(timerSelectionChanged == null) {
                     timerSelectionChanged = new Timer(components);
@@ -4725,6 +4855,142 @@ namespace QTTabBarLib {
                 }
                 // timerSelectionChanged.Enabled = true;
             }
+
+            if (!Config.Window.CaptureWeChatSelection)
+            {
+                return;
+            }
+            // 获取选中文件数据
+            try
+            {
+                var selectedCount = ShellBrowser.GetSelectedCount();
+                var tabText = tabControl1.TabPages[0].Text;
+                QTUtility2.log("ListView_SelectionChanged this.TabCount " + this.TabCount +
+                               " fHideExplorer " + fHideExplorer +
+                               " selectedCount " + selectedCount +
+                               " mCmdType " + mCmdType +
+                               " tabItem Text " + tabText
+                );
+
+                // other cmd 方式会报错  找不到元素。 (异常来自 HRESULT:0x80070490)
+                if (this.TabCount == 1 && // 当前捕获到的新进程是只有一个窗口
+                    fHideExplorer && // 需要进行退出的窗口
+                    (mCmdType == 2) && // factory 捕获 // || mCmdType == 3
+                    QTUtility2.IsEmpty(tabText) // 标签文本是空的
+                   )
+                {
+                    try
+                    {
+                        var tabItem = tabControl1.TabPages[0];
+                        IShellView shellView = null;
+
+                        if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out shellView))
+                        {
+                            var iid = new Guid("{0000010e-0000-0000-C000-000000000046}");
+                            object ppv;
+                            shellView.GetItemObject((uint)SVSIF.SELECT, ref iid, out ppv);
+                            if (ppv != null)
+                            {
+                                IDataObject pDataObject = (IDataObject)ppv;
+                                var shellObjectCollection = ShellObjectCollection.FromDataObject(pDataObject);
+                                if (shellObjectCollection.Count > 0)
+                                {
+                                    string key = "";
+                                    foreach (ShellObject so in shellObjectCollection)
+                                    {
+                                        FileInfo info = new FileInfo(so.ParsingName);
+                                        if (info.Exists)
+                                        {
+                                            key = info.Directory.FullName;
+
+                                            if (QTUtility2.IsNotEmpty(key))
+                                            {
+                                                RegistryUtil.WriteSelection(key, so.ParsingName);
+                                                QTUtility2.log(
+                                                    " WriteSelection " +
+                                                    key +
+                                                    " path " + so.ParsingName
+                                                );
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            if (fHideExplorer)
+                            {
+                                Explorer.Quit();
+                                WindowUtils.CloseExplorer(ExplorerHandle, 0);
+
+
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            QTUtility2.MakeErrorLog(e, "关闭窗口");
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "获取选中文件数据");
+            }
+
+            
+            if (
+                this.TabCount == 1 &&
+                fHideExplorer && // 需要进行退出的窗口
+                (mCmdType == 3) && // other cmd 捕获， vscode 、visual studio 打开的都是单进程， 试一试关闭当前标签
+                QTUtility2.IsEmpty(tabControl1.TabPages[0].Text)) // 标签文本是空的)
+            {
+                try
+                {
+                    // string focushed;
+                    // CurrentTab.GetSelectedItemsAt(CurrentAddress, out focushed);
+                    // 不能执行 quit， 因为是同一个进程
+                    QTUtility2.log("other cmd close windows  " );
+                    // WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                    // WindowUtils.CloseExplorer(ExplorerHandle, 1);
+                    // WindowUtils.CloseExplorer(ExplorerHandle, 2);
+                    WindowUtils.CloseExplorer(ExplorerHandle, 2, true);
+                    // WindowUtils.CloseExplorer(ExplorerHandle, 3);
+                    // MergeAllWindows();
+                }
+                finally
+                {
+                }
+            }
+
+
+            /*if (
+                this.TabCount == 1 &&
+                fHideExplorer && // 需要进行退出的窗口
+                (mCmdType == 3) && // other cmd 捕获
+                QTUtility2.IsEmpty(tabControl1.TabPages[0].Text)) // 标签文本是空的)
+            {
+                try
+                {
+                }
+                finally
+                {
+                    try
+                    {
+                        Explorer.Quit();
+                        WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                    }
+                    catch (Exception e)
+                    {
+                        QTUtility2.MakeErrorLog(e, "关闭窗口");
+                    }
+                }
+            }*/
         }
 
         private bool ListView_MiddleClick(Point pt) {
@@ -5208,44 +5474,7 @@ namespace QTTabBarLib {
             return true;
         }
 
-        private bool NavigateToPastSpecialDir(int hash) {
-            IEnumTravelLogEntry ppenum = null;
-            try {
-                ITravelLogEntry entry2;
-                if(TravelLog.EnumEntries(0x31, out ppenum) != 0) {
-                    goto Label_007C;
-                }
-            Label_0013:
-                do {
-                    if(ppenum.Next(1, out entry2, 0) != 0) {
-                        goto Label_007C;
-                    }
-                    if(entry2 != LogEntryDic[hash]) {
-                        goto Label_0057;
-                    }
-                }
-                while(TravelLog.TravelTo(entry2) != 0);
-                NowInTravelLog = true;
-                CurrentTravelLogIndex++;
-                return true;
-            Label_0057:
-                if(entry2 != null) {
-                    Marshal.ReleaseComObject(entry2);
-                }
-                goto Label_0013;
-            }
-            catch(Exception exception) {
-                QTUtility2.MakeErrorLog(exception);
-            }
-            finally {
-                if(ppenum != null) {
-                    QTUtility2.log("ReleaseComObject ppenum");
-                    Marshal.ReleaseComObject(ppenum);
-                }
-            }
-        Label_007C:
-            return false;
-        }
+        
 
         private void NavigationButton_DropDownMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             QMenuItem clickedItem = e.ClickedItem as QMenuItem;
@@ -5299,7 +5528,6 @@ namespace QTTabBarLib {
         }
 
         protected override void OnExplorerAttached() {
-            QTUtility2.log(  "QTTabBarClass OnExplorerAttached" );
             ExplorerHandle = (IntPtr)Explorer.HWND;
             try {
                 object obj2;
@@ -5870,12 +6098,12 @@ namespace QTTabBarLib {
             ShellBrowser.SetUsingListView(Config.Tweaks.ForceSysListView);
             tabControl1.ResumeLayout();
             ResumeLayout(true);
-            TryCallButtonBar(bbar => bbar.CreateItems());
+            TryCallButtonBar(bbar => { return bbar.CreateItems(); });
         }
 
         [ComRegisterFunction]
         private static void Register(Type t) {
-            QTUtility2.log(  "QTTabBarClass Register" );
+            // QTUtility2.log(  "QTTabBarClass Register" );
             string name = t.GUID.ToString("B");
             using(RegistryKey key2 = Registry.ClassesRoot.CreateSubKey(@"CLSID\" + name)) {
                 key2.SetValue(null, "QTTabBar");
@@ -6071,48 +6299,9 @@ namespace QTTabBarLib {
                 Config.Tabs.NewTabPosition = num;
             }
         }
-        /**
-         * 保存选中选项
-         */
-        private void SaveSelectedItems(QTabItem tab) {
-            Address[] addressArray;
-            string str;
-            if (
-                ( (tab != null) && !string.IsNullOrEmpty(CurrentAddress)) && 
-                ShellBrowser.TryGetSelection(out addressArray, out str, false, ShellBrowser))
-            {
-                tab.SetSelectedItemsAt(CurrentAddress, addressArray, str);
-            }
-        }
+        
 
-        private void SetBarRows(int count)
-        {
-            QTUtility2.log("QTTabBarClass SetBarRows");
-            // BandHeight = (count * (Config.Skin.TabHeight - 3 )) ;
-            // BandHeight = (count * (Config.Skin.TabHeight - 3));
-            // BandHeight = (count * (Config.Skin.TabHeight + BandHeightSpace));
-            BandHeight = (count * (Config.Skin.TabHeight) + BandHeightSpace );
-            // BandHeight = (count * (Config.Skin.TabHeight + 10 )) ;
-            // fix bug
-            /**
-           异常文本
-System.NullReferenceException: 未将对象引用设置到对象的实例。
-   在 QTTabBarLib.QTTabBarClass.SetBarRows(Int32 count)
-   在 QTTabBarLib.QTabControl.CalculateItemRectangle_MultiRows()
-   在 QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
-   在 QTTabBarLib.QTabControl.OnPaint(PaintEventArgs e)
-   在 System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
-   在 System.Windows.Forms.Control.WmPaint(Message& m)
-   在 System.Windows.Forms.Control.WndProc(Message& m)
-   在 QTTabBarLib.QTabControl.WndProc(Message& m)
-   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
-   在 System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
-             **/
-            if (null != rebarController)
-            {
-                rebarController.RefreshHeight();
-            }
-        }
+       
 
         protected override bool ShouldHaveBreak() {
             bool breakBar = true;
@@ -6175,16 +6364,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             md5Form.ShowFileHashForm((string[])paths);
         }
 
-        private void ShowMessageNavCanceled(string failedPath, bool fModal) {
-            QTUtility2.log(  "QTTabBarClass ShowMessageNavCanceled: " + failedPath);
-            QTUtility2.MakeErrorLog(null, string.Format("Failed navigation: {0}", failedPath));
-            MessageForm.Show(ExplorerHandle, 
-                string.Format(QTUtility.TextResourcesDic["TabBar_Message"][0], failedPath),
-                string.Empty, 
-                MessageBoxIcon.Asterisk, 
-                0x2710, 
-                fModal);
-        }
+      
 
         private void ShowSearchBar(bool fShow) {
             QTUtility2.log(  "QTTabBarClass ShowSearchBar fShow: " + fShow);
@@ -6214,6 +6394,10 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             try {
                 if(fShow) {
                     if(Explorer.Busy || string.IsNullOrEmpty(tab.CurrentPath)) {
+                        tabControl1.SetSubDirTipShown(false);
+                    }
+                    else if (QTUtility.IsNetPath(tab.CurrentPath))
+                    {
                         tabControl1.SetSubDirTipShown(false);
                     }
                     else {
@@ -6495,31 +6679,9 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             }*/
         }
 
-        private void SyncToolbarTravelButton() {
-            if(!QTUtility.IsXP) {
-                IntPtr ptr = (IntPtr)0x10001;
-                IntPtr ptr2 = (IntPtr)0x10000;
-                bool flag = (navBtnsFlag & 1) != 0;
-                bool flag2 = (navBtnsFlag & 2) != 0;
-                PInvoke.SendMessage(TravelToolBarHandle, 0x401, (IntPtr)0x100, flag ? ptr : ptr2);
-                PInvoke.SendMessage(TravelToolBarHandle, 0x401, (IntPtr)0x101, flag2 ? ptr : ptr2);
-                PInvoke.SendMessage(TravelToolBarHandle, 0x401, (IntPtr)0x102, (flag || flag2) ? ptr : ptr2);
-            }
-        }
+        
 
-        private void SyncTravelState() {
-            if(CurrentTab != null) {
-                navBtnsFlag = ((CurrentTab.HistoryCount_Back > 1) ? 1 : 0) | ((CurrentTab.HistoryCount_Forward > 0) ? 2 : 0);
-                if(Config.Tabs.ShowNavButtons && (toolStrip != null)) {
-                    buttonBack.Enabled = (navBtnsFlag & 1) != 0;
-                    buttonForward.Enabled = (navBtnsFlag & 2) != 0;
-                    buttonNavHistoryMenu.Enabled = navBtnsFlag != 0;
-                }
-                TryCallButtonBar(bbar => bbar.RefreshButtons());
-                QTabItem.CheckSubTexts(tabControl1);
-                SyncToolbarTravelButton();
-            }
-        }
+        
 
         private void tabControl1_CloseButtonClicked(object sender, QTabCancelEventArgs e) {
             if(NowTabDragging) {
@@ -6549,11 +6711,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             }
         }
 
-        private void tabControl1_Deselecting(object sender, QTabCancelEventArgs e) {
-            if(e.TabPageIndex != -1) {
-                SaveSelectedItems(e.TabPage);
-            }
-        }
+
 
         private void tabControl1_ItemDrag(object sender, ItemDragEventArgs e) {
             QTabItem item = (QTabItem)e.Item;
@@ -6748,90 +6906,10 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             }
         }
 
-        private void tabControl1_RowCountChanged(object sender, QEventArgs e) {
-            SetBarRows(e.RowCount);
-        }
 
-        /**
-         * TODO config to refresh  when tab control selected index changed
-         * 当切换标签的时候，配置是否进行刷新
-         * 出现异常情况
-         * System.NullReferenceException: 未将对象引用设置到对象的实例。
-           在 QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
-           在 QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
-           在 QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
-         */
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e) {
-            QTabItem selectedTab = tabControl1.SelectedTab;
-            string currentPath = selectedTab.CurrentPath;
-            if(IsSpecialFolderNeedsToTravel(currentPath) &&
-               LogEntryDic.ContainsKey(selectedTab.GetLogHash(true, 0))) {
-                NavigatedByCode = true;
-                CurrentTab = selectedTab;
-                while(lstActivatedTabs.Remove(CurrentTab)) {
-                }
-                lstActivatedTabs.Add(CurrentTab);
-                if(lstActivatedTabs.Count > 15) {
-                    lstActivatedTabs.RemoveAt(0);
-                }
-                fNavigatedByTabSelection = NavigateToPastSpecialDir(CurrentTab.GetLogHash(true, 0));
-                if(pluginServer != null) {
-                    pluginServer.OnTabChanged(tabControl1.SelectedIndex, selectedTab.CurrentIDL, selectedTab.CurrentPath);
-                }
-                if(tabControl1.Focused) {
-                    listView.SetFocus();
-                }
-            }
-            else {
-                IDLWrapper idlw = null;
-                if((selectedTab.CurrentIDL != null) && (selectedTab.CurrentIDL.Length > 0)) {
-                    idlw = new IDLWrapper(selectedTab.CurrentIDL);
-                }
-                if((idlw == null) || !idlw.Available) {
-                    idlw = new IDLWrapper(selectedTab.CurrentPath);
-                }
-                using(idlw) {
-                    if(!idlw.Available) {
-                        CancelFailedTabChanging(currentPath);
-                        return;
-                    }
-                    CurrentTab = selectedTab;
-                    while(lstActivatedTabs.Remove(CurrentTab)) {
-                    }
-                    lstActivatedTabs.Add(CurrentTab);
-                    if(lstActivatedTabs.Count > 15) {
-                        lstActivatedTabs.RemoveAt(0);
-                    }
-                    if(((currentPath != CurrentAddress) ||
-                        (QTUtility.IsXP && (currentPath == QTUtility.PATH_SEARCHFOLDER))) ||
-                       NowTabCloned) {
-                        NavigatedByCode = true;
-                        fNavigatedByTabSelection = true;
-                        NowTabCloned = false;
-                        if(ShellBrowser.Navigate(idlw) != 0) {
-                            CancelFailedTabChanging(currentPath);
-                            return;
-                        }
-                    }
-                    else {
-                        SyncTravelState();
-                    }
-                }
-                if(tabControl1.Focused) {
-                    listView.SetFocus();
-                }
-                if(pluginServer != null) {
-                    pluginServer.OnTabChanged(tabControl1.SelectedIndex, CurrentTab.CurrentIDL, CurrentTab.CurrentPath);
-                }
-            }
-        }
+       
 
-        private void tabControl1_Selecting(object sender, QTabCancelEventArgs e) {
-            if(NowTabsAddingRemoving) {
-                QTUtility2.log("tabControl1_Selecting");
-                e.Cancel = true;
-            }
-        }
+
 
         private void tabControl1_TabCountChanged(object sender, QTabCancelEventArgs e) {
             if(pluginServer == null) return;
@@ -6848,96 +6926,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             ShowSubdirTip_Tab(e.TabPage, e.Action == TabControlAction.Selecting, e.TabPageIndex, false, e.Cancel);
         }
 
-        // 新增+号按钮的添加新标签事件
-        private void tabControl1_PlusButtonClicked(object sender, QTabCancelEventArgs e)
-        {
-            // 新标签按钮 qwop
-            string clipPath = QTUtility2.GetStringClipboard();
-            if (String.IsNullOrEmpty(clipPath))
-            {
-                // 如果获取不到剪贴板路径，则打开默认
-                openDefault();
-                return;
-            }
-            clipPath = clipPath.Trim().Trim(new char[] { ' ', '"' });
-            string[] pathArr = { "a:\\", "b:\\", "c:\\", "d:\\", "e:\\", "f:\\", "g:\\", "h:\\", "i:\\" };
-            bool blockSelecting = false,  fForceNew = true;
-            // 如果剪贴板是一个文件路径，并且存在则打开父级目录或者跟级目录
-            if ( File.Exists( clipPath )) {
-                try
-                {
-                    QTUtility2.log("tabControl1_PlusButtonClicked file exist " + clipPath);
-                    string pathRoot = Path.GetPathRoot(clipPath);
-                    DirectoryInfo di = new DirectoryInfo(clipPath);
-                    if (Directory.Exists(di.Parent.FullName))
-                    {
-                        OpenNewTab(di.Parent.FullName, blockSelecting, fForceNew);
-
-                    }
-                    else
-                    {
-                        OpenNewTab(pathRoot, blockSelecting, fForceNew);
-                    }
-
-                    string selectMe = Path.GetFileName(clipPath);
-                    ShellBrowser.TrySetSelection(new Address[] { new Address(selectMe) }, null, true);
-                }catch( Exception e1)
-                {
-                    QTUtility2.MakeErrorLog(e1, "tabControl1_PlusButtonClicked for file:" + clipPath);
-                    openDefault();
-                }
-        } else if (Directory.Exists(clipPath)) // 剪贴板直接是一个目录则打开标签
-            {
-                try
-                {
-                    QTUtility2.log("tabControl1_PlusButtonClicked Directory exist " + clipPath);
-                    OpenNewTab(clipPath, blockSelecting, fForceNew);
-                }
-                catch( Exception e1)
-                {
-                    QTUtility2.MakeErrorLog(e1, "tabControl1_PlusButtonClicked for director :" + clipPath);
-                    openDefault();
-                }
-            } else
-            {
-                
-                // 打开指定盘符目录
-                /*
-                for ( int i = 0; i < pathArr.Length; i++ )
-                {
-                    if (Directory.Exists(pathArr[i]))
-                    {
-                        OpenNewTab(pathArr[i], blockSelecting, fForceNew);
-                        break;
-                    }
-                }
-                */
-                openDefault();
-            }
-        }
-
-        private void openDefault()
-        {
-            bool isOpend = false;
-            // 打开配置的路径地址
-            using (IDLWrapper wrapper = new IDLWrapper(Config.Window.DefaultLocation))
-            {
-                QTUtility2.log("tabControl1_PlusButtonClicked others default " + Config.Window.DefaultLocation);
-                OpenNewTab(wrapper, false, true);
-                isOpend = true;
-            }
-
-            if (!isOpend)
-            {
-                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // 我的电脑， 默认打开
-                using (IDLWrapper w = new IDLWrapper(idl))
-                {
-                    QTUtility2.log("tabControl1_PlusButtonClicked 我的电脑 ");
-                    OpenNewTab(w, false, true);
-                }
-            }
-        }
-
+       
 
         private void tabSwitcher_Switched(object sender, ItemCheckEventArgs e) {
             tabControl1.SelectedIndex = e.Index;
@@ -7178,14 +7167,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             }
         }
 
-        private static bool TryCallButtonBar(Action<QTButtonBar> action) {
-            QTButtonBar bbar = InstanceManager.GetThreadButtonBar();
-            if(bbar == null) return false;
-            action(bbar);
-            return true;
-        }
-
-        private static bool TryCallButtonBar(Func<QTButtonBar, bool> func) {
+        public static bool TryCallButtonBar(Func<QTButtonBar, bool> func) {
             QTButtonBar bbar = InstanceManager.GetThreadButtonBar();
             return bbar != null && func(bbar);
         }
@@ -7193,6 +7175,8 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
         internal bool TryGetSelection(out Address[] adSelectedItems, out string pathFocused, bool fDisplayName) {
             return ShellBrowser.TryGetSelection(out adSelectedItems, out pathFocused, fDisplayName);
         }
+
+       
 
         private void tsmiBranchRoot_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             QTUtility2.log("QTTabBarClass tsmiBranchRoot_DropDownItemClicked");
@@ -7356,5 +7340,609 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             // this.SetBarRows(this.tabControl.RowCount);
             SetBarRows(tabControl1.SetTabRowType(iType));
         }
+
+
+
+        #region 标签栏事件区
+        public RebarController rebarController;
+        protected string CurrentAddress;
+        protected QTabItem CurrentTab;
+        protected int BandHeight;
+        public static int BandHeightSpace = 3;
+        protected ShellBrowserEx ShellBrowser;
+        
+        protected List<QTabItem> lstActivatedTabs = new List<QTabItem>(0x10);
+        protected IntPtr ExplorerHandle;
+        protected Dictionary<int, ITravelLogEntry> LogEntryDic = new Dictionary<int, ITravelLogEntry>();
+        protected AbstractListView listView = new AbstractListView();
+        protected ListViewMonitor listViewManager;
+
+        protected List<ToolStripItem> lstPluginMenuItems_Sys;
+        protected List<ToolStripItem> lstPluginMenuItems_Tab;
+        protected ITravelLogStg TravelLog;
+        public QTTabBarClass.PluginServer pluginServer { get; set; }
+
+        public bool HideExplorer
+        {
+            get
+            {
+                return fHideExplorer;
+            }
+        }
+
+        protected bool NavigatedByCode;
+        
+        protected bool NowTabsAddingRemoving;
+        protected bool NowInTravelLog;
+        protected bool NowModalDialogShown;
+        protected bool NowOpenedByGroupOpener;
+        protected bool NowTabCloned;
+        protected bool NowTabCreated;
+        protected bool NowTabDragging;
+        protected bool NowTopMost;
+        protected bool fNavigatedByTabSelection;
+        protected int CurrentTravelLogIndex;
+        protected int navBtnsFlag;
+        // TODO add fields
+        protected ToolStripClasses toolStrip;
+        protected ToolStripButton buttonBack;
+        protected ToolStripButton buttonForward;
+        protected ToolStripDropDownButton buttonNavHistoryMenu;
+        protected IntPtr TravelToolBarHandle;
+
+        protected void AddToHistory(QTabItem closingTab)
+        {
+            string currentPath = closingTab.CurrentPath;
+            if ((Config.Misc.KeepHistory && !string.IsNullOrEmpty(currentPath)) && !IsSearchResultFolder(currentPath))
+            {
+                if (QTUtility2.IsShellPathButNotFileSystem(currentPath) && (currentPath.IndexOf("???") == -1))
+                {
+                    currentPath = currentPath + "???" + closingTab.GetLogHash(true, 0);
+                }
+                StaticReg.ClosedTabHistoryList.Add(currentPath);
+                InstanceManager.ButtonBarBroadcast(bbar => bbar.RefreshButtons(), true);
+            }
+        }
+
+        private static bool TryCallButtonBar(Action<QTButtonBar> action)
+        {
+            QTButtonBar bbar = InstanceManager.GetThreadButtonBar();
+            if (bbar == null) return false;
+            action(bbar);
+            return true;
+        }
+
+        // 关闭标签， 如果锁定则不关闭
+        protected bool CloseTab(QTabItem closingTab, bool fCritical, bool fSkipSync = false)
+        {
+            if (closingTab == null)
+            {
+                return false;
+            }
+            if ((!fCritical && closingTab.TabLocked) && QTUtility2.PathExists(closingTab.CurrentPath))
+            {
+                return false;
+            }
+            int index = tabControl1.TabPages.IndexOf(closingTab);
+            if (index == -1)
+            {
+                return false;
+            }
+            lstActivatedTabs.Remove(closingTab);
+            AddToHistory(closingTab);
+            tabControl1.TabPages.Remove(closingTab);
+            closingTab.OnClose();
+            if (closingTab != CurrentTab)
+            {
+                if (!fSkipSync)
+                {
+                    TryCallButtonBar(bbar => bbar.RefreshButtons());
+                    QTabItem.CheckSubTexts(tabControl1);
+                }
+                return true;
+            }
+            CurrentTab = null;
+            int tabCount = tabControl1.TabCount;
+            if (tabCount == 0) return true;
+            QTabItem tabPage = null;
+            switch (Config.Tabs.NextAfterClosed)
+            {
+                case TabPos.Right:
+                    tabPage = tabControl1.TabPages[index == tabCount ? index - 1 : index];
+                    break;
+
+                case TabPos.Left:
+                    tabPage = tabControl1.TabPages[index == 0 ? 0 : index - 1];
+                    break;
+
+                case TabPos.Rightmost:
+                    tabPage = tabControl1.TabPages[tabCount - 1];
+                    break;
+
+                case TabPos.Leftmost:
+                    tabPage = tabControl1.TabPages[0];
+                    break;
+
+                case TabPos.LastActive:
+                    if (lstActivatedTabs.Count > 0)
+                    {
+                        QTabItem lastTab = lstActivatedTabs[lstActivatedTabs.Count - 1];
+                        lstActivatedTabs.RemoveAt(lstActivatedTabs.Count - 1);
+                        tabPage = tabControl1.TabPages.Contains(lastTab)
+                                ? lastTab
+                                : tabControl1.TabPages[0];
+                    }
+                    else
+                    {
+                        tabPage = tabControl1.TabPages[0];
+                    }
+                    break;
+            }
+            if (tabPage != null)
+            {
+                tabControl1.SelectTab(tabPage);
+            }
+            else
+            {
+                tabControl1.SelectTab(0);
+            }
+            if (!fSkipSync)
+            {
+                TryCallButtonBar(bbar => bbar.RefreshButtons());
+            }
+            return true;
+        }
+
+        protected void CloseTabs(IEnumerable<QTabItem> tabs, bool fCritical = false)
+        {
+            tabControl1.SetRedraw(false);
+            bool closeCurrent = false;
+            foreach (QTabItem tab in tabs)
+            {
+                if (tab == CurrentTab)
+                    closeCurrent = true;
+                else
+                    CloseTab(tab, fCritical, true);
+            }
+            if (closeCurrent)
+            {
+                CloseTab(CurrentTab, fCritical);
+            }
+            else
+            {
+                TryCallButtonBar(bbar => bbar.RefreshButtons());
+                QTabItem.CheckSubTexts(tabControl1);
+            }
+            if (tabControl1.TabCount > 0)
+            {
+                tabControl1.SetRedraw(true);
+            }
+        }
+
+        // TODO: Optional params
+        protected bool CloseTab(QTabItem closingTab)
+        {
+            return ((tabControl1.TabCount > 1) && CloseTab(closingTab, false));
+        }
+
+        protected void ShowMessageNavCanceled(string failedPath, bool fModal)
+        {
+            QTUtility2.log("QTTabBarClass ShowMessageNavCanceled: " + failedPath);
+            QTUtility2.MakeErrorLog(null, string.Format("Failed navigation: {0}", failedPath));
+            MessageForm.Show(ExplorerHandle,
+                string.Format(QTUtility.TextResourcesDic["TabBar_Message"][0], failedPath),
+                string.Empty,
+                MessageBoxIcon.Asterisk,
+                0x2710,
+                fModal);
+        }
+
+        protected void CancelFailedTabChanging(string newPath)
+        {
+            if (!CloseTab(tabControl1.SelectedTab, true))
+            {
+                if (tabControl1.TabCount == 1)
+                {
+                    WindowUtils.CloseExplorer(ExplorerHandle, 2);
+                }
+                else
+                {
+                    ShowMessageNavCanceled(newPath, false);
+                    if (CurrentTab == null)
+                    {
+                        tabControl1.SelectedIndex = 0;
+                    }
+                }
+            }
+            else
+            {
+                StaticReg.ClosedTabHistoryList.Remove(newPath);
+                if (tabControl1.TabCount == 0)
+                {
+                    ShowMessageNavCanceled(newPath, true);
+                    WindowUtils.CloseExplorer(ExplorerHandle, 2);
+                }
+                else
+                {
+                    if (CurrentTab == null)
+                    {
+                        tabControl1.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        tabControl1.SelectTab(CurrentTab);
+                    }
+                    ShowMessageNavCanceled(newPath, false);
+                }
+            }
+        }
+
+        protected bool NavigateToPastSpecialDir(int hash)
+        {
+            IEnumTravelLogEntry ppenum = null;
+            try
+            {
+                ITravelLogEntry entry2;
+                if (TravelLog.EnumEntries(0x31, out ppenum) != 0)
+                {
+                    goto Label_007C;
+                }
+            Label_0013:
+                do
+                {
+                    if (ppenum.Next(1, out entry2, 0) != 0)
+                    {
+                        goto Label_007C;
+                    }
+                    if (entry2 != LogEntryDic[hash])
+                    {
+                        goto Label_0057;
+                    }
+                }
+                while (TravelLog.TravelTo(entry2) != 0);
+                NowInTravelLog = true;
+                CurrentTravelLogIndex++;
+                return true;
+            Label_0057:
+                if (entry2 != null)
+                {
+                    Marshal.ReleaseComObject(entry2);
+                }
+                goto Label_0013;
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception);
+            }
+            finally
+            {
+                if (ppenum != null)
+                {
+                    QTUtility2.log("ReleaseComObject ppenum");
+                    Marshal.ReleaseComObject(ppenum);
+                }
+            }
+        Label_007C:
+            return false;
+        }
+
+        /**
+        * TODO config to refresh  when tab control selected index changed
+        * 当切换标签的时候，配置是否进行刷新
+        * 出现异常情况
+        * System.NullReferenceException: 未将对象引用设置到对象的实例。
+          在 QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
+          在 QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
+          在 QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
+        */
+        protected void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            QTUtility2.log("tabControl1_SelectedIndexChanged" );
+            QTabItem selectedTab = tabControl1.SelectedTab;
+            string currentPath = selectedTab.CurrentPath;
+            if (IsSpecialFolderNeedsToTravel(currentPath) &&
+               LogEntryDic.ContainsKey(selectedTab.GetLogHash(true, 0)))
+            {
+                NavigatedByCode = true;
+                CurrentTab = selectedTab;
+                while (lstActivatedTabs.Remove(CurrentTab))
+                {
+                }
+                lstActivatedTabs.Add(CurrentTab);
+                if (lstActivatedTabs.Count > 15)
+                {
+                    lstActivatedTabs.RemoveAt(0);
+                }
+                fNavigatedByTabSelection = NavigateToPastSpecialDir(CurrentTab.GetLogHash(true, 0));
+                if (pluginServer != null)
+                {
+                    pluginServer.OnTabChanged(tabControl1.SelectedIndex, selectedTab.CurrentIDL, selectedTab.CurrentPath);
+                }
+                if (tabControl1.Focused)
+                {
+                    listView.SetFocus();
+                }
+            }
+            else
+            {
+                IDLWrapper idlw = null;
+                if ((selectedTab.CurrentIDL != null) && (selectedTab.CurrentIDL.Length > 0))
+                {
+                    idlw = new IDLWrapper(selectedTab.CurrentIDL);
+                }
+                if ((idlw == null) || !idlw.Available)
+                {
+                    idlw = new IDLWrapper(selectedTab.CurrentPath);
+                }
+                using (idlw)
+                {
+                    if (!idlw.Available)
+                    {
+                        CancelFailedTabChanging(currentPath);
+                        return;
+                    }
+                    CurrentTab = selectedTab;
+                    while (lstActivatedTabs.Remove(CurrentTab))
+                    {
+                    }
+                    lstActivatedTabs.Add(CurrentTab);
+                    if (lstActivatedTabs.Count > 15)
+                    {
+                        lstActivatedTabs.RemoveAt(0);
+                    }
+                    if (((currentPath != CurrentAddress) ||
+                        (QTUtility.IsXP && (currentPath == QTUtility.PATH_SEARCHFOLDER))) ||
+                       NowTabCloned)
+                    {
+                        NavigatedByCode = true;
+                        fNavigatedByTabSelection = true;
+                        NowTabCloned = false;
+                        if (ShellBrowser.Navigate(idlw) != 0)
+                        {
+                            CancelFailedTabChanging(currentPath);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        SyncTravelState();
+                    }
+                }
+                if (tabControl1.Focused)
+                {
+                    listView.SetFocus();
+                }
+                if (pluginServer != null)
+                {
+                    pluginServer.OnTabChanged(tabControl1.SelectedIndex, CurrentTab.CurrentIDL, CurrentTab.CurrentPath);
+                }
+            }
+        }
+
+        protected void SyncTravelState()
+        {
+            if (CurrentTab != null)
+            {
+                navBtnsFlag = ((CurrentTab.HistoryCount_Back > 1) ? 1 : 0) | ((CurrentTab.HistoryCount_Forward > 0) ? 2 : 0);
+                if (Config.Tabs.ShowNavButtons && (toolStrip != null))
+                {
+                    buttonBack.Enabled = (navBtnsFlag & 1) != 0;
+                    buttonForward.Enabled = (navBtnsFlag & 2) != 0;
+                    buttonNavHistoryMenu.Enabled = navBtnsFlag != 0;
+                }
+                TryCallButtonBar(bbar => bbar.RefreshButtons());
+                QTabItem.CheckSubTexts(tabControl1);
+                SyncToolbarTravelButton();
+            }
+        }
+
+        private void SyncToolbarTravelButton()
+        {
+            if (!QTUtility.IsXP)
+            {
+                IntPtr ptr = (IntPtr)0x10001;
+                IntPtr ptr2 = (IntPtr)0x10000;
+                bool flag = (navBtnsFlag & 1) != 0;
+                bool flag2 = (navBtnsFlag & 2) != 0;
+                PInvoke.SendMessage(TravelToolBarHandle, 0x401, (IntPtr)0x100, flag ? ptr : ptr2);
+                PInvoke.SendMessage(TravelToolBarHandle, 0x401, (IntPtr)0x101, flag2 ? ptr : ptr2);
+                PInvoke.SendMessage(TravelToolBarHandle, 0x401, (IntPtr)0x102, (flag || flag2) ? ptr : ptr2);
+            }
+        }
+
+        protected bool IsSpecialFolderNeedsToTravel(string path)
+        {
+            int index = path.IndexOf("*?*?*");
+            if (index != -1)
+            {
+                path = path.Substring(0, index);
+            }
+            if (!IsSearchResultFolder(path))
+            {
+                if (path.PathEquals("::{13E7F612-F261-4391-BEA2-39DF4F3FA311}"))
+                {
+                    return true;
+                }
+                if (!path.PathStartsWith(QTUtility.ResMisc[0]) && (!path.EndsWith(QTUtility.ResMisc[0], StringComparison.OrdinalIgnoreCase) || Path.IsPathRooted(path)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static bool IsSearchResultFolder(string path)
+        {
+            return path.PathStartsWith(QTUtility.IsXP ? QTUtility.ResMisc[2] : QTUtility.PATH_SEARCHFOLDER);
+        }
+
+        protected void tabControl1_RowCountChanged(object sender, QEventArgs e)
+        {
+            SetBarRows(e.RowCount);
+        }
+
+
+        protected void SetBarRows(int count)
+        {
+            // QTUtility2.log("QTTabBarClass SetBarRows");
+            // BandHeight = (count * (Config.Skin.TabHeight - 3 )) ;
+            // BandHeight = (count * (Config.Skin.TabHeight - 3));
+            // BandHeight = (count * (Config.Skin.TabHeight + BandHeightSpace));
+            BandHeight = (count * (Config.Skin.TabHeight) + BandHeightSpace);
+            // BandHeight = (count * (Config.Skin.TabHeight + 10 )) ;
+            // fix bug
+            /**
+           异常文本
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 QTTabBarLib.QTTabBarClass.SetBarRows(Int32 count)
+   在 QTTabBarLib.QTabControl.CalculateItemRectangle_MultiRows()
+   在 QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
+   在 QTTabBarLib.QTabControl.OnPaint(PaintEventArgs e)
+   在 System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
+   在 System.Windows.Forms.Control.WmPaint(Message& m)
+   在 System.Windows.Forms.Control.WndProc(Message& m)
+   在 QTTabBarLib.QTabControl.WndProc(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   在 System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+             **/
+            if (null != rebarController)
+            {
+                rebarController.RefreshHeight();
+            }
+        }
+
+        protected void tabControl1_Deselecting(object sender, QTabCancelEventArgs e)
+        {
+            if (e.TabPageIndex != -1)
+            {
+                SaveSelectedItems(e.TabPage);
+            }
+        }
+
+        /**
+         * 保存选中项
+         */
+        protected void SaveSelectedItems(QTabItem tab)
+        {
+            Address[] addressArray;
+            string str;
+            if (
+                ((tab != null) && !string.IsNullOrEmpty(CurrentAddress)) &&
+                ShellBrowser.TryGetSelection(out addressArray, out str, false, ShellBrowser))
+            {
+                if (addressArray != null && addressArray.Length > 0)
+                {
+                    QTUtility2.log("SaveSelectedItems addressArray " + addressArray[0].Path);
+                }
+                tab.SetSelectedItemsAt(CurrentAddress, addressArray, str);
+            }
+        }
+
+        
+        protected void tabControl1_Selecting(object sender, QTabCancelEventArgs e)
+        {
+            if (NowTabsAddingRemoving)
+            {
+                QTUtility2.log("tabControl1_Selecting");
+                e.Cancel = true;
+            }
+        }
+
+
+        // 新增+号按钮的添加新标签事件
+        private void tabControl1_PlusButtonClicked(object sender, QTabCancelEventArgs e)
+        {
+            // 新标签按钮 qwop
+            string clipPath = QTUtility2.GetStringClipboard();
+            if (String.IsNullOrEmpty(clipPath))
+            {
+                // 如果获取不到剪贴板路径，则打开默认
+                openDefault();
+                return;
+            }
+            clipPath = clipPath.Trim().Trim(new char[] { ' ', '"' });
+            string[] pathArr = { "a:\\", "b:\\", "c:\\", "d:\\", "e:\\", "f:\\", "g:\\", "h:\\", "i:\\" };
+            bool blockSelecting = false, fForceNew = true;
+            // 如果剪贴板是一个文件路径，并且存在则打开父级目录或者跟级目录
+            if (File.Exists(clipPath))
+            {
+                try
+                {
+                    QTUtility2.log("tabControl1_PlusButtonClicked file exist " + clipPath);
+                    string pathRoot = Path.GetPathRoot(clipPath);
+                    DirectoryInfo di = new DirectoryInfo(clipPath);
+                    if (Directory.Exists(di.Parent.FullName))
+                    {
+                        OpenNewTab(di.Parent.FullName, blockSelecting, fForceNew);
+
+                    }
+                    else
+                    {
+                        OpenNewTab(pathRoot, blockSelecting, fForceNew);
+                    }
+
+                    string selectMe = Path.GetFileName(clipPath);
+                    ShellBrowser.TrySetSelection(new Address[] { new Address(selectMe) }, null, true);
+                }
+                catch (Exception e1)
+                {
+                    QTUtility2.MakeErrorLog(e1, "tabControl1_PlusButtonClicked for file:" + clipPath);
+                    openDefault();
+                }
+            }
+            else if (Directory.Exists(clipPath)) // 剪贴板直接是一个目录则打开标签
+            {
+                try
+                {
+                    QTUtility2.log("tabControl1_PlusButtonClicked Directory exist " + clipPath);
+                    OpenNewTab(clipPath, blockSelecting, fForceNew);
+                }
+                catch (Exception e1)
+                {
+                    QTUtility2.MakeErrorLog(e1, "tabControl1_PlusButtonClicked for director :" + clipPath);
+                    openDefault();
+                }
+            }
+            else
+            {
+
+                // 打开指定盘符目录
+                /*
+                for ( int i = 0; i < pathArr.Length; i++ )
+                {
+                    if (Directory.Exists(pathArr[i]))
+                    {
+                        OpenNewTab(pathArr[i], blockSelecting, fForceNew);
+                        break;
+                    }
+                }
+                */
+                openDefault();
+            }
+        }
+
+        private void openDefault()
+        {
+            bool isOpend = false;
+            // 打开配置的路径地址
+            using (IDLWrapper wrapper = new IDLWrapper(Config.Window.DefaultLocation))
+            {
+                QTUtility2.log("tabControl1_PlusButtonClicked others default " + Config.Window.DefaultLocation);
+                OpenNewTab(wrapper, false, true);
+                isOpend = true;
+            }
+
+            if (!isOpend)
+            {
+                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // 我的电脑， 默认打开
+                using (IDLWrapper w = new IDLWrapper(idl))
+                {
+                    QTUtility2.log("tabControl1_PlusButtonClicked 我的电脑 ");
+                    OpenNewTab(w, false, true);
+                }
+            }
+        }
+
+        #endregion
     }
 }

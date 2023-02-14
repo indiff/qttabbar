@@ -54,6 +54,7 @@ namespace QTTabBarLib {
         }
 
         private bool EditController_MessageCaptured(ref Message msg) {
+            // QTUtility2.debugMessage(msg);
             if(msg.Msg == 0xb1 /* EM_SETSEL */ && msg.WParam.ToInt32() != -1) {
                 msg.LParam = EditController.OptionalHandle;
                 EditController.MessageCaptured -= EditController_MessageCaptured;
@@ -86,22 +87,30 @@ namespace QTTabBarLib {
                             QTUtility2.SendCOPYDATASTRUCT(ptr, (IntPtr)13, null, (IntPtr)GetItemCount());
                         }
                      */
+                        QTUtility2.log("LVN.ITEMCHANGED");
                         bool flag = !QTUtility.IsXP && Config.Tweaks.ToggleFullRowSelect;
                         NMLISTVIEW nmlistview2 = (NMLISTVIEW)Marshal.PtrToStructure(msg.LParam, typeof(NMLISTVIEW));
                         if(nmlistview2.uChanged == 8 /*LVIF_STATE*/) {
-                            uint num5 = nmlistview2.uNewState & LVIS.SELECTED;
-                            uint num6 = nmlistview2.uOldState & LVIS.SELECTED;
-                            uint num7 = nmlistview2.uNewState & LVIS.DROPHILITED;
-                            uint num8 = nmlistview2.uOldState & LVIS.DROPHILITED;
-                            uint num9 = nmlistview2.uNewState & LVIS.CUT;
-                            uint num10 = nmlistview2.uOldState & LVIS.CUT;
+                            uint newSelected = nmlistview2.uNewState & LVIS.SELECTED;
+                            uint oldSelected = nmlistview2.uOldState & LVIS.SELECTED;
+                            uint newDrophilited = nmlistview2.uNewState & LVIS.DROPHILITED;
+                            uint oldDrophilited = nmlistview2.uOldState & LVIS.DROPHILITED;
+                            uint newCut = nmlistview2.uNewState & LVIS.CUT;
+                            uint oldCut = nmlistview2.uOldState & LVIS.CUT;
                             if(flag) {
-                                if(nmlistview2.iItem != -1 && ((num5 != num6) || (num7 != num8) || (num9 != num10)) && ShellBrowser.ViewMode == FVM.DETAILS) {
+                                if (nmlistview2.iItem != -1 && 
+                                    ((newSelected != oldSelected) || 
+                                     (newDrophilited != oldDrophilited) || 
+                                     (newCut != oldCut)) &&
+                                    ShellBrowser.ViewMode == FVM.DETAILS)
+                                {
+                                    QTUtility2.log("LVN.ITEMCHANGED nmlistview2.iItem " + nmlistview2.iItem);
                                     PInvoke.SendMessage(nmlistview2.hdr.hwndFrom, LVM.REDRAWITEMS, (IntPtr)nmlistview2.iItem, (IntPtr)nmlistview2.iItem);
                                 }
                             }
-                            if(num5 != num6) {
-                                OnSelectionChanged();
+                            if(newSelected != oldSelected) {
+                                QTUtility2.log("newSelected != oldSelected  OnSelectionChanged " );
+                                OnSelectionChanged(ref msg);
                             }
                         }
                         break;

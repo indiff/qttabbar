@@ -431,11 +431,32 @@ namespace QTTabBarLib {
                     Translated = res[0];
                 }
                 */
+                if (!QTUtility.TextResourcesDic.ContainsKey(Key))
+                {
+                    QTUtility2.flog("*** TextResourcesDic not contains key " + Key );
+                }
+                else
+                {
+                    string[] res2;
+                    QTUtility.TextResourcesDic.TryGetValue(Key, out res2);
+                    if (res2 == null)
+                    {
+                        QTUtility2.flog("*** TextResourcesDic key " + Key + " res2 is null");
+                    }
+                    if (res2.Length == 0)
+                    {
+                        QTUtility2.flog("*** TextResourcesDic key " + Key + " res2 length is zero");
+                    }
+                }
                 if (Index >= 0)
                 {
                     Translated = Original;
                 } 
-                else if (QTUtility.TextResourcesDic.TryGetValue(Key, out res))
+                else if (QTUtility.TextResourcesDic.ContainsKey( Key ) && 
+                         QTUtility.TextResourcesDic.TryGetValue(Key, out res) &&
+                         res != null && 
+                         res.Length > 0 // 修复超出数组越界bug
+                         )
                 {
                     Translated = res[0];
                 }

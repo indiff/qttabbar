@@ -851,7 +851,7 @@ namespace QTTabBarLib {
 
         protected override void WndProc(ref Message m) {
             if((MessageParent != IntPtr.Zero) && (((m.Msg == WM.INITMENUPOPUP) || (m.Msg == WM.DRAWITEM)) || (m.Msg == WM.MEASUREITEM))) {
-                PInvoke.SendMessage(MessageParent, (uint)m.Msg, m.WParam, m.LParam);
+                PInvoke.SendMessage(MessageParent, m.Msg, m.WParam, m.LParam);
             }
             else {
                 if(m.Msg == WM.MOUSELEAVE) {

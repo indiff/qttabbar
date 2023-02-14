@@ -65,6 +65,26 @@ namespace QTTabBarLib
             {
                 return ShellColors.colorSet.Default;
             }
+        }
+
+        public static Color ExplorerBarHrztBGColor
+        {
+            get
+            {
+                return QTUtility.LaterThan7 ?
+                    SystemColors.Window :
+                    Color.FromArgb(241, 245, 251);
+            }
+        }
+
+        public static Color ExplorerBarVertBGColor
+        {
+            get
+            {
+                return QTUtility.LaterThan7 ?
+                    SystemColors.Window :
+                    Color.FromArgb(241, 245, 251);
+            }
         } 
 
         public static Color Text {

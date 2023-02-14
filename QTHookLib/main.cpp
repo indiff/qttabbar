@@ -1,4 +1,4 @@
-//    This file is part of QTTabBar, a shell extension for Microsoft
+ï»¿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
 //    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
@@ -23,7 +23,7 @@
 #include <time.h>
 #include <map>
 
-//GDI Ïà¹Ø Using GDI
+//GDI ç›¸å…³ Using GDI
 #include <comdef.h>
 #include <gdiplus.h>
 #include <Shlwapi.h>
@@ -46,6 +46,10 @@
 
 using namespace Gdiplus;
 
+const GUID IID_IExplorerFactory = { 0xA86304A7, 0x17CA, 0x4595, {0x99, 0xAB, 0x52, 0x30, 0x43, 0xA9, 0xC4, 0xAC} };
+const GUID CLSID_ExplorerFactoryServer = { 0x93A56381, 0xE0CD, 0x485A, {0xB6, 0x0E, 0x67, 0x81, 0x9E, 0x12, 0xF8, 0x1B} };
+const GUID CLSID_ExplorerFactory = { 0x78428474, 0x473B, 0x4660, {0x90, 0x68, 0xF2, 0xAA, 0x7F, 0x6C, 0xB2, 0x27} };
+
 
 void Log(std::wstring log)
 {
@@ -65,7 +69,7 @@ void Box(LPCWSTR lpText)
 
 
 #define Box2(content) {                                                            \
-    MessageBoxW(0, L"content", L"Box2", MB_ICONERROR); \
+    MessageBoxW(0, content, L"Box2", MB_ICONERROR); \
 }
 
 void Box1(LPCWSTR lpText)
@@ -127,8 +131,14 @@ MIDL_INTERFACE("0B907F92-1B63-40C6-AA54-0D3117F03578") IListControlHost     : pu
 MIDL_INTERFACE("66A9CB08-4802-11d2-A561-00A0C92DBFE8") ITravelLog           : public IUnknown {};
 MIDL_INTERFACE("3050F679-98B5-11CF-BB82-00AA00BDCE0B") ITravelLogEx         : public IUnknown {};
 MIDL_INTERFACE("7EBFDD87-AD18-11d3-A4C5-00C04F72D6B8") ITravelLogEntry      : public IUnknown {};
-MIDL_INTERFACE("489E9453-869B-4BCC-A1C7-48B5285FD9D8") ICommonExplorerHost  : public IUnknown {};
-MIDL_INTERFACE("A86304A7-17CA-4595-99AB-523043A9C4AC") IExplorerFactory 	: public IUnknown {};
+//MIDL_INTERFACE("489E9453-869B-4BCC-A1C7-48B5285FD9D8") ICommonExplorerHost  : public IUnknown {};
+
+MIDL_INTERFACE("93A56381-E0CD-485A-B60E-67819E12F81B") ICommonExplorerHost  : public IUnknown{};
+MIDL_INTERFACE("A86304A7-17CA-4595-99AB-523043A9C4AC") IExplorerFactory 	: public IUnknown
+{
+    public:
+        virtual HRESULT ShowWindow(PCIDLIST_ABSOLUTE, int, DWORD, DWORD, POINT) = 0;
+};
 MIDL_INTERFACE("E93D4057-B9A2-42A5-8AF8-E5BBF177D365") IShellNavigationBand : public IUnknown {};
 MIDL_INTERFACE("596742A5-1393-4E13-8765-AE1DF71ACAFB") CBreadcrumbBar {};
 MIDL_INTERFACE("93A56381-E0CD-485A-B60E-67819E12F81B") CExplorerFactoryServer {};
@@ -176,7 +186,7 @@ DECLARE_HOOK(11, HRESULT, ShowWindow_7, (ICommonExplorerHost* _this, PCIDLIST_AB
 DECLARE_HOOK(12, HRESULT, UpdateWindowList, (/*IShellBrowserService*/ IUnknown* _this))
 
 
-// ÉèÖÃ±³¾°Í¼Æ¬µÄ hook ¶¨Òå start 
+// è®¾ç½®èƒŒæ™¯å›¾ç‰‡çš„ hook å®šä¹‰ start 
 DECLARE_HOOK(13, HWND, CreateWindowExW, (
     DWORD     dwExStyle,
     LPCWSTR   lpClassName,
@@ -196,6 +206,8 @@ DECLARE_HOOK(13, HWND, CreateWindowExW, (
 DECLARE_HOOK(14, BOOL, DestroyWindow, (HWND))
 DECLARE_HOOK(15, HDC, BeginPaint, (HWND hWnd, LPPAINTSTRUCT lpPaint))
 
+
+
 /*
 __in HDC hDC,
 __in CONST RECT *lprc,
@@ -203,12 +215,24 @@ __in HBRUSH hbr
 */
 DECLARE_HOOK(16, int, FillRect, (HDC hDC, const RECT* lprc, HBRUSH hbr))
 DECLARE_HOOK(17, HDC, CreateCompatibleDC, (HDC hDC))
-// ÉèÖÃ±³¾°Í¼Æ¬µÄ hook ¶¨Òå end 
+// è®¾ç½®èƒŒæ™¯å›¾ç‰‡çš„ hook å®šä¹‰ end 
 
+DECLARE_HOOK(18, HRESULT, SHOpenFolderAndSelectItems, (
+		PCIDLIST_ABSOLUTE pidlFolder, 
+		UINT cidl,
+		PCUITEMID_CHILD_ARRAY apidl,
+		DWORD dwFlags
+	)
+)
 
-
-
-
+DECLARE_HOOK(19, HRESULT, ShellExecute, (
+		LPCWSTR lpOperation, 
+		LPCWSTR lpFile,
+		LPCWSTR lpParameters,
+		LPCWSTR lpDirectory,
+		INT nShowCmd
+	)
+)
 
 
 // Messages
@@ -221,6 +245,7 @@ unsigned int WM_ISITEMSVIEW;
 unsigned int WM_ACTIVATESEL;
 unsigned int WM_BREADCRUMBDPA;
 unsigned int WM_CHECKPULSE;
+unsigned int WM_SELECTFILE;
 
 // Callback struct
 struct CallbackStruct {
@@ -235,7 +260,7 @@ FARPROC fpRealRREP = NULL;
 FARPROC fpRealCI = NULL;
 
 
-//È«¾Ö±äÁ¿
+//å…¨å±€å˜é‡
 #pragma region GlobalVariable
 
 /*GDI Bitmap*/
@@ -251,10 +276,10 @@ public:
 	Gdiplus::Bitmap* src;
 };
 
-HMODULE g_hModule = NULL;           //È«¾ÖÄ£¿é¾ä±ú Global module handle
-bool m_isInitHook = false;          //Hook³õÊ¼»¯±êÖ¾ Hook init flag
+HMODULE g_hModule = NULL;           //å…¨å±€æ¨¡å—å¥æŸ„ Global module handle
+bool m_isInitHook = false;          //Hookåˆå§‹åŒ–æ ‡å¿— Hook init flag
 
-ULONG_PTR m_gdiplusToken;           //GDI³õÊ¼»¯±êÖ¾ GDI Init flag
+ULONG_PTR m_gdiplusToken;           //GDIåˆå§‹åŒ–æ ‡å¿— GDI Init flag
 
 struct MyData
 {
@@ -264,7 +289,7 @@ struct MyData
     int ImgIndex ;
 };
 //First ThreadID
-std::map<DWORD, MyData> m_duiList;//dui¾ä±úÁĞ±í dui handle list
+std::map<DWORD, MyData> m_duiList;//duiå¥æŸ„åˆ—è¡¨ dui handle list
 
 struct Config
 {
@@ -276,15 +301,15 @@ struct Config
     *  5 = Zoom
     *  6 = Zoom Fill
     */
-    int imgPosMode ;                 //Í¼Æ¬¶¨Î»·½Ê½ Image position mode type
-    bool isRandom ;               //Ëæ»úÏÔÊ¾Í¼Æ¬ Random pictures
-    BYTE imgAlpha ;                //Í¼Æ¬Í¸Ã÷¶È Image alpha
-    std::vector<BitmapGDI*> imageList;  //±³¾°Í¼ÁĞ±í background image list
-} m_config;                             //ÅäÖÃĞÅÏ¢ config
+    int imgPosMode ;                 //å›¾ç‰‡å®šä½æ–¹å¼ Image position mode type
+    bool isRandom ;               //éšæœºæ˜¾ç¤ºå›¾ç‰‡ Random pictures
+    BYTE imgAlpha ;                //å›¾ç‰‡é€æ˜åº¦ Image alpha
+    std::vector<BitmapGDI*> imageList;  //èƒŒæ™¯å›¾åˆ—è¡¨ background image list
+} m_config;                             //é…ç½®ä¿¡æ¯ config
 
 #pragma endregion
 
-// »ñÈ¡ DLL ÎÄ¼şµÄÄ¿Â¼
+// è·å– DLL æ–‡ä»¶çš„ç›®å½•
 std::wstring GetCurDllDir()
 {
 	wchar_t sPath[MAX_PATH];
@@ -295,7 +320,7 @@ std::wstring GetCurDllDir()
 }
 
 
-// ÅĞ¶ÏÎÄ¼şÊÇ·ñ´æÔÚ
+// åˆ¤æ–­æ–‡ä»¶æ˜¯å¦å­˜åœ¨
 bool FileIsExist(std::wstring FilePath)
 {
 	WIN32_FIND_DATA FindFileData;
@@ -307,7 +332,7 @@ bool FileIsExist(std::wstring FilePath)
 	}
 	return false;
 }
-// »ñÈ¡ INI µÄÅäÖÃÄÚÈİ
+// è·å– INI çš„é…ç½®å†…å®¹
 std::wstring GetIniString(std::wstring FilePath, std::wstring AppName, std::wstring KeyName)
 {
 	if (FileIsExist(FilePath)) {
@@ -328,21 +353,21 @@ std::wstring GetIniString(std::wstring FilePath, std::wstring AppName, std::wstr
 	return std::wstring();
 }
 
-// ±éÀúÎÄ¼ş
+// éå†æ–‡ä»¶
 void EnumFiles(std::wstring path, std::wstring append, std::vector<std::wstring>& fileList)
 {
 	
-	//ÎÄ¼ş¾ä±ú 
+	//æ–‡ä»¶å¥æŸ„ 
 	// intptr_t  hFile = 0;
-	// //ÎÄ¼şĞÅÏ¢ 
+	// //æ–‡ä»¶ä¿¡æ¯ 
 	// struct _wfinddata_t fileinfo;
 	std::wstring p;
-	// std::string inPath = "./*.png"; // µ±Ç°Ä¿Â¼µÄËùÓĞ
+	// std::string inPath = "./*.png"; // å½“å‰ç›®å½•çš„æ‰€æœ‰
 	// auto lp_text = p.assign(path).append(L"\\" + append).c_str();
 	auto lp_text = p.assign(path).append(L"\\" + append).c_str();
 	// Box1(lp_text);
 	WIN32_FIND_DATA fileinfo2;
-	//ÎÄ¼ş¾ä±ú
+	//æ–‡ä»¶å¥æŸ„
 	HANDLE myHandle = INVALID_HANDLE_VALUE;
 	// if ((hFile = _findfirst(lp_text, &fileinfo)) != -1)
 	if ((myHandle = FindFirstFile(lp_text, &fileinfo2)) != INVALID_HANDLE_VALUE)
@@ -372,7 +397,7 @@ void EnumFiles(std::wstring path, std::wstring append, std::vector<std::wstring>
 
 void LoadSettings(bool loadimg)
 {
-    //ÊÍ·Å¾É×ÊÔ´
+    //é‡Šæ”¾æ—§èµ„æº
     if (loadimg) {
 		/*for (auto image_list : m_config.imageList)
 		{
@@ -381,7 +406,7 @@ void LoadSettings(bool loadimg)
         m_config.imageList.clear();
     }
 
-    //¼ÓÔØÅäÖÃ Load config
+    //åŠ è½½é…ç½® Load config
     std::wstring cfgPath = GetCurDllDir() + L"\\config.ini";
 
 	m_config.isRandom = false;
@@ -393,7 +418,7 @@ void LoadSettings(bool loadimg)
 
     Box(L"Load random ");
 
-    //Í¼Æ¬¶¨Î»·½Ê½
+    //å›¾ç‰‡å®šä½æ–¹å¼
     /* 0 = Left top
     *  1 = Right top
     *  2 = Left bottom
@@ -411,7 +436,7 @@ void LoadSettings(bool loadimg)
 
     // m_config.imgPosMode = 6;
 
-    //Í¼Æ¬Í¸Ã÷¶È
+    //å›¾ç‰‡é€æ˜åº¦
     str = GetIniString(cfgPath, L"image", L"imgAlpha");
     // str = L"imgAlpha";
 	
@@ -427,38 +452,38 @@ void LoadSettings(bool loadimg)
     }
 	// m_config.imgAlpha = 255;
 	Box(L"shit");
-    //¼ÓÔØÍ¼Ïñ Load Image
+    //åŠ è½½å›¾åƒ Load Image
     if (loadimg) {
         std::wstring imgDir = GetCurDllDir() + L"\\Image";
         // std::wstring imgPath = L"C:\\ProgramData\\QTTabBar\\Image";
 
         Box(imgDir.c_str());
 
-		// Í¼Æ¬ÁĞ±í
+		// å›¾ç‰‡åˆ—è¡¨
 		std::vector<std::wstring> fileList;
 
 		std::wstring imgPath = GetIniString(cfgPath, L"image", L"imgPath");
-		if (FileIsExist(imgPath)) { // Èç¹ûÖ¸¶¨ÁËÎÄ¼ş´æÔÚ Ôò¼ÓÔØÖ¸¶¨µÄÎÄ¼ş£¬¹Ø±ÕËæ»ú
+		if (FileIsExist(imgPath)) { // å¦‚æœæŒ‡å®šäº†æ–‡ä»¶å­˜åœ¨ åˆ™åŠ è½½æŒ‡å®šçš„æ–‡ä»¶ï¼Œå…³é—­éšæœº
 			fileList.push_back(imgPath);
-			// ×Ô¶¨ÒåÍ¼Æ¬Ôò¹Ø±ÕËæ»ú
+			// è‡ªå®šä¹‰å›¾ç‰‡åˆ™å…³é—­éšæœº
 			m_config.isRandom = false;
-		} else  if (FileIsExist(imgDir)) // Èç¹ûÄ¿Â¼ C:\\ProgramData\\QTTabBar\\Image
+		} else  if (FileIsExist(imgDir)) // å¦‚æœç›®å½• C:\\ProgramData\\QTTabBar\\Image
         {
          
             EnumFiles(imgDir, L"*.png", fileList);
             EnumFiles(imgDir, L"*.jpg", fileList);
             EnumFiles(imgDir, L"*.jpeg", fileList);
 
-			// »¹ÊÇÎ´¼ÓÔØÔòÉèÖÃÒ»¸öÄ¬ÈÏµÄÍ¼Æ¬µØÖ· C:\\ProgramData\\QTTabBar\\Image\\bgImage.png
+			// è¿˜æ˜¯æœªåŠ è½½åˆ™è®¾ç½®ä¸€ä¸ªé»˜è®¤çš„å›¾ç‰‡åœ°å€ C:\\ProgramData\\QTTabBar\\Image\\bgImage.png
 			/*if (fileList.size() == 0) {
-				// Èç¹ûÎª 0 µÄ»°£¬ Ôò¼ÓÔØ×Ô¶¨ÒåµÄÍ¼Æ¬
+				// å¦‚æœä¸º 0 çš„è¯ï¼Œ åˆ™åŠ è½½è‡ªå®šä¹‰çš„å›¾ç‰‡
 				fileList.push_back(L"C:\\ProgramData\\QTTabBar\\Image\\bgImage.png");
 			}*/
 
-			// Î´¼ÓÔØµ½Í¼Æ¬µ¯¿ò£¬Ó°Ïì²Ù×÷
+			// æœªåŠ è½½åˆ°å›¾ç‰‡å¼¹æ¡†ï¼Œå½±å“æ“ä½œ
             if (fileList.size() == 0) {
                 /*MessageBoxW(0, 
-					L"ÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷±³¾°Ä¿Â¼Ã»ÓĞÎÄ¼ş£¬Òò´ËÀ©Õ¹²»»áÓĞÈÎºÎĞ§¹û.", 
+					L"æ–‡ä»¶èµ„æºç®¡ç†å™¨èƒŒæ™¯ç›®å½•æ²¡æœ‰æ–‡ä»¶ï¼Œå› æ­¤æ‰©å±•ä¸ä¼šæœ‰ä»»ä½•æ•ˆæœ.", 
 					imgDir.c_str(), 
 					MB_ICONERROR);*/
                 return;
@@ -470,21 +495,21 @@ void LoadSettings(bool loadimg)
                 if (bmp->src)
                     m_config.imageList.push_back(bmp);
                 else
-                    delete bmp;//Í¼Æ¬¼ÓÔØÊ§°Ü load failed*/
+                    delete bmp;//å›¾ç‰‡åŠ è½½å¤±è´¥ load failed*/
 
 			// MessageBoxW(0, L"LoadSettings", L" bpm " + fileList.size(), MB_ICONERROR);
             // Log(L"LoadSettings " + fileList.size() );
 
         }
-        else {  // Èç¹û Image Ä¿Â¼²»´æÔÚ
+        else {  // å¦‚æœ Image ç›®å½•ä¸å­˜åœ¨
             /*MessageBoxW(0, 
-				L"ÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷±³¾°Ä¿Â¼²»´æÔÚ£¬Òò´ËÀ©Õ¹²»»áÓĞÈÎºÎĞ§¹û.", 
-				L"È±ÉÙÍ¼Æ¬Ä¿Â¼", 
+				L"æ–‡ä»¶èµ„æºç®¡ç†å™¨èƒŒæ™¯ç›®å½•ä¸å­˜åœ¨ï¼Œå› æ­¤æ‰©å±•ä¸ä¼šæœ‰ä»»ä½•æ•ˆæœ.", 
+				L"ç¼ºå°‘å›¾ç‰‡ç›®å½•", 
 				MB_ICONERROR);*/
-            // Èç¹ûÄ¿Â¼²»´æÔÚ£¬Ôò¼ÓÔØ×Ô¶¨ÒåÍ¼Æ¬
+            // å¦‚æœç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™åŠ è½½è‡ªå®šä¹‰å›¾ç‰‡
         }
 
-		// ÅĞ¶ÏÊÇ·ñÓĞÍ¼Æ¬£¬Ôò³õÊ¼»¯
+		// åˆ¤æ–­æ˜¯å¦æœ‰å›¾ç‰‡ï¼Œåˆ™åˆå§‹åŒ–
 		if (fileList.size() > 0 )
 		{
 			for (size_t i = 0; i < fileList.size(); i++)
@@ -494,9 +519,9 @@ void LoadSettings(bool loadimg)
 	            if (bmp->src)
 	                m_config.imageList.push_back(bmp);
 	            else
-	                delete bmp;//Í¼Æ¬¼ÓÔØÊ§°Ü load failed
+	                delete bmp;//å›¾ç‰‡åŠ è½½å¤±è´¥ load failed
 
-	            /*·ÇËæ»ú Ö»¼ÓÔØÒ»ÕÅ
+	            /*ééšæœº åªåŠ è½½ä¸€å¼ 
 	            * Load only one image non randomly
 				*/
 	            if (!m_config.isRandom) break;
@@ -507,10 +532,10 @@ void LoadSettings(bool loadimg)
 }
 
 
-// Í¼Æ¬¹¹Ôìº¯Êı
+// å›¾ç‰‡æ„é€ å‡½æ•°
 BitmapGDI::BitmapGDI(std::wstring path)
 {
-	//ÕâÑù¼ÓÔØÊÇÎªÁË·ÀÖ¹ÎÄ¼ş±»Õ¼ÓÃ
+	//è¿™æ ·åŠ è½½æ˜¯ä¸ºäº†é˜²æ­¢æ–‡ä»¶è¢«å ç”¨
 	FILE* file = nullptr;
 	_wfopen_s(&file, path.c_str(), L"rb");
 	if (file) {
@@ -553,7 +578,7 @@ BitmapGDI::BitmapGDI(std::wstring path)
 	}
 }
 
-// Í¼Æ¬¶ÔÏóÎö¹¹º¯Êı
+// å›¾ç‰‡å¯¹è±¡ææ„å‡½æ•°
 BitmapGDI::~BitmapGDI()
 {
 	if (src)
@@ -586,11 +611,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
         g_hModule = hModule;
         DisableThreadLibraryCalls(hModule);
 
-        //·ÀÖ¹±ğµÄ³ÌĞòÒâÍâ¼ÓÔØ
+        //é˜²æ­¢åˆ«çš„ç¨‹åºæ„å¤–åŠ è½½
         wchar_t pName[MAX_PATH];
         GetModuleFileNameW(NULL, pName, MAX_PATH);
 
-        //½ø³ÌÃû×ªĞ¡Ğ´
+        //è¿›ç¨‹åè½¬å°å†™
         std::wstring path = std::wstring(pName);
         std::wstring name = path.substr(path.length() - 12, 12);
         std::transform(name.begin(), name.end(), name.begin(), ::tolower);
@@ -618,7 +643,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 }
 
 int Initialize(CallbackStruct* cb) {
-
     volatile static long initialized;
 	
 	// Log(L"Initialize");
@@ -630,9 +654,8 @@ int Initialize(CallbackStruct* cb) {
     }
 	
 
-    //ÉèÖÃËæ»úÊıÖÖ×Ó
+    //è®¾ç½®éšæœºæ•°ç§å­
     srand((int)time(0));
-	
 	
 	Box(L"MH_Initialize");
     // Initialize MinHook.
@@ -643,32 +666,38 @@ int Initialize(CallbackStruct* cb) {
     callbacks = *cb;
 
     // Register the messages.
-    // WM_REGISTERDRAGDROP = RegisterWindowMessageA("QTTabBar_RegisterDragDrop");
-    // WM_NEWTREECONTROL   = RegisterWindowMessageA("QTTabBar_NewTreeControl");
-    // WM_BROWSEOBJECT     = RegisterWindowMessageA("QTTabBar_BrowseObject");
-    // WM_HEADERINALLVIEWS = RegisterWindowMessageA("QTTabBar_HeaderInAllViews");
-    // WM_LISTREFRESHED    = RegisterWindowMessageA("QTTabBar_ListRefreshed");
-    // WM_ISITEMSVIEW      = RegisterWindowMessageA("QTTabBar_IsItemsView");
-    // WM_ACTIVATESEL      = RegisterWindowMessageA("QTTabBar_ActivateSelection");
-    // WM_BREADCRUMBDPA    = RegisterWindowMessageA("QTTabBar_BreadcrumbDPA");
-    // WM_CHECKPULSE       = RegisterWindowMessageA("QTTabBar_CheckPulse");
+    WM_REGISTERDRAGDROP = RegisterWindowMessageA("QTTabBar_RegisterDragDrop");
+    WM_NEWTREECONTROL   = RegisterWindowMessageA("QTTabBar_NewTreeControl");
+    WM_BROWSEOBJECT     = RegisterWindowMessageA("QTTabBar_BrowseObject");
+    WM_HEADERINALLVIEWS = RegisterWindowMessageA("QTTabBar_HeaderInAllViews");
+    WM_LISTREFRESHED    = RegisterWindowMessageA("QTTabBar_ListRefreshed");
+    WM_ISITEMSVIEW      = RegisterWindowMessageA("QTTabBar_IsItemsView");
+    WM_ACTIVATESEL      = RegisterWindowMessageA("QTTabBar_ActivateSelection");
+    WM_BREADCRUMBDPA    = RegisterWindowMessageA("QTTabBar_BreadcrumbDPA");
+    WM_CHECKPULSE       = RegisterWindowMessageA("QTTabBar_CheckPulse");
+    WM_SELECTFILE       = RegisterWindowMessageA("QTTabBar_SelectFile");
 
     // Create and enable the CoCreateInstance, RegisterDragDrop, and SHCreateShellFolderView hooks.
 	Box(L"CREATE_HOOK start");
-    // CREATE_HOOK(&CoCreateInstance, CoCreateInstance);
-    // CREATE_HOOK(&RegisterDragDrop, RegisterDragDrop);
-    // CREATE_HOOK(&SHCreateShellFolderView, SHCreateShellFolderView);
+    CREATE_HOOK(&CoCreateInstance, CoCreateInstance)
+    CREATE_HOOK(&RegisterDragDrop, RegisterDragDrop)
+	// åˆ›å»ºé»˜è®¤ Shell æ–‡ä»¶å¤¹è§†å›¾å¯¹è±¡çš„æ–°å®ä¾‹ã€‚
+	// å¯¹åº”å¾®ä¿¡æ‰“å¼€æ–‡ä»¶ã€qqæ‰“å¼€æ–‡ä»¶ã€é’‰é’‰æ‰“å¼€æ–‡ä»¶ä¼šæ‰“å¼€æ–°çš„çª—ä½“  è¿™é‡Œå‘ç°ä¸æ˜¯è°ƒç”¨è¯¥å‡½æ•°ï¼Œåªæœ‰æ‰“å¼€æ–‡ä»¶ä½ç½®ä¼šè°ƒç”¨è¿™ä¸ªæ–¹æ³•
+    CREATE_HOOK(&SHCreateShellFolderView, SHCreateShellFolderView) 
+	// å®šä½æ–‡ä»¶å‡½æ•°
+    CREATE_HOOK(&SHOpenFolderAndSelectItems, SHOpenFolderAndSelectItems)
+    // CREATE_HOOK(&ShellExecute, ShellExecute)
 	
-	CREATE_HOOK(&CreateWindowExW, CreateWindowExW);
-    CREATE_HOOK(&DestroyWindow, DestroyWindow);
-    CREATE_HOOK(&BeginPaint, BeginPaint);
-    CREATE_HOOK(&FillRect, FillRect);
-    CREATE_HOOK(&CreateCompatibleDC, CreateCompatibleDC);
+	CREATE_HOOK(&CreateWindowExW, CreateWindowExW)
+    CREATE_HOOK(&DestroyWindow, DestroyWindow)
+    CREATE_HOOK(&BeginPaint, BeginPaint)
+    CREATE_HOOK(&FillRect, FillRect)
+    CREATE_HOOK(&CreateCompatibleDC, CreateCompatibleDC)
 	Box(L"CREATE_HOOK end");
 	LoadSettings(true);
 	Box(L"LoadSettings end");
 
-    /*
+#if 0   
     // Create and enable the UiaReturnRawElementProvider hook (maybe)
     hModAutomation = LoadLibraryA("UIAutomationCore.dll");
     if(hModAutomation != NULL) {
@@ -683,10 +712,11 @@ int Initialize(CallbackStruct* cb) {
     if(psnb.Create(__uuidof(CBreadcrumbBar), CLSCTX_INPROC_SERVER)) {
         CREATE_COM_HOOK(psnb, 4, SetNavigationState)
     }
-
+#endif
 
     // Create an instance of CExplorerFactoryServer so we can hook it.
     // The interface in question is different on Vista and 7.
+#if 0   
     CComPtr<IUnknown> punk;
     if(punk.Create(__uuidof(CExplorerFactoryServer), CLSCTX_INPROC_SERVER)) {
         CComPtr<ICommonExplorerHost> pceh;
@@ -697,7 +727,17 @@ int Initialize(CallbackStruct* cb) {
         else if(pef.QueryFrom(punk)) {
             CREATE_COM_HOOK(pef, 3, ShowWindow_Vista)
         }
-    }*/
+    }
+#endif
+#if 0
+    //win 10 \BF\C9\D3ÃµÄ·\BD\B7\A8
+    CComPtr<IUnknown> punk;
+    if (punk.Create(CLSID_ExplorerFactoryServer, CLSCTX_INPROC_SERVER))
+    {
+        CREATE_COM_HOOK(punk, 3, ShowWindow_Vista)
+    }
+#endif    
+
     return MH_OK;
 }
 
@@ -750,7 +790,7 @@ int Dispose() {
 }
 
 
-//HookµÄÔ­Ê¼º¯Êı
+//Hookçš„åŸå§‹å‡½æ•°
 #pragma region Original Function
 
 typedef HWND(WINAPI* O_CreateWindowExW)(DWORD, LPCWSTR, LPCWSTR, DWORD,
@@ -813,14 +853,14 @@ HWND WINAPI DetourCreateWindowExW(
     if (classname == L"DirectUIHWND"
         && parentClassName == L"SHELLDLL_DefView")
     {
-        //¼ÌĞø²éÕÒ¸¸¼¶ Continue to find parent
+        //ç»§ç»­æŸ¥æ‰¾çˆ¶çº§ Continue to find parent
         HWND parent = GetParent(hWndParent);
 		GetClassName(parent, cn_chars, sizeof(classname));
         classname = std::wstring(cn_chars);
 
 		if (classname == L"ShellTabWindowClass")
         {
-            //¼ÇÂ¼µ½ÁĞ±íÖĞ Add to list
+            //è®°å½•åˆ°åˆ—è¡¨ä¸­ Add to list
             MyData data;
             data.hWnd = hWnd;
             auto imgSize = m_config.imageList.size();
@@ -848,7 +888,7 @@ HWND WINAPI DetourCreateWindowExW(
 
 BOOL WINAPI DetourDestroyWindow(HWND hWnd)
 {
-    //²éÕÒ²¢É¾³ıÁĞ±íÖĞµÄ¼ÇÂ¼ Find and remove from list
+    //æŸ¥æ‰¾å¹¶åˆ é™¤åˆ—è¡¨ä¸­çš„è®°å½• Find and remove from list
     auto iter = m_duiList.find(GetCurrentThreadId());
     if (iter != m_duiList.end())
     {
@@ -865,7 +905,7 @@ BOOL WINAPI DetourDestroyWindow(HWND hWnd)
 
 HDC WINAPI DetourBeginPaint(HWND hWnd, LPPAINTSTRUCT lpPaint)
 {
-    //¿ªÊ¼»æÖÆDUI´°¿Ú BeginPaint dui window
+    //å¼€å§‹ç»˜åˆ¶DUIçª—å£ BeginPaint dui window
     HDC hDC = fpBeginPaint(hWnd, lpPaint);
 
     auto iter = m_duiList.find(GetCurrentThreadId());
@@ -874,7 +914,7 @@ HDC WINAPI DetourBeginPaint(HWND hWnd, LPPAINTSTRUCT lpPaint)
         if (iter->second.hWnd == hWnd)
         {
 	        // Box1(L" set hdc suc ");
-            //¼ÇÂ¼µ½ÁĞ±í Record values to list
+            //è®°å½•åˆ°åˆ—è¡¨ Record values to list
             iter->second.hDC = hDC;
         }
     }
@@ -902,7 +942,7 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
             GetWindowRect(iter->second.hWnd, &pRc);
             SIZE wndSize = { pRc.right - pRc.left, pRc.bottom - pRc.top };
 
-            /*ÒòÍ¼Æ¬¶¨Î»·½Ê½²»Í¬ Èç¹û´°¿Ú´óĞ¡¸Ä±ä ĞèÒªÈ«ÌåÖØ»æ ·ñÔòÓĞ²ĞÁô
+            /*å› å›¾ç‰‡å®šä½æ–¹å¼ä¸åŒ å¦‚æœçª—å£å¤§å°æ”¹å˜ éœ€è¦å…¨ä½“é‡ç»˜ å¦åˆ™æœ‰æ®‹ç•™
             * Due to different image positioning methods,
             * if the window size changes, you need to redraw, otherwise there will be residues*/
             if ((iter->second.size.cx != wndSize.cx || iter->second.size.cy != wndSize.cy)
@@ -912,41 +952,41 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
 			
 			// Box1(L"InvalidateRect suc ");
 
-            //²Ã¼ô¾ØĞÎ Clip rect
+            //è£å‰ªçŸ©å½¢ Clip rect
             SaveDC(hDC);
             IntersectClipRect(hDC, lprc->left, lprc->top, lprc->right, lprc->bottom);
 
 			// Box1(L"SaveDC IntersectClipRect suc ");
             BitmapGDI* pBgBmp = m_config.imageList[iter->second.ImgIndex];
 
-            //¼ÆËãÍ¼Æ¬Î»ÖÃ Calculate picture position
+            //è®¡ç®—å›¾ç‰‡ä½ç½® Calculate picture position
             POINT pos;
             SIZE dstSize = { pBgBmp->Size.cx, pBgBmp->Size.cy };
 
 			// Box1(L"calc pos suc ");
             switch (m_config.imgPosMode)
             {
-            case 0://×óÉÏ
+            case 0://å·¦ä¸Š
                  pos.x = 0;
                 pos.y = 0;
                 break;
-            case 1://ÓÒÉÏ
+            case 1://å³ä¸Š
                 pos.x = wndSize.cx - pBgBmp->Size.cx;
                 pos.y = 0;
                 break;
-            case 2://×óÏÂ
+            case 2://å·¦ä¸‹
                 pos.x = 0;
                 pos.y = wndSize.cy - pBgBmp->Size.cy;
                 break;
-            case 3://ÓÒÏÂ
+            case 3://å³ä¸‹
                 pos.x = wndSize.cx - pBgBmp->Size.cx;
                 pos.y = wndSize.cy - pBgBmp->Size.cy;
                 break;
-            case 4://¾ÓÖĞÕı³£ï@Ê¾
+            case 4://å±…ä¸­æ­£å¸¸é¡¯ç¤º
                 pos.x = (wndSize.cx - pBgBmp->Size.cx) >> 1;
                 pos.y = (wndSize.cy - pBgBmp->Size.cy) >> 1;
                 break;
-            case 5://Ëõ·Å
+            case 5://ç¼©æ”¾
                   {
                       int newWidth = wndSize.cx;
                       int newHeight = wndSize.cy;
@@ -959,7 +999,7 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
                      dstSize.cy = newHeight;
                   }
                   break;
-            case 6://Ëõ·Å²¢Ìî³ä
+            case 6://ç¼©æ”¾å¹¶å¡«å……
                  {
                      /*static auto calcAspectRatio = [](int fromWidth, int fromHeight, int toWidthOrHeight, bool isWidth)
                      {
@@ -971,26 +1011,26 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
                          }
                      };*/
 					 
-                     //°´¸ßµÈ±ÈÀıÀ­Éì
+                     //æŒ‰é«˜ç­‰æ¯”ä¾‹æ‹‰ä¼¸
                      // int newWidth = calcAspectRatio(pBgBmp->Size.cx, pBgBmp->Size.cy, wndSize.cy, false);
 					 
                      int newWidth =  round_int((float)pBgBmp->Size.cx * ((float)wndSize.cy / (float)pBgBmp->Size.cy));
                      int newHeight = wndSize.cy;
 
                      pos.x = newWidth - wndSize.cx;
-                     pos.x /= 2;//¾ÓÖĞ
+                     pos.x /= 2;//å±…ä¸­
                      if (pos.x != 0) pos.x = -pos.x;
                      pos.y = 0;
 
 					
-                     //°´¸ß²»×ãÒÔÌî³ä¿í °´¿í
+                     //æŒ‰é«˜ä¸è¶³ä»¥å¡«å……å®½ æŒ‰å®½
                      if (newWidth < wndSize.cx) {
                          newWidth = wndSize.cx;
                          newHeight = round_int((float)pBgBmp->Size.cy * ((float)wndSize.cx / (float)pBgBmp->Size.cx));
                          // newHeight = calcAspectRatio(pBgBmp->Size.cx, pBgBmp->Size.cy, wndSize.cx, true);
                          pos.x = 0;
                          pos.y = newHeight - wndSize.cy;
-                         pos.y /= 2;//¾ÓÖĞ
+                         pos.y /= 2;//å±…ä¸­
                          if (pos.y != 0) pos.y = -pos.y;
                      }
                      // dstSize = { newWidth, newHeight };
@@ -1000,13 +1040,13 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
 				 
 				// Box1(L"imgPosMode is 6 break");
                 break;
-            default://Ä¬ÕJÓÒÏÂ
+            default://é»˜èªå³ä¸‹
                 pos.x = wndSize.cx - pBgBmp->Size.cx;
                 pos.y = wndSize.cy - pBgBmp->Size.cy;
                 break;
             }
 			
-            /*»æÖÆÍ¼Æ¬ Paint image*/
+            /*ç»˜åˆ¶å›¾ç‰‡ Paint image*/
             BLENDFUNCTION bf = { AC_SRC_OVER, 0, m_config.imgAlpha, AC_SRC_ALPHA };
 			
 			// Box1(L"BLENDFUNCTION suc");
@@ -1035,7 +1075,7 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
 
 HDC WINAPI DetourCreateCompatibleDC(HDC hDC)
 {
-    //ÔÚ»æÖÆDUIÖ®Ç° »áµ÷ÓÃCreateCompatibleDC ÕÒµ½Ëü
+    //åœ¨ç»˜åˆ¶DUIä¹‹å‰ ä¼šè°ƒç”¨CreateCompatibleDC æ‰¾åˆ°å®ƒ
     //CreateCompatibleDC is called before drawing the DUI
     HDC retDC = fpCreateCompatibleDC(hDC);
 
@@ -1071,47 +1111,115 @@ HRESULT WINAPI DetourRegisterDragDrop(IN HWND hwnd, IN LPDROPTARGET pDropTarget)
     return fpRegisterDragDrop(hwnd, *ppDropTarget);
 }
 
+// è¿™ä¸ªé’©å­çš„ç›®çš„åªæ˜¯è®¾ç½®å…¶ä»–é’©å­ã€‚ä¸€æ—¦è®¾ç½®äº†å…¶ä»–æŒ‚é’©ï¼Œå®ƒå°†è¢«ç¦ç”¨ã€‚
 // The purpose of this hook is just to set other hooks.  It is disabled once the other hooks are set.
 HRESULT WINAPI DetourSHCreateShellFolderView(const SFV_CREATE* pcsfv, IShellView** ppsv) {
+	
     HRESULT ret = fpSHCreateShellFolderView(pcsfv, ppsv);
     CComPtr<IShellView> psv(*ppsv);
     if(SUCCEEDED(ret) && psv.Implements(IID_CDefView)) {
-
-        CREATE_COM_HOOK(pcsfv->psfvcb, 3, MessageSFVCB);
+		// Box2(L"CREATE_COM_HOOK MessageSFVCB")
+		// æ³¨å†ŒæˆåŠŸ
+        CREATE_COM_HOOK(pcsfv->psfvcb, 3, MessageSFVCB)
 
         CComPtr<IShellView3> psv3;
         if(psv3.QueryFrom(psv)) {
-            CREATE_COM_HOOK(psv3, 20, CreateViewWindow3);
+			// Box2(L"CREATE_COM_HOOK CreateViewWindow3")
+			// æ³¨å†ŒæˆåŠŸ
+            CREATE_COM_HOOK(psv3, 20, CreateViewWindow3)
         }
 
         CComPtr<IListControlHost> plch;
         if(plch.QueryFrom(psv)) {
-            CREATE_COM_HOOK(plch, 3, OnActivateSelection);
+			// Box2(L"CREATE_COM_HOOK OnActivateSelection")
+			// ä¸ä¼šæ‰§è¡Œ
+			CREATE_COM_HOOK(plch, 3, OnActivateSelection)
         }
+		
 
         // Disable this hook, no need for it anymore.
         MH_DisableHook(&SHCreateShellFolderView);
     }
     return ret;
 }
+/*
+ [in] pidlFolder
+ç±»å‹ï¼š PCIDLIST_ABSOLUTE
+æŒ‡å‘æŒ‡å®šæ–‡ä»¶å¤¹çš„å®Œå…¨é™å®šé¡¹ ID åˆ—è¡¨çš„æŒ‡é’ˆã€‚
 
+cidl
+ç±»å‹ï¼š UINT
+é€‰æ‹©æ•°ç»„ä¸­çš„é¡¹è®¡æ•° apidlã€‚ å¦‚æœ cidl ä¸ºé›¶ï¼Œ åˆ™ pidlFolder å¿…é¡»æŒ‡å‘æè¿°è¦é€‰æ‹©çš„å•ä¸ªé¡¹çš„å®Œå…¨æŒ‡å®šçš„ ITEMIDLIST ã€‚ æ­¤å‡½æ•°å°†æ‰“å¼€çˆ¶æ–‡ä»¶å¤¹å¹¶é€‰æ‹©è¯¥é¡¹ç›®ã€‚
+
+[in, optional] apidl
+ç±»å‹ï¼š PCUITEMID_CHILD_ARRAY
+æŒ‡å‘ PIDL ç»“æ„çš„æ•°ç»„çš„æŒ‡é’ˆï¼Œæ¯ä¸ªç»“æ„éƒ½æ˜¯åœ¨ pidlFolder å¼•ç”¨çš„ç›®æ ‡æ–‡ä»¶å¤¹ä¸­é€‰æ‹©è¦é€‰æ‹©çš„é¡¹ã€‚
+
+dwFlags
+ç±»å‹ï¼šDWORD
+å¯é€‰æ ‡å¿—ã€‚ åœ¨ Windows XP ä¸‹ï¼Œæ­¤å‚æ•°å°†è¢«å¿½ç•¥ã€‚ åœ¨ Windows Vista ä¸­ï¼Œå®šä¹‰äº†ä»¥ä¸‹æ ‡å¿—ã€‚
+OFASI_EDIT (0x0001)
+é€‰æ‹©é¡¹ç›®å¹¶å°†å…¶åç§°ç½®äºç¼–è¾‘æ¨¡å¼ä¸‹ã€‚ ä»…å½“é€‰æ‹©å•ä¸ªé¡¹æ—¶ï¼Œæ‰èƒ½ä½¿ç”¨æ­¤æ ‡å¿—ã€‚ å¯¹äºå¤šä¸ªé¡¹é€‰æ‹©ï¼Œå°†å¿½ç•¥å®ƒã€‚
+OFASI_OPENDESKTOP (0x0002)
+é€‰æ‹©æ¡Œé¢ä¸Šçš„é¡¹æˆ–é¡¹ç›®ï¼Œè€Œä¸æ˜¯åœ¨ Windows èµ„æºç®¡ç†å™¨çª—å£ä¸­ã€‚ è¯·æ³¨æ„ï¼Œå¦‚æœæ¡Œé¢éšè—åœ¨æ‰“å¼€çš„çª—å£åé¢ï¼Œåˆ™ä¸ä¼šä½¿å…¶å¯è§ã€‚
+ */
+HRESULT WINAPI DetourSHOpenFolderAndSelectItems(PCIDLIST_ABSOLUTE pidlFolder, 
+		UINT cidl,
+		PCUITEMID_CHILD_ARRAY apidl,
+		DWORD dwFlags) {
+	// Box2(L"DetourSHOpenFolderAndSelectItems 1 ")
+	HRESULT ret = fpSHOpenFolderAndSelectItems(pidlFolder, cidl, apidl, dwFlags) ;
+	// WM_SELECTFILE
+	
+	if (SUCCEEDED( ret ))
+	{
+		
+	}
+	// Box2(L"DetourSHOpenFolderAndSelectItems 3 PostThreadMessage")
+    PostThreadMessage(GetCurrentThreadId(), WM_SELECTFILE, (WPARAM)(dwFlags), (LPARAM) apidl);
+    return ret;
+}
+
+
+HRESULT WINAPI DetourShellExecute(LPCWSTR lpOperation, 
+		LPCWSTR lpFile,
+		LPCWSTR lpParameters,
+		LPCWSTR lpDirectory,
+		INT nShowCmd) {
+	// Box2(L"DetourShellExecute ")
+	HRESULT ret = fpShellExecute(lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd);
+	// WM_SELECTFILE
+	if (SUCCEEDED( ret ))
+	{
+		
+	}
+	// Box2(L"DetourSHOpenFolderAndSelectItems 3 PostThreadMessage")
+ //    PostThreadMessage(GetCurrentThreadId(), WM_SELECTFILE, (WPARAM)(dwFlags), (LPARAM) apidl);
+    return ret;
+}
+
+// é€šçŸ¥ Windows èµ„æºç®¡ç†å™¨æµè§ˆåˆ°å¦ä¸€ä¸ªæ–‡ä»¶å¤¹ã€‚
 // The purpose of this hook is to work around Explorer's BeforeNavigate2 bug.  It allows QTTabBar
 // to be notified of navigations before they occur and have the chance to veto them.
 HRESULT WINAPI DetourBrowseObject(IShellBrowser* _this, PCUIDLIST_RELATIVE pidl, UINT wFlags) {
-    HWND hwnd;
+	// Box2(L"DetourBrowseObject") // ä¸€ç›´éƒ½æ‰§è¡Œ
+	HWND hwnd;
     LRESULT result = 0;
     if(SUCCEEDED(_this->GetWindow(&hwnd))) {
         HWND parent = GetParent(hwnd);
         if(parent != 0) hwnd = parent;
         result = SendMessage(hwnd, WM_BROWSEOBJECT, (WPARAM)(&wFlags), (LPARAM)pidl);
+ //       result = SendMessage(hwnd, WM_BROWSEOBJECT, (WPARAM)(&wFlags), (LPARAM)pidl);
     } 
     return result == 0 ? fpBrowseObject(_this, pidl, wFlags) : S_FALSE;
 }
 
+// æ­¤æŒ‚é’©çš„ç›®çš„æ˜¯å¯ç”¨â€œæ‰€æœ‰è§†å›¾ä¸­çš„æ ‡é¢˜â€åŠŸèƒ½
 // The purpose of this hook is to enable the Header In All Views functionality, if the user has 
 // opted to use it.
 HRESULT WINAPI DetourCreateViewWindow3(IShellView3* _this, IShellBrowser* psbOwner, IShellView* psvPrev, SV3CVW3_FLAGS dwViewFlags, FOLDERFLAGS dwMask, FOLDERFLAGS dwFlags, FOLDERVIEWMODE fvMode, const SHELLVIEWID* pvid, const RECT* prcView, HWND* phwndView) {
-    HWND hwnd;
+	// Box2(L"DetourCreateViewWindow3")  // æ‰“å¼€çª—å£ä¼šæ‰§è¡Œ
+	HWND hwnd;
     LRESULT result = 0;
     if(psbOwner != NULL && SUCCEEDED(psbOwner->GetWindow(&hwnd))) {
         HWND parent = GetParent(hwnd);
@@ -1124,17 +1232,70 @@ HRESULT WINAPI DetourCreateViewWindow3(IShellView3* _this, IShellBrowser* psbOwn
     return fpCreateViewWindow3(_this, psbOwner, psvPrev, dwViewFlags, dwMask, dwFlags, fvMode, pvid, prcView, phwndView);
 }
 
+#ifndef SFVM_SELECTIONCHANGED
+#define SFVM_SELECTIONCHANGED          8 /* undocumented */
+#define SFVM_DRAWMENUITEM              9 /* undocumented */
+#define SFVM_MEASUREMENUITEM          10 /* undocumented */
+#define SFVM_EXITMENULOOP             11 /* undocumented */
+#define SFVM_VIEWRELEASE              12 /* undocumented */
+#define SFVM_GETNAMELENGTH            13 /* undocumented */
+#define SFVM_WINDOWCLOSING            16 /* undocumented */
+#define SFVM_LISTREFRESHED            17 /* undocumented */
+#define SFVM_WINDOWFOCUSED            18 /* undocumented */
+#define SFVM_REGISTERCOPYHOOK         20 /* undocumented */
+#define SFVM_COPYHOOKCALLBACK         21 /* undocumented */
+#define SFVM_UNMERGEFROMMENU          28 /* undocumented */
+#define SFVM_ADDINGOBJECT             29 /* undocumented */
+#define SFVM_REMOVINGOBJECT           30 /* undocumented */
+#define SFVM_GETCOMMANDDIR            33 /* undocumented */
+#define SFVM_GETCOLUMNSTREAM          34 /* undocumented */
+#define SFVM_CANSELECTALL             35 /* undocumented */
+#define SFVM_ISSTRICTREFRESH          37 /* undocumented */
+#define SFVM_ISCHILDOBJECT            38 /* undocumented */
+#define SFVM_GETEXTVIEWS              40 /* undocumented */
+#define SFVM_GET_CUSTOMVIEWINFO       77 /* undocumented */
+#define SFVM_ENUMERATEDITEMS          79 /* undocumented */
+#define SFVM_GET_VIEW_DATA            80 /* undocumented */
+#define SFVM_GET_WEBVIEW_LAYOUT       82 /* undocumented */
+#define SFVM_GET_WEBVIEW_CONTENT      83 /* undocumented */
+#define SFVM_GET_WEBVIEW_TASKS        84 /* undocumented */
+#define SFVM_GET_WEBVIEW_THEME        86 /* undocumented */
+#define SFVM_GETDEFERREDVIEWSETTINGS  92 /* undocumented */
+#endif
+
+// å…è®¸ç³»ç»Ÿæ–‡ä»¶å¤¹è§†å›¾å¯¹è±¡å’Œç³»ç»Ÿæ–‡ä»¶å¤¹è§†å›¾å›è°ƒå¯¹è±¡ä¹‹é—´çš„é€šä¿¡ã€‚
 // The purpose of this hook is to notify QTTabBar whenever an Explorer refresh occurs.  This allows
 // the search box to be cleared.
 HRESULT WINAPI DetourMessageSFVCB(IShellFolderViewCB* _this, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	// Box2(L"DetourMessageSFVCB")  // è¿™é‡Œä¼šè°ƒç”¨å¾ˆå¤šæ¬¡
     if(uMsg == 0x11 /* SFVM_LISTREFRESHED */ && wParam != 0) {
         PostThreadMessage(GetCurrentThreadId(), WM_LISTREFRESHED, NULL, NULL);
     }
+	if ( uMsg == SFVM_SELECTIONCHANGED ) // SFVM_SELECTIONCHANGED
+	{
+		// wParam: count of selected items;
+		// lParam: point to an array of ITEMIDLISTs;
+
+		// struct SFVCB_SELECTINFO{
+		// 	UINT uOldState; // 0
+		// 	UINT uNewState; //LVIS_SELECTED, LVIS_FOCUSED,...
+		// 	LPITEMIDLIST pidl;
+		// };
+		// SFVCB_SELECTINFO* pSelectInfo = (SFVCB_SELECTINFO*)lParam;
+		// pSelectInfo->pidl.
+
+		// TCHAR path [MAX_PATH];
+  //       SHGetPathFromIDList (LPITEMIDLIST (lParam), path);
+		// Box2( path )
+		PostThreadMessage(GetCurrentThreadId(), WM_SELECTFILE, wParam, lParam);
+	}
     return fpMessageSFVCB(_this, uMsg, wParam, lParam);
 }
 
+// è·å–çª—å£çš„UI è‡ªåŠ¨åŒ–æä¾›ç¨‹åºçš„æ¥å£ã€‚
 // The purpose of this hook is just to set another hook.  It is disabled once the other hook is set.
 LRESULT WINAPI DetourUiaReturnRawElementProvider(HWND hwnd, WPARAM wParam, LPARAM lParam, IRawElementProviderSimple* el) {
+	// Box2(L"DetourUiaReturnRawElementProvider") // ä¼šæ‰§è¡Œ
     if(fpQueryInterface == NULL && (LONG)lParam == OBJID_CLIENT && SendMessage(hwnd, WM_ISITEMSVIEW, 0, 0) == 1) {
         CREATE_COM_HOOK(el, 0, QueryInterface);
         // Disable this hook, no need for it anymore.
@@ -1145,13 +1306,16 @@ LRESULT WINAPI DetourUiaReturnRawElementProvider(HWND hwnd, WPARAM wParam, LPARA
 
 // The purpose of this hook is to work around kb2462524, aka the scrolling lag bug.
 HRESULT WINAPI DetourQueryInterface(IRawElementProviderSimple* _this, REFIID riid, void** ppvObject) {
+	// Box2(L"DetourQueryInterface") // æ‰§è¡Œå¾ˆå¤šæ¬¡
     return IsEqualIID(riid, __uuidof(IRawElementProviderAdviseEvents))
             ? E_NOINTERFACE
             : fpQueryInterface(_this, riid, ppvObject);
 }
 
+// Hook ITravelLogEx::TravelToEntry to catch the Search band navigation
 // The purpose of this hook is to make clearing a search go back to the original directory.
 HRESULT WINAPI DetourTravelToEntry(ITravelLogEx* _this, IUnknown* punk, ITravelLogEntry* ptle) {
+	// Box2(L"DetourTravelToEntry")
     CComPtr<IShellBrowser> psb;
     LRESULT result = 0;
     if(punk != NULL && psb.QueryFrom(punk)) {
@@ -1166,9 +1330,11 @@ HRESULT WINAPI DetourTravelToEntry(ITravelLogEx* _this, IUnknown* punk, ITravelL
     return result == 0 ? fpTravelToEntry(_this, punk, ptle) : S_OK;
 }
 
+// è¿™ä¸ªé’©å­çš„ç›®çš„æ˜¯è®©QTTabBarå¤„ç†æ¿€æ´»é€‰æ‹©
 // The purpose of this hook is let QTTabBar handle activating the selection, so that recently
 // opened files can be logged (among other features).
 HRESULT WINAPI DetourOnActivateSelection(IListControlHost* _this, DWORD dwModifierKeys) {
+	// Box2(L"DetourOnActivateSelection")
     CComPtr<IShellView> psv;
     LRESULT result = 0;
     if(psv.QueryFrom(_this)) {
@@ -1180,10 +1346,12 @@ HRESULT WINAPI DetourOnActivateSelection(IListControlHost* _this, DWORD dwModifi
     return result == 0 ? fpOnActivateSelection(_this, dwModifierKeys) : S_OK;
 }
 
+// æ­¤é’©å­çš„ç›®çš„æ˜¯å°†é¢åŒ…å±‘æ çš„å†…éƒ¨DPAå¥æŸ„å‘é€åˆ°QTTabBar
 // The purpose of this hook is to send the Breadcrumb Bar's internal DPA handle to QTTabBar,
 // so that we can use it map the buttons to their corresponding IDLs.  This allows middle-click
 // on the breadcrumb bar to work.  The DPA handle changes whenever this function is called.
 HRESULT WINAPI DetourSetNavigationState(IShellNavigationBand* _this, unsigned long state) {
+	// Box2(L"DetourSetNavigationState")  // ä¼šæ‰§è¡Œ
 	HRESULT ret = fpSetNavigationState(_this, state);
     // I find the idea of reading an internal private variable of an undocumented class to
     // be quite unsettling.  Unfortunately, I see no way around it.  It's been in the same
@@ -1203,9 +1371,11 @@ HRESULT WINAPI DetourSetNavigationState(IShellNavigationBand* _this, unsigned lo
 // intercept it if the user has enabled the appropriate option.  The hooked function is different
 // on Vista and 7.
 HRESULT WINAPI DetourShowWindow_7(ICommonExplorerHost* _this, PCIDLIST_ABSOLUTE pidl, DWORD flags, POINT pt, DWORD mystery) {
+	// Box2(L"DetourShowWindow_7")
     return callbacks.fpNewWindow(pidl) ? S_OK : fpShowWindow_7(_this, pidl, flags, pt, mystery);
 }
 HRESULT WINAPI DetourShowWindow_Vista(IExplorerFactory* _this, PCIDLIST_ABSOLUTE pidl, DWORD flags, DWORD mystery1, DWORD mystery2, POINT pt) {
+	// Box2(L"DetourShowWindow_Vista")
     return callbacks.fpNewWindow(pidl) ? S_OK : fpShowWindow_Vista(_this, pidl, flags, mystery1, mystery2, pt);
 }
 
@@ -1214,6 +1384,7 @@ HRESULT WINAPI DetourShowWindow_Vista(IExplorerFactory* _this, PCIDLIST_ABSOLUTE
 // faking such a notification.  It's important that it happens after IShellBrowser::OnNavigate is
 // called by the real Explorer window, which happens in IShellBrowserService::UpdateWindowList.
 HRESULT WINAPI DetourUpdateWindowList(/* IShellBrowserService */ IUnknown* _this) {
+	// Box2(L"DetourUpdateWindowList")  // ç»å¸¸æ‰§è¡Œ
     HRESULT hr = fpUpdateWindowList(_this);
     CComPtr<IShellBrowser> psb;
     LRESULT result = 0;

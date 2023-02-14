@@ -26,7 +26,7 @@ using System.Windows.Forms;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    internal sealed class ToolStripClasses : ToolStrip {
+    public sealed class ToolStripClasses : ToolStrip {
         private bool fMA;
 
         public event EventHandler MouseActivated;

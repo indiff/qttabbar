@@ -84,7 +84,7 @@ namespace QTTabBarLib {
         }
     }
 
-    internal sealed class QTabCancelEventArgs : TabControlCancelEventArgs {
+    public sealed class QTabCancelEventArgs : TabControlCancelEventArgs {
         private QTabItem tabPage;
 
         public QTabCancelEventArgs(QTabItem tabPage, int tabPageIndex, bool cancel, TabControlAction action)

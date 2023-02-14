@@ -40,13 +40,10 @@ using Screen = System.Windows.Forms.Screen;
 using System.Reflection;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
-using BandObjectLib;
 using Binding = System.Windows.Data.Binding;
 using Button = System.Windows.Controls.Button;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
-using Point = System.Drawing.Point;
 using TreeView = System.Windows.Controls.TreeView;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -152,6 +149,11 @@ namespace QTTabBarLib {
                 PInvoke.SetProcessDPIAware();
                 // QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");
                 InitializeComponent();
+                
+                // this.LoadViewFromUri("/QTTabBar;component/optionsdialog/optionsdialog.xaml");
+                // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
+
+
                 //   QTUtility2.log("InitializeComponent end");
                 // 设置默认的title 和版本
                 string str = QTUtility.CurrentVersion.ToString();

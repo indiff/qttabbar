@@ -16,15 +16,23 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using QTPlugin;
+using QTTabBarLib.Common;
+using QTTabBarLib.ExplorerBrowser;
 using QTTabBarLib.Interop;
+using Control = System.Windows.Forms.Control;
+using HResult = QTTabBarLib.Interop.HResult;
 using IDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using IShellView = QTTabBarLib.Interop.IShellView;
 using Timer = System.Windows.Forms.Timer;
 
 namespace QTTabBarLib {
@@ -37,7 +45,7 @@ namespace QTTabBarLib {
         internal delegate void ItemCountChangedHandler(int count);
         internal delegate bool MiddleClickHandler(Point pt);
         internal delegate bool MouseActivateHandler(ref int result);
-        internal delegate void SelectionChangedHandler();
+        internal delegate void SelectionChangedHandler(/*object sender, SelectionChangedEventArgs e*/);
         internal delegate void RefreshHandler();
         #endregion
 
@@ -56,11 +64,11 @@ namespace QTTabBarLib {
         internal event ItemRightClickedEventHandler SubDirTip_MultipleMenuItemsRightClicked;
         #endregion
 
-        protected static readonly UInt32 WM_AFTERPAINT = PInvoke.RegisterWindowMessage("QTTabBar_AfterPaint");
-        protected static readonly UInt32 WM_REMOTEDISPOSE = PInvoke.RegisterWindowMessage("QTTabBar_RemoteDispose");
-        protected static readonly UInt32 WM_REGISTERDRAGDROP = PInvoke.RegisterWindowMessage("QTTabBar_RegisterDragDrop");
-        protected static readonly UInt32 WM_ISITEMSVIEW = PInvoke.RegisterWindowMessage("QTTabBar_IsItemsView");
-        protected static readonly UInt32 WM_ACTIVATESEL = PInvoke.RegisterWindowMessage("QTTabBar_ActivateSelection");
+        protected static readonly int WM_AFTERPAINT = PInvoke.RegisterWindowMessage("QTTabBar_AfterPaint");
+        protected static readonly int WM_REMOTEDISPOSE = PInvoke.RegisterWindowMessage("QTTabBar_RemoteDispose");
+        protected static readonly int WM_REGISTERDRAGDROP = PInvoke.RegisterWindowMessage("QTTabBar_RegisterDragDrop");
+        protected static readonly int WM_ISITEMSVIEW = PInvoke.RegisterWindowMessage("QTTabBar_IsItemsView");
+        protected static readonly int WM_ACTIVATESEL = PInvoke.RegisterWindowMessage("QTTabBar_ActivateSelection");
 
         protected NativeWindowController ListViewController;
         protected NativeWindowController ShellViewController;
@@ -118,10 +126,12 @@ namespace QTTabBarLib {
 
             // RefreshViewWatermark(true);
             // 如果文件不存在则不加载背景
-            if (File.Exists(BG_IMG))
+            /*if (File.Exists(BG_IMG))
             {
                 SetBackgroundImage(true, true, 0, 0);
-            }
+            }*/
+
+            // 执行不生效
             // SetBackgroundImage(true, true, 0, 0);
             // InstallHooks();
         }
@@ -286,7 +296,6 @@ namespace QTTabBarLib {
                  )
             {
                 var dToutiaoX1080IntellijIdea3Png = @"D:\toutiao\1920x1080-intellij-idea3.png";
-                // var dToutiaoX1080IntellijIdea3Png = @"D:\Users\Administrator\Documents\Tencent Files\531299332\Image\Group2\IY\S2\IYS2F)882TXGVT[JIR[`4BY.bmp";
 
                 using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
                 using (Bitmap bmp = freeBitmap.Clone())
@@ -576,9 +585,9 @@ namespace QTTabBarLib {
         }
 
         protected virtual bool ListViewController_MessageCaptured(ref Message msg) {
+            // QTUtility2.log("ListViewController msg\t" + Enum.GetName(typeof(MsgEnum), msg.Msg) + "\tw\t" + msg.WParam + "\tl\t" + msg.LParam);
             if(msg.Msg == WM_AFTERPAINT) {
                 RefreshSubDirTip(true);
-                
                 // SetBackgroundImage(true, true, 0, 0);
                 /*
                 RECT rect;
@@ -987,9 +996,11 @@ namespace QTTabBarLib {
             return MouseActivate != null && MouseActivate(ref result);
         }
 
-        protected void OnSelectionChanged() {
+        protected void OnSelectionChanged(ref Message msg/*object sender, SelectionChangedEventArgs e*/)
+        {
+            QTUtility2.log("OnSelectionChanged");
             if(SelectionChanged != null) {
-                SelectionChanged();
+                SelectionChanged(/*sender, e*/);
             }
         }
 
@@ -1069,7 +1080,7 @@ namespace QTTabBarLib {
         }
 
         protected virtual bool ShellViewController_MessageCaptured(ref Message msg) {
-
+            // QTUtility2.debugMessage(msg);
             switch(msg.Msg) {
                 case WM.MOUSEACTIVATE:
                     int res = (int)msg.Result;
@@ -1095,10 +1106,12 @@ namespace QTTabBarLib {
                             return;
                         }
                         path = ShellMethods.GetLinkTargetPath(path);
-                        if(string.IsNullOrEmpty(path) || !Directory.Exists(path)) {
+                        if (string.IsNullOrEmpty(path) || !Directory.Exists(path) || QTUtility.IsNetPath(path)) // add by indiff
+                        {
                             return;
                         }
                     }
+
                     if(subDirTip == null) {
                         subDirTip = new SubDirTipForm(hwndSubDirTipMessageReflect, true, this);
                         subDirTip.MenuClosed += subDirTip_MenuClosed;
@@ -1127,6 +1140,11 @@ namespace QTTabBarLib {
                 bool flag = false;
                 try {
                     if(!ShellMethods.TryMakeSubDirTipPath(ref str)) {
+                        return false;
+                    }
+
+                    if (QTUtility.IsNetPath(str))
+                    {
                         return false;
                     }
                     Point pnt = GetSubDirTipPoint(fByKey);
@@ -1160,7 +1178,9 @@ namespace QTTabBarLib {
                 return false;
             }
             if(ShellBrowser.TryGetHotTrackPath(iItem, out linkTargetPath)) {
-                if((linkTargetPath.StartsWith("::") || linkTargetPath.StartsWith(@"\\")) || linkTargetPath.ToLower().StartsWith(@"a:\")) {
+                if((linkTargetPath.StartsWith("::") ||
+                    linkTargetPath.StartsWith(@"\\")) ||
+                    linkTargetPath.ToLower().StartsWith(@"a:\")) {
                     return false;
                 }
                 string ext = Path.GetExtension(linkTargetPath).ToLower();

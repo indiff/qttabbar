@@ -23,8 +23,10 @@ namespace QTTabBarLib {
     internal delegate void ItemRightClickedEventHandler(object sender, ItemRightClickedEventArgs e);
     internal delegate void MenuReorderedEventHandler(object sender, ToolStripItemClickedEventArgs e);
     internal delegate void NavigationCompleteCallback(object obj, IntPtr ptr);
-    internal delegate void QEventHandler(object sender, QEventArgs e);
-    internal delegate void QTabCancelEventHandler(object sender, QTabCancelEventArgs e);
+
+    public delegate void QEventHandler(object sender, QEventArgs e);
+
+    public delegate void QTabCancelEventHandler(object sender, QTabCancelEventArgs e);
     internal delegate void WaitTimeoutCallback(int msec);
     internal delegate bool FolderClickedHandler(IDLWrapper item, Keys modkeys, bool middle);
 }

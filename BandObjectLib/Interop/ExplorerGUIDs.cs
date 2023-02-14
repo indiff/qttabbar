@@ -22,7 +22,9 @@ namespace BandObjectLib {
         public static readonly Guid CGID_DeskBand = new Guid("{EB0FE172-1A3A-11D0-89B3-00A0C90A90AC}");
         public static readonly Guid CLSID_TaskbarList = new Guid("56FDF344-FD6D-11d0-958A-006097C9A090");
         public static readonly Guid IID_IContextMenu = new Guid("{000214e4-0000-0000-c000-000000000046}");
+        //         internal const string IID_IShellItemArray = "B63EA76D-1F85-456F-A19C-48159EFA858B";
         public static readonly Guid IID_IDataObject = new Guid("{0000010e-0000-0000-C000-000000000046}");
+        public static readonly Guid IID_IShellItemArray = new Guid("{B63EA76D-1F85-456F-A19C-48159EFA858B}");
         public static readonly Guid IID_IDropTarget = new Guid("00000122-0000-0000-C000-000000000046");
         public static readonly Guid IID_IDropTargetHelper = new Guid("4657278B-411B-11D2-839A-00C04FD918D0");
         public static readonly Guid IID_IEnumIDList = new Guid("{000214F2-0000-0000-C000-000000000046}");

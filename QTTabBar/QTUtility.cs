@@ -39,7 +39,7 @@ using System.Text;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
-        internal static readonly Version BetaRevision = new Version(8, 0); // 主版本 beta  次版本 alpha
+        internal static readonly Version BetaRevision = new Version(9, 0); // 主版本 beta  次版本 alpha
         internal static readonly Version CurrentVersion = new Version(1, 5, 5, 0);
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
@@ -301,7 +301,7 @@ namespace QTTabBarLib {
                         memStream.Write(arrBytes, 0, arrBytes.Length);
                         memStream.Seek(0, SeekOrigin.Begin);
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
-                        binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
+                        // binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
                         object obj = binaryFormatter.Deserialize(memStream);
                         /*QTUtility2.log("ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
                         if (obj != null)
@@ -696,6 +696,16 @@ namespace QTTabBarLib {
             }
         }
 
+        public static bool LaterThan7
+        {
+            get
+            {
+                if (QTUtility.osVersion.Major > 6)
+                    return true;
+                return QTUtility.osVersion.Major == 6 && QTUtility.osVersion.Minor > 1;
+            }
+        }
+
         public static bool LaterThan8_1
         {
             get
@@ -730,6 +740,43 @@ namespace QTTabBarLib {
                 return QTUtility.IsWindows10 && QTUtility.osVersion.Build >= 17666;
             }
         }
+
+        private static bool rtl = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+
+        public static bool RightToLeft
+        {
+            get
+            {
+                return rtl;
+            }
+        }
+
+        public static bool IsWindows7
+        {
+            get
+            {
+                return osVersion.Major == 6 && osVersion.Minor == 1;
+            }
+        }
+
+        public static bool IsJapanese
+        {
+            get { return CultureInfo.CurrentUICulture.Name == "ja-JP"; }
+        }
+
+        public static bool IsChinese
+        {
+            get { return CultureInfo.CurrentUICulture.Name == "zh-CN"; }
+        }
+
+        public static string DefaultFontName
+        {
+            get
+            {
+                return IsJapanese && IsWindows10AndLater ? "Yu Gothic UI" : "Arial";
+            }
+        }
+
         public static Dictionary<string, string[]> ReadLanguageFile(string path) {
           //  const string linebreak = "\r\n";
           //  const string linebreakLiteral = @"\r\n";
@@ -1118,8 +1165,14 @@ namespace QTTabBarLib {
         }
 
 
+        public static bool isEmpty(string strs)
+        {
+            return strs == null || strs.Trim().Length == 0;
+        }
 
-       
-
+        public static bool IsNetPath(string path)
+        {
+            return !isEmpty(path) && path.StartsWith(@"\\");
+        }
     }
 }

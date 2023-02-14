@@ -139,10 +139,16 @@ namespace QTTabBarLib {
             );
         }
 
+        private static Boolean LoadedHook = false;
+
         public static void Initialize()
         {
             try
             {
+                if (LoadedHook)
+                {
+                    return;
+                }
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
                 string sCPUSerialNumber = "";
                 foreach (ManagementObject mo in searcher.Get())
@@ -161,6 +167,7 @@ namespace QTTabBarLib {
                 {
                     QTUtility2.log("can not hook in server by get server");
                     Config.Window.AutoHookWindow = false;
+                    LoadedHook = false;
                     return;
                 }
             }
@@ -168,6 +175,7 @@ namespace QTTabBarLib {
             {   
                 QTUtility2.log("can not hook in server by get server exception");
                 Config.Window.AutoHookWindow = false;
+                LoadedHook = false;
                 return;
             }
 
@@ -185,6 +193,7 @@ namespace QTTabBarLib {
 
             if (!Config.Window.AutoHookWindow)
             {
+                LoadedHook = false;
                 return;
             }
 
@@ -192,6 +201,7 @@ namespace QTTabBarLib {
             {
                 QTUtility2.flog("not exists file , close auto hook " + Path.Combine(installPath, filename));
                 Config.Window.AutoHookWindow = false;
+                LoadedHook = false;
                 return;
             }
             QTUtility2.flog("load library " + Path.Combine(installPath, filename) );
@@ -212,17 +222,20 @@ namespace QTTabBarLib {
                     }
                     catch(Exception e) {
                         QTUtility2.MakeErrorLog(e, "");
+                        LoadedHook = false;
                     }
                 }
             }
 
             if (retcode == 0)
             {
+                LoadedHook = true;
                 QTUtility2.log("HookLib Initialize success");
                 // MessageBox.Show("HookLib Initialize success");
                 return;
             }
             QTUtility2.MakeErrorLog(null, "HookLib Initialize failed: " + retcode);
+            LoadedHook = false;
             MessageForm.Show(IntPtr.Zero,
                 String.Format(
                     "{0}: {1} {2}",

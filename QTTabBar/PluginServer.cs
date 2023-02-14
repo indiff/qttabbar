@@ -27,7 +27,9 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     public sealed partial class QTTabBarClass {
-        internal sealed class PluginServer : IPluginServer, IDisposable {
+        private bool isTabSubFolderMenuVisible;
+
+        public  class PluginServer : IPluginServer, IDisposable {
             private Dictionary<string, string[]> dicLocalizingStrings;
             private QTPlugin.Interop.IShellBrowser shellBrowser;
             // private ExplorerManager explorerManager;
@@ -611,12 +613,22 @@ namespace QTTabBarLib {
 
             public void UpdateItem(IBarButton barItem, bool fEnabled, bool fRefreshImage) {
                 string pid = InstanceToFullName(barItem, false);
-                if(pid.Length > 0) 
+                if (pid.Length > 0)
+                {
                     TryCallButtonBar(bbar =>
                     {
-                        bbar.UpdatePluginItem(pid, barItem, fEnabled, fRefreshImage);
+                        return bbar.UpdatePluginItem(pid, barItem, fEnabled, fRefreshImage);
                     });
+                }
             }
+
+
+            /*public static bool TryCallButtonBar(Func<QTButtonBar, bool> func)
+            {
+                QTButtonBar bbar = InstanceManager.GetThreadButtonBar();
+                return bbar != null && func(bbar);
+            }*/
+
 
             /*public ITab SelectedTabInFocusedView
             {
@@ -865,6 +877,16 @@ namespace QTTabBarLib {
         public static Dictionary<String,String[]> testQTUtilityReadLanguageFile(string path )
         {
             return QTUtility.ReadLanguageFile( path );
+        }
+
+        protected override bool IsTabSubFolderMenuVisible
+        {
+            get { return isTabSubFolderMenuVisible; }
+        }
+
+        protected override int CalcBandHeight(int count)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1157,7 +1157,8 @@ namespace QTTabBarLib {
             }
             else if(((m.Msg == WM.INITMENUPOPUP) || (m.Msg == WM.DRAWITEM)) || (m.Msg == WM.MEASUREITEM)) {
                 if(hwndMessageReflect != IntPtr.Zero) {
-                    PInvoke.SendMessage(hwndMessageReflect, (uint)m.Msg, m.WParam, m.LParam);
+                    PInvoke.SendMessage(hwndMessageReflect, m.Msg, m.WParam, m.LParam);
+                    // PInvoke.SendMessage(hwndMessageReflect, (uint)m.Msg, m.WParam, m.LParam);
                 }
             }
             else {

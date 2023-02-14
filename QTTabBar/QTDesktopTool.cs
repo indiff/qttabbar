@@ -305,7 +305,7 @@ namespace QTTabBarLib {
 
         #region ---------- Overriding Methods ----------
 
-        public override void SetSite(object pUnkSite) {
+        public override int SetSite(object pUnkSite) {
             if(BandObjectSite != null) {
                 QTUtility2.log("ReleaseComObject BandObjectSite");
                 Marshal.ReleaseComObject(BandObjectSite);
@@ -321,6 +321,7 @@ namespace QTTabBarLib {
             InstallDesktopHook();
 
             TitleMenuItem.DrawBackground = tsmiVSTitle.Checked;
+            return 0;
         }
 
         public override void CloseDW(uint dwReserved) {

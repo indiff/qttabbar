@@ -27,5 +27,18 @@ namespace BandObjectLib {
         public IntPtr lParam;
         public uint time;
         public POINT pt;
+        private IntPtr result;
+
+        public IntPtr Result
+        {
+            get
+            {
+                return this.result;
+            }
+            set
+            {
+                this.result = value;
+            }
+        }
     }
 }

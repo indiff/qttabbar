@@ -208,6 +208,16 @@ namespace QTTabBarLib {
 
         public int GetSelectedCount() {
             int count;
+            if (folderView == null)
+            {
+                // 显示赋值 folderView 实例
+                IShellView ppshv;
+                if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
+                {
+                    folderView = ppshv as IFolderView;
+                }
+            }
+            QTUtility2.log(" GetSelectedCount folderView is null ? " + (folderView == null) ); // 测试是否未空？  by indiff
             return folderView != null && folderView.ItemCount(SVGIO.SELECTION, out count) == 0 ? count : 0;
         }
 
@@ -262,17 +272,24 @@ namespace QTTabBarLib {
         // 当导航的时候刷新文件夹视图
         public void OnNavigateComplete() {
             if(shellBrowser == null) return;
+
             // 是否释放有问题 by indiff
-            if(folderView != null) {
-                QTUtility2.log("ReleaseComObject folderView");
+            if (folderView != null)
+            {
+                QTUtility2.log("ReleaseComObject folderView to reset");
                 Marshal.ReleaseComObject(folderView);
                 folderView = null;
-            }
 
-            // 数显 folderView 实例
-            IShellView ppshv;
-            if(shellBrowser.QueryActiveShellView(out ppshv) == 0) {
-                folderView = ppshv as IFolderView;
+                if (folderView == null)
+                {
+                    // 显示赋值 folderView 实例
+                    IShellView ppshv;
+                    if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
+                    {
+                        folderView = ppshv as IFolderView;
+                    }
+                }
+
             }
         }
 
@@ -391,6 +408,7 @@ namespace QTTabBarLib {
         }
 
         public bool TrySetSelection(Address[] addresses, string pathToFocus, bool fDeselectOthers) {
+            QTUtility2.log("TrySetSelection " + pathToFocus);
             IShellView shellView = folderView as IShellView;
             if(addresses == null || folderView == null || shellView == null) return false;
             try {
@@ -428,6 +446,7 @@ namespace QTTabBarLib {
                 if(!fFocused && fFocusingNeeded) {
                     using(IDLWrapper wrapper = new IDLWrapper(pathToFocus)) {
                         IntPtr pIDLFOCUSCHILD = PInvoke.ILFindLastID(wrapper.PIDL);
+                        // SVSI_FOCUSED
                         shellView.SelectItem(pIDLFOCUSCHILD, SVSIF.FOCUSED | SVSIF.ENSUREVISIBLE);
 
                         QTUtility2.log("TrySetSelection success:" + pathToFocus);
@@ -438,7 +457,7 @@ namespace QTTabBarLib {
             catch(Exception ex) {
                 QTUtility2.MakeErrorLog(ex);
             }
-            QTUtility2.log("TrySetSelection fail:" + pathToFocus);
+            
             return false;
         }
     }
