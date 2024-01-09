@@ -23,7 +23,7 @@ using System.Reflection;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("BandObjectLib")]
-[assembly: AssemblyDescription("C# BandObject¿â")]
+[assembly: AssemblyDescription("C# BandObject")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTTabBar")]
