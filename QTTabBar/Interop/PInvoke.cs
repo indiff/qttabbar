@@ -646,5 +646,9 @@ namespace QTTabBarLib.Interop {
             int Msg,
             IntPtr wParam,
             IntPtr lParam);
+
+
+        [DllImport("ntdll.dll", SetLastError = true)]
+        static extern int NtQueryInformationProcess(IntPtr processHandle, int processInformationClass, IntPtr processInformation, uint processInformationLength, IntPtr returnLength);
     }
 }

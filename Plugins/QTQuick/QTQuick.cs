@@ -254,7 +254,7 @@ namespace Qwop {
               //  menu.Items.Add(new ToolStripMenuItem("设置当前目录ANT_HOME"));
              //   menu.Items.Add(new ToolStripMenuItem("设置当前目录MVND_HOME"));
 
-                menu.Items.Add(new ToolStripMenuItem("启动设置Path"));
+                menu.Items.Add(new ToolStripMenuItem("设置Path"));
                 menu.Items.Add(new ToolStripMenuItem("删除QTTabGroup（启动项）"));
                 menu.Items.Add(new ToolStripMenuItem("打开QTTabBar异常日志"));
 
@@ -706,21 +706,27 @@ namespace Qwop {
                                 exePath = @"H:\ProgramData\QTTabBar\SetHome.exe";
                             }
 
-
                             if (File.Exists(exePath))
                             {
-                                var process = new Process
-                                 {
-                                     StartInfo =
-                                     {
-                                         WorkingDirectory = selectedPath,
-                                         UseShellExecute = true,
-                                         FileName = exePath,
-                                         CreateNoWindow = true,
-                                         Verb = "runas"
-                                     }
-                                 };
-                                process.Start();
+                                try
+                                {
+                                    var process = new Process
+                                    {
+                                        StartInfo =
+                                        {
+                                            WorkingDirectory = selectedPath,
+                                            UseShellExecute = true,
+                                            FileName = exePath,
+                                            CreateNoWindow = true,
+                                            Verb = "runas"
+                                        }
+                                    };
+                                    process.Start();
+                                }
+                                catch (Exception e)
+                                {
+                                    QTUtility2.MakeErrorLog(e, "Setting Path");
+                                }
 
                                 /*new Thread(() =>
                                 {

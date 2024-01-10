@@ -39,6 +39,12 @@ namespace QTTabBarLib.Interop {
         int SaveViewState();
         [PreserveSig]
         int SelectItem(IntPtr pidlItem, SVSIF uFlags);
-        void GetItemObject(uint uItem, ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppv);
+        // void GetItemObject(uint uItem, ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppv);
+
+        [PreserveSig]
+        QTTabBarLib.Common.HResult GetItemObject(
+            uint uItem,
+            ref Guid riid,
+            [MarshalAs(UnmanagedType.IUnknown)] out object ppv);
     }
 }
