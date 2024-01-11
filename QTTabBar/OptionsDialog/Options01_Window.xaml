@@ -236,6 +236,10 @@
 				Content="Auto Hook(You can close it, No bg image,Must restart Explorer)" 
 				IsChecked="{Binding Path=AutoHookWindow}"
 				Style="{StaticResource CheckStyle}"/>
+        <CheckBox x:Name="ctxShowFailNavMsg"
+				Content="Show Fail Nav Message Box" 
+				IsChecked="{Binding Path=ShowFailNavMsg}"
+				Style="{StaticResource CheckStyle}"/>
 			
 			<CheckBox x:Name="ctxCaptureWeChatSelection"
 				Content="Capture Selection(WeChat/QQ/DingDing)"
