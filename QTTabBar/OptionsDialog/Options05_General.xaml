@@ -161,5 +161,17 @@
             Content="{qt:Resx Key=Options_Page05_General, Index=17}"
             IsChecked="{Binding Path=EnableLog}"
             Style="{StaticResource CheckStyle}"/>
+<!--        <Label
+            Content="GC"
+            Style="{StaticResource SectionHeaderStyle}"/>
+        <Button x:Name="btnGC"
+            Click="btnGC_Click"
+            Content="GC"
+            Height="23"
+            HorizontalAlignment="Left"
+            Margin="13,2,5,2"
+            Width="120"/>
+-->
+
     </StackPanel>
 </qt:OptionsDialogTab>
