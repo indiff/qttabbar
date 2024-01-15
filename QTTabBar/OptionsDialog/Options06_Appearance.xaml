@@ -161,7 +161,7 @@
                     Padding="0"/>
                 <qt:Spinner 
                     Min="10"
-                    Max="50"
+                    Max="100"
                     Value="{Binding Path=TabMinWidth}"/>
                 <Label
                     Content="{qt:Resx Key=Options_Page06_Appearance, Index=10}"

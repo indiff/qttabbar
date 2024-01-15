@@ -16,6 +16,7 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -79,11 +80,19 @@ namespace QTTabBarLib {
                 }
             }
         }
+
+
         private void EnableLog_Click(object sender, RoutedEventArgs e)
         {
             CheckBox enableLogBox = (CheckBox)e.Source;
             QTUtility2.ENABLE_LOGGER = enableLogBox.IsChecked.Value;
-        }       
+        }
+
+        private void btnGC_Click(object sender, RoutedEventArgs e)
+        {
+            
+            GC.Collect();
+        }
         
         
 
