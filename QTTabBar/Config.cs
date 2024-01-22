@@ -275,6 +275,7 @@ namespace QTTabBarLib {
             public bool TrayOnClose              { get; set; }
             public bool TrayOnMinimize           { get; set; }
             public bool AutoHookWindow           { get; set; }
+            public bool ShowFailNavMsg           { get; set; } // SHOW_FAIL_NAV_MSG
            
             public byte[] DefaultLocation        { get; set; }
 
@@ -289,7 +290,15 @@ namespace QTTabBarLib {
 
                 /* qwop's default value. */
                 CaptureNewWindows = true;
-                CaptureWeChatSelection = true;
+                if (QTUtility.IsThanWin11)
+                {
+                    CaptureWeChatSelection = false;
+                }
+                else
+                {
+                    CaptureWeChatSelection = true;
+                }
+                
                 RestoreSession = true;
                 RestoreOnlyLocked = false;
                 CloseBtnClosesUnlocked = false;
@@ -305,6 +314,8 @@ namespace QTTabBarLib {
                 using(IDLWrapper w = new IDLWrapper(idl)) {
                     DefaultLocation = w.IDL;
                 }
+                // 不显示导航失败的提示框
+                ShowFailNavMsg = false;
             }
         }
 
