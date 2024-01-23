@@ -372,8 +372,8 @@ namespace QTTabBarLib {
                 ShowNavButtons = false;  // 在标签显示导航按钮 (	(默认配置关闭按钮显示)标签栏右侧的两个按钮能否添加一个选项以控制是否去掉呢。#28）
                 NavButtonsOnRight = true; // 在最右边
                 MultipleTabRows = true; // 允许多行标签
-                ActiveTabOnBottomRow = true; // 始终将活动标签置于底部行
-                NeedPlusButton = true; // 是否蓝色新增标签按钮
+                ActiveTabOnBottomRow = false; // 始终将活动标签置于底部行
+                NeedPlusButton = true; // 是否显示蓝色新增标签按钮
             }
         }
 
