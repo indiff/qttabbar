@@ -604,9 +604,9 @@ namespace QTTabBarLib {
                 TabContentMargin = Padding.Empty; // 内容边缘
                 OverlapPixels = 0;  // 
                 HitTestTransparent = false;
-                TabHeight = 24;
-                TabMinWidth = 50;
-                TabMaxWidth = 200;
+                TabHeight = 30;  // 高度
+                TabMinWidth = 100;  // 最小宽度
+                TabMaxWidth = 200;  // 最大宽度
                 FixedWidthTabs = false;
                 TabTextFont = new Font(new FontFamily("微软雅黑"), 9f);
                 ToolBarTextColor = Color.Black;  // 工具栏文本颜色
