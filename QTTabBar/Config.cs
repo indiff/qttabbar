@@ -959,8 +959,8 @@ namespace QTTabBarLib {
                     BuiltInLangSelectedIndex = 6;
                     BuiltInLang = "Turkish";
                 }
-                else if (uiCulture.Equals("ru_RU") || lUiCulture.Equals("ru_RU"))
-                {
+                else if (uiCulture.Equals("ru_RU") || lUiCulture.Equals("ru"))
+                {  // 小写判断俄罗斯
                     BuiltInLangSelectedIndex = 7;
                     BuiltInLang = "Russian";
                 }
@@ -1018,7 +1018,7 @@ namespace QTTabBarLib {
                 // qwop's default value.
                 Width = 12;
 
-                // add by qwop.
+                // 最后选中的菜单索引，默认为0.
                 lstSelectedIndex = 0;
             }
         }
