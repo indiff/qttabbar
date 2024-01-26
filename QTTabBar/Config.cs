@@ -1133,7 +1133,8 @@ namespace QTTabBarLib {
                 Config.Misc.FileHistoryCount = QTUtility.ValidateMinMax(Config.Misc.FileHistoryCount, 1, 30);
                 Config.Misc.NetworkTimeout = QTUtility.ValidateMinMax(Config.Misc.NetworkTimeout, 0, 120);
                 Config.Skin.TabHeight = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 10, 50);
-                Config.Skin.TabMinWidth = QTUtility.ValidateMinMax(Config.Skin.TabMinWidth, 10, 50);
+                // 调整标签最小宽度
+				Config.Skin.TabMinWidth = QTUtility.ValidateMinMax(Config.Skin.TabMinWidth, 10, 100);
                 Config.Skin.TabMaxWidth = QTUtility.ValidateMinMax(Config.Skin.TabMaxWidth, 50, 999);
                 Config.Skin.OverlapPixels = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 0, 20);
                 Config.Skin.TabTextFont = Config.Skin.TabTextFont ?? Control.DefaultFont;
