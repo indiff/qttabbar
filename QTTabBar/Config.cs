@@ -1180,7 +1180,7 @@ namespace QTTabBarLib {
 
         public static void WriteConfig(bool DesktopOnly = false) {
             const string RegPath = RegConst.Root + RegConst.Config;
-            
+            QTUtility2.log("WriteConfig " + RegPath);
             //Returns details of setting properties from all categories, or only Desktop category
             var settings =
                 from categoryProperty in typeof(Config).GetProperties()
