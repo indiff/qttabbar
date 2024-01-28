@@ -427,8 +427,8 @@ namespace QTTabBarLib {
                 ToggleFullRowSelect = QTUtility.IsXP; // 详细视图选中整行
                 DetailsGridLines = false;  // 网格线
                 AlternateRowColors = false;// 交替行颜色
-                AltRowForegroundColor = SystemColors.WindowText;
-                AltRowBackgroundColor = QTUtility2.MakeColor(0xfaf5f1);
+                AltRowForegroundColor = SystemColors.WindowText; // 前景色
+                AltRowBackgroundColor = QTUtility2.MakeColor(0xfaf5f1); // 背景色
             }
         }
 
@@ -461,11 +461,11 @@ namespace QTTabBarLib {
                  TextExt = new List<string> {".txt", ".ini", ".inf" ,".cs", ".log", ".js", ".vbs"};
                  ImageExt = ThumbnailTooltipForm.MakeDefaultImgExts();*/
 
-                ShowSubDirTips = true;
-                SubDirTipsPreview = true;
-                SubDirTipsFiles = true;
+                ShowSubDirTips = true;  // 是否显示子目录提示
+                SubDirTipsPreview = true;  // 子目录提示预览
+                SubDirTipsFiles = true;  // 子目录提示文件
                 SubDirTipsWithShift = false ; // 仅当shift键按下显示子目录
-                ShowTooltipPreviews = true;
+                ShowTooltipPreviews = true;  
                 ShowPreviewInfo = true; // 启用文件预览
                 ShowPreviewsWithShift = true; // 仅当shift健按下, 启用文件预览
                 
