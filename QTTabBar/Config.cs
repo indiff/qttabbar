@@ -477,7 +477,7 @@ namespace QTTabBarLib {
                 //  字体配置
                 PreviewFont = Control.DefaultFont;
                 PreviewFont = new Font(new FontFamily("微软雅黑"), 9f);
-                // 文本类型扩展名
+                // 文本类型扩展名 添加 yml yaml 文件支持
                 TextExt = new List<string> { 
                     ".txt",".rtf"
                     ,".ini", ".inf",".properties", ".ruleset", ".settings"
@@ -485,6 +485,7 @@ namespace QTTabBarLib {
                     ,".js", ".vbs", ".bat", ".cmd", ".sh"
                     ,".c",".cpp",".cc",".h", ".rc"
                     ,".xml"
+                    ,".yml",".yaml"
                     ,".htm",".html",".mht",".mhtml", ".shtml", ".hta"
                     ,".HxT",".HxC",".hhc",".hhk", ".hhp"
                     ,".java"
