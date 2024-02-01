@@ -446,33 +446,34 @@ namespace QTTabBarLib {
         public static bool EnsureMainProcess(Action action) {
             ICommService service = GetChannel();
             if(service != null && service.IsMainProcess()) return true;
-            QTUtility2.log("EnsureMainProcess ExecuteOnMainProcess");
+            QTUtility2.log("InstanceManager EnsureMainProcess");
             ExecuteOnMainProcess(action, false);
             return false;
         }
 
         public static void InvokeMain(Action<QTTabBarClass> action) {
-            QTUtility2.log("EnsureMainProcess InvokeMain");
+            // QTUtility2.log("InstanceManager InvokeMain");
             ExecuteOnMainProcess(() => LocalInvokeMain(action), false);
         }
 
         public static void BeginInvokeMain(Action<QTTabBarClass> action) {
-            QTUtility2.log("EnsureMainProcess BeginInvokeMain");
+            // QTUtility2.log("InstanceManager BeginInvokeMain");
             ExecuteOnMainProcess(() => LocalInvokeMain(action, true), true);
         }
 
         public static void LocalInvokeMain(Action<QTTabBarClass> action, bool doAsync = false) {
             QTTabBarClass instance;
+            // 获取主进程的 QTTabBar的实例
             using(new Keychain(rwLockTabBar, false)) {
                 instance = sdTabHandles.Count == 0 ? null : sdTabHandles.Peek();
             }
             if(instance == null) return;
             if(doAsync) {
-                QTUtility2.log("EnsureMainProcess LocalInvokeMain instance.BeginInvoke doAsync  instance:" + instance );
+                QTUtility2.log("异步调用:");
                 instance.BeginInvoke(action, instance);    
             }
             else {
-                QTUtility2.log("EnsureMainProcess LocalInvokeMain instance.Invoke instance:" + instance);
+                QTUtility2.log("同步调用:" );
                 instance.Invoke(action, instance);   
             }
         }
