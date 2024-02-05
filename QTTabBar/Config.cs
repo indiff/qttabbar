@@ -635,7 +635,8 @@ namespace QTTabBarLib {
                 DrawHorizontalExplorerBarBgColor = false; // 
                 DrawVerticalExplorerBarBgColor = false; // 
             }
-
+			
+			// 切换暗色主题模式时候切换颜色
             internal void SwitchNighMode(bool isNighMode)
             {
                 if (this.SkinAutoColorChangeClose)
