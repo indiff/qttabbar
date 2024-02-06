@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2022  Quizo, Paul Accisano
+//    Copyright (C) 2007-2024  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -69,6 +69,7 @@ namespace QTTabBarLib {
         internal const string REGUSER = RegConst.Root;
         internal static readonly char[] SEPARATOR_CHAR = new char[] { ';' };
         internal const string SEPARATOR_PATH_HASH_SESSION = "*?*?*";
+		// ÊÇ·ñÎªµ÷ÊÔ×´Ì¬£¿
         internal const bool NOW_DEBUGGING =
 #if DEBUG
             true;
