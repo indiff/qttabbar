@@ -24,7 +24,9 @@ namespace QTTabBarLib {
         public const string Root = @"Software\QTTabBar\";
         // HKEY_CURRENT_USER\Software\QTTabBar\Config\Skin , 导出皮肤
         public const string Root_Config_Skin= @"Software\QTTabBar\Config\Skin\";
+        // 配置信息注册表路径
         public const string Config = @"Config\";
+        // 分组信息注册表路径
         public const string Groups = @"Groups\";
         public const string Apps = @"UserApps\";
         public const string StaticReg = @"Shared\";
