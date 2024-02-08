@@ -850,17 +850,29 @@ namespace QTTabBarLib {
             public bool UseTabSwitcher           { get; set; }
 
             public _Keys() {
+                // 初始化默认的快捷键字典项
                 var dict = new Dictionary<BindAction, Keys> {
+                    // 后退操作
                     {BindAction.GoBack,             Key.Left  | Key.Alt},
+                    // 前进操作
                     {BindAction.GoForward,          Key.Right | Key.Alt},
+                    // 跳转第一个
                     {BindAction.GoFirst,            Key.Left  | Key.Control | Key.Alt},
+                    // 跳转最后一个
                     {BindAction.GoLast,             Key.Right | Key.Control | Key.Alt},
+                    // 下一个标签
                     {BindAction.NextTab,            Key.Tab   | Key.Control},
+                    // 上一个标签
                     {BindAction.PreviousTab,        Key.Tab   | Key.Control | Key.Shift},
+                    //  新建标签
                     {BindAction.NewTab,             Key.T     | Key.Control},
+                    // 新窗口
                     {BindAction.NewWindow,          Key.T     | Key.Control | Key.Shift},
+                    // 关闭标签
                     {BindAction.CloseCurrent,       Key.W     | Key.Control},
+                    // 关闭其他标签
                     {BindAction.CloseAllButCurrent, Key.W     | Key.Control | Key.Shift},
+                    // 恢复关闭的标签
                     {BindAction.RestoreLastClosed,  Key.Z     | Key.Control | Key.Shift},
                     // 取消锁定键盘快捷键
                    // {BindAction.LockCurrent,        Key.L     | Key.Control},
