@@ -878,23 +878,27 @@ namespace QTTabBarLib {
                    // {BindAction.LockCurrent,        Key.L     | Key.Control},
                    // {BindAction.LockAll,            Key.L     | Key.Control | Key.Shift},
                     {BindAction.BrowseFolder,       Key.O     | Key.Control},
+                    // 打开选项
                     {BindAction.ShowOptions,        Key.O     | Key.Alt},
+                    // 显示工具栏菜单
                     {BindAction.ShowToolbarMenu,    Key.Oemcomma  | Key.Alt},
+                    // 显示标签菜单
                     {BindAction.ShowTabMenuCurrent, Key.OemPeriod | Key.Alt},
+                    // 显示标签组菜单
                     {BindAction.ShowGroupMenu,      Key.G     | Key.Alt},
+                    // 显示用户应用程序菜单
                     {BindAction.ShowUserAppsMenu,   Key.H     | Key.Alt},
+                    // 显示最近标签菜单
                     {BindAction.ShowRecentTabsMenu, Key.U     | Key.Alt},
+                    // 显示最近文件菜单
                     {BindAction.ShowRecentFilesMenu,Key.F     | Key.Alt},
-                    
-
-
                     // Bug fix 热键冲突， 调整 by indiff 
                     // {BindAction.NewFile,            Key.N     | Key.Control},
                     {BindAction.NewFile,            Key.N     | Key.Control | Key.Alt},
                     // {BindAction.NewFolder,          Key.N     | Key.Control | Key.Shift},
                    //  {BindAction.NewFolder,          Key.N     | Key.Shift }, // 系统默认自带
                    // 创建标签组
-                   {BindAction.CreateNewGroup,     Key.D    | Key.Control},
+                    {BindAction.CreateNewGroup,     Key.D    | Key.Control},
                    // 添加到标签组
                  //  {BindAction.AddToGroup,         Key.D    | Key.Control  },
                    // {BindAction.AddToGroup,         Key.G    | Key.Control | Key.Alt },

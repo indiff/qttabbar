@@ -28,6 +28,7 @@ namespace QTTabBarLib {
         public const string Config = @"Config\";
         // 分组信息注册表路径
         public const string Groups = @"Groups\";
+        // 自定应用注册表路径
         public const string Apps = @"UserApps\";
         public const string StaticReg = @"Shared\";
     }
