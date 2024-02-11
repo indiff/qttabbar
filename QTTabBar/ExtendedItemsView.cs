@@ -62,6 +62,9 @@ namespace QTTabBarLib {
             return focusedElement.FullRect;
         }
 
+        /**
+         * 获取子文件夹提示的位置
+         */
         protected override Point GetSubDirTipPoint(bool fByKey) {
             CachedListItemElement targetElement;
             if(fByKey) {
@@ -81,20 +84,20 @@ namespace QTTabBarLib {
             int x, y;
             Point ret;
             switch(ShellBrowser.ViewMode) {
-                case FVM.CONTENT:
+                case FVM.CONTENT: // 内容
                     y = targetElement.FullRect.Bottom;
                     x = targetElement.LabelRect.Left;
                     ret = new Point(x, y - 16);
                     break;
 
-                case FVM.DETAILS:
+                case FVM.DETAILS: // 详细信息
                     x = targetElement.LabelRect.Right;
                     y = targetElement.LabelRect.Top;
                     y += (targetElement.LabelRect.Bottom - y) / 2;
                     ret = new Point(x - 16, y - 8);
                     break;
 
-                case FVM.SMALLICON:
+                case FVM.SMALLICON: // 小图标
                     x = targetElement.FullRect.Right;
                     y = targetElement.FullRect.Top;
                     x -= (targetElement.FullRect.Bottom - y) / 2;
@@ -102,21 +105,21 @@ namespace QTTabBarLib {
                     ret = new Point(x - 8, y - 8);
                     break;
 
-                case FVM.TILE:
+                case FVM.TILE: // 平铺
                     y = targetElement.FullRect.Bottom;
                     x = targetElement.IconRect.Right;
                     ret = new Point(x - 16, y - 16);
                     break;
 
-                case FVM.THUMBSTRIP:
-                case FVM.THUMBNAIL:
-                case FVM.ICON:
+                case FVM.THUMBSTRIP: // 缩略图
+                case FVM.THUMBNAIL:  // 略图    
+                case FVM.ICON: // 图标
                     x = targetElement.FullRect.Right;
                     y = targetElement.IconRect.Bottom;
                     ret = new Point(x - 16, y - 16);
                     break;
 
-                case FVM.LIST:
+                case FVM.LIST: // 列表
                     x = targetElement.FullRect.Right;
                     y = targetElement.FullRect.Bottom;
                     ret = new Point(x, y - 15);
