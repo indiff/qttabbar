@@ -207,6 +207,7 @@ namespace QTTabBarLib {
             }
         }
 
+        // 处理Shift键盘事件
         public override void HandleShiftKey() {
             if(!Config.Tips.ShowPreviewsWithShift) {
                 HideThumbnailTooltip(5);
