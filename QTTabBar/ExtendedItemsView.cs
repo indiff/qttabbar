@@ -228,6 +228,12 @@ namespace QTTabBarLib {
             }
         }
 
+        // hitTest的底层实现：当控件接收到触摸事件的时候，不管能不能处理事件，都会调用hitTest方法，此方法的底层实现是：
+        // 1：先看自己是否能接受触摸事件  
+        // 2：再看触摸点是否在自己身上 
+        // 3：从后往前遍历子控件，拿到子控件后，再次重复1，2步骤，要把父控件上的坐标点转换为子控件坐标系下的点，再次执行hitTest方法。
+        // 4：若是最后还没有找到合适的view，那么就return self，自己就是合适的view
+        // 返回值：返回一个索引 index ，根据坐标点所在元素view位置来判断。 未找到返回-1
         public override int HitTest(Point pt, bool ScreenCoords) {
             if(hotElement != null) {
                 Point pt2 = pt;
