@@ -268,6 +268,7 @@ namespace QTTabBarLib {
             });
         }
 
+        // 判断是否为选中的文件
         public override bool IsTrackingItemName() {
             if(ShellBrowser.ViewMode != FVM.DETAILS) return true;
             Point pt = Control.MousePosition;
