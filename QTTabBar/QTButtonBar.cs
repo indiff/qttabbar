@@ -344,7 +344,10 @@ namespace QTTabBarLib {
             button.DropDownOpening += dropDownButtons_DropDownOpening;
             return button;
         }
-
+		
+		// 控制图片多线程锁
+        private static object imgLock2 = new object();
+		
         internal bool CreateItems()
         {
             // 工具栏按钮标签文字
@@ -493,10 +496,20 @@ namespace QTTabBarLib {
                 }*/
                 item.ImageScaling = ToolStripItemImageScaling.None;
                 item.Text = item.ToolTipText = ButtonItemsDisplayName[index];
-                item.Image = 
-                    (Config.BBar.LargeButtons ? imageStrip_Large[index - 1] : imageStrip_Small[index - 1])
-                       .Clone(
-                        new Rectangle(Point.Empty, Config.BBar.LargeButtons ? sizeLargeButton : sizeSmallButton), PixelFormat.Format32bppArgb);
+                /*
+                 ************** 异常文本 **************
+                   System.InvalidOperationException: 对象当前正在其他地方使用。
+                   在 System.Drawing.Bitmap.Clone(Rectangle rect, PixelFormat format)
+                   在 QTTabBarLib.QTButtonBar.CreateItems()
+                   在 QTTabBarLib.QTTabBarClass.RefreshOptions()
+                 */
+                lock (imgLock2) // by indiff
+                {
+                    item.Image =
+                        (Config.BBar.LargeButtons ? imageStrip_Large[index - 1] : imageStrip_Small[index - 1])
+                         .Clone(
+                            new Rectangle(Point.Empty, Config.BBar.LargeButtons ? sizeLargeButton : sizeSmallButton), PixelFormat.Format32bppArgb);
+                }
                
 
                 item.Tag = index;
