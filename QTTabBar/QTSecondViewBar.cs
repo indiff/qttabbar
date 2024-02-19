@@ -1845,12 +1845,15 @@ namespace QTTabBarLib
         {
             QTUtility2.log("QTTabBarClass ShowMessageNavCanceled: " + failedPath);
             QTUtility2.MakeErrorLog(null, string.Format("Failed navigation: {0}", failedPath));
-            MessageForm.Show(ExplorerHandle,
-                string.Format(QTUtility.TextResourcesDic["TabBar_Message"][0], failedPath),
-                string.Empty,
-                MessageBoxIcon.Asterisk,
-                0x2710,
-                fModal);
+            if ( Config.Window.ShowFailNavMsg )
+            {
+                MessageForm.Show(ExplorerHandle,
+                    string.Format(QTUtility.TextResourcesDic["TabBar_Message"][0], failedPath),
+                    string.Empty,
+                    MessageBoxIcon.Asterisk,
+                    0x2710,
+                    fModal);
+            }
         }
 
         protected void CancelFailedTabChanging(string newPath)
