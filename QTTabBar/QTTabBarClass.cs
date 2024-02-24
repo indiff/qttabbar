@@ -260,46 +260,54 @@ namespace QTTabBarLib {
                 ConfigurationManager.AppSettings.Set("EnableWindowsFormsHighDpiAutoResizing", "true");
             }
             catch (Exception) { /* Ignora l'eccezione #1# }*/
-
             try {
-                
                 string installDateString;
                 DateTime installDate;
                 string minDate = DateTime.MinValue.ToString();
                 using(RegistryKey key = Registry.LocalMachine.OpenSubKey(RegConst.Root)) {
                     installDateString = key == null ? minDate : (string)key.GetValue("InstallDate", minDate);
                     // 时间格式出错， 可能会导致初始化失败
-                    try
+                    if (QTUtility.IsSimpleDateStr(installDateString))  // 正则判断日期是否是正确格式
                     {
-                        QTUtility2.log("installDateString " + installDateString);
-                        installDate = DateTime.Parse(installDateString);
-                    }
-                    catch (Exception e)
-                    {
-                        installDate = DateTime.ParseExact(installDateString, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
-                        // ignore exception 
-                    }
-                }
-                using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
-                    DateTime lastActivation;
-                    // DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
-                    var value = (string)key.GetValue("ActivationDate", minDate);
-                    try
-                    {
-                        QTUtility2.log("ActivationDate " + value);
-                        lastActivation = DateTime.Parse(value);
-                    }
-                    catch (Exception e)
-                    {
-                        lastActivation = DateTime.ParseExact(value, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
-                        // ignore exception 
-                    }
+                        try
+                        {
+                            QTUtility2.log("installDateString " + installDateString);
+                            installDate = DateTime.Parse(installDateString);
+                        }
+                        catch (Exception e)
+                        {
+                            installDate = DateTime.ParseExact(installDateString, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
+                            // ignore exception 
+                        }
 
-                    fIsFirstLoad = installDate.CompareTo(lastActivation) > 0;
-                    // 时间格式出错， 可能会导致初始化失败
-                    if (fIsFirstLoad)
-                        key.SetValue("ActivationDate", installDateString);
+                        using (RegistryKey key2 = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                        {
+                            DateTime lastActivation;
+                            // DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
+                            var value = (string)key2.GetValue("ActivationDate", minDate);
+                            try
+                            {
+                                QTUtility2.log("ActivationDate " + value);
+                                lastActivation = DateTime.Parse(value);
+                            }
+                            catch (Exception e)
+                            {
+                                lastActivation = DateTime.ParseExact(value, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
+                                // ignore exception 
+                            }
+
+                            fIsFirstLoad = installDate.CompareTo(lastActivation) > 0;
+                            // 时间格式出错， 可能会导致初始化失败
+                            if (fIsFirstLoad)
+                                key.SetValue("ActivationDate", installDateString);
+                        }
+                    } 
+                    /*else if (QTUtility.IsShortDateStr(installDateString))
+                    {
+
+                    }*/
                 }
+                
             }
             catch (Exception e ){
                 QTUtility2.MakeErrorLog(e, "QTTabBarClass 构造函数初始化安装时间");
