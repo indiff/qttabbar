@@ -1072,6 +1072,7 @@ namespace QTTabBarLib {
                     using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
                         if(Config.Misc.KeepHistory) {
                             foreach(QTabItem item in tabControl1.TabPages) {
+                                // 这里调用 在创建窗口句柄之前，不能在控件上调用 Invoke 或 BeginInvoke。
                                 AddToHistory(item);
                             }
                             QTUtility.SaveRecentlyClosed(key);
@@ -2408,8 +2409,13 @@ namespace QTTabBarLib {
                 InitializeOpenedWindow();
             }
             else {
-                if(QTUtility.NoCapturePathsList.Any(ncPath => ncPath.PathEquals(path))) {
-                    QTUtility2.log("DoFirstNavigation NoCapturePathsList InitializeOpenedWindow");
+                QTUtility2.log("判断是否未忽略路径: " + path + " IsNoCapturePaths:" + QTUtility.IsNoCapturePaths(path));
+                if(
+                    // 如果是忽略路径
+                    QTUtility.NoCapturePathsList.Any(ncPath => ncPath.PathEquals(path))
+                    // ::{26EE0668-A00A-44D7-9371-BEB064C98683}
+                     || QTUtility.IsNoCapturePaths( path )
+                    ) {
                     InitializeOpenedWindow();
                     return;
                 }
