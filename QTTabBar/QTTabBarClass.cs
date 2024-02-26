@@ -2462,7 +2462,13 @@ namespace QTTabBarLib {
                 if (Config.Window.CaptureNewWindows &&
                     ModifierKeys != Keys.Control &&
                     InstanceManager.GetTotalInstanceCount() > 0) {
-                    QTUtility2.log("DoFirstNavigation GetCommandLine");
+                    // 增加父进程的判断, 这里获得的父进程是 winlogon svchost 这里获取父进程获取不到微信或者qq
+                    // string parentProcessName = QTUtility.GetParentProcessName();
+                    // string allParentProcessNames = QTUtility.GetAllParentProcessNames();
+                    // string parentProcessName2 = ProcessUtil.GetParentProcess().ProcessName;
+                    // string allParentProcessNames2 = ProcessUtil.GetAllParentProcessNames();
+                    // QTUtility2.log("DoFirstNavigation GetCommandLine parent process name: " + parentProcessName);
+                    // QTUtility2.log("DoFirstNavigation GetCommandLine parent process name2: " + allParentProcessNames2);
                     string cmd = GetCommandLine();
                     if (!String.IsNullOrEmpty(cmd))
                     {
@@ -2506,7 +2512,10 @@ namespace QTTabBarLib {
                             {
                                 tabbar.OpenNewTab(path);
                                 tabbar.RestoreWindow();
-                                tabbar.Wait4Select();
+                                if (Config.Window.CaptureWeChatSelection)
+                                {
+                                    tabbar.Wait4Select();
+                                }
                                 TimeSpan abs = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
                                 QTUtility2.log(string.Format("factory cmd BeginInvokeMain cost {0} ", abs.TotalMilliseconds));
                             });
@@ -2520,7 +2529,7 @@ namespace QTTabBarLib {
                                 tabbar.OpenNewTab(path);
                                 QTUtility2.log("other cmd BeginInvokeMain RestoreWindow");
                                 tabbar.RestoreWindow();
-                                // tabbar.Wait4Select();
+                                // tabbar.Wait4Select(); // intellij idea / vs code 导致崩溃？
                             });
                         }
                     }
@@ -2533,7 +2542,7 @@ namespace QTTabBarLib {
                     }
                     else
                     {
-                        QTUtility2.log("Close Explorer Explorer.Quit1");
+                        
                         // QTUtility2.Wait4SelectFiles(Explorer);
                         // Wait4SelectedQuit();
                         // Explorer.Quit();
@@ -2543,9 +2552,10 @@ namespace QTTabBarLib {
                         
                         if (mCmdType == 3 || !Config.Window.CaptureWeChatSelection)
                         {
+                            QTUtility2.log("Close Explorer Explorer.Quit");
                             Explorer.Quit();
                             // WindowUtils.HideExplorer(ExplorerHandle);
-                            WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                            // WindowUtils.CloseExplorer(ExplorerHandle, 0);
                         }
                     }
                     QTUtility2.log("DoFirstNavigation return");
