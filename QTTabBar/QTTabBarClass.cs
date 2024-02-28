@@ -2569,7 +2569,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * 定时器方式来获取微信或者qq打开后的选中文件
+         * 计时器间隔 1 秒方式来获取微信或者qq打开后的选中文件
          */
         private void Wait4Select()
         {
@@ -2580,12 +2580,14 @@ namespace QTTabBarLib {
 
             QTUtility2.log("Wait4Select");
             int count = 1;
+            // 自关闭 计时器间隔 1 秒
             Timer timer = new Timer { Interval = 1000 };
             timer.Tick += (sender, args) =>
             {
                 try
                 {
                     count++;
+                    // 超过次数10次 自关闭 
                     if (count >= 10)
                     {
                         timer.Stop();
@@ -2696,14 +2698,6 @@ namespace QTTabBarLib {
                                     WindowUtils.CloseExplorer(ExplorerHandle, 0);
 
                                 }
-
-                                /*if (list.Count > 0)
-                                    QTUtility2.log("set dict " + tabItem.CurrentPath);
-                                    InstanceManager.selectDict.Add(tabItem.CurrentPath, list);
-                                    timer.Stop();
-                                    Explorer.Quit();
-                                    WindowUtils.CloseExplorer(ExplorerHandle, 0);
-                                }*/
                             }
                         }
                     }
@@ -4673,7 +4667,9 @@ namespace QTTabBarLib {
                     contextMenuSys.Items[0].Dispose();
                     contextMenuSys.Items.AddRange(new ToolStripItem[]
                     {
-                        tsmiGroups, tsmiUndoClose, tsmiLastActiv, tsmiExecuted, tssep_Sys1, tsmiBrowseFolder, tsmiCloseAllButCurrent, tsmiCloseWindow, tsmiMergeWindows, tsmiLockToolbar, tssep_Sys2, tsmiOption
+                        tsmiGroups, tsmiUndoClose, tsmiLastActiv, tsmiExecuted, 
+                        tssep_Sys1, tsmiBrowseFolder, tsmiCloseAllButCurrent, tsmiCloseWindow, 
+                        tsmiMergeWindows, tsmiLockToolbar, tssep_Sys2, tsmiOption
                     });
                 }
 
