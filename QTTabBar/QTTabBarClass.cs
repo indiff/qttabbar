@@ -5934,7 +5934,10 @@ namespace QTTabBarLib {
                 StaticReg.SkipNextCapture = true;
                 if(ShellBrowser.Navigate(idlw, wFlags) != 0) {
                     QTUtility2.MakeErrorLog(null, string.Format("Failed navigation: {0}", idlw.Path));
-                    MessageBox.Show(string.Format(QTUtility.TextResourcesDic["TabBar_Message"][0], idlw.Path));
+                    if (Config.Window.ShowFailNavMsg)
+                    {
+                        MessageBox.Show(string.Format(QTUtility.TextResourcesDic["TabBar_Message"][0], idlw.Path));
+                    }
                     StaticReg.CreateWindowGroup = string.Empty;
                     StaticReg.SkipNextCapture = false;
                 }
