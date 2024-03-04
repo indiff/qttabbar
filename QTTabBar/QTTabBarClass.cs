@@ -7416,6 +7416,9 @@ namespace QTTabBarLib {
         protected ToolStripDropDownButton buttonNavHistoryMenu;
         protected IntPtr TravelToolBarHandle;
 
+        /**
+         * 添加到历史目录
+         */
         protected void AddToHistory(QTabItem closingTab)
         {
             string currentPath = closingTab.CurrentPath;
@@ -7426,6 +7429,7 @@ namespace QTTabBarLib {
                     currentPath = currentPath + "???" + closingTab.GetLogHash(true, 0);
                 }
                 StaticReg.ClosedTabHistoryList.Add(currentPath);
+                // windows 11 ，有可能调用 WindowsUtil.close 方法导致报错
                 InstanceManager.ButtonBarBroadcast(bbar => bbar.RefreshButtons(), true);
             }
         }
@@ -7555,12 +7559,15 @@ namespace QTTabBarLib {
         {
             QTUtility2.log("QTTabBarClass ShowMessageNavCanceled: " + failedPath);
             QTUtility2.MakeErrorLog(null, string.Format("Failed navigation: {0}", failedPath));
-            MessageForm.Show(ExplorerHandle,
-                string.Format(QTUtility.TextResourcesDic["TabBar_Message"][0], failedPath),
-                string.Empty,
-                MessageBoxIcon.Asterisk,
-                0x2710,
-                fModal);
+            if (Config.Window.ShowFailNavMsg)
+            {
+                MessageForm.Show(ExplorerHandle,
+                    string.Format(QTUtility.TextResourcesDic["TabBar_Message"][0], failedPath),
+                    string.Empty,
+                    MessageBoxIcon.Asterisk,
+                    0x2710,
+                    fModal);
+            }
         }
 
         protected void CancelFailedTabChanging(string newPath)
