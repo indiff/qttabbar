@@ -17,11 +17,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -39,8 +41,10 @@ using System.Text;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
-        internal static readonly Version BetaRevision = new Version(9, 0); // 主版本 beta  次版本 alpha
-        internal static readonly Version CurrentVersion = new Version(1, 5, 5, 0);
+        // 1.5.6.1  edit this 
+        internal static readonly Version BetaRevision = new Version(1, 0); // 主版本 beta  次版本 alpha
+        internal static readonly Version CurrentVersion = new Version(1, 5, 6, 0);
+        internal static readonly string BuildVerion = "build02";
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
         // 快捷键启用标识
@@ -57,6 +61,9 @@ namespace QTTabBarLib {
         internal static readonly bool IsWin10 = (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Minor >= 0) || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 4);
 
         internal static readonly bool IsWin11 = (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build >= 22000);
+
+        internal static readonly bool IsThanWin11 = (Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= 22000);
+
         private static Version osVersion = Environment.OSVersion.Version;
 
         internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
