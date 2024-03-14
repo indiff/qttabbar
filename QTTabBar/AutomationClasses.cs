@@ -55,6 +55,11 @@ namespace QTTabBarLib {
 
         public static T DoQuery<T>(Query<T> query) {
             try {
+                // 空值引用判断，这里返回一个默认值
+                if (null == automationDispatch) {
+                    return default(T);
+                }
+
                 return (T)automationDispatch.Invoke(new Func<T>(() => {
                     try {
                         using(AutomationElementFactory factory = new AutomationElementFactory(pAutomation)) {
