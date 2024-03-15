@@ -331,10 +331,22 @@ namespace QTTabBarLib {
 
         public void SetUsingListView(bool listview) {
             if(shellBrowser != null) {
-                IFolderViewOptions fvo = shellBrowser as IFolderViewOptions;
-                if(fvo != null) {
-                    fvo.SetFolderViewOptions(FVO.VISTALAYOUT, listview ? FVO.VISTALAYOUT : FVO.DEFAULT);
-                }                
+                try // add by indiff 2023.03.15
+                {
+                    // System.Runtime.InteropServices.InvalidComObjectException: COM 对象与其基础 RCW 分开后就不能再使用。 
+                    IFolderViewOptions fvo = shellBrowser as IFolderViewOptions;
+                    if(fvo != null) {
+                        fvo.SetFolderViewOptions(FVO.VISTALAYOUT, listview ? FVO.VISTALAYOUT : FVO.DEFAULT);
+                    }
+                }
+                catch (COMException e)
+                {
+                    QTUtility2.MakeErrorLog(e, " SetUsingListView COMException");
+                }
+                catch (InvalidComObjectException e)
+                {
+                    QTUtility2.MakeErrorLog(e, " SetUsingListView InvalidComObjectException");
+                }  // add by indiff 2023.03.15
             }
         }
 
