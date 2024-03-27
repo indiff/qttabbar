@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
+using System.Threading;
+using System.IO;
 
 namespace SetHome
 {
@@ -11,11 +14,20 @@ namespace SetHome
         [STAThread]
         static void Main(string[] args)
         {
+            // 只允许一个实例运行
+            var exeName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
+            Process[] processes = Process.GetProcessesByName(exeName);
+            if (processes.Length > 1)
+            {
+                // MessageBox.Show(exeName + "已经启动");
+                Thread.Sleep(333);
+                System.Environment.Exit(1);
+            }
+
             // 测试DPI兼容 indiff
             // PInvoke.SetProcessDPIAware();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
              /**
               * 当前用户是管理员的时候，直接启动应用程序
               * 如果不是管理员，则使用启动对象启动程序，以确保使用管理员身份运行
