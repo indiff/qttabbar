@@ -10,8 +10,7 @@ using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Win32;
-using System.Windows.Shell;
-using System.Text.RegularExpressions;
+using System.Text;
 
 namespace SetHome
 {
@@ -112,6 +111,7 @@ namespace SetHome
         /// <param name="isSysVar">是否是系统变量</param>
         public static void RunSetx(string varName, string value, bool isSysVar)
         {
+            /*
             new Thread(() =>
             {
                 List<string> args = new List<string>();
@@ -124,6 +124,17 @@ namespace SetHome
                 args.Add(value);
                 RunCommand("setx", args.ToArray());
             }).Start();
+            */
+
+            List<string> args = new List<string>();
+            if (isSysVar)
+            {
+                args.Add("/m");
+            }
+            args.Add(varName);
+           //  value = RemovePathEndBackslash(value);
+            args.Add(value);
+            RunCommand("setx", args.ToArray());
         }
 
         /// <summary>
