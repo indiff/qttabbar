@@ -397,7 +397,7 @@ namespace SetHome
                         }
 
                         if (isRun) {
-                            Dispose();
+                            // Dispose();  // 这里导致插件执行报错
                             Application.Exit();
                         }
                         
@@ -434,6 +434,55 @@ namespace SetHome
 
         private static string joinDevPath(string oldPath)
         {
+            /*
+            // 处理一些 oldPath 为空的情况
+            HashSet<string> hs = new HashSet<string>();
+            oldPath = oldPath.Trim();
+            string[] sArray = oldPath.Split(';');
+            if (sArray.Length > 0)
+            {
+                bool existSystem32 = false;
+                string str = @"C:\Windows\System32";
+                foreach (string stmp in sArray)
+                {
+                    if (!existSystem32) {
+                        // Dir exist
+                        bool flag = str.Equals(stmp, StringComparison.OrdinalIgnoreCase);
+                        if (flag)
+                        {
+                            existSystem32 = true;
+                        }
+                    }
+                    
+                    if (!string.IsNullOrEmpty(stmp.Trim()) && Directory.Exists(stmp))
+                    {
+                        hs.Add(stmp);
+                    }
+                }
+
+                if (!existSystem32)
+                {
+                    hs.Add(str);
+                }
+                // C:\Windows\System32
+                string[] strs = hs.ToArray();
+                oldPath = String.Join(";", strs);
+                if (!oldPath.EndsWith(";")) {
+                    oldPath += ";";
+                }
+            }
+
+            if (String.IsNullOrEmpty(oldPath.Trim()))
+            {
+                oldPath = @"C:\Windows\System32;";
+            }
+
+            if (oldPath.Trim().Equals(";") || IsSemicolon(oldPath))
+            {
+                oldPath = @"C:\Windows\System32;";
+            }
+            */
+
             return oldPath
                     + @"%JAVA_HOME%\bin;"
                     + @"%M2_HOME%\bin;"
