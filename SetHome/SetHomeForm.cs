@@ -492,9 +492,16 @@ namespace SetHome
                     ;
         }
 
+        private static bool IsSemicolon(string str) {
+            var strTrim = str.Trim();
+            var chars = strTrim.ToCharArray();
+            bool allSemicolons = chars.All(c => c == ';');
+            return allSemicolons;
+        }
+
         private static string getOldPath(RegistryKey envKey)
         {
-            object value = envKey.GetValue("PATH");
+            object value = envKey.GetValue("PATH", "", RegistryValueOptions.DoNotExpandEnvironmentNames);
             string oldPath = value.ToString();
             var javaHome = Environment.GetEnvironmentVariable("JAVA_HOME");
             var m2Home = Environment.GetEnvironmentVariable("M2_HOME");
@@ -503,18 +510,27 @@ namespace SetHome
             var gradleHome = Environment.GetEnvironmentVariable("GRADLE_HOME");
            // MessageBox.Show(javaHome + @"\bin;");
 
-            oldPath = oldPath.Replace(javaHome + @"\bin;", "");
-            oldPath = oldPath.Replace(m2Home + @"\bin;", "");
-            oldPath = oldPath.Replace(antHome + @"\bin;", "");
-            oldPath = oldPath.Replace(mvndHome + @"\bin;", "");
-            oldPath = oldPath.Replace(gradleHome + @"\bin;", "");
+            if (null != javaHome) 
+                oldPath = oldPath.Replace(javaHome + @"\bin;", "");
+            if (null != m2Home) 
+                oldPath = oldPath.Replace(m2Home + @"\bin;", "");
+            if (null != antHome) 
+                oldPath = oldPath.Replace(antHome + @"\bin;", "");
+            if (null != mvndHome) 
+                oldPath = oldPath.Replace(mvndHome + @"\bin;", "");
+            if (null != gradleHome) 
+                oldPath = oldPath.Replace(gradleHome + @"\bin;", "");
 
-
-            oldPath = oldPath.Replace(javaHome + @"\bin", "");
-            oldPath = oldPath.Replace(m2Home + @"\bin", "");
-            oldPath = oldPath.Replace(antHome + @"\bin", "");
-            oldPath = oldPath.Replace(mvndHome + @"\bin", "");
-            oldPath = oldPath.Replace(gradleHome + @"\bin", "");
+            if (null != javaHome) 
+                oldPath = oldPath.Replace(javaHome + @"\bin", "");
+            if (null != m2Home) 
+                oldPath = oldPath.Replace(m2Home + @"\bin", "");
+            if (null != antHome) 
+                oldPath = oldPath.Replace(antHome + @"\bin", "");
+            if (null != mvndHome) 
+                oldPath = oldPath.Replace(mvndHome + @"\bin", "");
+            if (null != gradleHome) 
+                oldPath = oldPath.Replace(gradleHome + @"\bin", "");
 
             oldPath = oldPath.Replace(@"%JAVA_HOME%\bin;", "");
             oldPath = oldPath.Replace(@"%M2_HOME%\bin;", "");
@@ -532,6 +548,16 @@ namespace SetHome
             if (!oldPath.EndsWith(";"))
             {
                 oldPath = oldPath + ";";
+            }
+
+            // 忽略大小写  
+            if (
+                // !oldPath.Contains(@"C:\Windows\System32") &&
+                // !oldPath.Contains(@"%SystemRoot%\system32")  
+                !(oldPath.IndexOf(@"C:\Windows\System32", StringComparison.OrdinalIgnoreCase) >= 0) &&
+                !(oldPath.IndexOf(@"%SystemRoot%\system32", StringComparison.OrdinalIgnoreCase) >= 0)
+                ) {
+                oldPath = oldPath + @"C:\Windows\System32;"; 
             }
             return oldPath;
         }
