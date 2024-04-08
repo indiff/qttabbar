@@ -628,30 +628,60 @@ namespace SetHome
         private string kill(string oldPath, string fileName)
         {
             var paths = oldPath.Split(';');
+            var sb = new StringBuilder();
             if (paths != null && paths.Length > 0)
             {
+                var list = new List<string>();
                 for (var i = paths.Length - 1; i >= 0; i--)
                 {
                     var tempPath = paths[i];
-                    if (!string.IsNullOrEmpty(tempPath))
+                    if (!string.IsNullOrEmpty(tempPath.Trim()))
                     {
                         // 如果这个路径不存在则过滤掉
-                        if (!Directory.Exists(tempPath))
+                        var combine = Path.Combine(tempPath, fileName);
+
+                        // 展开变量
+                        string expandedPath = System.Environment.ExpandEnvironmentVariables(tempPath);
+                        var existFlag = Directory.Exists(tempPath.Trim());
+                        var existFlag2 = Directory.Exists(expandedPath.Trim());
+                        if (existFlag)
                         {
-                            oldPath = oldPath.Replace(tempPath, "");
-                            continue;
+                            var normalPath = Path.GetFullPath(tempPath.Trim()).TrimEnd(Path.DirectorySeparatorChar,Path.AltDirectorySeparatorChar);
+                            if ( list.Contains(normalPath) )
+                            {
+                                continue;
+                            } else { 
+                                list.Add(normalPath);
+                            }
                         }
 
-                        // 判断文件是否存在，存在的话 kill 掉
-                        var combine = Path.Combine(tempPath, fileName );
-                        if (File.Exists(combine))
+                        if (!existFlag && existFlag2)
                         {
-                            oldPath = oldPath.Replace(tempPath, "");
+                            var normalPath = Path.GetFullPath(expandedPath.Trim()).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                            if (list.Contains(normalPath))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                list.Add(normalPath);
+                            }
                         }
 
-                        
+
+                        if (
+                            (existFlag || existFlag2)
+                            && !File.Exists(combine))
+                        {
+                            // 判断文件是否存在，存在的话 kill 掉
+                            sb.Append(tempPath.Trim());
+                            sb.Append(';');
+                        }
                     }
                 }
+
+                list.Clear();
+                list = null;
             }
             // 如果不为空的话， 则判断结尾是否包含多个分号 ;
             if (!string.IsNullOrEmpty(oldPath))
@@ -666,12 +696,12 @@ namespace SetHome
                     oldPath = oldPath.Replace(";;;", ";");
                 }*/
                 // 正则替换掉，2个或者以上; 则替换成一个;
-                string pattern = @";+;+";
-                string replacement = ";";
-                oldPath = Regex.Replace(oldPath, pattern, replacement);
+               // string pattern = @";+;+";
+               // string replacement = ";";
+                //oldPath = Regex.Replace(oldPath, pattern, replacement);
+                // 这里会引起 bug 替换掉其他字符
             }
-
-            return oldPath;
+            return sb.ToString();
         }
 
         private void mvn_Click(object sender, EventArgs e)
