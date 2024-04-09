@@ -944,16 +944,26 @@ namespace SetHome
 
         private static void RestartExplorer()
         {
+            bool KillFlag = false;
             foreach (Process process in Process.GetProcessesByName("explorer"))
             {
                 try
                 {
                     process.Kill();
+                    KillFlag = true;
                 }
                 catch
                 {
+                    KillFlag = false;
                 }
             }
+
+            if (!KillFlag)
+            {
+                Process.Start(@"%systemroot%\taskkill.exe",  @"/F /T IM explorer.exe" );
+               // @"/F /T /PID " + process.Id);
+            }
+
             Thread.Sleep(1500);
             if (Process.GetProcessesByName("explorer").Length != 0)
                 return;
@@ -1034,6 +1044,11 @@ namespace SetHome
                 MessageBox.Show("设置ROCKETMQ_HOME成功");
                 UpdateEnvPath();
             }
+        }
+
+        private void SetHomeForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            System.Environment.Exit(1);
         }
     }
 }
