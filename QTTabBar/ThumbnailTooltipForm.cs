@@ -1498,7 +1498,7 @@ namespace QTTabBarLib {
             builder.Append(GetGDIPSupportedImages());
             builder.Append(supportedMovies);
             var strs = builder.ToString();
-            if (QTUtility.isEmpty(strs))
+            if (QTUtility.IsEmptyStr(strs))
             {
                 return new List<string>();
             }

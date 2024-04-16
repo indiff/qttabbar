@@ -44,7 +44,7 @@ namespace QTTabBarLib {
         // 1.5.6.1  edit this 
         internal static readonly Version BetaRevision = new Version(1, 0); // 主版本 beta  次版本 alpha
         internal static readonly Version CurrentVersion = new Version(1, 5, 6, 0);
-        internal static readonly string BuildVerion = "build02";
+        internal static readonly string BuildVerion = "build03";
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
         // 快捷键启用标识
@@ -953,10 +953,21 @@ namespace QTTabBarLib {
             return key;
         }
 
+        /**
+         * 非捕获 path 忽略掉
+         */
         public static void SaveClosing(List<string> closingPaths) {
+            if (null == closingPaths || closingPaths.Count == 0)
+            {
+                return;
+            }
             using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
-                if(key != null) {
-                    key.SetValue("TabsOnLastClosedWindow", closingPaths.StringJoin(";"));
+                if(key != null)
+                {
+                    string newCloseList =
+                        string.Join(";", closingPaths.Where(p => !IsNoCapturePaths(p)).ToArray())
+                        ;
+                    key.SetValue("TabsOnLastClosedWindow", newCloseList);
                 }
             }
         }
@@ -1173,14 +1184,111 @@ namespace QTTabBarLib {
         }
 
 
-        public static bool isEmpty(string strs)
+        public static bool IsEmptyStr(string strs)
         {
             return strs == null || strs.Trim().Length == 0;
         }
 
         public static bool IsNetPath(string path)
         {
-            return !isEmpty(path) && path.StartsWith(@"\\");
+            return !IsEmptyStr(path) && path.StartsWith(@"\\");
         }
+
+        public static bool IsNoCapturePaths(string path)
+        {
+            // 控制面板
+            string controlPanel = "::{26EE0668-A00A-44D7-9371-BEB064C98683}";
+            string print = @"::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{2227A280-3AEA-1069-A2DE-08002B30309D}";// 打印机
+            return !IsEmptyStr(path) && (
+                path.StartsWith(controlPanel) ||
+                path.StartsWith(print) 
+                );
+        }
+
+        public static bool IsSimpleDateStr(string input)
+        {
+            if (IsEmptyStr(input))
+            {
+                return false;
+            }
+            string pattern = @"\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}";
+            return Regex.IsMatch(input, pattern);
+        }
+
+        public static bool IsShortDateStr(string input)
+        {
+            if (IsEmptyStr(input))
+            {
+                return false;
+            }
+            string pattern = @"\d{1,2}/\d{1,2}/\d{1,2}\s周[一|二|三|四|五|六|日]\s\d{1,2}:\d{1,2}:\d{1,2}";
+            return Regex.IsMatch(input, pattern);
+        }
+
+        // c# 获取当前进程的父进程
+        public static string GetParentProcessName()
+        {
+            Process currentProcess = Process.GetCurrentProcess();
+            var process = GetParent( currentProcess );
+            if (process == null)
+            {
+                return "";
+            }
+            else
+            {
+                return process.ProcessName;
+            }
+        }
+
+        /// <summary>
+        /// 获取父进程。如果出错可能返回null
+        /// </summary>
+        /// <param name="process"></param>
+        /// <returns></returns>
+        public static Process GetParent(Process process)
+        {
+            try
+            {
+                //using (var query = new ManagementObjectSearcher("SELECT * FROM Win32_Process WHERE ProcessId=" + process.Id))
+                using (var query = new ManagementObjectSearcher("root\\CIMV2", "SELECT ParentProcessId FROM Win32_Process WHERE ProcessId=" + process.Id))
+                {
+                    return query
+                        .Get()
+                        .OfType<ManagementObject>()
+                        .Select(p => Process.GetProcessById((int)(uint)p["ParentProcessId"]))
+                        .FirstOrDefault();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+     
+
+        /// <summary>
+        /// Gets the parent process of a specified process.
+        /// </summary>
+        /// <param name="handle">The process handle.</param>
+        /// <returns>An instance of the Process class.</returns>
+        /*public static Process GetParentProcess(IntPtr handle)
+        {
+            ParentProcessUtilities pbi = new ParentProcessUtilities();
+            int returnLength;
+            int status = PInvoke.NtQueryInformationProcess(handle, 0, ref pbi, Marshal.SizeOf(pbi), out returnLength);
+            if (status != 0)
+                throw new Win32Exception(status);
+
+            try
+            {
+                return Process.GetProcessById(pbi.InheritedFromUniqueProcessId.ToInt32());
+            }
+            catch (ArgumentException)
+            {
+                // not found
+                return null;
+            }
+        }*/
     }
 }
