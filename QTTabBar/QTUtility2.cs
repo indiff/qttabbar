@@ -1076,8 +1076,6 @@ namespace QTTabBarLib {
                         rkUserApps.SetValue("TabsLocked2", "");
                     }
                 }
-
-                
             }
             
 

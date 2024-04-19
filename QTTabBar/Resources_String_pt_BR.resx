@@ -248,9 +248,12 @@ Por favor, especifique arquivo de imagem 432 x 40 px.;Resultados da Pesquisa em;
     <value>Grupos;Desfazer fechado;Aplicativos;Arquivos abertos recente</value>
   </data>
   <data name="TrayIcon" xml:space="preserve">
-    <value>1 janela;{0} janelas</value>
+    <value>1 janela;{0} janelas;Restore all;Close All</value>
   </data>
   <data name="UpdateCheck" xml:space="preserve">
     <value>Uma nova versão do Qttabbar foi lançada:;Pressione OK para ir ao site.;Sua versão do QTTabBar está atualizada.;Nova versão de desenvolvimento encontrada:;Arquivo de versão não encontrado (404).;Erro de rede desconhecido.;Servidor não encontrado.;O servidor retornou as strings erradas.</value>
+  </data>
+  <data name="Version_LangFile" xml:space="preserve">
+    <value>1.0</value>
   </data>
 </root>

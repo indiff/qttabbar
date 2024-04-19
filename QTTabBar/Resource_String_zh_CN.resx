@@ -240,6 +240,9 @@
   <data name="UpdateCheck" xml:space="preserve">
     <value>一个新版本QTTabBar已发布:;击打确定到站点.;你的QTTabBar版本是最新的.;发现新的开发版本:;版本文件未找到 (404);未知的网络错误.;未发现服务器.;服务器返回错误信息</value>
   </data>
+  <data name="Version_LangFile" xml:space="preserve">
+    <value>1.0</value>
+  </data>
   <data name="Version_QTTabBar" xml:space="preserve">
     <value>DevBuild: 2022/8/15 19:01:42 (2.0.50727.9164)</value>
   </data>

@@ -67,6 +67,7 @@ namespace QTTabBarLib {
         private static Version osVersion = Environment.OSVersion.Version;
 
         internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
+
         internal static readonly string PATH_MYNETWORK = IsXP
                 ? "::{208D2C60-3AEA-1069-A2D7-08002B30309D}"
                 : "::{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}";
@@ -80,6 +81,7 @@ namespace QTTabBarLib {
         internal const bool NOW_DEBUGGING =
 #if DEBUG
             true;
+        
 #else
             false;
 #endif

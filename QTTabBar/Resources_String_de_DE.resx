@@ -234,10 +234,13 @@
     <value>Gruppen;Geschlossen rückgängig machen;Anwendungen;Zuletzt geöffnete Dateien</value>
   </data>
   <data name="TrayIcon" xml:space="preserve">
-    <value>1 Fenster;{0} Fenster</value>
+    <value>1 Fenster;{0} Fenster;Restore all;Close All</value>
   </data>
   <data name="UpdateCheck" xml:space="preserve">
     <value>Eine neue Version von QTTabBar wurde veröffentlicht:;Drücken Sie OK, um zur Website zu gelangen.;Ihre Version von QTTabBar ist auf dem neuesten Stand.;Neue Entwicklungsversion gefunden:;Versionsdatei nicht gefunden (404).;Unbekannter Netzwerkfehler.;Server nicht gefunden.;Server hat falsche Zeichenfolgen zurückgegeben.</value>
+  </data>
+  <data name="Version_LangFile" xml:space="preserve">
+    <value>1.0</value>
   </data>
   <data name="Version_QTTabBar" xml:space="preserve">
     <value>DevBuild: 2022/8/15 19:01:42 (2.0.50727.9164)</value>

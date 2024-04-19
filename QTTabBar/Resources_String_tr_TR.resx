@@ -248,9 +248,12 @@ Lütfen 432 x 40 px resim dosyası seçin.;Arama sonuçları;kısayol;Dosya seç
     <value>Gruplar;Kapatmayı geri al;Uygulamalar;Son açılan dosyalar</value>
   </data>
   <data name="TrayIcon" xml:space="preserve">
-    <value>1 pencere;{0} pencere</value>
+    <value>1 pencere;{0} pencere;Restore all;Close All</value>
   </data>
   <data name="UpdateCheck" xml:space="preserve">
     <value>QTTabBar'ın yeni bir sürümü yayınlandı:;Web sitesine gitmek için Tamam'a basın.;QTTabBar sürümünüz güncel.;Yeni geliştirme sürümü bulundu:;Sürüm dosyası bulunamadı (404).;Bilinmeyen ağ hatası.;Sunucu bulunamadı.;Sunucu yanlış dizeler döndürdü.</value>
+  </data>
+  <data name="Version_LangFile" xml:space="preserve">
+    <value>1.0</value>
   </data>
 </root>

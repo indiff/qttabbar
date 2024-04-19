@@ -234,10 +234,13 @@
     <value>Groups;Undo closed;Applications;Recently opened files</value>
   </data>
   <data name="TrayIcon" xml:space="preserve">
-    <value>1 window;{0} windows</value>
+    <value>1 window;{0} windows;Restore all;Close All</value>
   </data>
   <data name="UpdateCheck" xml:space="preserve">
     <value>A new version of QTTabBar has been released:;Press OK to go to the web site.;Your version of QTTabBar is up to date.;New development version found:;Version file not found (404).;Unknown network error.;Server not found.;Server returned wrong strings.</value>
+  </data>
+  <data name="Version_LangFile" xml:space="preserve">
+    <value>1.0</value>
   </data>
   <data name="Version_QTTabBar" xml:space="preserve">
     <value>DevBuild: 2022/8/15 19:01:42 (2.0.50727.9164)</value>
