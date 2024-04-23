@@ -62,7 +62,9 @@ namespace QTTabBarLib {
                     }
                     catch (Exception ex)
                     {
-                        QTUtility2.MakeErrorLog(ex, "!p.Instance.QueryShortcutKeys");
+                        // 这里打印出插件的名称
+                        QTUtility2.MakeErrorLog(ex, "plugin: " + p.PluginInformation.Name + "!p.Instance.QueryShortcutKeys");
+                   
                     }
                     if(actions == null) continue;
                     if(WorkingConfig.keys.PluginShortcuts.TryGetValue(info.PluginID, out keys)) {

@@ -149,6 +149,7 @@ namespace QTTabBarLib {
                 {
                     return;
                 }
+                
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
                 string sCPUSerialNumber = "";
                 foreach (ManagementObject mo in searcher.Get())

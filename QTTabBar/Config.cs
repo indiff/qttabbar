@@ -898,7 +898,7 @@ namespace QTTabBarLib {
                     // {BindAction.NewFolder,          Key.N     | Key.Control | Key.Shift},
                    //  {BindAction.NewFolder,          Key.N     | Key.Shift }, // 系统默认自带
                    // 创建标签组
-                    {BindAction.CreateNewGroup,     Key.D    | Key.Control},
+                   {BindAction.CreateNewGroup,     Key.D    | Key.Control},
                    // 添加到标签组
                  //  {BindAction.AddToGroup,         Key.D    | Key.Control  },
                    // {BindAction.AddToGroup,         Key.G    | Key.Control | Key.Alt },
@@ -1245,6 +1245,7 @@ namespace QTTabBarLib {
                     key.SetValue(setting.name,value);
                 }
             }
+			
         }
     }
 }
