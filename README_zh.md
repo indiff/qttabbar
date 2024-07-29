@@ -1,4 +1,5 @@
 - [QTTabBar文档](https://www.yuque.com/indiff/qttabbar/zqtdig)
+- [QTTabBar V1.5.6-beta.1更新日志](https://www.yuque.com/indiff/qttabbar/rhyprn)
 - [汉化GitHub modify by indiff](https://openuserjs.org/scripts/indiff/GitHub_%E6%B1%89%E5%8C%96%E6%8F%92%E4%BB%B6_(indiff)%E4%BF%AE%E6%94%B9)
 - [生成chm格式数据库文档(支持模块分组) modify by indiff](https://github.com/indiff/DBCHM)
 - [Intellij Idea 辅助插件 Jutils](https://plugins.jetbrains.com/plugin/12758-jutils)
@@ -79,8 +80,9 @@
 * [中文配置文件/Chinese Language File](https://raw.githubusercontent.com/indiff/qttabbar/master/Lng_QTTabBar_zh.xml)
 
 # QQ交流群/QQ Group（1群已满）🦚
-* 1群（已满）: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=AGA5sh_6eCEYIwofpvazRxMFin8jmVI2&jump_from=webapi)
-* 2群: [963211351](https://jq.qq.com/?_wv=1027&k=VCPD2zLH)
+* 群3: [290935247](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=uDHSuCP9559NjGlEz4Ski_lHup6D3PFW&authKey=FNpsurcMXUh90bqg5l3S39L6uPaIVY95LgL6onz4svNiPjWImTDO%2BbeApzVzS98I&noverify=0&group_code=290935247)
+* 1群（满）: [157604022](https://qm.qq.com/cgi-bin/qm/qr?k=AGA5sh_6eCEYIwofpvazRxMFin8jmVI2&jump_from=webapi)
+* 2群（满）: [963211351](https://jq.qq.com/?_wv=1027&k=VCPD2zLH)
 
 # 鸣谢/Thanks
 * [原作者Quizo](https://twitter.com/QTTabBar)
