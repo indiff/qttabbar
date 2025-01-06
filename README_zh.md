@@ -24,7 +24,7 @@
 - [SourceForge主页](https://sourceforge.net/projects/qttabbar2/)
 
 # 版本更新/Changes
-- [1.5.6.1-beta(2024)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.6-beta.1) 修复自动选择
+- [1.5.6.1-beta(2024)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.6.-beta.1) 修复自动选择
 - [1.5.5.9-beta(2023)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.9) 修复微信、qq、钉钉打开选中文件，文件预览正确编码
 - [1.5.5.8-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.8) 无插件精简版
 - [1.5.5.7-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.7) 适配暗黑模式，支持设置背景图片
