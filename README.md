@@ -21,7 +21,7 @@
 - [Gitee Mirror](https://gitee.com/qwop/qttabbar)
 - [SourceForge Mirror](https://sourceforge.net/projects/qttabbar2/)
 # Changes
-- [1.5.6.1-beta(2024)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.6-beta.1) Fix auto select.
+- [1.5.6.1-beta(2024)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.6.-beta.1) Fix auto select.
 - [1.5.5.9-beta(2023)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.9) Capture to select,fix preview text encoding.
 - [1.5.5.8-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.8) No Plugins Mini Version
 - [1.5.5.7-beta(2022)💥](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.7) Adapts to dark mode and supports setting background pictures
