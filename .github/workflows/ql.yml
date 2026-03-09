@@ -24,7 +24,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # Changed to Windows for .NET Framework support
 
     strategy:
       fail-fast: false
@@ -49,20 +49,20 @@ jobs:
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
-    #- name: Autobuild
-     # uses: github/codeql-action/autobuild@45775bd8235c68ba998cffa5171334d58593da47
-
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 https://git.io/JvXDl
-
-    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
-    #    and modify them (or add more) to build your code if your project
-    #    uses a compiled language
-
-    #- run: |
-    #   make bootstrap
-    #   make release
+    # For .NET Framework projects, we need to use MSBuild
+    - name: Setup MSBuild for CodeQL  
+      uses: microsoft/setup-msbuild@v2
+      
+    - name: Setup NuGet for CodeQL
+      uses: nuget/setup-nuget@v2
+      with:
+        nuget-version: 'latest'
+        
+    - name: Restore packages for CodeQL
+      run: nuget restore "QTTabBar Rebirth.sln"
+      
+    - name: Build for CodeQL
+      run: msbuild "QTTabBar Rebirth.sln" /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU" /verbosity:minimal
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@45775bd8235c68ba998cffa5171334d58593da47
