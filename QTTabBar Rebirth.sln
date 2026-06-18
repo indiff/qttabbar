@@ -73,6 +73,11 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Installer", "Installer\Inst
 		{740C67C7-6AE5-414B-A3F8-D69355FE508B} = {740C67C7-6AE5-414B-A3F8-D69355FE508B}
 	EndProjectSection
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Bundle", "Installer\Bundle.wixproj", "{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1E197BA3-B592-44AC-85E1-7447E731856C} = {1E197BA3-B592-44AC-85E1-7447E731856C}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallerHelper", "InstallerHelper\InstallerHelper.vcxproj", "{8594AF64-8053-45F5-A3EC-E570860016B7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libMinHook", "MinHook\libMinHook.vcxproj", "{65021938-D251-46FA-BC3D-85C385D4C06D}"
@@ -643,6 +648,37 @@ Global
 		{1E197BA3-B592-44AC-85E1-7447E731856C}.x86 QT Only|x64.ActiveCfg = Release|x86
 		{1E197BA3-B592-44AC-85E1-7447E731856C}.x86 QT Only|x86.ActiveCfg = Release|x86
 		{1E197BA3-B592-44AC-85E1-7447E731856C}.x86 QT Only|x86.Build.0 = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug (No Plugins)|Any CPU.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug (No Plugins)|Mixed Platforms.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug (No Plugins)|x64.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug (No Plugins)|x86.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug (No Reg)|Any CPU.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug (No Reg)|Mixed Platforms.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug (No Reg)|x64.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug (No Reg)|x86.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug|x64.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Debug|x86.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Installer|Any CPU.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Installer|Any CPU.Build.0 = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Installer|Mixed Platforms.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Installer|Mixed Platforms.Build.0 = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Installer|x64.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Installer|x86.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Installer|x86.Build.0 = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Release|Any CPU.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Release|Any CPU.Build.0 = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Release|Mixed Platforms.Build.0 = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Release|x64.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Release|x86.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.Release|x86.Build.0 = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.x86 QT Only|Any CPU.ActiveCfg = Debug|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.x86 QT Only|Mixed Platforms.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.x86 QT Only|x64.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.x86 QT Only|x86.ActiveCfg = Release|x86
+		{A4F2D8B1-C63E-4F7A-9D2B-E81C5A3F6D09}.x86 QT Only|x86.Build.0 = Release|x86
 		{8594AF64-8053-45F5-A3EC-E570860016B7}.Debug (No Plugins)|Any CPU.ActiveCfg = Debug|Win32
 		{8594AF64-8053-45F5-A3EC-E570860016B7}.Debug (No Plugins)|Mixed Platforms.ActiveCfg = Debug|Win32
 		{8594AF64-8053-45F5-A3EC-E570860016B7}.Debug (No Plugins)|Mixed Platforms.Build.0 = Debug|Win32
