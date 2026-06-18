@@ -23,14 +23,14 @@
 
     <?define SkuName = "QTTabBar"?>
     <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.6.1" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.6.1 Beta(2023)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define ProductVersion="1.5.6.2" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.5.6.2 Beta(2026)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano and indiff -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
     <!-- 重点这里一定要改 -->
-    <?define StrongName="QTTabBar, Version=1.5.6.1, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
+    <?define StrongName="QTTabBar, Version=1.5.6.2, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
     <?define MyLanguage="1033"?>
     <!-- Language code page 1252 1033
 语言                         语言-国家     Language      Codepage
@@ -361,6 +361,18 @@ Language="1033"
       <Property Id="ALLUSERS" Value="1" />
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.CLOSE_TABS)" />
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+
+        <!-- Restart Explorer: three sequential actions to avoid timing and elevation issues.
+             WixShellExec uses ShellExecute which correctly de-elevates the new Explorer process. -->
+        <Property Id="WixQuietExecCmdLine" Value='"[SystemFolder]taskkill.exe" /F /IM explorer.exe' />
+        <CustomAction Id="KillExplorer" BinaryKey="WixCA" DllEntry="WixQuietExec" Impersonate="yes" Return="ignore" />
+
+        <Property Id="WixQuietExec64CmdLine" Value='"[SystemFolder]ping.exe" 127.0.0.1 -n 2' />
+        <CustomAction Id="WaitAfterKill" BinaryKey="WixCA" DllEntry="WixQuietExec64" Impersonate="yes" Return="ignore" />
+
+        <Property Id="WixShellExecTarget" Value="[WindowsFolder]explorer.exe" />
+        <CustomAction Id="StartExplorer" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" Return="ignore" />
+
         <UIRef Id="CustomWixUI_Minimal" />
     </Product>
 </Wix>

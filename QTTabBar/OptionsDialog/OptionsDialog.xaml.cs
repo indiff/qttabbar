@@ -115,28 +115,45 @@ namespace QTTabBarLib {
         }
 
         private static void ThreadEntry() {
-            instance = new OptionsDialog();
-            lock(instanceThread) {
-                Monitor.Pulse(instanceThread);
-            }
-            instance.Closed += (sender, e) => {
-                // We can't immediately shut down here, because ForceClose may be holding the lock.
-                Dispatcher.CurrentDispatcher.BeginInvokeShutdown(DispatcherPriority.Input);
+            // In .NET 4+, unhandled exceptions on any thread crash the process.
+            // Register dispatcher handler first so Show()/layout exceptions are caught.
+            Dispatcher.CurrentDispatcher.UnhandledException += (sender, e) => {
+                QTUtility2.MakeErrorLog(e.Exception, "OptionsDialog Dispatcher unhandled exception");
+                e.Handled = true;
             };
-            Dispatcher.CurrentDispatcher.ShutdownStarted += (sender, e) => {
-                lock(typeof(OptionsDialog)) {
-                    instance = null;
+
+            bool pulsed = false;
+            try {
+                instance = new OptionsDialog();
+                lock(instanceThread) {
+                    Monitor.Pulse(instanceThread);
+                    pulsed = true;
                 }
-            };
-            instance.Show();
+                instance.Closed += (sender, e) => {
+                    // We can't immediately shut down here, because ForceClose may be holding the lock.
+                    Dispatcher.CurrentDispatcher.BeginInvokeShutdown(DispatcherPriority.Input);
+                };
+                Dispatcher.CurrentDispatcher.ShutdownStarted += (sender, e) => {
+                    lock(typeof(OptionsDialog)) {
+                        instance = null;
+                    }
+                };
+                instance.Show();
 
-            /***  TO delete */
-            // load the remember lastSelectedIndex by qwop.
-            // MessageBox.Show("" + lastSelectedIndex);
-            instance.lstCategories.SelectedIndex = instance.WorkingConfig.desktop.lstSelectedIndex;
-            /***  TO delete */
+                if (instance.lstCategories != null && instance.WorkingConfig != null) {
+                    instance.lstCategories.SelectedIndex = instance.WorkingConfig.desktop.lstSelectedIndex;
+                }
 
-            Dispatcher.Run();
+                Dispatcher.Run();
+            }
+            catch (Exception ex) {
+                QTUtility2.MakeErrorLog(ex, "OptionsDialog ThreadEntry fatal error");
+                if (!pulsed) {
+                    lock(instanceThread) {
+                        Monitor.PulseAll(instanceThread);
+                    }
+                }
+            }
         }
 
         #endregion

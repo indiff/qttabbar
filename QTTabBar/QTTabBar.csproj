@@ -935,7 +935,6 @@
     </Reference>
     <Reference Include="Interop.SHDocVw">
       <HintPath>..\BandObjectLib\bin\Release\Interop.SHDocVw.dll</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

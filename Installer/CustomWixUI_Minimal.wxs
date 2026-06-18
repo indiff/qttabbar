@@ -47,6 +47,9 @@ Patch dialog sequence:
       <DialogRef Id="CustomWelcomeEulaDlg" />
 
 
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="KillExplorer" Order="1">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1</Publish>
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="WaitAfterKill" Order="2">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1</Publish>
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="StartExplorer" Order="3">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1</Publish>
       <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
       
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
