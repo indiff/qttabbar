@@ -13,6 +13,10 @@ jobs:
   analyze:
     name: Analyze
     runs-on: windows-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
 
     strategy:
       fail-fast: false
