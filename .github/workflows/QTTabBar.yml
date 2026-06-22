@@ -38,7 +38,10 @@ jobs:
       run: dotnet restore "QTTabBar.Tests\QTTabBar.Tests.csproj"
 
     - name: Build
-      run: msbuild "QTTabBar.Tests\QTTabBar.Tests.csproj" /t:Build /p:Configuration=$env:Configuration
+      shell: pwsh
+      run: |
+        $slnDir = $env:GITHUB_WORKSPACE + "\"
+        msbuild "QTTabBar.Tests\QTTabBar.Tests.csproj" /t:Build "/p:Configuration=$env:Configuration" "/p:SolutionDir=$slnDir"
       env:
         Configuration: ${{ matrix.configuration }}
 

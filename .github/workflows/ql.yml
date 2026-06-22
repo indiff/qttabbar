@@ -40,7 +40,10 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build
-      run: msbuild "QTTabBar\QTTabBar.csproj" /t:Build /p:Configuration=Release
+      shell: pwsh
+      run: |
+        $slnDir = $env:GITHUB_WORKSPACE + "\"
+        msbuild "QTTabBar\QTTabBar.csproj" /t:Build "/p:Configuration=Release" "/p:SolutionDir=$slnDir"
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
