@@ -64,7 +64,7 @@ jobs:
         path: QTTabBar\bin\${{ matrix.configuration }}\**\*
 
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: QTTabBar\bin\${{ matrix.configuration }}\**\*
