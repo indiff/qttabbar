@@ -1,97 +1,66 @@
-# This workflow uses actions that are not certified by GitHub.
-
 name: QTTabBar
 
 on:
   push:
-    branches: [ vs2019 ]
-   # tags:
-    #- 'v*'
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-
-  build:
-
+  build-and-test:
     strategy:
       matrix:
         configuration: [Release]
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on: windows-latest
 
     env:
-      Solution_Name: 'QTTabBar Rebirth.sln'                         # Replace with your solution name, i.e. MyWpfApp.sln.
+      Solution_Name: 'QTTabBar Rebirth.sln'
 
     steps:
-    - name: 拉取代码
-      uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        
-    - name: 配置msbuild
-      uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: 配置nuget
-      uses: nuget/setup-nuget@v1
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v2
       with:
-        nuget-version: '5.x'
-        
-#     - uses: actions/cache@v1
-#       id: cache
-#       with:
-#         path: ~/.nuget/packages
-#         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-        
+        nuget-version: 'latest'
+
     - name: NuGet Restore
-      if: steps.cache.outputs.cache-hit != 'true'
       run: nuget restore $env:Solution_Name
-  
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Rebuild the application
-      run: msbuild $env:Solution_Name /t:Rebuild /p:Configuration=$env:Configuration
+
+    - name: Build
+      run: msbuild $env:Solution_Name /t:Rebuild /p:Configuration=$env:Configuration /p:Platform="Any CPU"
       env:
         Configuration: ${{ matrix.configuration }}
-        
-#     - name: Zip the release dir   
-#     - uses: montudor/action-zip@v0.1.1
-#       with:
-#         args: zip -qq -r DBCHM.zip DBCHM\bin\Release        
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
+    - name: Run Tests
+      run: dotnet test "QTTabBar.Tests\QTTabBar.Tests.csproj" --no-build --configuration $env:Configuration --logger "trx;LogFileName=test-results.trx" --results-directory TestResults
+      env:
+        Configuration: ${{ matrix.configuration }}
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: TestResults\*.trx
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
       with:
         name: QTTabBar
-        path: |
-          D:\a\QTTabBar\QTTabBar\bin\Release\**\*
-          
-        
-#     - name: Create Release
-#       id: create_release
-#       uses: actions/create-release@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       with:
-#         tag_name: ${{ github.ref }}
-#         release_name: Release ${{ github.ref }}
-#         draft: false
-#         prerelease: false
-        
-#     - name: Upload Release Asset
-#       id: upload-release-asset 
-#       uses: actions/upload-release-asset@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       with:
-#         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-#         asset_path: D:\a\DBCHM\DBCHM\DBChm\bin\Release\DBCHM.exe
-#         asset_name: DBCHM.exe
-#         asset_content_type: application/zip        
-        
+        path: QTTabBar\bin\${{ matrix.configuration }}\**\*
+
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: |
-          D:\a\QTTabBar\QTTabBar\bin\Release\**\*
+        files: QTTabBar\bin\${{ matrix.configuration }}\**\*
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
