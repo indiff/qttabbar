@@ -40,7 +40,7 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build
-      run: msbuild "QTTabBar Rebirth.sln" /p:Configuration=Release /p:Platform="Any CPU"
+      run: msbuild "QTTabBar\QTTabBar.csproj" /t:Build /p:Configuration=Release
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
