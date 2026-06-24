@@ -7250,47 +7250,6 @@ namespace QTTabBarLib {
             
             return;
             // TODO: Make the following code optional in the Uninstaller.
-#if false
-            try {
-                using(RegistryKey key3 = Registry.Users) {
-                    try {
-                        foreach(string str2 in key3.GetSubKeyNames()) {
-                            bool flag = true;
-                            try {
-                                using(RegistryKey key4 = key3.OpenSubKey(str2 + @"\Software\Quizo", true)) {
-                                    if(key4 != null) {
-                                        try {
-                                            key4.DeleteSubKeyTree("QTTabBar");
-                                            string[] subKeyNames = key4.GetSubKeyNames();
-                                            flag = (subKeyNames != null) && (subKeyNames.Length > 0);
-                                        }
-                                        catch {
-                                        }
-                                    }
-                                }
-                            }
-                            catch {
-                            }
-                            try {
-                                if(!flag) {
-                                    using(RegistryKey key5 = key3.OpenSubKey(str2 + @"\Software", true)) {
-                                        if(key5 != null) {
-                                            key5.DeleteSubKeyTree("Quizo");
-                                        }
-                                    }
-                                }
-                            }
-                            catch {
-                            }
-                        }
-                    }
-                    catch {
-                    }
-                }
-            }
-            catch {
-            }
-#endif
         }
 
         private void UpOneLevel()

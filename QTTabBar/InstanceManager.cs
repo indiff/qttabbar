@@ -21,6 +21,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading;
+using System.Threading.Tasks;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
@@ -154,20 +155,25 @@ namespace QTTabBarLib {
                 }
                 ICommClient callback = sdInstances.Peek();
                 if(doAsync) {
-                    QTUtility2.log("ExecuteOnMainProcess callback.Execute doAsync");
+                    QTUtility2.log("ExecuteOnMainProcess: dispatching async Task.Run");
                     // if (!IsDead( callback ))
                     // {
-                        AsyncHelper.BeginInvoke(new Action(() => {
+                        Task.Run(() => {
+                            QTUtility2.log("ExecuteOnMainProcess: Task.Run executing");
                             try {
                                 if (!IsDead(callback))
                                 {
                                     callback.Execute(encodedAction);
+                                    QTUtility2.log("ExecuteOnMainProcess: Task.Run completed OK");
+                                }
+                                else {
+                                    QTUtility2.log("ExecuteOnMainProcess: Task.Run skipped (dead callback)");
                                 }
                             }
                             catch(Exception e) {
-                                QTUtility2.MakeErrorLog(e, "AsyncHelper.BeginInvoke");
+                                QTUtility2.MakeErrorLog(e, "ExecuteOnMainProcess Task.Run");
                             }
-                        }));
+                        });
                     // }
                 }
                 else {
@@ -185,7 +191,12 @@ namespace QTTabBarLib {
                     {
                         if (doAsync)
                         {
-                            AsyncHelper.BeginInvoke(action);
+                            QTUtility2.log("ExecuteOnServerProcess: dispatching async Task.Run");
+                            Task.Run(() => {
+                                QTUtility2.log("ExecuteOnServerProcess: Task.Run executing");
+                                try { action.DynamicInvoke(); QTUtility2.log("ExecuteOnServerProcess: Task.Run completed OK"); }
+                                catch (Exception e) { QTUtility2.MakeErrorLog(e, "ExecuteOnServerProcess Task.Run"); }
+                            });
                         }
                         else
                         {
@@ -220,25 +231,27 @@ namespace QTTabBarLib {
                 ICommClient sender = GetCallback();
                 CheckConnections();
                 List<ICommClient> targets = callbacks.Where(c => c != sender).ToList();
-                AsyncHelper.BeginInvoke(new Action(() => {
+                QTUtility2.log("Broadcast: dispatching async Task.Run to " + targets.Count + " targets");
+                Task.Run(() => {
                     int i = 0;
                     foreach(ICommClient target in targets) {
                         try {
                             i++;
-                            // QTUtility2.log("CommService Broadcast count : " + targets.Count + " handle index: " + i);
+                            QTUtility2.log("Broadcast Task.Run: sending to target " + i + "/" + targets.Count);
                             if (!IsDead(target)) {
                                 target.Execute(encodedAction);
+                            }
+                            else {
+                                QTUtility2.log("Broadcast Task.Run: target " + i + " is dead, skipping");
                             }
                         }
                         catch (Exception ex)
                         {
-                            QTUtility2.MakeErrorLog(ex);
+                            QTUtility2.MakeErrorLog(ex, "Broadcast Task.Run target " + i);
                         }
                     }
-
-                    // TimeSpan abs2 = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
-                    // QTUtility2.log(string.Format("Broadcast async cost {0} ", abs2.TotalMilliseconds));
-                }));
+                    QTUtility2.log("Broadcast Task.Run: completed " + i + " targets");
+                });
 
                 // TimeSpan abs = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
                 // QTUtility2.log(string.Format("Broadcast sync cost {0} ", abs.TotalMilliseconds));
@@ -463,17 +476,17 @@ namespace QTTabBarLib {
 
         public static void LocalInvokeMain(Action<QTTabBarClass> action, bool doAsync = false) {
             QTTabBarClass instance;
-            // »ñÈ¡Ö÷½ø³ÌµÄ QTTabBarµÄÊµÀý
+            // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ QTTabBarï¿½ï¿½Êµï¿½ï¿½
             using(new Keychain(rwLockTabBar, false)) {
                 instance = sdTabHandles.Count == 0 ? null : sdTabHandles.Peek();
             }
             if(instance == null) return;
             if(doAsync) {
-                QTUtility2.log("Òì²½µ÷ÓÃ:");
+                QTUtility2.log("ï¿½ì²½ï¿½ï¿½ï¿½ï¿½:");
                 instance.BeginInvoke(action, instance);    
             }
             else {
-                QTUtility2.log("Í¬²½µ÷ÓÃ:" );
+                QTUtility2.log("Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" );
                 instance.Invoke(action, instance);   
             }
         }
@@ -531,7 +544,7 @@ namespace QTTabBarLib {
             }*/
             if (Interlocked.Exchange(ref inTimer, 1) != 0)
             {
-                QTUtility2.log("¾Ü¾ø½øÈë");
+                QTUtility2.log("ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½ï¿½");
                 return;
             }
             try
@@ -543,7 +556,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("Òì³£");
+                QTUtility2.log("ï¿½ì³£");
             }
             finally
             {
@@ -559,7 +572,7 @@ namespace QTTabBarLib {
             }*/
             if (Interlocked.Exchange(ref inTimer, 1) != 0)
             {
-                QTUtility2.log("¾Ü¾ø½øÈë");
+                QTUtility2.log("ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½ï¿½");
                 return;
             }
             try
@@ -571,7 +584,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("Òì³£");
+                QTUtility2.log("ï¿½ì³£");
             }
             finally
             {
@@ -588,7 +601,7 @@ namespace QTTabBarLib {
             }*/
             if (Interlocked.Exchange(ref inTimer, 1) != 0)
             {
-                QTUtility2.log("¾Ü¾ø½øÈë");
+                QTUtility2.log("ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½ï¿½");
                 return null;
             }
             try
@@ -601,7 +614,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("Òì³£");
+                QTUtility2.log("ï¿½ì³£");
                 return null;
             }
             finally
