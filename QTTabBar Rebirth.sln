@@ -7,11 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QTTabBar", "QTTabBar\QTTabB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandObjectLib", "BandObjectLib\BandObjectLib.csproj", "{BDB3B670-A17B-483E-954C-52FC2B6FF9D3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Register", "Register\Register.vcxproj", "{E35915FE-ED91-4AE5-B566-F269CD854498}"
-	ProjectSection(ProjectDependencies) = postProject
-		{740C67C7-6AE5-414B-A3F8-D69355FE508B} = {740C67C7-6AE5-414B-A3F8-D69355FE508B}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QTPluginLib", "QTPluginLib\QTPluginLib.csproj", "{749BE612-0CAA-444E-8704-4CF9D9A6F653}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateNewItem", "Plugins\CreateNewItem\CreateNewItem.csproj", "{2D16184B-D2F9-4395-AC50-2B66F9E74525}"
@@ -206,45 +201,6 @@ Global
 		{BDB3B670-A17B-483E-954C-52FC2B6FF9D3}.x86 QT Only|Mixed Platforms.Build.0 = Release|Any CPU
 		{BDB3B670-A17B-483E-954C-52FC2B6FF9D3}.x86 QT Only|x64.ActiveCfg = Release|Any CPU
 		{BDB3B670-A17B-483E-954C-52FC2B6FF9D3}.x86 QT Only|x86.ActiveCfg = Release|Any CPU
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Plugins)|Any CPU.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Plugins)|Any CPU.Build.0 = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Plugins)|Mixed Platforms.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Plugins)|Mixed Platforms.Build.0 = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Plugins)|x64.ActiveCfg = Debug|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Plugins)|x64.Build.0 = Debug|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Plugins)|x86.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Reg)|Any CPU.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Reg)|Mixed Platforms.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Reg)|Mixed Platforms.Build.0 = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Reg)|x64.ActiveCfg = Debug|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Reg)|x64.Build.0 = Debug|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug (No Reg)|x86.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug|Any CPU.Build.0 = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug|x64.ActiveCfg = Debug|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug|x64.Build.0 = Debug|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Debug|x86.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Installer|Any CPU.ActiveCfg = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Installer|Mixed Platforms.ActiveCfg = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Installer|Mixed Platforms.Build.0 = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Installer|x64.ActiveCfg = Release|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Installer|x64.Build.0 = Release|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Installer|x86.ActiveCfg = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Release|Any CPU.ActiveCfg = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Release|Any CPU.Build.0 = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Release|x64.ActiveCfg = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Release|x64.Build.0 = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.Release|x86.ActiveCfg = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.x86 QT Only|Any CPU.ActiveCfg = Debug|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.x86 QT Only|Mixed Platforms.ActiveCfg = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.x86 QT Only|Mixed Platforms.Build.0 = Release|Win32
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.x86 QT Only|x64.ActiveCfg = Release|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.x86 QT Only|x64.Build.0 = Release|x64
-		{E35915FE-ED91-4AE5-B566-F269CD854498}.x86 QT Only|x86.ActiveCfg = Release|Win32
 		{749BE612-0CAA-444E-8704-4CF9D9A6F653}.Debug (No Plugins)|Any CPU.ActiveCfg = Debug|Any CPU
 		{749BE612-0CAA-444E-8704-4CF9D9A6F653}.Debug (No Plugins)|Any CPU.Build.0 = Debug|Any CPU
 		{749BE612-0CAA-444E-8704-4CF9D9A6F653}.Debug (No Plugins)|Mixed Platforms.ActiveCfg = Debug|Any CPU
