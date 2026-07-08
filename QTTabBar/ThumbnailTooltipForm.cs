@@ -641,7 +641,6 @@ namespace QTTabBarLib {
             detechted = DetectEncoding(buffer);
             if (detechted != null)
             {
-                // QTUtility2.log(" try get DetectInputCodepage " + detechted.EncodingName + " " + detechted.CodePage);
                 QTUtility2.log(" try get DetectEncoding " + detechted.EncodingName + " " + detechted.CodePage);
                 return detechted.GetString(buffer);
             }

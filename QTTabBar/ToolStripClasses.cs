@@ -317,7 +317,6 @@ namespace QTTabBarLib {
             using (Bitmap bmp = freeBitmap.Clone())
             {
                 bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                // QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
                 e.Graphics.DrawImage(bmp,
                     new Rectangle(0, e.ToolStrip.OverflowButton.Height - bmp.Height, e.ToolStrip.OverflowButton.Bounds.Width, e.ToolStrip.OverflowButton.Bounds.Height));
             }

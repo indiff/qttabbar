@@ -546,9 +546,6 @@ namespace QTTabBarLib {
                         }*/
                         // IntPtr pIDL = Marshal.ReadIntPtr(lParam);
                         // SFVCB_SELECTINFO sel = (SFVCB_SELECTINFO)Marshal.PtrToStructure(lParam, typeof(SFVCB_SELECTINFO));
-                        // QTUtility2.log("SFVCB_SELECTINFO UOldState " + sel.UOldState);
-                        // QTUtility2.log("SFVCB_SELECTINFO UNewState " + sel.UNewState);
-                        // QTUtility2.log("SFVCB_SELECTINFO Pid1 " + sel.Pid1);
                         return PInvoke.CallNextHookEx(hHook_Msg, nCode, wParam, lParam);
                     }
 
@@ -2004,7 +2001,6 @@ namespace QTTabBarLib {
                     break;
 
                 case BindAction.UpOneLevelTab:
-                    // QTUtility2.log("QTTabBarClass UpOneLevelTab");
                 case BindAction.UpOneLevel:
                     QTUtility2.log("QTTabBarClass case UpOneLevel");
                     UpOneLevel(); // Hmm...
@@ -2462,13 +2458,6 @@ namespace QTTabBarLib {
                 if (Config.Window.CaptureNewWindows &&
                     ModifierKeys != Keys.Control &&
                     InstanceManager.GetTotalInstanceCount() > 0) {
-                    // ���Ӹ����̵��ж�, �����õĸ������� winlogon svchost �����ȡ�����̻�ȡ����΢�Ż���qq
-                    // string parentProcessName = QTUtility.GetParentProcessName();
-                    // string allParentProcessNames = QTUtility.GetAllParentProcessNames();
-                    // string parentProcessName2 = ProcessUtil.GetParentProcess().ProcessName;
-                    // string allParentProcessNames2 = ProcessUtil.GetAllParentProcessNames();
-                    // QTUtility2.log("DoFirstNavigation GetCommandLine parent process name: " + parentProcessName);
-                    // QTUtility2.log("DoFirstNavigation GetCommandLine parent process name2: " + allParentProcessNames2);
                     string cmd = GetCommandLine();
                     if (!String.IsNullOrEmpty(cmd))
                     {
@@ -2486,7 +2475,6 @@ namespace QTTabBarLib {
                         {
                             mCmdType = 1;
                             string selectMe = GetNameToSelectFromCommandLineArg(cmd);
-                            // QTUtility2.log("select cmd " + cmd + " select :" + selectMe );
                             TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
@@ -3377,9 +3365,7 @@ namespace QTTabBarLib {
                             QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD");
                             if(fProcess) {
                                 MouseChord chord = QTUtility.MakeMouseChord(MouseChord.X1, ModifierKeys);
-                               // QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD fProcess chord " + chord);
                                 if(Config.Mouse.GlobalMouseActions.TryGetValue(chord, out action)) {
-                                  //  QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD fProcess DoBindAction " + action);
                                     DoBindAction(action);
                                 }
                             }
@@ -4861,8 +4847,6 @@ namespace QTTabBarLib {
         /// </summary>
         private void ListView_SelectionChanged(/*object sender, SelectionChangedEventArgs e*/)
         {
-            // QTUtility2.log("ListView_SelectionChanged e.AddedItems " + e.AddedItems);
-            // QTUtility2.log("ListView_SelectionChanged e.OriginalSource " + e.OriginalSource);
             if(pluginServer != null && pluginServer.SelectionChangedAttached) {
                 if(timerSelectionChanged == null) {
                     timerSelectionChanged = new Timer(components);
@@ -6129,7 +6113,6 @@ namespace QTTabBarLib {
 
         [ComRegisterFunction]
         private static void Register(Type t) {
-            // QTUtility2.log(  "QTTabBarClass Register" );
             string name = t.GUID.ToString("B");
             using(RegistryKey key2 = Registry.ClassesRoot.CreateSubKey(@"CLSID\" + name)) {
                 key2.SetValue(null, "QTTabBar");
@@ -6585,7 +6568,6 @@ namespace QTTabBarLib {
                 if(flag && (ContextMenuedTab != CurrentTab)) {
                     if(ContextMenuedTab != null) {
                         if(ContextMenuedTab.TabLocked) {
-                            // QTUtility2.log("Clone Tab Button2");
                             var index = TabIndex();
                             // ����߼���һ����ǩ
                             // tabControl1.TabPages.IndexOf(ContextMenuedTab) + 1
@@ -7776,7 +7758,6 @@ namespace QTTabBarLib {
 
         protected void SetBarRows(int count)
         {
-            // QTUtility2.log("QTTabBarClass SetBarRows");
             // BandHeight = (count * (Config.Skin.TabHeight - 3 )) ;
             // BandHeight = (count * (Config.Skin.TabHeight - 3));
             // BandHeight = (count * (Config.Skin.TabHeight + BandHeightSpace));

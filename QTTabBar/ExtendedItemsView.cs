@@ -514,8 +514,6 @@ namespace QTTabBarLib {
                 case WM.USER + 163:  // 1024 +163 = 1187  => 4A3
                     // var msgWParam = msg.WParam; //  0 
                     // var msgLParam = msg.LParam; //  0
-                    // QTUtility2.log("selection changes msgWParam " + msg.WParam);
-                    // QTUtility2.log("selection changes msgLParam " + msg.LParam);
                     OnSelectionChanged(ref msg);
                     break;
                 

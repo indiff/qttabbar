@@ -165,14 +165,12 @@ namespace QTTabBarLib {
                 SourceInitialized += (sender, args) => QTUtility2.SetDarkTitleBar(new WindowInteropHelper(this).Handle);
                 // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
                 PInvoke.SetProcessDPIAware();
-                // QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");
                 InitializeComponent();
                 
                 // this.LoadViewFromUri("/QTTabBar;component/optionsdialog/optionsdialog.xaml");
                 // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
 
 
-                //   QTUtility2.log("InitializeComponent end");
                 // 设置默认的title 和版本
                 string str = QTUtility.CurrentVersion.ToString();
                 if (QTUtility.BetaRevision.Major > 0)
@@ -185,7 +183,6 @@ namespace QTTabBarLib {
                 }
                 this.Title += str + QTUtility.BuildVerion; //  +"_" + QTUtility2.MakeVersionString();
 
-             //   QTUtility2.log("set title end");           
                 int i = 0;
                 tabbedPanel.ItemsSource = new OptionsDialogTab[] {
                     new Options01_Window        { Index = i++},
@@ -204,7 +201,6 @@ namespace QTTabBarLib {
                     new Options14_About         { Index = i}
                 };
 
-               // QTUtility2.log("tabbedPanel.ItemsSource end");    
 
                 // For some reason, on XP, the Options dialog starts up with a blank tab
                 // This is the only way I've found to fix it
@@ -221,11 +217,9 @@ namespace QTTabBarLib {
                     if(ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
                     tab.InitializeConfig();
                 }
-              //  QTUtility2.log("InitializeConfig end");
 
                 //////////// setting by qwop .
                 setByQwop();
-              //  QTUtility2.log("利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度 end");
             }
             catch (Exception exception)
             {

@@ -117,7 +117,6 @@ namespace QTTabBarLib {
         public int GetFocusedIndex()
         {
             int focusedIndex;
-            // QTUtility2.log("GetFocusedIndex  folderView " + folderView);
             return folderView != null && folderView.GetFocusedItem(out focusedIndex) == 0
                 ? focusedIndex : -1;
         }
@@ -133,7 +132,6 @@ namespace QTTabBarLib {
             if(folderView == null) return new IDLWrapper();
             IntPtr ppidl = IntPtr.Zero;
             try {
-                // QTUtility2.log("GetItem  folderView " + folderView + " idx " + idx );
                 /*if (InstanceManager.GetTotalInstanceCount() > 0)
                 {
                     var shellBrowserEx = InstanceManager.GetThreadTabBar().GetShellBrowser();
@@ -359,13 +357,11 @@ namespace QTTabBarLib {
                     if (null != wrapper && wrapper.Available)
                     {
                         if(!string.IsNullOrEmpty(matchName) && matchName != wrapper.ParseName) {
-                          //  QTUtility2.log("TryGetHotTrackPath not match " + matchName + " wrapper.ParseName " + wrapper.ParseName);
                             return false;
                         }
                         using(IDLWrapper wrapper2 = ILAppend(wrapper.PIDL)) {
                             path = wrapper2.ParseName;
                             if(!string.IsNullOrEmpty(path) && path.IndexOfAny(Path.GetInvalidPathChars()) < 0) {
-                              //  QTUtility2.log("TryGetHotTrackPath  path " + path + " wrapper.ParseName " + wrapper2.ParseName);
                                 return true;
                             }
                             path = null;

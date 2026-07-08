@@ -254,7 +254,6 @@ namespace QTTabBarLib {
                 });
 
                 // TimeSpan abs = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
-                // QTUtility2.log(string.Format("Broadcast sync cost {0} ", abs.TotalMilliseconds));
             }
 
             public void DeleteInstance(IntPtr hwnd) {
@@ -465,12 +464,10 @@ namespace QTTabBarLib {
         }
 
         public static void InvokeMain(Action<QTTabBarClass> action) {
-            // QTUtility2.log("InstanceManager InvokeMain");
             ExecuteOnMainProcess(() => LocalInvokeMain(action), false);
         }
 
         public static void BeginInvokeMain(Action<QTTabBarClass> action) {
-            // QTUtility2.log("InstanceManager BeginInvokeMain");
             ExecuteOnMainProcess(() => LocalInvokeMain(action, true), true);
         }
 

@@ -23,7 +23,6 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -1234,70 +1233,5 @@ namespace QTTabBarLib {
             return Regex.IsMatch(input, pattern);
         }
 
-        // c# ��ȡ��ǰ���̵ĸ�����
-        public static string GetParentProcessName()
-        {
-            Process currentProcess = Process.GetCurrentProcess();
-            var process = GetParent( currentProcess );
-            if (process == null)
-            {
-                return "";
-            }
-            else
-            {
-                return process.ProcessName;
-            }
-        }
-
-        /// <summary>
-        /// ��ȡ�����̡�����������ܷ���null
-        /// </summary>
-        /// <param name="process"></param>
-        /// <returns></returns>
-        public static Process GetParent(Process process)
-        {
-            try
-            {
-                //using (var query = new ManagementObjectSearcher("SELECT * FROM Win32_Process WHERE ProcessId=" + process.Id))
-                using (var query = new ManagementObjectSearcher("root\\CIMV2", "SELECT ParentProcessId FROM Win32_Process WHERE ProcessId=" + process.Id))
-                {
-                    return query
-                        .Get()
-                        .OfType<ManagementObject>()
-                        .Select(p => Process.GetProcessById((int)(uint)p["ParentProcessId"]))
-                        .FirstOrDefault();
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-     
-
-        /// <summary>
-        /// Gets the parent process of a specified process.
-        /// </summary>
-        /// <param name="handle">The process handle.</param>
-        /// <returns>An instance of the Process class.</returns>
-        /*public static Process GetParentProcess(IntPtr handle)
-        {
-            ParentProcessUtilities pbi = new ParentProcessUtilities();
-            int returnLength;
-            int status = PInvoke.NtQueryInformationProcess(handle, 0, ref pbi, Marshal.SizeOf(pbi), out returnLength);
-            if (status != 0)
-                throw new Win32Exception(status);
-
-            try
-            {
-                return Process.GetProcessById(pbi.InheritedFromUniqueProcessId.ToInt32());
-            }
-            catch (ArgumentException)
-            {
-                // not found
-                return null;
-            }
-        }*/
     }
 }

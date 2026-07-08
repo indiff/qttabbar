@@ -81,64 +81,6 @@ namespace QTTabBarLib {
             CreateCompatibleDC
         }
 
-        /** Do not initialize hook.*/
-        public static void Initialize_donot()
-        {
-            QTUtility2.log("Do not initialize hook" );
-        }
-
-        public static void Initialize_bgtool()
-        {
-            if (hHookLib != IntPtr.Zero) return;
-            string installPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "QTTabBar");
-            // string filename = IntPtr.Size == 8 ? "QTHookLib64.dll" : "QTHookLib32.dll";
-            string filename =  "ExplorerBgTool.dll";
-            hHookLib = PInvoke.LoadLibrary(Path.Combine(installPath, filename));
-            int retcode = -1;
-            if (hHookLib == IntPtr.Zero)
-            {
-                int error = Marshal.GetLastWin32Error();
-                QTUtility2.MakeErrorLog(null, "LoadLibrary error: " + error);
-            }
-            else
-            {
-                IntPtr pFunc = PInvoke.GetProcAddress(hHookLib, "OnWindowLoad");
-                if (pFunc != IntPtr.Zero)
-                {
-                    InitHookLibDelegate initialize = (InitHookLibDelegate)
-                        Marshal.GetDelegateForFunctionPointer(pFunc, typeof(InitHookLibDelegate));
-                    try
-                    {
-                        retcode = initialize(callbackStruct);
-                    }
-                    catch (Exception e)
-                    {
-                        QTUtility2.MakeErrorLog(e, "");
-                    }
-
-                }
-            }
-
-            if (retcode == 0)
-            {
-                QTUtility2.log("HookLib Initialize success");
-                return;
-            }
-            QTUtility2.MakeErrorLog(null, "HookLib Initialize failed: " + retcode);
-
-            MessageForm.Show(IntPtr.Zero,
-                String.Format(
-                    "{0}: {1} {2}",
-                    QTUtility.TextResourcesDic["ErrorDialogs"][4],
-                    QTUtility.TextResourcesDic["ErrorDialogs"][5],
-                    QTUtility.TextResourcesDic["ErrorDialogs"][7]
-                ),
-                QTUtility.TextResourcesDic["ErrorDialogs"][1],
-                MessageBoxIcon.Hand,
-                30000, false, true
-            );
-        }
-
         private static Boolean LoadedHook = false;
 
         public static void Initialize()
@@ -283,9 +225,6 @@ namespace QTTabBarLib {
             });
             return true;
         }
-        /** do not init shell brownser hook. */
-        public static void InitShellBrowserHook_old(IShellBrowser shellBrowser) { }
-
         public static void InitShellBrowserHook(IShellBrowser shellBrowser)
         {
             lock (typeof(HookLibManager))

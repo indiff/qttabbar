@@ -1872,7 +1872,6 @@ namespace QTTabBarLib {
 
         protected override void OnDpiChanged(int oldDpi, int newDpi)
         {
-            // QTUtility2.log("QTButtonBar OnDpiChanged");
             RefreshHeight();
         }
 

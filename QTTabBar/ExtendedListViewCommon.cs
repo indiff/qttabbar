@@ -30,7 +30,6 @@ using QTTabBarLib.Common;
 using QTTabBarLib.ExplorerBrowser;
 using QTTabBarLib.Interop;
 using Control = System.Windows.Forms.Control;
-using HResult = QTTabBarLib.Interop.HResult;
 using IDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using IShellView = QTTabBarLib.Interop.IShellView;
 using Timer = System.Windows.Forms.Timer;
@@ -532,7 +531,6 @@ namespace QTTabBarLib {
             }
             // parent = PInvoke.GetParent(parent);
             // name = PInvoke.GetClassName(parent);
-            // QTUtility2.log(" parent name " + name);
             /*handle = findParent("ShellTabWindowClass");
             if (handle == IntPtr.Zero)
             {   
@@ -585,7 +583,6 @@ namespace QTTabBarLib {
         }
 
         protected virtual bool ListViewController_MessageCaptured(ref Message msg) {
-            // QTUtility2.log("ListViewController msg\t" + Enum.GetName(typeof(MsgEnum), msg.Msg) + "\tw\t" + msg.WParam + "\tl\t" + msg.LParam);
             if(msg.Msg == WM_AFTERPAINT) {
                 RefreshSubDirTip(true);
                 // SetBackgroundImage(true, true, 0, 0);
@@ -672,9 +669,6 @@ namespace QTTabBarLib {
                                 // visualProperties.GetColor(VPCOLORFLAGS.VPCF_SORTCOLUMN, out pcr2);
                                 // int pcr3;
                                 // visualProperties.GetColor(VPCOLORFLAGS.VPCF_TEXT, out pcr3);
-                                // QTUtility2.log("on focus changed pcr1 : " + pcr1);
-                                // QTUtility2.log("on focus changed pcr2 : " + pcr2);
-                                // QTUtility2.log("on focus changed pcr3 : " + pcr3);
                                 //
                                 // visualProperties.SetColor(VPCOLORFLAGS.VPCF_BACKGROUND, pcr1);
                                 // visualProperties.SetColor(VPCOLORFLAGS.VPCF_SORTCOLUMN, pcr2);
