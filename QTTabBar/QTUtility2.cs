@@ -226,6 +226,16 @@ namespace QTTabBarLib {
             return ((clr.R | (clr.G << 8)) | (clr.B << 0x10));
         }
 
+        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+        // Makes the window's title bar/border follow InNightMode instead of always
+        // being light, regardless of the Windows theme (WinForms/WPF don't do this
+        // on their own).
+        public static void SetDarkTitleBar(IntPtr hwnd) {
+            int useDark = QTUtility.InNightMode ? 1 : 0;
+            PInvoke.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref useDark, sizeof(int));
+        }
+
         /**
          * force log
          */

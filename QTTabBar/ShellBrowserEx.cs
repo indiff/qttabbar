@@ -273,23 +273,20 @@ namespace QTTabBarLib {
         public void OnNavigateComplete() {
             if(shellBrowser == null) return;
 
-            // 是否释放有问题 by indiff
             if (folderView != null)
             {
                 QTUtility2.log("ReleaseComObject folderView to reset");
                 Marshal.ReleaseComObject(folderView);
                 folderView = null;
+            }
 
-                if (folderView == null)
-                {
-                    // 显示赋值 folderView 实例
-                    IShellView ppshv;
-                    if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
-                    {
-                        folderView = ppshv as IFolderView;
-                    }
-                }
-
+            // Re-acquire unconditionally (this used to be nested inside the block
+            // above, so a fresh ShellBrowserEx with folderView still null never
+            // acquired one on its first OnNavigateComplete call from the ctor).
+            IShellView ppshv;
+            if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
+            {
+                folderView = ppshv as IFolderView;
             }
         }
 

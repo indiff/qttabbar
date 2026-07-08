@@ -949,7 +949,7 @@ namespace QTTabBarLib
                         {
                             if (obj != null)
                             {
-                                IOleWindow window = obj as IOleWindow;
+                                QTTabBarLib.Interop.IOleWindow window = obj as QTTabBarLib.Interop.IOleWindow;
                                 if (window != null)
                                 {
                                     IntPtr hwnd;

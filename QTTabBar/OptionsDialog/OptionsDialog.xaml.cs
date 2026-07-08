@@ -162,6 +162,7 @@ namespace QTTabBarLib {
             try {
                 Initialized += (sender, args) => Topmost = true;
                 ContentRendered += (sender, args) => Topmost = false;
+                SourceInitialized += (sender, args) => QTUtility2.SetDarkTitleBar(new WindowInteropHelper(this).Handle);
                 // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
                 PInvoke.SetProcessDPIAware();
                 // QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");

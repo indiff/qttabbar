@@ -34,7 +34,7 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     /**
-     * Ô¤ÀÀ´°¿Ú
+     * Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     internal sealed class ThumbnailTooltipForm : Form {
         private const string EMPTYFILE = "  *empty file";
@@ -81,7 +81,7 @@ namespace QTTabBarLib {
         /// static fields.
         /// </summary>
         private static string supportedImages;
-        // Ö§³ÖµÄÊÓÆµ¸ñÊ½
+        // Ö§ï¿½Öµï¿½ï¿½ï¿½Æµï¿½ï¿½Ê½
         private static string supportedMovies = ".asx;.dvr-ms;.mp2;.flv;..mkv;.ts;.3g2;.3gp;.3gp2;.3gpp;.amr;.amv;.asf;.avi;.bdmv;.bik;.d2v;.divx;.drc;.dsa;.dsm;.dss;.dsv;.evo;.f4v;.flc;.fli;.flic;.flv;.hdmov;.ifo;.ivf;.m1v;.m2p;.m2t;.m2ts;.m2v;.m4b;.m4p;.m4v;.mkv;.mp2v;.mp4;.mp4v;.mpe;.mpeg;.mpg;.mpls;.mpv2;.mpv4;.mov;.mts;.ogm;.ogv;.pss;.pva;.qt;.ram;.ratdvd;.rm;.rmm;.rmvb;.roq;.rpm;.smil;.smk;.swf;.tp;.tpr;.ts;.vob;.vp6;.webm;.wm;.wmp;.wmv";
 
 
@@ -239,7 +239,7 @@ namespace QTTabBarLib {
                     return false;
                 }
             }
-            if(ExtIsText(ext)) { // Èç¹ûÔ¤ÀÀµÄÊÇÎÄ±¾ÎÄ¼þ
+            if(ExtIsText(ext)) { // ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½Ä¼ï¿½
                 FileInfo textFileInfo = new FileInfo(path);
                 if(textFileInfo.Exists) {
                     try {
@@ -248,7 +248,7 @@ namespace QTTabBarLib {
                         bool isEmptyText = false;
                         string content;
                         ioException = null;
-                        // ¼ÓÔØÔ¤ÀÀµÄÂß¼­
+                        // ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
 
                         /*if (textFileInfo.Length > 0L && textFileInfo.Length <= MAX_TEXT_LENGTH)
                         {
@@ -269,7 +269,9 @@ namespace QTTabBarLib {
                             // str4 = "  *empty file";
                             content = EMPTYFILE;
                         }
-                        lblText.ForeColor = (ioException != null) ? Color.Red : (isEmptyText ? SystemColors.GrayText : SystemColors.InfoText);
+                        Color normalColor = QTUtility.InNightMode ? Color.White : SystemColors.InfoText;
+                        Color emptyColor = QTUtility.InNightMode ? Color.Gray : SystemColors.GrayText;
+                        lblText.ForeColor = (ioException != null) ? Color.Red : (isEmptyText ? emptyColor : normalColor);
                         try {
                             lblText.Font = Config.Tips.PreviewFont;
                             fFontAsigned = true;
@@ -379,7 +381,9 @@ namespace QTTabBarLib {
             lblInfo = new Label();
             ((ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            lblInfo.ForeColor = SystemColors.InfoText;
+            Color foreColor = QTUtility.InNightMode ? Color.White : SystemColors.InfoText;
+            Color backColor = QTUtility.InNightMode ? Color.FromArgb(32, 32, 32) : SystemColors.Info;
+            lblInfo.ForeColor = foreColor;
             lblInfo.BackColor = Color.Transparent;
             lblInfo.Dock = DockStyle.Bottom;
             lblInfo.Padding = new Padding(4);
@@ -393,7 +397,7 @@ namespace QTTabBarLib {
             pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             pictureBox1.TabStop = false;
             lblText.AutoEllipsis = true;
-            lblText.ForeColor = SystemColors.InfoText;
+            lblText.ForeColor = foreColor;
             lblText.BackColor = Color.Transparent;
             lblText.Dock = DockStyle.Fill;
             lblText.Location = new Point(0, 0);
@@ -402,7 +406,7 @@ namespace QTTabBarLib {
             lblText.UseMnemonic = false;
             AutoScaleDimensions = new SizeF(6f, 13f);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.Info;
+            BackColor = backColor;
             ClientSize = new Size(0x100, 0x80);
             Controls.Add(lblText);
             Controls.Add(pictureBox1);
@@ -458,10 +462,10 @@ namespace QTTabBarLib {
         }
 
         /// <summary> 
-        /// ¸ø¶¨ÎÄ¼þµÄÂ·¾¶£¬¶ÁÈ¡ÎÄ¼þµÄ¶þ½øÖÆÊý¾Ý£¬ÅÐ¶ÏÎÄ¼þµÄ±àÂëÀàÐÍ 
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ä¼ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½Ð¶ï¿½ï¿½Ä¼ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
         /// </summary> 
-        /// <param name=¡°FILE_NAME¡°>ÎÄ¼þÂ·¾¶</param> 
-        /// <returns>ÎÄ¼þµÄ±àÂëÀàÐÍ</returns> 
+        /// <param name=ï¿½ï¿½FILE_NAMEï¿½ï¿½>ï¿½Ä¼ï¿½Â·ï¿½ï¿½</param> 
+        /// <returns>ï¿½Ä¼ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</returns> 
         public static System.Text.Encoding GetType(string FILE_NAME)
         {
             FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
@@ -471,15 +475,15 @@ namespace QTTabBarLib {
         }
 
         /// <summary> 
-        /// Í¨¹ý¸ø¶¨µÄÎÄ¼þÁ÷£¬ÅÐ¶ÏÎÄ¼þµÄ±àÂëÀàÐÍ 
+        /// Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ä¼ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
         /// </summary> 
-        /// <param name=¡°fs¡°>ÎÄ¼þÁ÷</param> 
-        /// <returns>ÎÄ¼þµÄ±àÂëÀàÐÍ</returns> 
+        /// <param name=ï¿½ï¿½fsï¿½ï¿½>ï¿½Ä¼ï¿½ï¿½ï¿½</param> 
+        /// <returns>ï¿½Ä¼ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</returns> 
         public static System.Text.Encoding GetType(FileStream fs)
         {
             byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
             byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-            byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //´øBOM 
+            byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //ï¿½ï¿½BOM 
             Encoding reVal = Encoding.Default;
 
             BinaryReader r = new BinaryReader(fs, System.Text.Encoding.Default);
@@ -509,20 +513,20 @@ namespace QTTabBarLib {
         } 
 
         /// <summary> 
-        /// ÅÐ¶ÏÊÇ·ñ´øBOMµÄUTF8¸ñÊ½£¨¹ÀËã·½·¨£©
-        /// BOM£ºByte Order Mark£¬¶¨Òå×Ö½ÚË³Ðò¡£
-        /// UTF-8²»ÐèÒªBOM±íÃ÷×Ö½ÚË³Ðò£¬µ«ÓÃBOMÀ´±íÊ¾±àÂë·½Ê½¡£
-        /// Windows¾ÍÊÇ²ÉÓÃBOMÀ´±ê¼ÇÎÄ±¾ÎÄ¼þµÄ±àÂë·½Ê½µÄ£¬
-        /// ¿ÉÒÔ°ÑUTF-8ºÍASCIIµÈ±àÂëÇø·Ö¿ªÀ´£¬
-        /// µ«ÔÚWindowsÖ®Íâ£¨Èç£¬Linux £©£¬»á´øÀ´ÎÊÌâ¡£
+        /// ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½BOMï¿½ï¿½UTF8ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ã·½ï¿½ï¿½ï¿½ï¿½
+        /// BOMï¿½ï¿½Byte Order Markï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Ë³ï¿½ï¿½
+        /// UTF-8ï¿½ï¿½ï¿½ï¿½ÒªBOMï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Ë³ï¿½ò£¬µï¿½ï¿½ï¿½BOMï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ë·½Ê½ï¿½ï¿½
+        /// Windowsï¿½ï¿½ï¿½Ç²ï¿½ï¿½ï¿½BOMï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½Ä¼ï¿½ï¿½Ä±ï¿½ï¿½ë·½Ê½ï¿½Ä£ï¿½
+        /// ï¿½ï¿½ï¿½Ô°ï¿½UTF-8ï¿½ï¿½ASCIIï¿½È±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¿ï¿½ï¿½ï¿½ï¿½ï¿½
+        /// ï¿½ï¿½ï¿½ï¿½WindowsÖ®ï¿½â£¨ï¿½ç£¬Linux ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â¡£
         /// </summary> 
         /// <param name="data"></param> 
         /// <returns></returns> 
         private static bool IsUTF8Bytes(byte[] data)
         {
-            // ×Ö½ÚÊý
+            // ï¿½Ö½ï¿½ï¿½ï¿½
             int charByteCounter = 1;
-            // µ±Ç°×Ö½Ú
+            // ï¿½ï¿½Ç°ï¿½Ö½ï¿½
             byte curByte;
             for (int i = 0; i < data.Length; i++)
             {
@@ -531,13 +535,13 @@ namespace QTTabBarLib {
                 {
                     if (curByte >= 0x80)
                     {
-                        // ÅÐ¶Ïµ±Ç° 
+                        // ï¿½Ð¶Ïµï¿½Ç° 
                         while (((curByte <<= 1) & 0x80) != 0)
                         {
                             charByteCounter++;
                         }
-                        // ±ê¼ÇÎ»Ê×Î»ÈôÎª·Ç0 ÔòÖÁÉÙÒÔ2¸ö1¿ªÊ¼
-                        // Èç:110XXXXX...........1111110X 
+                        // ï¿½ï¿½ï¿½Î»ï¿½ï¿½Î»ï¿½ï¿½Îªï¿½ï¿½0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½1ï¿½ï¿½Ê¼
+                        // ï¿½ï¿½:110XXXXX...........1111110X 
                         if (charByteCounter == 1 || charByteCounter > 6)
                         {
                             return false;
@@ -546,7 +550,7 @@ namespace QTTabBarLib {
                 }
                 else
                 {
-                    // ÈôÊÇUTF-8 ´ËÊ±µÚÒ»Î»±ØÐëÎª1 
+                    // ï¿½ï¿½ï¿½ï¿½UTF-8 ï¿½ï¿½Ê±ï¿½ï¿½Ò»Î»ï¿½ï¿½ï¿½ï¿½Îª1 
                     if ((curByte & 0xC0) != 0x80)
                     {
                         return false;
@@ -678,7 +682,7 @@ namespace QTTabBarLib {
             }
             if (info.nCodePage == Encoding.ASCII.CodePage)
             {
-                //ASCII¤Î¤È¤­¤ÏUTF-8¤Ë¤¹¤ë
+                //ASCIIï¿½Î¤È¤ï¿½ï¿½ï¿½UTF-8ï¿½Ë¤ï¿½ï¿½ï¿½
                 return Encoding.UTF8;
             }
             return Encoding.GetEncoding((int)info.nCodePage);
@@ -779,12 +783,12 @@ namespace QTTabBarLib {
         }
 
         /**
-         * codepage=936 ¼òÌåÖÐÎÄGBK
-            codepage=950 ·±ÌåÖÐÎÄBIG5
-            codepage=437 ÃÀ¹ú/¼ÓÄÃ´óÓ¢Óï
-            codepage=932 ÈÕÎÄ
-            codepage=949 º«ÎÄ
-            codepage=866 ¶íÎÄ
+         * codepage=936 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½GBK
+            codepage=950 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BIG5
+            codepage=437 ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½Ã´ï¿½Ó¢ï¿½ï¿½
+            codepage=932 ï¿½ï¿½ï¿½ï¿½
+            codepage=949 ï¿½ï¿½ï¿½ï¿½
+            codepage=866 ï¿½ï¿½ï¿½ï¿½
          */
         public static Encoding TryGetEncoding(byte[] bytes)
         {
@@ -1146,24 +1150,24 @@ namespace QTTabBarLib {
 
         public static bool IsTragetEncoding(byte[] bytes, Encoding targetEncoding)
         {
-            //Œ¢byte[]ÞDžéstringÔÙÞD»Øbyte[]¿´Î»Ôª”µÊÇ·ñÓÐ×ƒ
+            //ï¿½ï¿½byte[]ï¿½Dï¿½ï¿½stringï¿½ï¿½ï¿½Dï¿½ï¿½byte[]ï¿½ï¿½Î»Ôªï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½×ƒ
             var stringWithTragetEncoding = targetEncoding.GetString(bytes);
             var bytesWithTragetEncodingCount = targetEncoding.GetByteCount(stringWithTragetEncoding);
             return bytes.Length == bytesWithTragetEncodingCount;
         }
 
         /// <summary> 
-        /// ÅÐ¶ÏÎÄ¼þÁ÷µÄ±àÂëÀàÐÍ 
+        /// ï¿½Ð¶ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
         /// </summary> 
-        /// <param name="filestream">ÎÄ¼þÁ÷</param> 
-        /// <returns>Á÷µÄ±àÂëÀàÐÍ</returns> 
+        /// <param name="filestream">ï¿½Ä¼ï¿½ï¿½ï¿½</param> 
+        /// <returns>ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</returns> 
         private static Encoding GetStreamEncoding(byte[] ss)
         {
             try
             {
                 byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
                 byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-                //´øBOM 
+                //ï¿½ï¿½BOM 
                 byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF };
                 Encoding reVal = Encoding.Default;
                 if (IsUTF8Bytes(ss) || (ss[0] == 0xEF && ss[1] == 0xBB && ss[2] == 0xBF))
@@ -1506,12 +1510,16 @@ namespace QTTabBarLib {
         }
 
         protected override void OnPaintBackground(PaintEventArgs e) {
-            if(!QTUtility.IsXP && VisualStyleRenderer.IsSupported) {
+            // The themed tooltip visual style part is always light regardless of app
+            // dark mode, so it can't be used when InNightMode - paint manually instead.
+            if(!QTUtility.IsXP && !QTUtility.InNightMode && VisualStyleRenderer.IsSupported) {
                 new VisualStyleRenderer(VisualStyleElement.ToolTip.Standard.Normal).DrawBackground(e.Graphics, new Rectangle(0, 0, Width, Height));
             }
             else {
                 base.OnPaintBackground(e);
-                e.Graphics.DrawRectangle(SystemPens.InfoText, new Rectangle(0, 0, Width - 1, Height - 1));
+                Pen borderPen = QTUtility.InNightMode ? new Pen(Color.FromArgb(83, 83, 83)) : SystemPens.InfoText;
+                e.Graphics.DrawRectangle(borderPen, new Rectangle(0, 0, Width - 1, Height - 1));
+                if(QTUtility.InNightMode) borderPen.Dispose();
             }
         }
 

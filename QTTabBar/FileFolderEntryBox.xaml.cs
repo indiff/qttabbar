@@ -203,7 +203,9 @@ namespace QTTabBarLib {
             }
 
             //txtLocation.FontStyle = b ? FontStyles.Italic : FontStyles.Normal;
-            txtLocation.Foreground = b ? Brushes.DarkGray : Brushes.Black;
+            txtLocation.Foreground = QTUtility.InNightMode
+                    ? (b ? Brushes.Gray : Brushes.White)
+                    : (b ? Brushes.DarkGray : Brushes.Black);
             watermarkVisible = b;
 
             string text;

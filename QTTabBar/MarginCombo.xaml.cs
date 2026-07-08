@@ -1,4 +1,4 @@
-﻿//    This file is part of QTTabBar, a shell extension for Microsoft
+//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
 //    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
@@ -17,7 +17,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,19 +29,20 @@ namespace QTTabBarLib {
     /// <summary>
     /// Interaction logic for MarginCombo.xaml
     /// </summary>
-    public partial class MarginCombo : ComboBox {
+    public partial class MarginCombo : UserControl {
         private const int VAL_MAX = 99;
-        private TextBox txtMargin;
         private MarginEntry[] entries;
+
         public MarginCombo() {
             InitializeComponent();
-            ItemsSource = entries = new MarginEntry[] {
+            itemsControl.ItemsSource = entries = new MarginEntry[] {
                 new MarginEntry(this, 0),
                 new MarginEntry(this, 1),
                 new MarginEntry(this, 2),
                 new MarginEntry(this, 3),
                 new MarginEntry(this, 4)
             };
+            UpdateSummary();
         }
 
         // It *really* pisses me off that I can't use the Thickness class instead.
@@ -59,6 +59,7 @@ namespace QTTabBarLib {
             combo.entries[3].Value = p.Right;
             combo.entries[4].Value = p.Bottom;
             combo.entries[0].Value = combo.entries.Skip(1).All(e => e.Value == p.Left) ? p.Left : -1;
+            combo.UpdateSummary();
         }
 
         public Padding Value {
@@ -66,32 +67,12 @@ namespace QTTabBarLib {
             set { SetValue(ValueProperty, value); }
         }
 
-        public override void OnApplyTemplate() {
-            base.OnApplyTemplate();
-            txtMargin = GetTemplateChild("PART_EditableTextBox") as TextBox;
-            if(txtMargin != null) {
-                txtMargin.PreviewTextInput += txtMargin_PreviewTextInput;
-                txtMargin.TextChanged += txtMargin_TextChanged;
-                txtMargin.SetBinding(TextBox.TextProperty, new Binding("Value") {
-                    Source = this,
-                    Converter = new JoinedTextConverter(),
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-                });
-            }
+        private void UpdateSummary() {
+            Padding p = Value;
+            txtSummary.Text = p.Left + ", " + p.Top + ", " + p.Right + ", " + p.Bottom;
         }
 
         #region Event Handlers
-
-        //# The converter will do the validation for us.
-        private void txtMargin_TextChanged(object sender, TextChangedEventArgs textChangedEventArgs) {
-            TextBox box = ((TextBox)sender);
-            int pos = box.CaretIndex;
-            BindingExpression bind = box.GetBindingExpression(TextBox.TextProperty);
-            if(bind != null) {
-                bind.UpdateTarget();
-                box.CaretIndex = pos;
-            }
-        }
 
         //# Make sure the text stays numeric and in range.
         private void txtLTRB_TextChanged(object sender, RoutedEventArgs e) {
@@ -113,12 +94,8 @@ namespace QTTabBarLib {
             }
         }
 
-        //# Allow only digits to be entered.  We still need TextChanged to 
+        //# Allow only digits to be entered.  We still need TextChanged to
         //# make sure letters don't get in via pasting, drag & drop, etc.
-        private void txtMargin_PreviewTextInput(object sender, TextCompositionEventArgs e) {
-            e.Handled = !e.Text.ToCharArray().All(c => char.IsDigit(c) || c == ' ' || c == ',');
-        }
-
         private void txtLTRB_PreviewTextInput(object sender, TextCompositionEventArgs e) {
             e.Handled = !e.Text.ToCharArray().All(char.IsDigit);
         }
@@ -128,23 +105,6 @@ namespace QTTabBarLib {
         }
 
         #endregion
-
-        [ValueConversion(typeof(Padding), typeof(string))]
-        private class JoinedTextConverter : IValueConverter {
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-                Padding t = (Padding)value;
-                return t.Left + ", " + t.Top + ", " + t.Right + ", " + t.Bottom;
-            }
-
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-                int i;
-                int[] v = value.ToString().Split(',').Select(
-                        s => int.TryParse(s.Trim(), out i) ? Math.Min(Math.Max(i, 0), VAL_MAX) : 0).ToArray();
-                Array.Resize(ref v, 4);
-                return new Padding(v[0], v[1], v[2], v[3]);
-            }
-        }
-
 
         #region ---------- Binding Classes ----------
         // INotifyPropertyChanged is implemented automatically by Notify Property Weaver!

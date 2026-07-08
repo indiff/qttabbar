@@ -24,7 +24,7 @@
     xmlns:qt="clr-namespace:QTTabBarLib"
     x:Class="QTTabBarLib.OptionsDialog"
     x:ClassModifier="internal"
-    Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
+    Background="#FF202020"
     Height="650"
     Title="{qt:Resx Key=OptionsDialog, Index=0}"
     ToolTip="{qt:Resx Key=OptionsDialog, Index=0}"
@@ -57,7 +57,7 @@
             LastChildFill="False"
             VerticalAlignment="Center">
             <DockPanel.Resources>
-                <Style TargetType="{x:Type Button}">
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Height" Value="22"/>
                     <Setter Property="Margin" Value="3,0"/>
                     <Setter Property="Padding" Value="0"/>
@@ -97,15 +97,15 @@
             PreviewMouseWheel="lstCategories_PreviewMouseWheel"
             Width="136">
             <ListBox.Resources>
-                <SolidColorBrush 
-                    x:Key="{x:Static SystemColors.HighlightBrushKey}" 
-                    Color="White"/>
-                <SolidColorBrush 
+                <SolidColorBrush
+                    x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                    Color="#FF626262"/>
+                <SolidColorBrush
                     x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                    Color="Black"/>
-                <SolidColorBrush 
-                    x:Key="{x:Static SystemColors.ControlBrushKey}"
                     Color="White"/>
+                <SolidColorBrush
+                    x:Key="{x:Static SystemColors.ControlBrushKey}"
+                    Color="#FF202020"/>
             </ListBox.Resources>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
@@ -124,17 +124,18 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid
-                        Background="#d8ded9"
+                        Background="#FF2C2C2C"
                         Height="25"
                         Margin="0,1"
                         Cursor="Hand"
                         Width="128">
-                        <Image x:Name="imgCategorySelection" 
+                        <Image x:Name="imgCategorySelection"
                             Visibility="Collapsed"/>
                         <TextBlock
                             Margin="10,1"
                             Text="{qt:Resx Key=TabBar_Option_Genre}"
 							HorizontalAlignment="center"
+                            Foreground="White"
                             VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -175,7 +176,7 @@
 
         <!-- The main TabControl -->
     	<TabControl x:Name="tabbedPanel"
-            Background="{StaticResource {x:Static SystemColors.ControlLightLightBrushKey}}"
+            Background="#FF202020"
             Grid.Column="1"
             Margin="0,3,3,0"
             Padding="0"

@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2002-2010  Pavel Zolnikov, Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -17,12 +17,10 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Security;
 
-namespace BandObjectLib {
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("00000114-0000-0000-C000-000000000046"), SuppressUnmanagedCodeSecurity]
-    public interface IOleWindow {
-        void GetWindow(out IntPtr phwnd);
-        void ContextSensitiveHelp([In] bool fEnterMode);
+namespace QTTabBarLib.Interop {
+    [ComImport, Guid("000214e8-0000-0000-c000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IShellExtInit {
+        void Initialize(IntPtr pidlFolder, IntPtr pDataObj, IntPtr hKeyProgID);
     }
 }

@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2002-2010  Pavel Zolnikov, Quizo, Paul Accisano
+//    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -19,10 +19,16 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace BandObjectLib {
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("00000114-0000-0000-C000-000000000046"), SuppressUnmanagedCodeSecurity]
-    public interface IOleWindow {
-        void GetWindow(out IntPtr phwnd);
-        void ContextSensitiveHelp([In] bool fEnterMode);
+namespace QTTabBarLib.Interop {
+    // The real shell IContextMenu IID (000214e4-...). IContextMenu2/3 add extra
+    // methods but keep this vtable prefix, so implementing just this base
+    // interface with its real IID is enough for a non-owner-drawn menu item.
+    [ComImport, Guid("000214e4-0000-0000-c000-000000000046"), SuppressUnmanagedCodeSecurity, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IContextMenu {
+        [PreserveSig]
+        int QueryContextMenu(IntPtr hMenu, uint indexMenu, uint idCmdFirst, uint idCmdLast, uint uFlags);
+        [PreserveSig]
+        int InvokeCommand(ref CMINVOKECOMMANDINFO pici);
+        void GetCommandString(uint idCmd, uint uFlags, ref int pwReserved, IntPtr commandstring, uint cch);
     }
 }

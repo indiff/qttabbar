@@ -114,6 +114,8 @@
     <Compile Include="ActionDelayer.cs" />
     <Compile Include="AppsManager.cs" />
     <Compile Include="AutoLoader.cs" />
+    <Compile Include="ContextMenuOptions.cs" />
+    <Compile Include="ExplorerSiteAdapter.cs" />
     <Compile Include="AutomationClasses.cs" />
     <Compile Include="BreadcrumbBar.cs" />
     <Compile Include="AbstractListView.cs" />
@@ -433,6 +435,8 @@
     <Compile Include="Interop\HDITEM.cs" />
     <Compile Include="Interop\HookProc.cs" />
     <Compile Include="Interop\ICONINFO.cs" />
+    <Compile Include="Interop\IContextMenu.cs" />
+    <Compile Include="Interop\IShellExtInit.cs" />
     <Compile Include="Interop\IContextMenu2.cs" />
     <Compile Include="Interop\IDeskBand2.cs" />
     <Compile Include="Interop\IEnumIDList.cs" />

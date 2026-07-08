@@ -125,13 +125,13 @@ namespace QTTabBarLib {
             }
 
             // RefreshViewWatermark(true);
-            // Èç¹ûÎÄ¼þ²»´æÔÚÔò²»¼ÓÔØ±³¾°
+            // ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò²»¼ï¿½ï¿½Ø±ï¿½ï¿½ï¿½
             /*if (File.Exists(BG_IMG))
             {
                 SetBackgroundImage(true, true, 0, 0);
             }*/
 
-            // Ö´ÐÐ²»ÉúÐ§
+            // Ö´ï¿½Ð²ï¿½ï¿½ï¿½Ð§
             // SetBackgroundImage(true, true, 0, 0);
             // InstallHooks();
         }
@@ -168,10 +168,10 @@ namespace QTTabBarLib {
             PInvoke.GetWindowRect(Handle, out pRc);
             Size wndSize = new Size(lprc.right - pRc.left, lprc.bottom - pRc.top);
             Rectangle rctDw = pRc.ToRectangle();
-            //¼ÆËãÍ¼Æ¬Î»ÖÃ Calculate picture position
+            //ï¿½ï¿½ï¿½ï¿½Í¼Æ¬Î»ï¿½ï¿½ Calculate picture position
             PInvoke.InvalidateRect(Handle, IntPtr.Zero, true);
 
-            var bgPng = @"D:\ÏÂÔØ\Release\Release\x64\Image\bgImage1.png";
+            var bgPng = @"D:\ï¿½ï¿½ï¿½ï¿½\Release\Release\x64\Image\bgImage1.png";
 
             // PInvoke.SaveDC
             if (rendererDown_Normal == null)
@@ -187,7 +187,7 @@ namespace QTTabBarLib {
                     // VisualStyleRenderer renderer2;
                     renderer = rendererDown_Normal;
                     // g.DrawImage(QTUtility.ImageListGlobal.Images[base2.ImageKey], rect);
-                    var dToutiaoX1080IntellijIdea3Png = @"D:\ÏÂÔØ\Release\Release\x64\Image\bgImage.png";
+                    var dToutiaoX1080IntellijIdea3Png = @"D:\ï¿½ï¿½ï¿½ï¿½\Release\Release\x64\Image\bgImage.png";
                     using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
                     using (Bitmap bmp = freeBitmap.Clone())
                     {
@@ -263,7 +263,7 @@ namespace QTTabBarLib {
             lvbkimage.ulFlags = LVBKIF_SOURCE_HBITMAP;
             result = PInvoke.SendMessageLVBKIMAGE(handle, LVM_SETBKIMAGE, 0, ref lvbkimage);
 
-            var dToutiaoX1080IntellijIdea3Png = @"D:\ÏÂÔØ\Release\Release\x64\Image\bgImage1.png";
+            var dToutiaoX1080IntellijIdea3Png = @"D:\ï¿½ï¿½ï¿½ï¿½\Release\Release\x64\Image\bgImage1.png";
             // var dToutiaoX1080IntellijIdea3Png = @"D:\Users\Administrator\Documents\Tencent Files\531299332\Image\Group2\IY\S2\IYS2F)882TXGVT[JIR[`4BY.bmp";
 
             using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
@@ -603,7 +603,7 @@ namespace QTTabBarLib {
                 PInvoke.InvalidateRect(Handle, IntPtr.Zero, true);
 
 
-                //²Ã¼ô¾ØÐÎ Clip rect
+                //ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ Clip rect
                 // SaveDC(hDC);
                 // IntersectClipRect(hDC, lprc->left, lprc->top, lprc->right, lprc->bottom);
 
@@ -621,7 +621,7 @@ namespace QTTabBarLib {
                         // VisualStyleRenderer renderer2;
                         renderer = rendererDown_Normal;
                         // g.DrawImage(QTUtility.ImageListGlobal.Images[base2.ImageKey], rect);
-                        var dToutiaoX1080IntellijIdea3Png = @"D:\ÏÂÔØ\Release\Release\x64\Image\bgImage.png";
+                        var dToutiaoX1080IntellijIdea3Png = @"D:\ï¿½ï¿½ï¿½ï¿½\Release\Release\x64\Image\bgImage.png";
                         using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
                         using (Bitmap bmp = freeBitmap.Clone())
                         {
@@ -731,7 +731,7 @@ namespace QTTabBarLib {
                      // PInvoke.InvalidateRect(Handle, IntPtr.Zero, true);
  
  
-                     //²Ã¼ô¾ØÐÎ Clip rect
+                     //ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ Clip rect
                      // SaveDC(hDC);
                      // IntersectClipRect(hDC, lprc->left, lprc->top, lprc->right, lprc->bottom);
  
@@ -749,7 +749,7 @@ namespace QTTabBarLib {
                              // VisualStyleRenderer renderer2;
                              renderer = rendererDown_Normal;
                              // g.DrawImage(QTUtility.ImageListGlobal.Images[base2.ImageKey], rect);
-                             var dToutiaoX1080IntellijIdea3Png = @"D:\ÏÂÔØ\Release\Release\x64\Image\bgImage.png";
+                             var dToutiaoX1080IntellijIdea3Png = @"D:\ï¿½ï¿½ï¿½ï¿½\Release\Release\x64\Image\bgImage.png";
                              using (FreeBitmap freeBitmap = new FreeBitmap(dToutiaoX1080IntellijIdea3Png))
                              using (Bitmap bmp = freeBitmap.Clone())
                              {
@@ -774,7 +774,7 @@ namespace QTTabBarLib {
                     return true;
 
                 case WM.PAINT:
-                    // Ö±½ÓÔÚ Paint ÏûÏ¢ÄÚ²¿²Ù×÷²»ÐÐ
+                    // Ö±ï¿½ï¿½ï¿½ï¿½ Paint ï¿½ï¿½Ï¢ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     // It's very dangerous to do automation-related things
                     // during WM_PAINT.  So, use PostMessage to do it later.
                     PInvoke.PostMessage(ListViewController.Handle, WM_AFTERPAINT, IntPtr.Zero, IntPtr.Zero);
@@ -1173,7 +1173,7 @@ namespace QTTabBarLib {
 
         private bool ShowThumbnailTooltip(int iItem, Point pnt, bool fKey) {
             string linkTargetPath;
-            if (ShellBrowser == null) // µ¼ÖÂ¿ÕÖ¸ÕëÎÊÌâ by indiff
+            if (ShellBrowser == null) // ï¿½ï¿½ï¿½Â¿ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ by indiff
             {
                 return false;
             }
