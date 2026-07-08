@@ -60,7 +60,7 @@ When editing anything under `Interop\`/`Common\`/`QTHookLib`, assume the target 
 User settings persist to the registry (`RegistryUtil.cs`, `StaticReg.cs`, `Config.cs`). The options UI is WPF (`QTTabBar\OptionsDialog\Options0N_*.xaml[.cs]`, one file pair per settings tab: Window, Tabs, Tweaks, Tooltips, General, Appearance, Mouse, Keys, Groups, Apps, ButtonBar, Plugins, Language, About) hosted from a WinForms-based host app (most of the rest of the UI, e.g. `QTabControl.cs`, `Toolbar.cs`, `SubDirTipForm.cs`, is WinForms). Expect to bridge between WPF and WinForms when touching options-related UI.
 
 ### Localization
-`Resources_String*.resx`/`.cs` — one resx per built-in language (`de_DE`, `es_ES`, `fr_FR`, `pt_BR`, `ru_RU`, `tr_TR`, plus `zh_CN` handled separately via `Resource_String_zh_CN.*`). `I18N\` and `Multilang\` hold additional translation tooling/data. `Options13_Language.xaml` is the in-app language picker.
+`Resources_String*.resx`/`.cs` — one resx per built-in language (`de_DE`, `es_ES`, `fr_FR`, `pt_BR`, `ru_RU`, `tr_TR`, plus `zh_CN` handled separately via `Resource_String_zh_CN.*`). `Translations\` (repo root) holds source translation files: `.txt` resgen input for the built-in `.resx` resources (via an old `resgen.bat`, hardcoded to an obsolete 2010-era path — not part of the current build) and `.xml` runtime-loadable language packs matching `Options13_Language.xaml`'s Import/Export Language feature. `QTTabBar\Multilang\` is unrelated — COM interop for `IMultiLanguage`/charset conversion, not translation content.
 
 ## Working conventions
 
