@@ -150,7 +150,7 @@ namespace QTTabBarLib {
                 }
                 SingleClickMode = flag1;
                 ShowInfoTip = flag2;*/
-                InNightMode = true; // getNightMode();
+                InNightMode = getNightMode();
             // }
             // catch (Exception ex)
             // {

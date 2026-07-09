@@ -166,7 +166,8 @@ namespace QTTabBarLib {
                 // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
                 PInvoke.SetProcessDPIAware();
                 InitializeComponent();
-                
+                QTUtility2.ApplyOptionsDialogTheme(Resources);
+
                 // this.LoadViewFromUri("/QTTabBar;component/optionsdialog/optionsdialog.xaml");
                 // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
 
@@ -752,6 +753,12 @@ namespace QTTabBarLib {
     /// Contains a few things common to more than one page.
     /// </summary>
     internal abstract class OptionsDialogTab : UserControl {
+        protected OptionsDialogTab() {
+            // Deferred to Loaded: this constructor runs before the derived class's own
+            // InitializeComponent(), which is what actually populates Resources.
+            Loaded += (sender, args) => QTUtility2.ApplyOptionsDialogTheme(Resources);
+        }
+
         public static readonly DependencyProperty WorkingConfigProperty =
                 DependencyProperty.Register("WorkingConfig", typeof(Config), typeof(OptionsDialogTab),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));

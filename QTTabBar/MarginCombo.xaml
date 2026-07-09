@@ -29,8 +29,8 @@
     xmlns:qt="clr-namespace:QTTabBarLib">
     <Grid MinHeight="23">
         <ToggleButton x:Name="toggleButton"
-            Background="#FF2B2B2B"
-            BorderBrush="#FF8C8C8C"
+            Background="{DynamicResource ThemeFieldBrush}"
+            BorderBrush="{DynamicResource ThemeBorderBrush}"
             BorderThickness="1">
             <ToggleButton.Template>
                 <ControlTemplate TargetType="ToggleButton">
@@ -43,7 +43,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="20"/>
                             </Grid.ColumnDefinitions>
-                            <Path Grid.Column="1" Data="M0,0 L4,4 L8,0 Z" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Path Grid.Column="1" Data="M0,0 L4,4 L8,0 Z" Fill="{DynamicResource ThemeForegroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -51,7 +51,7 @@
         </ToggleButton>
         <TextBlock x:Name="txtSummary"
             IsHitTestVisible="False"
-            Foreground="White"
+            Foreground="{DynamicResource ThemeForegroundBrush}"
             Margin="4,0,20,0"
             VerticalAlignment="Center"
             HorizontalAlignment="Left"/>
@@ -62,7 +62,7 @@
             StaysOpen="False"
             AllowsTransparency="True"
             Focusable="False">
-            <Border Background="#FF2B2B2B" BorderBrush="#FF8C8C8C" BorderThickness="1">
+            <Border Background="{DynamicResource ThemeFieldBrush}" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1">
                 <ItemsControl x:Name="itemsControl">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -75,7 +75,7 @@
                                 <Grid Width="75">
                                     <Label
                                         Content="{qt:Resx Key=MarginDropDown}"
-                                        Foreground="White"
+                                        Foreground="{DynamicResource ThemeForegroundBrush}"
                                         Padding="0"
                                         Margin="{Binding Path=LabelMargin}"
                                         VerticalAlignment="Center">
@@ -87,9 +87,9 @@
                                     </Label>
                                 </Grid>
                                 <TextBox
-                                    Background="#FF3C3C3C"
-                                    Foreground="White"
-                                    BorderBrush="#FF8C8C8C"
+                                    Background="{DynamicResource ThemeFieldBrush}"
+                                    Foreground="{DynamicResource ThemeForegroundBrush}"
+                                    BorderBrush="{DynamicResource ThemeBorderBrush}"
                                     PreviewTextInput="txtLTRB_PreviewTextInput"
                                     TextChanged="txtLTRB_TextChanged"
                                     Text="{Binding Path=TextBoxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

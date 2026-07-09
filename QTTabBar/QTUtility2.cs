@@ -232,8 +232,29 @@ namespace QTTabBarLib {
         // being light, regardless of the Windows theme (WinForms/WPF don't do this
         // on their own).
         public static void SetDarkTitleBar(IntPtr hwnd) {
-            int useDark = QTUtility.InNightMode ? 1 : 0;
+            int useDark = QTUtility.getNightMode() ? 1 : 0;
             PInvoke.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref useDark, sizeof(int));
+        }
+
+        // OptionsDialogResources.xaml hardcodes a dark palette; every Options page merges it via
+        // Source="..." rather than instantiating a class, so a code-behind on that dictionary
+        // never runs. This overwrites the same keys with the light palette instead, directly on
+        // the caller's own Resources (which DynamicResource lookups find before the merged dark
+        // dictionary further down the resource-lookup chain). No-op in dark mode.
+        public static void ApplyOptionsDialogTheme(System.Windows.ResourceDictionary resources) {
+            if (QTUtility.getNightMode()) return;
+            resources["ThemeBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources["ThemeFieldBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources["ThemeBorderBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources["ThemeForegroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources["ThemeSelectionBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources["SectionHeaderBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xF2, 0xF2, 0xF2));
+            resources[System.Windows.SystemColors.ControlTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.WindowTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.WindowBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources[System.Windows.SystemColors.HighlightBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources[System.Windows.SystemColors.HighlightTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.ControlBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
         }
 
         /**

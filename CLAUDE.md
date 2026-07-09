@@ -49,7 +49,7 @@ Deep Explorer integration (subclassing list views, tracking navigation, injectin
 - `QTTabBar\Interop\` — P/Invoke signatures, private shell COM interfaces (`IShellBrowser`, `IFolderView2`, `ITravelLogEntry`, etc.), Win32 structs.
 - `QTTabBar\Common\` — a large embedded copy of the Windows API Code Pack shell library (`ShellObject`, `KnownFolders`, property system, thumbnails) — treat as vendored, not first-party.
 - `QTHookLib` (C++, `vcxproj`) + `MinHook` (C++, vendored inline-hooking library) — a native DLL injected into Explorer to hook window procedures Explorer doesn't expose any other way. `HookLibManager.cs` (`QTTabBar\HookLibManager.cs`) is the managed side: it loads the native hook DLL, registers C-callable delegates (`HookLibCallback`, `NewWindowCallback`) as callbacks, and communicates hook results back across the native/managed boundary.
-- `Register` and `InstallerHelper` (C++, `vcxproj`) — native helpers invoked by the WiX installer for COM registration/custom actions, not part of the runtime app.
+- `InstallerHelper` (C++, `vcxproj`) — native custom actions invoked by the WiX installer for COM registration, not part of the runtime app.
 
 When editing anything under `Interop\`/`Common\`/`QTHookLib`, assume the target APIs are undocumented and version-sensitive across Windows releases — test on the actual Explorer shell, not just compile-clean.
 
@@ -60,7 +60,7 @@ When editing anything under `Interop\`/`Common\`/`QTHookLib`, assume the target 
 User settings persist to the registry (`RegistryUtil.cs`, `StaticReg.cs`, `Config.cs`). The options UI is WPF (`QTTabBar\OptionsDialog\Options0N_*.xaml[.cs]`, one file pair per settings tab: Window, Tabs, Tweaks, Tooltips, General, Appearance, Mouse, Keys, Groups, Apps, ButtonBar, Plugins, Language, About) hosted from a WinForms-based host app (most of the rest of the UI, e.g. `QTabControl.cs`, `Toolbar.cs`, `SubDirTipForm.cs`, is WinForms). Expect to bridge between WPF and WinForms when touching options-related UI.
 
 ### Localization
-`Resources_String*.resx`/`.cs` — one resx per built-in language (`de_DE`, `es_ES`, `fr_FR`, `pt_BR`, `ru_RU`, `tr_TR`, plus `zh_CN` handled separately via `Resource_String_zh_CN.*`). `Translations\` (repo root) holds source translation files: `.txt` resgen input for the built-in `.resx` resources (via an old `resgen.bat`, hardcoded to an obsolete 2010-era path — not part of the current build) and `.xml` runtime-loadable language packs matching `Options13_Language.xaml`'s Import/Export Language feature. `QTTabBar\Multilang\` is unrelated — COM interop for `IMultiLanguage`/charset conversion, not translation content.
+`Resources_String*.resx`/`.cs` — one resx per built-in language (`de_DE`, `es_ES`, `fr_FR`, `pt_BR`, `ru_RU`, `tr_TR`, plus `zh_CN` handled separately via `Resource_String_zh_CN.*`). `Translations\` (repo root) holds `.xml` runtime-loadable language packs matching `Options13_Language.xaml`'s Import/Export Language feature. `QTTabBar\Multilang\` is unrelated — COM interop for `IMultiLanguage`/charset conversion, not translation content.
 
 ## Working conventions
 
