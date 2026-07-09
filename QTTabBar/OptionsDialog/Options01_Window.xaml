@@ -245,5 +245,9 @@
 				Content="Capture Selection(WeChat/QQ/DingDing)"
 				IsChecked="{Binding Path=CaptureWeChatSelection}"
 				Style="{StaticResource CheckStyle}"/>
+			<CheckBox x:Name="ctxAutoEnableExperimental"
+				Content="Enable QTTabBar (experimental) - attaches to every new Explorer window automatically"
+				IsChecked="{Binding Path=AutoEnableExperimental}"
+				Style="{StaticResource CheckStyle}"/>
     </StackPanel>
 </qt:OptionsDialogTab>

@@ -90,12 +90,6 @@ namespace QTTabBarLib {
 
         private static void AttachToWindow(IntPtr hwnd) {
             try {
-                // Attaching twice on the same (thread-affine) window creates a second
-                // overlapping QTTabBarClass instance and corrupts drag/drop handoff.
-                // A real deskband is only ever instantiated once per window by
-                // Explorer, so mirror that here.
-                if(InstanceManager.GetThreadTabBar() != null) return;
-
                 // pici.hwnd is usually a child window (e.g. the folder view), not the
                 // top-level frame HWND that IWebBrowser2.HWND reports. Resolve to the
                 // root so the match below actually finds the window.
@@ -124,6 +118,24 @@ namespace QTTabBarLib {
                     QTUtility2.flog("ContextMenuOptions.AttachToWindow: no matching IWebBrowser2 found");
                     return;
                 }
+                AttachToWindow(webBrowser);
+            }
+            catch(Exception ex) {
+                QTUtility2.MakeErrorLog(ex, "ContextMenuOptions.AttachToWindow");
+            }
+        }
+
+        // Shared by the context-menu path above (resolves an IWebBrowser2 from an hwnd first)
+        // and AutoLoader (already has the IWebBrowser2 for its own window as the BHO site).
+        // Must be called on the target window's own UI thread - AutoLoader.SetSite and
+        // InvokeCommand both satisfy this since Explorer invokes them there directly.
+        internal static void AttachToWindow(IWebBrowser2 webBrowser) {
+            try {
+                // Attaching twice on the same (thread-affine) window creates a second
+                // overlapping QTTabBarClass instance and corrupts drag/drop handoff.
+                // A real deskband is only ever instantiated once per window by
+                // Explorer, so mirror that here.
+                if(InstanceManager.GetThreadTabBar() != null) return;
 
                 QTTabBarClass tabBar = new QTTabBarClass();
                 tabBar.SetSite(new ExplorerSiteAdapter(webBrowser));

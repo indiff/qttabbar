@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BandObjectLib;
 using Microsoft.Win32;
+using QTTabBarLib.Interop;
 using SHDocVw;
 
 namespace QTTabBarLib {
@@ -70,6 +71,33 @@ namespace QTTabBarLib {
                 QTUtility2.log("QTTabBar AutoLoader SetSite ActivateIt ");
                 // QTUtility2.flog("QTTabBar AutoLoader SetSite ActivateIt ");
                 ActivateIt();
+
+                // Normally the toolbar band triggers this on load. Without a band (e.g.
+                // Explorer never hosts the toolbar), InstanceManager/Config/etc. are
+                // never set up, so force it before checking the setting below.
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(QTUtility).TypeHandle);
+                if (Config.Window.AutoEnableExperimental) {
+                    // SetSite fires far earlier in the window's life than the existing
+                    // right-click "Enable QTTabBar" path ever did (that only ever ran on an
+                    // already-open, already-visible window). Attaching here immediately once
+                    // took down Explorer's ability to open further windows at all. Instead,
+                    // poll (on this same thread's own message loop, via a WinForms Timer, so
+                    // there's no cross-thread risk) until the window is actually visible
+                    // before attaching, and give up quietly after a few tries rather than
+                    // retrying forever if something's wrong.
+                    IWebBrowser2 wb = explorer;
+                    ActionDelayer.Add(() => {
+                        try {
+                            IntPtr hwnd = (IntPtr)wb.HWND;
+                            if (hwnd == IntPtr.Zero || !PInvoke.IsWindowVisible(hwnd)) return false;
+                            ContextMenuOptions.AttachToWindow(wb);
+                        }
+                        catch {
+                            // Fall through - treat as "done trying", not "keep retrying".
+                        }
+                        return true;
+                    }, 500, 500, 10);
+                }
             }
 
             return 0;

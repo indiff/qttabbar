@@ -257,6 +257,27 @@ namespace QTTabBarLib {
             resources[System.Windows.SystemColors.ControlBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
         }
 
+        // Some settings (e.g. Config.Window.AutoHookWindow) only take effect during process
+        // startup - QTUtility's static constructor and HookLibManager.Initialize() only ever
+        // run once per explorer.exe process - so changing them requires a full restart to pick
+        // up. Runs the kill+relaunch from a separate cmd.exe rather than doing it inline: this
+        // call is normally made from code running inside explorer.exe itself, which taskkill
+        // is about to terminate, so anything after the kill needs to survive in a process that
+        // isn't also about to die.
+        public static void RestartExplorer() {
+            try {
+                Process.Start(new ProcessStartInfo {
+                    FileName = "cmd.exe",
+                    Arguments = "/c taskkill /F /IM explorer.exe & start explorer.exe",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                });
+            }
+            catch (Exception ex) {
+                MakeErrorLog(ex, "RestartExplorer");
+            }
+        }
+
         /**
          * force log
          */
