@@ -23,15 +23,16 @@ using SHDocVw;
 
 namespace QTTabBarLib {
 
-    // Adds "QTTabBar Options" (and an experimental "Enable QTTabBar" toggle) to a
-    // folder background's right-click menu, so QTTabBar is reachable/usable even
-    // when Explorer never hosts the toolbar (e.g. newer Windows 11 builds with no
-    // rebar/toolband UI left).
+    // Adds "QTTabBar Options" to a folder background's right-click menu, so QTTabBar
+    // is reachable/usable even when Explorer never hosts the toolbar (e.g. newer
+    // Windows 11 builds with no rebar/toolband UI left). The per-window attach this
+    // used to also offer here ("Enable QTTabBar (experimental)") is now the
+    // Options > Window > "Enable QTTabBar on every Explorer window" toggle instead,
+    // which covers every window automatically via AutoLoader.
     [Guid("B3FFB6A3-3BC5-4D2F-8C49-6432D7174A3E"), ComVisible(true), ClassInterface(ClassInterfaceType.None)]
     public class ContextMenuOptions : IContextMenu, IShellExtInit {
         private const string KEYNAME = @"Directory\Background\shellex\ContextMenuHandlers\QTTabBar";
         private const uint CMD_OPTIONS = 0;
-        private const uint CMD_ENABLE = 1;
         private const uint MF_STRING = 0x00000000;
         private const uint MF_BYPOSITION = 0x00000400;
         private const uint CMF_DEFAULTONLY = 0x00000001;
@@ -59,11 +60,10 @@ namespace QTTabBarLib {
         public int QueryContextMenu(IntPtr hMenu, uint indexMenu, uint idCmdFirst, uint idCmdLast, uint uFlags) {
             if((uFlags & CMF_DEFAULTONLY) != 0) return 0;
             // Insert at indexMenu (like the other classic shell extensions) instead of
-            // appending, so the items land in the extensions cluster instead of at the
+            // appending, so the item lands in the extensions cluster instead of at the
             // very bottom of the menu.
             PInvoke.InsertMenu(hMenu, indexMenu, MF_BYPOSITION | MF_STRING, (IntPtr)(idCmdFirst + CMD_OPTIONS), "QTTabBar Options");
-            PInvoke.InsertMenu(hMenu, indexMenu + 1, MF_BYPOSITION | MF_STRING, (IntPtr)(idCmdFirst + CMD_ENABLE), "Enable QTTabBar (experimental)");
-            return 2; // Highest command offset used (CMD_ENABLE) + 1.
+            return 1; // Highest command offset used (CMD_OPTIONS) + 1.
         }
 
         public int InvokeCommand(ref CMINVOKECOMMANDINFO pici) {
@@ -76,59 +76,15 @@ namespace QTTabBarLib {
             if((uint)verb == CMD_OPTIONS) {
                 OptionsDialog.Open();
             }
-            else if((uint)verb == CMD_ENABLE) {
-                AttachToWindow(pici.hwnd);
-            }
             return 0;
         }
 
         // Manually drives the same SetSite/ShowDW lifecycle Explorer would normally
         // drive for a docked toolband, so QTTabBarClass attaches (mouse actions,
-        // hover previews, ...) to an already-open window without ever being shown
-        // in a rebar.
-        private const int GA_ROOT = 2;
-
-        private static void AttachToWindow(IntPtr hwnd) {
-            try {
-                // pici.hwnd is usually a child window (e.g. the folder view), not the
-                // top-level frame HWND that IWebBrowser2.HWND reports. Resolve to the
-                // root so the match below actually finds the window.
-                IntPtr rootHwnd = PInvoke.GetAncestor(hwnd, GA_ROOT);
-                if(rootHwnd == IntPtr.Zero) rootHwnd = hwnd;
-                QTUtility2.flog("ContextMenuOptions.AttachToWindow: hwnd=" + hwnd + " root=" + rootHwnd);
-
-                // Activate by CLSID and cast to the interface (rather than "new
-                // ShellWindows()") to avoid embedded-interop-type identity mismatches
-                // that can make the RCW uncastable to the generated coclass wrapper.
-                object shellWindowsObj = Activator.CreateInstance(
-                        Type.GetTypeFromCLSID(new Guid("9BA05972-F6A8-11CF-A442-00A0C90A8F39")));
-                IShellWindows shellWindows = (IShellWindows)shellWindowsObj;
-
-                IWebBrowser2 webBrowser = null;
-                foreach(object item in shellWindows) {
-                    IWebBrowser2 wb = item as IWebBrowser2;
-                    if(wb == null) continue;
-                    QTUtility2.flog("ContextMenuOptions.AttachToWindow: candidate hwnd=" + (IntPtr)wb.HWND);
-                    if((IntPtr)wb.HWND == rootHwnd) {
-                        webBrowser = wb;
-                        break;
-                    }
-                }
-                if(webBrowser == null) {
-                    QTUtility2.flog("ContextMenuOptions.AttachToWindow: no matching IWebBrowser2 found");
-                    return;
-                }
-                AttachToWindow(webBrowser);
-            }
-            catch(Exception ex) {
-                QTUtility2.MakeErrorLog(ex, "ContextMenuOptions.AttachToWindow");
-            }
-        }
-
-        // Shared by the context-menu path above (resolves an IWebBrowser2 from an hwnd first)
-        // and AutoLoader (already has the IWebBrowser2 for its own window as the BHO site).
-        // Must be called on the target window's own UI thread - AutoLoader.SetSite and
-        // InvokeCommand both satisfy this since Explorer invokes them there directly.
+        // hover previews, ...) to a window without ever being shown in a rebar.
+        // Called from AutoLoader, which already has the IWebBrowser2 for its own window
+        // as the BHO site. Must be called on the target window's own UI thread -
+        // AutoLoader.SetSite satisfies this since Explorer invokes it there directly.
         internal static void AttachToWindow(IWebBrowser2 webBrowser) {
             try {
                 // Attaching twice on the same (thread-affine) window creates a second
