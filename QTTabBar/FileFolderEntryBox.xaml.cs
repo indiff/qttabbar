@@ -203,7 +203,11 @@ namespace QTTabBarLib {
             }
 
             //txtLocation.FontStyle = b ? FontStyles.Italic : FontStyles.Normal;
-            txtLocation.Foreground = QTUtility.InNightMode
+            // QTUtility.InNightMode only gets refreshed when a real QTTabBarClass is attached
+            // and processes a theme-change message - with the toolbar/experimental attach off,
+            // it never updates and stays at its false default regardless of the real theme.
+            // getNightMode() reads the registry directly, so it's correct with no attachment.
+            txtLocation.Foreground = QTUtility.getNightMode()
                     ? (b ? Brushes.Gray : Brushes.White)
                     : (b ? Brushes.DarkGray : Brushes.Black);
             watermarkVisible = b;
