@@ -31,6 +31,7 @@
     <qt:Converter       Type="{x:Type qt:OptionsDialog+FontStringConverter          }" x:Key="FontStringConverter"          />
     <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+LogicalAndMultiConverter     }" x:Key="LogicalAndMultiConverter"     />
     <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+BoolJoinMultiConverter       }" x:Key="BoolJoinMultiConverter"       />
+    <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+LogicalAndBroadcastMultiConverter }" x:Key="LogicalAndBroadcastMultiConverter" />
 
     <!-- Dark palette (matching ShellColors' Windows10Dark/Windows11Dark). Every consumer merges
          this file via Source="..." rather than instantiating a class, so a code-behind on this

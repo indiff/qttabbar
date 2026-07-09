@@ -232,22 +232,29 @@
         <Label
 			Content="Others" 
 			Style="{StaticResource SectionHeaderStyle}"/>
-			<CheckBox x:Name="ctxAutoHookWindow"
-				Content="Auto Hook(You can close it, No bg image,Must restart Explorer)" 
-				IsChecked="{Binding Path=AutoHookWindow}"
-				Style="{StaticResource CheckStyle}"/>
         <CheckBox x:Name="ctxShowFailNavMsg"
-				Content="Show Fail Nav Message Box" 
+				Content="Show Fail Nav Message Box"
 				IsChecked="{Binding Path=ShowFailNavMsg}"
 				Style="{StaticResource CheckStyle}"/>
-			
+
 			<CheckBox x:Name="ctxCaptureWeChatSelection"
 				Content="Capture Selection(WeChat/QQ/DingDing)"
 				IsChecked="{Binding Path=CaptureWeChatSelection}"
 				Style="{StaticResource CheckStyle}"/>
+			<!-- One user-facing switch for what used to be two separate settings
+			     (AutoHookWindow / AutoEnableExperimental): they're different underlying
+			     attach mechanisms (native hook vs. per-window SetSite/ShowDW), but nothing
+			     needs them independently, and having both confused whether QTTabBar was
+			     really on or off. Must restart Explorer - see UpdateOptions(). -->
 			<CheckBox x:Name="ctxAutoEnableExperimental"
-				Content="Enable QTTabBar (experimental) - attaches to every new Explorer window automatically"
-				IsChecked="{Binding Path=AutoEnableExperimental}"
-				Style="{StaticResource CheckStyle}"/>
+				Content="Enable QTTabBar on every Explorer window (experimental, must restart Explorer)"
+				Style="{StaticResource CheckStyle}">
+				<CheckBox.IsChecked>
+					<MultiBinding Converter="{StaticResource LogicalAndBroadcastMultiConverter}" Mode="TwoWay">
+						<Binding Path="AutoHookWindow"/>
+						<Binding Path="AutoEnableExperimental"/>
+					</MultiBinding>
+				</CheckBox.IsChecked>
+			</CheckBox>
     </StackPanel>
 </qt:OptionsDialogTab>

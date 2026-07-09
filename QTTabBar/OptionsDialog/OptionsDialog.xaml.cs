@@ -656,6 +656,19 @@ namespace QTTabBarLib {
             }
         }
 
+        // Like LogicalAndMultiConverter, but for a single checkbox that should set several
+        // underlying bools together (rather than one) - broadcasts the new value to every
+        // bound target instead of just the first.
+        internal class LogicalAndBroadcastMultiConverter : IMultiValueConverter {
+            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+                return values.All(b => b is bool && (bool)b);
+            }
+
+            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
+                return targetTypes.Select(t => value).ToArray();
+            }
+        }
+
         // Converts between many booleans and a string by StringJoining them.
         internal class BoolJoinMultiConverter : IMultiValueConverter {
             public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
