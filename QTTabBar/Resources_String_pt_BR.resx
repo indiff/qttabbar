@@ -210,7 +210,7 @@ Por favor, especifique arquivo de imagem 432 x 40 px.;Resultados da Pesquisa em;
     <value>Altera o idioma.;Idioma principal;Usar idioma integrado:;Usar arquivo de idioma:;Arquivos de idiomas de plugin;Editor de arquivos de idioma;Mostrar Editor de Idiomas...;Original;Traduzido;Redefinir todas as entradas ao seu valor original?;Erro ao salvar o arquivo.;Chinês simplificado;Inglês;Alemão</value>
   </data>
   <data name="Options_Page14_About" xml:space="preserve">
-    <value>Exibe as informações de créditos e da versão.;Código original por {0};Desenvolvedor Chefe:;Outros Desenvolvedores:;Ícones e gráficos:;Se você achou o Qttabbar útil, por favor considere fazer uma pequena doação.;汉化修改：;Criado por: {0}</value>
+    <value>Exibe as informações de créditos e da versão.;Código original por {0};Desenvolvedor Chefe:;Outros Desenvolvedores:;Ícones e gráficos:;Se você achou o Qttabbar útil, por favor considere fazer uma pequena doação.;Localização chinesa por:;Criado por: {0}</value>
   </data>
   <data name="OptionsDialog" xml:space="preserve">
     <value>Opções do QTTabBar;Redefinir todas as opções nesta página para seus valores padrão?;Redefinir todas as opções para seus valores padrão? Isso não afetará grupos, aplicativos ou plugins.;Confirmações</value>

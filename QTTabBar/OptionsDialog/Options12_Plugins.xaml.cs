@@ -55,7 +55,7 @@ namespace QTTabBarLib {
             // Should we do anything here?
         }
         /// <summary>
-        /// 提交配置信息
+        /// Submit configuration info
         /// </summary>
         public override void CommitConfig() {
             try {
@@ -126,7 +126,7 @@ namespace QTTabBarLib {
             });
         }
         /// <summary>
-        ///  启用禁用插件
+        ///  Enable/disable plugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -147,7 +147,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///     删除插件
+        ///     Delete plugin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -203,7 +203,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// 启用所有插件
+        /// Enable all plugins
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -218,7 +218,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// 禁用所有插件
+        /// Disable all plugins
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

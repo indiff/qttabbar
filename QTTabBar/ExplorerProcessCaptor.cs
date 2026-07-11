@@ -8,7 +8,7 @@ namespace QTTabBarLib
 {
     // ABCDEF
     [ComVisible(true)]
-    //[Guid("ABCD0000-0000-0000-0000-0000000000EF")]  // 会导致很多功能被捕获
+    //[Guid("ABCD0000-0000-0000-0000-0000000000EF")]  // Would cause many features to get captured
     [Guid("ABCD0000-0000-1111-0000-0000000000EF")]
     class ExplorerProcessCaptor1 : IShellExecuteHook
     {
@@ -61,7 +61,7 @@ namespace QTTabBarLib
 
                     }
                     IntPtr ppidl;
-                    // 检索名为 ITEMIDLIST 结构的已知文件夹的路径。
+                    // Retrieve the path of a known folder, named as an ITEMIDLIST structure.
                     // if (si == null && PInvoke.SHGetKnownFolderIDList(COMGUIDS.FOLDERID_UsersLibraries, 0, IntPtr.Zero, out ppidl) == 0)
                 }
             }

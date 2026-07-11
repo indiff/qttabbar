@@ -66,7 +66,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * 当预览文件类型变动时候，自动更新当前使用的配置
+         * Automatically update the currently used config when the preview file type changes
          */
         public override void CommitConfig() {
             try

@@ -245,7 +245,7 @@ namespace QTTabBarLib {
                     info.AddValue("class", null);
                 }*/
 
-                // 导致某些方法都不执行，界面空白 https://www.yuque.com/indiff/lc0r1g/vu0lyb
+                // Causes certain methods to not execute, resulting in a blank UI. https://www.yuque.com/indiff/lc0r1g/vu0lyb
                 // info.AddValue("isSerializable", false);
                 // info.AddValue("method", Delegate.Method);
                 // info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
@@ -291,7 +291,7 @@ namespace QTTabBarLib {
                         info.AddValue(field.Name, new SerializeDelegate((Delegate)field.GetValue(obj)));
                     }
                     else if(!field.FieldType.IsSerializable) {
-                        // Debug.Assert(field.Name.Contains("<>")); // compiler-generated only  断言报错问题 by indiff
+                        // Debug.Assert(field.Name.Contains("<>")); // compiler-generated only  - assertion error issue, by indiff
                         info.AddValue(field.Name, new AnonymousClassWrapper(field.FieldType, field.GetValue(obj)));
                     }
                     else {

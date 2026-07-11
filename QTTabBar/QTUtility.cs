@@ -41,7 +41,7 @@ using System.Text;
 namespace QTTabBarLib {
     internal static class QTUtility {
         // 1.5.6.2  edit this
-        internal static readonly Version BetaRevision = new Version(1, 0); // ���汾 beta  �ΰ汾 alpha
+        internal static readonly Version BetaRevision = new Version(1, 0); // Major = beta revision, Minor = alpha revision
         internal static readonly Version CurrentVersion = new Version(1, 5, 6, 2);
         internal static readonly string BuildVerion = "build01";
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;

@@ -45,9 +45,9 @@ namespace BandObjectLib {
         /***
          *
          *
-         *    // ��ֱ��Դ��������	CATID_InfoBand
-            // ˮƽ��Դ��������	CATID_CommBand
-            // ����	CATID_DeskBand
+         *    // Vertical Explorer bar	CATID_InfoBand
+            // Horizontal Explorer bar	CATID_CommBand
+            // Desktop	CATID_DeskBand
          *
          *
          */
@@ -74,7 +74,7 @@ namespace BandObjectLib {
 
         internal static bool HostedNotByExplorer = (ProcessName != "explorer");
 
-        // �ж��Ƿ�������־��������Ϊfalse�� ��������. Ĭ���ǹرյģ��ڳ���ѡ�����������������
+        // Whether to enable logging output; setting to false disables it. Off by default; can be toggled in the app options.
         // public static bool ENABLE_LOGGER = true;
 
         // We must subclass the rebar in order to fix a certain bug in 
@@ -174,7 +174,7 @@ namespace BandObjectLib {
             }
             return true;
         }
-        // virtual �ؼ��������޸ķ��������ԡ����������¼���������ʹ���ǿ������������б���д��
+        // The virtual keyword modifies a method, property, indexer, or event declaration, allowing it to be overridden in a derived class.
         public virtual void CloseDW(uint dwReserved) {
             Util2.bandLog("CloseDW");
             fClosedDW = true;
@@ -215,105 +215,105 @@ namespace BandObjectLib {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="dwBandID">��������Ĵ��ı�ʶ���� �����Ҫ������������Ա�����ֵ��</param>
-        /// <param name="dwViewMode">���������ͼģʽ�� ����ֵ֮һ��</param>
+        /// <param name="dwBandID">The identifier of the band, assigned by the container. Used by the band when it needs to communicate with the container.</param>
+        /// <param name="dwViewMode">The band object's view mode. One of the following values.</param>
         /// DBIF_VIEWMODE_NORMAL
-        /// ��״��������ˮƽ������ʾ��
+        /// The band object is displayed horizontally.
         ///
         /// DBIF_VIEWMODE_VERTICAL
-        ///     ��״������ʾ�ڴ�ֱ���С�
+        ///     The band object is displayed in a vertical window.
         ///
         /// DBIF_VIEWMODE_FLOATING
-        ///     ��״�������ڸ���������ʾ��
+        ///     The band object is displayed in a floating window.
         ///
         /// DBIF_VIEWMODE_TRANSPARENT
-        ///     ��״��������͸��������ʾ��
-        /// <param name="pdbi">���������Ϣ</param>
+        ///     The band object is displayed transparently.
+        /// <param name="pdbi">Information about the band object</param>
         /// ptMinSize
         /// 
-        /// ���ͣ� POINTL
+        /// Type: POINTL
         /// 
-        /// ���մ��������С��С�� POINTL �ṹ�� ��С������ POINTL �ṹ�� x ��Ա�и�������С�߶��� y ��Ա�и�����
+        /// The band object's minimum size, as a POINTL structure. The minimum width is in the POINTL structure's x member; the minimum height is in the y member.
         /// 
         /// ptMaxSize
         /// 
-        /// ���ͣ� POINTL
+        /// Type: POINTL
         /// 
-        /// һ�� POINTL �ṹ�������մ����������С�� POINTL �ṹ�� y ��Ա���ṩ�����߶ȣ�x ��Ա�������ԡ� ���������������߶�û�����ƣ�Ӧʹ�� (LONG) -1��
+        /// A POINTL structure containing the band object's maximum size. The POINTL structure's y member gives the maximum height; the x member is ignored. If there is no limit on the maximum height, use (LONG) -1.
         /// 
         /// ptIntegral
         /// 
-        /// ���ͣ� POINTL
+        /// Type: POINTL
         /// 
-        /// һ�� POINTL �ṹ�������մ�С��������ֵ (����) �����е����˴�����Ĵ�С�� ��ֱ����ֵ�� POINTL �ṹ�� y ��Ա�� ������x ��Ա�������ԡ�
+        /// A POINTL structure containing the size, in pixels, by which the band is resized. The vertical value is in the POINTL structure's y member; the x member is ignored.
         /// 
-        /// dwModeFlags ��Ա������� DBIMF_VARIABLEHEIGHT ��־;���򣬽����� ptIntegral��
+        /// Used only if the dwModeFlags member contains the DBIMF_VARIABLEHEIGHT flag; otherwise, ptIntegral is ignored.
         /// 
         /// ptActual
         /// 
-        /// ���ͣ� POINTL
+        /// Type: POINTL
         /// 
-        /// ���մ�����������С�� POINTL �ṹ�� ��������� POINTL �ṹ�� x ��Ա�и���������߶��� y ��Ա�и����� ����������ʹ����Щֵ�����޷���֤���δ�СΪ�˴�С��
+        /// The band object's actual size, as a POINTL structure. The actual width is in the POINTL structure's x member; the actual height is in the y member. Even if the application uses these values, there's no guarantee the band will actually be this size.
         /// 
         /// wszTitle[256]
         /// 
-        /// ���ͣ� WCHAR[256]
+        /// Type: WCHAR[256]
         /// 
-        /// ���մ������ WCHAR ��������
+        /// The band object's title, as a WCHAR character array.
         /// 
         /// dwModeFlags
         /// 
-        /// ���ͣ�DWORD
+        /// Type: DWORD
         /// 
-        /// һ�� ֵ����ֵ����һ��ָ�� band ����Ĳ���ģʽ�ı�־�� ����һ������ֵ��
+        /// A value describing flags that specify the band object's mode of operation. Can be one or more values.
         /// 
         /// DBIMF_NORMAL
-        /// ��ʹ��Ĭ�����ԡ� ����ģʽ��־�޸Ĵ˱�־��
+        /// Use default properties. Combine with mode flags to modify this flag.
         /// 
         /// DBIMF_FIXED
-        /// Windows XP �����߰汾�� ������Ĵ�С��λ�ù̶��� ʹ�ô˱�־ʱ�������ڴ���������ʾ��С�����ֱ���
+        /// Windows XP or later. The band object's size and position are fixed. When using this flag, the display size and resolution of the band must be maintained.
         /// 
         /// DBIMF_FIXEDBMP
-        /// Windows XP �����߰汾�� band ����ʹ�ù̶�λͼ (.bmp) �ļ���Ϊ�䱳���� ��ע�⣬������������¶�֧�ֱ�������˼�ʹ�����˴˱�־��Ҳ�����޷�����λͼ��
+        /// Windows XP or later. The band object uses a fixed bitmap (.bmp) file as its background. Note that not all versions support backgrounds, so even with this flag the bitmap may not display.
         /// 
         /// DBIMF_VARIABLEHEIGHT
-        /// ���Ը��Ĵ�����ĸ߶ȡ� ptIntegral ��Ա���������������С�Ĳ���ֵ��
+        /// The band object's height can be changed. The ptIntegral member specifies the increment size value.
         /// 
         /// DBIMF_UNDELETEABLE
-        /// Windows XP �����߰汾�� �޷����ֶ�������ɾ�� band ����
+        /// Windows XP or later. The band object cannot be manually deleted by the user.
         /// 
         /// DBIMF_DEBOSSED
-        /// �������԰��ݵ������ʾ��
+        /// The band object should be displayed with an embossed appearance.
         /// 
         /// DBIMF_BKCOLOR
-        /// ʹ�� crBkgnd ��ָ���ı���ɫ��ʾ����
+        /// Display the band using the background color specified in crBkgnd.
         /// 
         /// DBIMF_USECHEVRON
-        /// Windows XP �����߰汾�� ����޷���ʾ (����������С�� ptActual�������ʾ V �Σ���ָʾ�и���Ŀ���ѡ� ���� V ��ʱ����ʾ��Щѡ�
+        /// Windows XP or later. If it cannot be displayed (because its size is smaller than ptActual), show a chevron to indicate there are more targets to choose from. Display these options when the chevron is clicked.
         /// 
         /// DBIMF_BREAK
-        /// Windows XP �����߰汾�� �ֶӶ�����ʾ�ڴ������е������С�
+        /// Windows XP or later. The band group displays on a new row within the container.
         /// 
         /// DBIMF_ADDTOFRONT
-        /// Windows XP �����߰汾�� band �������ֶ������еĵ�һ������
+        /// Windows XP or later. The band should be the first entry in the new band group.
         /// 
         /// DBIMF_TOPALIGN
-        /// Windows XP �����߰汾�� band ������ʾ���ֶ������Ķ������С�
+        /// Windows XP or later. The band should be displayed at the top of the new band group.
         /// 
         /// DBIMF_NOGRIPPER
-        /// Windows Vista �����߰汾�� ������ʾ��С�����ֱ����������û��ƶ������������Ĵ�С��
+        /// Windows Vista or later. Do not show the size-adjustment handle that lets users move or resize the band object.
         /// 
         /// DBIMF_ALWAYSGRIPPER
-        /// Windows Vista �����߰汾�� ʼ����ʾ�����û��ƶ��ֶӶ����������С�Ĵ�С�ֱ�����ʹ�ô�������������Ψһ��һ����
+        /// Windows Vista or later. Always show the size-adjustment handle that lets users move or resize the band group, even if this is the only band using this size.
         /// 
         /// DBIMF_NOMARGINS
-        /// Windows Vista �����߰汾�� ������Ӧ��ʾ�߾ࡣ
+        /// Windows Vista or later. The band should not show margins.
         /// 
         /// crBkgnd
         /// 
-        /// ���ͣ� COLORREF
+        /// Type: COLORREF
         /// 
-        /// ���մ��ı���ɫ�� COLORREF �ṹ�� dwModeFlags ��Ա������� DBIMF_BKCOLOR ��־;���򣬽����� crBkgnd��
+        /// The band object's background color, as a COLORREF structure. Used only if the dwModeFlags member contains the DBIMF_BKCOLOR flag; otherwise, crBkgnd is ignored.
         public virtual void GetBandInfo(uint dwBandID, uint dwViewMode, ref DESKBANDINFO pdbi) {
             this.bandID = (int) dwBandID;
             this.fVertical = dwViewMode == 1U;
@@ -412,7 +412,7 @@ namespace BandObjectLib {
         }
 
         /// <summary>
-        /// ֪ͨͣ�����ڶ����ܵı߿�ռ��Ѹ��ġ�Ϊ����Ӧ�˷�����IDockingWindow ʵ�ֱ������ SetBorderSpaceDW����ʹ����Ҫ�߿�ռ����Ҫ���ġ�
+        /// Notifies the docking window that the border space occupied by another band has changed. To respond to this method, the IDockingWindow implementation must call SetBorderSpaceDW even if its required border space doesn't need to change.
         /// </summary>
         /// <param name="prcBorder"></param>
         /// <param name="punkToolbarSite"></param>
@@ -610,7 +610,7 @@ namespace BandObjectLib {
         {
         }
 
-        /*#region �������� by indiff
+        /*#region Refresh feature, by indiff
         public  void RefreshRebarBand()
         {
             // REBARBANDINFO* lParam = stackalloc REBARBANDINFO[1];
@@ -729,12 +729,12 @@ namespace BandObjectLib {
                 using (StreamWriter writer = new StreamWriter(path, true))
                 {
                     writer.WriteLine(DateTime.Now.ToString());
-                    writer.WriteLine(".NET �汾: " + Environment.Version);
-                    writer.WriteLine("����ϵͳ�汾: " + Environment.OSVersion.Version);
-                    //writer.WriteLine("QT �汾: " + MakeVersionString());
+                    writer.WriteLine(".NET Version: " + Environment.Version);
+                    writer.WriteLine("OS Version: " + Environment.OSVersion.Version);
+                    //writer.WriteLine("QT Version: " + MakeVersionString());
                     if (!String.IsNullOrEmpty(optional))
                     {
-                        writer.WriteLine("������Ϣ: " + optional);
+                        writer.WriteLine("Additional Info: " + optional);
                     }
                     if (ex == null)
                     {

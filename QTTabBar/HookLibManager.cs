@@ -97,11 +97,11 @@ namespace QTTabBarLib {
                 foreach (ManagementObject mo in searcher.Get())
                 {
 
-                    sCPUSerialNumber = mo["Name"].ToString().ToLower().Trim();//操作系统名字
-                    //sCPUSerialNumber = mo["BootDevice"].ToString().Trim();//系统启动分区
-                    //sCPUSerialNumber = mo["NumberOfProcesses"].ToString().Trim();//当前运行的进程数
-                    //sCPUSerialNumber = mo["SerialNumber"].ToString().Trim();//操作系统序列号
-                    //sCPUSerialNumber = mo["OSLanguage"].ToString().Trim();//操作系统的语言
+                    sCPUSerialNumber = mo["Name"].ToString().ToLower().Trim();//OS name
+                    //sCPUSerialNumber = mo["BootDevice"].ToString().Trim();//boot partition
+                    //sCPUSerialNumber = mo["NumberOfProcesses"].ToString().Trim();//current running process count
+                    //sCPUSerialNumber = mo["SerialNumber"].ToString().Trim();//OS serial number
+                    //sCPUSerialNumber = mo["OSLanguage"].ToString().Trim();//OS language
                     //sCPUSerialNumber = mo["Manufacturer"].ToString().Trim();//
                 }
 
@@ -140,7 +140,7 @@ namespace QTTabBarLib {
                 return;
             }
 
-            if (!File.Exists(Path.Combine(installPath, filename))) // 如果文件不存在则设置为不自动加载
+            if (!File.Exists(Path.Combine(installPath, filename))) // If the file doesn't exist, disable auto-load
             {
                 QTUtility2.flog("not exists file , close auto hook " + Path.Combine(installPath, filename));
                 Config.Window.AutoHookWindow = false;

@@ -26,7 +26,7 @@ namespace QTTabBarLib {
 
         public override void InitializeConfig() {
             try {
-                // 设置默认的title 和版本
+                // Set the default title and version
                 string str = QTUtility.CurrentVersion.ToString();
                 if (QTUtility.BetaRevision.Major > 0)
                 {
@@ -66,7 +66,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * 中文方式，则进入微信
+         * If Chinese locale, go to WeChat instead
          */
         private void imgPaypal_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             var uiCulture = System.Globalization.CultureInfo.InstalledUICulture.Name;

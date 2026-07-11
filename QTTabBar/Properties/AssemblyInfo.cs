@@ -25,7 +25,7 @@ using System.Resources;
 //
 [assembly: AssemblyTitle("QTTabBar")]
 //[assembly: AssemblyDescription("Main QTTabBar Assembly")]
-[assembly: AssemblyDescription("��QTTabBar����")]
+[assembly: AssemblyDescription("QTTabBar Plugin")]
 [assembly: AssemblyConfiguration("")]
 // [assembly: AssemblyCompany("Quizo and Paul Accisano")]
 [assembly: AssemblyCompany("indiff")]

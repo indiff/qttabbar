@@ -89,7 +89,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SetHome", "SetHome\SetHome.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QTTabBar.Tests", "QTTabBar.Tests\QTTabBar.Tests.csproj", "{F3A9C2D1-7B4E-4F8A-B3C6-E91D5A2F8C04}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "文档", "文档", "{D2560F19-A854-471A-ADD7-D34697734767}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{D2560F19-A854-471A-ADD7-D34697734767}"
 	ProjectSection(SolutionItems) = preProject
 		url.txt = url.txt
 	EndProjectSection

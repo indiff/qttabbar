@@ -9,7 +9,7 @@ namespace QuizoPlugins
     {
         #region ChineseCalendarException
         /// <summary>
-        /// 中国日历异常处理
+        /// Chinese calendar exception handling
         /// </summary>
         public class ChineseCalendarException : System.Exception
         {
@@ -22,12 +22,12 @@ namespace QuizoPlugins
 
 
         #endregion
-        #region 内部结构
+        #region Internal structures
         private struct SolarHolidayStruct
         {
             public int Month;
             public int Day;
-            public int Recess; //假期长度
+            public int Recess; //Holiday length
             public string HolidayName;
             public SolarHolidayStruct(int month, int day, int recess, string name)
             {
@@ -81,7 +81,7 @@ namespace QuizoPlugins
 
 
 
-        #region 内部变量
+        #region Internal variables
         private DateTime _date;
 
 
@@ -89,35 +89,35 @@ namespace QuizoPlugins
         private int _cYear;
         private int _cMonth;
         private int _cDay;
-        private bool _cIsLeapMonth; //当月是否闰月
-        private bool _cIsLeapYear; //当年是否有闰月
+        private bool _cIsLeapMonth; //whether the current month is a leap month
+        private bool _cIsLeapYear; //whether the current year has a leap month
         #endregion
 
 
 
-        #region 基础数据
-        #region 基本常量
+        #region Base data
+        #region Basic constants
         private const int MinYear = 1900;
         private const int MaxYear = 2050;
         private static DateTime MinDay = new DateTime(1900, 1, 30);
         private static DateTime MaxDay = new DateTime(2049, 12, 31);
-        private const int GanZhiStartYear = 1864; //干支计算起始年
-        private static DateTime GanZhiStartDay = new DateTime(1899, 12, 22);//起始日
+        private const int GanZhiStartYear = 1864; //Ganzhi calculation start year
+        private static DateTime GanZhiStartDay = new DateTime(1899, 12, 22);//start day
         private const string HZNum = "○一二三四五六七八九";
-        private const int AnimalStartYear = 1900; //1900年为鼠年
+        private const int AnimalStartYear = 1900; //1900 is the Year of the Rat
         #endregion
 
 
 
-        #region 阴历数据
+        #region Lunar calendar data
         /// <summary>
-        /// 来源于网上的农历数据
+        /// Lunar calendar data sourced from the internet
         /// </summary>
         /// <remarks>
-        /// 数据结构如下，共使用17位数据
-        /// 第17位：表示闰月天数，0表示29天   1表示30天
-        /// 第16位-第5位（共12位）表示12个月，其中第16位表示第一月，如果该月为30天则为1，29天为0
-        /// 第4位-第1位（共4位）表示闰月是哪个月，如果当年没有闰月，则置0
+        /// Data structure as follows, using 17 digits total
+        /// Digit 17: leap month day count, 0 = 29 days, 1 = 30 days
+        /// Digits 16-5 (12 digits) represent the 12 months; digit 16 is month 1 - 1 if that month has 30 days, 0 if 29
+        /// Digits 4-1 (4 digits) indicate which month is the leap month; 0 if the year has no leap month
         ///</remarks>
         private static int[] LunarDateArray = new int[]{
                 0x04BD8,0x04AE0,0x0A570,0x054D5,0x0D260,0x0D950,0x16554,0x056A0,0x09AD0,0x055D2,
@@ -144,7 +144,7 @@ namespace QuizoPlugins
 
 
 
-        #region 星座名称
+        #region Zodiac (Western) sign names
         private static string[] _constellationName =
                     {
                     "白羊座", "金牛座", "双子座",
@@ -156,7 +156,7 @@ namespace QuizoPlugins
 
 
 
-        #region 二十四节气
+        #region The 24 solar terms
         private static string[] _lunarHolidayName =
                     {
                     "小寒", "大寒", "立春", "雨水",
@@ -170,14 +170,14 @@ namespace QuizoPlugins
 
 
 
-        #region 节气数据
+        #region Solar term data
         private static string[] SolarTerm = new string[] { "小寒", "大寒", "立春", "雨水", "惊蛰", "春分", "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露", "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至" };
         private static int[] sTermInfo = new int[] { 0, 21208, 42467, 63836, 85337, 107014, 128867, 150921, 173149, 195551, 218072, 240693, 263343, 285989, 308563, 331033, 353350, 375494, 397447, 419210, 440795, 462224, 483532, 504758 };
         #endregion
 
 
 
-        #region 农历相关数据
+        #region Lunar-calendar-related data
         private static string ganStr = "甲乙丙丁戊己庚辛壬癸";
         private static string zhiStr = "子丑寅卯辰巳午未申酉戌亥";
         private static string animalStr = "鼠牛虎兔龙蛇马羊猴鸡狗猪";
@@ -197,7 +197,7 @@ namespace QuizoPlugins
 
 
 
-        #region 按公历计算的节日
+        #region Holidays calculated by the solar calendar
         private static SolarHolidayStruct[] sHolidayInfo = new SolarHolidayStruct[]{
             new SolarHolidayStruct(1, 1, 1, "元旦"),
             new SolarHolidayStruct(2, 2, 0, "世界湿地日"),
@@ -256,7 +256,7 @@ namespace QuizoPlugins
 
 
 
-        #region 按农历计算的节日
+        #region Holidays calculated by the lunar calendar
         private static LunarHolidayStruct[] lHolidayInfo = new LunarHolidayStruct[]{
             new LunarHolidayStruct(1, 1, 1, "春节"),
             new LunarHolidayStruct(1, 15, 0, "元宵节"),
@@ -274,7 +274,7 @@ namespace QuizoPlugins
 
 
 
-        #region 按某月第几个星期几
+        #region Holidays by nth weekday of month
         private static WeekHolidayStruct[] wHolidayInfo = new WeekHolidayStruct[]{
             new WeekHolidayStruct(5, 2, 1, "母亲节"),
             new WeekHolidayStruct(5, 3, 1, "全国助残日"),
@@ -293,10 +293,10 @@ namespace QuizoPlugins
 
 
 
-        #region 构造函数
-        #region ChinaCalendar <公历日期初始化>
+        #region Constructors
+        #region ChinaCalendar <Solar date initialization>
         /// <summary>
-        /// 用一个标准的公历日期来初使化
+        /// Initialize using a standard solar (Gregorian) date
         /// </summary>
         /// <param name="dt"></param>
         public ChineseCalendar(DateTime dt)
@@ -316,20 +316,20 @@ namespace QuizoPlugins
 
 
 
-            //农历日期计算部分
+            //Lunar date calculation section
             leap = 0;
             temp = 0;
 
 
 
-            TimeSpan ts = _date - ChineseCalendar.MinDay;//计算两天的基本差距
+            TimeSpan ts = _date - ChineseCalendar.MinDay;//Calculate the basic difference between the two dates
             offset = ts.Days;
 
 
 
             for (i = MinYear; i <= MaxYear; i++)
             {
-                temp = GetChineseYearDays(i);  //求当年农历年天数
+                temp = GetChineseYearDays(i);  //Get the number of days in that lunar year
                 if (offset - temp < 1)
                     break;
                 else
@@ -341,8 +341,8 @@ namespace QuizoPlugins
 
 
 
-            leap = GetChineseLeapMonth(_cYear);//计算该年闰哪个月
-            //设定当年是否有闰月
+            leap = GetChineseLeapMonth(_cYear);//Calculate which month is the leap month that year
+            //Set whether the year has a leap month
             if (leap > 0)
             {
                 _cIsLeapYear = true;
@@ -357,17 +357,17 @@ namespace QuizoPlugins
             _cIsLeapMonth = false;
             for (i = 1; i <= 12; i++)
             {
-                //闰月
+                //Leap month
                 if ((leap > 0) && (i == leap + 1) && (_cIsLeapMonth == false))
                 {
                     _cIsLeapMonth = true;
                     i = i - 1;
-                    temp = GetChineseLeapMonthDays(_cYear); //计算闰月天数
+                    temp = GetChineseLeapMonthDays(_cYear); //Calculate the leap month's day count
                 }
                 else
                 {
                     _cIsLeapMonth = false;
-                    temp = GetChineseMonthDays(_cYear, i);//计算非闰月天数
+                    temp = GetChineseMonthDays(_cYear, i);//Calculate a non-leap month's day count
                 }
 
 
@@ -386,14 +386,14 @@ namespace QuizoPlugins
 
 
 
-        #region ChinaCalendar <农历日期初始化>
+        #region ChinaCalendar <Lunar date initialization>
         /// <summary>
-        /// 用农历的日期来初使化
+        /// Initialize using a lunar date
         /// </summary>
-        /// <param name="cy">农历年</param>
-        /// <param name="cm">农历月</param>
-        /// <param name="cd">农历日</param>
-        /// <param name="LeapFlag">闰月标志</param>
+        /// <param name="cy">Lunar year</param>
+        /// <param name="cm">Lunar month</param>
+        /// <param name="cd">Lunar day</param>
+        /// <param name="LeapFlag">Leap month flag</param>
         public ChineseCalendar(int cy, int cm, int cd, bool leapMonthFlag)
         {
             int i, leap, Temp, offset;
@@ -416,13 +416,13 @@ namespace QuizoPlugins
 
             for (i = MinYear; i < cy; i++)
             {
-                Temp = GetChineseYearDays(i); //求当年农历年天数
+                Temp = GetChineseYearDays(i); //Get the number of days in that lunar year
                 offset = offset + Temp;
             }
 
 
 
-            leap = GetChineseLeapMonth(cy);// 计算该年应该闰哪个月
+            leap = GetChineseLeapMonth(cy);// Calculate which month should be the leap month that year
             if (leap != 0)
             {
                 this._cIsLeapYear = true;
@@ -436,66 +436,66 @@ namespace QuizoPlugins
 
             if (cm != leap)
             {
-                _cIsLeapMonth = false;  //当前日期并非闰月
+                _cIsLeapMonth = false;  //The current date isn't a leap month
             }
             else
             {
-                _cIsLeapMonth = leapMonthFlag;  //使用用户输入的是否闰月月份
+                _cIsLeapMonth = leapMonthFlag;  //Use the user-provided leap-month flag
             }
 
 
 
 
-            if ((_cIsLeapYear == false) || //当年没有闰月
-                 (cm < leap)) //计算月份小于闰月    
+            if ((_cIsLeapYear == false) || //The year has no leap month
+                 (cm < leap)) //The month being calculated is before the leap month
             {
                 #region ...
                 for (i = 1; i < cm; i++)
                 {
-                    Temp = GetChineseMonthDays(cy, i);//计算非闰月天数
+                    Temp = GetChineseMonthDays(cy, i);//Calculate a non-leap month's day count
                     offset = offset + Temp;
                 }
 
 
 
-                //检查日期是否大于最大天
+                //Check whether the date exceeds the maximum day
                 if (cd > GetChineseMonthDays(cy, cm))
                 {
-                    //throw new ChineseCalendarException("不合法的农历日期");
+                    //throw new ChineseCalendarException("Invalid lunar date");
                 }
-                offset = offset + cd; //加上当月的天数
+                offset = offset + cd; //Add the current month's day count
                 #endregion
             }
-            else   //是闰年，且计算月份大于或等于闰月
+            else   //It's a leap year, and the month being calculated is >= the leap month
             {
                 #region ...
                 for (i = 1; i < cm; i++)
                 {
-                    Temp = GetChineseMonthDays(cy, i); //计算非闰月天数
+                    Temp = GetChineseMonthDays(cy, i); //Calculate a non-leap month's day count
                     offset = offset + Temp;
                 }
 
 
 
-                if (cm > leap) //计算月大于闰月
+                if (cm > leap) //The month is after the leap month
                 {
-                    Temp = GetChineseLeapMonthDays(cy);   //计算闰月天数
-                    offset = offset + Temp;               //加上闰月天数
+                    Temp = GetChineseLeapMonthDays(cy);   //Calculate the leap month's day count
+                    offset = offset + Temp;               //Add the leap month's day count
 
 
 
                     if (cd > GetChineseMonthDays(cy, cm))
                     {
-                        throw new ChineseCalendarException("不合法的农历日期");
+                        throw new ChineseCalendarException("Invalid lunar date");
                     }
                     offset = offset + cd;
                 }
-                else  //计算月等于闰月
+                else  //The month being calculated equals the leap month
                 {
-                    //如果需要计算的是闰月，则应首先加上与闰月对应的普通月的天数
-                    if (this._cIsLeapMonth == true) //计算月为闰月
+                    //If calculating the leap month itself, first add the day count of its corresponding regular month
+                    if (this._cIsLeapMonth == true) //The month being calculated is the leap month
                     {
-                        Temp = GetChineseMonthDays(cy, cm); //计算非闰月天数
+                        Temp = GetChineseMonthDays(cy, cm); //Calculate a non-leap month's day count
                         offset = offset + Temp;
                     }
 
@@ -503,7 +503,7 @@ namespace QuizoPlugins
 
                     if (cd > GetChineseLeapMonthDays(cy))
                     {
-                        throw new ChineseCalendarException("不合法的农历日期");
+                        throw new ChineseCalendarException("Invalid lunar date");
                     }
                     offset = offset + cd;
                 }
@@ -520,12 +520,12 @@ namespace QuizoPlugins
 
 
 
-        #region 私有函数
+        #region Private functions
 
 
 
         #region GetChineseMonthDays
-        //传回农历 y年m月的总天数
+        //Returns the total days in lunar year y, month m
         private int GetChineseMonthDays(int year, int month)
         {
             if (BitTest32((LunarDateArray[year - MinYear] & 0x0000FFFF), (16 - month)))
@@ -542,7 +542,7 @@ namespace QuizoPlugins
 
 
         #region GetChineseLeapMonth
-        //传回农历 y年闰哪个月 1-12 , 没闰传回 0
+        //Returns which month (1-12) is the leap month in lunar year y; 0 if none
         private int GetChineseLeapMonth(int year)
         {
 
@@ -558,7 +558,7 @@ namespace QuizoPlugins
 
 
         #region GetChineseLeapMonthDays
-        //传回农历 y年闰月的天数
+        //Returns the day count of the leap month in lunar year y
         private int GetChineseLeapMonthDays(int year)
         {
             if (GetChineseLeapMonth(year) != 0)
@@ -583,7 +583,7 @@ namespace QuizoPlugins
 
         #region GetChineseYearDays
         /// <summary>
-        /// 取农历年一年的天数
+        /// Get the total days in a lunar year
         /// </summary>
         /// <param name="year"></param>
         /// <returns></returns>
@@ -593,13 +593,13 @@ namespace QuizoPlugins
 
 
 
-            sumDay = 348; //29天 X 12个月
+            sumDay = 348; //29 days x 12 months
             i = 0x8000;
             info = LunarDateArray[year - MinYear] & 0x0FFFF;
 
 
 
-            //计算12个月中有多少天为30天
+            //Calculate how many of the 12 months have 30 days
             for (int m = 0; m < 12; m++)
             {
                 f = info & i;
@@ -617,14 +617,14 @@ namespace QuizoPlugins
 
         #region CheckDateLimit
         /// <summary>
-        /// 检查公历日期是否符合要求
+        /// Check whether the solar date meets requirements
         /// </summary>
         /// <param name="dt"></param>
         private void CheckDateLimit(DateTime dt)
         {
             if ((dt < MinDay) || (dt > MaxDay))
             {
-                throw new ChineseCalendarException("超出可转换的日期");
+                throw new ChineseCalendarException("Date out of convertible range");
             }
         }
         #endregion
@@ -633,7 +633,7 @@ namespace QuizoPlugins
 
         #region CheckChineseDateLimit
         /// <summary>
-        /// 检查农历日期是否合理
+        /// Check whether the lunar date is valid
         /// </summary>
         /// <param name="year"></param>
         /// <param name="month"></param>
@@ -643,23 +643,23 @@ namespace QuizoPlugins
         {
             if ((year < MinYear) || (year > MaxYear))
             {
-                throw new ChineseCalendarException("非法农历日期");
+                throw new ChineseCalendarException("Invalid lunar date");
             }
             if ((month < 1) || (month > 12))
             {
-                throw new ChineseCalendarException("非法农历日期");
+                throw new ChineseCalendarException("Invalid lunar date");
             }
-            if ((day < 1) || (day > 30)) //中国的月最多30天
+            if ((day < 1) || (day > 30)) //A Chinese calendar month has at most 30 days
             {
-                throw new ChineseCalendarException("非法农历日期");
+                throw new ChineseCalendarException("Invalid lunar date");
             }
 
 
 
-            int leap = GetChineseLeapMonth(year);// 计算该年应该闰哪个月
+            int leap = GetChineseLeapMonth(year);// Calculate which month should be the leap month that year
             if ((leapMonth == true) && (month != leap))
             {
-                throw new ChineseCalendarException("非法农历日期");
+                throw new ChineseCalendarException("Invalid lunar date");
             }
 
 
@@ -672,7 +672,7 @@ namespace QuizoPlugins
 
         #region ConvertNumToChineseNum
         /// <summary>
-        /// 将0-9转成汉字形式
+        /// Convert 0-9 into Chinese numeral form
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
@@ -711,7 +711,7 @@ namespace QuizoPlugins
 
         #region BitTest32
         /// <summary>
-        /// 测试某位是否为真
+        /// Test whether a given bit is true
         /// </summary>
         /// <param name="num"></param>
         /// <param name="bitpostion"></param>
@@ -742,7 +742,7 @@ namespace QuizoPlugins
         #endregion
         #region ConvertDayOfWeek
         /// <summary>
-        /// 将星期几转成数字表示
+        /// Convert a weekday into its numeric representation
         /// </summary>
         /// <param name="dayOfWeek"></param>
         /// <returns></returns>
@@ -774,7 +774,7 @@ namespace QuizoPlugins
 
         #region CompareWeekDayHoliday
         /// <summary>
-        /// 比较当天是不是指定的第周几
+        /// Compare whether the day is the specified nth weekday
         /// </summary>
         /// <param name="date"></param>
         /// <param name="month"></param>
@@ -786,13 +786,13 @@ namespace QuizoPlugins
         {
             bool ret = false;
 
-            if (date.Month == month) //月份相同
+            if (date.Month == month) //Same month
             {
-                if (ConvertDayOfWeek(date.DayOfWeek) == day) //星期几相同
+                if (ConvertDayOfWeek(date.DayOfWeek) == day) //Same weekday
                 {
-                    DateTime firstDay = new DateTime(date.Year, date.Month, 1);//生成当月第一天
+                    DateTime firstDay = new DateTime(date.Year, date.Month, 1);//Generate the first day of the month
                     int i = ConvertDayOfWeek(firstDay.DayOfWeek);
-                    int firWeekDays = 7 - ConvertDayOfWeek(firstDay.DayOfWeek) + 1; //计算第一周剩余天数
+                    int firWeekDays = 7 - ConvertDayOfWeek(firstDay.DayOfWeek) + 1; //Calculate the remaining days in the first week
 
                     if (i > day)
                     {
@@ -816,19 +816,19 @@ namespace QuizoPlugins
         #endregion
         #endregion
 
-        #region  属性
+        #region  Properties
 
-        #region 节日
+        #region Holidays
         #region ChineseCalendarHoliday
         /// <summary>
-        /// 计算中国农历节日
+        /// Calculate Chinese lunar calendar holidays
         /// </summary>
         public string ChineseCalendarHoliday
         {
             get
             {
                 string tempStr = "";
-                if (this._cIsLeapMonth == false) //闰月不计算节日
+                if (this._cIsLeapMonth == false) //Don't calculate holidays for a leap month
                 {
                     foreach (LunarHolidayStruct lh in lHolidayInfo)
                     {
@@ -841,11 +841,11 @@ namespace QuizoPlugins
                         }
                     }
 
-                    //对除夕进行特别处理
+                    //Special handling for Chinese New Year's Eve
                     if (this._cMonth == 12)
                     {
-                        int i = GetChineseMonthDays(this._cYear, 12); //计算当年农历12月的总天数
-                        if (this._cDay == i) //如果为最后一天
+                        int i = GetChineseMonthDays(this._cYear, 12); //Calculate the total days in lunar month 12 of that year
+                        if (this._cDay == i) //If it's the last day
                         {
                             tempStr = "除夕";
                         }
@@ -858,7 +858,7 @@ namespace QuizoPlugins
 
         #region WeekDayHoliday
         /// <summary>
-        /// 按某月第几周第几日计算的节日
+        /// Holidays calculated by the nth weekday of a given month
         /// </summary>
         public string WeekDayHoliday
         {
@@ -880,7 +880,7 @@ namespace QuizoPlugins
 
         #region DateHoliday
         /// <summary>
-        /// 按公历日计算的节日
+        /// Holidays calculated by the solar calendar day
         /// </summary>
         public string DateHoliday
         {
@@ -902,10 +902,10 @@ namespace QuizoPlugins
         #endregion
         #endregion
 
-        #region 公历日期
+        #region Solar date
         #region Date
         /// <summary>
-        /// 取对应的公历日期
+        /// Get the corresponding solar date
         /// </summary>
         public DateTime Date
         {
@@ -916,7 +916,7 @@ namespace QuizoPlugins
 
         #region WeekDay
         /// <summary>
-        /// 取星期几
+        /// Get the day of the week
         /// </summary>
         public DayOfWeek WeekDay
         {
@@ -926,7 +926,7 @@ namespace QuizoPlugins
 
         #region WeekDayStr
         /// <summary>
-        /// 周几的字符
+        /// Weekday as text
         /// </summary>
         public string WeekDayStr
         {
@@ -955,7 +955,7 @@ namespace QuizoPlugins
 
         #region DateString
         /// <summary>
-        /// 公历日期中文表示法 如一九九七年七月一日
+        /// Solar date in Chinese numeral form, e.g. 一九九七年七月一日
         /// </summary>
         public string DateString
         {
@@ -968,7 +968,7 @@ namespace QuizoPlugins
 
         #region IsLeapYear
         /// <summary>
-        /// 当前是否公历闰年
+        /// Whether the current year is a solar (Gregorian) leap year
         /// </summary>
         public bool IsLeapYear
         {
@@ -980,10 +980,10 @@ namespace QuizoPlugins
         #endregion
         #endregion
 
-        #region 农历日期
+        #region Lunar date
         #region IsChineseLeapMonth
         /// <summary>
-        /// 是否闰月
+        /// Whether it's a leap month
         /// </summary>
         public bool IsChineseLeapMonth
         {
@@ -993,7 +993,7 @@ namespace QuizoPlugins
 
         #region IsChineseLeapYear
         /// <summary>
-        /// 当年是否有闰月
+        /// Whether the year has a leap month
         /// </summary>
         public bool IsChineseLeapYear
         {
@@ -1006,7 +1006,7 @@ namespace QuizoPlugins
 
         #region ChineseDay
         /// <summary>
-        /// 农历日
+        /// Lunar day
         /// </summary>
         public int ChineseDay
         {
@@ -1016,7 +1016,7 @@ namespace QuizoPlugins
 
         #region ChineseDayString
         /// <summary>
-        /// 农历日中文表示
+        /// Lunar day in Chinese numeral form
         /// </summary>
         public string ChineseDayString
         {
@@ -1042,7 +1042,7 @@ namespace QuizoPlugins
 
         #region ChineseMonth
         /// <summary>
-        /// 农历的月份
+        /// Lunar month
         /// </summary>
         public int ChineseMonth
         {
@@ -1052,7 +1052,7 @@ namespace QuizoPlugins
 
         #region ChineseMonthString
         /// <summary>
-        /// 农历月份中文表示
+        /// Lunar month in Chinese numeral form
         /// </summary>
         public string ChineseMonthString
         {
@@ -1065,7 +1065,7 @@ namespace QuizoPlugins
 
         #region ChineseYear
         /// <summary>
-        /// 取农历年份
+        /// Get the lunar year
         /// </summary>
         public int ChineseYear
         {
@@ -1075,7 +1075,7 @@ namespace QuizoPlugins
 
         #region ChineseYearString
         /// <summary>
-        /// 取农历年字符串如，一九九七年
+        /// Get the lunar year string, e.g. 一九九七年
         /// </summary>
         public string ChineseYearString
         {
@@ -1094,7 +1094,7 @@ namespace QuizoPlugins
 
         #region ChineseDateString
         /// <summary>
-        /// 取农历日期表示法：农历一九九七年正月初五
+        /// Get the lunar date representation: e.g. 农历一九九七年正月初五
         /// </summary>
         public string ChineseDateString
         {
@@ -1114,15 +1114,15 @@ namespace QuizoPlugins
 
         #region ChineseTwentyFourDay
         /// <summary>
-        /// 定气法计算二十四节气,二十四节气是按地球公转来计算的，并非是阴历计算的
+        /// Calculates the 24 solar terms using the constant-solar-term method; the 24 solar terms are calculated from the Earth's revolution, not the lunar calendar
         /// </summary>
         /// <remarks>
-        /// 节气的定法有两种。古代历法采用的称为"恒气"，即按时间把一年等分为24份，
-        /// 每一节气平均得15天有余，所以又称"平气"。现代农历采用的称为"定气"，即
-        /// 按地球在轨道上的位置为标准，一周360°，两节气之间相隔15°。由于冬至时地
-        /// 球位于近日点附近，运动速度较快，因而太阳在黄道上移动15°的时间不到15天。
-        /// 夏至前后的情况正好相反，太阳在黄道上移动较慢，一个节气达16天之多。采用
-        /// 定气时可以保证春、秋两分必然在昼夜平分的那两天。
+        /// There are two methods for defining solar terms. The ancient calendar method, called "constant qi", divides the year into 24 equal parts,
+        /// with each solar term averaging just over 15 days, hence also called "average qi". The modern lunar calendar uses the method called "true qi", which
+        /// uses the Earth's position in its orbit as the standard - one revolution is 360 degrees, with 15 degrees between consecutive solar terms. Because the Earth is near
+        /// perihelion around the winter solstice and moving faster, the time for the sun to move 15 degrees along the ecliptic is just under 15 days.
+        /// Around the summer solstice it's the opposite - the sun moves more slowly along the ecliptic, and a solar term can last up to 16 days. Using
+        /// the true-qi method ensures the spring and autumn equinoxes always fall on days when day and night are equal.
         /// </remarks>
         public string ChineseTwentyFourDay
         {
@@ -1140,7 +1140,7 @@ namespace QuizoPlugins
                 {
                     num = 525948.76 * (y - 1900) + sTermInfo[i - 1];
 
-                    newDate = baseDateAndTime.AddMinutes(num);//按分钟计算
+                    newDate = baseDateAndTime.AddMinutes(num);//Calculated in minutes
                     if (newDate.DayOfYear == _date.DayOfYear)
                     {
                         tempStr = SolarTerm[i - 1];
@@ -1153,10 +1153,10 @@ namespace QuizoPlugins
         #endregion
         #endregion
 
-        #region 星座
+        #region Zodiac (Western) sign
         #region Constellation
         /// <summary>
-        /// 计算指定日期的星座序号
+        /// Calculate the zodiac sign index for a given date
         /// </summary>
         /// <returns></returns>
         public string Constellation
@@ -1190,11 +1190,11 @@ namespace QuizoPlugins
         #endregion
         #endregion
 
-        #region 属相
+        #region Chinese zodiac (animal sign)
         #region Animal
         /// <summary>
-        /// 计算属相的索引，注意虽然属相是以农历年来区别的，但是目前在实际使用中是按公历来计算的
-        /// 鼠年为1,其它类推
+        /// Calculate the Chinese zodiac index. Note: although the zodiac is traditionally distinguished by lunar year, in practice it is commonly calculated using the solar calendar.
+        /// Year of the Rat = 1, and so on
         /// </summary>
         public int Animal
         {
@@ -1208,7 +1208,7 @@ namespace QuizoPlugins
 
         #region AnimalString
         /// <summary>
-        /// 取属相字符串
+        /// Get the Chinese zodiac string
         /// </summary>
         public string AnimalString
         {
@@ -1221,17 +1221,17 @@ namespace QuizoPlugins
         #endregion
         #endregion
 
-        #region 天干地支
+        #region Heavenly Stems and Earthly Branches (Ganzhi)
         #region GanZhiYearString
         /// <summary>
-        /// 取农历年的干支表示法如 乙丑年
+        /// Get the Ganzhi representation of the lunar year, e.g. 乙丑年
         /// </summary>
         public string GanZhiYearString
         {
             get
             {
                 string tempStr;
-                int i = (this._cYear - GanZhiStartYear) % 60; //计算干支
+                int i = (this._cYear - GanZhiStartYear) % 60; //Calculate the Ganzhi
                 tempStr = ganStr[i % 10].ToString() + zhiStr[i % 12].ToString() + "年";
                 return tempStr;
             }
@@ -1240,13 +1240,13 @@ namespace QuizoPlugins
 
         #region GanZhiMonthString
         /// <summary>
-        /// 取干支的月表示字符串，注意农历的闰月不记干支
+        /// Get the Ganzhi month string; note leap months don't get their own Ganzhi designation
         /// </summary>
         public string GanZhiMonthString
         {
             get
             {
-                //每个月的地支总是固定的,而且总是从寅月开始
+                //Each month's Earthly Branch is always fixed, and always starts from the month of Yin
                 int zhiIndex;
                 string zhi;
                 if (this._cMonth > 10)
@@ -1259,10 +1259,10 @@ namespace QuizoPlugins
                 }
                 zhi = zhiStr[zhiIndex - 1].ToString();
 
-                //根据当年的干支年的干来计算月干的第一个
+                //Calculate the first month's Heavenly Stem based on the year's Heavenly Stem
                 int ganIndex = 1;
                 string gan;
-                int i = (this._cYear - GanZhiStartYear) % 60; //计算干支
+                int i = (this._cYear - GanZhiStartYear) % 60; //Calculate the Ganzhi
                 switch (i % 10)
                 {
                     #region ...
@@ -1307,7 +1307,7 @@ namespace QuizoPlugins
 
         #region GanZhiDayString
         /// <summary>
-        /// 取干支日表示法
+        /// Get the Ganzhi day representation
         /// </summary>
         public string GanZhiDayString
         {
@@ -1324,7 +1324,7 @@ namespace QuizoPlugins
 
         #region GanZhiDateString
         /// <summary>
-        /// 取当前日期的干支表示法如 甲子年乙丑月丙庚日
+        /// Get the Ganzhi representation of the current date, e.g. 甲子年乙丑月丙庚日
         /// </summary>
         public string GanZhiDateString
         {
@@ -1337,10 +1337,10 @@ namespace QuizoPlugins
         #endregion
         #endregion
 
-        #region 方法
+        #region Methods
         #region NextDay
         /// <summary>
-        /// 取下一天
+        /// Get the next day
         /// </summary>
         /// <returns></returns>
         public ChineseCalendar NextDay()
@@ -1352,7 +1352,7 @@ namespace QuizoPlugins
 
         #region PervDay
         /// <summary>
-        /// 取前一天
+        /// Get the previous day
         /// </summary>
         /// <returns></returns>
         public ChineseCalendar PervDay()

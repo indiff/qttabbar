@@ -29,7 +29,7 @@ using QTTabBarLib.Interop;
 namespace QTTabBarLib
 {
     /***
-     * 最小化的右下角
+     * Bottom-right corner when minimized
      */
     internal class TrayIcon
     {

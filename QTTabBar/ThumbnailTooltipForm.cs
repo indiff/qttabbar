@@ -515,10 +515,10 @@ namespace QTTabBarLib {
         /// <summary> 
         /// �ж��Ƿ��BOM��UTF8��ʽ�����㷽����
         /// BOM��Byte Order Mark�������ֽ�˳��
-        /// UTF-8����ҪBOM�����ֽ�˳�򣬵���BOM����ʾ���뷽ʽ��
-        /// Windows���ǲ���BOM������ı��ļ��ı��뷽ʽ�ģ�
-        /// ���԰�UTF-8��ASCII�ȱ������ֿ�����
-        /// ����Windows֮�⣨�磬Linux ������������⡣
+        /// UTF-8 doesn't need a BOM to indicate byte order, but a BOM does indicate the encoding.
+        /// Windows can't tell a text file's encoding without a BOM,
+        /// so it can't distinguish UTF-8 from ASCII and similar encodings,
+        /// causing problems outside Windows (e.g. on Linux and other platforms).
         /// </summary> 
         /// <param name="data"></param> 
         /// <returns></returns> 

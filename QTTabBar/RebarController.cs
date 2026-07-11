@@ -113,7 +113,7 @@ namespace QTTabBarLib {
                 textureBrushRebar = null;
             }
             if (!File.Exists(Config.Skin.RebarImageFile)) {
-                // 加载默认的背景图
+                // Load the default background image
                 bmpRebar = Resources_Image.imgRebar;
                 textureBrushRebar = new TextureBrush(bmpRebar);
             } else
@@ -138,7 +138,7 @@ namespace QTTabBarLib {
             
         }
         /**
-         * 确认按钮栏是否正确
+         * Ensure the menu bar band is correct
          */
         public void EnsureMenuBarIsCorrect() {
             bool show = MenuHasFocus || MenuBarShown;
@@ -164,7 +164,7 @@ namespace QTTabBarLib {
 
 
         /**
-         * 刷新高度 适配4k
+         * Refresh height - adapt for 4K
          */
         internal unsafe void RefreshHeight() {
             const int DBID_BANDINFOCHANGED = 0;
@@ -253,7 +253,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// 刷新背景颜色和图片
+        /// Refresh background color and image
         /// </summary>
         public void RefreshBG() {
             if(Config.Skin.UseRebarBGColor) {
@@ -275,7 +275,7 @@ namespace QTTabBarLib {
             if(hWnd != IntPtr.Zero) {
                 PInvoke.RedrawWindow(hWnd, IntPtr.Zero, IntPtr.Zero, 0x289);
             }
-            // 修复刷新图片空图片情况报错
+            // Fix an error when refreshing with an empty image
             if(Config.Skin.UseRebarImage && Config.Skin.RebarImageFile.Length > 0 && File.Exists( Config.Skin.RebarImageFile ) ) {
                 CreateRebarImage();
             }

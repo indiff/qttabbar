@@ -163,7 +163,7 @@ namespace QTTabBarLib {
                 Initialized += (sender, args) => Topmost = true;
                 ContentRendered += (sender, args) => Topmost = false;
                 SourceInitialized += (sender, args) => QTUtility2.SetDarkTitleBar(new WindowInteropHelper(this).Handle);
-                // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
+                // SetProcessDPIAware only exists on Vista and later - calling it directly would make the program incompatible with XP
                 PInvoke.SetProcessDPIAware();
                 InitializeComponent();
                 QTUtility2.ApplyOptionsDialogTheme(Resources);
@@ -172,7 +172,7 @@ namespace QTTabBarLib {
                 // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
 
 
-                // 设置默认的title 和版本
+                // Set the default title and version
                 string str = QTUtility.CurrentVersion.ToString();
                 if (QTUtility.BetaRevision.Major > 0)
                 {
@@ -232,9 +232,9 @@ namespace QTTabBarLib {
 
         #region setting by qwop
         /// <summary>
-        /// 利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度。
-        /// 可以生成 WorkingConfig 配置 初始化的 值。 
-        /// 方法: generateInitConfig()
+        /// Uses the primary screen's width to set the Options form's width, and an absolute height.
+        /// Can generate the initialized values for the WorkingConfig configuration.
+        /// Method: generateInitConfig()
         /// </summary>
         private void setByQwop() {
             /*POINT point;
@@ -253,7 +253,7 @@ namespace QTTabBarLib {
 
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            // 双屏幕打开逻辑问题
+            // Dual-monitor open logic issue
             /*var bMulScreens = Screen.AllScreens.Length > 1;
             var screenWidth = 0;
             if (bMulScreens)
@@ -278,21 +278,21 @@ namespace QTTabBarLib {
 
             ////////////////////////////////////////
             // generateInitConfig();
-            // 设置 Esc 关闭窗口
+            // Set Esc to close the window
             this.KeyDown += ModifyPrice_KeyDown;
         }
 
         private void ModifyPrice_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)//Esc键  
+            if (e.Key == Key.Escape)//Esc key
             {
                 this.Close();
             }
         }
 
         /// <summary>
-        /// 反射当前的 WorkingConfig 配置的内部属性所有的值
-        /// 如果内部的值为空则生成赋空.
+        /// Reflects over all internal property values of the current WorkingConfig configuration
+        /// If an internal value is null, assign null when generating.
         /// Author: qwop
         /// Date:   2012-07-03
         /// </summary>

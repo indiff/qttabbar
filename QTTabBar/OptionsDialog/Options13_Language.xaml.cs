@@ -348,7 +348,7 @@ namespace QTTabBarLib {
             Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() => entry.IsEditing = true));
         }
 
-        #region 选择框事件
+        #region Selection box events
         private void buildinCbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ( true != radUseLangFileYes.IsChecked)
@@ -409,14 +409,14 @@ namespace QTTabBarLib {
                     case 2: keyValuePairs = Resources_String_de_DE.ResourceManager.GetResourceStrings(); break;
                 }
 
-                // 如果加载为空， 则读取默认的应用语言
+                // If loading returns empty, read the default application language
                 if (null == keyValuePairs)
                 {
                     keyValuePairs = Resources_String.ResourceManager.GetResourceStrings();
                 }
 
 
-                // 判断是否未使用内置语言,如果是的话，则直接遍历 内置语言
+                // Check whether a built-in language isn't being used; if so, iterate directly over the built-in languages
                 if (!Config.Lang.UseLangFile)
                 {
                     foreach (var pair in keyValuePairs)
@@ -455,7 +455,7 @@ namespace QTTabBarLib {
                 else if (QTUtility.TextResourcesDic.ContainsKey( Key ) && 
                          QTUtility.TextResourcesDic.TryGetValue(Key, out res) &&
                          res != null && 
-                         res.Length > 0 // 修复超出数组越界bug
+                         res.Length > 0 // Fix an array-out-of-bounds bug
                          )
                 {
                     Translated = res[0];

@@ -473,17 +473,17 @@ namespace QTTabBarLib {
 
         public static void LocalInvokeMain(Action<QTTabBarClass> action, bool doAsync = false) {
             QTTabBarClass instance;
-            // ��ȡ�����̵� QTTabBar��ʵ��
+            // Get the QTTabBar class instance for the current thread
             using(new Keychain(rwLockTabBar, false)) {
                 instance = sdTabHandles.Count == 0 ? null : sdTabHandles.Peek();
             }
             if(instance == null) return;
             if(doAsync) {
-                QTUtility2.log("�첽����:");
+                QTUtility2.log("Async call:");
                 instance.BeginInvoke(action, instance);    
             }
             else {
-                QTUtility2.log("ͬ������:" );
+                QTUtility2.log("Sync call:" );
                 instance.Invoke(action, instance);   
             }
         }
@@ -541,7 +541,7 @@ namespace QTTabBarLib {
             }*/
             if (Interlocked.Exchange(ref inTimer, 1) != 0)
             {
-                QTUtility2.log("�ܾ�����");
+                QTUtility2.log("Access denied");
                 return;
             }
             try
@@ -553,7 +553,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("�쳣");
+                QTUtility2.log("Exception");
             }
             finally
             {
@@ -569,7 +569,7 @@ namespace QTTabBarLib {
             }*/
             if (Interlocked.Exchange(ref inTimer, 1) != 0)
             {
-                QTUtility2.log("�ܾ�����");
+                QTUtility2.log("Access denied");
                 return;
             }
             try
@@ -581,7 +581,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("�쳣");
+                QTUtility2.log("Exception");
             }
             finally
             {
@@ -598,7 +598,7 @@ namespace QTTabBarLib {
             }*/
             if (Interlocked.Exchange(ref inTimer, 1) != 0)
             {
-                QTUtility2.log("�ܾ�����");
+                QTUtility2.log("Access denied");
                 return null;
             }
             try
@@ -611,7 +611,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("�쳣");
+                QTUtility2.log("Exception");
                 return null;
             }
             finally

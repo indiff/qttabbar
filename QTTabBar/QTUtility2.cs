@@ -530,15 +530,15 @@ namespace QTTabBarLib {
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
                 var line = new StringBuilder();
                 line.AppendLine(DateTime.Now.ToString());
-                line.AppendLine(".NET �汾: " + Environment.Version);
-                line.AppendLine("����ϵͳ�汾: " + Environment.OSVersion.Version + 
+                line.AppendLine(".NET Version: " + Environment.Version);
+                line.AppendLine("OS Version: " + Environment.OSVersion.Version +
                                 " Major: " + Environment.OSVersion.Version.Major +
-                                " ����: " + getEnv()
+                                " Arch: " + getEnv()
                                 );
-                line.AppendLine("QT �汾: " + MakeVersionString());
+                line.AppendLine("QT Version: " + MakeVersionString());
                 if (!String.IsNullOrEmpty(optional))
                 {
-                    line.AppendLine("������Ϣ: " + optional);
+                    line.AppendLine("Additional Info: " + optional);
                 }
                 if (ex == null)
                 {
@@ -597,20 +597,20 @@ namespace QTTabBarLib {
 
         /*
         public static object lockObject = new object();
-        //��д���������ļ�д��Ȩ�ޣ�ÿ���߳����εȴ��ϸ�д�����
+        // A reader-writer lock granting exclusive file-write permission - each thread waits its turn until the previous write finishes.
         static ReaderWriterLockSlim LogWriteLock = new ReaderWriterLockSlim();
         */
 
 
         /*
-        ������Mutex
-        ���壺
-            private static readonly Mutex mutex = new Mutex();
-            ʹ�ã�
-            mutex.WaitOne();
-            mutex.ReleaseMutex();
-            ���ã�������ס���������ݣ�����ֹ�����߳̽���ô���飬ֱ���ô����������ɣ��ͷŸ�����
-         * Mutex�����ǿ���ϵͳ����ģ������ǿ��Կ�Խ���̵ġ�
+         * About Mutex
+         * Declaration:
+         *     private static readonly Mutex mutex = new Mutex();
+         * Usage:
+         *     mutex.WaitOne();
+         *     mutex.ReleaseMutex();
+         * Purpose: locks the critical section so other threads block until the current thread finishes, then releases the lock.
+         * A Mutex is a kernel-level synchronization object and can be used across process boundaries.
          */
         private static readonly Mutex M_MUTEX = new Mutex();
 
@@ -844,7 +844,7 @@ namespace QTTabBarLib {
         }
 
         public static string MakeVersionString() {
-            // qwop comment  ���� .net framework �İ汾��
+            // qwop comment  confirm the .NET Framework version.
             if(QTUtility.IS_DEV_VERSION) {
                 return "DevBuild: " + QTUtility.GetLinkerTimestamp() + " (" + Environment.Version + ")";
             }

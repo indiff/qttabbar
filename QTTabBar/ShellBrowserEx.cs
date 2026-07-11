@@ -208,14 +208,14 @@ namespace QTTabBarLib {
             int count;
             if (folderView == null)
             {
-                // 显示赋值 folderView 实例
+                // Explicitly assign the folderView instance
                 IShellView ppshv;
                 if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
                 {
                     folderView = ppshv as IFolderView;
                 }
             }
-            QTUtility2.log(" GetSelectedCount folderView is null ? " + (folderView == null) ); // 测试是否未空？  by indiff
+            QTUtility2.log(" GetSelectedCount folderView is null ? " + (folderView == null) ); // Testing whether it's null, by indiff
             return folderView != null && folderView.ItemCount(SVGIO.SELECTION, out count) == 0 ? count : 0;
         }
 
@@ -258,7 +258,7 @@ namespace QTTabBarLib {
             IntPtr ptr;
             return IsFolderTreeVisible(out ptr);
         }
-        // 判断文件夹是否显示, 函数为xp操作系统
+        // Checks whether the folder tree is visible; this function is for the XP OS
         public bool IsFolderTreeVisible(out IntPtr hwnd) {
             hwnd = IntPtr.Zero;
             return  QTUtility.IsXP && 
@@ -267,7 +267,7 @@ namespace QTTabBarLib {
         }
 
         // Call this on navigate to refresh the FolderView
-        // 当导航的时候刷新文件夹视图
+        // Refresh the folder view on navigate
         public void OnNavigateComplete() {
             if(shellBrowser == null) return;
 
@@ -289,10 +289,10 @@ namespace QTTabBarLib {
         }
 
         /**
-         System.NullReferenceException: 未将对象引用设置到对象的实例。
-            在 QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
-            在 QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
-            在 QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
+         System.NullReferenceException: Object reference not set to an instance of an object.
+            at QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
+            at QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
+            at QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
             
          */
         public int Navigate(IDLWrapper idlw, SBSP flags = SBSP.SAMEBROWSER) {
@@ -328,7 +328,7 @@ namespace QTTabBarLib {
             if(shellBrowser != null) {
                 try // add by indiff 2023.03.15
                 {
-                    // System.Runtime.InteropServices.InvalidComObjectException: COM 对象与其基础 RCW 分开后就不能再使用。 
+                    // System.Runtime.InteropServices.InvalidComObjectException: COM object that has been separated from its underlying RCW cannot be used.
                     IFolderViewOptions fvo = shellBrowser as IFolderViewOptions;
                     if(fvo != null) {
                         fvo.SetFolderViewOptions(FVO.VISTALAYOUT, listview ? FVO.VISTALAYOUT : FVO.DEFAULT);
