@@ -113,7 +113,7 @@ namespace QuizoPlugins {
                 MakeErrorLog(e, "RefreshItems");
             }
             finally {
-                // 修复剪切插件， 以下代码执行有问题
+                // Fix an occasional crash where releasing the object couldn't execute
                 if (shellView != null)
                 {
                     // log(" ReleaseComObject shellView " + shellView);
@@ -145,7 +145,7 @@ namespace QuizoPlugins {
                 using (StreamWriter writer = new StreamWriter(path, true))
                 {
                     writer.WriteLine("[log]" + DateTime.Now.ToString() + " " + optional + "\n");
-                    // 打印方法调用栈
+                    // Print the method call stack
                     /*
                     var stackTrace = new StackTrace();
                     for (int i = 0; i < stackTrace.FrameCount; i++)
@@ -178,11 +178,11 @@ namespace QuizoPlugins {
                 using (StreamWriter writer = new StreamWriter(path, true))
                 {
                     writer.WriteLine(DateTime.Now.ToString());
-                    writer.WriteLine(".NET 版本: " + Environment.Version);
-                    writer.WriteLine("操作系统版本: " + Environment.OSVersion.Version + " Major: " + Environment.OSVersion.Version.Major);
+                    writer.WriteLine(".NET Version: " + Environment.Version);
+                    writer.WriteLine("OS Version: " + Environment.OSVersion.Version + " Major: " + Environment.OSVersion.Version.Major);
                     if (!String.IsNullOrEmpty(optional))
                     {
-                        writer.WriteLine("错误信息: " + optional);
+                        writer.WriteLine("Additional Info: " + optional);
                     }
                     if (ex == null)
                     {

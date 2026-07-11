@@ -1,32 +1,32 @@
 ---
-name: Bug报告
-about: 创建一个Bug报告来帮助我们
+name: Bug Report
+about: Create a bug report to help us
 title: ''
 labels: bug
 assignees: indiff
 
 ---
 
-**描述这个Bug**
-清晰的Bug描述.
+**Describe the bug**
+A clear description of the bug.
 
-**重现过程**
-重现过程的步骤:
-1. 点击 '...'
-2. 打开 '....'
-3. 滚动 '....'
-4. 报错信息
+**Steps to reproduce**
+Steps to reproduce the behavior:
+1. Click on '...'
+2. Open '....'
+3. Scroll to '....'
+4. See error
 
-**期望的结构**
-对你期望发生的事情的清晰而简洁的描述.
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
-**截图**
-如果可以的话，截图说明问题
+**Screenshots**
+If applicable, add screenshots to help explain the problem
 
-**系统环境:**
- - 操作系统: [e.g. win10]
+**Environment:**
+ - OS: [e.g. win10]
  - .net framework: [e.g. 3.5]
- - 软件版本: [e.g. 1.5.3]
- - 重点、重点、重点；没有报错日志本地复现不了的话，那这个问题不会处理
-**上传报错日志(C:\Users\Administrator\AppData\Roaming\QTTabBar\QTTabBarException.log):**
+ - Software version: [e.g. 1.5.3]
+ - Important, important, important: if there's no error log and the issue can't be reproduced locally, it won't be addressed
+**Upload the error log (C:\Users\Administrator\AppData\Roaming\QTTabBar\QTTabBarException.log):**
 

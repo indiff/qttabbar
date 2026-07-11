@@ -34,7 +34,7 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     /**
-     * Ԥ������
+     * Preview form
      */
     internal sealed class ThumbnailTooltipForm : Form {
         private const string EMPTYFILE = "  *empty file";
@@ -81,7 +81,7 @@ namespace QTTabBarLib {
         /// static fields.
         /// </summary>
         private static string supportedImages;
-        // ֧�ֵ���Ƶ��ʽ
+        // Supported movie formats
         private static string supportedMovies = ".asx;.dvr-ms;.mp2;.flv;..mkv;.ts;.3g2;.3gp;.3gp2;.3gpp;.amr;.amv;.asf;.avi;.bdmv;.bik;.d2v;.divx;.drc;.dsa;.dsm;.dss;.dsv;.evo;.f4v;.flc;.fli;.flic;.flv;.hdmov;.ifo;.ivf;.m1v;.m2p;.m2t;.m2ts;.m2v;.m4b;.m4p;.m4v;.mkv;.mp2v;.mp4;.mp4v;.mpe;.mpeg;.mpg;.mpls;.mpv2;.mpv4;.mov;.mts;.ogm;.ogv;.pss;.pva;.qt;.ram;.ratdvd;.rm;.rmm;.rmvb;.roq;.rpm;.smil;.smk;.swf;.tp;.tpr;.ts;.vob;.vp6;.webm;.wm;.wmp;.wmv";
 
 
@@ -239,7 +239,7 @@ namespace QTTabBarLib {
                     return false;
                 }
             }
-            if(ExtIsText(ext)) { // ���Ԥ�������ı��ļ�
+            if(ExtIsText(ext)) { // If the preview is a text file
                 FileInfo textFileInfo = new FileInfo(path);
                 if(textFileInfo.Exists) {
                     try {
@@ -248,7 +248,7 @@ namespace QTTabBarLib {
                         bool isEmptyText = false;
                         string content;
                         ioException = null;
-                        // ����Ԥ�����߼�
+                        // File preview logic
 
                         /*if (textFileInfo.Length > 0L && textFileInfo.Length <= MAX_TEXT_LENGTH)
                         {
@@ -462,10 +462,10 @@ namespace QTTabBarLib {
         }
 
         /// <summary> 
-        /// �����ļ���·������ȡ�ļ��Ķ��������ݣ��ж��ļ��ı������� 
+        /// Given the file's path, read the file's binary data and determine the file's text encoding
         /// </summary> 
-        /// <param name=��FILE_NAME��>�ļ�·��</param> 
-        /// <returns>�ļ��ı�������</returns> 
+        /// <param name="FILE_NAME">File path</param> 
+        /// <returns>The file's text encoding</returns> 
         public static System.Text.Encoding GetType(string FILE_NAME)
         {
             FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
@@ -475,15 +475,15 @@ namespace QTTabBarLib {
         }
 
         /// <summary> 
-        /// ͨ���������ļ������ж��ļ��ı������� 
+        /// Determine the file's text encoding from the given file stream
         /// </summary> 
-        /// <param name=��fs��>�ļ���</param> 
-        /// <returns>�ļ��ı�������</returns> 
+        /// <param name="fs">File stream</param> 
+        /// <returns>The file's text encoding</returns> 
         public static System.Text.Encoding GetType(FileStream fs)
         {
             byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
             byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-            byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //��BOM 
+            byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //has a BOM 
             Encoding reVal = Encoding.Default;
 
             BinaryReader r = new BinaryReader(fs, System.Text.Encoding.Default);
@@ -513,8 +513,8 @@ namespace QTTabBarLib {
         } 
 
         /// <summary> 
-        /// �ж��Ƿ��BOM��UTF8��ʽ�����㷽����
-        /// BOM��Byte Order Mark�������ֽ�˳��
+        /// Algorithm for determining whether it's UTF-8 with a BOM:
+        /// BOM stands for Byte Order Mark, i.e. a byte-order marker.
         /// UTF-8 doesn't need a BOM to indicate byte order, but a BOM does indicate the encoding.
         /// Windows can't tell a text file's encoding without a BOM,
         /// so it can't distinguish UTF-8 from ASCII and similar encodings,
@@ -524,9 +524,9 @@ namespace QTTabBarLib {
         /// <returns></returns> 
         private static bool IsUTF8Bytes(byte[] data)
         {
-            // �ֽ���
+            // Byte count
             int charByteCounter = 1;
-            // ��ǰ�ֽ�
+            // Current byte
             byte curByte;
             for (int i = 0; i < data.Length; i++)
             {
@@ -535,13 +535,13 @@ namespace QTTabBarLib {
                 {
                     if (curByte >= 0x80)
                     {
-                        // �жϵ�ǰ 
+                        // Check the current byte
                         while (((curByte <<= 1) & 0x80) != 0)
                         {
                             charByteCounter++;
                         }
-                        // ���λ��λ��Ϊ��0 ��������2��1��ʼ
-                        // ��:110XXXXX...........1111110X 
+                        // If the leading bit is not '0', count starting from 2 or 1
+                        // e.g.:110XXXXX...........1111110X 
                         if (charByteCounter == 1 || charByteCounter > 6)
                         {
                             return false;
@@ -550,7 +550,7 @@ namespace QTTabBarLib {
                 }
                 else
                 {
-                    // ����UTF-8 ��ʱ��һλ����Ϊ1 
+                    // If it is UTF-8, the leading bit must be 1 here 
                     if ((curByte & 0xC0) != 0x80)
                     {
                         return false;
@@ -681,7 +681,7 @@ namespace QTTabBarLib {
             }
             if (info.nCodePage == Encoding.ASCII.CodePage)
             {
-                //ASCII�ΤȤ���UTF-8�ˤ���
+                //ASCII and UTF-8 are compatible
                 return Encoding.UTF8;
             }
             return Encoding.GetEncoding((int)info.nCodePage);
@@ -782,12 +782,12 @@ namespace QTTabBarLib {
         }
 
         /**
-         * codepage=936 ��������GBK
-            codepage=950 ��������BIG5
-            codepage=437 ����/���ô�Ӣ��
-            codepage=932 ����
-            codepage=949 ����
-            codepage=866 ����
+         * codepage=936 Simplified Chinese GBK
+            codepage=950 Traditional Chinese BIG5
+            codepage=437 US/Canada English
+            codepage=932 Japanese
+            codepage=949 Korean
+            codepage=866 Russian
          */
         public static Encoding TryGetEncoding(byte[] bytes)
         {
@@ -1149,24 +1149,24 @@ namespace QTTabBarLib {
 
         public static bool IsTragetEncoding(byte[] bytes, Encoding targetEncoding)
         {
-            //��byte[]�D��string���D��byte[]��λԪ���Ƿ���׃
+            //Convert byte[] to string, then back to byte[]; check whether the byte count matches
             var stringWithTragetEncoding = targetEncoding.GetString(bytes);
             var bytesWithTragetEncodingCount = targetEncoding.GetByteCount(stringWithTragetEncoding);
             return bytes.Length == bytesWithTragetEncodingCount;
         }
 
         /// <summary> 
-        /// �ж��ļ����ı������� 
+        /// Determine the file's text encoding
         /// </summary> 
-        /// <param name="filestream">�ļ���</param> 
-        /// <returns>���ı�������</returns> 
+        /// <param name="filestream">File stream</param> 
+        /// <returns>The text encoding</returns> 
         private static Encoding GetStreamEncoding(byte[] ss)
         {
             try
             {
                 byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
                 byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-                //��BOM 
+                //has a BOM 
                 byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF };
                 Encoding reVal = Encoding.Default;
                 if (IsUTF8Bytes(ss) || (ss[0] == 0xEF && ss[1] == 0xBB && ss[2] == 0xBF))

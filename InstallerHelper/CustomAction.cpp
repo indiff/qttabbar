@@ -171,7 +171,7 @@ UINT WIXAPI CloseAndReopenAndDeletePlugins(MSIHANDLE hInstaller) {
 UINT WIXAPI CheckOldVersion(MSIHANDLE hInstaller) {
     HKEY key;
     REGSAM access = KEY_QUERY_VALUE | KEY_WOW64_64KEY;
-	// 计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
+	// Check \HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
     if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{DAD20769-75D8-4C1D-80E3-D545563FE9EF}_is1"), 0, access, &key) == ERROR_SUCCESS) {
        MsiSetProperty(hInstaller, _T("OBSOLETEVERSION"), _T("1"));
        RegCloseKey(key);
@@ -179,11 +179,11 @@ UINT WIXAPI CheckOldVersion(MSIHANDLE hInstaller) {
     }
 	
     RegCloseKey(key);
-	// 遍历注册表的路径检测老版本 计算机\HKEY_CLASSES_ROOT\Installer\Products
-	HKEY hKey = NULL; //保存注册表的句柄 
-	DWORD dwIndexs = 0; //需要返回子项的索引 
-	TCHAR keyName[MAX_PATH] = { 0 }; //保存子键的名称 
-	DWORD charLength = 256;  //想要读取多少字节并返回实际读取到的字符长度
+	// Check the registry for an old version, checking \HKEY_CLASSES_ROOT\Installer\Products
+	HKEY hKey = NULL; //Handle to the subkey's registry key
+	DWORD dwIndexs = 0; //Index number to enumerate
+	TCHAR keyName[MAX_PATH] = { 0 }; //Stores the subkey's name
+	DWORD charLength = 256;  //Max bytes to read; returns the actual number of characters read
 	// auto subKey = _T("SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall");
 	auto subKey = _T("Installer\\Products");
 	// if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, subKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -222,7 +222,7 @@ UINT WIXAPI CheckOldVersion(MSIHANDLE hInstaller) {
 				}
 			}
 			++dwIndexs;
-			charLength = 256; // 数据必须要重置一下， 不然数据长度会有问题
+			charLength = 256; // Reset the buffer-size parameter each iteration, since it gets overwritten with the actual length read
 		}
 	}
 	if (hKey != NULL)

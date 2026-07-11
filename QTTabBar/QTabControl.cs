@@ -46,7 +46,7 @@ namespace QTTabBarLib {
         private bool fForceClassic;
         private bool fLimitSize;
         private bool fNeedToDrawUpDown;
-        // �Ƿ�����������ť
+        // Whether the plus button is needed
         private bool fNeedPlusButton;
         private bool fNowMouseIsOnCloseBtn;
         private bool fNowMouseIsOnIcon;
@@ -109,7 +109,7 @@ namespace QTTabBarLib {
         [ThreadStatic()]
         private static VisualStyleRenderer vsr_RPressed;
 
-        public event QTabCancelEventHandler CloseButtonClicked; // �ر��¼�
+        public event QTabCancelEventHandler CloseButtonClicked; // Close event
         public event QTabCancelEventHandler Deselecting; 
         public event ItemDragEventHandler ItemDrag;
         public event QTabCancelEventHandler PointedTabChanged;
@@ -118,7 +118,7 @@ namespace QTTabBarLib {
         public event QTabCancelEventHandler Selecting;
         public event QTabCancelEventHandler TabCountChanged;
         public event QTabCancelEventHandler TabIconMouseDown;
-        // ��ɫ��ť�¼�
+        // Plus button event
         public event QTabCancelEventHandler PlusButtonClicked;
 
         public QTabControl() {
@@ -142,8 +142,8 @@ namespace QTTabBarLib {
                      | ControlStyles.OptimizedDoubleBuffer
                      | ControlStyles.ResizeRedraw//redraw when the control's size changes
                      | ControlStyles.AllPaintingInWmPaint //control ignores the WM_ERASEBKGND message, to reduce flicker
-                     | ControlStyles.SupportsTransparentBackColor//��ؼ����� alpha �����С�� 255 ���� BackColor ��ģ��͸����
-                     | ControlStyles.OptimizedDoubleBuffer //��ؼ������Ȼ��Ƶ�������������ֱ�ӻ��Ƶ���Ļ������Լ�����˸
+                     | ControlStyles.SupportsTransparentBackColor//control simulates transparency when BackColor's alpha is less than 255
+                     | ControlStyles.OptimizedDoubleBuffer //control draws to a buffer first and then to the screen, instead of drawing directly to the screen, to reduce flicker
             , value : true);
 
             /*this.SetStyle(ControlStyles.UserPaint |
@@ -155,8 +155,8 @@ namespace QTTabBarLib {
             tabPages = new QTabCollection(this);
             
             sfTypoGraphic = StringFormat.GenericTypographic;
-            // MeasureTrailingSpaces ����ÿһ�н�β����β��ո� ��Ĭ������£�MeasureString �������صı߽���ζ����ų�ÿһ�н�β���Ŀո� ���ô˱���Ա��ڲⶨʱ���ո������ȥ��
-            // NoWrap �ھ��������ø�ʽʱ�������Զ����й��ܡ� �����ݵ��ǵ�����Ǿ���ʱ������ָ�����ε��г���Ϊ��ʱ���������˱�ǡ�
+            // MeasureTrailingSpaces includes the trailing space at the end of each line. By default, the boundary rectangle returned by MeasureString excludes the trailing space of each line; set this flag to include it when measuring.
+            // NoWrap disables automatic line wrapping when formatting within a rectangle. This flag is implied when a point is passed instead of a rectangle, or when the specified rectangle's line length is zero.
             sfTypoGraphic.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap;
             sfTypoGraphic.LineAlignment = StringAlignment.Far;  // StringAlignment.Center StringAlignment.Near StringAlignment.Far
             sfTypoGraphic.Trimming = StringTrimming.EllipsisCharacter;
@@ -190,9 +190,9 @@ namespace QTTabBarLib {
             }*/
             // brshActive = new SolidBrush(colorSet[0]);
             // brshInactv = new SolidBrush(colorSet[1]);
-            // ���䰵�� by indiff dark mode
-            /*brshActive = new SolidBrush(Config.Skin.TabTextActiveColor);  // ��ǩ���ˢ
-            brshInactv = new SolidBrush(Config.Skin.TabTextInactiveColor); // ��ǩ�Ǽ��ˢ
+            // Handle dark mode, by indiff
+            /*brshActive = new SolidBrush(Config.Skin.TabTextActiveColor);  // Tab-text-active brush
+            brshInactv = new SolidBrush(Config.Skin.TabTextInactiveColor); // Tab-text-inactive brush
             if (QTUtility.InNightMode)
             {
                 BackColor = Config.Skin.TabShadActiveColor;
@@ -214,7 +214,7 @@ namespace QTTabBarLib {
             {
                 this.BackColor = SystemColors.Window;
             }*/
-            // ��ʱ����֧��˫���¼�
+            // Timer to support double-click suppression
             timerSuppressDoubleClick = new Timer(components);
             timerSuppressDoubleClick.Interval = SystemInformation.DoubleClickTime + 100;
             timerSuppressDoubleClick.Tick += timerSuppressDoubleClick_Tick;
@@ -338,7 +338,7 @@ namespace QTTabBarLib {
             int num6 = height - 3;
             int num7 = 0;
             int num8 = 0;
-            if(sizeMode == TabSizeMode.Fixed) {  // �̶�����
+            if(sizeMode == TabSizeMode.Fixed) {  // Fixed width
                 for(int i = 0; i < count; i++) {
                     if((x + num4) > width) {
                         num7++;
@@ -464,7 +464,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * ��ǩ�л�
+         * Tab switching
          */
         private bool ChangeSelection(QTabItem tabToSelect, int index) {
             if(((Deselecting != null) && (this.iSelectedIndex > -1)) && (this.iSelectedIndex < tabPages.Count)) {
@@ -608,7 +608,7 @@ namespace QTTabBarLib {
                   g.DrawRectangle(Pens.Black, new Rectangle(0, 0, rctItem.Width - 1, rctItem.Height - 1));
                   */
                 int num = bSelected ? 0 : 1;
-                if(tabImages == null) { // ���ͼƬΪ��
+                if(tabImages == null) { // If the image is null
                     // g.FillRectangle(rectBrush, rctItem);
                     g.DrawLine(SystemPens.ControlLightLight, 
                         new Point(rctItem.X + 2, rctItem.Y), 
@@ -635,7 +635,7 @@ namespace QTTabBarLib {
                             new Point((rctItem.X + rctItem.Width) + 1,  (rctItem.Y + rctItem.Height) - 1));
                         pen.Dispose();
                     }
-                }  else {  // ���ͼƬ��Ϊ��
+                }  else {  // If the image is not null
                     Bitmap bitmap;
                     if(bSelected) {
                         bitmap = tabImages[0];
@@ -646,7 +646,7 @@ namespace QTTabBarLib {
                     else {
                         bitmap = tabImages[1];
                     }
-                    if(bitmap != null) { // ���ͼƬ��Ϊ��
+                    if(bitmap != null) { // If the image is not null
                                 int left = sizingMargin.Left;
                                 int top = sizingMargin.Top;
                                 int right = sizingMargin.Right;
@@ -682,14 +682,14 @@ namespace QTTabBarLib {
                                 {
                                     g.DrawImage(bitmap, rectangleArray[i], rectangleArray2[i], GraphicsUnit.Pixel);
                                 }
-                                // bitmap.Dispose(); // ���ﵼ��ͼƬ����
+                                // bitmap.Dispose(); // This causes an image error here
                     }
                 }
             } // !fVisualStyle
             else {
                 VisualStyleRenderer renderer;
                 if(!bSelected) {
-                    // ��ѡ������ renderer
+                    // renderer for the unselected case
                     if(!fHot && (iPseudoHotIndex != index)) {
                         Edges edges4 = edges;
                         if(edges4 == Edges.Left) {
@@ -774,65 +774,65 @@ namespace QTTabBarLib {
             }
         }
 
-        // 43 ����bug
+        // bug #43
         /*
          * 
             Message ---
-            δ�������������õ������ʵ����
+            Object reference not set to an instance of an object.
             HelpLink ---
 
             Source ---
             QTTabBar
 
             StackTrace ---
-               �� QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
-               �� QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
+               at QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
+               at QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
             TargetSite ---
             Void DrawTab(System.Drawing.Graphics, System.Drawing.Rectangle, Int32, QTTabBarLib.QTabItem, Boolean)
          
              Message ---
-            ����������Χ������Ϊ�Ǹ�ֵ��С�ڼ��ϴ�С��
-                       ������: index
+            Index was out of range. Must be non-negative and less than the size of the collection.
+                       Parameter name: index
             HelpLink ---
 
             Source ---
             mscorlib
             StackTrace ---
-                       �� System.Collections.ArrayList.get_Item(Int32 index)
-                       �� System.Windows.Forms.ImageList.ImageCollection.IndexOfKey(String key)
-                       �� System.Windows.Forms.ImageList.ImageCollection.ContainsKey(String key)
-                       �� QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
+                       at System.Collections.ArrayList.get_Item(Int32 index)
+                       at System.Windows.Forms.ImageList.ImageCollection.IndexOfKey(String key)
+                       at System.Windows.Forms.ImageList.ImageCollection.ContainsKey(String key)
+                       at QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
 */
-        // ��ָ���߿��ڻ��Ƶ�ǰ�Ӿ���ʽԪ�صı���ͼ��
+        // Draw the background image for the current visual-style element, using the specified border.
         private void DrawTab(Graphics g, Rectangle itemRct, int index, QTabItem tabHot, bool fVisualStyle) {
             try
             {
-                Rectangle textRect; // �����ı�����
-                Rectangle rctItem = textRect = itemRct; // ��ǩ����
-                // ����������Χ������Ϊ�Ǹ�ֵ��С�ڼ��ϴ�С��
-                QTabItem baseTabItem = tabPages[index]; // ��ǰ�ı�ǩ��
-                bool bSelected = iSelectedIndex == index; // �Ƿ�ѡ��
-                bool fHot = baseTabItem == tabHot; // �Ƿ�δ�ȵ��ǩ
-                textRect.X += 2; // x��ƫ�� 2 ����
+                Rectangle textRect; // Text box area
+                Rectangle rctItem = textRect = itemRct; // Tab area
+                // Index was out of range. Must be non-negative and less than the size of the collection.
+                QTabItem baseTabItem = tabPages[index]; // The current tab item
+                bool bSelected = iSelectedIndex == index; // Whether it is selected
+                bool fHot = baseTabItem == tabHot; // Whether it is not the hot tab
+                textRect.X += 2; // x-axis offset of 2 pixels
                 if(bSelected) {
-                    rctItem.Width += 4; // ���ѡ������ȼӿ� 4 ����
+                    rctItem.Width += 4; // If selected, widen by 4 pixels
                 }
                 else {
-                    rctItem.X += 2;  // ��ѡ�� ��ǩ����x��ƫ�� 2 ����
-                    rctItem.Y += 2;  // ��ѡ�� ��ǩ����y��ƫ�� 2 ����
-                    rctItem.Height -= 2;  // ��ѡ�� ��ǩ����߶Ȼ��� 2 ����
-                    // textRect.Y += 2; // ��ѡ�� �ı�����y��ƫ�� 2 ����
+                    rctItem.X += 2;  // Unselected tab: x-axis offset of 2 pixels
+                    rctItem.Y += 2;  // Unselected tab: y-axis offset of 2 pixels
+                    rctItem.Height -= 2;  // Unselected tab: height reduced by 2 pixels
+                    // textRect.Y += 2; // Unselected tab: text area y-axis offset of 2 pixels
                 }
                 DrawBackground(g, bSelected, fHot, rctItem, baseTabItem.Edge, fVisualStyle, index);
-                int tabPosYHalfTabHeight = (rctItem.Height - 0x10) / 2; // ��ǩY����� 10 ���ص�һ��
-                // �ж��Ƿ�ʹ��ͼƬ
+                int tabPosYHalfTabHeight = (rctItem.Height - 0x10) / 2; // Tab Y-axis distance, half of 10 pixels
+                // Check whether to use an image
                 if(fDrawFolderImg && QTUtility.ImageListGlobal.Images.ContainsKey(baseTabItem.ImageKey)) {
-                    // ͼƬ���� 0x10 -> 16
+                    // Image width/height 0x10 -> 16
                     Rectangle imgRect = new Rectangle(
                         rctItem.X + (bSelected ? 7 : 5), 
                         rctItem.Y + tabPosYHalfTabHeight, 
                         0x10, 
-                        0x10); // 16 �߶�  * 16 ����
+                        0x10); // 16 height * 16 width
                     textRect.X += 0x18;
                     textRect.Width -= 0x18; // 24
                     if((fNowMouseIsOnIcon && (iTabMouseOnButtonsIndex == index)) || (iTabIndexOfSubDirShown == index)) {
@@ -845,9 +845,9 @@ namespace QTTabBarLib {
                         }
                         g.DrawImage(bmpFolIconBG, new Rectangle(imgRect.X - 2, imgRect.Y - 2, imgRect.Width + 4, imgRect.Height + 4));
                     }
-					// ���Ʊ���ͼƬ
+					// Draw the folder image
                     g.DrawImage(QTUtility.ImageListGlobal.Images[baseTabItem.ImageKey], imgRect);
-					// �ж��Ƿ��������ͼ��
+					// Check whether to show the drive-letter icon
                     if(Config.Tabs.ShowDriveLetters) {
                         string pathInitial = baseTabItem.PathInitial;
                         if(pathInitial.Length > 0) {
@@ -859,20 +859,20 @@ namespace QTTabBarLib {
                     textRect.X += 4;
                     textRect.Width -= 4;
                 }
-                if(baseTabItem.TabLocked) { // ����������������ͼƬ
+                if(baseTabItem.TabLocked) { // A locked tab needs to draw the lock image
                     Rectangle lockRect = new Rectangle(
-                        rctItem.X + (bSelected ? 6 : 4),  // ѡ��ƫ�� 6 ���ء���ѡ��ƫ�� 4 ����
-                        rctItem.Y + tabPosYHalfTabHeight,  // Y��Ϊ��ǩһ��߶�
+                        rctItem.X + (bSelected ? 6 : 4),  // Selected offset 6 px, unselected offset 4 px
+                        rctItem.Y + tabPosYHalfTabHeight,  // Y-axis is half the tab height
                         9, 
                         11); // 9 * 11
-                    if(fDrawFolderImg) { // �����ļ���ͼƬ
-                        lockRect.X += 9;   //  X ƫ�� 9 ����
-                        lockRect.Y += 5;   //  Y ƫ�� 9 ����
+                    if(fDrawFolderImg) { // Has a folder image
+                        lockRect.X += 9;   //  X offset 9 px
+                        lockRect.Y += 5;   //  Y offset 9 px
                     }
                     else {
-                        lockRect.Y += 2; //  X ƫ�� 2 ����
-                        textRect.X += 10;//  Y ƫ�� 10 ����
-                        textRect.Width -= 10;  // ���ȼ�10����
+                        lockRect.Y += 2; //  X offset 2 px
+                        textRect.X += 10;//  Y offset 10 px
+                        textRect.Width -= 10;  // Width reduced by 10 px
                     }
                     if(bmpLocked == null) {
                         bmpLocked = Resources_Image.imgLocked;
@@ -887,22 +887,22 @@ namespace QTTabBarLib {
                     ((baseTabItem.TitleTextSize.Width + baseTabItem.SubTitleTextSize.Width) + 4f) : 
                     (baseTabItem.TitleTextSize.Width + 2f);
 
-                // ��ǩY��ƫ��Ϊ �ı�����߶�- �ı��߶�  һ��
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.993���� 2022/10/1 16:57:52  Config.Skin.TabHeight 35
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0���� 2022/10/1 16:57:52  textRect.Height 35
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0���� 2022/10/1 16:57:52  baseTabItem.TitleTextSize.Height 20
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0���� 2022/10/1 16:57:52  textRect.X 26
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0���� 2022/10/1 16:57:52  textRect.Y 0
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0���� 2022/10/1 16:57:52  textPosX 53.5
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.994���� 2022/10/1 16:57:52  textPosY 2.5
+                // Tab Y-axis offset is half of (text-area height - text height)
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.993ms 2022/10/1 16:57:52  Config.Skin.TabHeight 35
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  textRect.Height 35
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  baseTabItem.TitleTextSize.Height 20
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  textRect.X 26
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  textRect.Y 0
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  textPosX 53.5
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.994ms 2022/10/1 16:57:52  textPosY 2.5
                 //     ? Math.Max(((textRect.Width - textWidth) / 2f), 0f) :
                 //     0f));
                 // float textPosY = Math.Max(((textRect.Height - baseTabItem.TitleTextSize.Height) / 2f) - 5 , 0f);
                 // float textPosY = 0;
-                // ����Ϊ������ʾ
+                // Changed to centered display
                 float textPosY = -(textRect.Height - baseTabItem.TitleTextSize.Height) / 2;
                 // float textPosY = 5f;
-                // �����ǩ�ı�����������ƫ��ֵ
+                // Calculate the horizontal-centering offset for the tab text
                 float textPosX = (tabTextAlignment == StringAlignment.Center)
                               ? Math.Max(((textRect.Width - textWidth) / 2f), 0f) :
                               0f; 
@@ -911,7 +911,7 @@ namespace QTTabBarLib {
                                             textRect.Y + textPosY,
                                             Math.Min((baseTabItem.TitleTextSize.Width + 2f), (textRect.Width - textPosX)), 
                                             textRect.Height);
-                // ������Ӱ���� dark mode
+                // Draw shadow text, dark mode
                 if(fDrawShadow)
                 {
                     
@@ -951,15 +951,15 @@ namespace QTTabBarLib {
                     rectangle.Width--;
                     ControlPaint.DrawFocusRectangle(g, rectangle);
                 }
-				// �Ƿ����ñ�ע����
+				// Whether comment/subtitle text is enabled
                 if(isComment && (textRect.Width > baseTabItem.TitleTextSize.Width)) {
-                    // ����Ϊ���е�����, �ı��߶� - ��ע�ı��߶ȵ�һ��
+                    // Changed to a centered algorithm: text height minus half the subtitle-text height
                     // float posY = Math.Max(((textRect.Height - baseTabItem.SubTitleTextSize.Height) / 2f), 0f);
                     float posY = Math.Max(((textRect.Height - baseTabItem.SubTitleTextSize.Height) / 2f), 0f);
-					// PointF	����ʾ������������Ͻ�
-					// SizeF	����ʾ��������Ŀ��Ⱥ͸߶ȡ�
+					// PointF	represents the top-left coordinate point
+					// SizeF	represents the rectangle's width and height.
 					// posY = textRect.Y + posY;
-					posY = textRect.Y  - posY; // �޸�������ǩ����������
+					posY = textRect.Y  - posY; // Fix an issue with incorrect subtitle position
                     // float posY = textRect.Y + Math.Max( baseTabItem.SubTitleTextSize.Height, 0f );
 					RectangleF drawStrRectF = new RectangleF(
                         textRct.Right, 
@@ -968,7 +968,7 @@ namespace QTTabBarLib {
                             (baseTabItem.SubTitleTextSize.Width + 2f),
                             (textRect.Width - ((baseTabItem.TitleTextSize.Width + textPosX) + 4f))
                         ), 
-                        textRect.Height);  // �ı�����
+                        textRect.Height);  // Text height
                     if(fDrawShadow) {
                         DrawTextWithShadow(g, 
                             (fAutoSubText ? "@" : ":") + baseTabItem.Comment, 
@@ -1114,8 +1114,8 @@ namespace QTTabBarLib {
         }
 
         /**
-         * ��ȡ�������ı�ǩ
-         * bug ��ֻ��һ����ǩ��ʱ�򣬵����ǩ�հ״�ʶ��Ϊ��ǩ
+         * Get the tab the mouse is over
+         * bug: when there is only one tab, clicking the tab's blank area is recognized as the tab
          */
         public QTabItem GetTabMouseOn() {
             if (this == null || this.IsDisposed)
@@ -1138,7 +1138,7 @@ namespace QTTabBarLib {
                 return null;
             }
 
-            // �����ǩֻ��һ���Ļ�
+            // If there is only one tab
             if (tabPages.Count == 1) {
                  if (tabPages[0].TabBounds.Contains(pt))
                  {
@@ -1471,7 +1471,7 @@ namespace QTTabBarLib {
 
         private RectangleF newRect;
         /**
-         * ������ɫ��ť
+         * Draw the blue button
          */
         private void DrawPlusButton(Graphics g,Rectangle drawRect)
         {
@@ -1667,7 +1667,7 @@ namespace QTTabBarLib {
             else {
                 SetTabImages(null);
             }
-            // �жϱ�ǩ�ı��Ƿ���� ���� ����
+            // Check whether tab text is centered or left-aligned
             tabTextAlignment = Config.Skin.TabTextCentered ? StringAlignment.Center : StringAlignment.Near;
             fDrawShadow = Config.Skin.TabTitleShadows;
             fDrawCloseButton = Config.Tabs.ShowCloseButtons && !Config.Tabs.CloseBtnsWithAlt;

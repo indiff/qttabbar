@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("SetHome")]
-[assembly: AssemblyDescription("设置Java工具集环境变量(JDK/ANT/MAVEN/GRADLE)")]
+[assembly: AssemblyDescription("Set Java toolchain environment variables (JDK/ANT/MAVEN/GRADLE)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("SetHome")]

@@ -46,7 +46,7 @@ namespace QTTabBarLib {
         internal static readonly string BuildVerion = "build01";
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-        // ��ݼ����ñ�ʶ
+        // Keyboard-shortcut-enabled flag
         internal const int FLAG_KEYENABLED = 0x100000;
         internal const string IMAGEKEY_FOLDER = "folder";
         internal const string IMAGEKEY_MYNETWORK = "mynetwork";
@@ -76,7 +76,7 @@ namespace QTTabBarLib {
         internal const string REGUSER = RegConst.Root;
         internal static readonly char[] SEPARATOR_CHAR = new char[] { ';' };
         internal const string SEPARATOR_PATH_HASH_SESSION = "*?*?*";
-		// �Ƿ�Ϊ����״̬��
+		// Whether it is in debug state?
         internal const bool NOW_DEBUGGING =
 #if DEBUG
             true;
@@ -104,7 +104,7 @@ namespace QTTabBarLib {
         internal static Dictionary<string, string[]> TextResourcesDic;
         internal static byte WindowAlpha = 0xff;
 
-        // �Ƿ�Ϊ����ģʽ
+        // Whether it is night/dark mode
         internal static bool InNightMode;
 
         // {
@@ -113,12 +113,12 @@ namespace QTTabBarLib {
         // }
 
 
-        ///////////////////////// ���� by indiff ////////////////////////////////////
+        ///////////////////////// Added by indiff ////////////////////////////////
         internal static bool SingleClickMode { get; private set; }
 
         internal static bool ShowInfoTip { get; private set; }
         /**
-         * ˢ��״̬
+         * Refresh state
          */
         public static void RefreshShellStateValues()
         {
@@ -157,12 +157,12 @@ namespace QTTabBarLib {
             //     QTUtility2.MakeErrorLog(ex, "QTUtility.RefreshShellStateValues" );
             // }
         }
-        ///////////////////////// ���� by indiff ////////////////////////////////////
+        ///////////////////////// Added by indiff ////////////////////////////////
 
 
 
         /// <summary>
-        /// ִֻ��һ��
+        /// Runs only once
         /// </summary>
         static QTUtility() {
             // I'm tempted to just return for everything except "explorer"
@@ -198,27 +198,27 @@ namespace QTTabBarLib {
 
                 // Load the config
                 ConfigManager.Initialize();
-                QTUtility2.log("QTUtility ��������");
+                QTUtility2.log("QTUtility loaded config");
                 
                 // Initialize the instance manager
                 InstanceManager.Initialize();
-                QTUtility2.log("QTUtility ��ʼ��InstanceManager");
+                QTUtility2.log("QTUtility initialized InstanceManager");
 
                 // Create and enable the API hooks
                 HookLibManager.Initialize();
-                QTUtility2.log("QTUtility ������������ API hooks");
+                QTUtility2.log("QTUtility installed keyboard/mouse API hooks");
 
                 // Create the global imagelist
                 ImageListGlobal = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
                 ImageListGlobal.Images.Add("folder", GetIcon(string.Empty, false));
-                QTUtility2.log("QTUtility ����ȫ���ļ���ͼƬ�б�");
+                QTUtility2.log("QTUtility created the global folder image list");
 
                 // Load groups/apps
                 GroupsManager.LoadGroups();
-                QTUtility2.log("QTUtility ���ط������");
+                QTUtility2.log("QTUtility loaded groups and apps");
                 
                 AppsManager.LoadApps();
-                QTUtility2.log("QTUtility ����ȫ���ļ���ͼƬ�б�");
+                QTUtility2.log("QTUtility created the global folder image list");
 
                 if(Config.Lang.UseLangFile && File.Exists(Config.Lang.LangFile)) {
                     TextResourcesDic = ReadLanguageFile(Config.Lang.LangFile);
@@ -254,8 +254,8 @@ namespace QTTabBarLib {
 
                
 
-                // ���ò�����������
-                /*QTUtility2.log("QTUtility ���غ��Ե�·�� ������� ��������");
+                // Get the shell single-click mode setting
+                /*QTUtility2.log("QTUtility loading ignored paths, adding defaults, adding ignores");
                 string[] theNoCaptures = { "::{26EE0668-A00A-44D7-9371-BEB064C98683}",
                                            "::{26EE0668-A00A-44D7-9371-BEB064C98683}\0",
                                            "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}" };
@@ -272,33 +272,33 @@ namespace QTTabBarLib {
                 NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}");
                 NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\0");
 
-                NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");// ��������
+                NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");// Add default
                 */
 
-                // ������� ::{26EE0668-A00A-44D7-9371-BEB064C98683} ::{26EE0668-A00A-44D7-9371-BEB064C98683}\0
+                // Add default ::{26EE0668-A00A-44D7-9371-BEB064C98683} ::{26EE0668-A00A-44D7-9371-BEB064C98683}\0
               
-               // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // �ҵĵ���
-              //  NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // ���п������
+               // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // My Computer
+              //  NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // Control Panel related
                // NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}");
                 
-                // ����վ      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
+                // Recycle Bin      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
                 /*
-                                               ����վ �C {645FF040-5081-101B-9F08-00AA002F954E}
-                               ������� �C {21EC2020-3AEA-1069-A2DD-08002B30309D}
-                               ���� �C {2559A1F3-21D7-11D4-BDAF-00C04F60B9F0}
-                               ���� �C {2559A1F0-21D7-11D4-BDAF-00C04F60B9F0}
-                               Internet Explorer �C {871C5380-42A0-1069-A2EA-08002B30309D}
-                               �������� �C {D20EA4E1-3957-11D2-A40B-0C5020524153}
-                               �������� �C {7007ACC7-3202-11D1-AAD2-00805FC1270E}
-                               ��ӡ���ʹ��� �C {2227A280-3AEA-1069-A2DE-08002B30309D}
+                                               Recycle Bin - {645FF040-5081-101B-9F08-00AA002F954E}
+                               Control Panel - {21EC2020-3AEA-1069-A2DD-08002B30309D}
+                               Network - {2559A1F3-21D7-11D4-BDAF-00C04F60B9F0}
+                               Network - {2559A1F0-21D7-11D4-BDAF-00C04F60B9F0}
+                               Internet Explorer - {871C5380-42A0-1069-A2EA-08002B30309D}
+                               My Network Places - {D20EA4E1-3957-11D2-A40B-0C5020524153}
+                               My Network Places - {7007ACC7-3202-11D1-AAD2-00805FC1270E}
+                               Printers and Faxes - {2227A280-3AEA-1069-A2DE-08002B30309D}
                                                */
-                // ���ò�����������
+                // Set special directories to not capture
                 GetShellClickMode();
                 QTUtility2.log("QTUtility Get Shell Click Mode");
 
                 // Initialize plugins
                 PluginManager.Initialize();
-                QTUtility2.log("QTUtility �������в��");
+                QTUtility2.log("QTUtility initialized all plugins");
             }
             catch(Exception exception) {
                 // TODO: Any errors here would be very serious.  Alert the user as such.
@@ -317,7 +317,7 @@ namespace QTTabBarLib {
                         memStream.Write(arrBytes, 0, arrBytes.Length);
                         memStream.Seek(0, SeekOrigin.Begin);
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
-                        // binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // �޸��������л����� application ���߲����� assembly
+                        // binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // Fix a deserialization issue caused by a mismatched application/assembly version
                         object obj = binaryFormatter.Deserialize(memStream);
                         /*QTUtility2.log("ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
                         if (obj != null)
@@ -962,7 +962,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * �ǲ��� path ���Ե�
+         * Whether it is a relative path
          */
         public static void SaveClosing(List<string> closingPaths) {
             if (null == closingPaths || closingPaths.Count == 0)
@@ -1010,7 +1010,7 @@ namespace QTTabBarLib {
             }
         }
         
-        // �ж�ͼƬ�б�����Ϊ��
+        // Check whether the image list is empty
         private static void SetImageKey(string key, string itemPath) {
             if( null != ImageListGlobal.Images && 
                 ImageListGlobal.Images.Count > 0 && // add by indiff check Images
@@ -1027,7 +1027,7 @@ namespace QTTabBarLib {
             value = ValidateMinMax(value, min, max);
         }
 
-        // �ж��Ƿ�Ϊ����ģʽ  Environment.OSVersion.Version.Major
+        // Check whether it is debug mode  Environment.OSVersion.Version.Major
         public static bool getNightMode()
         {
             // if (Environment.OSVersion.Version.Major > 9)  {
@@ -1093,16 +1093,16 @@ namespace QTTabBarLib {
         public static void ValidateTextResources(ref Dictionary<string, string[]> dict)
         {
             // MessageBox.Show("Config.Lang.UseLangFile:" + Config.Lang.UseLangFile + ",dict == null:" + (dict == null));
-            // ��Ҫ���˵ĵ��� url
+            // Regional URLs to filter out
             string[] urlKeys = { "SiteURL", "PayPalURL" };
             
-            // dict �ļ��
+            // dict folder
             if (dict == null)
             {
                 dict = new Dictionary<string, string[]>();
             }
 
-            // ������������,�ڴ˿�������������
+            // Built-in language resource - compatibility handling can go here
             IEnumerable<KeyValuePair<string, string>> keyValuePairs = null;
             switch (Config.Lang.BuiltInLangSelectedIndex)
             {
@@ -1116,13 +1116,13 @@ namespace QTTabBarLib {
                 case 7: keyValuePairs = Resources_String_ru_RU.ResourceManager.GetResourceStrings(); break;
             }
 
-            // �������Ϊ�գ� ���ȡĬ�ϵ�Ӧ������
+            // If empty, get the default application language
             if (null == keyValuePairs)
             {
                 keyValuePairs = Resources_String.ResourceManager.GetResourceStrings();
             }
 
-            // �ж��Ƿ�δʹ����������,����ǵĻ�����ֱ�ӱ��� ��������
+            // Check whether a built-in language is not in use; if so, return the built-in language directly
             if ( !Config.Lang.UseLangFile )
             {
                 foreach (var pair in keyValuePairs)
@@ -1130,21 +1130,21 @@ namespace QTTabBarLib {
                     dict[pair.Key] = pair.Value.Split(SEPARATOR_CHAR);
                 }
             }
-            else // �����ⲿ�����ļ�
+            else // Load an external language file
             {
-                // ������������
+                // Load language resources
                 foreach (var pair in keyValuePairs)
                 {
                     if (urlKeys.Contains(pair.Key)) continue;
-                    // �ֺŷָ��ַ������������ʽ
+                    // Semicolon-delimited string, in order
                     string[] buildinValue = pair.Value.Split(SEPARATOR_CHAR);
                     string[] res;
                     dict.TryGetValue(pair.Key, out res);
-                    if (res == null) // ����� dict ��δ��ȡ����Ӧ�� ֵ�� ��� �������Ը��ǵ�.
+                    if (res == null) // If no corresponding value is found in dict, fall back to the built-in language.
                     {
                         dict[pair.Key] = buildinValue;
                     }
-                    else if (res.Length < buildinValue.Length)// �����ȡ�����������������Ե���Ŀ��һ��
+                    else if (res.Length < buildinValue.Length)// If the number of entries retrieved is insufficient, fill in the remaining items with the built-in language
                     {
                         int len = res.Length;
                         Array.Resize(ref res, buildinValue.Length);
@@ -1204,9 +1204,9 @@ namespace QTTabBarLib {
 
         public static bool IsNoCapturePaths(string path)
         {
-            // �������
+            // Printer-related
             string controlPanel = "::{26EE0668-A00A-44D7-9371-BEB064C98683}";
-            string print = @"::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{2227A280-3AEA-1069-A2DE-08002B30309D}";// ��ӡ��
+            string print = @"::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{2227A280-3AEA-1069-A2DE-08002B30309D}";// Printer
             return !IsEmptyStr(path) && (
                 path.StartsWith(controlPanel) ||
                 path.StartsWith(print) 

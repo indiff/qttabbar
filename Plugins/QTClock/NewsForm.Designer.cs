@@ -56,7 +56,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(185, 39);
             this.label1.TabIndex = 0;
-            this.label1.Text = "新闻加载中...";
+            this.label1.Text = "Loading news...";
             // 
             // button1
             // 
@@ -64,7 +64,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(319, 39);
             this.button1.TabIndex = 1;
-            this.button1.Text = "ESC隐藏，单击退出，双击热点新闻条目👨‍🦲";
+            this.button1.Text = "ESC to hide, click to exit, double-click a headline 👨‍🦲";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -74,7 +74,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 39);
             this.button2.TabIndex = 2;
-            this.button2.Text = "重新加载";
+            this.button2.Text = "Reload";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -84,7 +84,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(100, 39);
             this.button3.TabIndex = 3;
-            this.button3.Text = "隐藏到侧边";
+            this.button3.Text = "Hide to side";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 

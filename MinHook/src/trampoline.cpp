@@ -48,7 +48,7 @@ namespace MinHook { namespace
 	inline unsigned int hde_disasm(const void* code, hde_t* hs) { return hde32_disasm(code, hs); }
 #endif
 
-	// 命令書き込み用構造体
+	// Structures for writing instructions
 #pragma pack(push, 1)
 	struct JMP_REL
 	{
@@ -64,7 +64,7 @@ namespace MinHook { namespace
 	};
 	typedef JMP_ABS CALL_ABS, JCC_REL;
 
-	// 間接絶対NEAR Jccに相当するロジック
+	// Logic corresponding to an indirect NEAR Jcc target
 	struct JCC_ABS
 	{
 		uint8_t		opcode;		// 7* 02			J** +4		
@@ -105,8 +105,8 @@ namespace MinHook
 
 		size_t    oldPos = 0;
 		size_t    newPos = 0;
-		uintptr_t jmpDest = 0;		// 関数内ジャンプの飛び先アドレス（分岐中判定に使用）
-		bool      finished = false;	// 関数終了フラグ
+		uintptr_t jmpDest = 0;		// Destination address of the jump at the end of the function (used to determine whether still branching)
+		bool      finished = false;	// Function-end flag
 		while (!finished)
 		{
 			uint8_t *pInst = reinterpret_cast<uint8_t*>(ct.pTarget) + oldPos;
@@ -122,7 +122,7 @@ namespace MinHook
 
 			if (pInst - reinterpret_cast<uint8_t*>(ct.pTarget) >= sizeof(JMP_REL))
 			{
-				// ターゲット関数へのジャンプを書き込み、関数を終了
+				// Insert a jump to the target function; the function ends here
 				AppendTempAddress(reinterpret_cast<uintptr_t>(pInst), newPos, jmp, ct);
 
 				pCopySrc = &jmp;
@@ -131,32 +131,32 @@ namespace MinHook
 				finished = true;
 			}
 #if defined _M_X64
-			// RIP相対アドレッシングを使用している命令 (ModR/M = 00???101B)
+			// Instruction using RIP-relative addressing (ModR/M = 00???101B)
 			else if ((hs.modrm & 0xC7) == 0x05)
 			{
-				// RIP相対アドレスのみ書き換え
+				// Only RIP-relative addresses need processing
 				AppendRipRelativeAddress(pInst, newPos, hs, ct);
 
-				// JMP (FF /4)なら関数を終了
+				// If it's a JMP (FF /4), the function ends here
 				if (hs.opcode == 0xFF && hs.modrm_reg == 4)	
 				{
 					finished = true;
 				}
 			}
 #endif
-			// 相対直接CALL
+			// Direct CALL
 			else if (hs.opcode == 0xE8)
 			{
 				AppendTempAddress(GetRelativeBranchDestination(pInst, hs), newPos, call, ct);
 				pCopySrc = &call;
 				copySize = sizeof(call);
 			}
-			// 相対直接JMP (EB or E9)
+			// Direct JMP (EB or E9)
 			else if ((hs.opcode & 0xFD) == 0xE9)
 			{
 				uintptr_t dest = GetRelativeBranchDestination(pInst, hs);
 
-				// 関数内へのジャンプはそのままコピー（ジャンプ中は命令長が変わるような操作は不可）
+				// Jumps within the function are copied as-is (the jump target must not undergo an operation that changes instruction length)
 				if (IsInternalJump(ct.pTarget, dest))
 				{
 					jmpDest = std::max<uintptr_t>(jmpDest, dest);
@@ -167,21 +167,21 @@ namespace MinHook
 					pCopySrc = &jmp;
 					copySize = sizeof(jmp);
 
-					// 分岐中でなければ関数を終了
+					// If no longer branching, the function ends here
 					finished = (reinterpret_cast<uintptr_t>(pInst) >= jmpDest);
 				}
 			}
-			// 相対直接Jcc
+			// Direct Jcc
 			else if ((hs.opcode & 0xF0) == 0x70 || hs.opcode == 0xE3 || (hs.opcode2 & 0xF0) == 0x80)
 			{
 				uintptr_t dest = GetRelativeBranchDestination(pInst, hs);
 
-				// 関数内へのジャンプはそのままコピー（分岐中は命令長が変わるような操作は不可）
+				// Jumps within the function are copied as-is (during branch resolution, an operation that changes instruction length is not allowed)
 				if (IsInternalJump(ct.pTarget, dest))
 				{
 					jmpDest = std::max<uintptr_t>(jmpDest, dest);
 				}
-				else if (hs.opcode == 0xE3) // 関数外へのJCXZ, JECXZ には対応しない 
+				else if (hs.opcode == 0xE3) // JCXZ/JECXZ jumping outside the function isn't supported
 				{
 					return false;
 				}
@@ -196,11 +196,11 @@ namespace MinHook
 			// RET (C2 or C3)
 			else if ((hs.opcode & 0xFE) == 0xC2)
 			{
-				// 分岐中でなければトランポリン関数を終了
+				// If no longer branching, the trampoline function ends here
 				finished = (reinterpret_cast<uintptr_t>(pInst) >= jmpDest);
 			}
 
-			// 分岐中は命令長が変わるような操作は不可
+			// During branch resolution, an operation that changes instruction length is not allowed
 			if (reinterpret_cast<uintptr_t>(pInst) < jmpDest && copySize != hs.len)
 			{
 				return false;
@@ -238,7 +238,7 @@ namespace MinHook
 
 			uintptr_t addr;
 #if defined _M_X64
-			if (ta->address < 0x10000)	// 0x10000未満はテーブルのインデックス、0x10000以上はRIP相対アドレス
+			if (ta->address < 0x10000)	// Values below 0x10000 are table indices; 0x10000 and above are RIP-relative addresses
 			{
 				addr = reinterpret_cast<uintptr_t>(pt++);
 			}
@@ -309,7 +309,7 @@ namespace MinHook { namespace
 	{
 		TEMP_ADDR ta;
 		ta.address  = reinterpret_cast<uintptr_t>(pInst) + hs.len + static_cast<int32_t>(hs.disp.disp32);
-		ta.position = pos + hs.len - ((hs.flags & 0x3C) >> 2) - 4; // pos + 命令長 - 即値サイズ - 4
+		ta.position = pos + hs.len - ((hs.flags & 0x3C) >> 2) - 4; // pos + instruction length - immediate size - 4
 		ta.pc       = pos + hs.len;
 
 		ct.tempAddr.push_back(ta);

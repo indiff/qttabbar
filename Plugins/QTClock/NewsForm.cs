@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -20,13 +20,13 @@ namespace QuizoPlugins
         private static NewsForm instance;
 
         private static readonly object m_objLock = new object();
-        private static readonly int sideThickness = 4;//边缘的厚度，窗体停靠在边缘隐藏后留出来的可见部分的厚度 
+        private static readonly int sideThickness = 4;//Edge thickness - the visible portion left showing when the form docks and hides at the screen edge
 
 
         private NewsForm()
         {
             InitializeComponent();
-            // 355 * 162  0x133 0x73  宽度设置为屏幕 1/3 高度为屏幕 1/6
+            // 355 * 162  0x133 0x73  width set to 1/3 of the screen, height to 1/6 of the screen
             // int width = Screen.PrimaryScreen.WorkingArea.Size.Width / 3;
             // int height = Screen.PrimaryScreen.WorkingArea.Size.Height - 100;
             // this.ClientSize = new System.Drawing.Size(width, height);
@@ -73,7 +73,7 @@ namespace QuizoPlugins
                 {
                     screenWidth += Screen.AllScreens[i].WorkingArea.Width;
                 }
-                this.label2.Text = "检测当前为多屏!";
+                this.label2.Text = "Multi-screen setup detected!";
             }
             else
             {
@@ -81,19 +81,19 @@ namespace QuizoPlugins
                 this.label2.Text = "" ;
             }
 
-            //如果窗体最小化或最大化了则什么也不做  
+            //If the form is minimized or maximized, do nothing
             if (this.WindowState == FormWindowState.Minimized || this.WindowState == FormWindowState.Maximized)
             {
                 return;
             }
 
-            //如果鼠标在窗体内  
+            //If the mouse is within the form
             if (Cursor.Position.X >= this.Left &&
                 Cursor.Position.X < this.Right &&
                 Cursor.Position.Y >= this.Top &&
                 Cursor.Position.Y < this.Bottom)
             {
-                //如果窗体离屏幕边缘很近，则自动停靠在该边缘  
+                //If the form is very close to a screen edge, dock it automatically at that edge
                 if (this.Top <= sideThickness)
                 {
                     this.Top = 0;
@@ -107,26 +107,26 @@ namespace QuizoPlugins
                     this.Left = screenWidth - this.Width;
                 }
             }
-            //当鼠标离开窗体以后  
+            //After the mouse leaves the form
             else
             {
-                //隐藏到屏幕左边缘  
+                //Hide to the left screen edge
                 if (this.Left == 0)
                 {
                     this.Left = sideThickness - this.Width;
                 }
-                //隐藏到屏幕右边缘  
+                //Hide to the right screen edge
                 else if (this.Left == screenWidth - this.Width)
                 {
                     this.Left = screenWidth - sideThickness;
                 }
-                //隐藏到屏幕右边缘  
+                //Hide to the right screen edge
                 else if (this.Left < screenWidth - this.Width)
                 {
                     // MessageBox.Show("Screen.PrimaryScreen.WorkingArea.Width - this.Width " + this.Left);
                     this.Left = screenWidth - sideThickness;
                 }
-                //隐藏到屏幕上边缘  
+                //Hide to the top screen edge
                 else if (this.Top == 0 && this.Left > 0 && this.Left < screenWidth - this.Width)
                 {
                     this.Top = sideThickness - this.Height;
@@ -146,33 +146,33 @@ namespace QuizoPlugins
                     screenWidth += Screen.AllScreens[i].WorkingArea.Width;
                 }
 
-                // this.label2.Text = "检测当前为多屏:" + Screen.AllScreens.Length + ",width:" + screenWidth;
-                this.label2.Text = "检测当前为多屏!" ;
+                // this.label2.Text = "Multi-screen setup detected:" + Screen.AllScreens.Length + ",width:" + screenWidth;
+                this.label2.Text = "Multi-screen setup detected!" ;
             }
             else
             {
                 screenWidth += Screen.PrimaryScreen.WorkingArea.Width;
                 this.label2.Text = "" ;
             }
-            //隐藏到屏幕左边缘  
+            //Hide to the left screen edge
             if (this.Left == 0)
             {
                 // MessageBox.Show("" + this.Left);
                 this.Left = sideThickness - this.Width;
             }
-            //隐藏到屏幕右边缘  
+            //Hide to the right screen edge
             else if (this.Left == screenWidth - this.Width)
             {
                // MessageBox.Show("Screen.PrimaryScreen.WorkingArea.Width - this.Width " + this.Left);
                 this.Left = screenWidth - sideThickness;
             }
-            //隐藏到屏幕右边缘  
+            //Hide to the right screen edge
             else if (this.Left < screenWidth - this.Width)
             {
                // MessageBox.Show("Screen.PrimaryScreen.WorkingArea.Width - this.Width " + this.Left);
                 this.Left = screenWidth - sideThickness;
             }
-            //隐藏到屏幕上边缘  
+            //Hide to the top screen edge
             else if (this.Top == 0 && this.Left > 0 && this.Left < screenWidth - this.Width)
             {
                 //MessageBox.Show("Screen.PrimaryScreen.WorkingArea.Width - this.Width " + this.Left);
@@ -213,7 +213,7 @@ namespace QuizoPlugins
         public void setItems(Clock.Item[] items )
         {
             // dt.Rows.Clear();
-            this.label1.Text = ("数据加载中...");
+            this.label1.Text = ("Loading data...");
             this.items = items;
             if (this.items != null && this.items.Length > 0)
             {
@@ -236,13 +236,13 @@ namespace QuizoPlugins
                  {
                      /*if (len > 0) {
                          double size = len / 1024d;
-                         this.label1.Text = ("加载成功,数据大小" + len + "KB");
+                         this.label1.Text = ("Loaded successfully, data size " + len + "KB");
                      }
                      else {
-                         this.label1.Text = ("加载成功");
+                         this.label1.Text = ("Loaded successfully");
                          
                      }*/
-                     this.label1.Text = ("加载成功" + items.Length + "条");
+                     this.label1.Text = ("Loaded successfully, " + items.Length + " items");
                      this.button1.Enabled = true;
                      this.button2.Enabled = true;
                      this.button3.Enabled = true;
@@ -250,7 +250,7 @@ namespace QuizoPlugins
             }
             else
             {
-                this.label1.Text = ("加载失败");
+                this.label1.Text = ("Failed to load");
             }
         }
 
@@ -281,11 +281,11 @@ namespace QuizoPlugins
                             if (!string.IsNullOrEmpty(items[i].url) && items[i].url.ToLower().StartsWith("http"))
                             {
                                 Process.Start(items[i].url);
-                                this.AutoSideHide(); // 双击则 side 隐藏
+                                this.AutoSideHide(); // double-click hides to the side
                             }
                             else
                             {
-                                MessageBox.Show("未获取到链接");
+                                MessageBox.Show("No link was found");
                             }
                             return;
                         }
@@ -319,7 +319,7 @@ namespace QuizoPlugins
                 if (items != null && this.listBox1.SelectedIndex < items.Length)
                 {
                     var description = items[this.listBox1.SelectedIndex].description;
-                    // 如果描述信息为空，则取标题
+                    // If the description is empty, use the title instead
                     if (isEmpty(description))
                     {
                         description = items[this.listBox1.SelectedIndex].title;
@@ -342,7 +342,7 @@ namespace QuizoPlugins
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.label1.Text = ("数据加载中...");
+            this.label1.Text = ("Loading data...");
             this.button1.Enabled = false;
             this.button2.Enabled = false;
             this.button3.Enabled = false;
