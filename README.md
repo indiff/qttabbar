@@ -37,8 +37,7 @@ Windows 11 removed the classic Explorer toolbar, so there's no toolbar menu to e
 On Windows 11, QTTabBar works alongside Explorer's own native tabs rather than showing its own tab bar. Once enabled you get:
 
 - **Double-click** an empty area of a folder to go up one level
-- **Hover previews** of folders and archives (Sub-Directory Tips)
-- **Back / Forward** buttons that act on the currently active native tab
+- **Hover previews** of text files and photos/media files
 
 Error logs are written to `%APPDATA%\QTTabBar\QTTabBarException.log`.
 
