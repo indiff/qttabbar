@@ -50,8 +50,13 @@ Write-Host "Updated $bundleWxs"
 
 # --- 2. Build the DLL --------------------------------------------------
 
-$msbuild = Get-ChildItem "C:\Program Files*\Microsoft Visual Studio\2022\*\MSBuild\Current\Bin\MSBuild.exe" -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
-if (-not $msbuild) { throw "MSBuild.exe not found under Visual Studio 2022" }
+# On CI, microsoft/setup-msbuild puts msbuild on PATH; locally fall back to the
+# Visual Studio 2022 install.
+$msbuild = (Get-Command msbuild -ErrorAction SilentlyContinue).Source
+if (-not $msbuild) {
+    $msbuild = Get-ChildItem "C:\Program Files*\Microsoft Visual Studio\2022\*\MSBuild\Current\Bin\MSBuild.exe" -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+}
+if (-not $msbuild) { throw "MSBuild.exe not found" }
 
 & $msbuild "$root\QTTabBar\QTTabBar.csproj" /p:Configuration=Release "/p:SolutionDir=$root\" /nologo /v:minimal
 if ($LASTEXITCODE -ne 0) { throw "QTTabBar.csproj build failed" }
