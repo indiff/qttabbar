@@ -76,7 +76,14 @@ namespace QTTabBarLib {
                 // Explorer never hosts the toolbar), InstanceManager/Config/etc. are
                 // never set up, so force it before checking the setting below.
                 System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(QTUtility).TypeHandle);
-                if (Config.Window.AutoEnableExperimental) {
+                // Windows 10 still has a real toolbar rebar - users enable QTTabBar (and
+                // separately QTButtonBar, if they only want one of the two) through
+                // Explorer's own View > Toolbars menu there, same as any other classic
+                // toolband. This auto-attach path never parents into a real rebar (see
+                // ContextMenuOptions.AttachToWindow), so it only ever gives double-click
+                // and hover preview, not tabs - worth running only where Windows 11's
+                // lack of a rebar leaves no other way to get even that much.
+                if (QTUtility.IsWin11 && Config.Window.AutoEnableExperimental) {
                     // SetSite fires far earlier in the window's life than the existing
                     // right-click "Enable QTTabBar" path ever did (that only ever ran on an
                     // already-open, already-visible window). Attaching here immediately once

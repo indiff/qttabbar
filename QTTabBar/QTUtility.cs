@@ -40,9 +40,10 @@ using System.Text;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
-        // 1.5.6.2  edit this
         internal static readonly Version BetaRevision = new Version(1, 0); // Major = beta revision, Minor = alpha revision
-        internal static readonly Version CurrentVersion = new Version(1, 5, 6, 2);
+        // Derived from AssemblyVersion in Properties/AssemblyInfo.cs - the only place
+        // the app's own version needs to be edited by hand outside the installer.
+        internal static readonly Version CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version;
         internal static readonly string BuildVerion = "build01";
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";

@@ -3,6 +3,7 @@ name: QTTabBar
 on:
   push:
     branches: [ master ]
+    tags: [ 'v*' ]
   pull_request:
     branches: [ master ]
   workflow_dispatch:
@@ -64,10 +65,41 @@ jobs:
         name: QTTabBar
         path: QTTabBar\bin\${{ matrix.configuration }}\**\*
 
+  release-installer:
+    needs: build-and-test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v2
+      with:
+        nuget-version: 'latest'
+
+    - name: NuGet Restore
+      run: nuget restore "QTTabBar Rebirth.sln"
+
+    - name: Install WiX Toolset v3
+      run: choco install wixtoolset -y
+
+    - name: Build installer
+      shell: pwsh
+      run: |
+        $version = "${{ github.ref_name }}" -replace '^v', ''
+        .\Installer\Build-Installer.ps1 -Version $version
+        echo "VERSION=$version" >> $env:GITHUB_ENV
+
     - name: Release
       uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: QTTabBar\bin\${{ matrix.configuration }}\**\*
+        files: Installer\bin\Release\QTTabBar Setup ${{ env.VERSION }}.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

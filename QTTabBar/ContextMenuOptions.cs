@@ -81,7 +81,10 @@ namespace QTTabBarLib {
 
         // Manually drives the same SetSite/ShowDW lifecycle Explorer would normally
         // drive for a docked toolband, so QTTabBarClass attaches (mouse actions,
-        // hover previews, ...) to a window without ever being shown in a rebar.
+        // hover previews, ...) to a window without ever being shown in a rebar. Real
+        // tabs still require the user to enable QTTabBar the normal way (Explorer's
+        // own View > Toolbars menu on Windows 10 - see AutoLoader.SetSite for why this
+        // path is Windows 11-only).
         // Called from AutoLoader, which already has the IWebBrowser2 for its own window
         // as the BHO site. Must be called on the target window's own UI thread -
         // AutoLoader.SetSite satisfies this since Explorer invokes it there directly.

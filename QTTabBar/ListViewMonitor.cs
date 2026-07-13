@@ -1,4 +1,4 @@
-﻿//    This file is part of QTTabBar, a shell extension for Microsoft
+//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
 //    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
@@ -16,14 +16,24 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     public class ListViewMonitor : IDisposable {
         public event EventHandler ListViewChanged;
-        private IntPtr hwndShellContainer;
-        private NativeWindowController ContainerController;
+        // Windows 11's native Explorer tabs (22H2+) create one ShellTabWindowClass
+        // container per tab inside the same window; earlier Windows has exactly one.
+        // A view (SHELLDLL_DefView) is only ever created inside its own container, so
+        // every container must be watched, and containers appear/disappear as native
+        // tabs open and close.
+        private List<NativeWindowController> containerControllers = new List<NativeWindowController>();
+        private NativeWindowController explorerController;
+        // All still-live captured views, so switching back to a native tab reuses the
+        // instance that already subclasses its listview instead of subclassing twice.
+        private List<AbstractListView> liveViews = new List<AbstractListView>();
         private ShellBrowserEx ShellBrowser;
         private IntPtr hwndExplorer;
         private IntPtr hwndSubDirTipMessageReflect;
@@ -33,31 +43,72 @@ namespace QTTabBarLib {
             ShellBrowser = shellBrowser;
             this.hwndExplorer = hwndExplorer;
             this.hwndSubDirTipMessageReflect = hwndSubDirTipMessageReflect;
-            hwndShellContainer = QTUtility.IsXP 
-                    ? hwndExplorer
-                    : WindowUtils.FindChildWindow(hwndExplorer, hwnd => PInvoke.GetClassName(hwnd) == "ShellTabWindowClass");
-            if(hwndShellContainer != IntPtr.Zero) {
-                ContainerController = new NativeWindowController(hwndShellContainer);
-                ContainerController.MessageCaptured += ContainerController_MessageCaptured;
+            if(QTUtility.IsXP) {
+                AddContainer(hwndExplorer);
+            }
+            else {
+                IntPtr hwndContainer = IntPtr.Zero;
+                while((hwndContainer = PInvoke.FindWindowEx(hwndExplorer, hwndContainer, "ShellTabWindowClass", null)) != IntPtr.Zero) {
+                    AddContainer(hwndContainer);
+                }
+                // New native tabs create their container after this monitor exists -
+                // the explorer window gets the WM_PARENTNOTIFY for those.
+                explorerController = new NativeWindowController(hwndExplorer);
+                explorerController.MessageCaptured += ExplorerController_MessageCaptured;
             }
         }
 
         public AbstractListView CurrentListView { get; private set; }
         public AbstractListView PreviousListView { get; private set; }
 
+        private void AddContainer(IntPtr hwnd) {
+            NativeWindowController controller = new NativeWindowController(hwnd);
+            controller.MessageCaptured += ContainerController_MessageCaptured;
+            containerControllers.Add(controller);
+        }
+
+        // The active native tab's container is always first in the explorer window's
+        // child z-order (switching tabs just reorders them).
+        private IntPtr ActiveContainer() {
+            return QTUtility.IsXP ? hwndExplorer : WindowUtils.GetShellTabWindowClass(hwndExplorer);
+        }
+
+        private bool ExplorerController_MessageCaptured(ref Message msg) {
+            if(msg.Msg == WM.PARENTNOTIFY &&
+               PInvoke.LoWord((int)msg.WParam) == WM.CREATE &&
+               PInvoke.GetClassName(msg.LParam) == "ShellTabWindowClass") {
+                AddContainer(msg.LParam);
+            }
+            return false;
+        }
+
         private bool ContainerController_MessageCaptured(ref Message msg) {
-            // QTUtility2.debugMessage(msg);
-            if(msg.Msg == WM.PARENTNOTIFY && 
+            if(msg.Msg == WM.PARENTNOTIFY &&
                PInvoke.LoWord((int)msg.WParam) == WM.CREATE) {
                 string name = PInvoke.GetClassName(msg.LParam);
-                if(name == "SHELLDLL_DefView") {
+                if(name == "SHELLDLL_DefView" && msg.HWnd == ActiveContainer()) {
                     RecaptureHandles(msg.LParam);
+                }
+            }
+            else if(msg.Msg == WM.WINDOWPOSCHANGED && containerControllers.Count > 1) {
+                // Switching native tabs creates and shows nothing - the incoming tab's
+                // container is just moved to the top of the z-order. This is the only
+                // signal that a different tab's existing view is now the one on screen.
+                WINDOWPOS wp = (WINDOWPOS)Marshal.PtrToStructure(msg.LParam, typeof(WINDOWPOS));
+                if((wp.flags & SWP.NOZORDER) == 0 && msg.HWnd == ActiveContainer()) {
+                    IntPtr hwndShellView = WindowUtils.FindChildWindow(msg.HWnd,
+                            hwnd => PInvoke.GetClassName(hwnd) == "SHELLDLL_DefView");
+                    if(hwndShellView != IntPtr.Zero) {
+                        RecaptureHandles(hwndShellView);
+                    }
                 }
             }
             return false;
         }
 
         public void Initialize() {
+            // EnumChildWindows walks depth-first from the first (= active) container,
+            // so with multiple native tabs this finds the active tab's view.
             IntPtr hwndShellView = WindowUtils.FindChildWindow(hwndExplorer, hwnd => PInvoke.GetClassName(hwnd) == "SHELLDLL_DefView");
             if(hwndShellView == IntPtr.Zero) {
                 if(CurrentListView != null) {
@@ -93,6 +144,15 @@ namespace QTTabBarLib {
                 PreviousListView = CurrentListView;
             }
 
+            AbstractListView live = hwndListView == IntPtr.Zero ? null
+                    : liveViews.Find(view => view.Handle == hwndListView);
+            if(live != null) {
+                // Back on a native tab whose view is still alive and subclassed.
+                CurrentListView = live;
+                ListViewChanged(this, null);
+                return;
+            }
+
             if(hwndListView == IntPtr.Zero)
             {
                 QTUtility2.log("new AbstractListView");
@@ -107,10 +167,12 @@ namespace QTTabBarLib {
                 CurrentListView = new ExtendedItemsView(ShellBrowser, hwndShellView, hwndListView, hwndSubDirTipMessageReflect);
             }
             CurrentListView.ListViewDestroyed += ListView_Destroyed;
+            liveViews.Add(CurrentListView);
             ListViewChanged(this, null);
         }
 
         private void ListView_Destroyed(object sender, EventArgs args) {
+            liveViews.Remove((AbstractListView)sender);
             if(sender == CurrentListView) {
                 if(PreviousListView != null) {
                     CurrentListView = PreviousListView;
@@ -131,6 +193,10 @@ namespace QTTabBarLib {
 
         public void Dispose() {
             if(fDisposed) return;
+            foreach(AbstractListView view in liveViews) {
+                if(view != CurrentListView) view.Dispose();
+            }
+            liveViews.Clear();
             if(CurrentListView != null) {
                 CurrentListView.Dispose();
                 CurrentListView = null;

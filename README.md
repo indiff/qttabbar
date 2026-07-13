@@ -31,23 +31,19 @@ Error logs are written to `%APPDATA%\QTTabBar\QTTabBarException.log`.
 - [WiX Toolset v3.14](https://github.com/wixtoolset/wix3/releases) (command-line tools)
 - [NotifyPropertyWeaver](https://github.com/SimonCropp/NotifyPropertyWeaver) (included in `Tools\`)
 
-**Steps:**
+**Day-to-day code changes** (no installer needed):
 
 ```powershell
-# Build the main DLL
 msbuild QTTabBar\QTTabBar.csproj /p:Configuration=Release /p:SolutionDir="$pwd\\"
-
-# Build the MSI (run from the Installer\ directory)
-cd Installer
-$wix = "C:\Program Files (x86)\WiX Toolset v3.14\bin"
-$version = "1.5.6.2"  # keep in sync with ProductVersion in Installer.wxs and Version in Bundle.wxs
-& "$wix\candle.exe" -ext "$wix\WixNetFxExtension.dll" -ext "$wix\WixUIExtension.dll" -ext "$wix\WixUtilExtension.dll" -out obj\Release\ Installer.wxs CustomWelcomeEulaDlg.wxs CustomWixUI_Minimal.wxs
-& "$wix\light.exe"  -ext "$wix\WixNetFxExtension.dll" -ext "$wix\WixUIExtension.dll" -ext "$wix\WixUtilExtension.dll" -cultures:en-US -loc lang.wxl -sice:ICE80 -sice:ICE61 -out "bin\Release\en-US\QTTabBar Setup $version.msi" obj\Release\Installer.wixobj obj\Release\CustomWelcomeEulaDlg.wixobj obj\Release\CustomWixUI_Minimal.wixobj
-
-# Build the bootstrapper EXE
-& "$wix\candle.exe" -ext "$wix\WixBalExtension.dll" -ext "$wix\WixNetFxExtension.dll" -out obj\Release\Bundle\Bundle.wixobj Bundle.wxs
-& "$wix\light.exe"  -ext "$wix\WixBalExtension.dll" -ext "$wix\WixNetFxExtension.dll" -out "bin\Release\QTTabBar Setup $version.exe" obj\Release\Bundle\Bundle.wixobj
 ```
+
+**Cutting a versioned release installer:**
+
+```powershell
+.\Installer\Build-Installer.ps1 -Version 1.5.6.4
+```
+
+This is the *only* place the version number needs to be typed — the script stamps it into `AssemblyInfo.cs`, `Installer.wxs`, and `Bundle.wxs`, then builds the DLL, MSI, and bootstrapper. (`QTUtility.CurrentVersion`, shown in the About tab, reads the version from the built assembly at runtime instead of being hardcoded separately.)
 
 Output: `Installer\bin\Release\QTTabBar Setup <version>.exe` (bootstrapper with embedded MSI)
 

@@ -1689,6 +1689,14 @@ namespace QTTabBarLib {
         }
 
         private bool DoBindAction(BindAction action, bool fRepeat = false, QTabItem tab = null, IDLWrapper item = null) {
+            // Windows 11 has no rebar for the tab bar to dock into (see ContextMenuOptions/
+            // ExplorerSiteAdapter), so tabs and everything tab-related never render there.
+            // Only allow the two features that work without a visible tab bar: double-click
+            // to go up a level, and SubDirTip preview.
+            if(QTUtility.IsWin11 && action != BindAction.UpOneLevel && action != BindAction.ShowSDTSelected) {
+                return false;
+            }
+
             if(fRepeat && !(
                     action == BindAction.GoBack ||
                     action == BindAction.GoForward ||
@@ -2454,8 +2462,15 @@ namespace QTTabBarLib {
 
                 // 1. set capture new window
                 // 2. ctrl key not pressed.
-                // 3. instsance count > 0 
-                if (Config.Window.CaptureNewWindows &&
+                // 3. instsance count > 0
+                // Not on Windows 11: this folds the new window into a tab elsewhere and
+                // closes it via Explorer.Quit() below, but tabs never render there (see
+                // the DoBindAction gate above) - the window would just vanish with nowhere
+                // visible for its content to go, and worse, the fall-through after
+                // Explorer.Quit() (no return - see the commented-out one two lines down)
+                // re-initializes the closing window, which loops.
+                if (!QTUtility.IsWin11 &&
+                    Config.Window.CaptureNewWindows &&
                     ModifierKeys != Keys.Control &&
                     InstanceManager.GetTotalInstanceCount() > 0) {
                     string cmd = GetCommandLine();
@@ -3141,6 +3156,16 @@ namespace QTTabBarLib {
 
             if(msg.Msg == WM_BROWSEOBJECT) {
                 SBSP flags = (SBSP)Marshal.ReadInt32(msg.WParam);
+                // Windows 11's native Explorer tabs (22H2+) each keep their own travel
+                // log, and QTTabBar's simulated tabs never render there (see the
+                // DoBindAction gate) - its private history is a stale copy of whichever
+                // native tab it bound to first, so replaying it here navigates the wrong
+                // tab. Leave msg.Result at 0 so the hook (DetourBrowseObject) falls
+                // through to Explorer's own BrowseObject, which runs on the exact tab
+                // the user clicked back/forward in.
+                if(QTUtility.IsWin11 && (flags & (SBSP.NAVIGATEBACK | SBSP.NAVIGATEFORWARD)) != 0) {
+                    return true;
+                }
                 if((flags & SBSP.NAVIGATEBACK) != 0) {
                     msg.Result = (IntPtr)1;
                     QTUtility2.log("explorerController_MessageCaptured WM_BROWSEOBJECT: NAVIGATEBACK");
@@ -5066,16 +5091,30 @@ namespace QTTabBarLib {
                 ExtendedListViewCommon elvc = listView as ExtendedListViewCommon;
                 if (elvc != null)
                 {
+                    // ListViewMonitor re-surfaces the same instance when the user
+                    // switches back to a still-open Windows 11 native tab - detach
+                    // first so handlers never stack up and fire twice.
+                    elvc.ItemCountChanged -= ListView_ItemCountChanged;
                     elvc.ItemCountChanged += ListView_ItemCountChanged;
+                    elvc.SelectionActivated -= ListView_SelectionActivated;
                     elvc.SelectionActivated += ListView_SelectionActivated;
+                    elvc.SelectionChanged -= ListView_SelectionChanged;
                     elvc.SelectionChanged += ListView_SelectionChanged;
+                    elvc.MiddleClick -= ListView_MiddleClick;
                     elvc.MiddleClick += ListView_MiddleClick;
+                    elvc.DoubleClick -= ListView_DoubleClick;
                     elvc.DoubleClick += ListView_DoubleClick;
+                    elvc.EndLabelEdit -= ListView_EndLabelEdit;
                     elvc.EndLabelEdit += ListView_EndLabelEdit;
+                    elvc.MouseActivate -= ListView_MouseActivate;
                     elvc.MouseActivate += ListView_MouseActivate;
+                    elvc.SubDirTip_MenuItemClicked -= subDirTip_MenuItemClicked;
                     elvc.SubDirTip_MenuItemClicked += subDirTip_MenuItemClicked;
+                    elvc.SubDirTip_MenuItemRightClicked -= subDirTip_MenuItemRightClicked;
                     elvc.SubDirTip_MenuItemRightClicked += subDirTip_MenuItemRightClicked;
+                    elvc.SubDirTip_MultipleMenuItemsClicked -= subDirTip_MultipleMenuItemsClicked;
                     elvc.SubDirTip_MultipleMenuItemsClicked += subDirTip_MultipleMenuItemsClicked;
+                    elvc.SubDirTip_MultipleMenuItemsRightClicked -= subDirTip_MultipleMenuItemsRightClicked;
                     elvc.SubDirTip_MultipleMenuItemsRightClicked += subDirTip_MultipleMenuItemsRightClicked;
                 }
             }

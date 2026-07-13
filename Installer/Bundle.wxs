@@ -3,8 +3,8 @@
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
 
-    <Bundle Name="QTTabBar 1.5.6.2"
-            Version="1.5.6.2"
+    <Bundle Name="QTTabBar 1.5.7"
+            Version="1.5.7"
             Manufacturer="indiff"
             UpgradeCode="{6E6EAFA9-B39E-4A2F-88A0-E52B365F33D8}"
             IconSourceFile="QTTabBar.ico">
@@ -22,7 +22,7 @@
 
             <!-- QTTabBar MSI (built from Installer.wixproj) -->
             <MsiPackage Id="QTTabBarInstaller"
-                        SourceFile="bin\Release\en-US\QTTabBar Setup.msi"
+                        SourceFile="bin\Release\en-US\QTTabBar Setup 1.5.7.msi"
                         Vital="yes"
                         DisplayInternalUI="no" />
         </Chain>
