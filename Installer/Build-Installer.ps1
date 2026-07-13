@@ -58,28 +58,44 @@ if (-not $msbuild) {
 }
 if (-not $msbuild) { throw "MSBuild.exe not found" }
 
-# The native vcxproj files (QTHookLib, MinHook, InstallerHelper) don't pin a
-# PlatformToolset, so on a runner without VS2010 they default to v100 and fail
-# with MSB8020. Force a modern toolset; v143 covers every VS2022+ install
-# (MSVC 14.3x-14.4x). Managed projects ignore these props.
+# Build the code projects explicitly rather than the whole .sln: the solution
+# also contains Installer.wixproj, which msbuild builds in parallel before the
+# plugin DLLs exist (WiX projects have no project references to them), so a
+# solution build fails with LGHT0103. QTTabBar.csproj pulls in BandObjectLib and
+# QTPluginLib via project references; the plugins and SetHome are standalone.
+# (Sample/SamplePlugin is intentionally omitted - the installer doesn't ship it.)
+$managedProjects = @(
+    "QTTabBar\QTTabBar.csproj"
+    "Plugins\CreateNewItem\CreateNewItem.csproj"
+    "Plugins\QTClock\QTClock.csproj"
+    "Plugins\QTFileTools\QTFileTools.csproj"
+    "Plugins\QTFolderButton\QTFolderButton.csproj"
+    "Plugins\QTViewModeButton\ViewModeButton.csproj"
+    "Plugins\QTWindowManager\QTWindowManager.csproj"
+    "Plugins\ShowStatusBar\ShowStatusBar.csproj"
+    "Plugins\MigemoLoader\MigemoLoader.csproj"
+    "Plugins\Memo\Memo.csproj"
+    "Plugins\QTQuick\QTQuick.csproj"
+    "Plugins\TurnOffRepeat\TurnOffRepeat.csproj"
+    "Plugins\ActivateByMouseHover\ActivateByMouseHover.csproj"
+    "SetHome\SetHome.csproj"
+)
+foreach ($proj in $managedProjects) {
+    & $msbuild "$root\$proj" /p:Configuration=Release "/p:SolutionDir=$root\" /nologo /v:minimal
+    if ($LASTEXITCODE -ne 0) { throw "build failed: $proj" }
+}
+
+# Native hook, both platforms. The vcxproj files don't pin a PlatformToolset, so
+# on a runner without VS2010 they default to v100 and fail with MSB8020 - force a
+# modern toolset (v143 covers every VS2022+ MSVC). QTHookLib links libMinHook, so
+# build that first for each platform. Win32 -> QTHookLib32.dll, x64 -> ...64.dll.
 $vcProps = @('/p:PlatformToolset=v143', '/p:WindowsTargetPlatformVersion=10.0')
-
-# Full solution: QTTabBar.dll, BandObjectLib, QTPluginLib, every bundled plugin,
-# and QTHookLib32.dll (the native vcxproj maps to Release|Win32 in every
-# solution configuration). On a clean checkout (CI) none of these exist yet, so
-# building just QTTabBar.csproj isn't enough - WiX needs them all.
-& $msbuild "$root\QTTabBar Rebirth.sln" /p:Configuration=Release "/p:Platform=Any CPU" $vcProps /nologo /v:minimal
-if ($LASTEXITCODE -ne 0) { throw "solution build failed" }
-
-# QTHookLib64.dll: the solution never builds the x64 hook (its config maps to
-# Win32 everywhere), so build that one platform directly.
-& $msbuild "$root\QTHookLib\QTHookLib.vcxproj" /p:Configuration=Release /p:Platform=x64 $vcProps /nologo /v:minimal
-if ($LASTEXITCODE -ne 0) { throw "QTHookLib x64 build failed" }
-
-# SetHome.exe: the solution's Any CPU config only sets ActiveCfg for it (no
-# Build.0), so it isn't built as part of the solution - build it explicitly.
-& $msbuild "$root\SetHome\SetHome.csproj" /p:Configuration=Release "/p:SolutionDir=$root\" /nologo /v:minimal
-if ($LASTEXITCODE -ne 0) { throw "SetHome build failed" }
+foreach ($plat in @('Win32', 'x64')) {
+    & $msbuild "$root\MinHook\libMinHook.vcxproj" /p:Configuration=Release /p:Platform=$plat $vcProps /nologo /v:minimal
+    if ($LASTEXITCODE -ne 0) { throw "libMinHook $plat build failed" }
+    & $msbuild "$root\QTHookLib\QTHookLib.vcxproj" /p:Configuration=Release /p:Platform=$plat $vcProps /nologo /v:minimal
+    if ($LASTEXITCODE -ne 0) { throw "QTHookLib $plat build failed" }
+}
 
 # --- 3. Build the MSI ---------------------------------------------------
 
