@@ -48,7 +48,7 @@ $bundleWxs = Join-Path $installerDir "Bundle.wxs"
     | Set-Content $bundleWxs -NoNewline
 Write-Host "Updated $bundleWxs"
 
-# --- 2. Build the DLL --------------------------------------------------
+# --- 2. Build every payload the installer packages ---------------------
 
 # On CI, microsoft/setup-msbuild puts msbuild on PATH; locally fall back to the
 # Visual Studio 2022 install.
@@ -58,8 +58,22 @@ if (-not $msbuild) {
 }
 if (-not $msbuild) { throw "MSBuild.exe not found" }
 
-& $msbuild "$root\QTTabBar\QTTabBar.csproj" /p:Configuration=Release "/p:SolutionDir=$root\" /nologo /v:minimal
-if ($LASTEXITCODE -ne 0) { throw "QTTabBar.csproj build failed" }
+# Full solution: QTTabBar.dll, BandObjectLib, QTPluginLib, every bundled plugin,
+# and QTHookLib32.dll (the native vcxproj maps to Release|Win32 in every
+# solution configuration). On a clean checkout (CI) none of these exist yet, so
+# building just QTTabBar.csproj isn't enough - WiX needs them all.
+& $msbuild "$root\QTTabBar Rebirth.sln" /p:Configuration=Release "/p:Platform=Any CPU" /nologo /v:minimal
+if ($LASTEXITCODE -ne 0) { throw "solution build failed" }
+
+# QTHookLib64.dll: the solution never builds the x64 hook (its config maps to
+# Win32 everywhere), so build that one platform directly.
+& $msbuild "$root\QTHookLib\QTHookLib.vcxproj" /p:Configuration=Release /p:Platform=x64 /nologo /v:minimal
+if ($LASTEXITCODE -ne 0) { throw "QTHookLib x64 build failed" }
+
+# SetHome.exe: the solution's Any CPU config only sets ActiveCfg for it (no
+# Build.0), so it isn't built as part of the solution - build it explicitly.
+& $msbuild "$root\SetHome\SetHome.csproj" /p:Configuration=Release "/p:SolutionDir=$root\" /nologo /v:minimal
+if ($LASTEXITCODE -ne 0) { throw "SetHome build failed" }
 
 # --- 3. Build the MSI ---------------------------------------------------
 
