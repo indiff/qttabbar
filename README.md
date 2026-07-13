@@ -20,7 +20,25 @@ See [CHANGELOG.md](CHANGELOG.md) for the full version history.
 
 1. Run `QTTabBar Setup.exe` — it will install .NET Framework 4.8 automatically if not present
 2. After installation, open a File Explorer window
-3. Enable the toolbars: **View → Options** (Windows 10/11) or right-click the toolbar area and check **QTTabBar** and **QT ButtonBar**
+3. Activate QTTabBar — the steps differ by Windows version (see below)
+
+### Activating on Windows 10
+
+Explorer still has a classic toolbar, so enable the bands the normal way: right-click an empty part of the toolbar area (or use **View → Options**) and tick **QTTabBar** and **QT ButtonBar**. This gives the full experience, including QTTabBar's own tab bar.
+
+### Activating on Windows 11
+
+Windows 11 removed the classic Explorer toolbar, so there's no toolbar menu to enable QTTabBar through. Instead, turn on the auto-attach option:
+
+1. Right-click an empty area inside any folder and choose **QTTabBar Options**.
+2. On the **Window** tab, tick **“Enable QTTabBar on every Explorer window (experimental, must restart Explorer)”**.
+3. Click **OK**, then restart Explorer — either sign out and back in, or open Task Manager, find **Windows Explorer**, and click **Restart**.
+
+On Windows 11, QTTabBar works alongside Explorer's own native tabs rather than showing its own tab bar. Once enabled you get:
+
+- **Double-click** an empty area of a folder to go up one level
+- **Hover previews** of folders and archives (Sub-Directory Tips)
+- **Back / Forward** buttons that act on the currently active native tab
 
 Error logs are written to `%APPDATA%\QTTabBar\QTTabBarException.log`.
 
