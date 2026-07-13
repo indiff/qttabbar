@@ -132,9 +132,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
-      <ProgramDatabaseFile>
+      <OptimizeReferences>true</OptimizeReferences>      <ProgramDatabaseFile>
       </ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
@@ -153,9 +151,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
-      <ProgramDatabaseFile>
+      <OptimizeReferences>true</OptimizeReferences>      <ProgramDatabaseFile>
       </ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
