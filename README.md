@@ -34,6 +34,8 @@ Windows 11 removed the classic Explorer toolbar, so there's no toolbar menu to e
 2. On the **Window** tab, tick **“Enable QTTabBar on every Explorer window (experimental, must restart Explorer)”**.
 3. Click **OK**, then restart Explorer — either sign out and back in, or open Task Manager, find **Windows Explorer**, and click **Restart**.
 
+![QTTabBar Options — Enable QTTabBar on every Explorer window](docs/images/win11-enable-on-every-window.png)
+
 On Windows 11, QTTabBar works alongside Explorer's own native tabs rather than showing its own tab bar. Once enabled you get:
 
 - **Double-click** an empty area of a folder to go up one level
