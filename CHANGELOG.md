@@ -1,5 +1,7 @@
 # Changelog
 
+- [1.5.9 (2026)](https://github.com/niklas2233/qttabbar/releases/tag/v1.5.9) Fix Windows 11 double-click to go up a level (broke after long Explorer sessions), Back button jumping to Home instead of stepping back, and mouse back/forward (X1/X2) side buttons
+- [1.5.7 (2026)](https://github.com/niklas2233/qttabbar/releases/tag/v1.5.7) Fix back/forward and double-click on Windows 11 native tabs; register the ContextMenuOptions handler
 - [1.5.6.2 (2026)](https://github.com/niklas2233/qttabbar/releases/tag/v1.5.6.2) Upgrade to .NET 4.8; fix options dialog crash and empty window; bars disabled by default; installer restarts Explorer correctly
 - [1.5.6.1-beta (2024)](https://github.com/indiff/qttabbar/releases/tag/v1.5.6.-beta.1) Fix auto select
 - [1.5.5.9-beta (2023)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.9) Capture to select, fix preview text encoding
