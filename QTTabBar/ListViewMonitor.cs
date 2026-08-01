@@ -87,7 +87,7 @@ namespace QTTabBarLib {
                PInvoke.LoWord((int)msg.WParam) == WM.CREATE) {
                 string name = PInvoke.GetClassName(msg.LParam);
                 if(name == "SHELLDLL_DefView" && msg.HWnd == ActiveContainer()) {
-                    RecaptureHandles(msg.LParam);
+                    RecaptureHandles(msg.LParam, fForceNew: true);
                 }
             }
             else if(msg.Msg == WM.WINDOWPOSCHANGED && containerControllers.Count > 1) {
@@ -122,7 +122,34 @@ namespace QTTabBarLib {
             }
         }
 
-        private void RecaptureHandles(IntPtr hwndShellView) {
+        // A live view lingers in liveViews when its WM_DESTROY is missed (the event
+        // never fires). Drop any whose window is gone before we trust the by-handle
+        // cache below - otherwise, once Windows recycles that HWND value, the reuse
+        // lookup hands back a dead view still subclassing the defunct window, so it
+        // never sees the active tab's mouse messages and double-click silently dies
+        // while Explorer-native back/forward (which never touches this cache) works.
+        private void PruneDeadViews() {
+            for(int i = liveViews.Count - 1; i >= 0; i--) {
+                AbstractListView v = liveViews[i];
+                if(v == CurrentListView || v == PreviousListView) continue;
+                // Drop dead-window views (missed WM_DESTROY) and stranded AbstractListView
+                // placeholders (Handle == Zero, left behind after visiting a virtual folder
+                // like Home). Neither can ever be reused - the by-handle lookup skips Zero
+                // and never matches a defunct window - so both are pure leak.
+                if(v.Handle == IntPtr.Zero || !PInvoke.IsWindow(v.Handle)) {
+                    liveViews.RemoveAt(i);
+                    v.Dispose();
+                }
+            }
+        }
+
+        // fForceNew is set by callers that just watched a brand-new list view get
+        // created (SHELLDLL_DefView CREATE). Such an HWND can never legitimately be an
+        // existing live tab, so we must not short-circuit on a handle match or reuse a
+        // cached view for it - a match there is a recycled-handle impostor, not a tab
+        // the user switched back to (that path is the WINDOWPOSCHANGED trigger, which
+        // passes fForceNew=false and keeps the reuse fast-path).
+        private void RecaptureHandles(IntPtr hwndShellView, bool fForceNew = false) {
             bool fIsSysListView = false;
             IntPtr hwndListView = WindowUtils.FindChildWindow(hwndShellView, hwnd => {
                 string name = PInvoke.GetClassName(hwnd);
@@ -137,8 +164,10 @@ namespace QTTabBarLib {
                 return false;
             });
 
+            PruneDeadViews();
+
             if(CurrentListView != null) {
-                if(CurrentListView.Handle == hwndListView) {
+                if(!fForceNew && CurrentListView.Handle == hwndListView) {
                     return;
                 }
                 PreviousListView = CurrentListView;
@@ -146,11 +175,17 @@ namespace QTTabBarLib {
 
             AbstractListView live = hwndListView == IntPtr.Zero ? null
                     : liveViews.Find(view => view.Handle == hwndListView);
-            if(live != null) {
+            if(live != null && !fForceNew) {
                 // Back on a native tab whose view is still alive and subclassed.
                 CurrentListView = live;
                 ListViewChanged(this, null);
                 return;
+            }
+            if(live != null) {
+                // fForceNew: the HWND belongs to a freshly created view, so this cached
+                // entry is a stale collision. Drop it so we subclass the real window.
+                liveViews.Remove(live);
+                if(live != PreviousListView) live.Dispose();
             }
 
             if(hwndListView == IntPtr.Zero)

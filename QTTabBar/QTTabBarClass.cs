@@ -755,13 +755,25 @@ namespace QTTabBarLib {
                             return ptr;*/
 
                         case WM.XBUTTONDOWN:
-                             
+
                         case WM.XBUTTONUP:
-                            MouseButtons mouseButtons = MouseButtons;
+                            // On Win11 QTTabBar doesn't own navigation - its private travel
+                            // log is a stale copy of whichever native tab it bound to first
+                            // (same reason WM_BROWSEOBJECT bails, and DoBindAction no-ops
+                            // GoBack/GoForward there). Let Explorer handle the X buttons
+                            // natively so back/forward act on the tab the user is actually in.
+                            if(QTUtility.IsWin11) break;
+                            // Don't use the live MouseButtons state here: by the time
+                            // WM.XBUTTONUP arrives the button has already been released,
+                            // so MouseButtons would always report None. Decode which
+                            // XButton fired from the MOUSEHOOKSTRUCTEX in lParam instead
+                            // (same struct HandleMOUSEWHEEL uses for the wheel delta).
+                            MOUSEHOOKSTRUCTEX mhsx = (MOUSEHOOKSTRUCTEX)Marshal.PtrToStructure(lParam, typeof(MOUSEHOOKSTRUCTEX));
+                            int xButton = mhsx.mouseData >> 0x10;
                             Keys modifierKeys = ModifierKeys;
-                            MouseChord chord = mouseButtons == MouseButtons.XButton1
+                            MouseChord chord = xButton == 1
                                     ? MouseChord.X1
-                                    : mouseButtons == MouseButtons.XButton2 ? MouseChord.X2 : MouseChord.None;
+                                    : xButton == 2 ? MouseChord.X2 : MouseChord.None;
                             if(chord == MouseChord.None) break;
                             chord = QTUtility.MakeMouseChord(chord, modifierKeys);
                             BindAction action;
@@ -902,6 +914,12 @@ namespace QTTabBarLib {
         }
 
         private void ClearTravelLogs() {
+            // Win11 native tabs each keep their own travel log and QTTabBar delegates
+            // back/forward straight to Explorer there (its simulated tabs don't render).
+            // Stripping that log to its first entry - which is what this method does, to
+            // keep the old QTTabBar per-tab history from doubling up - leaves Explorer's
+            // Back button nowhere to go but Home. Leave the native log intact on Win11.
+            if(QTUtility.IsWin11) return;
             IEnumTravelLogEntry ppenum = null;
             try {
                 if((TravelLog.EnumEntries(0x30, out ppenum) != 0) || (ppenum == null)) {
@@ -3387,26 +3405,22 @@ namespace QTTabBarLib {
 
                     switch(command) {
                         case APPCOMMAND_BROWSER_BACKWARD:
-                            QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD");
-                            if(fProcess) {
-                                MouseChord chord = QTUtility.MakeMouseChord(MouseChord.X1, ModifierKeys);
-                                if(Config.Mouse.GlobalMouseActions.TryGetValue(chord, out action)) {
-                                    DoBindAction(action);
-                                }
-                            }
-                            else
-                            {
-
-                            }
-                            return true;
-
                         case APPCOMMAND_BROWSER_FORWARD:
-                            QTUtility2.log("APPCOMMAND_BROWSER_FORWARD");
-                            if(fProcess) {
-                                MouseChord chord = QTUtility.MakeMouseChord(MouseChord.X2, ModifierKeys);
-                                if(Config.Mouse.GlobalMouseActions.TryGetValue(chord, out action)) {
-                                    DoBindAction(action);
-                                }
+                            QTUtility2.log("APPCOMMAND_BROWSER_" +
+                                    (command == APPCOMMAND_BROWSER_BACKWARD ? "BACKWARD" : "FORWARD"));
+                            // A mouse-generated APPCOMMAND is Explorer's to handle - returning
+                            // true here would consume it and nothing would navigate at all.
+                            // Win10: CallbackMouseProc already ate the XBUTTON, so this only
+                            // arrives when the hook missed it. Win11: CallbackMouseProc lets the
+                            // XBUTTON through on purpose so Explorer navigates the native tab the
+                            // user is actually in. Only driver/keyboard-generated commands - which
+                            // the mouse hook never sees - map to a configured bind action.
+                            if(!fProcess) return false;
+                            MouseChord chord = QTUtility.MakeMouseChord(
+                                    command == APPCOMMAND_BROWSER_BACKWARD ? MouseChord.X1 : MouseChord.X2,
+                                    ModifierKeys);
+                            if(Config.Mouse.GlobalMouseActions.TryGetValue(chord, out action)) {
+                                DoBindAction(action);
                             }
                             return true;
 
