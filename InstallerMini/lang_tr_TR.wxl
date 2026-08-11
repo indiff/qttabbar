@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="tr-tr" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="YOURLOCID">Yerel metinler</String>
+  <String Id="READ_INFO">Lütfen aşağıdaki bilgileri okuyun.</String>
+  <String Id="CLOSE_TABS">Tüm gezgin pencerelerini kapatın ve sekmeler halinde yeniden açın</String>
+  <String Id="COMPILE_IMG">Yerel görüntüleri derleyin</String>
+  <String Id="GPL_FILE">GPL3.rtf</String>
+  <String Id="STANDARD_BUTTONS">QTTab Varsayılan Düğmeleri</String>
+  <String Id="DESKTOP_TOOL">QTTab Desktop Tool</String>
+
+  <String Id="QTTABBAR_ATUOLOADER">QTTabBar Autoloader</String>
+
+  <String Id="ALREADY_INSTALLED">En son sürüm zaten yüklü.</String>
+  <String Id="DETECTED_OLD_VERSION">Yükleyici, QTTabBar'ın daha eski bir sürümünün yüklü olduğunu tespit etti. Yükleyicideki değişiklikler nedeniyle, devam etmeden önce bu eski sürümü manuel olarak kaldırmanız ve Explorer'ı yeniden başlatmanız gerekir. Eski sürümü kaldırdıktan ve Explorer'ı yeniden başlattıktan sonra yükleyiciyi yeniden çalıştırın.</String>
+  <String Id="STILL_OLD_VERSION">Görünüşe göre QTTabBar'ın eski bir sürümü hala Windows Gezgini'nde yüklü. Devam etmeden önce lütfen Görev Yöneticisi aracılığıyla Explorer'ı yeniden başlatın veya bilgisayarınızı yeniden başlatın.</String>
+  <String Id="REQUIRE_NET_FRAMEWORK">Bu uygulama, .NET Framework 3.5 veya üstünü gerektirir. Lütfen .NET Framework'ü yükleyin ve ardından bu yükleyiciyi yeniden çalıştırın.</String>
+</WixLocalization>
+

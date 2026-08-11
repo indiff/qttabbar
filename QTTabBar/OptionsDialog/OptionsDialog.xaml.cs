@@ -162,11 +162,12 @@ namespace QTTabBarLib {
             try {
                 Initialized += (sender, args) => Topmost = true;
                 ContentRendered += (sender, args) => Topmost = false;
-                // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
+                SourceInitialized += (sender, args) => QTUtility2.SetDarkTitleBar(new WindowInteropHelper(this).Handle);
+                // SetProcessDPIAware only exists on Vista and later - calling it directly would make the program incompatible with XP
                 PInvoke.SetProcessDPIAware();
-                // QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");
                 InitializeComponent();
-                
+                QTUtility2.ApplyOptionsDialogTheme(Resources);
+
                 // this.LoadViewFromUri("/QTTabBar;component/optionsdialog/optionsdialog.xaml");
                 // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
 
@@ -356,12 +357,19 @@ namespace QTTabBarLib {
         #endregion
 
         private void UpdateOptions() {
+            // AutoHookWindow only takes effect during explorer.exe startup (HookLibManager.
+            // Initialize() only ever runs once per process), so changing it needs a restart
+            // to actually apply.
+            bool oldAutoHookWindow = Config.Window.AutoHookWindow;
             foreach(OptionsDialogTab tab in tabbedPanel.Items) {
                 tab.CommitConfig();
             }
             ConfigManager.LoadedConfig = QTUtility2.DeepClone(WorkingConfig);
             ConfigManager.WriteConfig();
             ConfigManager.UpdateConfig();
+            if (Config.Window.AutoHookWindow != oldAutoHookWindow) {
+                QTUtility2.RestartExplorer();
+            }
         }
 
         private void CategoryListBoxItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
@@ -653,6 +661,19 @@ namespace QTTabBarLib {
             }
         }
 
+        // Like LogicalAndMultiConverter, but for a single checkbox that should set several
+        // underlying bools together (rather than one) - broadcasts the new value to every
+        // bound target instead of just the first.
+        internal class LogicalAndBroadcastMultiConverter : IMultiValueConverter {
+            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+                return values.All(b => b is bool && (bool)b);
+            }
+
+            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
+                return targetTypes.Select(t => value).ToArray();
+            }
+        }
+
         // Converts between many booleans and a string by StringJoining them.
         internal class BoolJoinMultiConverter : IMultiValueConverter {
             public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
@@ -757,6 +778,12 @@ namespace QTTabBarLib {
     /// Contains a few things common to more than one page.
     /// </summary>
     internal abstract class OptionsDialogTab : UserControl {
+        protected OptionsDialogTab() {
+            // Deferred to Loaded: this constructor runs before the derived class's own
+            // InitializeComponent(), which is what actually populates Resources.
+            Loaded += (sender, args) => QTUtility2.ApplyOptionsDialogTheme(Resources);
+        }
+
         public static readonly DependencyProperty WorkingConfigProperty =
                 DependencyProperty.Register("WorkingConfig", typeof(Config), typeof(OptionsDialogTab),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));

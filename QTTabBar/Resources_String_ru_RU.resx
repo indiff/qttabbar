@@ -121,13 +121,13 @@
     <value>AHOHNMYC</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>俄罗斯</value>
+    <value>Russian</value>
   </data>
   <data name="Country" xml:space="preserve">
     <value>RU</value>
   </data>
   <data name="Version_QTTabBar" xml:space="preserve">
-    <value>DevBuild: 2022/10/11 下午 07:45:49 (2.0.50727.9164)</value>
+    <value>DevBuild: 2022/10/11 07:45:49 PM (2.0.50727.9164)</value>
   </data>
   <data name="DateModified" xml:space="preserve">
     <value>10/20/2022</value>

@@ -611,12 +611,12 @@ namespace SetHome
                 envKey.SetValue("JAVA_HOME", selectedPath);
                 var devPath = joinDevPath(oldPath);
                 // envKey.SetValue("PATH", devPath);
-                RunSetx("Path", devPath, true);
+                // RunSetx("Path", devPath, true);
+                envKey.SetValue("PATH", devPath);
                 if (File.Exists(toolsJar) && File.Exists(dtJar))
                 {
                     envKey.SetValue("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;");
                 }
-
                 // setx "Path" "%Path%;%JAVA_HOME%\bin" /m
                 // Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
                 // Environment.SetEnvironmentVariable("PATH", devPath + ";9", EnvironmentVariableTarget.Machine);
@@ -752,10 +752,9 @@ namespace SetHome
                 }
 
                 envKey.SetValue("M2_HOME", selectedPath);
-                // envKey.SetValue("PATH", joinDevPath(oldPath));
-                RunSetx("Path", joinDevPath(oldPath), true);
-                
-                
+                envKey.SetValue("PATH", joinDevPath(oldPath));
+                //  RunSetx("Path", joinDevPath(oldPath), true);
+
                 MessageBox.Show("设置M2_HOME成功");
                 UpdateEnvPath();
             }
@@ -797,9 +796,9 @@ namespace SetHome
                 string oldPath = getOldPath(envKey);
                 oldPath = kill(oldPath, "mvnd.exe");
                 envKey.SetValue("MVND_HOME", selectedPath);
-                // envKey.SetValue("PATH", joinDevPath(oldPath));
-                RunSetx("Path", joinDevPath(oldPath), true);
-                
+                envKey.SetValue("PATH", joinDevPath(oldPath));
+                // RunSetx("Path", joinDevPath(oldPath), true);
+
                 MessageBox.Show("设置MVND_HOME成功");
                 UpdateEnvPath();
             }
@@ -841,9 +840,9 @@ namespace SetHome
                 string oldPath = getOldPath(envKey);
                 oldPath = kill(oldPath, "ant.cmd");
                 envKey.SetValue("ANT_HOME", selectedPath);
-                // envKey.SetValue("PATH", joinDevPath(oldPath));
-                RunSetx("Path", joinDevPath(oldPath), true);
-                
+                envKey.SetValue("PATH", joinDevPath(oldPath));
+                // RunSetx("Path", joinDevPath(oldPath), true);
+
                 MessageBox.Show("设置ANT_HOME成功");
                 UpdateEnvPath();
             }
@@ -885,8 +884,8 @@ namespace SetHome
                 string oldPath = getOldPath(envKey);
                 oldPath = kill(oldPath, "gradle.bat");
                 envKey.SetValue("GRADLE_HOME", selectedPath);
-                // envKey.SetValue("PATH", joinDevPath(oldPath));
-                RunSetx("Path", joinDevPath(oldPath), true);
+                envKey.SetValue("PATH", joinDevPath(oldPath));
+                // RunSetx("Path", joinDevPath(oldPath), true);
                 MessageBox.Show("设置GRADLE_HOME成功");
                 UpdateEnvPath();
             }
@@ -967,6 +966,7 @@ namespace SetHome
             Thread.Sleep(1500);
             if (Process.GetProcessesByName("explorer").Length != 0)
                 return;
+
             Process.Start("explorer.exe");
         }
 

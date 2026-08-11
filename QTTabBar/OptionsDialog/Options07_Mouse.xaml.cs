@@ -132,6 +132,8 @@ namespace QTTabBarLib {
                 BindAction.NewFolder,
                 BindAction.NewFile,
                 BindAction.UpOneLevel,
+                BindAction.GoBack,
+                BindAction.GoForward,
                 BindAction.Refresh,
                 BindAction.Paste,
                 BindAction.Maximize,

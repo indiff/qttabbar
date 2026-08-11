@@ -19,6 +19,14 @@ namespace QTTabBarLib {
     internal partial class Options01_Window : OptionsDialogTab {
         public Options01_Window() {
             InitializeComponent();
+            // Windows 10 still has a real toolbar rebar - QTTabBar/QTButtonBar are
+            // enabled individually through Explorer's own View > Toolbars menu there,
+            // same as any other classic toolband, so there's nothing for this toggle to
+            // usefully do. It only matters on Windows 11, which has no rebar to enable
+            // a toolband through in the first place (see AutoLoader.SetSite).
+            if (!QTUtility.IsWin11) {
+                ctxAutoEnableExperimental.Visibility = System.Windows.Visibility.Collapsed;
+            }
         }
 
         public override void InitializeConfig() {

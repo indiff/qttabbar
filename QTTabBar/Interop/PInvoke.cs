@@ -74,6 +74,8 @@ namespace QTTabBarLib.Interop {
         public static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
         [DllImport("dwmapi.dll")]
         public static extern int DwmIsCompositionEnabled(out bool pfEnabled);
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
         [DllImport("user32.dll")]
         public static extern bool EmptyClipboard();
         [DllImport("user32.dll")]
@@ -310,6 +312,8 @@ namespace QTTabBarLib.Interop {
         public static extern IntPtr ILFindLastID(IntPtr pidl);
         [DllImport("shell32.dll")]
         public static extern uint ILGetSize(IntPtr pidl);
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern bool InsertMenu(IntPtr hMenu, uint uPosition, uint uFlags, IntPtr uIDNewItem, string lpNewItem);
         [DllImport("user32.dll")]
         public static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
         [DllImport("user32.dll")]

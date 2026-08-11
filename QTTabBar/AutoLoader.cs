@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BandObjectLib;
 using Microsoft.Win32;
+using QTTabBarLib.Interop;
 using SHDocVw;
 
 namespace QTTabBarLib {
@@ -71,6 +72,40 @@ namespace QTTabBarLib {
                 QTUtility2.log("QTTabBar AutoLoader SetSite ActivateIt ");
                 // QTUtility2.flog("QTTabBar AutoLoader SetSite ActivateIt ");
                 ActivateIt();
+
+                // Normally the toolbar band triggers this on load. Without a band (e.g.
+                // Explorer never hosts the toolbar), InstanceManager/Config/etc. are
+                // never set up, so force it before checking the setting below.
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(QTUtility).TypeHandle);
+                // Windows 10 still has a real toolbar rebar - users enable QTTabBar (and
+                // separately QTButtonBar, if they only want one of the two) through
+                // Explorer's own View > Toolbars menu there, same as any other classic
+                // toolband. This auto-attach path never parents into a real rebar (see
+                // ContextMenuOptions.AttachToWindow), so it only ever gives double-click
+                // and hover preview, not tabs - worth running only where Windows 11's
+                // lack of a rebar leaves no other way to get even that much.
+                if (QTUtility.IsWin11 && Config.Window.AutoEnableExperimental) {
+                    // SetSite fires far earlier in the window's life than the existing
+                    // right-click "Enable QTTabBar" path ever did (that only ever ran on an
+                    // already-open, already-visible window). Attaching here immediately once
+                    // took down Explorer's ability to open further windows at all. Instead,
+                    // poll (on this same thread's own message loop, via a WinForms Timer, so
+                    // there's no cross-thread risk) until the window is actually visible
+                    // before attaching, and give up quietly after a few tries rather than
+                    // retrying forever if something's wrong.
+                    IWebBrowser2 wb = explorer;
+                    ActionDelayer.Add(() => {
+                        try {
+                            IntPtr hwnd = (IntPtr)wb.HWND;
+                            if (hwnd == IntPtr.Zero || !PInvoke.IsWindowVisible(hwnd)) return false;
+                            ContextMenuOptions.AttachToWindow(wb);
+                        }
+                        catch {
+                            // Fall through - treat as "done trying", not "keep retrying".
+                        }
+                        return true;
+                    }, 500, 500, 10);
+                }
             }
 
             return 0;
@@ -92,6 +127,35 @@ namespace QTTabBarLib {
             using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
                 DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
                 if(installDate.CompareTo(lastActivation) <= 0) return;
+
+                object secViewBar = new Guid("{d2bf470e-ed1c-487f-a333-2bd8835eb6ce}").ToString("B");
+                object pvaTabBar = new Guid("{d2bf470e-ed1c-487f-a333-2bd8835eb6ce}").ToString("B");
+                object pvaButtonBar = new Guid("{d2bf470e-ed1c-487f-a666-2bd8835eb6ce}").ToString("B");
+                object pvarShow = true;
+                object pvarSize = null;
+                try {
+                    /*
+                    explorer.ShowBrowserBar(pvaTabBar, pvarShow, pvarSize);
+                    QTUtility2.log("QTTabBar AutoLoader 显示标签");
+                    
+                    explorer.ShowBrowserBar(pvaButtonBar, pvarShow, pvarSize);
+                    QTUtility2.log("QTTabBar AutoLoader 显示工具栏");
+
+                    explorer.ShowBrowserBar(secViewBar, pvarShow, pvarSize);*/
+                    QTUtility2.log("QTTabBar AutoLoader 显示标签");
+                }
+                catch(COMException e) {
+                    QTUtility2.MakeErrorLog(e, "ActivateIt");
+                    MessageForm.Show(
+                        IntPtr.Zero,
+                        QTUtility.TextResourcesDic["ErrorDialogs"][2],
+                        QTUtility.TextResourcesDic["ErrorDialogs"][3],
+                        MessageBoxIcon.Warning, 
+                        30000, 
+                        false, 
+                        true
+                    );
+                }
 
                 key.SetValue("ActivationDate", installDateString);
                 QTUtility2.flog("QTTabBar AutoLoader add ActivationDate");

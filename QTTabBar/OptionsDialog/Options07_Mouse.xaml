@@ -71,7 +71,7 @@
                 SelectionMode="Single">
                 <ListBox.Style>
                     <Style TargetType="{x:Type ListView}">
-                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Foreground" Value="White"/>
                     </Style>
                 </ListBox.Style>
                 <ListView.ItemContainerStyle>
@@ -79,6 +79,7 @@
                         <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         <Setter Property="Height" Value="20"/>
+                        <Setter Property="Foreground" Value="White"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.GroupStyle>
@@ -107,7 +108,7 @@
                                     </Grid>
                                     <TextBlock 
                                         DockPanel.Dock="Left"
-                                        Foreground="MediumBlue"
+                                        Foreground="CornflowerBlue"
                                         Margin="6,3,4,2"
                                         Text="{qt:Resx Key=Options_Page07_Mouse}">
                                         <TextBlock.Style>

@@ -41,13 +41,14 @@ using System.Text;
 
 namespace QTTabBarLib {
     internal static class QTUtility {
-        // 1.5.6.2  edit this
-        internal static readonly Version BetaRevision = new Version(1, 0); // ���汾 beta  �ΰ汾 alpha
-        internal static readonly Version CurrentVersion = new Version(1, 5, 6, 2);
+        internal static readonly Version BetaRevision = new Version(1, 0); // Major = beta revision, Minor = alpha revision
+        // Derived from AssemblyVersion in Properties/AssemblyInfo.cs - the only place
+        // the app's own version needs to be edited by hand outside the installer.
+        internal static readonly Version CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version;
         internal static readonly string BuildVerion = "build01";
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-        // ��ݼ����ñ�ʶ
+        // 快捷键启用标识
         internal const int FLAG_KEYENABLED = 0x100000;
         internal const string IMAGEKEY_FOLDER = "folder";
         internal const string IMAGEKEY_MYNETWORK = "mynetwork";
@@ -77,7 +78,7 @@ namespace QTTabBarLib {
         internal const string REGUSER = RegConst.Root;
         internal static readonly char[] SEPARATOR_CHAR = new char[] { ';' };
         internal const string SEPARATOR_PATH_HASH_SESSION = "*?*?*";
-		// �Ƿ�Ϊ����״̬��
+		// 是否为调试状态？
         internal const bool NOW_DEBUGGING =
 #if DEBUG
             true;
@@ -105,7 +106,7 @@ namespace QTTabBarLib {
         internal static Dictionary<string, string[]> TextResourcesDic;
         internal static byte WindowAlpha = 0xff;
 
-        // �Ƿ�Ϊ����ģʽ
+        // 是否为暗黑模式
         internal static bool InNightMode;
 
         // {
@@ -114,12 +115,12 @@ namespace QTTabBarLib {
         // }
 
 
-        ///////////////////////// ���� by indiff ////////////////////////////////////
+        ///////////////////////// 新增 by indiff ////////////////////////////////////
         internal static bool SingleClickMode { get; private set; }
 
         internal static bool ShowInfoTip { get; private set; }
         /**
-         * ˢ��״̬
+         * 刷新状态
          */
         public static void RefreshShellStateValues()
         {
@@ -151,19 +152,19 @@ namespace QTTabBarLib {
                 }
                 SingleClickMode = flag1;
                 ShowInfoTip = flag2;*/
-                InNightMode = true; // getNightMode();
+                InNightMode = getNightMode();
             // }
             // catch (Exception ex)
             // {
             //     QTUtility2.MakeErrorLog(ex, "QTUtility.RefreshShellStateValues" );
             // }
         }
-        ///////////////////////// ���� by indiff ////////////////////////////////////
+        ///////////////////////// 新增 by indiff ////////////////////////////////////
 
 
 
         /// <summary>
-        /// ִֻ��һ��
+        /// 只执行一次
         /// </summary>
         static QTUtility() {
             // I'm tempted to just return for everything except "explorer"
@@ -199,27 +200,27 @@ namespace QTTabBarLib {
 
                 // Load the config
                 ConfigManager.Initialize();
-                QTUtility2.log("QTUtility ��������");
+                QTUtility2.log("QTUtility 加载配置");
                 
                 // Initialize the instance manager
                 InstanceManager.Initialize();
-                QTUtility2.log("QTUtility ��ʼ��InstanceManager");
+                QTUtility2.log("QTUtility 初始化InstanceManager");
 
                 // Create and enable the API hooks
                 HookLibManager.Initialize();
-                QTUtility2.log("QTUtility ������������ API hooks");
+                QTUtility2.log("QTUtility 创建并且启用 API hooks");
 
                 // Create the global imagelist
                 ImageListGlobal = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
                 ImageListGlobal.Images.Add("folder", GetIcon(string.Empty, false));
-                QTUtility2.log("QTUtility ����ȫ���ļ���ͼƬ�б�");
+                QTUtility2.log("QTUtility 创建全局文件夹图片列表");
 
                 // Load groups/apps
                 GroupsManager.LoadGroups();
-                QTUtility2.log("QTUtility ���ط������");
+                QTUtility2.log("QTUtility 加载分组完成");
                 
                 AppsManager.LoadApps();
-                QTUtility2.log("QTUtility ����ȫ���ļ���ͼƬ�б�");
+                QTUtility2.log("QTUtility 创建全局文件夹图片列表");
 
                 if(Config.Lang.UseLangFile && File.Exists(Config.Lang.LangFile)) {
                     TextResourcesDic = ReadLanguageFile(Config.Lang.LangFile);
@@ -255,8 +256,8 @@ namespace QTTabBarLib {
 
                
 
-                // ���ò�����������
-                /*QTUtility2.log("QTUtility ���غ��Ե�·�� ������� ��������");
+                // 配置不捕获控制面板
+                /*QTUtility2.log("QTUtility 加载忽略的路径 控制面板 网络连接");
                 string[] theNoCaptures = { "::{26EE0668-A00A-44D7-9371-BEB064C98683}",
                                            "::{26EE0668-A00A-44D7-9371-BEB064C98683}\0",
                                            "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}" };
@@ -273,33 +274,33 @@ namespace QTTabBarLib {
                 NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}");
                 NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\0");
 
-                NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");// ��������
+                NoCapturePathsList.Add("::{7007ACC7-3202-11D1-AAD2-00805FC1270E}");// 网络连接
                 */
 
-                // ������� ::{26EE0668-A00A-44D7-9371-BEB064C98683} ::{26EE0668-A00A-44D7-9371-BEB064C98683}\0
+                // 控制面板 ::{26EE0668-A00A-44D7-9371-BEB064C98683} ::{26EE0668-A00A-44D7-9371-BEB064C98683}\0
               
-               // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // �ҵĵ���
-              //  NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // ���п������
+               // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // 我的电脑
+              //  NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // 所有控制面板
                // NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}");
                 
-                // ����վ      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
+                // 回收站      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
                 /*
-                                               ����վ �C {645FF040-5081-101B-9F08-00AA002F954E}
-                               ������� �C {21EC2020-3AEA-1069-A2DD-08002B30309D}
-                               ���� �C {2559A1F3-21D7-11D4-BDAF-00C04F60B9F0}
-                               ���� �C {2559A1F0-21D7-11D4-BDAF-00C04F60B9F0}
-                               Internet Explorer �C {871C5380-42A0-1069-A2EA-08002B30309D}
-                               �������� �C {D20EA4E1-3957-11D2-A40B-0C5020524153}
-                               �������� �C {7007ACC7-3202-11D1-AAD2-00805FC1270E}
-                               ��ӡ���ʹ��� �C {2227A280-3AEA-1069-A2DE-08002B30309D}
+                                               回收站 – {645FF040-5081-101B-9F08-00AA002F954E}
+                               控制面板 – {21EC2020-3AEA-1069-A2DD-08002B30309D}
+                               运行 – {2559A1F3-21D7-11D4-BDAF-00C04F60B9F0}
+                               搜索 – {2559A1F0-21D7-11D4-BDAF-00C04F60B9F0}
+                               Internet Explorer – {871C5380-42A0-1069-A2EA-08002B30309D}
+                               管理工具 – {D20EA4E1-3957-11D2-A40B-0C5020524153}
+                               网络连接 – {7007ACC7-3202-11D1-AAD2-00805FC1270E}
+                               打印机和传真 – {2227A280-3AEA-1069-A2DE-08002B30309D}
                                                */
-                // ���ò�����������
+                // 配置不捕获控制面板
                 GetShellClickMode();
                 QTUtility2.log("QTUtility Get Shell Click Mode");
 
                 // Initialize plugins
                 PluginManager.Initialize();
-                QTUtility2.log("QTUtility �������в��");
+                QTUtility2.log("QTUtility 加载所有插件");
             }
             catch(Exception exception) {
                 // TODO: Any errors here would be very serious.  Alert the user as such.
@@ -318,7 +319,7 @@ namespace QTTabBarLib {
                         memStream.Write(arrBytes, 0, arrBytes.Length);
                         memStream.Seek(0, SeekOrigin.Begin);
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
-                        // binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // �޸��������л����� application ���߲����� assembly
+                        // binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
                         object obj = binaryFormatter.Deserialize(memStream);
                         /*QTUtility2.log("ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
                         if (obj != null)
@@ -963,7 +964,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * �ǲ��� path ���Ե�
+         * 非捕获 path 忽略掉
          */
         public static void SaveClosing(List<string> closingPaths) {
             if (null == closingPaths || closingPaths.Count == 0)
@@ -1011,7 +1012,7 @@ namespace QTTabBarLib {
             }
         }
         
-        // �ж�ͼƬ�б�����Ϊ��
+        // 判断图片列表不能为空
         private static void SetImageKey(string key, string itemPath) {
             if( null != ImageListGlobal.Images && 
                 ImageListGlobal.Images.Count > 0 && // add by indiff check Images
@@ -1028,7 +1029,7 @@ namespace QTTabBarLib {
             value = ValidateMinMax(value, min, max);
         }
 
-        // �ж��Ƿ�Ϊ����ģʽ  Environment.OSVersion.Version.Major
+        // 判断是否为暗黑模式  Environment.OSVersion.Version.Major
         public static bool getNightMode()
         {
             // if (Environment.OSVersion.Version.Major > 9)  {
@@ -1094,16 +1095,16 @@ namespace QTTabBarLib {
         public static void ValidateTextResources(ref Dictionary<string, string[]> dict)
         {
             // MessageBox.Show("Config.Lang.UseLangFile:" + Config.Lang.UseLangFile + ",dict == null:" + (dict == null));
-            // ��Ҫ���˵ĵ��� url
+            // 需要过滤的掉的 url
             string[] urlKeys = { "SiteURL", "PayPalURL" };
             
-            // dict �ļ��
+            // dict 的检测
             if (dict == null)
             {
                 dict = new Dictionary<string, string[]>();
             }
 
-            // ������������,�ڴ˿�������������
+            // 加载内置语言,在此可添加内置语言
             IEnumerable<KeyValuePair<string, string>> keyValuePairs = null;
             switch (Config.Lang.BuiltInLangSelectedIndex)
             {
@@ -1117,13 +1118,13 @@ namespace QTTabBarLib {
                 case 7: keyValuePairs = Resources_String_ru_RU.ResourceManager.GetResourceStrings(); break;
             }
 
-            // �������Ϊ�գ� ���ȡĬ�ϵ�Ӧ������
+            // 如果加载为空， 则读取默认的应用语言
             if (null == keyValuePairs)
             {
                 keyValuePairs = Resources_String.ResourceManager.GetResourceStrings();
             }
 
-            // �ж��Ƿ�δʹ����������,����ǵĻ�����ֱ�ӱ��� ��������
+            // 判断是否未使用内置语言,如果是的话，则直接遍历 内置语言
             if ( !Config.Lang.UseLangFile )
             {
                 foreach (var pair in keyValuePairs)
@@ -1131,21 +1132,21 @@ namespace QTTabBarLib {
                     dict[pair.Key] = pair.Value.Split(SEPARATOR_CHAR);
                 }
             }
-            else // �����ⲿ�����ļ�
+            else // 加载外部语言文件
             {
-                // ������������
+                // 遍历内置语言
                 foreach (var pair in keyValuePairs)
                 {
                     if (urlKeys.Contains(pair.Key)) continue;
-                    // �ֺŷָ��ַ������������ʽ
+                    // 分号分隔字符串获得数组形式
                     string[] buildinValue = pair.Value.Split(SEPARATOR_CHAR);
                     string[] res;
                     dict.TryGetValue(pair.Key, out res);
-                    if (res == null) // ����� dict ��δ��ȡ����Ӧ�� ֵ�� ��� �������Ը��ǵ�.
+                    if (res == null) // 如果从 dict 中未获取到对应的 值， 则从 内置语言覆盖掉.
                     {
                         dict[pair.Key] = buildinValue;
                     }
-                    else if (res.Length < buildinValue.Length)// �����ȡ�����������������Ե���Ŀ��һ��
+                    else if (res.Length < buildinValue.Length)// 如果获取到，但是于内置语言的数目不一致
                     {
                         int len = res.Length;
                         Array.Resize(ref res, buildinValue.Length);
@@ -1189,7 +1190,7 @@ namespace QTTabBarLib {
 
         internal static string DefaultNewFileName()
         {
-            return isChinese() ? "�½��ı��ĵ�" : "newDocument";
+            return isChinese() ? "新建文本文档" : "newDocument";
         }
 
 
@@ -1205,9 +1206,9 @@ namespace QTTabBarLib {
 
         public static bool IsNoCapturePaths(string path)
         {
-            // �������
+            // 控制面板
             string controlPanel = "::{26EE0668-A00A-44D7-9371-BEB064C98683}";
-            string print = @"::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{2227A280-3AEA-1069-A2DE-08002B30309D}";// ��ӡ��
+            string print = @"::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{2227A280-3AEA-1069-A2DE-08002B30309D}";// 打印机
             return !IsEmptyStr(path) && (
                 path.StartsWith(controlPanel) ||
                 path.StartsWith(print) 
@@ -1230,11 +1231,11 @@ namespace QTTabBarLib {
             {
                 return false;
             }
-            string pattern = @"\d{1,2}/\d{1,2}/\d{1,2}\s��[һ|��|��|��|��|��|��]\s\d{1,2}:\d{1,2}:\d{1,2}";
+            string pattern = @"\d{1,2}/\d{1,2}/\d{1,2}\s周[一|二|三|四|五|六|日]\s\d{1,2}:\d{1,2}:\d{1,2}";
             return Regex.IsMatch(input, pattern);
         }
 
-        // c# ��ȡ��ǰ���̵ĸ�����
+        // c# 获取当前进程的父进程
         public static string GetParentProcessName()
         {
             Process currentProcess = Process.GetCurrentProcess();
@@ -1250,7 +1251,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// ��ȡ�����̡�����������ܷ���null
+        /// 获取父进程。如果出错可能返回null
         /// </summary>
         /// <param name="process"></param>
         /// <returns></returns>

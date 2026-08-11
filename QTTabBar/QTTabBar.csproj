@@ -46,6 +46,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -64,6 +65,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>QTTabBar1.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -73,6 +75,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>QTTabBar1.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Reg%29|x86'">
     <OutputPath>bin\x86\Debug %28No Reg%29\</OutputPath>
@@ -81,9 +84,11 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
     <CodeAnalysisRuleSet>QTTabBar1.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Reg%29|AnyCPU'">
     <CodeAnalysisRuleSet>QTTabBar1.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -114,6 +119,8 @@
     <Compile Include="ActionDelayer.cs" />
     <Compile Include="AppsManager.cs" />
     <Compile Include="AutoLoader.cs" />
+    <Compile Include="ContextMenuOptions.cs" />
+    <Compile Include="ExplorerSiteAdapter.cs" />
     <Compile Include="AutomationClasses.cs" />
     <Compile Include="BreadcrumbBar.cs" />
     <Compile Include="AbstractListView.cs" />
@@ -326,6 +333,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PreMergeToMergedDeserializationBinder.cs" />
+    <Compile Include="ProcessUtil.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -433,6 +441,8 @@
     <Compile Include="Interop\HDITEM.cs" />
     <Compile Include="Interop\HookProc.cs" />
     <Compile Include="Interop\ICONINFO.cs" />
+    <Compile Include="Interop\IContextMenu.cs" />
+    <Compile Include="Interop\IShellExtInit.cs" />
     <Compile Include="Interop\IContextMenu2.cs" />
     <Compile Include="Interop\IDeskBand2.cs" />
     <Compile Include="Interop\IEnumIDList.cs" />

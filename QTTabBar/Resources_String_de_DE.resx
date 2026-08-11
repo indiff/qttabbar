@@ -199,7 +199,7 @@
     <value>Sprache ändern;Hauptsprache;Eingebaute Sprache verwenden:;Sprachdatei verwenden:;Plugin-Sprachdateien;Sprachdatei-Editor;Spracheditor anzeigen...;Original;Übersetzt;Alle Einträge auf ihren ursprünglichen Wert zurücksetzen?;Fehler beim Speichern der Datei.;简体中文;English;German</value>
   </data>
   <data name="Options_Page14_About" xml:space="preserve">
-    <value>Credits und Versionsinformationen anzeigen:;Originalcode von {0};Hauptentwickler:;Andere Entwickler:;Symbole und Grafiken:;Wenn Sie QTTabBar nützlich finden, ziehen Sie bitte eine kleine Spende in Betracht.;汉化修改：;Build by: {0}</value>
+    <value>Credits und Versionsinformationen anzeigen:;Originalcode von {0};Hauptentwickler:;Andere Entwickler:;Symbole und Grafiken:;Wenn Sie QTTabBar nützlich finden, ziehen Sie bitte eine kleine Spende in Betracht.;Chinesische Lokalisierung von:;Build by: {0}</value>
   </data>
   <data name="PayPalURL" xml:space="preserve">
     <value>https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg</value>

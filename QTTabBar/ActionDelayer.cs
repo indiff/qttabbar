@@ -9,18 +9,23 @@ namespace QTTabBarLib
             {
                 Timer timer = new Timer();
                 timer.Interval = msec;
-                timer.Tick += (EventHandler) ((s, e) =>
+                EventHandler handler = null;
+                handler = (EventHandler)((s, e) =>
                 {
-                    timer.Stop();
+                    
                     try
                     {
                         action();
+                        timer.Stop();
                     }
                     catch
                     {
+                    } finally {
+                        timer.Tick -= handler;
+                        timer.Dispose(); // 释放资源，防止对象累积
                     }
-                    timer.Dispose();
                 });
+                timer.Tick += handler;
                 timer.Start();
             }
 

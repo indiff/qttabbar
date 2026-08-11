@@ -226,6 +226,58 @@ namespace QTTabBarLib {
             return ((clr.R | (clr.G << 8)) | (clr.B << 0x10));
         }
 
+        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+        // Makes the window's title bar/border follow InNightMode instead of always
+        // being light, regardless of the Windows theme (WinForms/WPF don't do this
+        // on their own).
+        public static void SetDarkTitleBar(IntPtr hwnd) {
+            int useDark = QTUtility.getNightMode() ? 1 : 0;
+            PInvoke.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref useDark, sizeof(int));
+        }
+
+        // OptionsDialogResources.xaml hardcodes a dark palette; every Options page merges it via
+        // Source="..." rather than instantiating a class, so a code-behind on that dictionary
+        // never runs. This overwrites the same keys with the light palette instead, directly on
+        // the caller's own Resources (which DynamicResource lookups find before the merged dark
+        // dictionary further down the resource-lookup chain). No-op in dark mode.
+        public static void ApplyOptionsDialogTheme(System.Windows.ResourceDictionary resources) {
+            if (QTUtility.getNightMode()) return;
+            resources["ThemeBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources["ThemeFieldBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources["ThemeBorderBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources["ThemeForegroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources["ThemeSelectionBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources["SectionHeaderBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xF2, 0xF2, 0xF2));
+            resources[System.Windows.SystemColors.ControlTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.WindowTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.WindowBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources[System.Windows.SystemColors.HighlightBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources[System.Windows.SystemColors.HighlightTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.ControlBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+        }
+
+        // Some settings (e.g. Config.Window.AutoHookWindow) only take effect during process
+        // startup - QTUtility's static constructor and HookLibManager.Initialize() only ever
+        // run once per explorer.exe process - so changing them requires a full restart to pick
+        // up. Runs the kill+relaunch from a separate cmd.exe rather than doing it inline: this
+        // call is normally made from code running inside explorer.exe itself, which taskkill
+        // is about to terminate, so anything after the kill needs to survive in a process that
+        // isn't also about to die.
+        public static void RestartExplorer() {
+            try {
+                Process.Start(new ProcessStartInfo {
+                    FileName = "cmd.exe",
+                    Arguments = "/c taskkill /F /IM explorer.exe & start explorer.exe",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                });
+            }
+            catch (Exception ex) {
+                MakeErrorLog(ex, "RestartExplorer");
+            }
+        }
+
         /**
          * force log
          */
@@ -235,7 +287,7 @@ namespace QTTabBarLib {
             Dictionary<String, String> dic = new Dictionary<String, String>();
             if (trace != null)
             {
-                StackFrame frame = trace.GetFrame(1);//1�����ϼ���2�������ϼ����Դ�����
+                StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
                 if (frame != null)
                 {
                     MethodBase method = frame.GetMethod();
@@ -266,7 +318,7 @@ namespace QTTabBarLib {
 
                 if (trace != null)
                 {
-                    StackFrame frame = trace.GetFrame(1);//1�����ϼ���2�������ϼ����Դ�����
+                    StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
                     if (frame != null)
                     {
                         MethodBase method = frame.GetMethod();
@@ -307,7 +359,7 @@ namespace QTTabBarLib {
 
                 if (trace != null)
                 {
-                    StackFrame frame = trace.GetFrame(1);//1�����ϼ���2�������ϼ����Դ�����
+                    StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
                     if (frame != null)
                     {
                         MethodBase method = frame.GetMethod();
@@ -328,7 +380,7 @@ namespace QTTabBarLib {
 
         // private static DateTime dateTime ;
         private static Dictionary<int, DateTime> dictTime = new Dictionary<int, DateTime>();
-        // ����һЩ���� ��־
+        // 忽略一些添加 日志
         private static string[] IGNORES = { "ReleaseComObject" };
         
         public static void log(string level, string optional,Dictionary<String, String> dic=null)
@@ -353,7 +405,7 @@ namespace QTTabBarLib {
             {
                 DateTime oldTime = dateTime;
                 dateTime = DateTime.Now;
-                useTime = "" + ((dateTime - oldTime).TotalMilliseconds) + "����";
+                useTime = "" + ((dateTime - oldTime).TotalMilliseconds) + "毫秒";
             }
             else
             {
@@ -386,18 +438,18 @@ namespace QTTabBarLib {
                     var oldTime = dictTime[cThreadId];
                     if (null != oldTime)
                     {
-                        useTime = "" + ((DateTime.Now - oldTime).TotalMilliseconds) + "����";
+                        useTime = "" + ((DateTime.Now - oldTime).TotalMilliseconds) + "毫秒";
                         dictTime[cThreadId] = DateTime.Now;
                     }
                 }
                 else
                 {
-                    ;
                     dictTime[cThreadId] = DateTime.Now;
                 }
-            } 
+            }
 
-            string path = Path.Combine(appdataQT, "QTTabBarException.log");
+           //  string path = Path.Combine(appdataQT, "QTTabBarException.log");
+            string path = Path.Combine(appdataQT, "QTTabBar.log");
             var line = new StringBuilder();
             line
                 .Append("[")
@@ -407,7 +459,7 @@ namespace QTTabBarLib {
             // add className and methodName debug
             if (null != dic && dic.Count > 0 && dic.ContainsKey("methodName") && dic.ContainsKey("className"))
             {
-                // ��������ͷ�����
+                // 输出类名和方法名
                 if (dic.ContainsKey("className"))
                 {
                     var className = dic["className"];
@@ -430,14 +482,14 @@ namespace QTTabBarLib {
                     }
                 }
             }
-            // ����ID
+            // 进程ID
             if (process != null)
             {
                 line
                     .Append("\tP:")
                     .Append(process.Id);
             }
-            // �߳� ID
+            // 线程 ID
             if (cThreadId != null)
             {
                 line
@@ -465,6 +517,7 @@ namespace QTTabBarLib {
             writeStr(path, line);
         }
 
+        
 
         public static void MakeErrorLog(Exception ex, string optional = null) {
             try
@@ -478,15 +531,15 @@ namespace QTTabBarLib {
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
                 var line = new StringBuilder();
                 line.AppendLine(DateTime.Now.ToString());
-                line.AppendLine(".NET �汾: " + Environment.Version);
-                line.AppendLine("����ϵͳ�汾: " + Environment.OSVersion.Version + 
+                line.AppendLine(".NET 版本: " + Environment.Version);
+                line.AppendLine("操作系统版本: " + Environment.OSVersion.Version + 
                                 " Major: " + Environment.OSVersion.Version.Major +
-                                " ����: " + getEnv()
+                                " 环境: " + getEnv()
                                 );
-                line.AppendLine("QT �汾: " + MakeVersionString());
+                line.AppendLine("QT 版本: " + MakeVersionString());
                 if (!String.IsNullOrEmpty(optional))
                 {
-                    line.AppendLine("������Ϣ: " + optional);
+                    line.AppendLine("错误信息: " + optional);
                 }
                 if (ex == null)
                 {
@@ -674,7 +727,7 @@ namespace QTTabBarLib {
 
                     if (!String.IsNullOrEmpty(optional))
                     {
-                        writer.WriteLine("������Ϣ: " + optional);
+                        writer.WriteLine("错误信息: " + optional);
                     }
                    
                     writer.WriteLine("--------------");
@@ -792,7 +845,7 @@ namespace QTTabBarLib {
         }
 
         public static string MakeVersionString() {
-            // qwop comment  ���� .net framework �İ汾��
+            // qwop comment  添加 .net framework 的版本号
             if(QTUtility.IS_DEV_VERSION) {
                 return "DevBuild: " + QTUtility.GetLinkerTimestamp() + " (" + Environment.Version + ")";
             }
@@ -946,7 +999,7 @@ namespace QTTabBarLib {
 
 
         /**
-         * �����ַ�����������
+         * 设置字符串到剪贴板
          */
         internal static void SetStringClipboard(string str) {
             try {
@@ -961,7 +1014,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * �����ַ�����������
+         * 设置字符串到剪贴板
          */
         internal static string GetStringClipboard()
         {
@@ -980,7 +1033,7 @@ namespace QTTabBarLib {
             }
             return "";
         }
-        // �ַ���ͨ���ָ�������
+        // 字符串通过分隔符连接
         public static string StringJoin<T>(this IEnumerable<T> list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -991,7 +1044,7 @@ namespace QTTabBarLib {
             }
             return sb.ToString();
         }
-        // �ַ���ͨ���ָ�������
+        // 字符串通过分隔符连接
         public static string StringJoin(this IEnumerable list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -1023,7 +1076,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///  д��ע����� �ر���Ϣȥ��д��������ǩ�ĵ���
+        ///  写入注册表， 关闭消息去除写入锁定标签的调用
         ///  qttabbarclass  public override void CloseDW(uint dwReserved)
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -1031,10 +1084,10 @@ namespace QTTabBarLib {
         /// <param name="regValueName"></param>
         /// <param name="rkUserApps"></param>
         public static void WriteRegBinary<T>(T[] array, string regValueName, RegistryKey rkUserApps) {
-            // ���������ǩ·��������
+            // 如果锁定标签路径有内容
             if ("TabsLocked".Equals(regValueName))
             {
-                // MessageBox.Show("д��������ǩ");
+                // MessageBox.Show("写入锁定标签");
                 if (null != array && array.Length > 0)
                 {
                     if (rkUserApps != null)
@@ -1046,7 +1099,7 @@ namespace QTTabBarLib {
 
                         if (null == newArray || newArray.Length == 0)
                         {
-                            // MessageBox.Show("������ǩ����Ϊ�գ�" + array.StringJoin(";"));
+                            // MessageBox.Show("锁定标签数据为空：" + array.StringJoin(";"));
                             if (rkUserApps != null)
                             {
                                 rkUserApps.SetValue("TabsLocked2", "");
@@ -1054,7 +1107,7 @@ namespace QTTabBarLib {
                         }
                         else
                         {
-                            //  MessageBox.Show("������ǩ����Ϊ��" + array.StringJoin(";"));
+                            //  MessageBox.Show("锁定标签数据为：" + array.StringJoin(";"));
                             rkUserApps.SetValue("TabsLocked2", newArray.StringJoin(";"));
                         }
                         /*
@@ -1070,7 +1123,7 @@ namespace QTTabBarLib {
                 }
                 else if (null == array || array.Length == 0  )
                 {
-                    //   MessageBox.Show("������ǩ����Ϊ�գ�" + array.StringJoin(";"));
+                    //   MessageBox.Show("锁定标签数据为空：" + array.StringJoin(";"));
                     if (rkUserApps != null)
                     {
                         rkUserApps.SetValue("TabsLocked2", "");
@@ -1192,7 +1245,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///    ���ڵ�����Ϣ
+        ///    用于调试消息
         /// </summary>
         /// <param name="msg"></param>
         public static void debugMessage(Message msg)
@@ -1220,7 +1273,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///    ���ڵ�����Ϣ
+        ///    用于调试消息
         /// </summary>
         /// <param name="msg"></param>
         public static void debugMessage(MSG msg)
@@ -1253,22 +1306,22 @@ namespace QTTabBarLib {
 
             // Process.Start("TASKKILL /F /T /PID " + process.Id);
             /*string MyDosComLine1;
-            MyDosComLine1 = "TASKKILL /F /T /PID " + process.Id;//���ظ�Ŀ¼����
+            MyDosComLine1 = "TASKKILL /F /T /PID " + process.Id;//返回根目录命令
             Process myProcess = new Process();
-            myProcess.StartInfo.FileName = "cmd.exe ";//��DOS����ƽ̨ 
+            myProcess.StartInfo.FileName = "cmd.exe ";//打开DOS控制平台 
             myProcess.StartInfo.UseShellExecute = false;
-            myProcess.StartInfo.CreateNoWindow = true;//�Ƿ���ʾDOS���ڣ�true��������;
+            myProcess.StartInfo.CreateNoWindow = true;//是否显示DOS窗口，true代表隐藏;
             myProcess.StartInfo.RedirectStandardInput = true;
             myProcess.StartInfo.RedirectStandardOutput = true;
             myProcess.StartInfo.RedirectStandardError = true;
             myProcess.Start();
-            StreamWriter sIn = myProcess.StandardInput;//��׼������ 
+            StreamWriter sIn = myProcess.StandardInput;//标准输入流 
             sIn.AutoFlush = true;
-            StreamReader sOut = myProcess.StandardOutput;//��׼������
-            StreamReader sErr = myProcess.StandardError;//��׼������ 
-            sIn.Write(MyDosComLine1 + Environment.NewLine);//��һ��DOS����
+            StreamReader sOut = myProcess.StandardOutput;//标准输入流
+            StreamReader sErr = myProcess.StandardError;//标准错误流 
+            sIn.Write(MyDosComLine1 + Environment.NewLine);//第一条DOS命令
             log("write dos command: " + MyDosComLine1);
-            sIn.Write("exit" + Environment.NewLine);//������DOS����˳�DOS����
+            sIn.Write("exit" + Environment.NewLine);//第四条DOS命令，退出DOS窗口
             if (myProcess.HasExited == false)
             {
                 myProcess.Kill();
