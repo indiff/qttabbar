@@ -100,7 +100,7 @@ jobs:
         echo "VERSION=$version" >> $env:GITHUB_ENV
 
     - name: Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         files: Installer\bin\Release\QTTabBar Setup ${{ env.VERSION }}.exe
       env:
