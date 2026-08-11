@@ -39,7 +39,7 @@ jobs:
       run: nuget restore "QTTabBar Rebirth.sln"
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
 
@@ -50,4 +50,4 @@ jobs:
         msbuild "QTTabBar\QTTabBar.csproj" /t:Build "/p:Configuration=Release" "/p:SolutionDir=$slnDir"
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
