@@ -574,7 +574,7 @@ namespace QTTabBarLib {
                         object obj = Marshal.GetObjectForIUnknown(msg.wParam);
                         try {
                             if(obj != null) {
-                                IOleWindow window = obj as IOleWindow;
+                                QTTabBarLib.Interop.IOleWindow window = obj as QTTabBarLib.Interop.IOleWindow;
                                 if(window != null) {
                                     IntPtr hwnd;
                                     window.GetWindow(out hwnd);
@@ -3530,9 +3530,9 @@ namespace QTTabBarLib {
                         case APPCOMMAND_BROWSER_BACKWARD:
                             QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD");
                             if(fProcess) {
-                                MouseChord chord = QTUtility.MakeMouseChord(MouseChord.X1, ModifierKeys);
-                               // QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD fProcess chord " + chord);
-                                if(Config.Mouse.GlobalMouseActions.TryGetValue(chord, out action)) {
+                                MouseChord chrod =  QTUtility.MakeMouseChord(MouseChord.X1, ModifierKeys);
+                                // QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD fProcess chord " + chord);
+                                if (Config.Mouse.GlobalMouseActions.TryGetValue(chrod, out action)) {
                                   //  QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD fProcess DoBindAction " + action);
                                     DoBindAction(action);
                                 }

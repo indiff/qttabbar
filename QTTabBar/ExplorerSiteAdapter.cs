@@ -17,6 +17,7 @@
 
 using System;
 using BandObjectLib;
+using QTTabBarLib.Interop;
 using SHDocVw;
 
 namespace QTTabBarLib {
@@ -51,6 +52,16 @@ namespace QTTabBarLib {
         }
 
         public void ContextSensitiveHelp(bool fEnterMode) {
+        }
+
+        int IOleWindow.GetWindow(out IntPtr phwnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        int IOleWindow.ContextSensitiveHelp(bool fEnterMode)
+        {
+            throw new NotImplementedException();
         }
     }
 }

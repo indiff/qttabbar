@@ -357,6 +357,10 @@ namespace QTTabBarLib {
         #endregion
 
         private void UpdateOptions() {
+            // AutoHookWindow only takes effect during explorer.exe startup (HookLibManager.
+            // Initialize() only ever runs once per process), so changing it needs a restart
+            // to actually apply.
+            bool oldAutoHookWindow = Config.Window.AutoHookWindow;
             foreach(OptionsDialogTab tab in tabbedPanel.Items) {
                 tab.CommitConfig();
             }
