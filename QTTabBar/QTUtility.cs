@@ -319,7 +319,7 @@ namespace QTTabBarLib {
                         memStream.Write(arrBytes, 0, arrBytes.Length);
                         memStream.Seek(0, SeekOrigin.Begin);
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
-                        // binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // 修复不能序列化其他 application 或者产生的 assembly
+                        binaryFormatter.Binder = new QTTabBarDeserializationBinder();
                         object obj = binaryFormatter.Deserialize(memStream);
                         /*QTUtility2.log("ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
                         if (obj != null)
@@ -1300,5 +1300,43 @@ namespace QTTabBarLib {
                 return null;
             }
         }*/
+    }
+
+    /// <summary>
+    /// Restricts BinaryFormatter deserialization to types from the QTTabBar assembly,
+    /// preventing arbitrary class instantiation from untrusted input.
+    /// </summary>
+    internal sealed class QTTabBarDeserializationBinder : SerializationBinder {
+        private static readonly Assembly QTTabBarAssembly = typeof(QTTabBarDeserializationBinder).Assembly;
+        private static readonly string QTTabBarAssemblyName = QTTabBarAssembly.GetName().Name;
+        // Allowed assembly names in addition to the QTTabBar assembly itself.
+        // mscorlib is required for core types; System.Core is required for delegate serialization holders.
+        private static readonly HashSet<string> AllowedAssemblyNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+            "mscorlib",
+            "System.Core",
+        };
+
+        public override Type BindToType(string assemblyName, string typeName) {
+            AssemblyName an = new AssemblyName(assemblyName);
+            if(an.Name == QTTabBarAssemblyName) {
+                Type t = QTTabBarAssembly.GetType(typeName, throwOnError: false);
+                if(t == null) throw new SerializationException("Unknown type during deserialization: " + typeName);
+                return t;
+            }
+            if(!AllowedAssemblyNames.Contains(an.Name)) {
+                throw new SerializationException("Untrusted assembly during deserialization: " + assemblyName);
+            }
+            // Only load an assembly whose simple name is in the explicit allowlist
+            Assembly resolved;
+            try {
+                resolved = Assembly.Load(assemblyName);
+            }
+            catch(Exception ex) {
+                throw new SerializationException("Unable to load assembly during deserialization: " + assemblyName, ex);
+            }
+            Type type = resolved.GetType(typeName, throwOnError: false);
+            if(type == null) throw new SerializationException("Unknown type during deserialization: " + typeName);
+            return type;
+        }
     }
 }
