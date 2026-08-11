@@ -93,36 +93,6 @@ namespace QTTabBarLib {
                 DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
                 if(installDate.CompareTo(lastActivation) <= 0) return;
 
-                object secViewBar = new Guid("{d2bf470e-ed1c-487f-a333-2bd8835eb6ce}").ToString("B");
-                object pvaTabBar = new Guid("{d2bf470e-ed1c-487f-a333-2bd8835eb6ce}").ToString("B");
-                object pvaButtonBar = new Guid("{d2bf470e-ed1c-487f-a666-2bd8835eb6ce}").ToString("B");
-                object pvarShow = true;
-                object pvarSize = null;
-                try {
-
-
-                    explorer.ShowBrowserBar(pvaTabBar, pvarShow, pvarSize);
-                    QTUtility2.log("QTTabBar AutoLoader 显示标签");
-                    
-                    explorer.ShowBrowserBar(pvaButtonBar, pvarShow, pvarSize);
-                    QTUtility2.log("QTTabBar AutoLoader 显示工具栏");
-
-                    explorer.ShowBrowserBar(secViewBar, pvarShow, pvarSize);
-                    QTUtility2.log("QTTabBar AutoLoader 显示标签");
-                }
-                catch(COMException e) {
-                    QTUtility2.MakeErrorLog(e, "ActivateIt");
-                    MessageForm.Show(
-                        IntPtr.Zero,
-                        QTUtility.TextResourcesDic["ErrorDialogs"][2],
-                        QTUtility.TextResourcesDic["ErrorDialogs"][3],
-                        MessageBoxIcon.Warning, 
-                        30000, 
-                        false, 
-                        true
-                    );
-                }
-
                 key.SetValue("ActivationDate", installDateString);
                 QTUtility2.flog("QTTabBar AutoLoader add ActivationDate");
             }

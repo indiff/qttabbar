@@ -25,7 +25,7 @@ using System.Resources;
 //
 [assembly: AssemblyTitle("QTTabBar")]
 //[assembly: AssemblyDescription("Main QTTabBar Assembly")]
-[assembly: AssemblyDescription("Ö÷QTTabBar³ÌÐò¼¯")]
+[assembly: AssemblyDescription("ï¿½ï¿½QTTabBarï¿½ï¿½ï¿½ï¿½")]
 [assembly: AssemblyConfiguration("")]
 // [assembly: AssemblyCompany("Quizo and Paul Accisano")]
 [assembly: AssemblyCompany("indiff")]
@@ -54,8 +54,8 @@ using System.Resources;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.5.6.1")]
-[assembly: AssemblyFileVersion("1.5.6.1")]	// edit this
+[assembly: AssemblyVersion("1.5.6.2")]
+[assembly: AssemblyFileVersion("1.5.6.2")]	// edit this
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
 // Microsoft .NET Framework documentation for more information on assembly signing.
