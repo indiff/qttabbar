@@ -5,6 +5,12 @@
 
 version: 2
 updates:
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "01:51"  # 对应中国时区 15:00
+      timezone: "Asia/Shanghai"
 
  # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"

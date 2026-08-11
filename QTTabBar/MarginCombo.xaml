@@ -2,7 +2,7 @@
 <!--
     This file is part of QTTabBar, a shell extension for Microsoft
     Windows Explorer.
-    Copyright (C) 2007-2021  Quizo, Paul Accisano
+    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 
     QTTabBar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,50 +18,87 @@
     along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<ComboBox x:Class="QTTabBarLib.MarginCombo"
+<!-- Not a ComboBox subclass (that used to be the case): ComboBox's classic-theme
+     chrome and internal focus/keyboard-navigation scope fought every attempt to
+     restyle it for dark mode, at one point breaking the ability to type into the
+     row TextBoxes entirely. A plain ToggleButton + Popup + ItemsControl gives full
+     control over both appearance and focus behavior without that baggage. -->
+<UserControl x:Class="QTTabBarLib.MarginCombo"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:qt="clr-namespace:QTTabBarLib"
-    IsEditable="True">
-    <ComboBox.Resources>
-        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
-        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{x:Static SystemColors.ControlTextColor}"/>
-    </ComboBox.Resources>
-    <ComboBox.ItemContainerStyle>
-        <Style TargetType="{x:Type ComboBoxItem}">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
-    </ComboBox.ItemContainerStyle>
-    <ComboBox.ItemTemplate>
-        <DataTemplate>
-            <StackPanel
-                Orientation="Horizontal"
-                Margin="{Binding Path=PanelMargin}"
-                MouseDown="MouseEater"
-                MouseUp="MouseEater"
-                Background="Transparent">
-                <Grid Width="75">
-                    <Label
-                        Content="{qt:Resx Key=MarginDropDown}"
-                        Padding="0"
-                        Margin="{Binding Path=LabelMargin}"
-                        VerticalAlignment="Center">
-                        <Label.Style>
-                            <Style TargetType="{x:Type Label}">
-                                <Setter Property="qt:Resx.Index" Value="{Binding Path=Index}"/>
-                            </Style>
-                        </Label.Style>
-                    </Label>
-                </Grid>
-                <TextBox
-                    PreviewTextInput="txtLTRB_PreviewTextInput"
-                    TextChanged="txtLTRB_TextChanged"
-                    Text="{Binding Path=TextBoxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Width="50" />
-            </StackPanel>
-        </DataTemplate>
-    </ComboBox.ItemTemplate>
-</ComboBox>
+    xmlns:qt="clr-namespace:QTTabBarLib">
+    <Grid MinHeight="23">
+        <ToggleButton x:Name="toggleButton"
+            Background="{DynamicResource ThemeFieldBrush}"
+            BorderBrush="{DynamicResource ThemeBorderBrush}"
+            BorderThickness="1">
+            <ToggleButton.Template>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Path Grid.Column="1" Data="M0,0 L4,4 L8,0 Z" Fill="{DynamicResource ThemeForegroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </ToggleButton.Template>
+        </ToggleButton>
+        <TextBlock x:Name="txtSummary"
+            IsHitTestVisible="False"
+            Foreground="{DynamicResource ThemeForegroundBrush}"
+            Margin="4,0,20,0"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"/>
+        <Popup x:Name="popup"
+            IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}"
+            PlacementTarget="{Binding ElementName=toggleButton}"
+            Placement="Bottom"
+            StaysOpen="False"
+            AllowsTransparency="True"
+            Focusable="False">
+            <Border Background="{DynamicResource ThemeFieldBrush}" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1">
+                <ItemsControl x:Name="itemsControl">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Margin="{Binding Path=PanelMargin}"
+                                MouseDown="MouseEater"
+                                MouseUp="MouseEater"
+                                Background="Transparent">
+                                <Grid Width="75">
+                                    <Label
+                                        Content="{qt:Resx Key=MarginDropDown}"
+                                        Foreground="{DynamicResource ThemeForegroundBrush}"
+                                        Padding="0"
+                                        Margin="{Binding Path=LabelMargin}"
+                                        VerticalAlignment="Center">
+                                        <Label.Style>
+                                            <Style TargetType="{x:Type Label}">
+                                                <Setter Property="qt:Resx.Index" Value="{Binding Path=Index}"/>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                </Grid>
+                                <TextBox
+                                    Background="{DynamicResource ThemeFieldBrush}"
+                                    Foreground="{DynamicResource ThemeForegroundBrush}"
+                                    BorderBrush="{DynamicResource ThemeBorderBrush}"
+                                    PreviewTextInput="txtLTRB_PreviewTextInput"
+                                    TextChanged="txtLTRB_TextChanged"
+                                    Text="{Binding Path=TextBoxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="50" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

@@ -203,7 +203,7 @@
                                 <DockPanel LastChildFill="True">
                                     <TextBlock 
                                         DockPanel.Dock="Left"
-                                        Foreground="MediumBlue"
+                                        Foreground="CornflowerBlue"
                                         Margin="20, 1, 4, 4"
                                         Text="{Binding Path=Name}"/>
                                     <Border

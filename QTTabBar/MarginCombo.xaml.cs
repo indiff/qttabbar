@@ -30,19 +30,20 @@ namespace QTTabBarLib {
     /// <summary>
     /// Interaction logic for MarginCombo.xaml
     /// </summary>
-    public partial class MarginCombo : ComboBox {
+    public partial class MarginCombo : UserControl {
         private const int VAL_MAX = 99;
         private TextBox txtMargin;
         private MarginEntry[] entries;
         public MarginCombo() {
             InitializeComponent();
-            ItemsSource = entries = new MarginEntry[] {
+            itemsControl.ItemsSource = entries = new MarginEntry[] {
                 new MarginEntry(this, 0),
                 new MarginEntry(this, 1),
                 new MarginEntry(this, 2),
                 new MarginEntry(this, 3),
                 new MarginEntry(this, 4)
             };
+            UpdateSummary();
         }
 
         // It *really* pisses me off that I can't use the Thickness class instead.
@@ -59,6 +60,7 @@ namespace QTTabBarLib {
             combo.entries[3].Value = p.Right;
             combo.entries[4].Value = p.Bottom;
             combo.entries[0].Value = combo.entries.Skip(1).All(e => e.Value == p.Left) ? p.Left : -1;
+            combo.UpdateSummary();
         }
 
         public Padding Value {
@@ -66,6 +68,13 @@ namespace QTTabBarLib {
             set { SetValue(ValueProperty, value); }
         }
 
+        private void UpdateSummary() {
+            Padding p = Value;
+            txtSummary.Text = p.Left + ", " + p.Top + ", " + p.Right + ", " + p.Bottom;
+        }
+
+        #region Event Handlers
+		
         public override void OnApplyTemplate() {
             base.OnApplyTemplate();
             txtMargin = GetTemplateChild("PART_EditableTextBox") as TextBox;
@@ -79,8 +88,6 @@ namespace QTTabBarLib {
                 });
             }
         }
-
-        #region Event Handlers
 
         //# The converter will do the validation for us.
         private void txtMargin_TextChanged(object sender, TextChangedEventArgs textChangedEventArgs) {
@@ -113,7 +120,7 @@ namespace QTTabBarLib {
             }
         }
 
-        //# Allow only digits to be entered.  We still need TextChanged to 
+        //# Allow only digits to be entered.  We still need TextChanged to
         //# make sure letters don't get in via pasting, drag & drop, etc.
         private void txtMargin_PreviewTextInput(object sender, TextCompositionEventArgs e) {
             e.Handled = !e.Text.ToCharArray().All(c => char.IsDigit(c) || c == ' ' || c == ',');

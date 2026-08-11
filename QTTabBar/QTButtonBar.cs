@@ -1453,7 +1453,8 @@ namespace QTTabBarLib {
         }
 
         private void toolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-            if(e.ClickedItem == null || e.ClickedItem.Tag == null) return;
+            // 添加条件  null == InstanceManager.GetThreadTabBar()  , 会不会执行？
+            if(e.ClickedItem == null || e.ClickedItem.Tag == null || null == InstanceManager.GetThreadTabBar()) return;
             InstanceManager.GetThreadTabBar().ProcessButtonBarClick((int)e.ClickedItem.Tag);
         }
 

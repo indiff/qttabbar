@@ -92,20 +92,39 @@ namespace QTTabBarLib {
             if(shellBrowser != null) {
               QTUtility2.log("ReleaseComObject shellBrowser");
               Marshal.FinalReleaseComObject(shellBrowser);
-              shellBrowser = null;
+                //   shellBrowser = null; // 引起问题 ？ 未将对象引用设置到对象的实例
             }
             if(folderView != null) {
-                QTUtility2.log("ReleaseComObject folderView");
+               QTUtility2.log("ReleaseComObject folderView");
                Marshal.ReleaseComObject(folderView);
-             //  folderView = null;
+                //  folderView = null;
             }
         }
         
         public IntPtr GetExplorerHandle() {
-            IntPtr hwnd;
-            shellBrowser.GetWindow(out hwnd);
-            IntPtr parent = PInvoke.GetParent(hwnd);
-            return parent != IntPtr.Zero ? parent : hwnd;
+          
+            try {
+                IntPtr hwnd = IntPtr.Zero;
+                if (null != shellBrowser)
+                {
+                    shellBrowser.GetWindow(out hwnd);
+                }
+                IntPtr parent = PInvoke.GetParent(hwnd);
+                return parent != IntPtr.Zero ? parent : hwnd;
+            }
+            catch (Exception e) {
+                QTUtility2.MakeErrorLog(e, "ShellBrowserEx GetExplorerHandle 111");
+            }
+            return IntPtr.Zero;
+            /*
+          IntPtr hwnd = IntPtr.Zero;
+          if (null != shellBrowser)
+          {
+              shellBrowser.GetWindow(out hwnd);
+          }
+          IntPtr parent = PInvoke.GetParent(hwnd);
+          return parent != IntPtr.Zero ? parent : hwnd;
+            * */
         }
 
         
@@ -207,18 +226,26 @@ namespace QTTabBarLib {
         }
 
         public int GetSelectedCount() {
-            int count;
-            if (folderView == null)
+            int count = 0 ;
+            try
             {
-                // 显示赋值 folderView 实例
-                IShellView ppshv;
-                if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
+                // 增加捕获异常
+                if (folderView == null && null != shellBrowser)
                 {
-                    folderView = ppshv as IFolderView;
+                    // 显示赋值 folderView 实例
+                    IShellView ppshv;
+                    if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
+                    {
+                        folderView = ppshv as IFolderView;
+                    }
                 }
+                QTUtility2.log(" GetSelectedCount folderView is null ? " + (folderView == null)); // 测试是否未空？  by indiff
+                return folderView != null && folderView.ItemCount(SVGIO.SELECTION, out count) == 0 ? count : 0;
             }
-            QTUtility2.log(" GetSelectedCount folderView is null ? " + (folderView == null) ); // 测试是否未空？  by indiff
-            return folderView != null && folderView.ItemCount(SVGIO.SELECTION, out count) == 0 ? count : 0;
+            catch (Exception e) {
+                QTUtility2.MakeErrorLog(e, "GetSelectedCount");
+            }
+            return count;
         }
 
         public IDLWrapper GetShellPath() {

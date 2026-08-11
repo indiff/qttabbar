@@ -237,17 +237,23 @@ namespace QTTabBarLib {
             }
             QTUtility2.MakeErrorLog(null, "HookLib Initialize failed: " + retcode);
             LoadedHook = false;
-            MessageForm.Show(IntPtr.Zero,
-                String.Format(
-                    "{0}: {1} {2}",
-                    QTUtility.TextResourcesDic["ErrorDialogs"][4],
-                    QTUtility.TextResourcesDic["ErrorDialogs"][5],
-                    QTUtility.TextResourcesDic["ErrorDialogs"][7]
-                ),
-                QTUtility.TextResourcesDic["ErrorDialogs"][1],
-                MessageBoxIcon.Hand, 
-                30000, false, true
-            );
+            // Called from within QTUtility's own static constructor, before TextResourcesDic
+            // is populated (that happens later in the same .cctor) - showing this dialog would
+            // NRE and poison the .cctor for the rest of the process, taking every QTUtility-
+            // dependent feature down with it. The MakeErrorLog call above already recorded this.
+            if (QTUtility.TextResourcesDic != null) {
+                MessageForm.Show(IntPtr.Zero,
+                    String.Format(
+                        "{0}: {1} {2}",
+                        QTUtility.TextResourcesDic["ErrorDialogs"][4],
+                        QTUtility.TextResourcesDic["ErrorDialogs"][5],
+                        QTUtility.TextResourcesDic["ErrorDialogs"][7]
+                    ),
+                    QTUtility.TextResourcesDic["ErrorDialogs"][1],
+                    MessageBoxIcon.Hand,
+                    30000, false, true
+                );
+            }
         }
 
 

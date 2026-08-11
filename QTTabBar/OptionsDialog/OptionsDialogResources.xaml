@@ -31,18 +31,212 @@
     <qt:Converter       Type="{x:Type qt:OptionsDialog+FontStringConverter          }" x:Key="FontStringConverter"          />
     <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+LogicalAndMultiConverter     }" x:Key="LogicalAndMultiConverter"     />
     <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+BoolJoinMultiConverter       }" x:Key="BoolJoinMultiConverter"       />
+    <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+LogicalAndBroadcastMultiConverter }" x:Key="LogicalAndBroadcastMultiConverter" />
+
+    <!-- Dark palette (matching ShellColors' Windows10Dark/Windows11Dark). Every consumer merges
+         this file via Source="..." rather than instantiating a class, so a code-behind on this
+         dictionary would never run - QTUtility2.ApplyOptionsDialogTheme overwrites these five
+         (plus the SystemColors keys below) with the light palette instead, called from
+         OptionsDialogTab and OptionsDialog once each consumer's own Resources are loaded.
+         Consumers use DynamicResource so that later overwrite is picked up. -->
+    <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="#FF202020"/>
+    <SolidColorBrush x:Key="ThemeFieldBrush"       Color="#FF2B2B2B"/>
+    <SolidColorBrush x:Key="ThemeBorderBrush"      Color="#FF535353"/>
+    <SolidColorBrush x:Key="ThemeForegroundBrush"  Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ThemeSelectionBrush"   Color="#FF626262"/>
+    <SolidColorBrush x:Key="SectionHeaderBackgroundBrush" Color="#FF2C2C2C"/>
+
+    <!-- The classic-theme RadioButton/CheckBox/Label control templates read these
+         system brush keys directly for their label text, ignoring a plain
+         Foreground setter, so they need overriding at the resource-key level.
+         Buttons read ControlTextBrushKey too, so they get their own style below
+         to opt back out (button face itself stays the native light chrome).
+         Dark values only - overwritten in the light case by ApplyOptionsDialogTheme. -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}"  Color="White"/>
+    <!-- ComboBox dropdown popups read WindowBrush directly for their background,
+         not the ComboBox's own Background property. -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}"      Color="#FF2B2B2B"/>
+    <!-- Used by OptionsDialog.xaml's own category sidebar (ListView selection colors and
+         the ListBox's own "control face" background). Placeholder values only, see above. -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"     Color="#FF626262"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"       Color="#FF202020"/>
+
+    <Style TargetType="Button">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="#FFE1E1E1"/>
+        <Setter Property="BorderBrush" Value="#FF8C8C8C"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <!-- The classic-theme ButtonChrome template has its own baked-in disabled
+             rendering that ignores plain Background/Foreground setters entirely, so
+             a full custom template is the only way to keep a consistent look
+             regardless of IsEnabled. -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="{TemplateBinding Padding}"
+                            RecognizesAccessKey="True"
+                            TextElement.Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFD5D5D5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#FFBEBEBE"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!-- Label Style for Section Headers -->
     <Style x:Key="SectionHeaderStyle" TargetType="Label">
-        <Setter Property="Background"       Value="#FFF0F2F5"/>
-        <Setter Property="BorderBrush"      Value="#FFE2E4E7"/>
+        <Setter Property="Background"       Value="{DynamicResource SectionHeaderBackgroundBrush}"/>
+        <Setter Property="BorderBrush"      Value="{DynamicResource ThemeBorderBrush}"/>
         <Setter Property="BorderThickness"  Value="0,0,0,1"/>
         <Setter Property="FontSize"         Value="11"/>
         <Setter Property="FontWeight"       Value="Bold"/>
-        <Setter Property="Foreground"       Value="#FF3B3B3B"/>
+        <Setter Property="Foreground"       Value="{DynamicResource ThemeForegroundBrush}"/>
         <Setter Property="Height"           Value="22"/>
         <Setter Property="Margin"           Value="0,14,0,9"/>
         <Setter Property="Padding"          Value="6,2,0,2"/>
+    </Style>
+
+    <!-- Implicit (unkeyed) styles so every Options page gets these for free. -->
+    <Style TargetType="UserControl">
+        <Setter Property="Background"  Value="{DynamicResource ThemeBackgroundBrush}"/>
+    </Style>
+    <Style TargetType="TextBlock">
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+    </Style>
+    <Style TargetType="Label">
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+    </Style>
+    <Style TargetType="CheckBox">
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+    </Style>
+    <Style TargetType="RadioButton">
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+    </Style>
+    <Style TargetType="GridViewColumnHeader">
+        <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
+    </Style>
+    <Style TargetType="GroupBox">
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
+    </Style>
+    <Style TargetType="TextBox">
+        <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
+    </Style>
+    <Style TargetType="ComboBox">
+        <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
+        <!-- The classic-theme "closed" selection box (separate from the dropdown
+             popup, fixed above via ComboBoxItem) also ignores Background/Foreground,
+             so it needs a full template like Button did. -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                            ClickMode="Press"
+                            Focusable="False">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Path Grid.Column="1" Data="M0,0 L4,4 L8,0 Z" Fill="{DynamicResource ThemeForegroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                        <ContentPresenter
+                            IsHitTestVisible="False"
+                            Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            Margin="4,0,20,0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        <Popup
+                            Placement="Bottom"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            AllowsTransparency="True"
+                            Focusable="False"
+                            PopupAnimation="Slide">
+                            <Grid
+                                SnapsToDevicePixels="True"
+                                MinWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border Background="{DynamicResource ThemeFieldBrush}" BorderBrush="{DynamicResource ThemeBorderBrush}" BorderThickness="1"/>
+                                <ScrollViewer Margin="1" SnapsToDevicePixels="True">
+                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- ComboBoxItem's classic-theme chrome ignores the parent ComboBox's
+         Background/Foreground for unselected items, same as ListViewItem did. -->
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border Background="{TemplateBinding Background}" Padding="4,3">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ThemeSelectionBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="ListBox">
+        <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
+    </Style>
+    <Style TargetType="ListView">
+        <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
+    </Style>
+    <Style TargetType="DataGrid">
+        <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>
+        <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
     </Style>
     <!--  Hm...
         <Style x:Key="CheckedSectionHeaderStyle" TargetType="Border">

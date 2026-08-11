@@ -25,13 +25,13 @@ using System.Resources;
 //
 [assembly: AssemblyTitle("QTTabBar")]
 //[assembly: AssemblyDescription("Main QTTabBar Assembly")]
-[assembly: AssemblyDescription("��QTTabBar����")]
+[assembly: AssemblyDescription("QTTabBar Plugin")]
 [assembly: AssemblyConfiguration("")]
 // [assembly: AssemblyCompany("Quizo and Paul Accisano")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTTabBar")]
 // 2007-2020
-[assembly: AssemblyCopyright("Copyright (C)  2007-2023")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2026")]
 [assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
 // [assembly: AssemblyFileVersion("2.0.0.0")]
@@ -54,8 +54,8 @@ using System.Resources;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.5.6.2")]
-[assembly: AssemblyFileVersion("1.5.6.2")]	// edit this
+[assembly: AssemblyVersion("1.5.9.0")]
+[assembly: AssemblyFileVersion("1.5.9.0")]	// edit this
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
 // Microsoft .NET Framework documentation for more information on assembly signing.

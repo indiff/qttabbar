@@ -276,7 +276,8 @@ namespace QTTabBarLib {
             public bool TrayOnMinimize           { get; set; }
             public bool AutoHookWindow           { get; set; }
             public bool ShowFailNavMsg           { get; set; } // SHOW_FAIL_NAV_MSG
-           
+            public bool AutoEnableExperimental   { get; set; } // auto-attach QTTabBarClass to every new Explorer window (see ContextMenuOptions/AutoLoader)
+
             public byte[] DefaultLocation        { get; set; }
 
             public _Window() {
@@ -307,6 +308,7 @@ namespace QTTabBarLib {
                 TrayOnMinimize = false;
                 // 默认关闭自动启动hook
                 AutoHookWindow = false;
+                AutoEnableExperimental = false;
   //              string idl = Environment.OSVersion.Version >= new Version(6, 1)
   //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
   //                     : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // Computer
@@ -362,7 +364,8 @@ namespace QTTabBarLib {
                 ActivateNewTab = true;  // 是否立即切换到新标签
                 NeverOpenSame = true;   //  重用新标签
                 RenameAmbTabs = true;  // 模糊重命名标签
-                DragOverTabOpensSDT = false; // 拖拽标签后的操作
+                DragOverTabOpensSDT = true; // 拖拽标签后的操作  true 复制 移动 文件  false  切换到它
+                // DragOverTabOpensSDT 注册表存储的值为 0  1     reg_dword 类型
                 ShowFolderIcon = true;  // 显示驱动器图标
                 ShowSubDirTipOnTab = false;  // 在文件夹显示子标签
                 ShowDriveLetters = false; // 显示驱动器字符
@@ -478,30 +481,53 @@ namespace QTTabBarLib {
                 PreviewFont = Control.DefaultFont;
                 PreviewFont = new Font(new FontFamily("微软雅黑"), 9f);
                 // 文本类型扩展名 添加 yml yaml 文件支持
-                TextExt = new List<string> { 
-                    ".txt",".rtf"
-                    ,".ini", ".inf",".properties", ".ruleset", ".settings"
-                    ,".cs", ".log"
-                    ,".js", ".vbs", ".bat", ".cmd", ".sh"
-                    ,".c",".cpp",".cc",".h", ".rc"
+                TextExt = new List<string> {
+                    ".asp" 
+                    ,".aspx"
+                    ,".bat"
+                    ,".cmd"
+                    ,".sh"
+                    ,".c",".cpp",".cc",".h", ".rc",".cs"
+                    ,".css"
+                    ,".env"
+                    ,".txt"
+                    ,".txtlog"
+                    ,".tex"
+                    ,".rtf"
+                    ,".ini", ".inf"
+                    ,".properties"
+                    , ".ruleset", ".settings"
+                    ,".log"
+                    ,".js"
+                    ,".vb"
+                    ,".vbs"
                     ,".xml"
-                    ,".yml",".yaml"
+                    ,".yml"
+                    ,".yaml"
+                    ,".toml"
                     ,".htm",".html",".mht",".mhtml", ".shtml", ".hta"
                     ,".HxT",".HxC",".hhc",".hhk", ".hhp"
                     ,".java"
                     ,".sql"
+                    ,".tsv"
                     ,".csv"
                     ,".md" 
-
+                    ,".markdown" 
+                    ,".json" 
+                    ,".wsdl" // web service 定义描述文件
                     ,".m" 
                     ,".reg" 
-
                     ,".wxl" 
                     ,".wxs" 
-                    
                     ,".py", ".rb"
-                    ,".jsp", ".asp", ".php",".aspx"
-                    ,".resx",".xaml",  ".config", ".manifest", ".csproj", ".vbproj"
+                    ,".jsp", ".php"
+                    ,".resx",".xaml"
+                    ,".cfg"
+                    ,".conf"
+                    ,".config"
+                    ,".manifest"
+                    ,".csproj"
+                    ,".vbproj"
                 };
                 // 配置默认的图像扩展名
                 ImageExt = ThumbnailTooltipForm.MakeDefaultImgExts();

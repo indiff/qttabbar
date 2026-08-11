@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="pt-br" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="YOURLOCID">Sua string de localização</String>
+  <String Id="READ_INFO">Por favor, leia as seguintes informações.</String>
+  <String Id="CLOSE_TABS">Feche todas as janelas do Explorer e reabra-as como abas</String>
+  <String Id="COMPILE_IMG">Compilando imagens nativas</String>
+  <String Id="GPL_FILE">GPL3.rtf</String>
+  <String Id="STANDARD_BUTTONS">Botões Padrão do QTTab</String>
+  <String Id="DESKTOP_TOOL">Ferramenta de Desktop QTTab</String>
+
+  <String Id="QTTABBAR_ATUOLOADER">QTTabBar AutoLoader</String>
+
+  <String Id="ALREADY_INSTALLED">Versão mais recente já instalada.</String>
+  <String Id="DETECTED_OLD_VERSION">O instalador detectou que uma versão mais antiga do QTTabBar está instalada.  Devido a uma alteração nos instaladores, você deve desinstalar manualmente esta versão mais antiga e reiniciar o Explorer antes de continuar.  Por favor, execute o instalador novamente uma vez que a versão mais antiga é desinstalada e o Explorer foi reiniciado.</String>
+  <String Id="STILL_OLD_VERSION">Parece que uma versão mais antiga do QTTabBar ainda está carregada no Windows Explorer.  Por favor, reinicie o Explorer através do Gerenciador de tarefas ou reinicie seu computador antes de continuar.</String>
+  <String Id="REQUIRE_NET_FRAMEWORK">Este aplicativo requer a versão .NET Framework pelo menos 3.5. Por favor, instale o .NET Framework e execute este instalador novamente.</String>
+</WixLocalization>

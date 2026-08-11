@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -269,7 +269,9 @@ namespace QTTabBarLib {
                             // str4 = "  *empty file";
                             content = EMPTYFILE;
                         }
-                        lblText.ForeColor = (ioException != null) ? Color.Red : (isEmptyText ? SystemColors.GrayText : SystemColors.InfoText);
+                        Color normalColor = QTUtility.InNightMode ? Color.White : SystemColors.InfoText;
+                        Color emptyColor = QTUtility.InNightMode ? Color.Gray : SystemColors.GrayText;
+                        lblText.ForeColor = (ioException != null) ? Color.Red : (isEmptyText ? emptyColor : normalColor);
                         try {
                             lblText.Font = Config.Tips.PreviewFont;
                             fFontAsigned = true;
@@ -379,7 +381,9 @@ namespace QTTabBarLib {
             lblInfo = new Label();
             ((ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            lblInfo.ForeColor = SystemColors.InfoText;
+            Color foreColor = QTUtility.InNightMode ? Color.White : SystemColors.InfoText;
+            Color backColor = QTUtility.InNightMode ? Color.FromArgb(32, 32, 32) : SystemColors.Info;
+            lblInfo.ForeColor = foreColor;
             lblInfo.BackColor = Color.Transparent;
             lblInfo.Dock = DockStyle.Bottom;
             lblInfo.Padding = new Padding(4);
@@ -393,7 +397,7 @@ namespace QTTabBarLib {
             pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             pictureBox1.TabStop = false;
             lblText.AutoEllipsis = true;
-            lblText.ForeColor = SystemColors.InfoText;
+            lblText.ForeColor = foreColor;
             lblText.BackColor = Color.Transparent;
             lblText.Dock = DockStyle.Fill;
             lblText.Location = new Point(0, 0);
@@ -402,7 +406,7 @@ namespace QTTabBarLib {
             lblText.UseMnemonic = false;
             AutoScaleDimensions = new SizeF(6f, 13f);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.Info;
+            BackColor = backColor;
             ClientSize = new Size(0x100, 0x80);
             Controls.Add(lblText);
             Controls.Add(pictureBox1);
