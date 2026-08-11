@@ -190,7 +190,10 @@
  *  do nothing else.  On the Mac OS X version of gcc this is _STDINT_H_.
  */
 
-#if ((defined(__STDC__) && __STDC__ && __STDC_VERSION__ >= 199901L) || (defined (__WATCOMC__) && (defined (_STDINT_H_INCLUDED) || __WATCOMC__ >= 1250)) || (defined(__GNUC__) && (defined(_STDINT_H) || defined(_STDINT_H_)) )) && !defined (_PSTDINT_H_INCLUDED)
+/* MSVC 2010+ (_MSC_VER >= 1600) ships a real <stdint.h>; use it and skip the
+ * fallback definitions below, which otherwise redefine uint32_t etc. and fail
+ * to compile (C2371) against the modern toolchain's own <stdint.h>. */
+#if ((defined(__STDC__) && __STDC__ && __STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1600) || (defined (__WATCOMC__) && (defined (_STDINT_H_INCLUDED) || __WATCOMC__ >= 1250)) || (defined(__GNUC__) && (defined(_STDINT_H) || defined(_STDINT_H_)) )) && !defined (_PSTDINT_H_INCLUDED)
 #include <stdint.h>
 #define _PSTDINT_H_INCLUDED
 # ifndef PRINTF_INT64_MODIFIER

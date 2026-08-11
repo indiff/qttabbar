@@ -1,4 +1,4 @@
-﻿//    This file is part of QTTabBar, a shell extension for Microsoft
+//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
 //    Copyright (C) 2007-2021  Quizo, Paul Accisano
 //
@@ -23,7 +23,7 @@
 #include <time.h>
 #include <map>
 
-//GDI 相关 Using GDI
+//GDI-related, Using GDI
 #include <comdef.h>
 #include <gdiplus.h>
 #include <Shlwapi.h>
@@ -186,7 +186,7 @@ DECLARE_HOOK(11, HRESULT, ShowWindow_7, (ICommonExplorerHost* _this, PCIDLIST_AB
 DECLARE_HOOK(12, HRESULT, UpdateWindowList, (/*IShellBrowserService*/ IUnknown* _this))
 
 
-// 设置背景图片的 hook 定义 start 
+// Background-image hook definitions start
 DECLARE_HOOK(13, HWND, CreateWindowExW, (
     DWORD     dwExStyle,
     LPCWSTR   lpClassName,
@@ -215,7 +215,7 @@ __in HBRUSH hbr
 */
 DECLARE_HOOK(16, int, FillRect, (HDC hDC, const RECT* lprc, HBRUSH hbr))
 DECLARE_HOOK(17, HDC, CreateCompatibleDC, (HDC hDC))
-// 设置背景图片的 hook 定义 end 
+// Background-image hook definitions end
 
 DECLARE_HOOK(18, HRESULT, SHOpenFolderAndSelectItems, (
 		PCIDLIST_ABSOLUTE pidlFolder, 
@@ -260,7 +260,7 @@ FARPROC fpRealRREP = NULL;
 FARPROC fpRealCI = NULL;
 
 
-//全局变量
+//Global variables
 #pragma region GlobalVariable
 
 /*GDI Bitmap*/
@@ -276,10 +276,10 @@ public:
 	Gdiplus::Bitmap* src;
 };
 
-HMODULE g_hModule = NULL;           //全局模块句柄 Global module handle
-bool m_isInitHook = false;          //Hook初始化标志 Hook init flag
+HMODULE g_hModule = NULL;           //Global module handle
+bool m_isInitHook = false;          //Hook init flag
 
-ULONG_PTR m_gdiplusToken;           //GDI初始化标志 GDI Init flag
+ULONG_PTR m_gdiplusToken;           //GDI Init flag
 
 struct MyData
 {
@@ -289,7 +289,7 @@ struct MyData
     int ImgIndex ;
 };
 //First ThreadID
-std::map<DWORD, MyData> m_duiList;//dui句柄列表 dui handle list
+std::map<DWORD, MyData> m_duiList;//dui handle list
 
 struct Config
 {
@@ -301,15 +301,15 @@ struct Config
     *  5 = Zoom
     *  6 = Zoom Fill
     */
-    int imgPosMode ;                 //图片定位方式 Image position mode type
-    bool isRandom ;               //随机显示图片 Random pictures
-    BYTE imgAlpha ;                //图片透明度 Image alpha
-    std::vector<BitmapGDI*> imageList;  //背景图列表 background image list
-} m_config;                             //配置信息 config
+    int imgPosMode ;                 //Image position mode type
+    bool isRandom ;               //Random pictures
+    BYTE imgAlpha ;                //Image alpha
+    std::vector<BitmapGDI*> imageList;  //background image list
+} m_config;                             //config
 
 #pragma endregion
 
-// 获取 DLL 文件的目录
+// Get the DLL file's directory
 std::wstring GetCurDllDir()
 {
 	wchar_t sPath[MAX_PATH];
@@ -320,7 +320,7 @@ std::wstring GetCurDllDir()
 }
 
 
-// 判断文件是否存在
+// Check whether the file exists
 bool FileIsExist(std::wstring FilePath)
 {
 	WIN32_FIND_DATA FindFileData;
@@ -332,7 +332,7 @@ bool FileIsExist(std::wstring FilePath)
 	}
 	return false;
 }
-// 获取 INI 的配置内容
+// Get the INI's config content
 std::wstring GetIniString(std::wstring FilePath, std::wstring AppName, std::wstring KeyName)
 {
 	if (FileIsExist(FilePath)) {
@@ -353,21 +353,21 @@ std::wstring GetIniString(std::wstring FilePath, std::wstring AppName, std::wstr
 	return std::wstring();
 }
 
-// 遍历文件
+// Enumerate files
 void EnumFiles(std::wstring path, std::wstring append, std::vector<std::wstring>& fileList)
 {
 	
-	//文件句柄 
+	//File handle
 	// intptr_t  hFile = 0;
-	// //文件信息 
+	// //File info
 	// struct _wfinddata_t fileinfo;
 	std::wstring p;
-	// std::string inPath = "./*.png"; // 当前目录的所有
+	// std::string inPath = "./*.png"; // everything in the current directory
 	// auto lp_text = p.assign(path).append(L"\\" + append).c_str();
 	auto lp_text = p.assign(path).append(L"\\" + append).c_str();
 	// Box1(lp_text);
 	WIN32_FIND_DATA fileinfo2;
-	//文件句柄
+	//File handle
 	HANDLE myHandle = INVALID_HANDLE_VALUE;
 	// if ((hFile = _findfirst(lp_text, &fileinfo)) != -1)
 	if ((myHandle = FindFirstFile(lp_text, &fileinfo2)) != INVALID_HANDLE_VALUE)
@@ -397,7 +397,7 @@ void EnumFiles(std::wstring path, std::wstring append, std::vector<std::wstring>
 
 void LoadSettings(bool loadimg)
 {
-    //释放旧资源
+    //Release old resources
     if (loadimg) {
 		/*for (auto image_list : m_config.imageList)
 		{
@@ -406,7 +406,7 @@ void LoadSettings(bool loadimg)
         m_config.imageList.clear();
     }
 
-    //加载配置 Load config
+    //Load config
     std::wstring cfgPath = GetCurDllDir() + L"\\config.ini";
 
 	m_config.isRandom = false;
@@ -418,7 +418,7 @@ void LoadSettings(bool loadimg)
 
     Box(L"Load random ");
 
-    //图片定位方式
+    //Image position mode
     /* 0 = Left top
     *  1 = Right top
     *  2 = Left bottom
@@ -436,7 +436,7 @@ void LoadSettings(bool loadimg)
 
     // m_config.imgPosMode = 6;
 
-    //图片透明度
+    //Image alpha
     str = GetIniString(cfgPath, L"image", L"imgAlpha");
     // str = L"imgAlpha";
 	
@@ -452,39 +452,39 @@ void LoadSettings(bool loadimg)
     }
 	// m_config.imgAlpha = 255;
 	Box(L"shit");
-    //加载图像 Load Image
+    //Load Image
     if (loadimg) {
         std::wstring imgDir = GetCurDllDir() + L"\\Image";
         // std::wstring imgPath = L"C:\\ProgramData\\QTTabBar\\Image";
 
         Box(imgDir.c_str());
 
-		// 图片列表
+		// Image list
 		std::vector<std::wstring> fileList;
 
 		std::wstring imgPath = GetIniString(cfgPath, L"image", L"imgPath");
-		if (FileIsExist(imgPath)) { // 如果指定了文件存在 则加载指定的文件，关闭随机
+		if (FileIsExist(imgPath)) { // If a specified file exists, load it and disable random
 			fileList.push_back(imgPath);
-			// 自定义图片则关闭随机
+			// A custom image disables random
 			m_config.isRandom = false;
-		} else  if (FileIsExist(imgDir)) // 如果目录 C:\\ProgramData\\QTTabBar\\Image
+		} else  if (FileIsExist(imgDir)) // If the directory C:\\ProgramData\\QTTabBar\\Image exists
         {
          
             EnumFiles(imgDir, L"*.png", fileList);
             EnumFiles(imgDir, L"*.jpg", fileList);
             EnumFiles(imgDir, L"*.jpeg", fileList);
 
-			// 还是未加载则设置一个默认的图片地址 C:\\ProgramData\\QTTabBar\\Image\\bgImage.png
+			// If still not loaded, set a default image path C:\\ProgramData\\QTTabBar\\Image\\bgImage.png
 			/*if (fileList.size() == 0) {
-				// 如果为 0 的话， 则加载自定义的图片
+				// If it's 0, load the custom image
 				fileList.push_back(L"C:\\ProgramData\\QTTabBar\\Image\\bgImage.png");
 			}*/
 
-			// 未加载到图片弹框，影响操作
+			// No image loaded, show a dialog since it affects operation
             if (fileList.size() == 0) {
-                /*MessageBoxW(0, 
-					L"文件资源管理器背景目录没有文件，因此扩展不会有任何效果.", 
-					imgDir.c_str(), 
+                /*MessageBoxW(0,
+					L"There are no files in the File Explorer background directory, so the extension will have no effect.",
+					imgDir.c_str(),
 					MB_ICONERROR);*/
                 return;
             } else {
@@ -495,21 +495,21 @@ void LoadSettings(bool loadimg)
                 if (bmp->src)
                     m_config.imageList.push_back(bmp);
                 else
-                    delete bmp;//图片加载失败 load failed*/
+                    delete bmp;//load failed*/
 
 			// MessageBoxW(0, L"LoadSettings", L" bpm " + fileList.size(), MB_ICONERROR);
             // Log(L"LoadSettings " + fileList.size() );
 
         }
-        else {  // 如果 Image 目录不存在
-            /*MessageBoxW(0, 
-				L"文件资源管理器背景目录不存在，因此扩展不会有任何效果.", 
-				L"缺少图片目录", 
+        else {  // If the Image directory doesn't exist
+            /*MessageBoxW(0,
+				L"The File Explorer background directory doesn't exist, so the extension will have no effect.",
+				L"Missing image directory",
 				MB_ICONERROR);*/
-            // 如果目录不存在，则加载自定义图片
+            // If the directory doesn't exist, load a custom image
         }
 
-		// 判断是否有图片，则初始化
+		// Check whether there are images, then initialize
 		if (fileList.size() > 0 )
 		{
 			for (size_t i = 0; i < fileList.size(); i++)
@@ -519,9 +519,9 @@ void LoadSettings(bool loadimg)
 	            if (bmp->src)
 	                m_config.imageList.push_back(bmp);
 	            else
-	                delete bmp;//图片加载失败 load failed
+	                delete bmp;//load failed
 
-	            /*非随机 只加载一张
+	            /*Non-random - load only one
 	            * Load only one image non randomly
 				*/
 	            if (!m_config.isRandom) break;
@@ -532,10 +532,10 @@ void LoadSettings(bool loadimg)
 }
 
 
-// 图片构造函数
+// Image constructor
 BitmapGDI::BitmapGDI(std::wstring path)
 {
-	//这样加载是为了防止文件被占用
+	//Loading this way prevents the file from being locked
 	FILE* file = nullptr;
 	_wfopen_s(&file, path.c_str(), L"rb");
 	if (file) {
@@ -578,7 +578,7 @@ BitmapGDI::BitmapGDI(std::wstring path)
 	}
 }
 
-// 图片对象析构函数
+// Image object destructor
 BitmapGDI::~BitmapGDI()
 {
 	if (src)
@@ -611,11 +611,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
         g_hModule = hModule;
         DisableThreadLibraryCalls(hModule);
 
-        //防止别的程序意外加载
+        //Prevent other programs from accidentally loading this
         wchar_t pName[MAX_PATH];
         GetModuleFileNameW(NULL, pName, MAX_PATH);
 
-        //进程名转小写
+        //Convert the process name to lowercase
         std::wstring path = std::wstring(pName);
         std::wstring name = path.substr(path.length() - 12, 12);
         std::transform(name.begin(), name.end(), name.begin(), ::tolower);
@@ -654,7 +654,7 @@ int Initialize(CallbackStruct* cb) {
     }
 	
 
-    //设置随机数种子
+    //Seed the random number generator
     srand((int)time(0));
 	
 	Box(L"MH_Initialize");
@@ -681,10 +681,10 @@ int Initialize(CallbackStruct* cb) {
 	Box(L"CREATE_HOOK start");
     CREATE_HOOK(&CoCreateInstance, CoCreateInstance)
     CREATE_HOOK(&RegisterDragDrop, RegisterDragDrop)
-	// 创建默认 Shell 文件夹视图对象的新实例。
-	// 对应微信打开文件、qq打开文件、钉钉打开文件会打开新的窗体  这里发现不是调用该函数，只有打开文件位置会调用这个方法
-    CREATE_HOOK(&SHCreateShellFolderView, SHCreateShellFolderView) 
-	// 定位文件函数
+	// Creates a new instance of the default Shell folder view object.
+	// Corresponds to WeChat/QQ/DingTalk opening a file, which opens a new window - found that this function isn't actually called for that; only "open file location" calls this method
+    CREATE_HOOK(&SHCreateShellFolderView, SHCreateShellFolderView)
+	// Locate-file function
     CREATE_HOOK(&SHOpenFolderAndSelectItems, SHOpenFolderAndSelectItems)
     // CREATE_HOOK(&ShellExecute, ShellExecute)
 	
@@ -730,7 +730,7 @@ int Initialize(CallbackStruct* cb) {
     }
 #endif
 #if 0
-    //win 10 \BF\C9\D3õķ\BD\B7\A8
+    //Win 10 workaround
     CComPtr<IUnknown> punk;
     if (punk.Create(CLSID_ExplorerFactoryServer, CLSCTX_INPROC_SERVER))
     {
@@ -790,7 +790,7 @@ int Dispose() {
 }
 
 
-//Hook的原始函数
+//Hook's original functions
 #pragma region Original Function
 
 typedef HWND(WINAPI* O_CreateWindowExW)(DWORD, LPCWSTR, LPCWSTR, DWORD,
@@ -853,14 +853,14 @@ HWND WINAPI DetourCreateWindowExW(
     if (classname == L"DirectUIHWND"
         && parentClassName == L"SHELLDLL_DefView")
     {
-        //继续查找父级 Continue to find parent
+        //Continue to find parent
         HWND parent = GetParent(hWndParent);
 		GetClassName(parent, cn_chars, sizeof(classname));
         classname = std::wstring(cn_chars);
 
 		if (classname == L"ShellTabWindowClass")
         {
-            //记录到列表中 Add to list
+            //Add to list
             MyData data;
             data.hWnd = hWnd;
             auto imgSize = m_config.imageList.size();
@@ -888,7 +888,7 @@ HWND WINAPI DetourCreateWindowExW(
 
 BOOL WINAPI DetourDestroyWindow(HWND hWnd)
 {
-    //查找并删除列表中的记录 Find and remove from list
+    //Find and remove from list
     auto iter = m_duiList.find(GetCurrentThreadId());
     if (iter != m_duiList.end())
     {
@@ -905,7 +905,7 @@ BOOL WINAPI DetourDestroyWindow(HWND hWnd)
 
 HDC WINAPI DetourBeginPaint(HWND hWnd, LPPAINTSTRUCT lpPaint)
 {
-    //开始绘制DUI窗口 BeginPaint dui window
+    //BeginPaint dui window
     HDC hDC = fpBeginPaint(hWnd, lpPaint);
 
     auto iter = m_duiList.find(GetCurrentThreadId());
@@ -914,7 +914,7 @@ HDC WINAPI DetourBeginPaint(HWND hWnd, LPPAINTSTRUCT lpPaint)
         if (iter->second.hWnd == hWnd)
         {
 	        // Box1(L" set hdc suc ");
-            //记录到列表 Record values to list
+            //Record values to list
             iter->second.hDC = hDC;
         }
     }
@@ -942,8 +942,7 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
             GetWindowRect(iter->second.hWnd, &pRc);
             SIZE wndSize = { pRc.right - pRc.left, pRc.bottom - pRc.top };
 
-            /*因图片定位方式不同 如果窗口大小改变 需要全体重绘 否则有残留
-            * Due to different image positioning methods,
+            /* Due to different image positioning methods,
             * if the window size changes, you need to redraw, otherwise there will be residues*/
             if ((iter->second.size.cx != wndSize.cx || iter->second.size.cy != wndSize.cy)
                 && m_config.imgPosMode != 0) {
@@ -952,41 +951,41 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
 			
 			// Box1(L"InvalidateRect suc ");
 
-            //裁剪矩形 Clip rect
+            //Clip rect
             SaveDC(hDC);
             IntersectClipRect(hDC, lprc->left, lprc->top, lprc->right, lprc->bottom);
 
 			// Box1(L"SaveDC IntersectClipRect suc ");
             BitmapGDI* pBgBmp = m_config.imageList[iter->second.ImgIndex];
 
-            //计算图片位置 Calculate picture position
+            //Calculate picture position
             POINT pos;
             SIZE dstSize = { pBgBmp->Size.cx, pBgBmp->Size.cy };
 
 			// Box1(L"calc pos suc ");
             switch (m_config.imgPosMode)
             {
-            case 0://左上
+            case 0://Top-left
                  pos.x = 0;
                 pos.y = 0;
                 break;
-            case 1://右上
+            case 1://Top-right
                 pos.x = wndSize.cx - pBgBmp->Size.cx;
                 pos.y = 0;
                 break;
-            case 2://左下
+            case 2://Bottom-left
                 pos.x = 0;
                 pos.y = wndSize.cy - pBgBmp->Size.cy;
                 break;
-            case 3://右下
+            case 3://Bottom-right
                 pos.x = wndSize.cx - pBgBmp->Size.cx;
                 pos.y = wndSize.cy - pBgBmp->Size.cy;
                 break;
-            case 4://居中正常顯示
+            case 4://Centered, normal display
                 pos.x = (wndSize.cx - pBgBmp->Size.cx) >> 1;
                 pos.y = (wndSize.cy - pBgBmp->Size.cy) >> 1;
                 break;
-            case 5://缩放
+            case 5://Scale
                   {
                       int newWidth = wndSize.cx;
                       int newHeight = wndSize.cy;
@@ -999,7 +998,7 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
                      dstSize.cy = newHeight;
                   }
                   break;
-            case 6://缩放并填充
+            case 6://Scale and fill
                  {
                      /*static auto calcAspectRatio = [](int fromWidth, int fromHeight, int toWidthOrHeight, bool isWidth)
                      {
@@ -1011,26 +1010,26 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
                          }
                      };*/
 					 
-                     //按高等比例拉伸
+                     //Stretch proportionally by height
                      // int newWidth = calcAspectRatio(pBgBmp->Size.cx, pBgBmp->Size.cy, wndSize.cy, false);
 					 
                      int newWidth =  round_int((float)pBgBmp->Size.cx * ((float)wndSize.cy / (float)pBgBmp->Size.cy));
                      int newHeight = wndSize.cy;
 
                      pos.x = newWidth - wndSize.cx;
-                     pos.x /= 2;//居中
+                     pos.x /= 2;//Center
                      if (pos.x != 0) pos.x = -pos.x;
                      pos.y = 0;
 
 					
-                     //按高不足以填充宽 按宽
+                     //If height isn't enough to fill width, use width instead
                      if (newWidth < wndSize.cx) {
                          newWidth = wndSize.cx;
                          newHeight = round_int((float)pBgBmp->Size.cy * ((float)wndSize.cx / (float)pBgBmp->Size.cx));
                          // newHeight = calcAspectRatio(pBgBmp->Size.cx, pBgBmp->Size.cy, wndSize.cx, true);
                          pos.x = 0;
                          pos.y = newHeight - wndSize.cy;
-                         pos.y /= 2;//居中
+                         pos.y /= 2;//Center
                          if (pos.y != 0) pos.y = -pos.y;
                      }
                      // dstSize = { newWidth, newHeight };
@@ -1040,13 +1039,13 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
 				 
 				// Box1(L"imgPosMode is 6 break");
                 break;
-            default://默認右下
+            default://Default: bottom-right
                 pos.x = wndSize.cx - pBgBmp->Size.cx;
                 pos.y = wndSize.cy - pBgBmp->Size.cy;
                 break;
             }
 			
-            /*绘制图片 Paint image*/
+            /*Paint image*/
             BLENDFUNCTION bf = { AC_SRC_OVER, 0, m_config.imgAlpha, AC_SRC_ALPHA };
 			
 			// Box1(L"BLENDFUNCTION suc");
@@ -1075,7 +1074,7 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
 
 HDC WINAPI DetourCreateCompatibleDC(HDC hDC)
 {
-    //在绘制DUI之前 会调用CreateCompatibleDC 找到它
+    //Called right before drawing the DUI - find it here
     //CreateCompatibleDC is called before drawing the DUI
     HDC retDC = fpCreateCompatibleDC(hDC);
 
@@ -1111,7 +1110,6 @@ HRESULT WINAPI DetourRegisterDragDrop(IN HWND hwnd, IN LPDROPTARGET pDropTarget)
     return fpRegisterDragDrop(hwnd, *ppDropTarget);
 }
 
-// 这个钩子的目的只是设置其他钩子。一旦设置了其他挂钩，它将被禁用。
 // The purpose of this hook is just to set other hooks.  It is disabled once the other hooks are set.
 HRESULT WINAPI DetourSHCreateShellFolderView(const SFV_CREATE* pcsfv, IShellView** ppsv) {
 	
@@ -1119,20 +1117,20 @@ HRESULT WINAPI DetourSHCreateShellFolderView(const SFV_CREATE* pcsfv, IShellView
     CComPtr<IShellView> psv(*ppsv);
     if(SUCCEEDED(ret) && psv.Implements(IID_CDefView)) {
 		// Box2(L"CREATE_COM_HOOK MessageSFVCB")
-		// 注册成功
+		// Registered successfully
         CREATE_COM_HOOK(pcsfv->psfvcb, 3, MessageSFVCB)
 
         CComPtr<IShellView3> psv3;
         if(psv3.QueryFrom(psv)) {
 			// Box2(L"CREATE_COM_HOOK CreateViewWindow3")
-			// 注册成功
+			// Registered successfully
             CREATE_COM_HOOK(psv3, 20, CreateViewWindow3)
         }
 
         CComPtr<IListControlHost> plch;
         if(plch.QueryFrom(psv)) {
 			// Box2(L"CREATE_COM_HOOK OnActivateSelection")
-			// 不会执行
+			// Won't execute
 			CREATE_COM_HOOK(plch, 3, OnActivateSelection)
         }
 		
@@ -1144,24 +1142,24 @@ HRESULT WINAPI DetourSHCreateShellFolderView(const SFV_CREATE* pcsfv, IShellView
 }
 /*
  [in] pidlFolder
-类型： PCIDLIST_ABSOLUTE
-指向指定文件夹的完全限定项 ID 列表的指针。
+Type: PCIDLIST_ABSOLUTE
+A pointer to the fully qualified item ID list of the specified folder.
 
 cidl
-类型： UINT
-选择数组中的项计数 apidl。 如果 cidl 为零， 则 pidlFolder 必须指向描述要选择的单个项的完全指定的 ITEMIDLIST 。 此函数将打开父文件夹并选择该项目。
+Type: UINT
+Count of items in the selection array apidl. If cidl is zero, then pidlFolder must point to a fully specified ITEMIDLIST describing a single item to select. This function will open the parent folder and select that item.
 
 [in, optional] apidl
-类型： PCUITEMID_CHILD_ARRAY
-指向 PIDL 结构的数组的指针，每个结构都是在 pidlFolder 引用的目标文件夹中选择要选择的项。
+Type: PCUITEMID_CHILD_ARRAY
+A pointer to an array of PIDLs, each of which is an item to select in the target folder referenced by pidlFolder.
 
 dwFlags
-类型：DWORD
-可选标志。 在 Windows XP 下，此参数将被忽略。 在 Windows Vista 中，定义了以下标志。
+Type: DWORD
+Optional flags. This parameter is ignored under Windows XP. In Windows Vista, the following flags are defined.
 OFASI_EDIT (0x0001)
-选择项目并将其名称置于编辑模式下。 仅当选择单个项时，才能使用此标志。 对于多个项选择，将忽略它。
+Select the item and put its name into edit mode. This flag can only be used when a single item is selected. It is ignored for multiple item selections.
 OFASI_OPENDESKTOP (0x0002)
-选择桌面上的项或项目，而不是在 Windows 资源管理器窗口中。 请注意，如果桌面隐藏在打开的窗口后面，则不会使其可见。
+Select the item or items on the desktop, rather than in a Windows Explorer window. Note that if the desktop is hidden behind an open window, this will not make it visible.
  */
 HRESULT WINAPI DetourSHOpenFolderAndSelectItems(PCIDLIST_ABSOLUTE pidlFolder, 
 		UINT cidl,
@@ -1198,11 +1196,10 @@ HRESULT WINAPI DetourShellExecute(LPCWSTR lpOperation,
     return ret;
 }
 
-// 通知 Windows 资源管理器浏览到另一个文件夹。
 // The purpose of this hook is to work around Explorer's BeforeNavigate2 bug.  It allows QTTabBar
 // to be notified of navigations before they occur and have the chance to veto them.
 HRESULT WINAPI DetourBrowseObject(IShellBrowser* _this, PCUIDLIST_RELATIVE pidl, UINT wFlags) {
-	// Box2(L"DetourBrowseObject") // 一直都执行
+	// Box2(L"DetourBrowseObject") // Always executes
 	HWND hwnd;
     LRESULT result = 0;
     if(SUCCEEDED(_this->GetWindow(&hwnd))) {
@@ -1214,11 +1211,10 @@ HRESULT WINAPI DetourBrowseObject(IShellBrowser* _this, PCUIDLIST_RELATIVE pidl,
     return result == 0 ? fpBrowseObject(_this, pidl, wFlags) : S_FALSE;
 }
 
-// 此挂钩的目的是启用“所有视图中的标题”功能
 // The purpose of this hook is to enable the Header In All Views functionality, if the user has 
 // opted to use it.
 HRESULT WINAPI DetourCreateViewWindow3(IShellView3* _this, IShellBrowser* psbOwner, IShellView* psvPrev, SV3CVW3_FLAGS dwViewFlags, FOLDERFLAGS dwMask, FOLDERFLAGS dwFlags, FOLDERVIEWMODE fvMode, const SHELLVIEWID* pvid, const RECT* prcView, HWND* phwndView) {
-	// Box2(L"DetourCreateViewWindow3")  // 打开窗口会执行
+	// Box2(L"DetourCreateViewWindow3")  // Executes when a window opens
 	HWND hwnd;
     LRESULT result = 0;
     if(psbOwner != NULL && SUCCEEDED(psbOwner->GetWindow(&hwnd))) {
@@ -1263,11 +1259,10 @@ HRESULT WINAPI DetourCreateViewWindow3(IShellView3* _this, IShellBrowser* psbOwn
 #define SFVM_GETDEFERREDVIEWSETTINGS  92 /* undocumented */
 #endif
 
-// 允许系统文件夹视图对象和系统文件夹视图回调对象之间的通信。
 // The purpose of this hook is to notify QTTabBar whenever an Explorer refresh occurs.  This allows
 // the search box to be cleared.
 HRESULT WINAPI DetourMessageSFVCB(IShellFolderViewCB* _this, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	// Box2(L"DetourMessageSFVCB")  // 这里会调用很多次
+	// Box2(L"DetourMessageSFVCB")  // Called many times here
     if(uMsg == 0x11 /* SFVM_LISTREFRESHED */ && wParam != 0) {
         PostThreadMessage(GetCurrentThreadId(), WM_LISTREFRESHED, NULL, NULL);
     }
@@ -1292,10 +1287,9 @@ HRESULT WINAPI DetourMessageSFVCB(IShellFolderViewCB* _this, UINT uMsg, WPARAM w
     return fpMessageSFVCB(_this, uMsg, wParam, lParam);
 }
 
-// 获取窗口的UI 自动化提供程序的接口。
 // The purpose of this hook is just to set another hook.  It is disabled once the other hook is set.
 LRESULT WINAPI DetourUiaReturnRawElementProvider(HWND hwnd, WPARAM wParam, LPARAM lParam, IRawElementProviderSimple* el) {
-	// Box2(L"DetourUiaReturnRawElementProvider") // 会执行
+	// Box2(L"DetourUiaReturnRawElementProvider") // Executes
     if(fpQueryInterface == NULL && (LONG)lParam == OBJID_CLIENT && SendMessage(hwnd, WM_ISITEMSVIEW, 0, 0) == 1) {
         CREATE_COM_HOOK(el, 0, QueryInterface);
         // Disable this hook, no need for it anymore.
@@ -1306,7 +1300,7 @@ LRESULT WINAPI DetourUiaReturnRawElementProvider(HWND hwnd, WPARAM wParam, LPARA
 
 // The purpose of this hook is to work around kb2462524, aka the scrolling lag bug.
 HRESULT WINAPI DetourQueryInterface(IRawElementProviderSimple* _this, REFIID riid, void** ppvObject) {
-	// Box2(L"DetourQueryInterface") // 执行很多次
+	// Box2(L"DetourQueryInterface") // Executes many times
     return IsEqualIID(riid, __uuidof(IRawElementProviderAdviseEvents))
             ? E_NOINTERFACE
             : fpQueryInterface(_this, riid, ppvObject);
@@ -1330,7 +1324,6 @@ HRESULT WINAPI DetourTravelToEntry(ITravelLogEx* _this, IUnknown* punk, ITravelL
     return result == 0 ? fpTravelToEntry(_this, punk, ptle) : S_OK;
 }
 
-// 这个钩子的目的是让QTTabBar处理激活选择
 // The purpose of this hook is let QTTabBar handle activating the selection, so that recently
 // opened files can be logged (among other features).
 HRESULT WINAPI DetourOnActivateSelection(IListControlHost* _this, DWORD dwModifierKeys) {
@@ -1346,12 +1339,11 @@ HRESULT WINAPI DetourOnActivateSelection(IListControlHost* _this, DWORD dwModifi
     return result == 0 ? fpOnActivateSelection(_this, dwModifierKeys) : S_OK;
 }
 
-// 此钩子的目的是将面包屑栏的内部DPA句柄发送到QTTabBar
 // The purpose of this hook is to send the Breadcrumb Bar's internal DPA handle to QTTabBar,
 // so that we can use it map the buttons to their corresponding IDLs.  This allows middle-click
 // on the breadcrumb bar to work.  The DPA handle changes whenever this function is called.
 HRESULT WINAPI DetourSetNavigationState(IShellNavigationBand* _this, unsigned long state) {
-	// Box2(L"DetourSetNavigationState")  // 会执行
+	// Box2(L"DetourSetNavigationState")  // Executes
 	HRESULT ret = fpSetNavigationState(_this, state);
     // I find the idea of reading an internal private variable of an undocumented class to
     // be quite unsettling.  Unfortunately, I see no way around it.  It's been in the same
@@ -1384,7 +1376,7 @@ HRESULT WINAPI DetourShowWindow_Vista(IExplorerFactory* _this, PCIDLIST_ABSOLUTE
 // faking such a notification.  It's important that it happens after IShellBrowser::OnNavigate is
 // called by the real Explorer window, which happens in IShellBrowserService::UpdateWindowList.
 HRESULT WINAPI DetourUpdateWindowList(/* IShellBrowserService */ IUnknown* _this) {
-	// Box2(L"DetourUpdateWindowList")  // 经常执行
+	// Box2(L"DetourUpdateWindowList")  // Executes often
     HRESULT hr = fpUpdateWindowList(_this);
     CComPtr<IShellBrowser> psb;
     LRESULT result = 0;

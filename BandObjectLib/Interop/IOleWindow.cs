@@ -21,7 +21,7 @@ using System.Security;
 
 namespace BandObjectLib {
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("00000114-0000-0000-C000-000000000046"), SuppressUnmanagedCodeSecurity]
-    internal interface IOleWindow {
+    public interface IOleWindow {
         void GetWindow(out IntPtr phwnd);
         void ContextSensitiveHelp([In] bool fEnterMode);
     }
