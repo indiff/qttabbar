@@ -1,7 +1,7 @@
 # QTTabBar
 
-[![GitHub all releases](https://img.shields.io/github/downloads/niklas2233/qttabbar/total)](https://github.com/niklas2233/qttabbar/releases)
-[![Github Stars](https://img.shields.io/github/stars/niklas2233/qttabbar?logo=github)](https://github.com/niklas2233/qttabbar)
+[![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases)
+[![Github Stars](https://img.shields.io/github/stars/indiff/qttabbar?logo=github)](https://github.com/indiff/qttabbar)
 [![.NET Framework 4.8](https://img.shields.io/badge/.NET-4.8-blue.svg)](https://dotnet.microsoft.com/download/dotnet-framework/net48)
 
 QTTabBar adds tabbed browsing and other enhancements to Windows Explorer. This is a fork of [indiff/qttabbar](https://github.com/indiff/qttabbar), updated for .NET 4.8 and modern Windows.
@@ -10,7 +10,7 @@ QTTabBar adds tabbed browsing and other enhancements to Windows Explorer. This i
 
 ## Changes
 
-- [1.5.6.2 (2026)](https://github.com/niklas2233/qttabbar/releases/tag/v1.5.6.2) Upgrade to .NET 4.8; fix options dialog crash and empty window; bars disabled by default; installer restarts Explorer correctly
+- [1.5.6.2 (2026)](https://github.com/indiff/qttabbar/releases/tag/v1.5.6.2) Upgrade to .NET 4.8; fix options dialog crash and empty window; bars disabled by default; installer restarts Explorer correctly
 - [1.5.6.1-beta (2024)](https://github.com/indiff/qttabbar/releases/tag/v1.5.6.-beta.1) Fix auto select
 - [1.5.5.9-beta (2023)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.9) Capture to select, fix preview text encoding
 - [1.5.5.8-beta (2022)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.8) No Plugins Mini Version
