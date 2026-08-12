@@ -96,17 +96,6 @@
             SelectionMode="Single"
             PreviewMouseWheel="lstCategories_PreviewMouseWheel"
             Width="136">
-            <ListBox.Resources>
-                <SolidColorBrush 
-                    x:Key="{x:Static SystemColors.HighlightBrushKey}" 
-                    Color="White"/>
-                <SolidColorBrush 
-                    x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                    Color="Black"/>
-                <SolidColorBrush 
-                    x:Key="{x:Static SystemColors.ControlBrushKey}"
-                    Color="White"/>
-            </ListBox.Resources>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>

@@ -92,7 +92,7 @@ namespace QTTabBarLib {
             if(shellBrowser != null) {
               QTUtility2.log("ReleaseComObject shellBrowser");
               Marshal.FinalReleaseComObject(shellBrowser);
-                //   shellBrowser = null; // 引起问题 ？ 未将对象引用设置到对象的实例
+                //   shellBrowser = null; // causes problems? Object reference not set to an instance of an object
             }
             if(folderView != null) {
                QTUtility2.log("ReleaseComObject folderView");
@@ -136,7 +136,6 @@ namespace QTTabBarLib {
         public int GetFocusedIndex()
         {
             int focusedIndex;
-            // QTUtility2.log("GetFocusedIndex  folderView " + folderView);
             return folderView != null && folderView.GetFocusedItem(out focusedIndex) == 0
                 ? focusedIndex : -1;
         }
@@ -152,7 +151,6 @@ namespace QTTabBarLib {
             if(folderView == null) return new IDLWrapper();
             IntPtr ppidl = IntPtr.Zero;
             try {
-                // QTUtility2.log("GetItem  folderView " + folderView + " idx " + idx );
                 /*if (InstanceManager.GetTotalInstanceCount() > 0)
                 {
                     var shellBrowserEx = InstanceManager.GetThreadTabBar().GetShellBrowser();
@@ -229,17 +227,17 @@ namespace QTTabBarLib {
             int count = 0 ;
             try
             {
-                // 增加捕获异常
+                // Catch exceptions
                 if (folderView == null && null != shellBrowser)
                 {
-                    // 显示赋值 folderView 实例
+                    // Explicitly assign the folderView instance
                     IShellView ppshv;
                     if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
                     {
                         folderView = ppshv as IFolderView;
                     }
                 }
-                QTUtility2.log(" GetSelectedCount folderView is null ? " + (folderView == null)); // 测试是否未空？  by indiff
+                QTUtility2.log(" GetSelectedCount folderView is null ? " + (folderView == null)); // Testing whether it is null, by indiff
                 return folderView != null && folderView.ItemCount(SVGIO.SELECTION, out count) == 0 ? count : 0;
             }
             catch (Exception e) {
@@ -287,7 +285,7 @@ namespace QTTabBarLib {
             IntPtr ptr;
             return IsFolderTreeVisible(out ptr);
         }
-        // 判断文件夹是否显示, 函数为xp操作系统
+        // Checks whether the folder tree is visible; this function is for the XP OS
         public bool IsFolderTreeVisible(out IntPtr hwnd) {
             hwnd = IntPtr.Zero;
             return  QTUtility.IsXP && 
@@ -296,35 +294,32 @@ namespace QTTabBarLib {
         }
 
         // Call this on navigate to refresh the FolderView
-        // 当导航的时候刷新文件夹视图
+        // Refresh the folder view on navigate
         public void OnNavigateComplete() {
             if(shellBrowser == null) return;
 
-            // 是否释放有问题 by indiff
             if (folderView != null)
             {
                 QTUtility2.log("ReleaseComObject folderView to reset");
                 Marshal.ReleaseComObject(folderView);
                 folderView = null;
+            }
 
-                if (folderView == null)
-                {
-                    // 显示赋值 folderView 实例
-                    IShellView ppshv;
-                    if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
-                    {
-                        folderView = ppshv as IFolderView;
-                    }
-                }
-
+            // Re-acquire unconditionally (this used to be nested inside the block
+            // above, so a fresh ShellBrowserEx with folderView still null never
+            // acquired one on its first OnNavigateComplete call from the ctor).
+            IShellView ppshv;
+            if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
+            {
+                folderView = ppshv as IFolderView;
             }
         }
 
         /**
-         System.NullReferenceException: 未将对象引用设置到对象的实例。
-            在 QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
-            在 QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
-            在 QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
+         System.NullReferenceException: Object reference not set to an instance of an object.
+            at QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
+            at QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
+            at QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
             
          */
         public int Navigate(IDLWrapper idlw, SBSP flags = SBSP.SAMEBROWSER) {
@@ -360,7 +355,7 @@ namespace QTTabBarLib {
             if(shellBrowser != null) {
                 try // add by indiff 2023.03.15
                 {
-                    // System.Runtime.InteropServices.InvalidComObjectException: COM 对象与其基础 RCW 分开后就不能再使用。 
+                    // System.Runtime.InteropServices.InvalidComObjectException: COM object that has been separated from its underlying RCW cannot be used.
                     IFolderViewOptions fvo = shellBrowser as IFolderViewOptions;
                     if(fvo != null) {
                         fvo.SetFolderViewOptions(FVO.VISTALAYOUT, listview ? FVO.VISTALAYOUT : FVO.DEFAULT);
@@ -389,13 +384,11 @@ namespace QTTabBarLib {
                     if (null != wrapper && wrapper.Available)
                     {
                         if(!string.IsNullOrEmpty(matchName) && matchName != wrapper.ParseName) {
-                          //  QTUtility2.log("TryGetHotTrackPath not match " + matchName + " wrapper.ParseName " + wrapper.ParseName);
                             return false;
                         }
                         using(IDLWrapper wrapper2 = ILAppend(wrapper.PIDL)) {
                             path = wrapper2.ParseName;
                             if(!string.IsNullOrEmpty(path) && path.IndexOfAny(Path.GetInvalidPathChars()) < 0) {
-                              //  QTUtility2.log("TryGetHotTrackPath  path " + path + " wrapper.ParseName " + wrapper2.ParseName);
                                 return true;
                             }
                             path = null;

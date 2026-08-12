@@ -245,7 +245,7 @@ namespace QTTabBarLib {
                     info.AddValue("class", null);
                 }*/
 
-                // 导致某些方法都不执行，界面空白 https://www.yuque.com/indiff/lc0r1g/vu0lyb
+                // Causes certain methods to not execute, resulting in a blank UI. https://www.yuque.com/indiff/lc0r1g/vu0lyb
                 // info.AddValue("isSerializable", false);
                 // info.AddValue("method", Delegate.Method);
                 // info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
@@ -291,7 +291,7 @@ namespace QTTabBarLib {
                         info.AddValue(field.Name, new SerializeDelegate((Delegate)field.GetValue(obj)));
                     }
                     else if(!field.FieldType.IsSerializable) {
-                        // Debug.Assert(field.Name.Contains("<>")); // compiler-generated only  断言报错问题 by indiff
+                        // Debug.Assert(field.Name.Contains("<>")); // compiler-generated only  - assertion error issue, by indiff
                         info.AddValue(field.Name, new AnonymousClassWrapper(field.FieldType, field.GetValue(obj)));
                     }
                     else {
@@ -400,70 +400,5 @@ namespace QTTabBarLib {
         }
     }
 
-    // Delegate.BeginInvoke is stupid because it leaks if you don't call EndInvoke.
-    // This class implements fire-and-forget functionality.
-    internal static class AsyncHelper {
-       // [Serializable]
-        private class TargetInfo {
-            public TargetInfo(Delegate d, object[] args, int delay) {
-                Target = d;
-                Args = args;
-                Delay = delay;
-            }
-            public readonly Delegate Target;
-            public readonly object[] Args;
-            public readonly int Delay;
-        }
-
-        public static void BeginInvoke(int delayMillis, Delegate d, params object[] args) {
-            ThreadPool.QueueUserWorkItem(DynamicInvokeCallback, new TargetInfo(d, args, delayMillis));
-        }
-
-        public static void BeginInvoke(Delegate d, params object[] args) {
-            ThreadPool.QueueUserWorkItem(DynamicInvokeCallback, new TargetInfo(d, args, 0));
-        }
-
-        private static void DynamicInvokeCallback(object state){
-            if (state == null)
-            {
-                return; 
-            }
-            TargetInfo ti = (TargetInfo)state;
-            try {
-                if (ti.Delay > 0)
-                {
-                    Thread.Sleep(ti.Delay);
-                }
-                if (ti.Target != null)
-                {
-                    ti.Target.DynamicInvoke(ti.Args);
-                }
-            }
-            catch(Exception ex) {
-                QTUtility2.MakeErrorLog(ex, "AsyncHelper");
-            }
-        }
-    }
-
-    [Serializable]
-    internal class DisList<T> : List<T>, IDisposable where T : IDisposable {
-        public DisList() {
-        }
-
-        public DisList(IEnumerable<T> col) : base(col) {
-        }
-
-        public void Dispose() {
-            foreach(T t in this) {
-                try {
-                    t.Dispose();
-                }
-                catch(Exception e) {
-                    QTUtility2.MakeErrorLog(e, "DisList Dispose");
-                }
-            }
-            Clear();
-        }
-    }
 }
 

@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("TurnOffRepeat")]
-[assembly: AssemblyDescription("关闭重复，排序插件")]
+[assembly: AssemblyDescription("Close Repeat Tab, Sort Tab plugin")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTFileTools")]

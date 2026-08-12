@@ -229,8 +229,6 @@
     </Compile>
     <Compile Include="FreeBitmap.cs" />
     <Compile Include="Graphic.cs" />
-    <Compile Include="ICommandInvokerWindow.cs" />
-    <Compile Include="Interop\CoreErrorHelper.cs" />
     <Compile Include="Interop\GWL.cs" />
     <Compile Include="Interop\IShellExecuteHook.cs" />
     <Compile Include="Interop\IVisualProperties.cs" />
@@ -333,7 +331,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PreMergeToMergedDeserializationBinder.cs" />
-    <Compile Include="ProcessUtil.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -938,11 +935,6 @@
     <Folder Include="quizo\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.mshtml">
-      <HintPath>Resources\Microsoft.mshtml.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Interop.SHDocVw">
       <HintPath>..\BandObjectLib\bin\Release\Interop.SHDocVw.dll</HintPath>
     </Reference>

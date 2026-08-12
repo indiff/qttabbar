@@ -44,7 +44,7 @@ namespace QTTabBarLib {
 
         public override void ResetConfig() {
             WorkingConfig.skin = new Config._Skin();
-            // 修复颜色重置导致暗黑模式混乱问题
+            // Fix an issue where resetting colors broke dark mode
             WorkingConfig.skin.SkinAutoColorChangeClose = false;
             Config.Skin.SkinAutoColorChangeClose = false;
             QTUtility2.log("reset SwitchNighMode");
@@ -110,13 +110,13 @@ namespace QTTabBarLib {
 
         private void btnImportSkin_Click(object sender, RoutedEventArgs e)
         {
-            // 导入皮肤.
-            System.Windows.MessageBox.Show("双击注册表可以直接导入");
+            // Import skin.
+            System.Windows.MessageBox.Show("Double-click the registry file to import it directly");
         }
 
         private void btnExportSkin_Click(object sender, RoutedEventArgs e)
         {
-            // 导出皮肤.
+            // Export skin.
             using (System.Windows.Forms.SaveFileDialog sf = new System.Windows.Forms.SaveFileDialog())
             {
                 sf.Filter = "Registry file (*.reg)|*.reg";

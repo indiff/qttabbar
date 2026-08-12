@@ -181,7 +181,7 @@ namespace QTTabBarLib.ExplorerBrowser.WindowsForms
         }
 
         /// <summary>
-        /// 通过标签进行导航
+        /// Navigate via tab
         public bool Navigate(string path)
         {
             var shellObject = ShellObject.FromParsingName(path);

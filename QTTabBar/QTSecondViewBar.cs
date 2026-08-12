@@ -127,7 +127,7 @@ namespace QTTabBarLib
             // 
             // viewContainer
             // 
-            // 使用 Anchor 属性可以定义在调整控件的父控件大小时如何自动调整控件的大小。将控件锚定到其父控件后，可确保当调整父控件的大小时锚定的边缘与父控件的边缘的相对位置保持不变。
+            // The Anchor property defines how a control resizes when its parent control is resized. Once a control is anchored to its parent, the relative position between the anchored edges and the parent's edges stays the same when the parent is resized.
             this.viewContainer.Anchor = AnchorStyles.Top |
                                         AnchorStyles.Bottom |
                                         AnchorStyles.Left |
@@ -199,7 +199,7 @@ namespace QTTabBarLib
             // tabControl1.TabCountChanged += tabControl1_TabCountChanged;
             // tabControl1.CloseButtonClicked += tabControl1_CloseButtonClicked;
             // tabControl1.TabIconMouseDown += tabControl1_TabIconMouseDown;
-            // // 注册蓝色新增按钮的点击事件
+            // // Register the click event for the blue new-tab button
             // tabControl1.PlusButtonClicked += tabControl1_PlusButtonClicked;
 
 
@@ -234,11 +234,11 @@ namespace QTTabBarLib
             // tabControl1.TabCountChanged += tabControl1_TabCountChanged;
             // tabControl1.CloseButtonClicked += tabControl1_CloseButtonClicked;
             // tabControl1.TabIconMouseDown += tabControl1_TabIconMouseDown;
-            // // 注册蓝色新增按钮的点击事件
+            // // Register the click event for the blue new-tab button
             tabControl1.PlusButtonClicked += tabControl1_PlusButtonClicked;
 
-            
-            // 标签组件容器
+
+            // Tab component container
             this.controlContainer.BackColor = System.Drawing.Color.Transparent;
             // this.controlContainer.Dock = DockStyle.Bottom;
             // this.controlContainer.Dock = DockStyle.Top;
@@ -256,10 +256,10 @@ namespace QTTabBarLib
             this.controlContainer.Text = "ControlContainer";
             this.controlContainer.Visible = true;
 
-            // 添加标签栏
+            // Add the tab bar
             this.controlContainer.Controls.Add(this.tabControl1);
 
-            // 获取或设置控件绑定到的容器的边缘并确定控件如何随其父级一起调整大小。（即指控件挂靠的方向）
+            // Gets or sets the edge of the container the control is bound to, determining how it resizes with its parent (i.e. which direction the control docks)
             // this.controlContainer.Anchor = AnchorStyles.Top |
             //                                AnchorStyles.Bottom |
             //                                AnchorStyles.Left |
@@ -283,7 +283,7 @@ namespace QTTabBarLib
             this.splitContainer.Panel1.Padding = Padding.Empty;
                 // new Padding(0, Graphic.SelectValueByScaling<int>(ExplorerManager.WindowScaling, 16, 11, 6), 0, 0);
 
-            // 添加 视图容器、标签容器
+            // Add the view container and tab container
             // this.splitContainer.Panel2.BackColor = Color.Transparent;
             this.splitContainer.Panel2.Controls.Add((Control)this.viewContainer);
             this.splitContainer.Panel2.Controls.Add((Control)this.controlContainer);
@@ -354,7 +354,7 @@ namespace QTTabBarLib
         {
             this.contextMenuTab = new ContextMenuStripEx(this.components, true);
             // this.contextMenuTab.ImageList = ;
-            this.contextMenuTab.Items.Add((ToolStripItem)new ToolStripMenuItem("测试"));
+            this.contextMenuTab.Items.Add((ToolStripItem)new ToolStripMenuItem("Test"));
             /*this.contextMenuTab.ItemClicked += new ToolStripItemClickedEventHandler(this.contextMenuTab_ItemClicked);
             this.contextMenuTab.Opening += new CancelEventHandler(this.contextMenuTab_Opening);
             this.contextMenuTab.Closed += new ToolStripDropDownClosedEventHandler(this.contextMenuTab_Closed);
@@ -475,13 +475,13 @@ namespace QTTabBarLib
         }
 
         /**
-         * 初始化已经打开的窗口
+         * Initialize an already-open window
          */
         private bool IsShown;
         private void InitializeOpenedWindow()
         {
             IsShown = true;
-            //  安装钩子
+            //  Install hooks
             QTUtility2.log("QTTabBarClass InitializeOpenedWindow  InstallHooks");
             InstallHooks();
             /*if (QTUtility.WindowAlpha < 0xff)
@@ -503,7 +503,7 @@ namespace QTTabBarLib
         private WindowSubclass rebarWindowSubclass;
         private WindowSubclass baseBarWindowSubclass;
 
-        // 安装钩子
+        // Install hooks
         private void InstallHooks()
         {
             if (this.fHookInstalled)
@@ -552,7 +552,7 @@ namespace QTTabBarLib
             switch (msg.Msg)
             {
                 // case 20:
-                case WM.ERASEBKGND: // 0x0014当窗口背景必须被擦除时（例如在窗口改变大小时）
+                case WM.ERASEBKGND: // 0x0014, sent when the window background must be erased (e.g. when the window is resized)
                     QTUtility2.log("WM.ERASEBKGND " + this.IsVertical);
                     Rectangle rectangle = new Rectangle(Point.Empty, PInvoke.GetWindowRect(msg.HWnd).Size);
                     if (this.IsVertical)
@@ -599,7 +599,7 @@ namespace QTTabBarLib
                     }
                     return true;
                 // case 70:
-                case WM.WINDOWPOSCHANGING:  // 当窗口位置、大小、Z顺序要改变时会发送 WM_WINDOWPOSCHANGING
+                case WM.WINDOWPOSCHANGING:  // WM_WINDOWPOSCHANGING is sent when the window's position, size, or Z-order is about to change
                     QTUtility2.log("WM.WINDOWPOSCHANGING " + this.IsVertical);
                     WINDOWPOS* lparam = (WINDOWPOS*)(void*)msg.LParam;
                     if (!this.UserResizing && this.BaseBarPreferredSize != 0 &&
@@ -751,11 +751,11 @@ namespace QTTabBarLib
         {
             switch (msg.Msg)
             {
-                case WM.PAINT: // WM_PAINT 0x000F 15 要求一个窗口重绘自己
+                case WM.PAINT: // WM_PAINT 0x000F 15, asks a window to repaint itself
                     QTUtility2.log("rebarSubclassProc WM_PAINT " + this.IsVertical);
                     msg.Result = PInvoke.DefWindowProc(msg.HWnd, msg.Msg, msg.WParam, msg.LParam);
                     return true;
-                case WM.ERASEBKGND: // WM_ERASEBKGND 0x0014 20 当窗口背景必须被擦除时（例如在窗口改变大小时）
+                case WM.ERASEBKGND: // WM_ERASEBKGND 0x0014 20, sent when the window background must be erased (e.g. when the window is resized)
                     QTUtility2.log("rebarSubclassProc WM_ERASEBKGND " + this.IsVertical);
                     RECT pRect;
                     PInvoke.GetWindowRect(msg.HWnd, out pRect);
@@ -772,7 +772,7 @@ namespace QTTabBarLib
         private IntPtr hHook_Mouse;
         private IntPtr hHook_Msg;
         /**
-        * 注册快捷键的回调
+        * Callback for registered keyboard shortcuts
         */
         private IntPtr CallbackKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
@@ -847,7 +847,7 @@ namespace QTTabBarLib
         }
 
 
-        // 绑定 鼠标组合快捷键
+        // Bind mouse-chord shortcuts
         private IntPtr CallbackMouseProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
             try
@@ -911,7 +911,7 @@ namespace QTTabBarLib
         private readonly int WM_CHECKPULSE = PInvoke.RegisterWindowMessage("QTSecondViewBar_CheckPulse");
         private readonly int WM_SELECTFILE = PInvoke.RegisterWindowMessage("QTTabBar_SelectFile");
         /// <summary>
-        /// 注册windows消息
+        /// Register Windows messages
         /// </summary>
         /// <param name="nCode"></param>
         /// <param name="wParam"></param>
@@ -1003,7 +1003,7 @@ namespace QTTabBarLib
                             }
                             break;
                         */
-                        case WM.ERASEBKGND: // 0x0014当窗口背景必须被擦除时（例如在窗口改变大小时）
+                        case WM.ERASEBKGND: // 0x0014, sent when the window background must be erased (e.g. when the window is resized)
                         {
                             Rectangle rectangle = new Rectangle(Point.Empty, PInvoke.GetWindowRect(msg.hwnd).Size);
                             if (this.IsVertical)
@@ -1063,14 +1063,14 @@ namespace QTTabBarLib
                         case WM.SYSCOLORCHANGE:
                             QTUtility.InNightMode = QTUtility.getNightMode();
                             QTUtility2.log("SYSCOLORCHANGE SwitchNighMode");
-                            Config.Skin.SwitchNighMode(QTUtility.InNightMode); // 如果关闭自动变色则不进行变色
+                            Config.Skin.SwitchNighMode(QTUtility.InNightMode); // Skip color switching if auto color-switching is disabled
                             ConfigManager.UpdateConfig(true);
                             this.tabControl1.InitializeColors();
                             PInvoke.SetRedraw(ExplorerHandle, true);
                             PInvoke.RedrawWindow(ExplorerHandle, IntPtr.Zero, IntPtr.Zero, 0x289);
                             break;
 
-                        case WM.CLOSE:  // 关闭窗口
+                        case WM.CLOSE:  // Close window
                             if (QTUtility.IsXP)
                             {
                                 if ((msg.hwnd == ExplorerHandle) && HandleCLOSE(msg.lParam))
@@ -1090,12 +1090,12 @@ namespace QTTabBarLib
                                 QTUtility2.WriteRegBinary(list, "TabsLocked", key);
                             }
                             if (msg.hwnd == WindowUtils.GetShellTabWindowClass(ExplorerHandle))
-                            { // 如果标签的 handle 与资源管理器的匹配
+                            { // If the tab's handle matches Explorer's
                                 try
                                 {
                                     bool flag = tabControl1.TabCount == 1;
                                     string currentPath = tabControl1.SelectedTab.CurrentPath;
-                                    if (!Directory.Exists(currentPath) && // 如果当前路径目录不存在
+                                    if (!Directory.Exists(currentPath) && // If the current path directory doesn't exist
                                        currentPath.Length > 3
                                         /* && currentPath.Substring(1, 2) == @":\" */ )
                                     {
@@ -1221,7 +1221,7 @@ namespace QTTabBarLib
         }
 
 
-        // 关闭标签， 如果锁定则不关闭
+        // Close the tab; don't close if it's locked
         private bool CloseTab(QTabItem closingTab, bool fCritical, bool fSkipSync = false)
         {
             if (closingTab == null)
@@ -1303,7 +1303,7 @@ namespace QTTabBarLib
         }
 
         /**
-        * 处理关闭操作
+        * Handle the close operation
         */
         private bool HandleCLOSE(IntPtr lParam)
         {
@@ -1380,7 +1380,7 @@ namespace QTTabBarLib
 
         private void ListViewMonitor_ListViewChanged(object sender, EventArgs args)
         {
-            if (listViewManager != null) // 修复空指针问题 by indiff
+            if (listViewManager != null) // Fix a null-pointer issue, by indiff
             {
                 listView = listViewManager.CurrentListView;
                 ExtendedListViewCommon elvc = listView as ExtendedListViewCommon;
@@ -1412,7 +1412,7 @@ namespace QTTabBarLib
                 MessageBox.Show(String.Join(",", list1));
                
 
-                MessageBox.Show("关闭窗口:" + tabControl1.TabPages.Count );
+                MessageBox.Show("Close window:" + tabControl1.TabPages.Count );
                 string[] list = (from QTabItem item2 in tabControl1.TabPages
                                  where item2.TabLocked
                                  select item2.CurrentPath).ToArray();
@@ -1496,9 +1496,9 @@ namespace QTTabBarLib
                     this.fNowResizing = false;
                 }
 
-                // 可以更改带对象的高度  
-                // 不会显示大小调整手柄，以允许用户移动或调整带对象的大小。  
-                // DBIMF.NOMARGINS 带对象不应显示边距。
+                // The band object's height can be changed
+                // Size-adjustment handles are not shown, to let the user move or resize the band object
+                // DBIMF.NOMARGINS - the band object should not show margins
 
                 if ((dbi.dwMask & DBIM.MODEFLAGS) != (0))
                 {
@@ -1717,7 +1717,7 @@ namespace QTTabBarLib
                 subKey.SetValue(null, "");
                 subKey.SetValue("MenuText", (object)str);
                 subKey.SetValue("HelpText", (object)helpStr);
-                // 垂直资源管理器栏	CATID_InfoBand
+                // Vertical Explorer bar	CATID_InfoBand
                 // public const string CATID_CommBand = "{00021494-0000-0000-C000-000000000046}";
                 subKey.CreateSubKey("Implemented Categories\\{00021493-0000-0000-C000-000000000046}"); 
                 // subKey.CreateSubKey(@"Implemented Categories\{00021494-0000-0000-C000-000000000046}"); 
@@ -1773,7 +1773,7 @@ namespace QTTabBarLib
         }*/
 
 
-        #region 标签栏事件区
+        #region Tab bar event region
         public RebarController rebarController;
         protected string CurrentAddress;
         protected QTabItem CurrentTab;
@@ -1876,7 +1876,7 @@ namespace QTTabBarLib
             }
             else
             {
-                StaticReg.ClosedTabHistoryList.Remove(newPath); // 最近关闭的删除掉.
+                StaticReg.ClosedTabHistoryList.Remove(newPath); // Remove it from the recently-closed list.
                 if (tabControl1.TabCount == 0)
                 {
                     QTUtility2.log("CancelFailedTabChanging 2");
@@ -1950,12 +1950,12 @@ namespace QTTabBarLib
 
         /**
         * TODO config to refresh  when tab control selected index changed
-        * 当切换标签的时候，配置是否进行刷新
-        * 出现异常情况
-        * System.NullReferenceException: 未将对象引用设置到对象的实例。
-          在 QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
-          在 QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
-          在 QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
+        * Whether to refresh depends on config, when switching tabs
+        * An exception occurs:
+        * System.NullReferenceException: Object reference not set to an instance of an object.
+          at QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
+          at QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
+          at QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
         */
         protected void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -2023,7 +2023,7 @@ namespace QTTabBarLib
                         fNavigatedByTabSelection = true;
                         NowTabCloned = false;
                         // if (ShellBrowser.Navigate(idlw) != 0)
-                        // 扩展导航的 ShellBrowser 为空
+                        // The ShellBrowser for extended navigation is null
                         if (explorerBrowser.Navigate(idlw.Path))
                         {
                             QTUtility2.log("tabControl1_SelectedIndexChanged explorerBrowser.Navigate");
@@ -2127,18 +2127,18 @@ namespace QTTabBarLib
             // BandHeight = (count * (Config.Skin.TabHeight + 10 )) ;
             // fix bug
             /**
-           异常文本
-System.NullReferenceException: 未将对象引用设置到对象的实例。
-   在 QTTabBarLib.QTTabBarClass.SetBarRows(Int32 count)
-   在 QTTabBarLib.QTabControl.CalculateItemRectangle_MultiRows()
-   在 QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
-   在 QTTabBarLib.QTabControl.OnPaint(PaintEventArgs e)
-   在 System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
-   在 System.Windows.Forms.Control.WmPaint(Message& m)
-   在 System.Windows.Forms.Control.WndProc(Message& m)
-   在 QTTabBarLib.QTabControl.WndProc(Message& m)
-   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
-   在 System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+           Exception text
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at QTTabBarLib.QTTabBarClass.SetBarRows(Int32 count)
+   at QTTabBarLib.QTabControl.CalculateItemRectangle_MultiRows()
+   at QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
+   at QTTabBarLib.QTabControl.OnPaint(PaintEventArgs e)
+   at System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
+   at System.Windows.Forms.Control.WmPaint(Message& m)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at QTTabBarLib.QTabControl.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
              **/
             if (null != rebarController)
             {
@@ -2155,7 +2155,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
         }
 
         /**
-         * 保存选中项
+         * Save the selected item
          */
         protected void SaveSelectedItems(QTabItem tab)
         {
@@ -2185,22 +2185,22 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
 
 
 
-        // 新增+号按钮的添加新标签事件
+        // The "+" button's add-new-tab event
         private void 
             tabControl1_PlusButtonClicked(object sender, QTabCancelEventArgs e)
         {
-            // 新标签按钮 qwop
+            // New tab button, qwop
             string clipPath = QTUtility2.GetStringClipboard();
             if (String.IsNullOrEmpty(clipPath))
             {
-                // 如果获取不到剪贴板路径，则打开默认
+                // If we can't get a path from the clipboard, open the default
                 openDefault();
                 return;
             }
             clipPath = clipPath.Trim().Trim(new char[] { ' ', '"' });
             string[] pathArr = { "a:\\", "b:\\", "c:\\", "d:\\", "e:\\", "f:\\", "g:\\", "h:\\", "i:\\" };
             bool blockSelecting = false, fForceNew = true;
-            // 如果剪贴板是一个文件路径，并且存在则打开父级目录或者跟级目录
+            // If the clipboard contains a file path that exists, open its parent (or root) directory
             if (File.Exists(clipPath))
             {
                 try
@@ -2227,7 +2227,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
                     // openDefault();
                 }
             }
-            else if (Directory.Exists(clipPath)) // 剪贴板直接是一个目录则打开标签
+            else if (Directory.Exists(clipPath)) // If the clipboard is directly a directory, open it as a tab
             {
                 try
                 {
@@ -2244,7 +2244,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             else
             {
 
-                // 打开指定盘符目录
+                // Open the specified drive directory
                 /*
                 for ( int i = 0; i < pathArr.Length; i++ )
                 {
@@ -2262,7 +2262,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
         private void openDefault()
         {
             bool isOpend = false;
-            // 打开配置的路径地址
+            // Open the configured path
             using (IDLWrapper wrapper = new IDLWrapper(Config.Window.DefaultLocation))
             {
                 QTUtility2.log("tabControl1_PlusButtonClicked others default " + Config.Window.DefaultLocation);
@@ -2272,10 +2272,10 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
 
             if (!isOpend)
             {
-                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // 我的电脑， 默认打开
+                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // My Computer, opened by default
                 using (IDLWrapper w = new IDLWrapper(idl))
                 {
-                    QTUtility2.log("tabControl1_PlusButtonClicked 我的电脑 ");
+                    QTUtility2.log("tabControl1_PlusButtonClicked My Computer ");
                     OpenNewTab(w, false, true);
                 }
             }
@@ -2417,7 +2417,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
         }
 
 
-        // 创建新的tab页
+        // Create a new tab page
         private QTabItem CreateNewTab(IDLWrapper idlw)
         {
             string path = idlw.Path;

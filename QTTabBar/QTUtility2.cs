@@ -41,7 +41,7 @@ namespace QTTabBarLib {
     public static class QTUtility2 {
         private const int THRESHOLD_ELLIPSIS = 40;
         private static bool fConsoleAllocated;
-        // �ж��Ƿ�������־��������Ϊfalse�� ��������. Ĭ���ǹرյģ��ڳ���ѡ�����������������
+        // Whether to enable logging output; setting to false disables it. Off by default; can be toggled in the app options.
         public static bool ENABLE_LOGGER = false;
 
         public static string ExplorerPath
@@ -287,7 +287,7 @@ namespace QTTabBarLib {
             Dictionary<String, String> dic = new Dictionary<String, String>();
             if (trace != null)
             {
-                StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
+                StackFrame frame = trace.GetFrame(1);//1 = caller, 2 = caller's caller, source method
                 if (frame != null)
                 {
                     MethodBase method = frame.GetMethod();
@@ -318,7 +318,7 @@ namespace QTTabBarLib {
 
                 if (trace != null)
                 {
-                    StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
+                    StackFrame frame = trace.GetFrame(1);//1 = caller, 2 = caller's caller, source method
                     if (frame != null)
                     {
                         MethodBase method = frame.GetMethod();
@@ -359,7 +359,7 @@ namespace QTTabBarLib {
 
                 if (trace != null)
                 {
-                    StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
+                    StackFrame frame = trace.GetFrame(1);//1 = caller, 2 = caller's caller, source method
                     if (frame != null)
                     {
                         MethodBase method = frame.GetMethod();
@@ -380,7 +380,7 @@ namespace QTTabBarLib {
 
         // private static DateTime dateTime ;
         private static Dictionary<int, DateTime> dictTime = new Dictionary<int, DateTime>();
-        // 忽略一些添加 日志
+        // Ignore some methods in logging
         private static string[] IGNORES = { "ReleaseComObject" };
         
         public static void log(string level, string optional,Dictionary<String, String> dic=null)
@@ -405,7 +405,7 @@ namespace QTTabBarLib {
             {
                 DateTime oldTime = dateTime;
                 dateTime = DateTime.Now;
-                useTime = "" + ((dateTime - oldTime).TotalMilliseconds) + "毫秒";
+                useTime = "" + ((dateTime - oldTime).TotalMilliseconds) + "ms";
             }
             else
             {
@@ -438,7 +438,7 @@ namespace QTTabBarLib {
                     var oldTime = dictTime[cThreadId];
                     if (null != oldTime)
                     {
-                        useTime = "" + ((DateTime.Now - oldTime).TotalMilliseconds) + "毫秒";
+                        useTime = "" + ((DateTime.Now - oldTime).TotalMilliseconds) + "ms";
                         dictTime[cThreadId] = DateTime.Now;
                     }
                 }
@@ -459,7 +459,7 @@ namespace QTTabBarLib {
             // add className and methodName debug
             if (null != dic && dic.Count > 0 && dic.ContainsKey("methodName") && dic.ContainsKey("className"))
             {
-                // 输出类名和方法名
+                // Add class name
                 if (dic.ContainsKey("className"))
                 {
                     var className = dic["className"];
@@ -482,14 +482,14 @@ namespace QTTabBarLib {
                     }
                 }
             }
-            // 进程ID
+            // Process ID
             if (process != null)
             {
                 line
                     .Append("\tP:")
                     .Append(process.Id);
             }
-            // 线程 ID
+            // Thread ID
             if (cThreadId != null)
             {
                 line
@@ -531,15 +531,15 @@ namespace QTTabBarLib {
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
                 var line = new StringBuilder();
                 line.AppendLine(DateTime.Now.ToString());
-                line.AppendLine(".NET 版本: " + Environment.Version);
-                line.AppendLine("操作系统版本: " + Environment.OSVersion.Version + 
+                line.AppendLine(".NET Version: " + Environment.Version);
+                line.AppendLine("OS Version: " + Environment.OSVersion.Version +
                                 " Major: " + Environment.OSVersion.Version.Major +
-                                " 环境: " + getEnv()
+                                " Arch: " + getEnv()
                                 );
-                line.AppendLine("QT 版本: " + MakeVersionString());
+                line.AppendLine("QT Version: " + MakeVersionString());
                 if (!String.IsNullOrEmpty(optional))
                 {
-                    line.AppendLine("错误信息: " + optional);
+                    line.AppendLine("Additional Info: " + optional);
                 }
                 if (ex == null)
                 {
@@ -598,20 +598,20 @@ namespace QTTabBarLib {
 
         /*
         public static object lockObject = new object();
-        //��д���������ļ�д��Ȩ�ޣ�ÿ���߳����εȴ��ϸ�д�����
+        // A reader-writer lock granting exclusive file-write permission - each thread waits its turn until the previous write finishes.
         static ReaderWriterLockSlim LogWriteLock = new ReaderWriterLockSlim();
         */
 
 
         /*
-        ������Mutex
-        ���壺
-            private static readonly Mutex mutex = new Mutex();
-            ʹ�ã�
-            mutex.WaitOne();
-            mutex.ReleaseMutex();
-            ���ã�������ס���������ݣ�����ֹ�����߳̽���ô���飬ֱ���ô����������ɣ��ͷŸ�����
-         * Mutex�����ǿ���ϵͳ����ģ������ǿ��Կ�Խ���̵ġ�
+         * About Mutex
+         * Declaration:
+         *     private static readonly Mutex mutex = new Mutex();
+         * Usage:
+         *     mutex.WaitOne();
+         *     mutex.ReleaseMutex();
+         * Purpose: locks the critical section so other threads block until the current thread finishes, then releases the lock.
+         * A Mutex is a kernel-level synchronization object and can be used across process boundaries.
          */
         private static readonly Mutex M_MUTEX = new Mutex();
 
@@ -620,13 +620,13 @@ namespace QTTabBarLib {
             try
             {
                 M_MUTEX.WaitOne();
-                //���ö�д��Ϊд��ģʽ��ռ��Դ
-                //��д��ģʽ�Ľ������ͷ���ͬһ��������ڣ��뱣֤�ڿ��ڽ���д��ģʽǰ���ᴥ���쳣���������Ϊ�������ͷŴ��������Ӷ������쳣
-                //����ʱ��ռ�ö�д������ᵼ�������̼߳�����
+                //Set the reader-writer lock to write mode to claim exclusive resource access
+                //After entering write mode, must exit on the same thread; ensure no exception is thrown before entering write mode, otherwise the lock is never released and further exceptions cascade
+                //Holding the lock while doing other work here would block other threads
                 // LogWriteLock.EnterWriteLock();
                 // lock (lockObject) {
 
-                // �޸� ������һ����ʹ�ã���˸ý����޷����ʸ��ļ�
+                // Fix: the previous one wasn't released, causing this process to be unable to access the file
                 if (File.Exists(path)) {
                     using (FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
                     {
@@ -647,7 +647,7 @@ namespace QTTabBarLib {
                     }
                 }
 
-                // �������� ������һ����ʹ�ã���˸ý����޷����ʸ��ļ�
+                // As above - the previous one wasn't released, causing this process to be unable to access the file
                     /*using (StreamWriter writer = new StreamWriter(path, true))
                     {
                         writer.WriteLine(formatLogLine);
@@ -656,8 +656,8 @@ namespace QTTabBarLib {
             }
             finally
             {
-                //�˳�д��ģʽ���ͷ���Դռ��
-                //ע���ͷ�����������ͬ����ᴥ���쳣
+                //Exit write mode, release the claimed resource
+                //Note: releasing locks in the wrong order will trigger an exception
                 // LogWriteLock.ExitWriteLock();
 
                 M_MUTEX.ReleaseMutex();
@@ -727,7 +727,7 @@ namespace QTTabBarLib {
 
                     if (!String.IsNullOrEmpty(optional))
                     {
-                        writer.WriteLine("错误信息: " + optional);
+                        writer.WriteLine("Additional Info: " + optional);
                     }
                    
                     writer.WriteLine("--------------");
@@ -845,7 +845,7 @@ namespace QTTabBarLib {
         }
 
         public static string MakeVersionString() {
-            // qwop comment  添加 .net framework 的版本号
+            // qwop comment  confirm the .NET Framework version.
             if(QTUtility.IS_DEV_VERSION) {
                 return "DevBuild: " + QTUtility.GetLinkerTimestamp() + " (" + Environment.Version + ")";
             }
@@ -999,7 +999,7 @@ namespace QTTabBarLib {
 
 
         /**
-         * 设置字符串到剪贴板
+         * Set a string to the clipboard
          */
         internal static void SetStringClipboard(string str) {
             try {
@@ -1014,7 +1014,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * 设置字符串到剪贴板
+         * Get a string from the clipboard
          */
         internal static string GetStringClipboard()
         {
@@ -1033,7 +1033,7 @@ namespace QTTabBarLib {
             }
             return "";
         }
-        // 字符串通过分隔符连接
+        // Join a string using a separator
         public static string StringJoin<T>(this IEnumerable<T> list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -1044,7 +1044,7 @@ namespace QTTabBarLib {
             }
             return sb.ToString();
         }
-        // 字符串通过分隔符连接
+        // Join a string using a separator
         public static string StringJoin(this IEnumerable list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -1076,7 +1076,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///  写入注册表， 关闭消息去除写入锁定标签的调用
+        ///  Write to the registry - de-duplicate the close message before invoking the lock-tabs write
         ///  qttabbarclass  public override void CloseDW(uint dwReserved)
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -1084,10 +1084,10 @@ namespace QTTabBarLib {
         /// <param name="regValueName"></param>
         /// <param name="rkUserApps"></param>
         public static void WriteRegBinary<T>(T[] array, string regValueName, RegistryKey rkUserApps) {
-            // 如果锁定标签路径有内容
+            // Write the array of locked-tab paths
             if ("TabsLocked".Equals(regValueName))
             {
-                // MessageBox.Show("写入锁定标签");
+                // MessageBox.Show("Writing locked tabs");
                 if (null != array && array.Length > 0)
                 {
                     if (rkUserApps != null)
@@ -1099,7 +1099,7 @@ namespace QTTabBarLib {
 
                         if (null == newArray || newArray.Length == 0)
                         {
-                            // MessageBox.Show("锁定标签数据为空：" + array.StringJoin(";"));
+                            // MessageBox.Show("Locked-tab array is empty: " + array.StringJoin(";"));
                             if (rkUserApps != null)
                             {
                                 rkUserApps.SetValue("TabsLocked2", "");
@@ -1107,7 +1107,7 @@ namespace QTTabBarLib {
                         }
                         else
                         {
-                            //  MessageBox.Show("锁定标签数据为：" + array.StringJoin(";"));
+                            //  MessageBox.Show("Locked-tab array is: " + array.StringJoin(";"));
                             rkUserApps.SetValue("TabsLocked2", newArray.StringJoin(";"));
                         }
                         /*
@@ -1123,7 +1123,7 @@ namespace QTTabBarLib {
                 }
                 else if (null == array || array.Length == 0  )
                 {
-                    //   MessageBox.Show("锁定标签数据为空：" + array.StringJoin(";"));
+                    //   MessageBox.Show("Locked-tab array is empty: " + array.StringJoin(";"));
                     if (rkUserApps != null)
                     {
                         rkUserApps.SetValue("TabsLocked2", "");
@@ -1245,7 +1245,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///    用于调试消息
+        ///    Used for debugging messages
         /// </summary>
         /// <param name="msg"></param>
         public static void debugMessage(Message msg)
@@ -1273,7 +1273,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///    用于调试消息
+        ///    Used for debugging messages
         /// </summary>
         /// <param name="msg"></param>
         public static void debugMessage(MSG msg)
@@ -1306,22 +1306,22 @@ namespace QTTabBarLib {
 
             // Process.Start("TASKKILL /F /T /PID " + process.Id);
             /*string MyDosComLine1;
-            MyDosComLine1 = "TASKKILL /F /T /PID " + process.Id;//返回根目录命令
+            MyDosComLine1 = "TASKKILL /F /T /PID " + process.Id;//Kill the process by PID
             Process myProcess = new Process();
-            myProcess.StartInfo.FileName = "cmd.exe ";//打开DOS控制平台 
+            myProcess.StartInfo.FileName = "cmd.exe ";//Open the DOS command shell
             myProcess.StartInfo.UseShellExecute = false;
-            myProcess.StartInfo.CreateNoWindow = true;//是否显示DOS窗口，true代表隐藏;
+            myProcess.StartInfo.CreateNoWindow = true;//Whether to show the DOS window; true = don't show;
             myProcess.StartInfo.RedirectStandardInput = true;
             myProcess.StartInfo.RedirectStandardOutput = true;
             myProcess.StartInfo.RedirectStandardError = true;
             myProcess.Start();
-            StreamWriter sIn = myProcess.StandardInput;//标准输入流 
+            StreamWriter sIn = myProcess.StandardInput;//Standard input stream
             sIn.AutoFlush = true;
-            StreamReader sOut = myProcess.StandardOutput;//标准输入流
-            StreamReader sErr = myProcess.StandardError;//标准错误流 
-            sIn.Write(MyDosComLine1 + Environment.NewLine);//第一条DOS命令
+            StreamReader sOut = myProcess.StandardOutput;//Standard output stream
+            StreamReader sErr = myProcess.StandardError;//Standard error stream
+            sIn.Write(MyDosComLine1 + Environment.NewLine);//Write a DOS command
             log("write dos command: " + MyDosComLine1);
-            sIn.Write("exit" + Environment.NewLine);//第四条DOS命令，退出DOS窗口
+            sIn.Write("exit" + Environment.NewLine);//exit, the DOS command exits the DOS window
             if (myProcess.HasExited == false)
             {
                 myProcess.Kill();

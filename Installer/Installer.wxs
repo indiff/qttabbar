@@ -29,11 +29,11 @@
     <!-- Quizo and Paul Accisano and indiff -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
-    <!-- 重点这里一定要改 -->
+    <!-- Important: this must be changed -->
     <?define StrongName="QTTabBar, Version=1.5.9.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
     <?define MyLanguage="1033"?>
     <!-- Language code page 1252 1033
-语言                         语言-国家     Language      Codepage
+Language                      Locale        Language Code Codepage
 English                       en-us             1033               1252
 Simplified Chinese            zh-cn              2052               936
 Traditional Chinese           zh-tw              1028                950

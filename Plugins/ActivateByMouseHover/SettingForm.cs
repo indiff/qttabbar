@@ -16,14 +16,14 @@ namespace QuizoPlugins
 
             if (CultureInfo.CurrentCulture.Name == "ja-JP")
             {
-                this.label1.Text = "待機時間(ミリ秒)";
+                this.label1.Text = "Wait time (ms)";
                 this.Text = "Activate By MouseHover";
             }
 
             if (CultureInfo.CurrentCulture.Name == "zh-CHS")
             {
-                this.label1.Text = "延时时间(毫秒)";
-                this.Text = "鼠标悬浮激活标签";
+                this.label1.Text = "Delay time (ms)";
+                this.Text = "Activate tab on mouse hover";
             }
        }
 

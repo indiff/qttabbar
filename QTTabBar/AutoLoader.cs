@@ -41,7 +41,7 @@ namespace QTTabBarLib {
                 key.SetValue("HelpText", "QTTabBar AutoLoader");
             }
             Registry.LocalMachine.CreateSubKey(BHOKEYNAME + name);
-            QTUtility2.flog( "AutoLoader 注册表 QTTabBar 自动加载(安装)");
+            QTUtility2.flog( "AutoLoader registry: QTTabBar auto-load (install)");
         }
 
         [ComUnregisterFunction]
@@ -49,20 +49,19 @@ namespace QTTabBarLib {
             using(RegistryKey key = Registry.LocalMachine.CreateSubKey(BHOKEYNAME)) {
                 key.DeleteSubKey(t.GUID.ToString("B"), false);
             }
-            QTUtility2.flog("AutoLoader 注册表 QTTabBar 自动加载(卸载)");
+            QTUtility2.flog("AutoLoader registry: QTTabBar auto-load (uninstall)");
         }
 
         public int SetSite(object site) {
-            // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
+            // SetProcessDPIAware only exists on Vista and later - calling it directly would make the program incompatible with XP
             // PInvoke.SetProcessDPIAware();
-            // QTUtility2.log("QTUtility AutoLoader SetSite SetProcessDPIAware 不兼容XP");
             QTUtility2.log("SetSite");
             explorer = site as IWebBrowser2;
             // QTUtility2.flog("QTTabBar AutoLoader SetSite ");
             /*if(explorer == null || Process.GetCurrentProcess().ProcessName == "iexplore") {
                 QTUtility2.log("QTTabBar AutoLoader SetSite Throw Exception ");
                 // QTUtility2.flog("QTTabBar AutoLoader SetSite Throw Exception ");
-                // 基于指定的 IErrorInfo 接口，用特定失败 HRESULT 引发异常
+                // Raise an exception with a specific failure HRESULT based on the given IErrorInfo interface
                 Marshal.ThrowExceptionForHR(E_FAIL);
             }
             else {*/

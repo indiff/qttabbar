@@ -105,7 +105,7 @@
 			<!-- add by qwop start -->
             <StackPanel Margin="10">
                 <Label Content="{qt:Resx Key=Options_Page14_About, Index=6}" FontWeight="Bold"/>
-                <Label Content="indiff(indiff@126.com QQ:531299332 交流群:157604022)"/>
+                <Label Content="indiff(indiff@126.com QQ:531299332 Discussion group:157604022)"/>
             </StackPanel>
 
             <Label Height="28">

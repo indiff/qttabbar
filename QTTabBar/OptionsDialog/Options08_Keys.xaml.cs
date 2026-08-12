@@ -54,7 +54,7 @@ namespace QTTabBarLib {
                     QTUtility2.log("plugin: " + p.PluginInformation.Name + " Enabled :" + p.PluginInformation.Enabled);
                     try {
                         if (null != p &&
-                            null != p.Instance && // 修复空指针问题 by indiff
+                            null != p.Instance && // Fix a null-pointer issue, by indiff
                             !p.Instance.QueryShortcutKeys(out actions))
                         {
                             actions = null;
@@ -62,7 +62,7 @@ namespace QTTabBarLib {
                     }
                     catch (Exception ex)
                     {
-                        // 这里打印出插件的名称
+                        // Print the plugin's name here
                         QTUtility2.MakeErrorLog(ex, "plugin: " + p.PluginInformation.Name + "!p.Instance.QueryShortcutKeys");
                    
                     }

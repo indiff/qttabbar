@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+<Author>
+HarkTu
+</Author>
+
+<Language>
+Turkish
+</Language>
+
+<Country>
+Turkiye
+</Country>
+
+<Version_QTTabBar>
+DevBuild: 6/23/2022 9:45:37 AM (2.0.50727.9164)
+</Version_QTTabBar>
+
+<DateModified>
+07/17/2022
+</DateModified>
+
+<!-- data start -->
+
+<ButtonBar_BtnName>
+Ayıraç
+Önceki
+Sonraki
+Gruplar
+Son kapatılan
+Uygulamalar
+Yeni Pencere
+Bunu klonla
+Kilitle
+Kopyalama Aracı
+En üstteki
+Kapat
+Diğerlerini kapat
+Pencereyi kapat
+Soldakileri kapat
+Sağdakileri kapat
+Bir seviye yukarı
+Tekrar yükle
+Ara
+Opaklık
+Arama kutusu
+Seçenekler
+</ButtonBar_BtnName>
+
+<ButtonBar_Misc>
+Yol
+İsim
+Geçerli klasör yolu
+Geçerli klasör adı
+MD5
+Öğeler
+Tüm açık sekmelerin yolları
+</ButtonBar_Misc>
+
+<Desktop>
+Liste
+Detaylar
+Döşemeler
+Varsayılan
+</Desktop>
+
+<DialogButtons>
+Tamam
+İptal
+&amp;Uygula
+&amp;Varsayılan
+&amp;Sayfayı Sıfırla
+&amp;Hepsini Sıfırla
+Sıfırla
+Ekle
+Ekle...
+Sil
+Seçenekler
+Etkinleştir
+Etkisizleştir
+Geri al
+Yükle...
+Kaydet...
+</DialogButtons>
+
+<DragDropToolTip>
+Kopyala:
+Taşı:
+Kısayol oluştur:
+</DragDropToolTip>
+
+<ErrorDialogs>
+İşlem başarısız.\r\nDosya veya bağlantının geçerli olduğuna emin olun:\r\n\r\n{0}
+Hata - QTTabBar
+Uyarı:  QTTabBar otomatik olarak etkinleştirilemedi. Manuel olarak etkinleştirmek için Alt tuşuna basıp bırakın, ardından Görünüm/Araç barları menüsünden QTTabBar'ı seçin.
+Etkinleştirilemiyor
+Hata
+QTTabBar hook kitaplığı yüklenemiyor.
+QTTabBar hook kitaplığı başlatılamıyor.
+Bazı özellikler çalışmayabilir. Bu sorunu çözmek için uygulamayı yeniden yüklemeniz gerekebilir.
+Masaüstü bağlanamadı. Lütfen QT Tab Desktop aracını yeniden etkinleştirin.
+İşlem başarısız.\r\nKlasörün var olduğundan ve erişim izninizin olduğundan emin olun:\r\n\r\n\t{0}
+</ErrorDialogs>
+
+<FileFilters>
+Görüntü dosyaları
+Dil dosyaları
+Eklenti dosyaları
+</FileFilters>
+
+<FileHashComputer>
+Yol
+Hash
+Kapat
+Temizle
+Yenile
+Her zaman üstte
+Sonucu göster
+Kapatıldığında temizle
+Tam yol
+(Hesaplanıyor...)
+</FileHashComputer>
+
+<MarginDropDown>
+Hepsi
+Sol
+Üst
+Sağ
+Alt
+</MarginDropDown>
+
+<Misc_Strings>
+Masaüstü arama
+Görüntü dosyası geçersiz.\r\n\r\nLütfen 432 x 40 px resim dosyası seçin.
+Arama sonuçları
+kısayol
+Dosya seç
+Klasör seç
+Deneysel
+dummy
+</Misc_Strings>
+
+<Options_Page01_Window>
+Windows Gezgini'nin davranışını değiştirin.
+Tek Pencere modu
+Yeni pencereleri yeni sekme olarak yakala
+Yeni pencereleri yakalama
+Yeni pencereler ve sekmeler için varsayılan konum
+Oturum kaydediliyor
+Her seferinde yeni bir oturum başlat
+Önceki oturumdaki tüm sekmeleri geri yükle
+Önceki oturumdan yalnızca kilitli sekmeleri geri yükle
+Kapat düğmesine basıldığında
+Pencereyi kapat
+Geçerli sekmeyi kapat
+Kilidi açık tüm sekmeleri kapat
+Tıklandığında pencereyi Görev Tepsisine gönder.
+Kapat
+Küçült
+</Options_Page01_Window>
+
+<Options_Page02_Tabs>
+Sekme seçeneklerini değiştir.
+Yeni sekme aç:
+Geçerli sekme kapatıldığında, şuna geç:
+Derhal yeni sekmelere geç
+Mevcut sekmeleri yeniden kullan
+Belirsiz sekmeleri yeniden adlandır
+Fare bir sekmenin üzerine sürüklendiğinde,
+Geçiş yap
+Alt Klasör İpucu menüsünü göster
+Sekme simgeleri
+Sekmelerde klasör simgelerini göster
+Simge tıklandığında Alt Klasör İpucu menüsünü göster
+Simgede sürücü harfini göster
+Kapat düğmesi
+Sekmelerde kapat düğmesini göster
+Yalnızca 'Alt' tuşu basılıyken
+Yalnızca fareyle üzerine gelindiğinde
+Sekmeler barı
+Sekmeler barında gezinme düğmelerini göster
+Solda
+Sağda
+Birden çok sekme satırına izin ver
+Etkin sekmenin olduğu satırı her zaman alta yerleştirin
+Geçerli sekmenin solunda
+Geçerli sekmenin sağında
+En soldaki konumda
+En sağdaki konumda
+Soldaki sekme
+Sağdaki sekme
+En soldaki sekme
+En sağdaki sekme
+Son aktif sekme
+Davranış
+</Options_Page02_Tabs>
+
+<Options_Page03_Tweaks>
+Liste Görünümü ince ayarlarını etkinleştirir veya devre dışı bırak.
+Liste Görünümü ile kullanılabilen ince ayarlar
+Tüm görünüm modlarında sütun başlıklarını görüntüle (Windows Vista/7)
+Kitaplık klasörleri için standart dosya sistemi görünümünü kullan (Windows 7)
+Dosyaları yeniden adlandırırken dosya uzantısının seçimini kaldır (Windows XP)
+Yeniden adlandırırken F2 ile seçimi değiştir
+Ok tuşlarıyla seçimi taşırken kaydır
+Backspace bir seviye yukarı çıkar (Windows Vista/7)
+Shift tuşunu basılı tutarken fare tekerleği yatay kaydırma yapar
+Yalnızca eski Liste Görünümü ile kullanılabilen ince ayarlar
+Eski Liste Görünümü kontrolünü etkinleştir (Windows 7)
+Ayrıntılı görünümde tam satır seçimi （Windows XP）
+Ayrıntılı görünümde kılavuz çizgilerini göster
+Ayrıntılı görünümde alternatif satır renkleri
+Ön plan rengi:
+Arka plan rengi:
+</Options_Page03_Tweaks>
+
+<Options_Page04_Tooltips>
+Alt Klasör ve Önizleme araç ipuçlarının davranışını değiştirin.
+Alt Klasör İpuçları
+Alt Klasör İpuçlarını Etkinleştir
+Sadece Shift tuşu aşağıdayken
+Dosyaları göster
+Menü öğeleri üzerinde fareyle gezinirken önizleme araç ipuçlarını göster
+Önizleme ipuçları
+Önizleme araç ipuçlarını etkinleştir
+Sadece Shift tuşu aşağıdayken
+Resimlerin altındaki dosya bilgilerini göster
+Maksimum Genişlik x Yükseklik:
+Yazı tipi:
+Metin dosya türleri
+Görüntü ve Video dosya türleri
+</Options_Page04_Tooltips>
+
+<Options_Page05_General>
+QTTabBar genel davranış seçenekleri
+Görev barı entegrasyonu
+Görev barında sekme önizlemelerini göster
+Tarih
+Kapatılan sekmelerin geçmişini tut
+Şimdi Temizle
+Açılan dosyaların geçmişini tut
+Ağ
+Ağ Zaman Aşımı (Sistem varsayılanı için 0 girin):
+Güncellemeleri periyodik olarak kontrol edin
+Şimdi kontrol et
+Dışa Aktar
+Dışa Aktarma Ayarları...
+Dosya geçmişi temizlensin mi?
+Sekme geçmişi temizlensin mi?
+Ses
+Sesi etkinleştir
+Günlüğü etkinleştir
+</Options_Page05_General>
+
+<Options_Page06_Appearance>
+Sekmelerin veya sekme barının görünümünü değiştirin.
+Sekme resmi
+Özel sekme resmini kullan:
+Boyutlandırma kenar boşlukları:
+Örtüşme alanı:
+İçerik kenar boşlukları:
+Saydam alanları test edin
+Sekme boyutu
+Yükseklik:
+Minimum Genişlik:
+Maksimum genişlik:
+Boyutlandırma modu:
+Esnek genişlik
+Sabit boyut
+Sekme metni
+Metin Renkleri:
+Gölge Renkleri:
+Aktif Renk
+Etkin Olmayan Renk
+Fare Üzerindeki Renk
+Metin Yazı Tipi:
+Hizalama:
+Sol
+Merkez
+Araç barı Arka Planı
+Resim
+Renk
+Her barı ayrı ayrı görüntüleyin
+Uzatma modu:
+Boyutlandırma kenar boşlukları:
+Kaplama dosyası
+Temayı İçe aktar...
+Temayı dışa aktar...
+Uzatılmış
+Gerçek boyut
+Döşeme
+</Options_Page06_Appearance>
+
+<Options_Page07_Mouse>
+Farklı fare eylemlerine komutlar atayın.
+Bir fare bağı eklemek için, uygun hedef türünün solundaki artı simgesi üzerinde bir fare eylemi gerçekleştirin. Bir bağı kaldırmak için listeden seçin ve Sil tuşuna basın.
+Diğer fare seçenekleri
+Fare tekerleği, farenin altındaki pencereyi kaydırır
+Hedef fare eylemi
+Eylem
+Herhangi bir yer
+Sekme
+Sekme barı Arka Planı
+Klasör Bağlantısı
+Dosya veya Klasör
+Gezgin Arka Planı
+Sol tık
+Sağ tık
+Orta tıklama
+Çift tıklama
+X1 Tıklama
+X2 Tıklama
+Bu fare düğmesi bu hedef için kullanılamaz.
+Bu hedef için geçerli fare düğmeleri şunlardır:
+Geçersiz Düğme
+</Options_Page07_Mouse>
+
+<Options_Page08_Keys>
+Klavye kısayollarını değiştirin.
+Listeden bir eylem seçin ve ona bağlamak istediğiniz tuş hareketine basın. Bağlamayı temizlemek için Escape tuşuna basın.
+Diğer klavye seçenekleri
+Ctrl + Tab tuşlarına basıldığında Sekme Değiştirici penceresini göster
+Eylem
+Tuş vuruşu
+Bu tuş zaten şuna atanmış:
+Yeniden atanmalı mı?
+Tuş çakışması
+</Options_Page08_Keys>
+
+<Options_Page09_Groups>
+Sekme grupları oluşturun ve yönetin.
+Bir gruba Kısayol Tuşu atamak için grubu seçin ve uygun tuş hareketine basın. Bağı kaldırmak için Escape tuşuna basın.
+Yeni Grup Oluştur
+Dosya
+Başlangıç
+Kısayol tuşu
+Yeni Grup
+"{0}" grubunu aç
+</Options_Page09_Groups>
+
+<Options_Page10_Apps>
+Sık kullanılan dosyalara veya uygulamalara kısayollar oluşturun.
+Bir uygulamaya Kısayol Tuşu atamak için onu seçin ve uygun tuş hareketine basın. Bağı kaldırmak için Escape tuşuna basın.
+Yeni klasör Oluştur
+Yol:
+Argümanlar:
+Çalışma dizini:
+Uygulama
+Kısayol tuşu
+Aşağıdaki anahtar sözcükler, çalışma zamanında çift tırnaklı yol dizeleriyle değiştirilir.
+Seçilen dosyalar.
+Seçilen klasörler.
+Seçilen dosyalar ve klasörler.
+Geçerli klasör.
+Seçim yoksa geçerli klasör, aksi takdirde seçilen klasör.
+Yeni dosya
+Bu klasör ve içeriği kaldırılsın mı?
+"{0}" uygulamasını başlatın
+</Options_Page10_Apps>
+
+<Options_Page11_ButtonBar>
+Düğmeler barını özelleştirin.
+Düğmeler
+Düğmeler barı Seçenekleri
+Büyük ikonlar
+Düğmelerde etiketleri göster
+Açılır düğme menülerinin sırasını kilitle
+Arama kutusunun boyutunu kilitle
+Özel Düğme Resimleri
+</Options_Page11_ButtonBar>
+
+<Options_Page12_Plugins>
+Üçüncü taraf eklentileri yönetin.
+Eklenti Yükle
+(Devre dışı)
+{0} tarafından
+{0} kaldırıldı.
+Bu eklenti, Tamam veya Uygula'ya bastığınızda yüklenecektir.
+Bu eklenti, Tamam veya Uygula'ya bastığınızda etkinleştirilecektir.
+Tamam veya Uygula'ya bastığınızda bu eklenti devre dışı bırakılacaktır.
+Bu eklentinin kaldırılması aşağıdaki eklentilerin de kaldırılmasına neden olacaktır:
+Devam?
+</Options_Page12_Plugins>
+
+<Options_Page13_Language>
+Dili değiştir.
+Ana dil
+Seçili dili kullan:
+Dil dosyasını kullan:
+Ek dil dosyaları
+Dil Dosyası Düzenleyicisi
+Dil Düzenleyicisini Göster...
+Orijinal
+Çevrildi
+Tüm girişler orijinal değerlerine sıfırlansın mı?
+Dosya kaydedilirken hata oluştu.
+简体中文
+English
+Deutsch
+Português
+Français
+</Options_Page13_Language>
+
+<Options_Page14_About>
+İlgili personel ve sürüm bilgilerini görüntüleyin.
+Kaynak kodu {0}
+Ana geliştiriciler:
+Diğer geliştiriciler:
+Simge ve Grafik Tasarım:
+QTTabBar'ı faydalı bulursanız, lütfen küçük bir bağış yapmayı düşünün.
+Basitleştirilmiş Çince:
+Derleme: {0}
+</Options_Page14_About>
+
+<OptionsDialog>
+QTTabBar Seçenekleri
+Bu sayfadaki tüm seçenekler varsayılan değerlerine sıfırlansın mı?
+Tüm seçenekler varsayılan değerlerine sıfırlansın mı? Bu, Grupları, Uygulamaları veya Eklentileri etkilemeyecektir.
+Onayla
+</OptionsDialog>
+
+<PayPalURL>
+https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg
+</PayPalURL>
+
+<ShortcutKeys_ActionNames>
+Geri dön ( Alt + Left )
+ileri git ( Alt + Right )
+Başa dön
+Sona git
+Sonraki sekmeyi seç
+Önceki sekmeyi seç
+İlk sekmeyi seç
+Son sekmeyi seç
+En son etkinleştirilen sekmeye geç
+Yeni sekme aç
+Yeni pencere aç
+Diğer pencerelerden sekmeleri birleştir
+Geçerli sekmeyi kapat
+Geçerli hariç hepsini kapat
+Soldakileri kapat
+Sağdakileri kapat
+Pencereyi kapat
+Kapatmayı geri al
+Geçerli sekmeyi klonla
+Geçerli klasörü yeni pencerede aç
+Geçerliyi kilitle / kilidini aç
+Tümünü kilitle / kilidini aç
+Klasöre göz at
+Yeni Grup Oluştur
+Seçenek iletişim kutusunu aç
+Araç barı menüsünü göster
+Geçerli sekme menüsünü göster
+Grup menüsünü göster (Düğmeler barı)
+Son klasör menüsünü göster (Düğmeler barı)
+Kullanıcı uygulama menüsünü göster (Düğmeler barı)
+Son dosyalar menüsünü göster (Düğmeler barı)
+Yeni boş dosya oluştur
+Yeni klasör Oluştur
+Seçili dosya yolunu kopyala
+Seçili dosya adını kopyala
+Geçerli klasör yolunu kopyala
+Geçerli klasör adını kopyala
+Seçilen dosyaların MD5'ini kontrol edin
+Pencereyi en üste getir
+Şeffaflık +
+Şeffaflık -
+Odak dosya listesi
+Arama barına odaklan (Gezgin)
+Arama kutusuna odaklan (Düğme barı)
+Seçili klasör için Alt Klasör İpucu Menüsünü Göster
+Pencereyi Görev Tepsisine gönder
+Sekme barına Odaklanın
+Sekmeleri ada göre sırala
+Sekmeleri yola göre sırala
+Sekmeleri son kullanıma göre sırala
+Hiç bir şey
+bir seviye yukarı
+Yenile
+Yapıştırmak
+Büyüt
+Küçült
+Yeni sekmede aç
+Etkinleştirmeden yeni sekmede aç
+Yeni pencerede aç
+Kes
+Kopyala
+Sil
+Özellikler
+Yolu kopyala
+Adı kopyala
+Checksum göster
+Sekmeyi kapat
+Soldaki sekmeleri kapat
+Sağdaki sekmeleri kapat
+bir seviye yukarı
+Kilitle
+Bağlam menüsünü göster
+Yeni pencerede aç
+Klonla
+Yolu kopyala
+Özellikler
+Alt Dizin İpucu menüsünü göster
+Bu hariç hepsini kapat
+CMD'yi aç
+Seçili klasörleri etkinleştirmeden yeni sekmede aç
+</ShortcutKeys_ActionNames>
+
+<ShortcutKeys_Groups>
+QTTabBar
+{0} (Plugin)
+</ShortcutKeys_Groups>
+
+<SiteURL>
+https://github.com/indiff/qttabbar
+</SiteURL>
+
+<TabBar_Menu>
+Kapat
+Sağdakileri kapat
+Soldakileri kapat
+Bu hariç hepsini kapat
+Gruba ekle
+Yeni Grup Oluştur
+Kilitle
+Bunu klonla
+Yeni Pencere
+Yolu kopyala
+Özellikler
+Sekme geçmişi
+Gruplar
+Kapatmayı geri al
+Son kullanılan
+Son açılan dosyalar
+Klasöre göz at
+Geçerli hariç hepsini kapat
+Pencereyi kapat
+Ayarlar
+Kilidini aç
+(&amp;A) uygulama menüsüne ekle
+Öğeler
+İptal
+Dallar
+Bu öğeyi menüden kaldır
+(&amp;P) klasörünü aç
+Sekme etiketi
+Sekme sıralaması
+İsim
+Yol
+Kullanım
+Araç barlarını Kilitle
+Diğer pencerelerin sekmelerini birleştir
+Ters çevir
+CMD'yi aç
+</TabBar_Menu>
+
+<TabBar_Message>
+QTTabBar açamıyor\r\n\r\n "{0}".
+</TabBar_Message>
+
+<TabBar_NewGroup>
+Yeni Grup Oluştur
+Grup ismi:
+Tüm sekmeleri ekle
+</TabBar_NewGroup>
+
+<TabBar_Option_Genre>
+Pencere
+Sekmeler
+İnce ayarlar
+İpuçları
+Genel
+Görünüş
+Fare
+Kısayollar
+Gruplar
+Uygulamalar
+Düğmeler Barı
+Eklentiler
+Dil
+Hakkında
+</TabBar_Option_Genre>
+
+<TaskBar_Menu>
+Görev barı (&amp;T)
+Masaüstü (&amp;D)
+Öğeleri kilitle (&amp;L)
+Başlık arka planını çiz (&amp;B)
+Menüyü göster (&amp;O)
+Uygulama kısayolları (&amp;A)
+</TaskBar_Menu>
+
+<TaskBar_Titles>
+Gruplar
+Kapatmayı geri al
+Uygulamalar
+Son açılan dosyalar
+</TaskBar_Titles>
+
+<TrayIcon>
+1 pencere
+{0} pencere
+</TrayIcon>
+
+<UpdateCheck>
+QTTabBar'ın yeni bir sürümü yayınlandı:
+Web sitesine gitmek için Tamam'a basın.
+QTTabBar sürümünüz güncel.
+Yeni geliştirme sürümü bulundu:
+Sürüm dosyası bulunamadı (404).
+Bilinmeyen ağ hatası.
+Sunucu bulunamadı.
+Sunucu yanlış dizeler döndürdü.
+</UpdateCheck>
+
+<!-- data end -->
+
+</root>

@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("QTQuick")]
-[assembly: AssemblyDescription("快捷打开系统配置，快捷操作等.")]
+[assembly: AssemblyDescription("Quick system settings, quick actions, etc.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTQuick")]

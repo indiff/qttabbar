@@ -24,7 +24,7 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
     //[Plugin(PluginType.Interactive, Author = "Quizo", Name = "Change Folder View Mode", Version = "1.0.0.0", Description = "Button to change folder viewmode for XP.")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "查看", Version = "1.0.0.0", Description = "添加按钮改变查看方式.")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "View", Version = "1.0.0.0", Description = "Change the button's view mode.")]
     public class ViewModeButton : IBarCustomItem
     {
         private IPluginServer pluginServer;
@@ -199,8 +199,8 @@ namespace QuizoPlugins {
         }
 
         /// <summary>
-        /// 更新按钮图片
-        /// 修复皮肤配置空图片报错
+        /// Update the button image
+        /// Fix a skin-config image issue
         /// check mode & button is null ?
         /// </summary>
         /// <param name="mode"></param>

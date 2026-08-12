@@ -34,7 +34,7 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     /**
-     * 预览窗口
+     * Preview form
      */
     internal sealed class ThumbnailTooltipForm : Form {
         private const string EMPTYFILE = "  *empty file";
@@ -81,7 +81,7 @@ namespace QTTabBarLib {
         /// static fields.
         /// </summary>
         private static string supportedImages;
-        // 支持的视频格式
+        // Supported movie formats
         private static string supportedMovies = ".asx;.dvr-ms;.mp2;.flv;..mkv;.ts;.3g2;.3gp;.3gp2;.3gpp;.amr;.amv;.asf;.avi;.bdmv;.bik;.d2v;.divx;.drc;.dsa;.dsm;.dss;.dsv;.evo;.f4v;.flc;.fli;.flic;.flv;.hdmov;.ifo;.ivf;.m1v;.m2p;.m2t;.m2ts;.m2v;.m4b;.m4p;.m4v;.mkv;.mp2v;.mp4;.mp4v;.mpe;.mpeg;.mpg;.mpls;.mpv2;.mpv4;.mov;.mts;.ogm;.ogv;.pss;.pva;.qt;.ram;.ratdvd;.rm;.rmm;.rmvb;.roq;.rpm;.smil;.smk;.swf;.tp;.tpr;.ts;.vob;.vp6;.webm;.wm;.wmp;.wmv";
 
 
@@ -239,7 +239,7 @@ namespace QTTabBarLib {
                     return false;
                 }
             }
-            if(ExtIsText(ext)) { // 如果预览的是文本文件
+            if(ExtIsText(ext)) { // If the preview is a text file
                 FileInfo textFileInfo = new FileInfo(path);
                 if(textFileInfo.Exists) {
                     try {
@@ -248,7 +248,7 @@ namespace QTTabBarLib {
                         bool isEmptyText = false;
                         string content;
                         ioException = null;
-                        // 加载预览的逻辑
+                        // File preview logic
 
                         /*if (textFileInfo.Length > 0L && textFileInfo.Length <= MAX_TEXT_LENGTH)
                         {
@@ -462,10 +462,10 @@ namespace QTTabBarLib {
         }
 
         /// <summary> 
-        /// 给定文件的路径，读取文件的二进制数据，判断文件的编码类型 
+        /// Given the file's path, read the file's binary data and determine the file's text encoding
         /// </summary> 
-        /// <param name=“FILE_NAME“>文件路径</param> 
-        /// <returns>文件的编码类型</returns> 
+        /// <param name="FILE_NAME">File path</param> 
+        /// <returns>The file's text encoding</returns> 
         public static System.Text.Encoding GetType(string FILE_NAME)
         {
             FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
@@ -475,15 +475,15 @@ namespace QTTabBarLib {
         }
 
         /// <summary> 
-        /// 通过给定的文件流，判断文件的编码类型 
+        /// Determine the file's text encoding from the given file stream
         /// </summary> 
-        /// <param name=“fs“>文件流</param> 
-        /// <returns>文件的编码类型</returns> 
+        /// <param name="fs">File stream</param> 
+        /// <returns>The file's text encoding</returns> 
         public static System.Text.Encoding GetType(FileStream fs)
         {
             byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
             byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-            byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //带BOM 
+            byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //has a BOM 
             Encoding reVal = Encoding.Default;
 
             BinaryReader r = new BinaryReader(fs, System.Text.Encoding.Default);
@@ -513,20 +513,20 @@ namespace QTTabBarLib {
         } 
 
         /// <summary> 
-        /// 判断是否带BOM的UTF8格式（估算方法）
-        /// BOM：Byte Order Mark，定义字节顺序。
-        /// UTF-8不需要BOM表明字节顺序，但用BOM来表示编码方式。
-        /// Windows就是采用BOM来标记文本文件的编码方式的，
-        /// 可以把UTF-8和ASCII等编码区分开来，
-        /// 但在Windows之外（如，Linux ），会带来问题。
+        /// Algorithm for determining whether it's UTF-8 with a BOM:
+        /// BOM stands for Byte Order Mark, i.e. a byte-order marker.
+        /// UTF-8 doesn't need a BOM to indicate byte order, but a BOM does indicate the encoding.
+        /// Windows can't tell a text file's encoding without a BOM,
+        /// so it can't distinguish UTF-8 from ASCII and similar encodings,
+        /// causing problems outside Windows (e.g. on Linux and other platforms).
         /// </summary> 
         /// <param name="data"></param> 
         /// <returns></returns> 
         private static bool IsUTF8Bytes(byte[] data)
         {
-            // 字节数
+            // Byte count
             int charByteCounter = 1;
-            // 当前字节
+            // Current byte
             byte curByte;
             for (int i = 0; i < data.Length; i++)
             {
@@ -535,13 +535,13 @@ namespace QTTabBarLib {
                 {
                     if (curByte >= 0x80)
                     {
-                        // 判断当前 
+                        // Check the current byte
                         while (((curByte <<= 1) & 0x80) != 0)
                         {
                             charByteCounter++;
                         }
-                        // 标记位首位若为非0 则至少以2个1开始
-                        // 如:110XXXXX...........1111110X 
+                        // If the leading bit is not '0', count starting from 2 or 1
+                        // e.g.:110XXXXX...........1111110X 
                         if (charByteCounter == 1 || charByteCounter > 6)
                         {
                             return false;
@@ -550,7 +550,7 @@ namespace QTTabBarLib {
                 }
                 else
                 {
-                    // 若是UTF-8 此时第一位必须为1 
+                    // If it is UTF-8, the leading bit must be 1 here 
                     if ((curByte & 0xC0) != 0x80)
                     {
                         return false;
@@ -641,7 +641,6 @@ namespace QTTabBarLib {
             detechted = DetectEncoding(buffer);
             if (detechted != null)
             {
-                // QTUtility2.log(" try get DetectInputCodepage " + detechted.EncodingName + " " + detechted.CodePage);
                 QTUtility2.log(" try get DetectEncoding " + detechted.EncodingName + " " + detechted.CodePage);
                 return detechted.GetString(buffer);
             }
@@ -682,7 +681,7 @@ namespace QTTabBarLib {
             }
             if (info.nCodePage == Encoding.ASCII.CodePage)
             {
-                //ASCIIのときはUTF-8にする
+                //ASCII and UTF-8 are compatible
                 return Encoding.UTF8;
             }
             return Encoding.GetEncoding((int)info.nCodePage);
@@ -783,12 +782,12 @@ namespace QTTabBarLib {
         }
 
         /**
-         * codepage=936 简体中文GBK
-            codepage=950 繁体中文BIG5
-            codepage=437 美国/加拿大英语
-            codepage=932 日文
-            codepage=949 韩文
-            codepage=866 俄文
+         * codepage=936 Simplified Chinese GBK
+            codepage=950 Traditional Chinese BIG5
+            codepage=437 US/Canada English
+            codepage=932 Japanese
+            codepage=949 Korean
+            codepage=866 Russian
          */
         public static Encoding TryGetEncoding(byte[] bytes)
         {
@@ -1150,24 +1149,24 @@ namespace QTTabBarLib {
 
         public static bool IsTragetEncoding(byte[] bytes, Encoding targetEncoding)
         {
-            //將byte[]轉為string再轉回byte[]看位元數是否有變
+            //Convert byte[] to string, then back to byte[]; check whether the byte count matches
             var stringWithTragetEncoding = targetEncoding.GetString(bytes);
             var bytesWithTragetEncodingCount = targetEncoding.GetByteCount(stringWithTragetEncoding);
             return bytes.Length == bytesWithTragetEncodingCount;
         }
 
         /// <summary> 
-        /// 判断文件流的编码类型 
+        /// Determine the file's text encoding
         /// </summary> 
-        /// <param name="filestream">文件流</param> 
-        /// <returns>流的编码类型</returns> 
+        /// <param name="filestream">File stream</param> 
+        /// <returns>The text encoding</returns> 
         private static Encoding GetStreamEncoding(byte[] ss)
         {
             try
             {
                 byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
                 byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-                //带BOM 
+                //has a BOM 
                 byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF };
                 Encoding reVal = Encoding.Default;
                 if (IsUTF8Bytes(ss) || (ss[0] == 0xEF && ss[1] == 0xBB && ss[2] == 0xBF))
@@ -1510,12 +1509,16 @@ namespace QTTabBarLib {
         }
 
         protected override void OnPaintBackground(PaintEventArgs e) {
-            if(!QTUtility.IsXP && VisualStyleRenderer.IsSupported) {
+            // The themed tooltip visual style part is always light regardless of app
+            // dark mode, so it can't be used when InNightMode - paint manually instead.
+            if(!QTUtility.IsXP && !QTUtility.InNightMode && VisualStyleRenderer.IsSupported) {
                 new VisualStyleRenderer(VisualStyleElement.ToolTip.Standard.Normal).DrawBackground(e.Graphics, new Rectangle(0, 0, Width, Height));
             }
             else {
                 base.OnPaintBackground(e);
-                e.Graphics.DrawRectangle(SystemPens.InfoText, new Rectangle(0, 0, Width - 1, Height - 1));
+                Pen borderPen = QTUtility.InNightMode ? new Pen(Color.FromArgb(83, 83, 83)) : SystemPens.InfoText;
+                e.Graphics.DrawRectangle(borderPen, new Rectangle(0, 0, Width - 1, Height - 1));
+                if(QTUtility.InNightMode) borderPen.Dispose();
             }
         }
 

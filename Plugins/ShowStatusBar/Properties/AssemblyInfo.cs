@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ShowStatusBar")]
-[assembly: AssemblyDescription("ÏÔÊ¾×´Ì¬À¸")]
+[assembly: AssemblyDescription("Show status bar")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("ShowStatusBar")]

@@ -113,7 +113,7 @@ namespace QTTabBarLib {
                 textureBrushRebar = null;
             }
             if (!File.Exists(Config.Skin.RebarImageFile)) {
-                // 加载默认的背景图
+                // Load the default background image
                 bmpRebar = Resources_Image.imgRebar;
                 textureBrushRebar = new TextureBrush(bmpRebar);
             } else
@@ -138,7 +138,7 @@ namespace QTTabBarLib {
             
         }
         /**
-         * 确认按钮栏是否正确
+         * Ensure the menu bar band is correct
          */
         public void EnsureMenuBarIsCorrect() {
             bool show = MenuHasFocus || MenuBarShown;
@@ -164,10 +164,9 @@ namespace QTTabBarLib {
 
 
         /**
-         * 刷新高度 适配4k
+         * Refresh height - adapt for 4K
          */
         internal unsafe void RefreshHeight() {
-            // QTUtility2.log("QTTabBarClass RefreshHeight");
             const int DBID_BANDINFOCHANGED = 0;
             const int OLECMDEXECOPT_DODEFAULT = 0;
             const int RBN_HEIGHTCHANGE = -831;
@@ -213,14 +212,12 @@ namespace QTTabBarLib {
                             {
                                 continue;
                             }
-                            // QTUtility2.log("Refresh Height bandIndex : " + i );
                             PInvoke.SendMessage(rebarController.Handle, RB.GETBANDBORDERS, (IntPtr)i, ref rectMargin);
                             rectBand.left -= !QTUtility.IsXP ? 4 : rectMargin.left;
                             rectBand.top -= rectMargin.top;
                             rectBand.right += rectMargin.right;
                             rectBand.bottom += rectMargin.bottom;
 
-                            // QTUtility2.log("rectBand Height: " + rectBand.Height);
                             // rectTargets.Add(rectBand.ToRectangle());
                         }
 
@@ -256,7 +253,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// 刷新背景颜色和图片
+        /// Refresh background color and image
         /// </summary>
         public void RefreshBG() {
             if(Config.Skin.UseRebarBGColor) {
@@ -278,7 +275,7 @@ namespace QTTabBarLib {
             if(hWnd != IntPtr.Zero) {
                 PInvoke.RedrawWindow(hWnd, IntPtr.Zero, IntPtr.Zero, 0x289);
             }
-            // 修复刷新图片空图片情况报错
+            // Fix an error when refreshing with an empty image
             if(Config.Skin.UseRebarImage && Config.Skin.RebarImageFile.Length > 0 && File.Exists( Config.Skin.RebarImageFile ) ) {
                 CreateRebarImage();
             }

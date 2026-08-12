@@ -1,0 +1,620 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+<Author>
+SaiyajinK
+</Author>
+
+<Language>
+French
+</Language>
+
+<Country>
+France
+</Country>
+
+<Version_QTTabBar>
+DevBuild: 23/06/2022 08:45:37 (2.0.50727.9164)
+</Version_QTTabBar>
+
+<DateModified>
+06/30/2022
+</DateModified>
+
+<!-- data start -->
+
+<ButtonBar_BtnName>
+Séparateur
+Retour
+Avant
+Groupes
+Récemment fermé
+Applications
+Nouvelle fenêtre
+Cloner ceci
+Verouiller
+Outil de copie
+Le plus haut
+Fermer
+Fermer tout sauf courant
+Fermer fenêtre
+Fermer à gauche
+Fermer à droite
+Augmente d'un niveau
+Recharger
+Recherche
+Opacité
+Barre de recherche
+Options
+</ButtonBar_BtnName>
+
+<ButtonBar_Misc>
+Chemin
+Nom
+Chemin du dossier actuel
+Nom du dossier actuel
+MD5
+éléments
+Chemins de tous les onglets ouverts
+</ButtonBar_Misc>
+
+<Desktop>
+Liste
+Détails
+Tuiles
+Défaut
+</Desktop>
+
+<DialogButtons>
+OK
+Annuler
+&amp;Appliquer
+&amp;Défaut
+Réinitialiser &amp;Page
+&amp;Tout réinitialiser
+Réinitialiser
+Ajouter
+Ajouter..
+Supprimer
+Options
+Activer
+Désactiver
+Annuler
+Charger...
+Sauvegarder...
+</DialogButtons>
+
+<DragDropToolTip>
+Copier dans:
+Déplacer dans:
+Créer un raccourci dans:
+</DragDropToolTip>
+
+<ErrorDialogs>
+L'opération a échoué.\r\nVeuillez vous assurer que le fichier ou la cible du lien existe:\r\n\r\n{0}
+Erreur - QTTabBar
+Avertissement: Impossible d'activer automatiquement QTTabBar. Pour l'activer manuellement, appuyez et relâchez la touche Alt, puis sélectionnez QTTabBar dans le menu Affichage/Barres d'outils.
+Impossible d'activer
+Erreur
+Impossible de charger la bibliothèque de crochets QTTabBar.
+Impossible d'initialiser la bibliothèque de crochets QTTabBar.
+Certaines fonctionnalités peuvent ne pas être fonctionnelles. Pour résoudre ce problème, vous devrez peut-être réinstaller l'application.
+Échec de l'accrochage du bureau. Veuillez réactiver l'outil QT Tab Desktop.
+L'opération a échoué.\r\nAssurez-vous que le dossier existe ou que vous êtes autorisé à accéder à:\r\n\r\n\t{0}
+</ErrorDialogs>
+
+<FileFilters>
+Fichiers images
+Fichiers de langue
+Fichiers Plugin
+</FileFilters>
+
+<FileHashComputer>
+Chemin
+Hacher
+Fermer
+Effacer
+Rafraîchir
+Toujours au premier-plan
+Afficher le résultat
+Effacer à la fermeture
+Chemin complet
+(Calcul en cours...)
+</FileHashComputer>
+
+<MarginDropDown>
+Tout
+Gauche
+Haut
+Droite
+Bas
+</MarginDropDown>
+
+<Misc_Strings>
+Recherche bureau
+Le fichier image n'est pas valide.\r\n\r\nVeuillez préciser 432 x 40 px fichier d'image.
+Résultats de la recherche dans
+Raccourci
+Choisissez votre fichier
+Choisissez votre dossier
+Expérimental
+dummy
+</Misc_Strings>
+
+<Options_Page01_Window>
+Modifiez le comportement de l'explorateur Windows.
+Mode de fenêtre unique
+Capturez de nouvelles fenêtres de l'explorateur sous forme de nouveaux onglets
+Ne capturez pas les nouvelles fenêtres de l'explorateur
+Emplacement par défaut des nouvelles fenêtres et onglets
+Enregistrement de session
+Commencer une nouvelle session à chaque fois
+Restaurer tous les onglets de la session précédente
+Restaurer uniquement les onglets verrouillés de la session précédente
+Lorsque le bouton de fermeture est pressé
+Ferme la fenêtre
+Fermer l'onglet actuel
+Fermer tous les onglets déverrouillés
+Envoyer la fenêtre vers la barre des tâches sur
+Fermer
+Minimiser
+Bouton + bleu
+</Options_Page01_Window>
+
+<Options_Page02_Tabs>
+Modifier les options liées aux onglets.
+Ouvrir de nouveaux onglets :
+Lorsque l'onglet actuel est fermé, basculez vers:
+Passez immédiatement aux nouveaux onglets
+Réutiliser les onglets existants
+Renommer les onglets ambigus
+Lorsque vous faites glisser la souris sur un onglet,
+Switcher
+Afficher le sous-dossier du menu Astuce
+Icônes d'onglet
+Afficher les icônes de dossier sur les onglets
+Afficher le sous-dossier du menu Astuce lorsque l'icône est cliquée
+Afficher la lettre du lecteur sur l'icône
+Bouton Fermer
+Afficher le bouton de fermeture sur les onglets
+Uniquement avec la touche Alt enfoncée
+Uniquement au survol de la souris
+Barre d'onglets
+Afficher les boutons de navigation dans la barre d'onglets
+À gauche
+À droite
+Autoriser plusieurs rangées d'onglets
+Toujours mettre la ligne avec l'onglet actif en bas
+À gauche de l'onglet actuel
+À droite de l'onglet actuel
+Dans la position la plus à gauche
+Dans la position la plus à droite
+Onglet à gauche
+Onglet à droite
+Onglet le plus à gauche
+Onglet le plus à droite
+Dernier onglet activé
+Comportement
+</Options_Page02_Tabs>
+
+<Options_Page03_Tweaks>
+Activez ou désactivez les modifications apportées à la vue de liste de l'explorateur.
+Tweaks pouvant être utilisés avec l'une ou l'autre des vues de liste
+Afficher les en-têtes de colonne dans tous les modes d'affichage (Windows Vista/7)
+Utiliser la vue standard du système de fichiers pour les dossiers de la bibliothèque (Windows 7)
+Désélectionnez l'extension de fichier lorsque vous renommez des fichiers (Windows XP)
+Sélection du cycle avec F2 lors du changement de nom
+Retour en boucle lors du déplacement de la sélection avec les touches fléchées
+Retour arrière monte d'un niveau (Windows Vista/7)
+Faire défiler avec la molette de la souris tout en maintenant la touche Maj enfoncée horizontalement
+Tweaks qui ne peuvent être utilisés qu'avec l'ancienne vue de liste
+Activer l'ancien contrôle d'affichage de liste (Windows 7)
+Sélection complète de la ligne dans la vue Détails
+Afficher les lignes de grille dans la vue Détails
+Couleurs de ligne alternatives dans la vue Détails
+Couleur de premier plan:
+Couleur de l'arrière plan:
+</Options_Page03_Tweaks>
+
+<Options_Page04_Tooltips>
+Modifiez le comportement des info-bulles de sous-dossier et d'aperçu.
+Conseils sur les sous-dossiers
+Activer les conseils de sous-dossier
+Seulement avec la touche Maj enfoncée
+Afficher les fichiers
+Afficher les info-bulles d'aperçu lorsque vous passez la souris sur les éléments de menu
+Aperçu des info-bulles
+Activer les info-bulles d'aperçu
+Seulement avec la touche Maj enfoncée
+Afficher les informations du fichier sous les images
+Largeur x Hauteur maximale:
+Polcice:
+Types de fichiers texte
+Types de fichiers image et vidéo
+</Options_Page04_Tooltips>
+
+<Options_Page05_General>
+Options générales pour le comportement de QTTabBar.
+Intégration de la barre des tâches
+Afficher les aperçus des onglets dans la barre des tâches
+Historique
+Conserver l'historique des onglets fermés
+Effacer maintenant
+Conserver l'historique des fichiers ouverts
+Réseau
+Délai d'expiration du réseau (Entrez 0 pour la valeur par défaut du système):
+Vérifiez périodiquement les mises à jour
+Vérifier maintenant
+Exporter
+Exporter les paramètres...
+Effacer l'historique des fichiers ?
+Effacer l'historique des onglets ?
+Son
+Activer le son
+Activer le journal
+</Options_Page05_General>
+
+<Options_Page06_Appearance>
+Modifiez l'apparence des onglets ou de la barre d'onglets.
+Image de l'onglet
+Utiliser une image de l'onglet personnalisé:
+Marges de dimensionnement:
+Zone de chevauchement:
+Marges de contenu:
+Testez les zones transparentes
+Taille de l'onglet
+Hauteur:
+Largeur minimale:
+Largeur maximale:
+Mode mise à l'échelle:
+Pleine largeur
+Même taille
+Texte de l'onglet
+Couleurs du texte :
+Couleurs de l'ombre :
+Couleur active
+Couleur inactive
+Couleur de la souris
+Police de texte:
+Alignement:
+Gauche
+Centrer
+Arrière-plan de la barre d'outils
+Image
+Couleur unie
+Image sur chaque barre séparément
+Mode étirement:
+Dimensionnement des marges
+Thème
+Importer un thème...
+Exporter un thème...
+Extensible
+Taille réelle
+Tuile
+</Options_Page06_Appearance>
+
+<Options_Page07_Mouse>
+Attribuez des commandes à différentes actions de la souris.
+Pour ajouter un raccourci de souris, effectuez une action de la souris sur l'icône plus à gauche du type de cible approprié. Pour supprimer une liaison, sélectionnez-la dans la liste et appuyez sur la touche Suppr.
+Autres options de souris
+La molette de la souris fait défiler la fenêtre sous la souris
+Accord de souris
+Action
+Partout
+Onglet
+Arrière-plan de l'onglet
+Lien de dossier
+Fichier ou dossier
+Arrière-plan de l'explorateur
+Clique gauche
+Clique droit
+Clique milieu
+Double clique
+X1 clique
+X2 clique
+Ce bouton de la souris ne peut pas être utilisé pour cette cible.
+Les boutons de souris valides pour cette cible sont:
+Bouton invalide
+</Options_Page07_Mouse>
+
+<Options_Page08_Keys>
+Modifier les raccourcis clavier.
+Sélectionnez une action dans la liste et appuyez sur la touche gestuelle que vous souhaitez lui associer. Appuyez sur Échap pour effacer la liaison.
+Autres options de clavier
+Afficher la fenêtre de switch de l'onglet lorsque Ctrl + Tab est enfoncé
+Action
+Frappe
+Cette clé est déjà affectée à :
+Doit-il être réaffecté ?
+Conflit de frappe
+</Options_Page08_Keys>
+
+<Options_Page09_Groups>
+Créer et gérer des groupes d'onglets.
+Pour attribuer une touche de raccourci à un groupe, sélectionnez-la et appuyez sur le geste de touche approprié. Appuyez sur Échap pour effacer la liaison.
+Créer un nouveau groupe
+Dossier
+Commencez
+Touche de raccourci
+Nouveau groupe
+Ouvrir le groupe "{0}"
+</Options_Page09_Groups>
+
+<Options_Page10_Apps>
+Créez des raccourcis vers des fichiers ou des applications couramment utilisés.
+Pour attribuer une touche de raccourci à une application, sélectionnez-la et appuyez sur le geste de touche approprié. Appuyez sur Échap pour effacer la liaison.
+Créer un nouveau dossier
+Chemin:
+Arguments:
+Répertoire de travail:
+Application
+Touche de raccourci
+Les mots clés suivants sont remplacés avec le chemin des règles lors de l'exécution.
+Fichiers sélectionnés.
+Dossiers sélectionnés.
+Fichiers et dossiers sélectionnés.
+Dossier actuel.
+Dossier actuel si aucune sélection, sinon dossier sélectionné.
+Nouveau dossier
+Supprimer ce dossier et son contenu ?
+Lancer l'application "{0}"
+</Options_Page10_Apps>
+
+<Options_Page11_ButtonBar>
+Personnalisez la barre de boutons.
+Boutons
+Options de la barre de boutons
+Grandes icônes
+Afficher les noms sur les boutons
+Verrouiller l'ordre des menus des boutons déroulants
+Verrouiller la taille du champ de recherche
+Images de boutons personnalisés
+</Options_Page11_ButtonBar>
+
+<Options_Page12_Plugins>
+Gérer les plugins tiers.
+Installer un plugin
+(Désactivé)
+par {0}
+{0} a été supprimé.
+Ce plugin sera installé lorsque vous appuyez sur OK ou Appliquer.
+Ce plugin sera activé lorsque vous appuyez sur OK ou Appliquer.
+Ce plugin sera désactivé lorsque vous appuyez sur OK ou Appliquer.
+La désinstallation de ce plugin désinstallera également les plugins suivants :
+Procéder?
+Activer
+Désactiver
+</Options_Page12_Plugins>
+
+<Options_Page13_Language>
+Changez la langue.
+Langage principal
+Utiliser le langage intégré:
+Utiliser le fichier de langue:
+Fichiers de langue du plug-in
+Éditeur de fichiers de langue
+Afficher l'éditeur de langue...
+Original
+Traduit
+Réinitialiser toutes les entrées à leur valeur d'origine ?
+Erreur lors de l'enregistrement du fichier.
+Chinois simplifié
+Anglais
+Allemand
+</Options_Page13_Language>
+
+<Options_Page14_About>
+Afficher les crédits et les informations de version.
+Code d'origine de {0}
+Développeur principal:
+Autres développeurs:
+Icônes et graphiques:
+Si vous trouvez QTTabBar utile, pensez à faire un petit don.
+Modification chinoise:
+Construit par : {0}
+</Options_Page14_About>
+
+<OptionsDialog>
+Options de QTTabBar
+Réinitialiser toutes les options de cette page à leurs valeurs par défaut ?
+Réinitialiser toutes les options à leurs valeurs par défaut ? Cela n'affectera pas les groupes, les applications ou les plugins.
+Confirmation
+</OptionsDialog>
+
+<PayPalURL>
+https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg
+</PayPalURL>
+
+<ShortcutKeys_ActionNames>
+Retour
+Avant
+Aller en arrière pour commencer
+Aller en avant pour finir
+Sélectionnez l'onglet suivant
+Sélectionner l'onglet précédent
+Sélectionnez le premier onglet
+Select last tab
+Sélectionner le dernier onglet
+Ouvrir un nouvel onglet
+Ouvrir une nouvelle fenêtre
+Fusionner les onglets d'autres fenêtres
+Fermer l'onglet actuel
+Fermer tout sauf courant
+Fermer à gauche
+Fermer à droite
+Fermer la fenêtre
+Annuler fermeture
+Cloner l'onglet actuel
+Ouvrir le dossier actuel dans une nouvelle fenêtre
+Verrouiller / déverrouiller courant
+Tout verrouiller / déverrouiller
+Parcourir le dossier
+Créer un nouveau groupe
+Ouvrir la boîte de dialogue des options
+Afficher le menu de la barre d'outils
+Afficher le menu de l'onglet actuel
+Afficher le menu du groupe (barre de boutons)
+Afficher le menu des dossiers récents (barre de boutons)
+Afficher le menu de l'application utilisateur (barre de boutons)
+Afficher le menu des fichiers récents (barre de boutons)
+Créer un nouveau fichier vide
+Créer un nouveau dossier
+Copier le chemin des fichiers sélectionnés
+Copier le nom des fichiers sélectionnés
+Copier le chemin du dossier actuel
+Copier le nom du dossier actuel
+Vérifier MD5 des fichiers sélectionnés
+Amenez la fenêtre au plus haut
+Transparence +
+Transparence -
+Liste des fichiers ciblés
+Barre de recherche ciblée (Explorateur)
+Zone de recherche ciblée (barre de boutons)
+Afficher le sous-dossier du menu astuces
+Envoyer la fenêtre vers la barre des tâches
+Concentrez la barre d'onglets
+Trier les onglets par nom
+Trier les onglets par chemin
+Trier les onglets par dernière activation
+Rien
+Augmenter d'un niveau
+Rafraîchir
+Coller
+Maximiser
+Minimiser
+Ouvrir dans un nouvel onglet
+Ouvrir dans un nouvel onglet sans activer
+Ouvrir dans une nouvelle fenêtre
+Couper
+Copie
+Effacer
+Propriétés
+Copier le chemin
+Copier le nom
+Afficher la somme de contrôle
+Fermer l'onglet
+Fermer les onglets à gauche
+Fermer les onglets à droite
+Augmenter d'un niveau
+Verrouiller
+Afficher le menu contextuel
+Ouvrir dans une nouvelle fenêtre
+Cloner
+Copier le chemin
+Propriétés
+Afficher le sous-répertoire du menu Astuce
+Fermer tout sauf ça
+Ouvrir CMD
+Ouvrir les dossiers sélectionnés dans un nouvel onglet sans activer
+</ShortcutKeys_ActionNames>
+
+<ShortcutKeys_Groups>
+QTTabBar
+{0} (Plugin)
+</ShortcutKeys_Groups>
+
+<SiteURL>
+https://github.com/indiff/qttabbar
+</SiteURL>
+
+<TabBar_Menu>
+Fermer
+Fermer à droite
+Fermer à gauche
+Fermer tout sauf ça
+Ajouter au groupe
+Créer un nouveau groupe
+Verrouiller
+Cloner ceci
+Nouvelle fenetre
+Copier le chemin
+Propriétés
+Historique des onglets
+Groupes
+Annuler fermeture
+Dernière activation
+Fichiers récemment ouverts
+Parcourir le dossier
+Fermer tout sauf courant
+Fermer la fenêtre
+Options
+Déverouiller
+Ajouter au menu de l'application :
+éléments
+Annuler
+Branches
+Supprimer cet élément du menu
+Ouvrir dossier contenant
+Nom de l'onglet
+Ordre de l'onglet
+Nom
+Chemin
+Actif
+Verrouiller les barres d'outils
+Fusionner les onglets d'autres fenêtres
+Inverser
+Ouvrir CMD
+</TabBar_Menu>
+
+<TabBar_Message>
+QTTabBar n'a pas pu s'ouvrir\r\n\r\n "{0}".
+</TabBar_Message>
+
+<TabBar_NewGroup>
+Créer un nouveau groupe
+Nom groupe:
+Ajouter tous les onglets
+</TabBar_NewGroup>
+
+<TabBar_Option_Genre>
+Fenêtre
+Onglets
+Tweaks
+Info-bulles
+Général
+Apparence
+Souris
+Raccourcis
+Groupes
+Applications
+Barre de boutons
+Plugins
+Langue
+À propos
+</TabBar_Option_Genre>
+
+<TaskBar_Menu>
+Barre des tâches
+Bureau
+Verrouiller les éléments
+Dessiner l'arrière-plan du titre
+Menu en un clic
+Activer les touches de raccourci d'application
+</TaskBar_Menu>
+
+<TaskBar_Titles>
+Groupes
+Annuler fermeture
+Applications
+Fichiers récemment ouverts
+</TaskBar_Titles>
+
+<TrayIcon>
+1 fenêtre
+{0} fenêtre
+</TrayIcon>
+
+<UpdateCheck>
+Une nouvelle version de QTTabBar est disponible:
+Appuyez sur OK pour accéder au site Web.
+Votre version de QTTabBar est à jour.
+Nouvelle version de développement trouvée:
+Fichier de version introuvable (404).
+Erreur réseau inconnue.
+Serveur introuvable.
+Le serveur a renvoyé des erreurs
+</UpdateCheck>
+
+<!-- data end -->
+
+</root>

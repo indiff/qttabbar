@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("active by mouse hover")]
-[assembly: AssemblyDescription("通过鼠标进行激活标签")]
+[assembly: AssemblyDescription("Activate tab via mouse hover")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("indiff")]

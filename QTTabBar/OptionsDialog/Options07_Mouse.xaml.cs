@@ -126,7 +126,7 @@ namespace QTTabBarLib {
                 BindAction.CopyItemName,
                 BindAction.ChecksumItem,
             }},
-            {MouseTarget.ExplorerBackground, new BindAction[] { // 初始化在背景区域的工作
+            {MouseTarget.ExplorerBackground, new BindAction[] { // Initialize the actions available in the background area
                 BindAction.Nothing,
                 BindAction.BrowseFolder,
                 BindAction.NewFolder,

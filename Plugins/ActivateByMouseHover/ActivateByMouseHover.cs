@@ -26,7 +26,7 @@ using Microsoft.Win32;
 
 namespace QuizoPlugins {
     // [Plugin(PluginType.Background, Author = "Quizo", Name = "Show StatusBar", Version = "0.9.0.0", Description = "ShowStatusBar")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "Êó±êĞü¸¡¼¤»î±êÇ©", Version = "1.0.0.1", Description = "Êó±êĞü¸¡¼¤»î±êÇ©;µ÷ÕûĞüÍ£5ÃëÉúĞ§")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "MouseHover Activate Tab", Version = "1.0.0.1", Description = "MouseHover Activate Tab; can set a 5-second dwell time to take effect")]
     public class ActivateByMouseHover : IPluginClient
     {
         private IPluginServer pluginServer;
@@ -194,8 +194,8 @@ namespace QuizoPlugins {
 		{
 			get
 			{
-                if (fZh) return "Êó±êĞü¸¡¼¤»î";
-				return fJa ? "¥Ş¥¦¥¹¥Û¥Ğ©`¤Ç¥¿¥Ö¤òßx’k" : "Activate By MouseHover";
+                if (fZh) return "é¼ æ ‡åœé¡¿æ¿€æ´»æ ‡ç­¾";
+				return fJa ? "ãƒã‚¦ã‚¹ãƒ›ãƒãƒ¼ã§ã‚¿ãƒ–ã‚’æœ‰åŠ¹ã«ã—ã¾ã™" : "Activate By MouseHover";
 			}
 		}
 
@@ -212,8 +212,8 @@ namespace QuizoPlugins {
 		{
 			get
 			{
-                if (fZh) return "Êó±êĞü¸¡¼¤»î¿ÉÒÔÉèÖÃÒ»¸öÑÓÊ±Ê±¼ä.";
-				return fJa ? "¥Ş¥¦¥¹¥«©`¥½¥ë¤ò¥¿¥Ö¤ÎÉÏ¤ËÖÃ¤¯¤À¤±¤Ç¡¢¤½¤Î¥¿¥Ö¤òßx’k¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤ê¤Ş¤¹¡£¥¦¥§¥¤¥È•régÔO¶¨¿É¡£" : "Activate a tab by mouse-hover. To set delay time, press Option. ";
+                if (fZh) return "é¼ æ ‡æ‚¬åœå¯æ¿€æ´»æ ‡ç­¾ã€‚è¦è®¾ç½®å»¶è¿Ÿæ—¶é—´ï¼Œè¯·æŒ‰ Option é”®ã€‚";
+				return fJa ? "ãƒã‚¦ã‚¹ãƒ›ãƒãƒ¼ã§ã‚¿ãƒ–ã‚’æœ‰åŠ¹ã«ã—ã¾ã™ã€‚é…å»¶æ™‚é–“ã‚’è¨­å®šã™ã‚‹ã«ã¯ã€Option ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚" : "Activate a tab by mouse-hover. To set delay time, press Option. ";
 			}
 		}
 

@@ -25,8 +25,7 @@ namespace QTTabBarLib {
     // toolband via SetSite (which only happens if Explorer hosts a rebar/toolband
     // UI at all). Wraps a live IWebBrowser2 for an already-open window so
     // QTTabBarClass can attach to it directly, without ever being docked.
-    internal class ExplorerSiteAdapter : _IServiceProvider, IInputObjectSite, IOleWindow
-    {
+    internal class ExplorerSiteAdapter : _IServiceProvider, IInputObjectSite, IOleWindow {
         private readonly IWebBrowser2 webBrowser;
 
         public ExplorerSiteAdapter(IWebBrowser2 webBrowser) {

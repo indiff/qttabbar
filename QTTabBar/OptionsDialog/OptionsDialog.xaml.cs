@@ -172,8 +172,7 @@ namespace QTTabBarLib {
                 // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
 
 
-                //   QTUtility2.log("InitializeComponent end");
-                // 设置默认的title 和版本
+                // Set the default title and version
                 string str = QTUtility.CurrentVersion.ToString();
                 if (QTUtility.BetaRevision.Major > 0)
                 {
@@ -185,7 +184,6 @@ namespace QTTabBarLib {
                 }
                 this.Title += str + QTUtility.BuildVerion; //  +"_" + QTUtility2.MakeVersionString();
 
-             //   QTUtility2.log("set title end");           
                 int i = 0;
                 tabbedPanel.ItemsSource = new OptionsDialogTab[] {
                     new Options01_Window        { Index = i++},
@@ -204,7 +202,6 @@ namespace QTTabBarLib {
                     new Options14_About         { Index = i}
                 };
 
-               // QTUtility2.log("tabbedPanel.ItemsSource end");    
 
                 // For some reason, on XP, the Options dialog starts up with a blank tab
                 // This is the only way I've found to fix it
@@ -221,11 +218,9 @@ namespace QTTabBarLib {
                     if(ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
                     tab.InitializeConfig();
                 }
-              //  QTUtility2.log("InitializeConfig end");
 
                 //////////// setting by qwop .
                 setByQwop();
-              //  QTUtility2.log("利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度 end");
             }
             catch (Exception exception)
             {
@@ -237,9 +232,9 @@ namespace QTTabBarLib {
 
         #region setting by qwop
         /// <summary>
-        /// 利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度。
-        /// 可以生成 WorkingConfig 配置 初始化的 值。 
-        /// 方法: generateInitConfig()
+        /// Uses the primary screen's width to set the Options form's width, and an absolute height.
+        /// Can generate the initialized values for the WorkingConfig configuration.
+        /// Method: generateInitConfig()
         /// </summary>
         private void setByQwop() {
             /*POINT point;
@@ -258,7 +253,7 @@ namespace QTTabBarLib {
 
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            // 双屏幕打开逻辑问题
+            // Dual-monitor open logic issue
             /*var bMulScreens = Screen.AllScreens.Length > 1;
             var screenWidth = 0;
             if (bMulScreens)
@@ -283,21 +278,21 @@ namespace QTTabBarLib {
 
             ////////////////////////////////////////
             // generateInitConfig();
-            // 设置 Esc 关闭窗口
+            // Set Esc to close the window
             this.KeyDown += ModifyPrice_KeyDown;
         }
 
         private void ModifyPrice_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)//Esc键  
+            if (e.Key == Key.Escape)//Esc key
             {
                 this.Close();
             }
         }
 
         /// <summary>
-        /// 反射当前的 WorkingConfig 配置的内部属性所有的值
-        /// 如果内部的值为空则生成赋空.
+        /// Reflects over all internal property values of the current WorkingConfig configuration
+        /// If an internal value is null, assign null when generating.
         /// Author: qwop
         /// Date:   2012-07-03
         /// </summary>

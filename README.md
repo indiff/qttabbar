@@ -22,25 +22,7 @@ QTTabBar adds tabbed browsing and other enhancements to Windows Explorer. This i
 - [SourceForge Mirror](https://sourceforge.net/projects/qttabbar2/)
 ## Changes
 
-- [1.5.6.2 (2026)](https://github.com/indiff/qttabbar/releases/tag/v1.5.6.2) Upgrade to .NET 4.8; fix options dialog crash and empty window; bars disabled by default; installer restarts Explorer correctly
-- [1.5.6.1-beta (2024)](https://github.com/indiff/qttabbar/releases/tag/v1.5.6.-beta.1) Fix auto select
-- [1.5.5.9-beta (2023)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.9) Capture to select, fix preview text encoding
-- [1.5.5.8-beta (2022)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.8) No Plugins Mini Version
-- [1.5.5.7-beta (2022)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.7) Dark mode support, background image support
-- [1.5.5.6-beta (2022)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5-beta.6) Added Brazilian, Spanish, French, Turkish languages
-- [1.5.5.5-beta (2022)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.5-beta) Debug log, DPI adjustment
-- [1.5.5.4-beta (2022)](https://github.com/indiff/qttabbar/releases/tag/1.5.5.4-beta) Ignore control panel capture
-- [1.5.5.3-beta (2021)](https://github.com/indiff/qttabbar/releases/tag/v1.5.5.3) SetHome tool, Portuguese (Brazil)
-- [1.5.5.2-beta (2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.5.2-beta) Built-in German, fix version number
-- [1.5.5 (2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.5.1-beta) Fix Explorer crash on options open, mouse hover activation plugin
-- [1.5.4 (2021)](https://github.com/indiff/qttabbar/releases/tag/1.5.4-beta) All plugins built-in, fix lock function bug
-- [1.5.3 (2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.3-beta) Custom button images, clipboard path in new tab, video preview
-- [1.5.2 (2020)](https://github.com/indiff/qttabbar/releases/tag/1.5.2) Fix command prompt exception, exception log improvements
-- [1.4 (2020)](https://github.com/indiff/qttabbar/releases/tag/1.4) Fix hotkey conflicts, create empty file
-- [1.3](https://github.com/indiff/qttabbar/releases/tag/1.3) Plugin deduplication and sorting
-- [1.2](https://github.com/indiff/qttabbar/releases/tag/1.2) Windows 10 support, fix link failures
-- [1.1](https://github.com/indiff/qttabbar/releases/tag/1.1) Localized installer UI
-- [1.0](https://github.com/indiff/qttabbar/releases/tag/1.0) Built-in Chinese language
+See [CHANGELOG.md](CHANGELOG.md) for the full version history.
 
 ## Download
 

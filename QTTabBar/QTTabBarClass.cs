@@ -50,7 +50,7 @@ using IDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace QTTabBarLib {
     /**
-     sealed 应用于某个类时，sealed 修饰符可阻止其他类继承自该类。在下面的示例中，类 B 继承自类 A，但没有类可以继承自类 B。
+     sealed applied to a class prevents other classes from inheriting from it. In the example below, class B inherits from class A, but no class can inherit from class B.
      class A {}
      sealed class B : A {}
      */
@@ -121,7 +121,7 @@ namespace QTTabBarLib {
         
         
         private TreeViewWrapper treeViewWrapper;
-        /*// 添加到分组
+            /*// Add to group
         private ToolStripMenuItem tsmiAddToGroup;
         private ToolStripMenuItem tsmiBrowseFolder;
         private ToolStripMenuItem tsmiCloneThis;
@@ -181,7 +181,7 @@ namespace QTTabBarLib {
         }
 
 
-        #region qwop 自定义区
+        #region qwop custom methods
         private static QTTabBarClass lstTabBar;
         public static void OpenOptionDialog()
         {
@@ -194,12 +194,12 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// 创建一个当前线程的 路径标签
+        /// Create a path tab on the current thread
         /// </summary>
-        /// <param name="address">路径</param>
-        /// <param name="index">位置</param>
-        /// <param name="fLocked">是否锁定</param>
-        /// <param name="fSelect">是否选中</param>
+        /// <param name="address">Path</param>
+        /// <param name="index">Position</param>
+        /// <param name="fLocked">Whether it is locked</param>
+        /// <param name="fSelect">Whether it is selected</param>
         /// <returns></returns>
         public static bool CreateTab(QTTabBarClass tabBar, Address address, int index, bool fLocked, bool fSelect)
         {
@@ -251,7 +251,7 @@ namespace QTTabBarLib {
         #endregion
 
         public QTTabBarClass() {
-            // 初始化工具类（如日志、路径等静态资源）
+            // Initialize utility classes (static resources such as logging and paths)
             QTUtility.Initialize();
             // QTUtility2.AllocDebugConsole();
             // Application.SetCompatibleTextRenderingDefault(false);
@@ -261,7 +261,7 @@ namespace QTTabBarLib {
                 ConfigurationManager.AppSettings.Set("EnableWindowsFormsHighDpiAutoResizing", "true");
             }
             catch (Exception) { /* Ignora l'eccezione #1# }*/
-			// 读取安装时间和激活时间，判断是否首次加载
+			// Read the install and activation times to decide whether this is the first load
             try {
                 string installDateString;
                 DateTime installDate = DateTime.Now;
@@ -269,8 +269,8 @@ namespace QTTabBarLib {
                 using(RegistryKey key = Registry.LocalMachine.OpenSubKey(RegConst.Root)) {
                     // installDateString = key == null ? nowDateStr : (string)key.GetValue("InstallDate", nowDateStr);
                     installDateString =  (string)key.GetValue("InstallDate");
-                    // 时间格式出错， 可能会导致初始化失败
-                    if (QTUtility.IsSimpleDateStr(installDateString))  // 正则判断日期是否是正确格式
+                    // Wrong time format, may cause initialization to fail
+                    if (QTUtility.IsSimpleDateStr(installDateString))  // Regex check that the date is in the correct format
                     {
                         try
                         {
@@ -329,21 +329,21 @@ namespace QTTabBarLib {
                         }
 
                         fIsFirstLoad = installDate.CompareTo(lastActivation) >= 0;
-                        // 时间格式出错， 可能会导致初始化失败
+                        // Wrong time format, may cause initialization to fail
                         if (fIsFirstLoad)
                             key2.SetValue("ActivationDate", installDateString);
                     }
                 }
             }
             catch (Exception e ){
-                QTUtility2.MakeErrorLog(e, "QTTabBarClass 构造函数初始化安装时间");
+                QTUtility2.MakeErrorLog(e, "QTTabBarClass constructor - initializing install time");
             }
 
 
             if(!fInitialized) {
                 InitializeStaticFields();
             }
-            // 初始化高度
+            // Initialize height
             BandHeight = Config.Skin.TabHeight + BandHeightSpace;
             // BandHeight = Config.Skin.TabHeight + 10;
             InitializeComponent();
@@ -352,34 +352,34 @@ namespace QTTabBarLib {
             // reocrd the last qttabbarclass instance, add by indiff .
             lstTabBar = this;
             
-            // 默认获取是否启用日志
+            // Get whether logging is enabled by default
             QTUtility2.ENABLE_LOGGER = Config.Misc.EnableLog;
         }
 
         /// <summary>
-        /// 按照配置的位置插入一个新的标签页。
+        /// Inserts a new tab at the position given by the configuration.
         /// </summary>
-        /// <param name="tab">要插入的标签对象</param>
+        /// <param name="tab">The tab object to insert</param>
         private void AddInsertTab(QTabItem tab) {
-            // 记录日志，便于调试
+            // Log for easier debugging
             QTUtility2.log(  "QTTabBarClass AddInsertTab  " );
-            // 根据配置决定新标签插入的位置
+            // Decide where the new tab goes based on the configuration
             switch(Config.Tabs.NewTabPosition) {
                 case TabPos.Leftmost:
-                    // 插入到最左侧（第一个位置）
+                    // Insert at the leftmost position (index 0)
                     tabControl1.TabPages.Insert(0, tab);
                     break;
 
                 case TabPos.Right:
                 case TabPos.Left: {
-                    // 插入到当前标签的左侧或右侧
+                    // Insert to the left or right of the current tab
                     int index = tabControl1.TabPages.IndexOf(CurrentTab);
                     if(index == -1) {
-                        // 如果当前没有选中的标签，则直接添加到末尾
+                        // If no tab is selected, just append at the end
                         tabControl1.TabPages.Add(tab);
                     }
                     else {
-                        // 插入到当前标签的右侧或左侧
+                        // Insert to the right or left of the current tab
                         tabControl1.TabPages.Insert(
                             Config.Tabs.NewTabPosition == TabPos.Right ? (index + 1) : index, tab
                         );
@@ -388,80 +388,78 @@ namespace QTTabBarLib {
                 }
 
                 default: // TabPos.Rightmost
-                    // 插入到最右侧（末尾）
+                    // Insert at the rightmost position (the end)
                     tabControl1.TabPages.Add(tab);
                     break;
             }
         }
 
         /// <summary>
-        /// 启动时自动打开分组和路径标签，并根据配置恢复上次会话或锁定标签。
+        /// Opens group and path tabs on startup, restoring the last session or locked tabs per the configuration.
         /// </summary>
-        /// <param name="openingGRP">启动时排除的分组名（一般为空字符串）</param>
-        /// <param name="openingPath">启动时排除的路径（一般为当前启动路径）</param>
+        /// <param name="openingGRP">Group name to exclude on startup (usually an empty string)</param>
+        /// <param name="openingPath">Path to exclude on startup (usually the current startup path)</param>
         private void AddStartUpTabs(string openingGRP, string openingPath) {
-            // 记录日志，便于调试
+            // Log for easier debugging
             QTUtility2.log(  "QTTabBarClass AddStartUpTabs openingGRP "  + openingGRP + " openingPath " + openingPath);
-            // 如果按下Shift键或当前已有其它实例，则不自动打开分组标签
+            // Skip auto-opening group tabs if Shift is held or another instance already exists
             if(ModifierKeys == Keys.Shift || InstanceManager.GetTotalInstanceCount() != 0) return;
-            // 遍历所有设置为“启动时自动打开”的分组，排除当前分组
+            // Walk every group marked "open on startup", excluding the current group
             foreach(string path in GroupsManager.Groups.Where(g => g.Startup && openingGRP != g.Name).SelectMany(g => g.Paths)) {
-                // 如果配置为“从不打开重复标签”，则跳过已存在的路径
+                // If "never open the same tab twice" is configured, skip paths that are already open
                 if(Config.Tabs.NeverOpenSame) {
                     if(path.PathEquals(openingPath)) {
-                        // 如果路径与启动路径相同，则将其移动到最后
+                        // If the path equals the startup path, move it to the end
                         tabControl1.TabPages.Relocate(0, tabControl1.TabCount - 1);
                         continue;
                     }
                     if(tabControl1.TabPages.Any(item => path.PathEquals(item.CurrentPath))) {
-                        // 如果标签栏中已存在该路径，则跳过
+                        // Skip if the tab bar already holds this path
                         continue;
                     }
                 }
-                // 创建IDL包装器，判断路径是否可用
+                // Create the IDL wrapper and check whether the path is usable
                 using(IDLWrapper wrapper = new IDLWrapper(path)) {
                     if(!wrapper.Available) continue;
-                    // 创建新的标签页对象
+                    // Create the new tab object
                     QTabItem tabPage = new QTabItem(QTUtility2.MakePathDisplayText(path, false), path, tabControl1);
-                    // 导航到指定路径
+                    // Navigate to the given path
                     tabPage.NavigatedTo(path, wrapper.IDL, -1, false);
-                    // 设置标签提示文本
+                    // Set the tab tooltip text
                     tabPage.ToolTipText = QTUtility2.MakePathDisplayText(path, true);
-                    // 设置下划线标记（表示自动打开）
+                    // Set the underline marker (indicates it was opened automatically)
                     tabPage.Underline = true;
-                    // 添加到标签栏
+                    // Add it to the tab bar
                     tabControl1.TabPages.Add(tabPage);
                 }
             }
-            // 根据配置决定是否恢复锁定标签或上次会话
+            // Decide whether to restore locked tabs or the last session based on the configuration
             if(Config.Window.RestoreOnlyLocked) {
-                // 只恢复锁定的标签
+                // Restore only the locked tabs
                 RestoreTabsOnInitialize(1, openingPath);
             }
             else if(Config.Window.RestoreSession || fIsFirstLoad) {
-                // 恢复上次会话或首次启动时恢复
+                // Restore the last session, or restore on first startup
                 RestoreTabsOnInitialize(0, openingPath);
             }
         }
 
        
 
-
-		/**
-		 * 如果拖拽多个文件，则进行新增到应用程序菜单的弹出菜单操作
-		 * @param listDroppedPaths 拖拽的文件路径列表
-		 */
+        /**
+         * Handle dropped-in files, invoking the method described by the relevant application
+         */
         private void AppendUserApps(IList<string> listDroppedPaths) {
-		    // 将资源管理器窗口置于前台
+		    // Bring the Explorer window to the foreground
             WindowUtils.BringExplorerToFront(ExplorerHandle);
-		    // 如果弹出菜单还未创建，则初始化
+		    // Initialize the popup menu if it has not been created yet
             if(contextMenuDropped == null) {
                 ToolStripMenuItem tsmiDropped = new ToolStripMenuItem { Tag = 1 };
                 contextMenuDropped = new ContextMenuStripEx(components, false);
                 contextMenuDropped.SuspendLayout();
                 contextMenuDropped.Items.Add(tsmiDropped);
                 contextMenuDropped.Items.Add(new ToolStripMenuItem());
-		        // 菜单项点击事件，点击后创建新的应用
+		        // Menu item click handler - creates a new app when clicked
                 contextMenuDropped.ItemClicked += (sender, e) => {
                     if(e.ClickedItem.Tag != null)
                         AppsManager.CreateNewApp((List<string>)contextMenuDropped.Tag);
@@ -469,56 +467,56 @@ namespace QTTabBarLib {
                 contextMenuDropped.ResumeLayout(false);
             }
 
-		    // 构造菜单显示文本
+		    // Build the menu display text
             string strMenu = QTUtility.ResMain[21];
             strMenu += listDroppedPaths.Count > 1
-                    ? listDroppedPaths.Count + QTUtility.ResMain[22] // "items"  新增到应用程序菜单 多文件显示数量
-		            : Path.GetFileName(listDroppedPaths[0]).Enquote(); // 单文件显示文件名
+                    ? listDroppedPaths.Count + QTUtility.ResMain[22] // "items" - per the relevant application's wording
+                    : Path.GetFileName(listDroppedPaths[0]).Enquote();
 
             contextMenuDropped.SuspendLayout();
             contextMenuDropped.Items[0].Text = strMenu;
-		    contextMenuDropped.Items[1].Text = QTUtility.ResMain[23]; // “取消”菜单项
+		    contextMenuDropped.Items[1].Text = QTUtility.ResMain[23]; // the "Cancel" menu item
             contextMenuDropped.Tag = listDroppedPaths;
             contextMenuDropped.ResumeLayout();
-		    // 在鼠标位置显示菜单
+		    // Show the menu at the mouse position
             contextMenuDropped.Show(MousePosition);
         }
 
-		// TODO: Kill this. 异步回调目录树操作完成
+		// TODO: Kill this. async callback fired when the directory-tree operation completes
         private void AsyncComplete_FolderTree(IAsyncResult ar) {
             AsyncResult result = (AsyncResult)ar;
-		    // 结束异步操作
+		    // End the async operation
             ((WaitTimeoutCallback)result.AsyncDelegate).EndInvoke(ar);
-		    // 如果窗口句柄已创建，则在UI线程回调
+		    // If the window handle exists, call back on the UI thread
             if(IsHandleCreated) {
                 Invoke(new FormMethodInvoker(CallbackFolderTree), new object[] { result.AsyncState });
             }
         }
 
-		// 该函数作为 BeforeNavigate2 的增强版，处理导航前的逻辑
-		// 返回 true 表示阻止导航。target IDL 仅供参考，不保证准确。
+		// An enhanced version of BeforeNavigate2 that handles pre-navigation logic.
+		// Returns true to block navigation. The target IDL is advisory only and is not guaranteed to be accurate.
 		
         // This function is used as a more available version of BeforeNavigate2.
         // Return true to suppress the navigation.  Target IDL should not be relied
         // upon; it's not guaranteed to be accurate.
         private bool BeforeNavigate(IDLWrapper target, bool autonav) {
-		    // 如果标签栏未显示，直接返回
+		    // Return immediately if the tab bar is not shown
             if(!IsShown) return false;
-		    // 隐藏子目录提示菜单
+		    // Hide the subdirectory tip menu
             HideSubDirTip_Tab_Menu();
-		    // 取消拖拽状态
+		    // Clear the drag state
             NowTabDragging = false;
-		    // 标记是否自动导航
+		    // Track whether this is an automatic navigation
             fAutoNavigating = autonav;
-		    // 如果不是代码触发导航，则保存当前选中项
+		    // Save the current selection unless the navigation was triggered by code
             if(!NavigatedByCode) {
                 SaveSelectedItems(CurrentTab);
             }
-		    // 如果当前处于历史记录导航状态
+		    // If we are currently navigating through history
             if(NowInTravelLog) {
                 if(CurrentTravelLogIndex > 0) {
                     CurrentTravelLogIndex--;
-		            // 如果不是特殊目录，则继续历史导航
+		            // Continue the history navigation unless this is a special folder
                     if(!IsSpecialFolderNeedsToTravel(target.Path)) {
                         NavigateBackToTheFuture();
                     }
@@ -527,33 +525,33 @@ namespace QTTabBarLib {
                     NowInTravelLog = false;
                 }
             }
-		    // 记录本次尝试导航的IDL
+		    // Record the IDL this navigation attempt targeted
             lastAttemptedBrowseObjectIDL = target.IDL;
             return false;
         }
 
-		// 目录树异步回调，显示或隐藏目录树
+		// Directory-tree async callback - shows or hides the directory tree
         private void CallbackFolderTree(object obj) {
             bool fShow = (bool)obj;
             ShowFolderTree(fShow);
             if(fShow) {
-		        // 重新绘制资源管理器窗口
+		        // Repaint the Explorer window
                 PInvoke.SetRedraw(ExplorerHandle, true);
                 PInvoke.RedrawWindow(ExplorerHandle, IntPtr.Zero, IntPtr.Zero, 0x289);
             }
         }
 
 		/**
-		 * 消息钩子的回调处理函数
-		 * 处理各种自定义消息和系统消息
+		 * Callback handler for the message hook.
+		 * Handles the various custom and system messages.
 		 */
         private IntPtr CallbackGetMsgProc(int nCode, IntPtr wParam, IntPtr lParam) {
             if(nCode >= 0) {
-		        // 解析消息结构体
+		        // Parse the message struct
                 MSG msg = (MSG)Marshal.PtrToStructure(lParam, typeof(MSG));
                 // QTUtility2.debugMessage(msg);
                 try {
-		            // XP系统下特殊处理关闭消息
+		            // Special handling of the close message on Windows XP
                     if(QTUtility.IsXP) {
                         if(msg.message == WM.CLOSE) {
                             if(iSequential_WM_CLOSE > 0) {
@@ -567,7 +565,7 @@ namespace QTTabBarLib {
                         }
                     }
 
-		            // 处理自定义消息：新目录树控件
+		            // Handle the custom message: new directory-tree control
                     if(msg.message == WM_NEWTREECONTROL)
                     {
                         QTUtility2.log("CallbackGetMsgProc WM_NEWTREECONTROL");
@@ -636,9 +634,6 @@ namespace QTTabBarLib {
                         }*/
                         // IntPtr pIDL = Marshal.ReadIntPtr(lParam);
                         // SFVCB_SELECTINFO sel = (SFVCB_SELECTINFO)Marshal.PtrToStructure(lParam, typeof(SFVCB_SELECTINFO));
-                        // QTUtility2.log("SFVCB_SELECTINFO UOldState " + sel.UOldState);
-                        // QTUtility2.log("SFVCB_SELECTINFO UNewState " + sel.UNewState);
-                        // QTUtility2.log("SFVCB_SELECTINFO Pid1 " + sel.Pid1);
                         return PInvoke.CallNextHookEx(hHook_Msg, nCode, wParam, lParam);
                     }
 
@@ -661,7 +656,7 @@ namespace QTTabBarLib {
                                 object obj = Marshal.GetObjectForIUnknown(msg.wParam);
                                 try {
                                     if(obj != null) {
-                                        IOleWindow window = obj as IOleWindow;
+                                        QTTabBarLib.Interop.IOleWindow window = obj as QTTabBarLib.Interop.IOleWindow;
                                         if(window != null) {
                                             IntPtr hwnd;
                                             window.GetWindow(out hwnd);
@@ -696,14 +691,14 @@ namespace QTTabBarLib {
                         case WM.SYSCOLORCHANGE:
                             QTUtility.InNightMode = QTUtility.getNightMode();
                             QTUtility2.log("SYSCOLORCHANGE SwitchNighMode");
-                            Config.Skin.SwitchNighMode(QTUtility.InNightMode ); // 如果关闭自动变色则不进行变色
+                            Config.Skin.SwitchNighMode(QTUtility.InNightMode ); // Skip color switching if auto color-switching is disabled
                             ConfigManager.UpdateConfig(true);
                             this.tabControl1.InitializeColors();
                             PInvoke.SetRedraw(ExplorerHandle, true);
                             PInvoke.RedrawWindow(ExplorerHandle, IntPtr.Zero, IntPtr.Zero, 0x289);
                             break;
 
-                        case WM.CLOSE:  // 关闭窗口
+                        case WM.CLOSE:  // Close window
                             if(QTUtility.IsXP) {
                                 if((msg.hwnd == ExplorerHandle) && HandleCLOSE(msg.lParam)) {
                                     Marshal.StructureToPtr(new MSG(), lParam, false);
@@ -720,11 +715,11 @@ namespace QTTabBarLib {
                                // MessageBox.Show(String.Join(",", list));
                                 QTUtility2.WriteRegBinary(list, "TabsLocked", key);
                             }
-                            if(msg.hwnd == WindowUtils.GetShellTabWindowClass(ExplorerHandle)) { // 如果标签的 handle 与资源管理器的匹配
+                            if(msg.hwnd == WindowUtils.GetShellTabWindowClass(ExplorerHandle)) { // If the tab's handle matches Explorer's
                                 try {
                                     bool flag = tabControl1.TabCount == 1;
                                     string currentPath = tabControl1.SelectedTab.CurrentPath;
-                                    if(!Directory.Exists(currentPath) && // 如果当前路径目录不存在
+                                    if(!Directory.Exists(currentPath) && // If the current path directory doesn't exist
                                        currentPath.Length > 3 
                                        /* && currentPath.Substring(1, 2) == @":\" */ ) {
                                         if(flag) {
@@ -768,7 +763,7 @@ namespace QTTabBarLib {
        
 
         /**
-         * 注册快捷键的回调
+         * Callback for registered keyboard shortcuts
          */
         private IntPtr CallbackKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam) {
             const uint KB_TRANSITION_FLAG = 0x80000000;
@@ -848,7 +843,7 @@ namespace QTTabBarLib {
                             return ptr;*/
 
                         case WM.XBUTTONDOWN:
-                             
+
                         case WM.XBUTTONUP:
                             // On Win11 QTTabBar doesn't own navigation - its private travel
                             // log is a stale copy of whichever native tab it bound to first
@@ -987,7 +982,7 @@ namespace QTTabBarLib {
             if(nowTopMost) {
                 ToggleTopMost();
             }
-			// 显示创建目录按钮
+			// Show the open-directory button
             using(FolderBrowserDialog dialog = new FolderBrowserDialog()) {
                 dialog.ShowNewFolderButton = true; // add by indiff
                 dialog.SelectedPath = CurrentAddress;
@@ -1109,7 +1104,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         *处理关闭窗口事件 by indiff
+         * Window-close event, by indiff
          */
         public override void CloseDW(uint dwReserved) {
             try {
@@ -1119,7 +1114,7 @@ namespace QTTabBarLib {
                 MessageBox.Show(String.Join(",", list1));
                
 
-                MessageBox.Show("关闭窗口:" + tabControl1.TabPages.Count );
+                MessageBox.Show("Close window:" + tabControl1.TabPages.Count );
                 string[] list = (from QTabItem item2 in tabControl1.TabPages
                                  where item2.TabLocked
                                  select item2.CurrentPath).ToArray();
@@ -1170,7 +1165,7 @@ namespace QTTabBarLib {
                         travelBtnController = null;
                     }
 
-                    // 移除右下角图标
+                    // Remove the new-item icon
                     if (null != Handle)
                     {
                         InstanceManager.RemoveFromTrayIcon(Handle);
@@ -1180,7 +1175,7 @@ namespace QTTabBarLib {
                     using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
                         if(Config.Misc.KeepHistory) {
                             foreach(QTabItem item in tabControl1.TabPages) {
-                                // 这里调用 在创建窗口句柄之前，不能在控件上调用 Invoke 或 BeginInvoke。
+                                // If Invoke or BeginInvoke is called on the control before its window handle has been created.
                                 AddToHistory(item);
                             }
                             QTUtility.SaveRecentlyClosed(key);
@@ -1196,7 +1191,7 @@ namespace QTTabBarLib {
                             }
                         }*/
 
-                        // 关闭消息去除写入锁定标签的调用
+                        // De-duplicate the close message before invoking the tab-close call
                         if (list != null && list.Length > 0)
                         {
                             QTUtility2.WriteRegBinary(list, "TabsLocked", key);
@@ -1333,10 +1328,10 @@ namespace QTTabBarLib {
             }
         }
         
-        // 控件正在打开时候发生
+        // Fires when the control is destroyed
         private void contextMenuSys_Opening(object sender, CancelEventArgs e) {
             InitializeSysMenu(false);
-            // 临时挂起控件布局
+            // Promptly dispose of control resources
             contextMenuSys.SuspendLayout();
             tsmiGroups.DropDown.SuspendLayout();
             tsmiUndoClose.DropDown.SuspendLayout();
@@ -1470,13 +1465,13 @@ namespace QTTabBarLib {
         }
 
         /**
-         * 创建并且启用 API Hook
+         * Install keyboard/mouse API hooks
          */
         private void EnableApiHook()
         {
             // Create and enable the API hooks
             HookLibManager.Initialize();
-            QTUtility2.log("QTUtility 创建并且启用 API hooks");
+            QTUtility2.log("QTUtility installing keyboard/mouse API hooks");
         }
 
         private void contextMenuTab_Opening(object sender, CancelEventArgs e) {
@@ -1652,7 +1647,7 @@ namespace QTTabBarLib {
             return cursor;
         }
 
-        // 创建标签组
+        // Create the tab bar
         private void CreateGroup(QTabItem contextMenuedTab) {
             NowModalDialogShown = true;
             using(CreateNewGroupForm form = new CreateNewGroupForm(contextMenuedTab.CurrentPath, tabControl1.TabPages)) {
@@ -1666,7 +1661,7 @@ namespace QTTabBarLib {
         }
 
 
-        // 添加到标签组功能
+        // Add-to-tab-group feature
         private void Add2Group(QTabItem contextMenuedTab)
         {
             NowModalDialogShown = true;
@@ -1718,7 +1713,7 @@ namespace QTTabBarLib {
             return list;
         }
         
-        // 创建新的tab页
+        // Create a new tab page
         private QTabItem CreateNewTab(IDLWrapper idlw) {
             string path = idlw.Path;
             QTabItem tab = new QTabItem(QTUtility2.MakePathDisplayText(path, false), path, tabControl1);
@@ -1728,7 +1723,7 @@ namespace QTTabBarLib {
             return tab;
         }
 
-        // 创建 tab 图片
+        // Load the tab image
         internal static Bitmap[] CreateTabImage() {
             if(File.Exists(Config.Skin.TabImageFile)) {
                 try {
@@ -1875,22 +1870,22 @@ namespace QTTabBarLib {
                     }
                     break;
 
-                case BindAction.CloseAllButCurrent: // 关闭其他
+                case BindAction.CloseAllButCurrent: // Close others
                 case BindAction.CloseAllButThis:
                     CloseAllTabsExcept(tab);
                     break;
 
-                case BindAction.CloseLeft: // 关左边
+                case BindAction.CloseLeft: // Close left
                 case BindAction.CloseLeftTab:
                     CloseLeftRight(true, tab.Index);
                     break;
 
-                case BindAction.CloseRight: // 关闭右边
+                case BindAction.CloseRight: // Close right
                 case BindAction.CloseRightTab:
                     CloseLeftRight(false, tab.Index);
                     break;
 
-                case BindAction.CloseWindow: // 关闭窗口 indiff
+                case BindAction.CloseWindow: // Close window, indiff
                     using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
                     {
                         string[] list = (from QTabItem item2 in tabControl1.TabPages
@@ -1907,7 +1902,7 @@ namespace QTTabBarLib {
                     RestoreLastClosed();
                     break;
 
-                case BindAction.CloneCurrent: // 复制当前
+                case BindAction.CloneCurrent: // Clone current
                 case BindAction.CloneTab:
                     CloneTabButton(tab, null, true, -1);
                     break;
@@ -1922,28 +1917,28 @@ namespace QTTabBarLib {
                     }
                     break;
 
-                case BindAction.LockCurrent: // 关闭标签
+                case BindAction.LockCurrent: // Lock tab
                 case BindAction.LockTab:
                     tab.TabLocked = !tab.TabLocked;
                     break;
 
-                case BindAction.LockAll: // 锁定所有
+                case BindAction.LockAll: // Lock all
                     bool lockState = tabControl1.TabPages.Any(t => t.TabLocked);
                     tabControl1.TabPages.ForEach(t => t.TabLocked = !lockState);
                     break;
-                case BindAction.BrowseFolder: // 打开文件夹
+                case BindAction.BrowseFolder: // Open folder
                     ChooseNewDirectory();
                     break;
 
-                case BindAction.CreateNewGroup: // 创建新分组
+                case BindAction.CreateNewGroup: // Create new group
                     CreateGroup(tab);
                     break;
                 
-                // case BindAction.AddToGroup: // 新增到标签组
+                // case BindAction.AddToGroup: // Add to tab group
                 //     Add2Group(tab);
                 //     break;
 
-                case BindAction.ShowOptions: // 显示选项
+                case BindAction.ShowOptions: // Show options
                     OptionsDialog.Open();
                     break;
 
@@ -2120,7 +2115,6 @@ namespace QTTabBarLib {
                     break;
 
                 case BindAction.UpOneLevelTab:
-                    // QTUtility2.log("QTTabBarClass UpOneLevelTab");
                 case BindAction.UpOneLevel:
                     QTUtility2.log("QTTabBarClass case UpOneLevel");
                     UpOneLevel(); // Hmm...
@@ -2136,7 +2130,7 @@ namespace QTTabBarLib {
                     break;
 
                 case BindAction.CopyTabPath:
-                    // 复制标签的路径路径
+                    // Copy the tab's path
                     string currentPath = tab.CurrentPath;
                     if(currentPath.IndexOf("???") != -1) {
                         currentPath = currentPath.Substring(0, currentPath.IndexOf("???"));
@@ -2183,10 +2177,10 @@ namespace QTTabBarLib {
                 case BindAction.ChecksumItem:
                     break;
                 /***** add by qwop start ***/
-                case BindAction.OpenCmd:  // 打开命令提示符
+                case BindAction.OpenCmd:  // Open Command Prompt
                     OpenCmd( tab ); // add by qwop...
                     break;
-                case BindAction.ItemsOpenInNewTabNoSel: // 打开选中的文件夹 到标签页(不激活)
+                case BindAction.ItemsOpenInNewTabNoSel: // Open the selected folders in new tabs (without selecting them)
                     Address[] addressArray;
                     if ( ShellBrowser.TryGetSelection(out addressArray, false  )) {
                         foreach (Address address in addressArray)
@@ -2203,7 +2197,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// 创建新文件 add by indiff
+        /// Create new file, add by indiff
         /// </summary>
         private void createNewFile()
         {
@@ -2225,7 +2219,7 @@ namespace QTTabBarLib {
                 // make new name
 
                 int i = 2;
-                // string name = "新建文本文档";
+                // string name = "New Text Document";
                 string name = QTUtility.DefaultNewFileName();
                 string ext =  ".txt";
                 string pathNew = path + "\\" + name + ext;
@@ -2250,7 +2244,7 @@ namespace QTTabBarLib {
                     {
                         IntPtr pIDLRltv = PInvoke.ILFindLastID(pIDL);
                         if (pIDLRltv != IntPtr.Zero) {
-                            // 选中文件
+                            // Select file
                              shellView.SelectItem(pIDLRltv, SVSIF.SELECT | SVSIF.DESELECTOTHERS | SVSIF.ENSUREVISIBLE | SVSIF.EDIT );
                            //  ShellBrowser.GetIShellBrowser().SelectItem(pIDLRltv, SVSI_SELECT | SVSI_DESELECTOTHERS | SVSI_ENSUREVISIBLE | SVSI_EDIT);
                             return;
@@ -2280,18 +2274,18 @@ namespace QTTabBarLib {
         /***** add by qwop end   ***/
 
         /// <summary>
-        /// 该函数设置由不同线程产生的窗口的显示状态。
+        /// Sets the show state of a window created by a different thread.
         /// </summary>
-        /// <param name="hWnd">窗口句柄</param>
-        /// <param name="cmdShow">指定窗口如何显示。查看允许值列表，请查阅ShowWlndow函数的说明部分。</param>
-        /// <returns>如果函数原来可见，返回值为非零；如果函数原来被隐藏，返回值为零。</returns>
+        /// <param name="hWnd">A handle to the window.</param>
+        /// <param name="cmdShow">Controls how the window is to be shown. See the description of the ShowWindow function for a list of possible values.</param>
+        /// <returns>If the window was previously visible, the return value is nonzero. If the window was previously hidden, the return value is zero.</returns>
         [DllImport("User32.dll")]
         private static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
         /// <summary>
-        /// 该函数将创建指定窗口的线程设置到前台，并且激活该窗口。键盘输入转向该窗口，并为用户改各种可视的记号。系统给创建前台窗口的线程分配的权限稍高于其他线程。
+        /// Brings the thread that created the specified window into the foreground and activates the window. Keyboard input is directed to the window, and various visual cues are changed for the user. The system assigns a slightly higher priority to the thread that created the foreground window than it does to other threads.
         /// </summary>
-        /// <param name="hWnd">将被激活并被调入前台的窗口句柄。</param>
-        /// <returns>如果窗口设入了前台，返回值为非零；如果窗口未被设入前台，返回值为零。</returns>
+        /// <param name="hWnd">A handle to the window that should be activated and brought to the foreground.</param>
+        /// <returns>If the window was brought to the foreground, the return value is nonzero. If the window was not brought to the foreground, the return value is zero.</returns>
         [DllImport("User32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
@@ -2309,13 +2303,13 @@ namespace QTTabBarLib {
             process.StartInfo.WorkingDirectory = currentPath;
             process.Start();
 
-            ShowWindowAsync(process.MainWindowHandle, WS_SHOWNORMAL); //显示，可以注释掉
-            SetForegroundWindow(process.MainWindowHandle);            //放到前端
+            ShowWindowAsync(process.MainWindowHandle, WS_SHOWNORMAL); //Show the window
+            SetForegroundWindow(process.MainWindowHandle);            //Bring to the foreground
             SetFocus(process.MainWindowHandle);
         }
 
         /************************************************************************/
-        /* 打开当前目录的 命令提示符                                            */
+        /* Open the current directory in Command Prompt                                            */
         /************************************************************************/
         private void OpenCmd( QTabItem tab )
         {
@@ -2341,7 +2335,7 @@ namespace QTTabBarLib {
                 {
                     currentPath = currentPath.Substring(0, currentPath.IndexOf("*?*?*"));
                 }
-                // 判断文件是否存在
+                // Check whether the file exists
                 if (Directory.Exists(currentPath))
                 {
                     /*
@@ -2352,7 +2346,7 @@ namespace QTTabBarLib {
                 
                 
                     startInfo.WorkingDirectory = currentPath;
-                    // 添加获取焦点
+                    // Add getting focus
                     Process instance = Process.Start(startInfo );
                     //  instance.WaitForInputIdle();
                     
@@ -2366,7 +2360,7 @@ namespace QTTabBarLib {
 
                 } // end for open cmd.
                 else { 
-                    // 找不到路径则打开系统盘
+                    // Couldn't find the system drive for the path
                     if (QTUtility2.PathExists("C:\\"))
                     {
                         cmdPath("C:\\");
@@ -2460,7 +2454,7 @@ namespace QTTabBarLib {
                 QTUtility2.MakeErrorLog( e, "DoFileTools");
             }
             if(index == 4) {
-                // .net4 这里测试是可以正常运行的
+                // .NET 4 and above use a strongly-typed delegate
                 /*QTUtility2.log("md5 out tabbar.OpenNewTab");
                 InstanceManager.BeginInvokeMain(tabbar =>
                 {
@@ -2475,14 +2469,14 @@ namespace QTTabBarLib {
             return false;
         }
 
-        // 捕获的方式  select 1 / factory 2 / other 3
+        // Unbinding method: select 1 / factory 2 / other 3
         private int mCmdType = 0;
 
         // This function is either called by BeforeNavigate2 (on XP and Vista)
-        // 此函数由BeforeNavigate2调用(on XP and Vista)
+        // This function fires on BeforeNavigate2 (on XP and Vista)
         // or NavigateComplete2 (on 7)
         private void DoFirstNavigation(bool before, string path) {
-            // TODO: sort out this mess  把这一团糟整理好
+            // TODO: sort out this mess - this is a legacy issue
             if(StaticReg.CreateWindowPaths.Count > 0 || StaticReg.CreateWindowIDLs.Count > 0) {
                 QTUtility2.log("DoFirstNavigation StaticReg.CreateWindowPaths.Count " + StaticReg.CreateWindowPaths.Count + " StaticReg.CreateWindowIDLs.Count:" + StaticReg.CreateWindowIDLs.Count);
                 foreach (string tpath in StaticReg.CreateWindowPaths.Where(str2 => !str2.PathEquals(path))) {
@@ -2525,9 +2519,9 @@ namespace QTTabBarLib {
                 InitializeOpenedWindow();
             }
             else {
-                QTUtility2.log("判断是否未忽略路径: " + path + " IsNoCapturePaths:" + QTUtility.IsNoCapturePaths(path));
+                QTUtility2.log("Checking whether the path is uncaptured: " + path + " IsNoCapturePaths:" + QTUtility.IsNoCapturePaths(path));
                 if(
-                    // 如果是忽略路径
+                    // This is where paths are ignored
                     QTUtility.NoCapturePathsList.Any(ncPath => ncPath.PathEquals(path))
                     // ::{26EE0668-A00A-44D7-9371-BEB064C98683}
                      || QTUtility.IsNoCapturePaths( path )
@@ -2536,7 +2530,7 @@ namespace QTTabBarLib {
                     return;
                 }
 				// add by qwop 
-                // 判断  InstanceManager 是否已经打开了这个标签
+                // Check whether InstanceManager already has an open tab
                 /*if (InstanceManager.GetTotalInstanceCount() > 0)
                 {
                         QTUtility2.log("InstanceManager.GetTotalInstanceCount() > 0");
@@ -2546,15 +2540,15 @@ namespace QTTabBarLib {
                             {
                                 if ( path.Equals(tabItem.CurrentPath) )
                                 {
-                                    // MessageBox.Show("如果已经到开了则 BringExplorerToFront ");
-                                    // 如果已经到开了则 bring
+                                    // MessageBox.Show("Window already exists, calling BringExplorerToFront ");
+                                    // Window already exists, bringing to front
                                     WindowUtils.BringExplorerToFront(tabbar.ExplorerHandle);
                                     // return;
                                 }
                             });
                         });
                  }*/
-                // 外部打开文件加速
+                // External open-folder class
                 /*if (Config.Window.CaptureNewWindows &&
                     ModifierKeys != Keys.Control &&
                     InstanceManager.GetTotalInstanceCount() == 1)
@@ -2567,7 +2561,7 @@ namespace QTTabBarLib {
                         if (wrapper3.IsFolder && wrapper3.IsReadyIfDrive)
                         {
                             OpenNewTab(wrapper3, false, false);
-                            QTUtility2.log("外部打开文件加速2 ");
+                            QTUtility2.log("External open-folder class 2 ");
                         }
                     }
                 }*/
@@ -2585,13 +2579,6 @@ namespace QTTabBarLib {
                     Config.Window.CaptureNewWindows &&
                     ModifierKeys != Keys.Control &&
                     InstanceManager.GetTotalInstanceCount() > 0) {
-                    // 增加父进程的判断, 这里获得的父进程是 winlogon svchost 这里获取父进程获取不到微信或者qq
-                    // string parentProcessName = QTUtility.GetParentProcessName();
-                    // string allParentProcessNames = QTUtility.GetAllParentProcessNames();
-                    // string parentProcessName2 = ProcessUtil.GetParentProcess().ProcessName;
-                    // string allParentProcessNames2 = ProcessUtil.GetAllParentProcessNames();
-                    // QTUtility2.log("DoFirstNavigation GetCommandLine parent process name: " + parentProcessName);
-                    // QTUtility2.log("DoFirstNavigation GetCommandLine parent process name2: " + allParentProcessNames2);
                     string cmd = GetCommandLine();
                     if (!String.IsNullOrEmpty(cmd))
                     {
@@ -2609,7 +2596,6 @@ namespace QTTabBarLib {
                         {
                             mCmdType = 1;
                             string selectMe = GetNameToSelectFromCommandLineArg(cmd);
-                            // QTUtility2.log("select cmd " + cmd + " select :" + selectMe );
                             TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
@@ -2648,11 +2634,11 @@ namespace QTTabBarLib {
                             mCmdType = 3;
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
-                                // vscode 打开的时候是同进程， 可能需要 shell捕获
+                                // vscode opens using the same process, so a shell command is needed
                                 tabbar.OpenNewTab(path);
                                 QTUtility2.log("other cmd BeginInvokeMain RestoreWindow");
                                 tabbar.RestoreWindow();
-                                // tabbar.Wait4Select(); // intellij idea / vs code 导致崩溃？
+                                // tabbar.Wait4Select(); // intellij idea / vs code waiting to be selected
                             });
                         }
                     }
@@ -2683,7 +2669,7 @@ namespace QTTabBarLib {
                     }
                     QTUtility2.log("DoFirstNavigation return");
                     // return;
-                } // 捕获命令的逻辑
+                } // Handle the close logic
                 QTUtility2.log("AddStartUpTabs ");
                 AddStartUpTabs(string.Empty, path);
                 QTUtility2.log("AddStartUpTabs InitializeOpenedWindow");
@@ -2692,7 +2678,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * 计时器间隔 1 秒方式来获取微信或者qq打开后的选中文件
+         * Delayed-detection approach - polls once per second to get the selected file after WeChat or QQ opens it
          */
         private void Wait4Select()
         {
@@ -2703,7 +2689,7 @@ namespace QTTabBarLib {
 
             QTUtility2.log("Wait4Select");
             int count = 1;
-            // 自关闭 计时器间隔 1 秒
+            // Close the 1-second delayed-detection timer
             Timer timer = new Timer { Interval = 1000 };
             EventHandler handler = null;
             handler = (sender, args) =>
@@ -2711,12 +2697,12 @@ namespace QTTabBarLib {
                 try
                 {
                     count++;
-                    // 超过次数10次 自关闭 
+                    // Close after the count exceeds 10
                     if (count >= 10)
                     {
                         timer.Stop();
                         timer.Tick -= handler;
-                        timer.Dispose(); // 释放资源，防止对象累积
+                        timer.Dispose(); // release resources so objects do not pile up
                     }
                     string SelectionPath = RegistryUtil.ReadSelection(CurrentTab.CurrentPath);
                     QTUtility2.log(
@@ -2742,7 +2728,7 @@ namespace QTTabBarLib {
                                     if (pIDLRltv != IntPtr.Zero)
                                     {
                                         QTUtility2.log("SelectItem " + pIDLRltv);
-                                        // 选中文件
+                                        // Select file
                                         mainShellView.SelectItem(pIDLRltv, SVSIF.SELECT |
                                                                            SVSIF.DESELECTOTHERS |
                                                                            SVSIF.ENSUREVISIBLE
@@ -2757,7 +2743,7 @@ namespace QTTabBarLib {
                         {
                             timer.Stop();
                             timer.Tick -= handler;
-                            timer.Dispose(); // 释放资源，防止对象累积
+                            timer.Dispose(); // release resources so objects do not pile up
                             // InstanceManager.RemoveSelect(CurrentTab.CurrentPath );
                             // InstanceManager.selectDict.Remove(CurrentTab.CurrentPath);
                         }
@@ -2765,7 +2751,7 @@ namespace QTTabBarLib {
                 }
                 catch (Exception e)
                 {
-                    QTUtility2.MakeErrorLog(e, "Try WeChat Select File exception!");
+                    QTUtility2.MakeErrorLog(e, "Getting the selected file after WeChat or QQ opens it");
                 }
             };
 
@@ -2787,7 +2773,7 @@ namespace QTTabBarLib {
                     QTUtility2.log("CloseExplorer QTTabBarClass start");
                     timer.Stop();
                     timer.Tick -= handler;
-                    timer.Dispose(); // 释放资源，防止对象累积
+                    timer.Dispose(); // release resources so objects do not pile up
                     Explorer.Quit();
                     WindowUtils.CloseExplorer(ExplorerHandle, 0);
                     QTUtility2.log("CloseExplorer QTTabBarClass  end");
@@ -2804,7 +2790,7 @@ namespace QTTabBarLib {
                     {
                         timer.Stop();
                         timer.Tick -= handler;
-                        timer.Dispose(); // 释放资源，防止对象累积
+                        timer.Dispose(); // release resources so objects do not pile up
                         Explorer.Quit();
                         WindowUtils.CloseExplorer(ExplorerHandle, 0);
                     }
@@ -2830,7 +2816,7 @@ namespace QTTabBarLib {
                                     // InstanceManager.selectDict.Add(tabItem.CurrentPath, list);
                                     timer.Stop();
                                     timer.Tick -= handler;
-                                    timer.Dispose(); // 释放资源，防止对象累积
+                                    timer.Dispose(); // release resources so objects do not pile up
                                     Explorer.Quit();
                                     WindowUtils.CloseExplorer(ExplorerHandle, 0);
 
@@ -2957,7 +2943,7 @@ namespace QTTabBarLib {
         private void dropTargetWrapper_DragFileOver(object sender, DragEventArgs e) {
             QTUtility2.log("QTTabBarClass dropTargetWrapper_DragFileOver");
             e.Effect = DragDropEffects.None;
-            QTabItem mouseOnTab = tabControl1.GetTabMouseOn(); // 鼠标悬浮的标签 
+            QTabItem mouseOnTab = tabControl1.GetTabMouseOn(); // The tab the mouse is over
             bool flag = true;
             if(mouseOnTab != tabForDD) {
                 tabControl1.Refresh();
@@ -2973,7 +2959,7 @@ namespace QTTabBarLib {
                     if(toolTipForDD != null) {
                         toolTipForDD.Hide(tabControl1);
                     }
-                    ShowToolTipForDD(mouseOnTab, -1, e.KeyState); // 显示tip 提示信息
+                    ShowToolTipForDD(mouseOnTab, -1, e.KeyState); // Show the tooltip hint info
                 }
                 else {
                     using(IDLWrapper wrapper = new IDLWrapper(mouseOnTab.CurrentIDL, !flag)) {
@@ -3028,7 +3014,7 @@ namespace QTTabBarLib {
             );*/
             string path = (string)URL;
             lastCompletedBrowseObjectIDL = lastAttemptedBrowseObjectIDL;
-            // 当导航的时候刷新文件夹视图
+            // Refresh the folder view when closing the window
             QTUtility2.log("QTTabBarClass ShellBrowser.OnNavigateComplete reset field FolderView");
             ShellBrowser.OnNavigateComplete();
             
@@ -3057,17 +3043,17 @@ namespace QTTabBarLib {
             }
             else {
                 int hash = -1;
-                // 是否为特殊目录
+                // Whether it is a linked directory
                 bool flag = IsSpecialFolderNeedsToTravel(path);
-                // 是否为 shellPath 
+                // Whether it is a shellPath
                 bool flag2 = QTUtility2.IsShellPathButNotFileSystem(path);
-                // 是否为 shellPath 
+                // Whether it is a shellPath
                 bool flag3 = QTUtility2.IsShellPathButNotFileSystem(CurrentTab.CurrentPath);
 
                 // If we're navigating on a locked tab, we simulate opening the target folder
                 // in a new tab.  First we clone the tab at the old address and lock it.  Then
                 // we move the current tab to the "new tab" position and unlock it.
-                if(!flag2 && !flag3 && !NavigatedByCode && CurrentTab.TabLocked) { // 如果标签锁定状态
+                if(!flag2 && !flag3 && !NavigatedByCode && CurrentTab.TabLocked) { // Preserve the tab's locked state
                     QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  !flag2 && !flag3 && !NavigatedByCode && CurrentTab.TabLocked");
                     int pos = tabControl1.SelectedIndex;
                     tabControl1.SetRedraw(false);
@@ -3099,7 +3085,7 @@ namespace QTTabBarLib {
                         lstActivatedTabs.RemoveAt(0);
                     }
                 }
-                // 如果是特殊目录,非code方式导航
+                // A directory that doesn't exist, open it via code
                 if(!NavigatedByCode && flag) {
                     QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  !NavigatedByCode && flag");
                     hash = DateTime.Now.GetHashCode();
@@ -3108,10 +3094,10 @@ namespace QTTabBarLib {
                 ClearTravelLogs();
                 try {
                     tabControl1.SetRedraw(false);
-                    if(fNowTravelByTree) { // 树形遍历, 中键单击导航栏会多开一个标签。
-                        // 获取当前打开的路径
+                    if(fNowTravelByTree) { // Tree-view navigation - middle-clicked to open an extra tab bar
+                        // Get the currently open path
                         using(IDLWrapper wrapper = GetCurrentPIDL()) {
-                            // 创建一个新标签并且选中，设置当前的标签
+                            // Add a new tab without selecting it, and use the current tab
                             QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  fNowTravelByTree CreateNewTab");
                             QTabItem tabPage = CreateNewTab(wrapper);
                             tabControl1.SelectTabDirectly(tabPage);
@@ -3154,7 +3140,7 @@ namespace QTTabBarLib {
                             CurrentTab.NavigatedTo(CurrentAddress, idl, hash, fAutoNavigating);
                         }
                     }
-                    // 同步遍历的状态
+                    // Sync the tab's locked state
                     SyncTravelState();
                     if (QTUtility.IsXP) // XP系统
                     {
@@ -3170,7 +3156,7 @@ namespace QTTabBarLib {
                             QTUtility.fExplorerPrevented = false;
                         }
                     }                    
-                    if(CurrentAddress.StartsWith("::")) { // 设置显示名称，特殊目录
+                    if(CurrentAddress.StartsWith("::")) { // Special display name, virtual directory
                         CurrentTab.ToolTipText = CurrentTab.Text;
                         QTUtility.DisplayNameCacheDic[CurrentAddress] = CurrentTab.Text;
                     }
@@ -3220,7 +3206,7 @@ namespace QTTabBarLib {
                         QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2 buttonNavHistoryMenu.DropDown.Visible");
                         buttonNavHistoryMenu.DropDown.Close(ToolStripDropDownCloseReason.AppFocusChange);
                     }
-                    // 判断是否需要更新，暂时手动更新吧 by indiff
+                    // Check whether a refresh is needed; manually update on timeout, by indiff
                     /*if(Config.Misc.AutoUpdate)
                     {
                         QTUtility2.log("UpdateChecker.Check");
@@ -3247,7 +3233,7 @@ namespace QTTabBarLib {
         }
 
 
-        // 消息捕获
+        // Message handling
         private bool explorerController_MessageCaptured(ref Message msg) {
             /* DebugUtil.WriteLine(
                  "QTTabBarClass explorerController_MessageCaptured:"
@@ -3272,7 +3258,7 @@ namespace QTTabBarLib {
              
             if (msg.Msg == 793)
             {
-                // 鼠标中键的操作
+                // Handle the middle-click action
                 QTUtility2.log("explorerController_MessageCaptured WM.APPCOMMAND msg: " + msg.Msg +
                                " msg.HWnd: " + msg.HWnd +
                                " msg.Result: " + msg.Result +
@@ -3396,7 +3382,7 @@ namespace QTTabBarLib {
                         BeginInvoke(new Action(() => {
                             InstanceManager.PushTabBarInstance(this);
                             InstanceManager.RemoveFromTrayIcon(Handle);
-                            // 在 QTTabBar 管理 Explorer 顶层窗口，也就是 `CabinetWClass` 窗口时，窗口有时会进入一种异常状态：
+                            // While QTTabBar manages the top-level Explorer window (the `CabinetWClass` window), the window can sometimes end up in a bad state:
                             IntPtr hwnd = this.ExplorerHandle;
                             if (PInvoke.IsIconic(hwnd) && PInvoke.GetForegroundWindow() == hwnd)
                             {
@@ -3528,21 +3514,6 @@ namespace QTTabBarLib {
 
                     switch(command) {
                         case APPCOMMAND_BROWSER_BACKWARD:
-                            QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD");
-                            if(fProcess) {
-                                MouseChord chrod =  QTUtility.MakeMouseChord(MouseChord.X1, ModifierKeys);
-                                // QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD fProcess chord " + chord);
-                                if (Config.Mouse.GlobalMouseActions.TryGetValue(chrod, out action)) {
-                                  //  QTUtility2.log("APPCOMMAND_BROWSER_BACKWARD fProcess DoBindAction " + action);
-                                    DoBindAction(action);
-                                }
-                            }
-                            else
-                            {
-
-                            }
-                            return true;
-
                         case APPCOMMAND_BROWSER_FORWARD:
                             QTUtility2.log("APPCOMMAND_BROWSER_" +
                                     (command == APPCOMMAND_BROWSER_BACKWARD ? "BACKWARD" : "FORWARD"));
@@ -3642,7 +3613,7 @@ namespace QTTabBarLib {
                     curTabCloning ?? (curTabCloning = CreateCursor(Resources_Image.imgCurTabCloning));
         }
         /**
-         * new 是否有意隐藏？
+         * Does new override the restart?
          */
         private  static string GetCommandLine()
         {
@@ -3685,7 +3656,7 @@ namespace QTTabBarLib {
         }
 
         private static string GetNameToSelectFromCommandLineArg(string str) {
-            QTUtility2.log("Marshal.PtrToStringUni ：" + str   );
+            QTUtility2.log("Marshal.PtrToStringUni: " + str   );
             if(!string.IsNullOrEmpty(str)) {
                 int index = str.IndexOf("/select,", StringComparison.CurrentCultureIgnoreCase);
                 if(index == -1) {
@@ -3743,7 +3714,7 @@ namespace QTTabBarLib {
             public IntPtr lParam;
         }
 
-        #region 中键点击资源管理器左侧导航
+        #region Photo album-related resources, events, behaviors
         unsafe private void Handle_MButtonUp_Tree(MSG msg) 
         {
             QTUtility2.log("QTTabBarClass Handle_MButtonUp_Tree msg");
@@ -3857,7 +3828,7 @@ namespace QTTabBarLib {
                             {
                                 // blockSelecting
                                 NavigatedByCode = true;
-                                fNowTravelByTree = false; // 会导致多开一个标签 by indiff
+                                fNowTravelByTree = false; // Would cause an extra tab to open, by indiff
                                // OpenNewTab(wrapper, true);
 
                                if (Config.Mouse.ItemActions.TryGetValue(chord, out action))
@@ -3896,7 +3867,7 @@ namespace QTTabBarLib {
                                     if (idlwTarget.IsFolder && idlwTarget.IsReadyIfDrive)
                                     {
                                         NavigatedByCode = true;
-                                        fNowTravelByTree = false; // 会导致多开一个标签 by indiff
+                                        fNowTravelByTree = false; // Would cause an extra tab to open, by indiff
                                         if (Config.Mouse.ItemActions.TryGetValue(chord, out action))
                                         {
                                             if (action == BindAction.ItemOpenInNewTab)
@@ -4070,7 +4041,7 @@ namespace QTTabBarLib {
             return false;
         }
         /**
-         * 处理关闭操作
+         * Handle the close operation
          */
         private bool HandleCLOSE(IntPtr lParam) {
             bool flag = Config.Window.CloseBtnClosesSingleTab;
@@ -4184,7 +4155,7 @@ namespace QTTabBarLib {
             HideToolTipForDD();
             int capacity = (int)PInvoke.DragQueryFile(hDrop, uint.MaxValue, null, 0);
             if(capacity >= 1) {
-                // 获取拖拽的文件列表
+                // Get the list of dragged files
                 List<string> listDroppedPaths = new List<string>(capacity);
                 for(int i = 0; i < capacity; i++) {
                     StringBuilder lpszFile = new StringBuilder(260);
@@ -4247,7 +4218,7 @@ namespace QTTabBarLib {
                     NavigateCurrentTab(false);
                     return true;
 
-                case Keys.Alt | Keys.F4:  // 快捷键方式关闭窗口
+            case Keys.Alt | Keys.F4:  // Close window via keyboard shortcut
                     if(!fRepeat) {
                         using (RegistryKey key1 = Registry.CurrentUser.CreateSubKey(RegConst.Root))
                         {
@@ -4600,13 +4571,13 @@ namespace QTTabBarLib {
             // AutoScaleMode = AutoScaleMode.Dpi;
             components = new Container();
             /*
-             提供当单击 ToolStripDropDown、ToolStripDropDownButton 或 ToolStripMenuItem 控件时，显示 ToolStripSplitButton 的控件的基本功能。
-             按钮工具栏
+             Provides the basic functionality of a ToolStripSplitButton control when displaying a ToolStripDropDown, ToolStripDropDownButton, or ToolStripMenuItem control.
+             Basic button functionality
              */
             buttonNavHistoryMenu = new ToolStripDropDownButton();
-            // 用于放置标签栏
+            // Used to set the tab bar
             tabControl1 = new QTabControl();
-            // 当前的标签
+            // The current tab
             CurrentTab = new QTabItem(string.Empty, string.Empty, tabControl1);
             contextMenuTab = new ContextMenuStripEx(components, false);
             contextMenuSys = new ContextMenuStripEx(components, false);
@@ -4615,7 +4586,7 @@ namespace QTTabBarLib {
             contextMenuTab.SuspendLayout();
             SuspendLayout();
 
-            // 判断是否显示按钮工具栏
+            // Check whether to show the button-label bar
             bool flag = Config.Tabs.ShowNavButtons;
             if (flag)
             {
@@ -4633,7 +4604,7 @@ namespace QTTabBarLib {
             
             
             tabControl1.SetRedraw(false);
-            // 添加当前标签
+            // Add the current tab
             tabControl1.TabPages.Add(CurrentTab);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.ContextMenuStrip = contextMenuTab;
@@ -4654,7 +4625,7 @@ namespace QTTabBarLib {
             tabControl1.TabCountChanged += tabControl1_TabCountChanged;
             tabControl1.CloseButtonClicked += tabControl1_CloseButtonClicked;
             tabControl1.TabIconMouseDown += tabControl1_TabIconMouseDown;
-            // 注册蓝色新增按钮的点击事件
+            // Register the click event for the color-change button
             tabControl1.PlusButtonClicked += tabControl1_PlusButtonClicked;
             
             contextMenuTab.Items.Add(new ToolStripMenuItem());
@@ -4673,7 +4644,7 @@ namespace QTTabBarLib {
             MinSize = new Size(150, Config.Skin.TabHeight + 2);
             Height = Config.Skin.TabHeight + 2;
             ContextMenuStrip = contextMenuSys;
-            // 注册鼠标双击事件
+            // Register the mouse double-click event
             MouseDoubleClick += QTTabBarClass_MouseDoubleClick;
             MouseUp += QTTabBarClass_MouseUp;
             tabControl1.ResumeLayout(false);
@@ -4700,7 +4671,7 @@ namespace QTTabBarLib {
             Explorer_NavigateComplete2(null, ref locationURL);
         }
         /**
-         * 初始化工具栏
+         * Initialize color config
          */
         private void InitializeNavBtns(bool fSync) {
             toolStrip = new ToolStripClasses();
@@ -4723,7 +4694,7 @@ namespace QTTabBarLib {
             toolStrip.Width = 0x3f;
             toolStrip.TabStop = false;
             
-            // dark mode ?  by indiff 插件的背景色
+            // dark mode ?  by indiff, change text color
             toolStrip.BackColor = QTUtility.InNightMode ? Color.Black : Color.WhiteSmoke;
             /*if (QTUtility.InNightMode)
             {
@@ -4748,20 +4719,20 @@ namespace QTTabBarLib {
             buttonForward.Click += NavigationButtons_Click;
         }
         /**
-         * 初始化已经打开的窗口
+         * Initialize an already-open window
          */
         private void InitializeOpenedWindow() {
             IsShown = true;
             InstanceManager.PushTabBarInstance(this);
-            //  安装钩子
+            //  Install hooks
             QTUtility2.log("QTTabBarClass InitializeOpenedWindow  InstallHooks");
             InstallHooks();
 
-            // 插件服务构造方法
+            // Calculate width/height direction
             QTUtility2.log("QTTabBarClass  PluginServer ");
             pluginServer = new PluginServer(this);
             
-            // 创建工具栏
+            // Add event listener
             QTUtility2.log("QTTabBarClass TryCallButtonBar ");
             if (!TryCallButtonBar(bbar => { return bbar.CreateItems(); }))
             {
@@ -4774,7 +4745,7 @@ namespace QTTabBarLib {
                     TryCallButtonBar(bbar => {return bbar.CreateItems();});
                     timer.Stop();
                     timer.Tick -= handler;
-                    timer.Dispose(); // 释放资源，防止对象累积
+                    timer.Dispose(); // release resources so objects do not pile up
                 };
                 timer.Tick += handler;
                 timer.Start();
@@ -4804,7 +4775,7 @@ namespace QTTabBarLib {
 
         private static void InitializeStaticFields() {
             fInitialized = true;
-            // 测试DPI兼容 indiff
+            // Fix DPI issue, indiff
             PInvoke.SetProcessDPIAware();
             Application.EnableVisualStyles();
         }
@@ -4813,12 +4784,12 @@ namespace QTTabBarLib {
             bool flag = false;
             if(tsmiGroups == null) {
                 flag = true;
-                // 初始化系统工具栏
-                // 标签组
+                // Initialize the system tray icon
+                // Tab bar
                 tsmiGroups = new ToolStripMenuItem(QTUtility.ResMain[12]);
-                // 最近关闭
+                // Mouse close
                 tsmiUndoClose = new ToolStripMenuItem(QTUtility.ResMain[13]);
-                // 最近关闭
+                // Keyboard close
                 tsmiLastActiv = new ToolStripMenuItem(QTUtility.ResMain[14]);
                 tsmiExecuted = new ToolStripMenuItem(QTUtility.ResMain[15]);
                 tsmiBrowseFolder = new ToolStripMenuItem(QTUtility.ResMain[0x10] + "...");
@@ -4882,7 +4853,7 @@ namespace QTTabBarLib {
             }
         }
 
-        // 初始化标签的右键菜单
+        // Initialize the tab bar's right-click menu
         private void InitializeTabMenu(bool fText) {
             try
             {
@@ -4927,7 +4898,7 @@ namespace QTTabBarLib {
                         // enableApiHook
                     });
 
-                    // 设置标签组的拖动事件 by indiff group drag
+                    // Bind the tab group's drag event, by indiff, group drag
                     tsmiAddToGroup.DragDrop += (sender, e) =>
                     {
                         NowTabDragging = true;
@@ -4937,7 +4908,7 @@ namespace QTTabBarLib {
                         NowTabDragging = false;
                     };
 
-                    // 设置标签组的点击事件 comment by indiff
+                    // Bind the tab group's click event, comment by indiff
                     tsmiAddToGroup.DropDownItemClicked += menuitemAddToGroup_DropDownItemClicked;
                     (tsmiAddToGroup.DropDown).ImageList = QTUtility.ImageListGlobal;
                     tsmiHistory.DropDown = new DropDownMenuBase(components, true, true, true);
@@ -4976,7 +4947,7 @@ namespace QTTabBarLib {
             }
         }
 
-        // 安装钩子
+        // Install hooks
         private void InstallHooks() {
             hookProc_Key = new HookProc(CallbackKeyboardProc);
             hookProc_Mouse = new HookProc(CallbackMouseProc);
@@ -5024,13 +4995,11 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// 视图选择事件发生
-        /// 添加获取选中文件数据
+        /// View-selection event handler
+        /// Used to get the selected file's name
         /// </summary>
         private void ListView_SelectionChanged(/*object sender, SelectionChangedEventArgs e*/)
         {
-            // QTUtility2.log("ListView_SelectionChanged e.AddedItems " + e.AddedItems);
-            // QTUtility2.log("ListView_SelectionChanged e.OriginalSource " + e.OriginalSource);
             if(pluginServer != null && pluginServer.SelectionChangedAttached) {
                 if(timerSelectionChanged == null) {
                     timerSelectionChanged = new Timer(components);
@@ -5044,7 +5013,7 @@ namespace QTTabBarLib {
                 // timerSelectionChanged.Enabled = true;
             }
 
-            // 获取选中文件数据
+            // Get the selected file's name
             try
             {
                 // var selectedCount = ShellBrowser.GetSelectedCount();
@@ -5056,12 +5025,12 @@ namespace QTTabBarLib {
                                " tabItem Text " + tabText
                 );
 
-                // other cmd 方式会报错  找不到元素。 (异常来自 HRESULT:0x80070490)
-                if (this.TabCount == 1 && // 当前捕获到的新进程是只有一个窗口
-                    fHideExplorer && // 需要进行退出的窗口
-                    (mCmdType == 2) && // factory 捕获 // || mCmdType == 3
-                    Config.Window.CaptureWeChatSelection && // 是否配置了进行捕获微信选中的文件
-                    QTUtility2.IsEmpty(tabText) // 标签文本是空的
+                // The other-cmd path throws an error: element not found. (Exception from HRESULT:0x80070490)
+                if (this.TabCount == 1 && // The current window down to the new window has only one tab
+                    fHideExplorer && // The exiting window needs to be hidden
+                    (mCmdType == 2) && // factory mode // || mCmdType == 3
+                    Config.Window.CaptureWeChatSelection && // Whether capturing the WeChat-selected file is configured
+                    QTUtility2.IsEmpty(tabText) // The tab text is empty
                    )
                 {
                     try
@@ -5125,27 +5094,27 @@ namespace QTTabBarLib {
                         }
                         catch (Exception e)
                         {
-                            QTUtility2.MakeErrorLog(e, "关闭窗口");
+                            QTUtility2.MakeErrorLog(e, "Close window");
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                QTUtility2.MakeErrorLog(e, "获取选中文件数据");
+                QTUtility2.MakeErrorLog(e, "Get the selected file's name");
             }
             
             if (
                 this.TabCount == 1 &&
-                fHideExplorer && // 需要进行退出的窗口
-                (mCmdType == 3) && // other cmd 捕获， vscode 、visual studio 打开的都是单进程， 试一试关闭当前标签
-                QTUtility2.IsEmpty(tabControl1.TabPages[0].Text)) // 标签文本是空的)
+                fHideExplorer && // The exiting window needs to be hidden
+                (mCmdType == 3) && // other-cmd mode - vscode and visual studio both open as a single process, so just close the current tab
+                QTUtility2.IsEmpty(tabControl1.TabPages[0].Text)) // The tab text is empty)
             {
                 try
                 {
                     // string focushed;
                     // CurrentTab.GetSelectedItemsAt(CurrentAddress, out focushed);
-                    // 不能执行 quit， 因为是同一个进程
+                    // Can't run quit, since it's the same process
                     QTUtility2.log("other cmd close windows  " );
                     // WindowUtils.CloseExplorer(ExplorerHandle, 0);
                     // WindowUtils.CloseExplorer(ExplorerHandle, 1);
@@ -5162,9 +5131,9 @@ namespace QTTabBarLib {
 
             /*if (
                 this.TabCount == 1 &&
-                fHideExplorer && // 需要进行退出的窗口
-                (mCmdType == 3) && // other cmd 捕获
-                QTUtility2.IsEmpty(tabControl1.TabPages[0].Text)) // 标签文本是空的)
+                fHideExplorer && // The exiting window needs to be hidden
+                (mCmdType == 3) && // other-cmd mode
+                QTUtility2.IsEmpty(tabControl1.TabPages[0].Text)) // The tab text is empty)
             {
                 try
                 {
@@ -5178,7 +5147,7 @@ namespace QTTabBarLib {
                     }
                     catch (Exception e)
                     {
-                        QTUtility2.MakeErrorLog(e, "关闭窗口");
+                        QTUtility2.MakeErrorLog(e, "Close window");
                     }
                 }
             }*/
@@ -5244,7 +5213,7 @@ namespace QTTabBarLib {
         }
 
         private void ListViewMonitor_ListViewChanged(object sender, EventArgs args) {
-            if (listViewManager != null) // 修复空指针问题 by indiff
+            if (listViewManager != null) // Fix a null-pointer issue, by indiff
             {
                 listView = listViewManager.CurrentListView;
                 ExtendedListViewCommon elvc = listView as ExtendedListViewCommon;
@@ -5303,7 +5272,7 @@ namespace QTTabBarLib {
             return path;
         }
         /**
-         * 新增到标签组事件
+         * Event for saving the selected tab
          */
         private void menuitemAddToGroup_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             // TODO we should be using tags I think
@@ -5777,7 +5746,7 @@ namespace QTTabBarLib {
         }
 
         private void OpenDroppedFolder(IList<string> listDroppedPaths) {
-            // 拖拽文件夹的操作，包括拖拽文件
+            // Dragging a folder, not dragging a file
             Keys modKeys = ModifierKeys;
             QTUtility2.InitializeTemporaryPaths();
             bool fBlockSelecting = modKeys == Keys.Shift;
@@ -5786,12 +5755,12 @@ namespace QTTabBarLib {
 
             tabControl1.SetRedraw(false);
             try {
-                // 遍历目录，打开一个新标签,并且选中打开
+                // On reaching the directory, open a new tab without selecting it
                 foreach(string path in listDroppedPaths.Where(path => !string.IsNullOrEmpty(path))) {
                     try {
                         using(IDLWrapper wrapper = new IDLWrapper(path)) {
                             if(!wrapper.Available) continue;
-                            if(wrapper.IsLink) {  // 链接目录
+                            if(wrapper.IsLink) {  // Shortcut directory
                                 if(wrapper.IsLinkToDeadFolder) continue;
                                 using(IDLWrapper idlwTarget = new IDLWrapper(ShellMethods.GetLinkTargetIDL(path))) {
                                     if(idlwTarget.IsFolder && idlwTarget.IsReadyIfDrive) {
@@ -5808,7 +5777,7 @@ namespace QTTabBarLib {
                                 }
                             }
                             else if(wrapper.IsFolder && wrapper.IsReadyIfDrive) {
-                                //  正常的目录文件夹
+                                //  Skip shortcut-directory folders
                                 if(fCtrl) {
                                     StaticReg.CreateWindowIDLs.Add(wrapper.IDL);
                                 }
@@ -5826,12 +5795,12 @@ namespace QTTabBarLib {
                 }
             }
             finally {
-                // 设置组件自动刷新 bRedraw
+                // Auto-refresh after drag, bRedraw
                 tabControl1.SetRedraw(true);
             }
 
             if(fCtrl) {
-                // ctrl+拖动打开一个新窗口
+                // Ctrl+drag opens a new window
                 if(StaticReg.CreateWindowIDLs.Count > 0) {
                     byte[] first = StaticReg.CreateWindowIDLs[0];
                     StaticReg.CreateWindowIDLs.RemoveAt(0);
@@ -5841,7 +5810,7 @@ namespace QTTabBarLib {
                 }
             }
             else {
-                // 拖动的如果是文件则判断是否进行添加到程序菜单
+                // Files dragged onto the tab - check whether they qualify for the add-to-group menu
                 if(!fOpened && listDroppedPaths.Count > 0) {
                     List<string> listDroppedPathsFiles = listDroppedPaths.Where(File.Exists).ToList();
                     if(listDroppedPathsFiles.Count > 0) {
@@ -6154,26 +6123,26 @@ namespace QTTabBarLib {
         // todo: consider moving all this to the button bar and just making the necessary methods internal.
         internal void ProcessButtonBarClick(int buttonID) {
             switch(buttonID) {
-                case QTButtonBar.BII_NAVIGATION_BACK: // 导航后退
+                case QTButtonBar.BII_NAVIGATION_BACK: // Navigate back
                     NavigateCurrentTab(true);
                     break;
 
-                case QTButtonBar.BII_NAVIGATION_FWRD: // 导航前进
+                case QTButtonBar.BII_NAVIGATION_FWRD: // Navigate forward
                     NavigateCurrentTab(true);
                     break;
 
-                case QTButtonBar.BII_NEWWINDOW:// 新窗口
+                case QTButtonBar.BII_NEWWINDOW:// New window
                     using(IDLWrapper wrapper4 = new IDLWrapper(CurrentTab.CurrentIDL)) {
                         OpenNewWindow(wrapper4);
                     }
                     break;
 
-                case QTButtonBar.BII_CLONE:// 复制标签
-                    QTUtility2.log("QTTabBarLib.QTTabBarClass.CloneCurrentTab 复制标签");
+                case QTButtonBar.BII_CLONE:// Clone tab
+                    QTUtility2.log("QTTabBarLib.QTTabBarClass.CloneCurrentTab Clone tab");
                     CloneCurrentTab();
                     break;
 
-                case QTButtonBar.BII_LOCK: // 锁定按钮
+                case QTButtonBar.BII_LOCK: // Lock button
                     CurrentTab.TabLocked = !CurrentTab.TabLocked;
                     // CurrentTab.CurrentPath
                     if (CurrentTab.TabLocked)
@@ -6181,11 +6150,11 @@ namespace QTTabBarLib {
                         StaticReg.LockedTabsToRestoreList.Add(CurrentTab.CurrentPath);
                     }
                     break;
-                case QTButtonBar.BII_TOPMOST: // 置顶
+                case QTButtonBar.BII_TOPMOST: // Topmost
                     ToggleTopMost();
                     break;
 
-                case QTButtonBar.BII_CLOSE_CURRENT:// 关闭当前
+                case QTButtonBar.BII_CLOSE_CURRENT:// Close current
                     if(Config.Window.CloseBtnClosesSingleTab) {
                         CloseTab(CurrentTab);
                         return;
@@ -6196,13 +6165,13 @@ namespace QTTabBarLib {
                     }
                     break;
 
-                case QTButtonBar.BII_CLOSE_ALLBUTCURRENT: // 关闭其他
+                case QTButtonBar.BII_CLOSE_ALLBUTCURRENT: // Close others
                     if(tabControl1.TabCount > 1) {
                         CloseAllTabsExcept(CurrentTab);
                     }
                     break;
 
-                case QTButtonBar.BII_CLOSE_WINDOW: // 关窗口
+                case QTButtonBar.BII_CLOSE_WINDOW: // Close window
                     using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
                     {
                         string[] list = (from QTabItem item2 in tabControl1.TabPages
@@ -6215,24 +6184,24 @@ namespace QTTabBarLib {
                     WindowUtils.CloseExplorer(ExplorerHandle, 1);
                     break;
 
-                case QTButtonBar.BII_CLOSE_LEFT: // 关闭左侧
+                case QTButtonBar.BII_CLOSE_LEFT: // Close left side
                     CloseLeftRight(true, -1);
                     break;
 
-                case QTButtonBar.BII_CLOSE_RIGHT: // 关闭右侧
+                case QTButtonBar.BII_CLOSE_RIGHT: // Close right side
                     CloseLeftRight(false, -1);
                     break;
 
-                case QTButtonBar.BII_GOUPONELEVEL: // 跳转上一级
+                case QTButtonBar.BII_GOUPONELEVEL: // Go up one level
                     QTUtility2.log("QTButtonBar.BII_GOUPONELEVEL UpOneLevel");
                     UpOneLevel();
                     break;
 
-                case QTButtonBar.BII_REFRESH_SHELLBROWSER: // 刷新
+                case QTButtonBar.BII_REFRESH_SHELLBROWSER: // Refresh
                     Explorer.Refresh();
                     break;
 
-                case QTButtonBar.BII_SHELLSEARCH: // 显示搜索栏
+                case QTButtonBar.BII_SHELLSEARCH: // Show search box
                     ShowSearchBar(true);
                     break;
                 
@@ -6272,7 +6241,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// 刷新所有配置
+        /// Refresh the sort control
         /// </summary>
         internal void RefreshOptions() {
             QTUtility2.log(  "QTTabBarClass RefreshOptions" );
@@ -6308,14 +6277,13 @@ namespace QTTabBarLib {
                 }
             SetBarRows(tabControl1.SetTabRowType(iType));
             if(rebarController != null) rebarController.RefreshBG();
-                foreach (QTabItem item in tabControl1.TabPages)
-                {
-                    item.RefreshRectangle();
-                }
+            foreach(QTabItem item in tabControl1.TabPages) {
+                item.RefreshRectangle();
+            }
             ShellBrowser.SetUsingListView(Config.Tweaks.ForceSysListView);
                 if (null != tabControl1)
                 {
-                    // 检测是否有 System.Runtime.InteropServices.InvalidComObjectException
+                    // Watch for System.Runtime.InteropServices.InvalidComObjectException
                     tabControl1.ResumeLayout();
                 }
             ResumeLayout(true);
@@ -6329,7 +6297,6 @@ namespace QTTabBarLib {
 
         [ComRegisterFunction]
         private static void Register(Type t) {
-            // QTUtility2.log(  "QTTabBarClass Register" );
             string name = t.GUID.ToString("B");
             using(RegistryKey key2 = Registry.ClassesRoot.CreateSubKey(@"CLSID\" + name)) {
                 key2.SetValue(null, "QTTabBar");
@@ -6422,7 +6389,7 @@ namespace QTTabBarLib {
             }
         }
 
-        // 恢复标签
+        // Restore tab
         private void RestoreTabsOnInitialize(int iIndex, string openingPath) {
             QTUtility2.log(  "QTTabBarClass RestoreTabsOnInitialize" );
             QTUtility.RefreshLockedTabsList();
@@ -6447,7 +6414,7 @@ namespace QTTabBarLib {
                             }
                         }
                         if (flag)
-                        {  // 判断是否锁定 !flag
+                        {  // Check whether !flag is satisfied
                            // if(str != openingPath) {
                                 using(IDLWrapper wrapper = new IDLWrapper(str)) {
                                     if(wrapper.Available) {
@@ -6481,7 +6448,7 @@ namespace QTTabBarLib {
                                             {
                                                 if (wrapper2.Available)
                                                 {
-                                                   // 只恢复锁定的 indiff
+                                                   // Only restore locked ones, indiff
                                                     QTabItem item4 = CreateNewTab(wrapper2);
                                                     item4.TabLocked = true;
                                                 }
@@ -6554,7 +6521,7 @@ namespace QTTabBarLib {
                 }
             }
         }
-        // 显示目录树
+        // Show directory tree
         private void ShowFolderTree(bool fShow) {
             if(QTUtility.IsXP &&
                (fShow != ShellBrowser.IsFolderTreeVisible())) {
@@ -6565,7 +6532,7 @@ namespace QTTabBarLib {
             }
         }
         
-        // 显示路径的MD5
+        // Show the path's MD5
         internal static void ShowMD5(string[] paths) {
             if(md5Form == null) {
                 md5Form = new FileHashComputerForm();
@@ -6615,7 +6582,7 @@ namespace QTTabBarLib {
             return listView;
         }
         
-        // 显示字目录提示信息
+        // Show the SubDirTip info
         private void ShowSubdirTip_Tab(QTabItem tab, bool fShow, int offsetX, bool fKey, bool fParent) {
             try {
                 if(fShow) {
@@ -6689,8 +6656,8 @@ namespace QTTabBarLib {
         }
 
         /**
-         * 显示描述信息
-         *  shift 显示详细信息
+         * Show preview info
+         *  Shift shows detailed info
          */
         private void ShowToolTipForDD(QTabItem tab, int iState, int grfKeyState) {
             if(((tabForDD == null) || (tabForDD != tab)) || (iModKeyStateDD != grfKeyState)) {
@@ -6785,9 +6752,8 @@ namespace QTTabBarLib {
                 if(flag && (ContextMenuedTab != CurrentTab)) {
                     if(ContextMenuedTab != null) {
                         if(ContextMenuedTab.TabLocked) {
-                            // QTUtility2.log("Clone Tab Button2");
                             var index = TabIndex();
-                            // 往左边加入一个标签
+                            // Add a tab when the condition is met
                             // tabControl1.TabPages.IndexOf(ContextMenuedTab) + 1
                             CloneTabButton(
                                 ContextMenuedTab, 
@@ -6828,7 +6794,7 @@ namespace QTTabBarLib {
             }
         }
 
-        // 修复预览目录跳转到正确的标签位置
+        // Fix incorrect tab position when jumping to a preview directory
         private int TabIndex()
         {
             var index = 1;
@@ -6948,7 +6914,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * bug 当只有一个标签的时候，点击标签空白处识别为标签
+         * bug: when there is only one tab, the blank second tab is still recognized as a tab
          */
         private void tabControl1_MouseDoubleClick(object sender, MouseEventArgs e) {
             if((ModifierKeys != Keys.Control) && (e.Button == MouseButtons.Left)) {
@@ -7051,11 +7017,11 @@ namespace QTTabBarLib {
             }
         }
 
-        // 鼠标在标签上操作
+        // Check whether it is a drag-drop onto a tab
         private void tabControl1_MouseUp(object sender, MouseEventArgs e) {
             if (null == tabControl1 || tabControl1.IsDisposed)
             {
-                // 如果是最后一个标签，则出现bug
+                // A bug that occurs when dragging onto the last tab
                 return;
             }
             QTabItem tabMouseOn = tabControl1.GetTabMouseOn();
@@ -7191,7 +7157,7 @@ namespace QTTabBarLib {
             }
         }
 
-        // 设置窗口置顶操作
+        // Set the window's topmost property
         private void ToggleTopMost() {
             QTUtility2.log("QTTabBarClass ToggleTopMost");
             if(PInvoke.Ptr_OP_AND(PInvoke.GetWindowLongPtr(ExplorerHandle, -20), 8) != IntPtr.Zero) {
@@ -7389,7 +7355,7 @@ namespace QTTabBarLib {
                 return true;
             }
             else {
-                QTUtility2.log("QTTabBarClass FolderLinkClicked 未获取到配置的动作");
+                QTUtility2.log("QTTabBarClass FolderLinkClicked Failed to get the configured object");
                 return false;
             }
         }
@@ -7451,52 +7417,11 @@ namespace QTTabBarLib {
             
             return;
             // TODO: Make the following code optional in the Uninstaller.
-#if false
-            try {
-                using(RegistryKey key3 = Registry.Users) {
-                    try {
-                        foreach(string str2 in key3.GetSubKeyNames()) {
-                            bool flag = true;
-                            try {
-                                using(RegistryKey key4 = key3.OpenSubKey(str2 + @"\Software\Quizo", true)) {
-                                    if(key4 != null) {
-                                        try {
-                                            key4.DeleteSubKeyTree("QTTabBar");
-                                            string[] subKeyNames = key4.GetSubKeyNames();
-                                            flag = (subKeyNames != null) && (subKeyNames.Length > 0);
-                                        }
-                                        catch {
-                                        }
-                                    }
-                                }
-                            }
-                            catch {
-                            }
-                            try {
-                                if(!flag) {
-                                    using(RegistryKey key5 = key3.OpenSubKey(str2 + @"\Software", true)) {
-                                        if(key5 != null) {
-                                            key5.DeleteSubKeyTree("Quizo");
-                                        }
-                                    }
-                                }
-                            }
-                            catch {
-                            }
-                        }
-                    }
-                    catch {
-                    }
-                }
-            }
-            catch {
-            }
-#endif
         }
 
         private void UpOneLevel()
         {
-            // 跳到上一级目录
+            // Open another directory
             if(CurrentTab.TabLocked) {
                 QTabItem tab = CurrentTab.Clone();
                 AddInsertTab(tab);
@@ -7514,7 +7439,7 @@ namespace QTTabBarLib {
             Thread.Sleep(msec);
         }
         /**
-         * 消息入口 by indiff
+         * Message hook, by indiff
          */
         protected override void WndProc(ref Message m) {
             try {
@@ -7523,7 +7448,7 @@ namespace QTTabBarLib {
                         NowModalDialogShown = m.WParam != IntPtr.Zero;
                         return;
 
-                    case WM.DROPFILES:  // 拖动文件
+                    case WM.DROPFILES:  // Dragged files
                         HandleFileDrop(m.WParam);
                         break;
 
@@ -7570,7 +7495,7 @@ namespace QTTabBarLib {
 
 
 
-        #region 标签栏事件区
+        #region Tab bar event region
         public RebarController rebarController;
         protected string CurrentAddress;
         protected QTabItem CurrentTab;
@@ -7618,7 +7543,7 @@ namespace QTTabBarLib {
         protected IntPtr TravelToolBarHandle;
 
         /**
-         * 添加到历史目录
+         * Add to history directory
          */
         protected void AddToHistory(QTabItem closingTab)
         {
@@ -7630,7 +7555,7 @@ namespace QTTabBarLib {
                     currentPath = currentPath + "???" + closingTab.GetLogHash(true, 0);
                 }
                 StaticReg.ClosedTabHistoryList.Add(currentPath);
-                // windows 11 ，有可能调用 WindowsUtil.close 方法导致报错
+                // On Windows 11 this may cause WindowsUtil.close to crash
                 InstanceManager.ButtonBarBroadcast(bbar => bbar.RefreshButtons(), true);
             }
         }
@@ -7643,7 +7568,7 @@ namespace QTTabBarLib {
             return true;
         }
 
-        // 关闭标签， 如果锁定则不关闭
+        // Close the tab; don't close if it's locked
         protected bool CloseTab(QTabItem closingTab, bool fCritical, bool fSkipSync = false)
         {
             if (closingTab == null)
@@ -7862,12 +7787,12 @@ namespace QTTabBarLib {
 
         /**
         * TODO config to refresh  when tab control selected index changed
-        * 当切换标签的时候，配置是否进行刷新
-        * 出现异常情况
-        * System.NullReferenceException: 未将对象引用设置到对象的实例。
-          在 QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
-          在 QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
-          在 QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
+        * Whether to refresh depends on config, when switching tabs
+        * An exception occurs:
+        * System.NullReferenceException: Object reference not set to an instance of an object.
+          at QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
+          at QTTabBarLib.ShellBrowserEx.Navigate(IDLWrapper idlw, SBSP flags)
+          at QTTabBarLib.QTTabBarClass.tabControl1_SelectedIndexChanged(Object sender, EventArgs e)
         */
         protected void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -8018,7 +7943,6 @@ namespace QTTabBarLib {
 
         protected void SetBarRows(int count)
         {
-            // QTUtility2.log("QTTabBarClass SetBarRows");
             // BandHeight = (count * (Config.Skin.TabHeight - 3 )) ;
             // BandHeight = (count * (Config.Skin.TabHeight - 3));
             // BandHeight = (count * (Config.Skin.TabHeight + BandHeightSpace));
@@ -8026,18 +7950,18 @@ namespace QTTabBarLib {
             // BandHeight = (count * (Config.Skin.TabHeight + 10 )) ;
             // fix bug
             /**
-           异常文本
-System.NullReferenceException: 未将对象引用设置到对象的实例。
-   在 QTTabBarLib.QTTabBarClass.SetBarRows(Int32 count)
-   在 QTTabBarLib.QTabControl.CalculateItemRectangle_MultiRows()
-   在 QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
-   在 QTTabBarLib.QTabControl.OnPaint(PaintEventArgs e)
-   在 System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
-   在 System.Windows.Forms.Control.WmPaint(Message& m)
-   在 System.Windows.Forms.Control.WndProc(Message& m)
-   在 QTTabBarLib.QTabControl.WndProc(Message& m)
-   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
-   在 System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+           Exception text
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at QTTabBarLib.QTTabBarClass.SetBarRows(Int32 count)
+   at QTTabBarLib.QTabControl.CalculateItemRectangle_MultiRows()
+   at QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
+   at QTTabBarLib.QTabControl.OnPaint(PaintEventArgs e)
+   at System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer)
+   at System.Windows.Forms.Control.WmPaint(Message& m)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at QTTabBarLib.QTabControl.WndProc(Message& m)
+   at System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
              **/
             if (null != rebarController)
             {
@@ -8054,7 +7978,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
         }
 
         /**
-         * 保存选中项
+         * Save the selected item
          */
         protected void SaveSelectedItems(QTabItem tab)
         {
@@ -8083,21 +8007,21 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
         }
 
 
-        // 新增+号按钮的添加新标签事件
+        // The "+" button's add-new-tab event
         private void tabControl1_PlusButtonClicked(object sender, QTabCancelEventArgs e)
         {
-            // 新标签按钮 qwop
+            // New tab button, qwop
             string clipPath = QTUtility2.GetStringClipboard();
             if (String.IsNullOrEmpty(clipPath))
             {
-                // 如果获取不到剪贴板路径，则打开默认
+                // If we can't get a path from the clipboard, open the default
                 openDefault();
                 return;
             }
             clipPath = clipPath.Trim().Trim(new char[] { ' ', '"' });
             string[] pathArr = { "a:\\", "b:\\", "c:\\", "d:\\", "e:\\", "f:\\", "g:\\", "h:\\", "i:\\" };
             bool blockSelecting = false, fForceNew = true;
-            // 如果剪贴板是一个文件路径，并且存在则打开父级目录或者跟级目录
+            // If the clipboard contains a file path that exists, open its parent (or root) directory
             if (File.Exists(clipPath))
             {
                 try
@@ -8124,7 +8048,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
                     openDefault();
                 }
             }
-            else if (Directory.Exists(clipPath)) // 剪贴板直接是一个目录则打开标签
+            else if (Directory.Exists(clipPath)) // If the clipboard is directly a directory, open it as a tab
             {
                 try
                 {
@@ -8140,7 +8064,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
             else
             {
 
-                // 打开指定盘符目录
+                // Open the specified drive directory
                 /*
                 for ( int i = 0; i < pathArr.Length; i++ )
                 {
@@ -8158,7 +8082,7 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
         private void openDefault()
         {
             bool isOpend = false;
-            // 打开配置的路径地址
+            // Open the configured path
             using (IDLWrapper wrapper = new IDLWrapper(Config.Window.DefaultLocation))
             {
                 QTUtility2.log("tabControl1_PlusButtonClicked others default " + Config.Window.DefaultLocation);
@@ -8168,10 +8092,10 @@ System.NullReferenceException: 未将对象引用设置到对象的实例。
 
             if (!isOpend)
             {
-                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // 我的电脑， 默认打开
+                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // My Computer, opened by default
                 using (IDLWrapper w = new IDLWrapper(idl))
                 {
-                    QTUtility2.log("tabControl1_PlusButtonClicked 我的电脑 ");
+                    QTUtility2.log("tabControl1_PlusButtonClicked My Computer ");
                     OpenNewTab(w, false, true);
                 }
             }

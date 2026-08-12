@@ -171,7 +171,7 @@ namespace QTTabBarLib.Interop {
         [DllImport("user32.dll")]
         public static extern int GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
         /// <summary>
-        /// 打开进程
+        /// Open a process
         /// </summary>
         /// <param name="dwDesiredAccess"></param>
         /// <param name="bInheritHandle"></param>

@@ -34,7 +34,7 @@ using System.Resources;
 [assembly: AssemblyCopyright("Copyright (C)  2007-2026")]
 [assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
-// [assembly: AssemblyFileVersion("2.0.0.0")]
+// [assembly: AssemblyFileVersion("1.5.9.0")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

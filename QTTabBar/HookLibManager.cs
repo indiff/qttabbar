@@ -81,64 +81,6 @@ namespace QTTabBarLib {
             CreateCompatibleDC
         }
 
-        /** Do not initialize hook.*/
-        public static void Initialize_donot()
-        {
-            QTUtility2.log("Do not initialize hook" );
-        }
-
-        public static void Initialize_bgtool()
-        {
-            if (hHookLib != IntPtr.Zero) return;
-            string installPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "QTTabBar");
-            // string filename = IntPtr.Size == 8 ? "QTHookLib64.dll" : "QTHookLib32.dll";
-            string filename =  "ExplorerBgTool.dll";
-            hHookLib = PInvoke.LoadLibrary(Path.Combine(installPath, filename));
-            int retcode = -1;
-            if (hHookLib == IntPtr.Zero)
-            {
-                int error = Marshal.GetLastWin32Error();
-                QTUtility2.MakeErrorLog(null, "LoadLibrary error: " + error);
-            }
-            else
-            {
-                IntPtr pFunc = PInvoke.GetProcAddress(hHookLib, "OnWindowLoad");
-                if (pFunc != IntPtr.Zero)
-                {
-                    InitHookLibDelegate initialize = (InitHookLibDelegate)
-                        Marshal.GetDelegateForFunctionPointer(pFunc, typeof(InitHookLibDelegate));
-                    try
-                    {
-                        retcode = initialize(callbackStruct);
-                    }
-                    catch (Exception e)
-                    {
-                        QTUtility2.MakeErrorLog(e, "");
-                    }
-
-                }
-            }
-
-            if (retcode == 0)
-            {
-                QTUtility2.log("HookLib Initialize success");
-                return;
-            }
-            QTUtility2.MakeErrorLog(null, "HookLib Initialize failed: " + retcode);
-
-            MessageForm.Show(IntPtr.Zero,
-                String.Format(
-                    "{0}: {1} {2}",
-                    QTUtility.TextResourcesDic["ErrorDialogs"][4],
-                    QTUtility.TextResourcesDic["ErrorDialogs"][5],
-                    QTUtility.TextResourcesDic["ErrorDialogs"][7]
-                ),
-                QTUtility.TextResourcesDic["ErrorDialogs"][1],
-                MessageBoxIcon.Hand,
-                30000, false, true
-            );
-        }
-
         private static Boolean LoadedHook = false;
 
         public static void Initialize()
@@ -155,11 +97,11 @@ namespace QTTabBarLib {
                 foreach (ManagementObject mo in searcher.Get())
                 {
 
-                    sCPUSerialNumber = mo["Name"].ToString().ToLower().Trim();//操作系统名字
-                    //sCPUSerialNumber = mo["BootDevice"].ToString().Trim();//系统启动分区
-                    //sCPUSerialNumber = mo["NumberOfProcesses"].ToString().Trim();//当前运行的进程数
-                    //sCPUSerialNumber = mo["SerialNumber"].ToString().Trim();//操作系统序列号
-                    //sCPUSerialNumber = mo["OSLanguage"].ToString().Trim();//操作系统的语言
+                    sCPUSerialNumber = mo["Name"].ToString().ToLower().Trim();//OS name
+                    //sCPUSerialNumber = mo["BootDevice"].ToString().Trim();//boot partition
+                    //sCPUSerialNumber = mo["NumberOfProcesses"].ToString().Trim();//current running process count
+                    //sCPUSerialNumber = mo["SerialNumber"].ToString().Trim();//OS serial number
+                    //sCPUSerialNumber = mo["OSLanguage"].ToString().Trim();//OS language
                     //sCPUSerialNumber = mo["Manufacturer"].ToString().Trim();//
                 }
 
@@ -198,7 +140,7 @@ namespace QTTabBarLib {
                 return;
             }
 
-            if (!File.Exists(Path.Combine(installPath, filename))) // 如果文件不存在则设置为不自动加载
+            if (!File.Exists(Path.Combine(installPath, filename))) // If the file doesn't exist, disable auto-load
             {
                 QTUtility2.flog("not exists file , close auto hook " + Path.Combine(installPath, filename));
                 Config.Window.AutoHookWindow = false;
@@ -289,9 +231,6 @@ namespace QTTabBarLib {
             });
             return true;
         }
-        /** do not init shell brownser hook. */
-        public static void InitShellBrowserHook_old(IShellBrowser shellBrowser) { }
-
         public static void InitShellBrowserHook(IShellBrowser shellBrowser)
         {
             lock (typeof(HookLibManager))
