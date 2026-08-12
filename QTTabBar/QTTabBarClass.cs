@@ -251,6 +251,7 @@ namespace QTTabBarLib {
         #endregion
 
         public QTTabBarClass() {
+            // Initialize utility classes (static resources such as logging and paths)
             QTUtility.Initialize();
             // QTUtility2.AllocDebugConsole();
             // Application.SetCompatibleTextRenderingDefault(false);
@@ -260,14 +261,16 @@ namespace QTTabBarLib {
                 ConfigurationManager.AppSettings.Set("EnableWindowsFormsHighDpiAutoResizing", "true");
             }
             catch (Exception) { /* Ignora l'eccezione #1# }*/
+			// Read the install and activation times to decide whether this is the first load
             try {
                 string installDateString;
-                DateTime installDate;
-                string minDate = DateTime.MinValue.ToString();
+                DateTime installDate = DateTime.Now;
+                string nowDateStr = DateTime.Now.ToString();
                 using(RegistryKey key = Registry.LocalMachine.OpenSubKey(RegConst.Root)) {
-                    installDateString = key == null ? minDate : (string)key.GetValue("InstallDate", minDate);
+                    // installDateString = key == null ? nowDateStr : (string)key.GetValue("InstallDate", nowDateStr);
+                    installDateString =  (string)key.GetValue("InstallDate");
                     // Wrong time format, may cause initialization to fail
-                    if (QTUtility.IsSimpleDateStr(installDateString))  // Added a check for whether the date matches the correct format
+                    if (QTUtility.IsSimpleDateStr(installDateString))  // Regex check that the date is in the correct format
                     {
                         try
                         {
@@ -276,42 +279,67 @@ namespace QTTabBarLib {
                         }
                         catch (Exception e)
                         {
-                            installDate = DateTime.ParseExact(installDateString, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
-                            // ignore exception 
-                        }
-
-                        using (RegistryKey key2 = Registry.CurrentUser.CreateSubKey(RegConst.Root))
-                        {
-                            DateTime lastActivation;
-                            // DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
-                            var value = (string)key2.GetValue("ActivationDate", minDate);
                             try
                             {
-                                QTUtility2.log("ActivationDate " + value);
-                                lastActivation = DateTime.Parse(value);
+                                installDate = DateTime.ParseExact(installDateString, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
                             }
-                            catch (Exception e)
+                            catch (Exception e1) {
+                                key.SetValue("InstallDate", nowDateStr);
+                                installDateString = nowDateStr;
+                                // ignore exception
+                            }
+                        }
+                    }
+                    else
+                    {
+                        key.SetValue("InstallDate", nowDateStr);
+                        installDateString = nowDateStr;
+                    }
+                }
+
+                using (RegistryKey key2 = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                {
+                    DateTime lastActivation ;
+                    // DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
+                    var value = (string)key2.GetValue("ActivationDate");
+                    if (value == null)
+                    {
+                        fIsFirstLoad = true;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            QTUtility2.log("ActivationDate " + value);
+                            lastActivation = DateTime.Parse(value);
+                        }
+                        catch (Exception e)
+                        {
+                            try
                             {
                                 lastActivation = DateTime.ParseExact(value, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
+                            }
+                            catch (Exception e2)
+                            {
+                                fIsFirstLoad = true;
+                                lastActivation = installDate;
+                                key2.SetValue("ActivationDate", nowDateStr);
                                 // ignore exception 
                             }
-
-                            fIsFirstLoad = installDate.CompareTo(lastActivation) > 0;
-                            // Wrong time format, may cause initialization to fail
-                            if (fIsFirstLoad)
-                                key.SetValue("ActivationDate", installDateString);
                         }
-                    } 
-                    /*else if (QTUtility.IsShortDateStr(installDateString))
-                    {
 
-                    }*/
+                        fIsFirstLoad = installDate.CompareTo(lastActivation) >= 0;
+                        // Wrong time format, may cause initialization to fail
+                        if (fIsFirstLoad)
+                            key2.SetValue("ActivationDate", installDateString);
+                    }
                 }
-                
             }
             catch (Exception e ){
                 QTUtility2.MakeErrorLog(e, "QTTabBarClass constructor - initializing install time");
             }
+
+
             if(!fInitialized) {
                 InitializeStaticFields();
             }
@@ -328,57 +356,90 @@ namespace QTTabBarLib {
             QTUtility2.ENABLE_LOGGER = Config.Misc.EnableLog;
         }
 
+        /// <summary>
+        /// Inserts a new tab at the position given by the configuration.
+        /// </summary>
+        /// <param name="tab">The tab object to insert</param>
         private void AddInsertTab(QTabItem tab) {
+            // Log for easier debugging
             QTUtility2.log(  "QTTabBarClass AddInsertTab  " );
+            // Decide where the new tab goes based on the configuration
             switch(Config.Tabs.NewTabPosition) {
                 case TabPos.Leftmost:
+                    // Insert at the leftmost position (index 0)
                     tabControl1.TabPages.Insert(0, tab);
                     break;
 
                 case TabPos.Right:
                 case TabPos.Left: {
+                    // Insert to the left or right of the current tab
                     int index = tabControl1.TabPages.IndexOf(CurrentTab);
                     if(index == -1) {
+                        // If no tab is selected, just append at the end
                         tabControl1.TabPages.Add(tab);
                     }
                     else {
-                        tabControl1.TabPages.Insert(Config.Tabs.NewTabPosition == TabPos.Right ? (index + 1) : index, tab);    
+                        // Insert to the right or left of the current tab
+                        tabControl1.TabPages.Insert(
+                            Config.Tabs.NewTabPosition == TabPos.Right ? (index + 1) : index, tab
+                        );
                     }
                     break;
                 }
 
                 default: // TabPos.Rightmost
+                    // Insert at the rightmost position (the end)
                     tabControl1.TabPages.Add(tab);
                     break;
             }
         }
 
+        /// <summary>
+        /// Opens group and path tabs on startup, restoring the last session or locked tabs per the configuration.
+        /// </summary>
+        /// <param name="openingGRP">Group name to exclude on startup (usually an empty string)</param>
+        /// <param name="openingPath">Path to exclude on startup (usually the current startup path)</param>
         private void AddStartUpTabs(string openingGRP, string openingPath) {
+            // Log for easier debugging
             QTUtility2.log(  "QTTabBarClass AddStartUpTabs openingGRP "  + openingGRP + " openingPath " + openingPath);
+            // Skip auto-opening group tabs if Shift is held or another instance already exists
             if(ModifierKeys == Keys.Shift || InstanceManager.GetTotalInstanceCount() != 0) return;
+            // Walk every group marked "open on startup", excluding the current group
             foreach(string path in GroupsManager.Groups.Where(g => g.Startup && openingGRP != g.Name).SelectMany(g => g.Paths)) {
+                // If "never open the same tab twice" is configured, skip paths that are already open
                 if(Config.Tabs.NeverOpenSame) {
                     if(path.PathEquals(openingPath)) {
+                        // If the path equals the startup path, move it to the end
                         tabControl1.TabPages.Relocate(0, tabControl1.TabCount - 1);
                         continue;
                     }
                     if(tabControl1.TabPages.Any(item => path.PathEquals(item.CurrentPath))) {
+                        // Skip if the tab bar already holds this path
                         continue;
                     }
                 }
+                // Create the IDL wrapper and check whether the path is usable
                 using(IDLWrapper wrapper = new IDLWrapper(path)) {
                     if(!wrapper.Available) continue;
+                    // Create the new tab object
                     QTabItem tabPage = new QTabItem(QTUtility2.MakePathDisplayText(path, false), path, tabControl1);
+                    // Navigate to the given path
                     tabPage.NavigatedTo(path, wrapper.IDL, -1, false);
+                    // Set the tab tooltip text
                     tabPage.ToolTipText = QTUtility2.MakePathDisplayText(path, true);
+                    // Set the underline marker (indicates it was opened automatically)
                     tabPage.Underline = true;
+                    // Add it to the tab bar
                     tabControl1.TabPages.Add(tabPage);
                 }
             }
+            // Decide whether to restore locked tabs or the last session based on the configuration
             if(Config.Window.RestoreOnlyLocked) {
+                // Restore only the locked tabs
                 RestoreTabsOnInitialize(1, openingPath);
             }
             else if(Config.Window.RestoreSession || fIsFirstLoad) {
+                // Restore the last session, or restore on first startup
                 RestoreTabsOnInitialize(0, openingPath);
             }
         }
@@ -389,13 +450,16 @@ namespace QTTabBarLib {
          * Handle dropped-in files, invoking the method described by the relevant application
          */
         private void AppendUserApps(IList<string> listDroppedPaths) {
+		    // Bring the Explorer window to the foreground
             WindowUtils.BringExplorerToFront(ExplorerHandle);
+		    // Initialize the popup menu if it has not been created yet
             if(contextMenuDropped == null) {
                 ToolStripMenuItem tsmiDropped = new ToolStripMenuItem { Tag = 1 };
                 contextMenuDropped = new ContextMenuStripEx(components, false);
                 contextMenuDropped.SuspendLayout();
                 contextMenuDropped.Items.Add(tsmiDropped);
                 contextMenuDropped.Items.Add(new ToolStripMenuItem());
+		        // Menu item click handler - creates a new app when clicked
                 contextMenuDropped.ItemClicked += (sender, e) => {
                     if(e.ClickedItem.Tag != null)
                         AppsManager.CreateNewApp((List<string>)contextMenuDropped.Tag);
@@ -403,6 +467,7 @@ namespace QTTabBarLib {
                 contextMenuDropped.ResumeLayout(false);
             }
 
+		    // Build the menu display text
             string strMenu = QTUtility.ResMain[21];
             strMenu += listDroppedPaths.Count > 1
                     ? listDroppedPaths.Count + QTUtility.ResMain[22] // "items" - per the relevant application's wording
@@ -410,35 +475,48 @@ namespace QTTabBarLib {
 
             contextMenuDropped.SuspendLayout();
             contextMenuDropped.Items[0].Text = strMenu;
-            contextMenuDropped.Items[1].Text = QTUtility.ResMain[23];			// Cancel
+		    contextMenuDropped.Items[1].Text = QTUtility.ResMain[23]; // the "Cancel" menu item
             contextMenuDropped.Tag = listDroppedPaths;
             contextMenuDropped.ResumeLayout();
+		    // Show the menu at the mouse position
             contextMenuDropped.Show(MousePosition);
         }
 
-        // TODO: Kill this.
+		// TODO: Kill this. async callback fired when the directory-tree operation completes
         private void AsyncComplete_FolderTree(IAsyncResult ar) {
             AsyncResult result = (AsyncResult)ar;
+		    // End the async operation
             ((WaitTimeoutCallback)result.AsyncDelegate).EndInvoke(ar);
+		    // If the window handle exists, call back on the UI thread
             if(IsHandleCreated) {
                 Invoke(new FormMethodInvoker(CallbackFolderTree), new object[] { result.AsyncState });
             }
         }
 
+		// An enhanced version of BeforeNavigate2 that handles pre-navigation logic.
+		// Returns true to block navigation. The target IDL is advisory only and is not guaranteed to be accurate.
+		
         // This function is used as a more available version of BeforeNavigate2.
         // Return true to suppress the navigation.  Target IDL should not be relied
         // upon; it's not guaranteed to be accurate.
         private bool BeforeNavigate(IDLWrapper target, bool autonav) {
+		    // Return immediately if the tab bar is not shown
             if(!IsShown) return false;
+		    // Hide the subdirectory tip menu
             HideSubDirTip_Tab_Menu();
+		    // Clear the drag state
             NowTabDragging = false;
+		    // Track whether this is an automatic navigation
             fAutoNavigating = autonav;
+		    // Save the current selection unless the navigation was triggered by code
             if(!NavigatedByCode) {
                 SaveSelectedItems(CurrentTab);
             }
+		    // If we are currently navigating through history
             if(NowInTravelLog) {
                 if(CurrentTravelLogIndex > 0) {
                     CurrentTravelLogIndex--;
+		            // Continue the history navigation unless this is a special folder
                     if(!IsSpecialFolderNeedsToTravel(target.Path)) {
                         NavigateBackToTheFuture();
                     }
@@ -447,24 +525,33 @@ namespace QTTabBarLib {
                     NowInTravelLog = false;
                 }
             }
+		    // Record the IDL this navigation attempt targeted
             lastAttemptedBrowseObjectIDL = target.IDL;
             return false;
         }
 
+		// Directory-tree async callback - shows or hides the directory tree
         private void CallbackFolderTree(object obj) {
             bool fShow = (bool)obj;
             ShowFolderTree(fShow);
             if(fShow) {
+		        // Repaint the Explorer window
                 PInvoke.SetRedraw(ExplorerHandle, true);
                 PInvoke.RedrawWindow(ExplorerHandle, IntPtr.Zero, IntPtr.Zero, 0x289);
             }
         }
 
+		/**
+		 * Callback handler for the message hook.
+		 * Handles the various custom and system messages.
+		 */
         private IntPtr CallbackGetMsgProc(int nCode, IntPtr wParam, IntPtr lParam) {
             if(nCode >= 0) {
+		        // Parse the message struct
                 MSG msg = (MSG)Marshal.PtrToStructure(lParam, typeof(MSG));
                 // QTUtility2.debugMessage(msg);
                 try {
+		            // Special handling of the close message on Windows XP
                     if(QTUtility.IsXP) {
                         if(msg.message == WM.CLOSE) {
                             if(iSequential_WM_CLOSE > 0) {
@@ -478,6 +565,7 @@ namespace QTTabBarLib {
                         }
                     }
 
+		            // Handle the custom message: new directory-tree control
                     if(msg.message == WM_NEWTREECONTROL)
                     {
                         QTUtility2.log("CallbackGetMsgProc WM_NEWTREECONTROL");
@@ -2603,7 +2691,8 @@ namespace QTTabBarLib {
             int count = 1;
             // Close the 1-second delayed-detection timer
             Timer timer = new Timer { Interval = 1000 };
-            timer.Tick += (sender, args) =>
+            EventHandler handler = null;
+            handler = (sender, args) =>
             {
                 try
                 {
@@ -2612,6 +2701,8 @@ namespace QTTabBarLib {
                     if (count >= 10)
                     {
                         timer.Stop();
+                        timer.Tick -= handler;
+                        timer.Dispose(); // release resources so objects do not pile up
                     }
                     string SelectionPath = RegistryUtil.ReadSelection(CurrentTab.CurrentPath);
                     QTUtility2.log(
@@ -2651,6 +2742,8 @@ namespace QTTabBarLib {
                         if (selected)
                         {
                             timer.Stop();
+                            timer.Tick -= handler;
+                            timer.Dispose(); // release resources so objects do not pile up
                             // InstanceManager.RemoveSelect(CurrentTab.CurrentPath );
                             // InstanceManager.selectDict.Remove(CurrentTab.CurrentPath);
                         }
@@ -2661,6 +2754,8 @@ namespace QTTabBarLib {
                     QTUtility2.MakeErrorLog(e, "Getting the selected file after WeChat or QQ opens it");
                 }
             };
+
+            timer.Tick += handler;
             timer.Start();
         }
 
@@ -2669,13 +2764,16 @@ namespace QTTabBarLib {
         {
             int count = 1;
             Timer timer = new Timer { Interval = 1000 };
-            timer.Tick += (sender, args) =>
+            EventHandler handler = null;
+            handler = (sender, args) =>
             {
                 count++;
                 if (count >= 10)
                 {
                     QTUtility2.log("CloseExplorer QTTabBarClass start");
                     timer.Stop();
+                    timer.Tick -= handler;
+                    timer.Dispose(); // release resources so objects do not pile up
                     Explorer.Quit();
                     WindowUtils.CloseExplorer(ExplorerHandle, 0);
                     QTUtility2.log("CloseExplorer QTTabBarClass  end");
@@ -2691,6 +2789,8 @@ namespace QTTabBarLib {
                     if (select != null)
                     {
                         timer.Stop();
+                        timer.Tick -= handler;
+                        timer.Dispose(); // release resources so objects do not pile up
                         Explorer.Quit();
                         WindowUtils.CloseExplorer(ExplorerHandle, 0);
                     }
@@ -2715,6 +2815,8 @@ namespace QTTabBarLib {
                                     InstanceManager.PutSelect(tabItem.CurrentPath, list);
                                     // InstanceManager.selectDict.Add(tabItem.CurrentPath, list);
                                     timer.Stop();
+                                    timer.Tick -= handler;
+                                    timer.Dispose(); // release resources so objects do not pile up
                                     Explorer.Quit();
                                     WindowUtils.CloseExplorer(ExplorerHandle, 0);
 
@@ -2727,6 +2829,7 @@ namespace QTTabBarLib {
                 {
                 }
             };
+            timer.Tick += handler;
             timer.Start();
         }
 
@@ -3279,6 +3382,12 @@ namespace QTTabBarLib {
                         BeginInvoke(new Action(() => {
                             InstanceManager.PushTabBarInstance(this);
                             InstanceManager.RemoveFromTrayIcon(Handle);
+                            // While QTTabBar manages the top-level Explorer window (the `CabinetWClass` window), the window can sometimes end up in a bad state:
+                            IntPtr hwnd = this.ExplorerHandle;
+                            if (PInvoke.IsIconic(hwnd) && PInvoke.GetForegroundWindow() == hwnd)
+                            {
+                                this.RestoreWindow();
+                            }
                         }));
                     }
                     else {
@@ -4629,11 +4738,16 @@ namespace QTTabBarLib {
             {
                 // Try again in 2 seconds
                 Timer timer = new Timer { Interval = 2000 };
-                timer.Tick += (sender, args) => {
+                EventHandler handler = null;
+                handler = (sender, args) =>
+                {
                     QTUtility2.log("QTTabBarClass timer.Tick TryCallButtonBar ");
                     TryCallButtonBar(bbar => {return bbar.CreateItems();});
                     timer.Stop();
+                    timer.Tick -= handler;
+                    timer.Dispose(); // release resources so objects do not pile up
                 };
+                timer.Tick += handler;
                 timer.Start();
             }
             if(QTUtility.WindowAlpha < 0xff) {
@@ -5596,14 +5710,15 @@ namespace QTTabBarLib {
                 bandObjectSite.QueryService(ExplorerGUIDs.IID_IShellBrowser, ExplorerGUIDs.IID_IUnknown, out obj2);
                 ShellBrowser = new ShellBrowserEx((IShellBrowser)obj2);
                 HookLibManager.InitShellBrowserHook(ShellBrowser.GetIShellBrowser());
-                if(Config.Tweaks.ForceSysListView) {
+                if (Config.Tweaks.ForceSysListView && ShellBrowser != null )
+                {
                     ShellBrowser.SetUsingListView(true);
                 }
                 bandObjectSite.QueryService(ExplorerGUIDs.IID_ITravelLogStg, ExplorerGUIDs.IID_ITravelLogStg, out obj3);
                 TravelLog = (ITravelLogStg)obj3;
             }
             catch(COMException exception) {
-                QTUtility2.MakeErrorLog(exception);
+                QTUtility2.MakeErrorLog(exception, "OnExplorerAttached");
             }
             
             Explorer.BeforeNavigate2 += Explorer_BeforeNavigate2;
@@ -6130,38 +6245,54 @@ namespace QTTabBarLib {
         /// </summary>
         internal void RefreshOptions() {
             QTUtility2.log(  "QTTabBarClass RefreshOptions" );
+            try
+            {
             SuspendLayout();
             tabControl1.SuspendLayout();
             tabControl1.RefreshOptions(false);
-            if(Config.Tabs.ShowNavButtons) {
-                if(toolStrip == null) {
+                if (Config.Tabs.ShowNavButtons)
+                {
+                    if (toolStrip == null)
+                    {
                     InitializeNavBtns(true);
                     buttonNavHistoryMenu.Enabled = navBtnsFlag != 0;
                     Controls.Add(toolStrip);
                 }
-                else {
+                    else
+                    {
                     toolStrip.SuspendLayout();
                 }
                 toolStrip.Dock = Config.Tabs.NavButtonsOnRight ? DockStyle.Right : DockStyle.Left;
                 toolStrip.ResumeLayout(false);
                 toolStrip.PerformLayout();
             }
-            else if(toolStrip != null) {
-                toolStrip.Dock = DockStyle.None;
-            }
+                else if (toolStrip != null)
+                {
+                    toolStrip.Dock = DockStyle.None;
+                }
             int iType = 0;
-            if(Config.Tabs.MultipleTabRows) {
-                iType = Config.Tabs.ActiveTabOnBottomRow ? 1 : 2;
-            }
+                if (Config.Tabs.MultipleTabRows)
+                {
+                    iType = Config.Tabs.ActiveTabOnBottomRow ? 1 : 2;
+                }
             SetBarRows(tabControl1.SetTabRowType(iType));
             if(rebarController != null) rebarController.RefreshBG();
             foreach(QTabItem item in tabControl1.TabPages) {
                 item.RefreshRectangle();
             }
             ShellBrowser.SetUsingListView(Config.Tweaks.ForceSysListView);
-            tabControl1.ResumeLayout();
+                if (null != tabControl1)
+                {
+                    // Watch for System.Runtime.InteropServices.InvalidComObjectException
+                    tabControl1.ResumeLayout();
+                }
             ResumeLayout(true);
             TryCallButtonBar(bbar => { return bbar.CreateItems(); });
+            }
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "RefreshOptions");
+            }
         }
 
         [ComRegisterFunction]
@@ -6998,6 +7129,7 @@ namespace QTTabBarLib {
             QTabItem tabMouseOn = tabControl1.GetTabMouseOn();
             if(((tabMouseOn != null) && (tabMouseOn == tabForDD)) && tabControl1.TabPages.Contains(tabMouseOn)) {
                 if(Config.Tabs.DragOverTabOpensSDT) {
+                    QTUtility2.log("timerOnTab_Tick");
                     WindowUtils.BringExplorerToFront(ExplorerHandle);
                     ShowSubdirTip_Tab(tabMouseOn, true, tabControl1.TabOffset, false, fToggleTabMenu);
                     fToggleTabMenu = !fToggleTabMenu;

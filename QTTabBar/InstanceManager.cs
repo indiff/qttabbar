@@ -26,30 +26,46 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     internal static class InstanceManager {
+        // Selection dictionary: key is the path, value is the list of selected items
         private static Dictionary<string, List<string>> selectDict = new Dictionary<string, List<string>>();
+        // Thread-to-QTTabBar map: one QTTabBarClass instance per thread
         private static Dictionary<Thread, QTTabBarClass> dictTabInstances = new Dictionary<Thread, QTTabBarClass>();
+        // Thread-to-QTButtonBar map: one QTButtonBar instance per thread
         private static Dictionary<Thread, QTButtonBar> dictBBarInstances = new Dictionary<Thread, QTButtonBar>();
+        // Handle-to-QTTabBar map, for looking up a QTTabBarClass by handle
         private static StackDictionary<IntPtr, QTTabBarClass> sdTabHandles = new StackDictionary<IntPtr, QTTabBarClass>();
+        // Reader/writer lock for the button bar, for thread safety
         private static ReaderWriterLock rwLockBtnBar = new ReaderWriterLock();
+        // Reader/writer lock for the tab bar, for thread safety
         private static ReaderWriterLock rwLockTabBar = new ReaderWriterLock();
+        // Reader/writer lock for the selection dictionary, for thread safety
         private static ReaderWriterLock rwLockSelectDict = new ReaderWriterLock();
 
-
-
+        // WCF duplex client, used for inter-process communication
         private static DuplexClient commClient;
+        // Whether this is the main process
         private static bool isServer;
 
+        // Variables used only by the main process
+        // The WCF service host
         // Server-only stuff
         private static ServiceHost serviceHost;
+        // Callback interfaces for every connected WCF client
         private static List<ICommClient> callbacks = new List<ICommClient>();
+        // Handle-to-WCF-client-callback map
         private static StackDictionary<IntPtr, ICommClient> sdInstances = new StackDictionary<IntPtr, ICommClient>();
+
+        // Tray icon manager
         private static TrayIcon trayIcon;
         // add by indiff
+        // Reader/writer lock used for thread synchronization (added by indiff)
         private static ReaderWriterLockSlim rwLock = new ReaderWriterLockSlim();
 
 
         #region Comm Classes and Interfaces
-
+        /// <summary>
+        /// WCF duplex client implementation
+        /// </summary>
         private class DuplexClient : DuplexClientBase<ICommService> {
             public DuplexClient(InstanceContext callbackInstance, Binding binding, EndpointAddress remoteAddress)
                 : base(callbackInstance, binding, remoteAddress) {
@@ -57,6 +73,9 @@ namespace QTTabBarLib {
             public new ICommService Channel { get { return base.Channel; } }
         }
 
+        /// <summary>
+        /// WCF service contract - defines every method callable across processes
+        /// </summary>
         [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(ICommClient))]
         private interface ICommService {
             [OperationContract]
@@ -96,25 +115,39 @@ namespace QTTabBarLib {
             void Broadcast(byte[] encodedAction);
         }
 
+        /// <summary>
+        /// WCF service implementation - handles all inter-process requests
+        /// </summary>
         [ServiceBehavior(
                 ConcurrencyMode = ConcurrencyMode.Reentrant,
                 InstanceContextMode = InstanceContextMode.PerSession)]
         private class CommService : ICommService {
 
+            /// <summary>
+            /// Checks whether the client connection has dropped
+            /// </summary>
             private static bool IsDead(ICommClient client) {
                 ICommunicationObject ico = client as ICommunicationObject;
                 return ico != null && ico.State != CommunicationState.Opened;                
             }
-
+            /// <summary>
+            /// Checks for and removes dropped client connections
+            /// </summary>
             private static void CheckConnections() {
                 callbacks.RemoveAll(IsDead);
                 sdInstances.RemoveAllValues(c => !callbacks.Contains(c));
             }
 
+            /// <summary>
+            /// Gets the callback channel for the current operation
+            /// </summary>
             private static ICommClient GetCallback() {
                 return OperationContext.Current.GetCallbackChannel<ICommClient>();
             }
 
+            /// <summary>
+            /// Gets the total number of instances
+            /// </summary>
             public int GetTotalInstanceCount() {
                 CheckConnections();
                 return sdInstances.Count;
@@ -289,7 +322,9 @@ namespace QTTabBarLib {
         private class CommClient : ICommClient {
             public void Execute(byte[] encodedAction) {
                 Delegate thedel = null;
-                try {
+                bool isBeginInvokeMain = false;
+                try
+                {
                     QTUtility2.log("InstanceManager CommClient Execute : "
                                    // +  encodedAction + 
                                    // " Length: " + encodedAction.Length + 
@@ -306,7 +341,8 @@ namespace QTTabBarLib {
                         thedel.DynamicInvoke();
                     }
                 }
-                catch(Exception ex) {
+                catch (Exception ex)
+                {
                     string errStr = null;
                     if (thedel != null && thedel.Method != null)
                     {
@@ -317,17 +353,41 @@ namespace QTTabBarLib {
                     // re initialize 
                     Initialize();
                 }
+                // remove close
+                finally
+                {
+                    if (!Config.Window.CaptureWeChatSelection) {
+
+                        if (commClient != null && commClient.State != CommunicationState.Closed)
+                        {
+                            try
+                            {
+                                commClient.Close();
+                            }
+                            catch (Exception closeEx)
+                            {
+                                QTUtility2.MakeErrorLog(closeEx, "commClient.Close() failed, try Abort()");
+                                commClient.Abort();
+                            }
+                        }
+                    }
+                } // end of finally
             }
         }
-
         #endregion
 
         #region Utility Methods
 
+        /// <summary>
+        /// Serializes a delegate into a byte array
+        /// </summary>
         private static byte[] DelToByte(Delegate del) {
             return QTUtility.ObjectToByteArray(new SerializeDelegate(del));
         }
 
+        /// <summary>
+        /// Deserializes a byte array back into a delegate
+        /// </summary>
         private static Delegate ByteToDel(byte[] buf) {
             if (buf == null || buf.Length == 0 ) { return null; }
             object v = QTUtility.ByteArrayToObject(buf);
@@ -338,6 +398,10 @@ namespace QTTabBarLib {
 
         #endregion
 
+
+        /// <summary>
+        /// Initializes inter-process communication and instance synchronization
+        /// </summary>
         public static void Initialize(bool skipServer = false) {
             uint desktopPID;
             PInvoke.GetWindowThreadProcessId(WindowUtils.GetShellTrayWnd(), out desktopPID);
@@ -350,6 +414,7 @@ namespace QTTabBarLib {
             // WFC channels should never be opened on any thread that has a message loop!
             // Otherwise reentrant calls will deadlock, for some reason.
             // So, create a new thread and open the channels there.
+            // A WCF channel cannot be opened on a thread with a message loop or it deadlocks, so use a new thread
             thread = new Thread(() => {
                 if(isServer && !skipServer) {
                     serviceHost = new ServiceHost(
@@ -385,12 +450,14 @@ namespace QTTabBarLib {
                         }
                     }
                 }
-                catch(EndpointNotFoundException) {
+                catch(EndpointNotFoundException e) {
+                    QTUtility2.MakeErrorLog( e, "Initialize commClient endpoint not found!" );
                 }
                 lock(thread) {
                     Monitor.Pulse(thread);
                 }
                 // Yes, we can just let the thread die here.
+                // Thread finished
             });
             thread.Start();
             lock(thread) {
@@ -398,6 +465,9 @@ namespace QTTabBarLib {
             }            
         }
 
+        /// <summary>
+        /// Gets the WCF communication channel
+        /// </summary>
         private static ICommService GetChannel() {
             if(commClient.State != CommunicationState.Opened) {
                 Initialize(true);
@@ -405,11 +475,17 @@ namespace QTTabBarLib {
             return commClient.State == CommunicationState.Opened ? commClient.Channel : null;
         }
 
+        /// <summary>
+        /// Static broadcast - sends the operation to every instance
+        /// </summary>
         public static void StaticBroadcast(Action action) {
             ICommService service = GetChannel();
             if(service != null) service.Broadcast(DelToByte(action));
         }
 
+        /// <summary>
+        /// Tab bar broadcast - sends the operation to every tab bar instance
+        /// </summary>
         public static void TabBarBroadcast(Action<QTTabBarClass> action, bool includeCurrent) {
             LocalTabBroadcast(action, Thread.CurrentThread);
             if(includeCurrent) {
@@ -419,6 +495,9 @@ namespace QTTabBarLib {
             StaticBroadcast(() => LocalTabBroadcast(action));
         }
 
+        /// <summary>
+        /// Local tab bar broadcast
+        /// </summary>
         public static void LocalTabBroadcast(Action<QTTabBarClass> action, Thread skip = null) {
             using(new Keychain(rwLockTabBar, false)) {
                 foreach(var pair in dictTabInstances) {
@@ -429,6 +508,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Button bar broadcast - sends the operation to every button bar instance
+        /// </summary>
         public static void ButtonBarBroadcast(Action<QTButtonBar> action, bool includeCurrent) {
             LocalBBarBroadcast(action, Thread.CurrentThread);
             if(includeCurrent) {
@@ -438,6 +520,9 @@ namespace QTTabBarLib {
             StaticBroadcast(() => LocalBBarBroadcast(action));
         }
 
+        /// <summary>
+        /// Local button bar broadcast
+        /// </summary>
         public static void LocalBBarBroadcast(Action<QTButtonBar> action, Thread skip = null) {
             using(new Keychain(rwLockBtnBar, false)) {
                 foreach(var pair in dictBBarInstances) {
@@ -448,6 +533,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Runs the operation on the main process
+        /// </summary>
         private static void ExecuteOnMainProcess(Action action, bool doAsync) {
             ICommService service = GetChannel();
             if(service == null || service.ExecuteOnMainProcess(DelToByte(action), doAsync)) {
@@ -455,6 +543,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Ensures the operation runs on the main process
+        /// </summary>
         public static bool EnsureMainProcess(Action action) {
             ICommService service = GetChannel();
             if(service != null && service.IsMainProcess()) return true;
@@ -463,14 +554,23 @@ namespace QTTabBarLib {
             return false;
         }
 
+        /// <summary>
+        /// Synchronously invokes a tab bar operation on the main process
+        /// </summary>
         public static void InvokeMain(Action<QTTabBarClass> action) {
             ExecuteOnMainProcess(() => LocalInvokeMain(action), false);
         }
 
+        /// <summary>
+        /// Asynchronously invokes a tab bar operation on the main process
+        /// </summary>
         public static void BeginInvokeMain(Action<QTTabBarClass> action) {
             ExecuteOnMainProcess(() => LocalInvokeMain(action, true), true);
         }
 
+        /// <summary>
+        /// Invokes the main tab bar instance locally
+        /// </summary>
         public static void LocalInvokeMain(Action<QTTabBarClass> action, bool doAsync = false) {
             QTTabBarClass instance;
             // Get the QTTabBar class instance for the current thread
@@ -488,14 +588,19 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Registers a button bar instance
+        /// </summary>
         public static void RegisterButtonBar(QTButtonBar bbar) {
             using(new Keychain(rwLockBtnBar, true)) {
                 dictBBarInstances[Thread.CurrentThread] = bbar;
             }
         }
 
-        
 
+        /// <summary>
+        /// Pushes a tab bar instance to the service host
+        /// </summary>
         public static void PushTabBarInstance(QTTabBarClass tabbar) {
             IntPtr handle = tabbar.Handle;
             using(new Keychain(rwLockTabBar, true)) {
@@ -506,12 +611,18 @@ namespace QTTabBarLib {
             if(service != null) service.PushInstance(handle);
         }
 
+        /// <summary>
+        /// Unregisters a button bar instance
+        /// </summary>
         public static void UnregisterButtonBar() {
             using(new Keychain(rwLockBtnBar, true)) {
                 dictBBarInstances.Remove(Thread.CurrentThread);
             }
         }
 
+        /// <summary>
+        /// Unregisters a tab bar instance
+        /// </summary>
         public static bool UnregisterTabBar() {
             using(new Keychain(rwLockTabBar, true)) {
                 QTTabBarClass tabbar;
@@ -526,23 +637,37 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Gets the total number of instances
+        /// </summary>
         public static int GetTotalInstanceCount() {
             ICommService service = GetChannel();
             return service == null ? dictTabInstances.Count : service.GetTotalInstanceCount();
         }
+
+        // Atomic operations for multithreading 
+        private static bool UseInterLocked = false;
+        // Mutex flag guarding selectDict against concurrent access
         private static int inTimer = 0;
+        // Lock object for selectDict operations
         private static object LockSelectDict = new object();
 
+        /// <summary>
+        /// Sets the selection list for the given key
+        /// </summary>
         public static void PutSelect(string key , List<string> list ) 
         {
             /*using(new Keychain(rwLockSelectDict, true))
             {
                 selectDict[key] = list;
             }*/
-            if (Interlocked.Exchange(ref inTimer, 1) != 0)
+            if (UseInterLocked)
             {
-                QTUtility2.log("Access denied");
-                return;
+                if (Interlocked.Exchange(ref inTimer, 1) != 0)
+                {
+                    QTUtility2.log("Access denied");
+                    return;
+                }
             }
             try
             {
@@ -557,20 +682,29 @@ namespace QTTabBarLib {
             }
             finally
             {
-                Interlocked.Exchange(ref inTimer, 0);
+                if (UseInterLocked)
+                {
+                    Interlocked.Exchange(ref inTimer, 0);
+                }
             }
         }
 
+        /// <summary>
+        /// Removes the selection for the given key
+        /// </summary>
         public static void RemoveSelect(string key  ) 
         {
             /*using(new Keychain(rwLockSelectDict, true))
             {
                 selectDict.Remove(key);
             }*/
-            if (Interlocked.Exchange(ref inTimer, 1) != 0)
+            if (UseInterLocked)
             {
-                QTUtility2.log("Access denied");
-                return;
+                if (Interlocked.Exchange(ref inTimer, 1) != 0)
+                {
+                    QTUtility2.log("Access denied");
+                    return;
+                }
             }
             try
             {
@@ -585,10 +719,16 @@ namespace QTTabBarLib {
             }
             finally
             {
-                Interlocked.Exchange(ref inTimer, 0);
+                if (UseInterLocked)
+                {
+                    Interlocked.Exchange(ref inTimer, 0);
+                }
             }
         }
 
+        /// <summary>
+        /// Gets the selection list for the given key
+        /// </summary>
         public static List<string> GetSelect(string key)
         {
             /*using (new Keychain(rwLockSelectDict, false))
@@ -596,10 +736,13 @@ namespace QTTabBarLib {
                 List<string> list;
                 return selectDict.TryGetValue(key, out list) ? list : null;
             }*/
-            if (Interlocked.Exchange(ref inTimer, 1) != 0)
+            if (UseInterLocked)
             {
-                QTUtility2.log("Access denied");
-                return null;
+                if (Interlocked.Exchange(ref inTimer, 1) != 0)
+                {
+                    QTUtility2.log("Access denied");
+                    return null;
+                }
             }
             try
             {
@@ -616,10 +759,16 @@ namespace QTTabBarLib {
             }
             finally
             {
-                Interlocked.Exchange(ref inTimer, 0);
+                if (UseInterLocked)
+                {
+                    Interlocked.Exchange(ref inTimer, 0);
+                }
             }
         }
 
+        /// <summary>
+        /// Gets the tab bar instance for the current thread
+        /// </summary>
         public static QTTabBarClass GetThreadTabBar() {
             using(new Keychain(rwLockTabBar, false)) {
                 QTTabBarClass tab;
@@ -627,6 +776,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Gets the button bar instance for the current thread
+        /// </summary>
         public static QTButtonBar GetThreadButtonBar() {
             using(new Keychain(rwLockBtnBar, false)) {
                 QTButtonBar bbar;
@@ -634,6 +786,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Gets the button bar handle for the current thread
+        /// </summary>
         public static bool TryGetButtonBarHandle(IntPtr explorerHandle, out IntPtr ptr) {
             // todo
             QTButtonBar bbar;
@@ -645,6 +800,9 @@ namespace QTTabBarLib {
             return false;
         }
 
+        /// <summary>
+        /// Runs the operation on the service process
+        /// </summary>
         public static void ExecuteOnServerProcess(Action action, bool doAsync) {
             ICommService service;
             if(isServer || (service = GetChannel()) == null) {
@@ -660,6 +818,9 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Gets a return value from the service process
+        /// </summary>
         public static T GetFromServerProcess<T>(Func<T> func) {
             ICommService service;
             if(isServer || (service = GetChannel()) == null) {
@@ -677,11 +838,17 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Adds the tray icon
+        /// </summary>
         public static void AddToTrayIcon(IntPtr tabBarHandle, IntPtr explorerHandle, string currentPath, string[] tabNames, string[] tabPaths) {
             ICommService service = GetChannel();
             if(service != null) service.AddToTrayIcon(tabBarHandle, explorerHandle, currentPath, tabNames, tabPaths);
         }
 
+        /// <summary>
+        /// Removes the tray icon
+        /// </summary>
         public static void RemoveFromTrayIcon(IntPtr tabBarHandle) {
             ICommService service = GetChannel();
             if (service != null)
@@ -690,12 +857,17 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Selects the given tab on another tab bar
+        /// </summary>
         public static void SelectTabOnOtherTabBar(IntPtr tabBarHandle, int index) {
             ICommService service = GetChannel();
             if(service != null) service.SelectTabOnOtherTabBar(tabBarHandle, index);
         }
 
-
+        /// <summary>
+        /// Syncs the toolbar colour across every tab bar
+        /// </summary>
         public static void SyncToolbarColorThreads()
         {
             IntPtr lParam = MCR.MAKELPARAM(1, 0);
@@ -716,5 +888,7 @@ namespace QTTabBarLib {
                 }
             }
         }
+
+
     }
 }

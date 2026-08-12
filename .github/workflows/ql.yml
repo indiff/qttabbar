@@ -25,13 +25,13 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
 
     - name: Setup NuGet
-      uses: nuget/setup-nuget@v2
+      uses: nuget/setup-nuget@v4
       with:
         nuget-version: 'latest'
 
@@ -39,7 +39,7 @@ jobs:
       run: nuget restore "QTTabBar Rebirth.sln"
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
 
@@ -50,4 +50,4 @@ jobs:
         msbuild "QTTabBar\QTTabBar.csproj" /t:Build "/p:Configuration=Release" "/p:SolutionDir=$slnDir"
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4

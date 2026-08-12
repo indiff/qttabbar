@@ -364,7 +364,8 @@ namespace QTTabBarLib {
                 ActivateNewTab = true;  // Whether to switch to the new tab immediately
                 NeverOpenSame = true;   //  Reuse an existing tab
                 RenameAmbTabs = true;  // Fuzzy-match tab rename
-                DragOverTabOpensSDT = false; // Action when dragging something onto a tab
+                DragOverTabOpensSDT = true; // Action when dragging onto a tab: true = copy/move the file, false = switch to it
+                // DragOverTabOpensSDT is stored in the registry as 0 / 1 (reg_dword)
                 ShowFolderIcon = true;  // Show folder icon
                 ShowSubDirTipOnTab = false;  // Show SubDirTip on tab
                 ShowDriveLetters = false; // Show drive letters
@@ -481,29 +482,52 @@ namespace QTTabBarLib {
                 PreviewFont = new Font(new FontFamily("微软雅黑"), 9f);
                 // Text-type extensions - added yml/yaml support
                 TextExt = new List<string> {
-                    ".txt",".rtf"
-                    ,".ini", ".inf",".properties", ".ruleset", ".settings"
-                    ,".cs", ".log"
-                    ,".js", ".vbs", ".bat", ".cmd", ".sh"
-                    ,".c",".cpp",".cc",".h", ".rc"
+                    ".asp" 
+                    ,".aspx"
+                    ,".bat"
+                    ,".cmd"
+                    ,".sh"
+                    ,".c",".cpp",".cc",".h", ".rc",".cs"
+                    ,".css"
+                    ,".env"
+                    ,".txt"
+                    ,".txtlog"
+                    ,".tex"
+                    ,".rtf"
+                    ,".ini", ".inf"
+                    ,".properties"
+                    , ".ruleset", ".settings"
+                    ,".log"
+                    ,".js"
+                    ,".vb"
+                    ,".vbs"
                     ,".xml"
-                    ,".yml",".yaml"
+                    ,".yml"
+                    ,".yaml"
+                    ,".toml"
                     ,".htm",".html",".mht",".mhtml", ".shtml", ".hta"
                     ,".HxT",".HxC",".hhc",".hhk", ".hhp"
                     ,".java"
                     ,".sql"
+                    ,".tsv"
                     ,".csv"
-                    ,".md"
-
-                    ,".m"
-                    ,".reg"
-
-                    ,".wxl"
-                    ,".wxs"
-
+                    ,".md" 
+                    ,".markdown" 
+                    ,".json" 
+                    ,".wsdl" // web service definition/description file
+                    ,".m" 
+                    ,".reg" 
+                    ,".wxl" 
+                    ,".wxs" 
                     ,".py", ".rb"
-                    ,".jsp", ".asp", ".php",".aspx"
-                    ,".resx",".xaml",  ".config", ".manifest", ".csproj", ".vbproj"
+                    ,".jsp", ".php"
+                    ,".resx",".xaml"
+                    ,".cfg"
+                    ,".conf"
+                    ,".config"
+                    ,".manifest"
+                    ,".csproj"
+                    ,".vbproj"
                 };
                 // Configure the default image extensions
                 ImageExt = ThumbnailTooltipForm.MakeDefaultImgExts();

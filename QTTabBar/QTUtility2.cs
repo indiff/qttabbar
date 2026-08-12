@@ -444,12 +444,12 @@ namespace QTTabBarLib {
                 }
                 else
                 {
-                    ;
                     dictTime[cThreadId] = DateTime.Now;
                 }
-            } 
+            }
 
-            string path = Path.Combine(appdataQT, "QTTabBarException.log");
+           //  string path = Path.Combine(appdataQT, "QTTabBarException.log");
+            string path = Path.Combine(appdataQT, "QTTabBar.log");
             var line = new StringBuilder();
             line
                 .Append("[")
@@ -517,6 +517,7 @@ namespace QTTabBarLib {
             writeStr(path, line);
         }
 
+        
 
         public static void MakeErrorLog(Exception ex, string optional = null) {
             try

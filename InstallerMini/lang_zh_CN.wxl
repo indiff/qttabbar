@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="zh-cn" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="YOURLOCID">你的本地字符串</String>
+  <String Id="READ_INFO">请阅读以下信息。</String>
+  <String Id="CLOSE_TABS">关闭所有的资源管理器窗口并且重新打开</String>
+  <String Id="COMPILE_IMG">编译本地图像</String>
+  <String Id="GPL_FILE">GPL3_zh_CN.rtf</String>
+  <String Id="STANDARD_BUTTONS">QTTab标准按钮</String>
+  <String Id="DESKTOP_TOOL">QTTab桌面工具</String>
+
+  <String Id="QTTABBAR_ATUOLOADER">QTTabBar自动加载器</String>
+
+  <String Id="ALREADY_INSTALLED">已安装较新的版本。</String>
+  <String Id="DETECTED_OLD_VERSION">安装程序检测到已安装较旧版本的QTTabBar。 由于安装程序的更改，您必须手动卸载此旧版本并重新启动Explorer，然后才能继续。 卸载较旧的版本并重新启动资源管理器后，请再次运行安装程序。</String>
+  <String Id="STILL_OLD_VERSION">似乎Windows资源管理器中仍加载了旧版本的QTTabBar。 请通过任务管理器重新启动资源管理器或重新启动计算机，然后再继续。</String>
+  <String Id="REQUIRE_NET_FRAMEWORK">此应用程序要求.NET Framework版本至少为3.5。 请安装.NET Framework，然后再次运行此安装程序。</String>
+</WixLocalization>
+

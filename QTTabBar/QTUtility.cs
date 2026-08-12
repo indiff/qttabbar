@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -318,7 +319,7 @@ namespace QTTabBarLib {
                         memStream.Write(arrBytes, 0, arrBytes.Length);
                         memStream.Seek(0, SeekOrigin.Begin);
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
-                        // binaryFormatter.Binder = new PreMergeToMergedDeserializationBinder(); // Fix a deserialization issue caused by a mismatched application/assembly version
+                        binaryFormatter.Binder = new QTTabBarDeserializationBinder();
                         object obj = binaryFormatter.Deserialize(memStream);
                         /*QTUtility2.log("ByteArrayToObject:" + Encoding.Default.GetString(arrBytes));
                         if (obj != null)
@@ -1189,7 +1190,7 @@ namespace QTTabBarLib {
 
         internal static string DefaultNewFileName()
         {
-            return isChinese() ? "�½��ı��ĵ�" : "newDocument";
+            return isChinese() ? "新建文本文档" : "newDocument";
         }
 
 
@@ -1230,9 +1231,112 @@ namespace QTTabBarLib {
             {
                 return false;
             }
-            string pattern = @"\d{1,2}/\d{1,2}/\d{1,2}\s��[һ|��|��|��|��|��|��]\s\d{1,2}:\d{1,2}:\d{1,2}";
+            string pattern = @"\d{1,2}/\d{1,2}/\d{1,2}\s周[一|二|三|四|五|六|日]\s\d{1,2}:\d{1,2}:\d{1,2}";
             return Regex.IsMatch(input, pattern);
         }
 
+        // C#: get the parent of the current process
+        public static string GetParentProcessName()
+        {
+            Process currentProcess = Process.GetCurrentProcess();
+            var process = GetParent( currentProcess );
+            if (process == null)
+            {
+                return "";
+            }
+            else
+            {
+                return process.ProcessName;
+            }
+        }
+
+        /// <summary>
+        /// Gets the parent process. May return null on error.
+        /// </summary>
+        /// <param name="process"></param>
+        /// <returns></returns>
+        public static Process GetParent(Process process)
+        {
+            try
+            {
+                //using (var query = new ManagementObjectSearcher("SELECT * FROM Win32_Process WHERE ProcessId=" + process.Id))
+                using (var query = new ManagementObjectSearcher("root\\CIMV2", "SELECT ParentProcessId FROM Win32_Process WHERE ProcessId=" + process.Id))
+                {
+                    return query
+                        .Get()
+                        .OfType<ManagementObject>()
+                        .Select(p => Process.GetProcessById((int)(uint)p["ParentProcessId"]))
+                        .FirstOrDefault();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+     
+
+        /// <summary>
+        /// Gets the parent process of a specified process.
+        /// </summary>
+        /// <param name="handle">The process handle.</param>
+        /// <returns>An instance of the Process class.</returns>
+        /*public static Process GetParentProcess(IntPtr handle)
+        {
+            ParentProcessUtilities pbi = new ParentProcessUtilities();
+            int returnLength;
+            int status = PInvoke.NtQueryInformationProcess(handle, 0, ref pbi, Marshal.SizeOf(pbi), out returnLength);
+            if (status != 0)
+                throw new Win32Exception(status);
+
+            try
+            {
+                return Process.GetProcessById(pbi.InheritedFromUniqueProcessId.ToInt32());
+            }
+            catch (ArgumentException)
+            {
+                // not found
+                return null;
+            }
+        }*/
+    }
+
+    /// <summary>
+    /// Restricts BinaryFormatter deserialization to types from the QTTabBar assembly,
+    /// preventing arbitrary class instantiation from untrusted input.
+    /// </summary>
+    internal sealed class QTTabBarDeserializationBinder : SerializationBinder {
+        private static readonly Assembly QTTabBarAssembly = typeof(QTTabBarDeserializationBinder).Assembly;
+        private static readonly string QTTabBarAssemblyName = QTTabBarAssembly.GetName().Name;
+        // Allowed assembly names in addition to the QTTabBar assembly itself.
+        // mscorlib is required for core types; System.Core is required for delegate serialization holders.
+        private static readonly HashSet<string> AllowedAssemblyNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+            "mscorlib",
+            "System.Core",
+        };
+
+        public override Type BindToType(string assemblyName, string typeName) {
+            AssemblyName an = new AssemblyName(assemblyName);
+            if(an.Name == QTTabBarAssemblyName) {
+                Type t = QTTabBarAssembly.GetType(typeName, throwOnError: false);
+                if(t == null) throw new SerializationException("Unknown type during deserialization: " + typeName);
+                return t;
+            }
+            if(!AllowedAssemblyNames.Contains(an.Name)) {
+                throw new SerializationException("Untrusted assembly during deserialization: " + assemblyName);
+            }
+            // Only load an assembly whose simple name is in the explicit allowlist
+            Assembly resolved;
+            try {
+                resolved = Assembly.Load(assemblyName);
+            }
+            catch(Exception ex) {
+                throw new SerializationException("Unable to load assembly during deserialization: " + assemblyName, ex);
+            }
+            Type type = resolved.GetType(typeName, throwOnError: false);
+            if(type == null) throw new SerializationException("Unknown type during deserialization: " + typeName);
+            return type;
+        }
     }
 }

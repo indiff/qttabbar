@@ -334,7 +334,23 @@ namespace QTTabBarLib {
         private static SizeF GetTextSize(string str, Graphics g, bool fTitle) {
             SizeF sizeF; 
             // fix bug 参数无效    
-            if ( !String.IsNullOrEmpty( str )  ) {
+            if ( String.IsNullOrEmpty( str ) || str.Trim().Length == 0  ) {
+                return SizeF.Empty;
+            }
+
+            if (font == null || fontSubText == null) {
+                QTUtility2.log(" GetTextSize 字体对象未初始化！");
+            }
+
+            if (rctMeasure.Width <= 0 || rctMeasure.Height <= 0) {
+                QTUtility2.log(" GetTextSize 矩形区域宽度或高度为 0!");
+            }
+
+            if (g == null) {
+                QTUtility2.log(" GetTextSize 传入的 Graphics 对象 g 失效!");
+            }
+            try
+            {
                 CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, str.Length) };
                 sfMeasure.SetMeasurableCharacterRanges(ranges);
                
@@ -345,7 +361,11 @@ namespace QTTabBarLib {
                     return sizeF;
                 }
             }
-            return SizeF.Empty;
+            catch (System.Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "GetTextSize str: " + str );
+                throw;
+            }
         }
 
         public LogData GoBackward() {
