@@ -248,99 +248,76 @@ namespace QTTabBarLib {
             }
             return true;
         }
-        #endregion
+		#endregion
 
-        public QTTabBarClass() {
-            // Initialize utility classes (static resources such as logging and paths)
-            QTUtility.Initialize();
-            // QTUtility2.AllocDebugConsole();
-            // Application.SetCompatibleTextRenderingDefault(false);
-            // Application.DoEvents();
-            /*try
-            {
-                ConfigurationManager.AppSettings.Set("EnableWindowsFormsHighDpiAutoResizing", "true");
-            }
-            catch (Exception) { /* Ignora l'eccezione #1# }*/
+		private static bool TryParseRegistryDate(string value, out DateTime result) {
+			if(string.IsNullOrEmpty(value)) {
+				result = DateTime.MinValue;
+				return false;
+			}
+
+			if(DateTime.TryParse(value, out result)) {
+				return true;
+			}
+
+			return DateTime.TryParseExact(
+				value,
+				"yyyy/MM/dd HH:mm:ss",
+				CultureInfo.CurrentCulture,
+				DateTimeStyles.None,
+				out result);
+		}
+
+		public QTTabBarClass() {
+			// Initialize utility classes (static resources such as logging and paths)
+			QTUtility.Initialize();
+			// QTUtility2.AllocDebugConsole();
+			// Application.SetCompatibleTextRenderingDefault(false);
+			// Application.DoEvents();
+			/*try
+			{
+				ConfigurationManager.AppSettings.Set("EnableWindowsFormsHighDpiAutoResizing", "true");
+			}
+			catch (Exception) { /* Ignora l'eccezione #1# }*/
 			// Read the install and activation times to decide whether this is the first load
-            try {
-                string installDateString;
-                DateTime installDate = DateTime.Now;
-                string nowDateStr = DateTime.Now.ToString();
-                using(RegistryKey key = Registry.LocalMachine.OpenSubKey(RegConst.Root)) {
-                    // installDateString = key == null ? nowDateStr : (string)key.GetValue("InstallDate", nowDateStr);
-                    installDateString =  (string)key.GetValue("InstallDate");
-                    // Wrong time format, may cause initialization to fail
-                    if (QTUtility.IsSimpleDateStr(installDateString))  // Regex check that the date is in the correct format
-                    {
-                        try
-                        {
-                            QTUtility2.log("installDateString " + installDateString);
-                            installDate = DateTime.Parse(installDateString);
-                        }
-                        catch (Exception e)
-                        {
-                            try
-                            {
-                                installDate = DateTime.ParseExact(installDateString, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
-                            }
-                            catch (Exception e1) {
-                                key.SetValue("InstallDate", nowDateStr);
-                                installDateString = nowDateStr;
-                                // ignore exception
-                            }
-                        }
-                    }
-                    else
-                    {
-                        key.SetValue("InstallDate", nowDateStr);
-                        installDateString = nowDateStr;
-                    }
-                }
+			try {
+				string nowDateStr = DateTime.Now.ToString();
+				string installDateString = nowDateStr;
+				DateTime installDate = DateTime.Now;
 
-                using (RegistryKey key2 = Registry.CurrentUser.CreateSubKey(RegConst.Root))
-                {
-                    DateTime lastActivation ;
-                    // DateTime lastActivation = DateTime.Parse((string)key.GetValue("ActivationDate", minDate));
-                    var value = (string)key2.GetValue("ActivationDate");
-                    if (value == null)
-                    {
-                        fIsFirstLoad = true;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            QTUtility2.log("ActivationDate " + value);
-                            lastActivation = DateTime.Parse(value);
-                        }
-                        catch (Exception e)
-                        {
-                            try
-                            {
-                                lastActivation = DateTime.ParseExact(value, "yyyy/MM/dd HH:mm:ss", CultureInfo.CurrentCulture);
-                            }
-                            catch (Exception e2)
-                            {
-                                fIsFirstLoad = true;
-                                lastActivation = installDate;
-                                key2.SetValue("ActivationDate", nowDateStr);
-                                // ignore exception 
-                            }
-                        }
+				using(RegistryKey key = Registry.LocalMachine.OpenSubKey(RegConst.Root, false)) {
+					string value = key == null ? null : key.GetValue("InstallDate") as string;
+					if(!TryParseRegistryDate(value, out installDate)) {
+						installDate = DateTime.Now;
+						installDateString = nowDateStr;
+					}
+					else {
+						installDateString = value;
+					}
+				}
 
-                        fIsFirstLoad = installDate.CompareTo(lastActivation) >= 0;
-                        // Wrong time format, may cause initialization to fail
-                        if (fIsFirstLoad)
-                            key2.SetValue("ActivationDate", installDateString);
-                    }
-                }
-            }
-            catch (Exception e ){
-                QTUtility2.MakeErrorLog(e, "QTTabBarClass constructor - initializing install time");
-            }
+				using(RegistryKey key2 = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
+					string activationValue = key2.GetValue("ActivationDate") as string;
+					DateTime lastActivation;
+
+					if(!TryParseRegistryDate(activationValue, out lastActivation)) {
+						fIsFirstLoad = true;
+						key2.SetValue("ActivationDate", installDateString);
+					}
+					else {
+						fIsFirstLoad = installDate.CompareTo(lastActivation) >= 0;
+						if(fIsFirstLoad) {
+							key2.SetValue("ActivationDate", installDateString);
+						}
+					}
+				}
+			}
+			catch (Exception e ){
+				QTUtility2.MakeErrorLog(e, "QTTabBarClass constructor - initializing install time");
+			}
 
 
-            if(!fInitialized) {
+			if(!fInitialized) {
                 InitializeStaticFields();
             }
             // Initialize height

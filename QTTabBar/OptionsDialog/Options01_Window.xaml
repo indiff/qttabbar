@@ -241,6 +241,10 @@
 				Content="Capture Selection(WeChat/QQ/DingDing)"
 				IsChecked="{Binding Path=CaptureWeChatSelection}"
 				Style="{StaticResource CheckStyle}"/>
+			<CheckBox x:Name="ctxOpenExplorerMaximized"
+				Content="Open Explorer windows maximized"
+				IsChecked="{Binding Path=OpenExplorerMaximized}"
+				Style="{StaticResource CheckStyle}"/>
 			<!-- One user-facing switch for what used to be two separate settings
 			     (AutoHookWindow / AutoEnableExperimental): they're different underlying
 			     attach mechanisms (native hook vs. per-window SetSite/ShowDW), but nothing

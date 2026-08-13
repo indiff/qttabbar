@@ -31,6 +31,7 @@ namespace QTTabBarLib {
     internal partial class Options04_Tooltips : OptionsDialogTab {
         private ObservableCollection<FileTypeEntry> TextFileTypes;
         private ObservableCollection<FileTypeEntry> MediaFileTypes;
+		private ObservableCollection<FileTypeEntry> VideoFileTypes;
 
         public Options04_Tooltips() {
             InitializeComponent();
@@ -44,6 +45,12 @@ namespace QTTabBarLib {
                    WorkingConfig.tips.TextExt.Select(ext => new FileTypeEntry(this, ext)));
                 lstMediaFileTypes.ItemsSource = MediaFileTypes = new ObservableCollection<FileTypeEntry>(
                         WorkingConfig.tips.ImageExt.Select(ext => new FileTypeEntry(this, ext)));
+                lstVideoFileTypes.ItemsSource = VideoFileTypes = new ObservableCollection<FileTypeEntry>(
+                        (WorkingConfig.tips.VideoExt ?? ThumbnailTooltipForm.MakeDefaultVideoExts()).Select(ext => new FileTypeEntry(this, ext)));
+                if (null != VideoFileTypes && VideoFileTypes.Count > 0) {
+                    lstVideoFileTypes.ScrollIntoView(VideoFileTypes.FirstOrDefault());
+                }
+
                 if (null != MediaFileTypes && MediaFileTypes.Count > 0) {
                     lstMediaFileTypes.ScrollIntoView(MediaFileTypes.FirstOrDefault());
                 }
@@ -126,6 +133,20 @@ namespace QTTabBarLib {
         private void btnAddMediaFileTypes_Click(object sender, RoutedEventArgs e) {
             AddNewFileType(lstMediaFileTypes);
         }
+		
+        private void btnAddVideoFileTypes_Click(object sender, RoutedEventArgs e) {
+            AddNewFileType(lstVideoFileTypes);
+        }
+		
+        private void btnRemoveVideoFileTypes_Click(object sender, RoutedEventArgs e) {
+            RemoveSelectedFileType(lstVideoFileTypes);
+        }
+		
+        private void btnResetVideoFileTypes_Click(object sender, RoutedEventArgs e) {
+            lstVideoFileTypes.ItemsSource = VideoFileTypes = new ObservableCollection<FileTypeEntry>(
+                    new Config._Tips().VideoExt.Select(ext => new FileTypeEntry(this, ext)));
+            lstVideoFileTypes.ScrollIntoView(VideoFileTypes.First());
+        }
 
         private void btnRemoveTextFileTypes_Click(object sender, RoutedEventArgs e) {
             RemoveSelectedFileType(lstTextFileTypes);
@@ -153,6 +174,9 @@ namespace QTTabBarLib {
 
         private void lstMediaFileTypes_OnKeyDown(object sender, KeyEventArgs e) {
             if(e.Key == Key.Delete) RemoveSelectedFileType(lstMediaFileTypes);
+        }
+        private void lstVideoFileTypes_OnKeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Delete) RemoveSelectedFileType(lstVideoFileTypes);
         }
 
         private void ListViewItem_Selected(object sender, RoutedEventArgs e) {
@@ -183,6 +207,8 @@ namespace QTTabBarLib {
                     if(!_IsEditing && string.IsNullOrEmpty(Extension)) {
                         parent.TextFileTypes.Remove(this);
                         parent.MediaFileTypes.Remove(this);
+                        parent.VideoFileTypes.Remove(this);
+
                     }
                 }
             }

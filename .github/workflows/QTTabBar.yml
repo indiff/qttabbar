@@ -95,7 +95,12 @@ jobs:
     - name: Build installer
       shell: pwsh
       run: |
-        $version = "${{ github.ref_name }}" -replace '^v', ''
+        if ("${{ github.ref }}" -eq "refs/heads/dev") {
+          $version = "1.6.0"
+        } else {
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+        }
+        Write-Host "Using version: $version"
         .\Installer\Build-Installer.ps1 -Version $version
         echo "VERSION=$version" >> $env:GITHUB_ENV
 

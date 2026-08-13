@@ -358,7 +358,6 @@ Language="1033"
         <!-- AppSearch must be done before RemoveExistingProducts and before FindRelatedProducts -->
         <AppSearch Sequence="1"></AppSearch>
         <RemoveExistingProducts After="InstallValidate">PREVIOUSVERSIONSINSTALLED</RemoveExistingProducts>
-        <ScheduleReboot After="RegisterProduct" />
       </InstallExecuteSequence>
         
         <InstallUISequence>
