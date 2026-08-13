@@ -181,7 +181,7 @@
                 Margin="2,0"
                 FontWeight="Bold"/>
             <Label
-                Content="Image filetypes"
+                Content="{qt:Resx Key=Options_Page04_Tooltips, Index=13}"
                 Height="16"
                 Padding="0"
                 Margin="2,0"
@@ -245,7 +245,7 @@
                 VerticalAlignment="Bottom"
                 Width="60"
                 Click="btnResetTextFileTypes_Click"/>
-            <ListBox x:Name="lstImageFileTypes"
+            <ListBox x:Name="lstMediaFileTypes"
                 ItemTemplate="{StaticResource FileTypeItemTemplate}"
                 Width="175"
                 Height="200"
@@ -254,7 +254,7 @@
                 Grid.Column="2"
                 Margin="2"
                 SelectionMode="Extended"
-                KeyDown="lstImageFileTypes_OnKeyDown">
+                KeyDown="lstMediaFileTypes_OnKeyDown">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
@@ -264,7 +264,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
             <Button
-                x:Name="btnAddImageFileTypes"
+                x:Name="btnAddMediaFileTypes"
                 Content="{qt:Resx Key=DialogButtons, Index=7}"
                 Grid.Column="3"
                 Grid.Row="1"
@@ -273,9 +273,9 @@
                 Margin="2"
                 VerticalAlignment="Top"
                 Width="60"
-                Click="btnAddImageFileTypes_Click"/>
+                Click="btnAddMediaFileTypes_Click"/>
             <Button
-                x:Name="btnRemoveImageFileTypes"
+                x:Name="btnRemoveMediaFileTypes"
                 Content="{qt:Resx Key=DialogButtons, Index=9}"
                 Grid.Column="3"
                 Grid.Row="2"
@@ -284,9 +284,9 @@
                 Margin="2"
                 VerticalAlignment="Top"
                 Width="60"
-                Click="btnRemoveImageFileTypes_Click"/>
+                Click="btnRemoveMediaFileTypes_Click"/>
             <Button
-                x:Name="btnResetImageFileTypes"
+                x:Name="btnResetMediaFileTypes"
                 Content="{qt:Resx Key=DialogButtons, Index=6}"
                 Grid.Column="3"
                 Grid.Row="3"
@@ -295,7 +295,7 @@
                 Margin="2"
                 VerticalAlignment="Bottom"
                 Width="60"
-                Click="btnResetImageFileTypes_Click" />
+                Click="btnResetMediaFileTypes_Click" />
             <ListBox x:Name="lstVideoFileTypes"
                 ItemTemplate="{StaticResource FileTypeItemTemplate}"
                 Width="175"

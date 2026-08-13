@@ -30,8 +30,8 @@ using Image = System.Drawing.Image;
 namespace QTTabBarLib {
     internal partial class Options04_Tooltips : OptionsDialogTab {
         private ObservableCollection<FileTypeEntry> TextFileTypes;
-        private ObservableCollection<FileTypeEntry> ImageFileTypes;
-        private ObservableCollection<FileTypeEntry> VideoFileTypes;
+        private ObservableCollection<FileTypeEntry> MediaFileTypes;
+		private ObservableCollection<FileTypeEntry> VideoFileTypes;
 
         public Options04_Tooltips() {
             InitializeComponent();
@@ -43,23 +43,23 @@ namespace QTTabBarLib {
             {
                 lstTextFileTypes.ItemsSource = TextFileTypes = new ObservableCollection<FileTypeEntry>(
                    WorkingConfig.tips.TextExt.Select(ext => new FileTypeEntry(this, ext)));
-                lstImageFileTypes.ItemsSource = ImageFileTypes = new ObservableCollection<FileTypeEntry>(
+                lstMediaFileTypes.ItemsSource = MediaFileTypes = new ObservableCollection<FileTypeEntry>(
                         WorkingConfig.tips.ImageExt.Select(ext => new FileTypeEntry(this, ext)));
                 lstVideoFileTypes.ItemsSource = VideoFileTypes = new ObservableCollection<FileTypeEntry>(
                         (WorkingConfig.tips.VideoExt ?? ThumbnailTooltipForm.MakeDefaultVideoExts()).Select(ext => new FileTypeEntry(this, ext)));
-                if (null != ImageFileTypes && ImageFileTypes.Count > 0) {
-                    lstImageFileTypes.ScrollIntoView(ImageFileTypes.FirstOrDefault());
-                }
-
                 if (null != VideoFileTypes && VideoFileTypes.Count > 0) {
                     lstVideoFileTypes.ScrollIntoView(VideoFileTypes.FirstOrDefault());
+                }
+
+                if (null != MediaFileTypes && MediaFileTypes.Count > 0) {
+                    lstMediaFileTypes.ScrollIntoView(MediaFileTypes.FirstOrDefault());
                 }
 
                 if (null != TextFileTypes && TextFileTypes.Count > 0)
                 {
                     lstTextFileTypes.ScrollIntoView(TextFileTypes.FirstOrDefault());
                 }
-
+                
             }
             catch (Exception exception)
             {
@@ -88,26 +88,15 @@ namespace QTTabBarLib {
                 }
                 
 
-                if (null != ImageFileTypes && ImageFileTypes.Count > 0)
+                if (null != MediaFileTypes && MediaFileTypes.Count > 0)
                 {
-                    WorkingConfig.tips.ImageExt = ImageFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
-                    Config.Tips.ImageExt = ImageFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
+                    WorkingConfig.tips.ImageExt = MediaFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
+                    Config.Tips.ImageExt = MediaFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
                 }
-                else if (null == ImageFileTypes || ImageFileTypes.Count == 0)
+                else if (null == MediaFileTypes || MediaFileTypes.Count == 0)
                 {
                     WorkingConfig.tips.ImageExt = new List<string> { };
                     Config.Tips.ImageExt = new List<string> { };
-                }
-
-                if (null != VideoFileTypes && VideoFileTypes.Count > 0)
-                {
-                    WorkingConfig.tips.VideoExt = VideoFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
-                    Config.Tips.VideoExt = VideoFileTypes.Select(entry => entry.DotExtension).DefaultIfEmpty().ToList();
-                }
-                else if (null == VideoFileTypes || VideoFileTypes.Count == 0)
-                {
-                    WorkingConfig.tips.VideoExt = new List<string> { };
-                    Config.Tips.VideoExt = new List<string> { };
                 }
             }
             catch (Exception exception)
@@ -141,24 +130,30 @@ namespace QTTabBarLib {
             AddNewFileType(lstTextFileTypes);
         }
 
-        private void btnAddImageFileTypes_Click(object sender, RoutedEventArgs e) {
-            AddNewFileType(lstImageFileTypes);
+        private void btnAddMediaFileTypes_Click(object sender, RoutedEventArgs e) {
+            AddNewFileType(lstMediaFileTypes);
         }
-
+		
         private void btnAddVideoFileTypes_Click(object sender, RoutedEventArgs e) {
             AddNewFileType(lstVideoFileTypes);
+        }
+		
+        private void btnRemoveVideoFileTypes_Click(object sender, RoutedEventArgs e) {
+            RemoveSelectedFileType(lstVideoFileTypes);
+        }
+		
+        private void btnResetVideoFileTypes_Click(object sender, RoutedEventArgs e) {
+            lstVideoFileTypes.ItemsSource = VideoFileTypes = new ObservableCollection<FileTypeEntry>(
+                    new Config._Tips().VideoExt.Select(ext => new FileTypeEntry(this, ext)));
+            lstVideoFileTypes.ScrollIntoView(VideoFileTypes.First());
         }
 
         private void btnRemoveTextFileTypes_Click(object sender, RoutedEventArgs e) {
             RemoveSelectedFileType(lstTextFileTypes);
         }
 
-        private void btnRemoveImageFileTypes_Click(object sender, RoutedEventArgs e) {
-            RemoveSelectedFileType(lstImageFileTypes);
-        }
-
-        private void btnRemoveVideoFileTypes_Click(object sender, RoutedEventArgs e) {
-            RemoveSelectedFileType(lstVideoFileTypes);
+        private void btnRemoveMediaFileTypes_Click(object sender, RoutedEventArgs e) {
+            RemoveSelectedFileType(lstMediaFileTypes);
         }
 
         private void btnResetTextFileTypes_Click(object sender, RoutedEventArgs e) {
@@ -167,26 +162,19 @@ namespace QTTabBarLib {
             lstTextFileTypes.ScrollIntoView(TextFileTypes.First());
         }
 
-        private void btnResetImageFileTypes_Click(object sender, RoutedEventArgs e) {
-            lstImageFileTypes.ItemsSource = ImageFileTypes = new ObservableCollection<FileTypeEntry>(
+        private void btnResetMediaFileTypes_Click(object sender, RoutedEventArgs e) {
+            lstMediaFileTypes.ItemsSource = MediaFileTypes = new ObservableCollection<FileTypeEntry>(
                     new Config._Tips().ImageExt.Select(ext => new FileTypeEntry(this, ext)));
-            lstImageFileTypes.ScrollIntoView(ImageFileTypes.First());
-        }
-
-        private void btnResetVideoFileTypes_Click(object sender, RoutedEventArgs e) {
-            lstVideoFileTypes.ItemsSource = VideoFileTypes = new ObservableCollection<FileTypeEntry>(
-                    new Config._Tips().VideoExt.Select(ext => new FileTypeEntry(this, ext)));
-            lstVideoFileTypes.ScrollIntoView(VideoFileTypes.First());
+            lstMediaFileTypes.ScrollIntoView(MediaFileTypes.First());
         }
 
         private void lstTextFileTypes_OnKeyDown(object sender, KeyEventArgs e) {
             if(e.Key == Key.Delete) RemoveSelectedFileType(lstTextFileTypes);
         }
 
-        private void lstImageFileTypes_OnKeyDown(object sender, KeyEventArgs e) {
-            if(e.Key == Key.Delete) RemoveSelectedFileType(lstImageFileTypes);
+        private void lstMediaFileTypes_OnKeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Delete) RemoveSelectedFileType(lstMediaFileTypes);
         }
-
         private void lstVideoFileTypes_OnKeyDown(object sender, KeyEventArgs e) {
             if(e.Key == Key.Delete) RemoveSelectedFileType(lstVideoFileTypes);
         }
@@ -218,8 +206,9 @@ namespace QTTabBarLib {
                     _IsEditing = value;
                     if(!_IsEditing && string.IsNullOrEmpty(Extension)) {
                         parent.TextFileTypes.Remove(this);
-                        parent.ImageFileTypes.Remove(this);
+                        parent.MediaFileTypes.Remove(this);
                         parent.VideoFileTypes.Remove(this);
+
                     }
                 }
             }
