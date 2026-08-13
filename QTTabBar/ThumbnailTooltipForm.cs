@@ -27,6 +27,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using System.Windows.Forms.VisualStyles;
 using BandObjectLib;
 using MultiLanguage;
@@ -54,6 +55,9 @@ namespace QTTabBarLib {
         private int maxHeight = Config.Tips.PreviewMaxHeight;
         private int maxWidth = Config.Tips.PreviewMaxWidth;
         private PictureBox pictureBox1;
+        // Video preview player: a WPF MediaElement hosted in this borderless tooltip via ElementHost
+        private ElementHost videoHost;
+        private System.Windows.Controls.MediaElement videoPlayer;
         public event QEventHandler ThumbnailVisibleChanged;
        //  static readonly string BomMarkUtf8String = Encoding.UTF8.GetString(BomMarkUtf8);
 
@@ -112,7 +116,7 @@ namespace QTTabBarLib {
 
         private bool CreateThumbnail(string path, ref Size formSize) {
             string ext = Path.GetExtension(path).ToLower();
-            if(ExtIsImage(ext)) {
+            if(ExtIsImage(ext) || ExtIsVideo(ext)) {
                 FileInfo info = new FileInfo(path);
                 if(!info.Exists || (info.Length <= 0L)) {
                     return false;
@@ -320,19 +324,35 @@ namespace QTTabBarLib {
             return GetGDIPSupportedImages().Contains(ext.ToLower());
         }
 
+        private static List<string> GetConfiguredImageExts() {
+            return Config.Tips.ImageExt ?? MakeDefaultImgExts();
+        }
+
+        private static List<string> GetConfiguredVideoExts() {
+            return Config.Tips.VideoExt ?? MakeDefaultVideoExts();
+        }
+
+        private static List<string> GetConfiguredTextExts() {
+            return Config.Tips.TextExt ?? new Config._Tips().TextExt;
+        }
+
         private static bool ExtIsImage(string ext) {
-            return (ext.Length != 0 && Config.Tips.ImageExt.Contains(ext.ToLower()) && ext != ".ico");
+            return (ext.Length != 0 && GetConfiguredImageExts().Contains(ext.ToLower()) && ext != ".ico");
+        }
+
+        private static bool ExtIsVideo(string ext) {
+            return (ext.Length != 0 && GetConfiguredVideoExts().Contains(ext.ToLower()));
         }
 
         public static bool ExtIsSupported(string ext) {
-            if(!ExtIsImage(ext)) {
+            if(!ExtIsImage(ext) && !ExtIsVideo(ext)) {
                 return ExtIsText(ext);
             }
             return true;
         }
 
         private static bool ExtIsText(string ext) {
-            return (ext.Length != 0 && Config.Tips.TextExt.Contains(ext.ToLower()));
+            return (ext.Length != 0 && GetConfiguredTextExts().Contains(ext.ToLower()));
         }
 
         private static string FormatSize(long size) {
@@ -377,6 +397,16 @@ namespace QTTabBarLib {
 
         private void InitializeComponent() {
             pictureBox1 = new PictureBox();
+            // Video preview: WPF MediaElement hosted via ElementHost, borderless and fills the preview area
+            videoPlayer = new System.Windows.Controls.MediaElement();
+            videoPlayer.LoadedBehavior = System.Windows.Controls.MediaState.Manual;
+            videoPlayer.UnloadedBehavior = System.Windows.Controls.MediaState.Manual;
+            videoPlayer.ScrubbingEnabled = true;
+            videoHost = new ElementHost();
+            videoHost.Dock = DockStyle.None;
+            videoHost.BackColor = Color.Black;
+            videoHost.Child = videoPlayer;
+            videoHost.Visible = false;
             lblText = new Label();
             lblInfo = new Label();
             ((ISupportInitialize)pictureBox1).BeginInit();
@@ -411,6 +441,11 @@ namespace QTTabBarLib {
             Controls.Add(lblText);
             Controls.Add(pictureBox1);
             Controls.Add(lblInfo);
+            Controls.Add(videoHost);
+            // Keep videoHost between pictureBox1 and lblInfo in the collection: WinForms
+            // docks controls in reverse collection order, so the bottom info bar must be
+            // added after the player to claim its strip before the player fills the rest.
+            Controls.SetChildIndex(videoHost, Controls.IndexOf(lblInfo));
             FormBorderStyle = FormBorderStyle.None;
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.Manual;
@@ -1497,15 +1532,18 @@ namespace QTTabBarLib {
         }
 
         internal static List<string> MakeDefaultImgExts() {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(GetGDIPSupportedImages());
-            builder.Append(supportedMovies);
-            var strs = builder.ToString();
-            if (QTUtility.IsEmptyStr(strs))
-            {
+            string strs = GetGDIPSupportedImages();
+            if(QTUtility.IsEmptyStr(strs)) {
                 return new List<string>();
             }
             return new List<string>(strs.Split(QTUtility.SEPARATOR_CHAR));
+        }
+
+        internal static List<string> MakeDefaultVideoExts() {
+            if(QTUtility.IsEmptyStr(supportedMovies)) {
+                return new List<string>();
+            }
+            return new List<string>(supportedMovies.Split(QTUtility.SEPARATOR_CHAR));
         }
 
         protected override void OnPaintBackground(PaintEventArgs e) {

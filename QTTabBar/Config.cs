@@ -277,6 +277,7 @@ namespace QTTabBarLib {
             public bool AutoHookWindow           { get; set; }
             public bool ShowFailNavMsg           { get; set; } // SHOW_FAIL_NAV_MSG
             public bool AutoEnableExperimental   { get; set; } // auto-attach QTTabBarClass to every new Explorer window (see ContextMenuOptions/AutoLoader)
+            public bool OpenExplorerMaximized    { get; set; }
 
             public byte[] DefaultLocation        { get; set; }
 
@@ -309,6 +310,7 @@ namespace QTTabBarLib {
                 // Auto-start hook off by default
                 AutoHookWindow = false;
                 AutoEnableExperimental = false;
+                OpenExplorerMaximized = false;
   //              string idl = Environment.OSVersion.Version >= new Version(6, 1)
   //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
   //                     : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // Computer
@@ -449,6 +451,7 @@ namespace QTTabBarLib {
             public Font PreviewFont              { get; set; }
             public List<string> TextExt          { get; set; }
             public List<string> ImageExt         { get; set; }
+            public List<string> VideoExt         { get; set; }
 
             public _Tips() {
                 /*ShowSubDirTips = true;
@@ -531,6 +534,7 @@ namespace QTTabBarLib {
                 };
                 // Configure the default image extensions
                 ImageExt = ThumbnailTooltipForm.MakeDefaultImgExts();
+                VideoExt = ThumbnailTooltipForm.MakeDefaultVideoExts();
             }
         }
 

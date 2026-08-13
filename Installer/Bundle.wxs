@@ -24,8 +24,7 @@
             <MsiPackage Id="QTTabBarInstaller"
                         SourceFile="bin\Release\en-US\QTTabBar Setup 1.5.9.msi"
                         Vital="yes"
-                        DisplayInternalUI="no"
-                        MsiProperties="REBOOT=ReallySuppress" />
+                        DisplayInternalUI="no" />
         </Chain>
     </Bundle>
 </Wix>

@@ -164,7 +164,9 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -179,12 +181,19 @@
                 Margin="2,0"
                 FontWeight="Bold"/>
             <Label
-                Content="{qt:Resx Key=Options_Page04_Tooltips, Index=13}"
+                Content="Image filetypes"
                 Height="16"
                 Padding="0"
                 Margin="2,0"
                 FontWeight="Bold"
                 Grid.Column="2"/>
+            <Label
+                Content="Video filetypes"
+                Height="16"
+                Padding="0"
+                Margin="2,0"
+                FontWeight="Bold"
+                Grid.Column="4"/>
             <ListBox x:Name="lstTextFileTypes"
                 ItemTemplate="{StaticResource FileTypeItemTemplate}"
                 Width="175"
@@ -236,7 +245,7 @@
                 VerticalAlignment="Bottom"
                 Width="60"
                 Click="btnResetTextFileTypes_Click"/>
-            <ListBox x:Name="lstMediaFileTypes"
+            <ListBox x:Name="lstImageFileTypes"
                 ItemTemplate="{StaticResource FileTypeItemTemplate}"
                 Width="175"
                 Height="200"
@@ -245,7 +254,7 @@
                 Grid.Column="2"
                 Margin="2"
                 SelectionMode="Extended"
-                KeyDown="lstMediaFileTypes_OnKeyDown">
+                KeyDown="lstImageFileTypes_OnKeyDown">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
@@ -255,7 +264,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
             <Button
-                x:Name="btnAddMediaFileTypes"
+                x:Name="btnAddImageFileTypes"
                 Content="{qt:Resx Key=DialogButtons, Index=7}"
                 Grid.Column="3"
                 Grid.Row="1"
@@ -264,9 +273,9 @@
                 Margin="2"
                 VerticalAlignment="Top"
                 Width="60"
-                Click="btnAddMediaFileTypes_Click"/>
+                Click="btnAddImageFileTypes_Click"/>
             <Button
-                x:Name="btnRemoveMediaFileTypes"
+                x:Name="btnRemoveImageFileTypes"
                 Content="{qt:Resx Key=DialogButtons, Index=9}"
                 Grid.Column="3"
                 Grid.Row="2"
@@ -275,9 +284,9 @@
                 Margin="2"
                 VerticalAlignment="Top"
                 Width="60"
-                Click="btnRemoveMediaFileTypes_Click"/>
+                Click="btnRemoveImageFileTypes_Click"/>
             <Button
-                x:Name="btnResetMediaFileTypes"
+                x:Name="btnResetImageFileTypes"
                 Content="{qt:Resx Key=DialogButtons, Index=6}"
                 Grid.Column="3"
                 Grid.Row="3"
@@ -285,7 +294,59 @@
                 HorizontalAlignment="Left"
                 Margin="2"
                 VerticalAlignment="Bottom"
-                Width="60" Click="btnResetMediaFileTypes_Click" />
+                Width="60"
+                Click="btnResetImageFileTypes_Click" />
+            <ListBox x:Name="lstVideoFileTypes"
+                ItemTemplate="{StaticResource FileTypeItemTemplate}"
+                Width="175"
+                Height="200"
+                Grid.Row="1"
+                Grid.RowSpan="3"
+                Grid.Column="4"
+                Margin="2"
+                SelectionMode="Extended"
+                KeyDown="lstVideoFileTypes_OnKeyDown">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+                        <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" />
+                        <EventSetter Event="Selected" Handler="ListViewItem_Selected" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <Button
+                x:Name="btnAddVideoFileTypes"
+                Content="{qt:Resx Key=DialogButtons, Index=7}"
+                Grid.Column="5"
+                Grid.Row="1"
+                Height="23"
+                HorizontalAlignment="Left"
+                Margin="2"
+                VerticalAlignment="Top"
+                Width="60"
+                Click="btnAddVideoFileTypes_Click"/>
+            <Button
+                x:Name="btnRemoveVideoFileTypes"
+                Content="{qt:Resx Key=DialogButtons, Index=9}"
+                Grid.Column="5"
+                Grid.Row="2"
+                Height="23"
+                HorizontalAlignment="Left"
+                Margin="2"
+                VerticalAlignment="Top"
+                Width="60"
+                Click="btnRemoveVideoFileTypes_Click"/>
+            <Button
+                x:Name="btnResetVideoFileTypes"
+                Content="{qt:Resx Key=DialogButtons, Index=6}"
+                Grid.Column="5"
+                Grid.Row="3"
+                Height="23"
+                HorizontalAlignment="Left"
+                Margin="2"
+                VerticalAlignment="Bottom"
+                Width="60"
+                Click="btnResetVideoFileTypes_Click" />
         </Grid>
     </StackPanel>
 </qt:OptionsDialogTab>
