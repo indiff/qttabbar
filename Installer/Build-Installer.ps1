@@ -29,6 +29,23 @@ $assemblyVersion = if ($Version -match '^\d+\.\d+\.\d+$') { "$Version.0" } else 
 
 # --- 1. Stamp the version into the three files that still need it ---------
 
+$Force_Remove_Path = Join-Path $root "MinHook\bin\"
+if (Test-Path $Force_Remove_Path) {
+    Remove-Item -Path $MinHook_Release -Recurse -Force -ErrorAction SilentlyContinue
+}
+$Force_Remove_Path = Join-Path $root "MinHook\obj\"
+if (Test-Path $Force_Remove_Path) {
+    Remove-Item -Path $MinHook_Release -Recurse -Force -ErrorAction SilentlyContinue
+}
+$Force_Remove_Path = Join-Path $root "QTHookLib\obj\"
+if (Test-Path $Force_Remove_Path) {
+    Remove-Item -Path $MinHook_Release -Recurse -Force -ErrorAction SilentlyContinue
+}
+$Force_Remove_Path = Join-Path $root "QTHookLib\bin\"
+if (Test-Path $Force_Remove_Path) {
+    Remove-Item -Path $MinHook_Release -Recurse -Force -ErrorAction SilentlyContinue
+}
+
 $assemblyInfo = Join-Path $root "QTTabBar\Properties\AssemblyInfo.cs"
 (Get-Content $assemblyInfo -Raw) `
     -replace 'AssemblyVersion\("[\d.]+"\)', "AssemblyVersion(`"$assemblyVersion`")" `

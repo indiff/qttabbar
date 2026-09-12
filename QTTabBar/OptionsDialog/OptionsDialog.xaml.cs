@@ -159,7 +159,7 @@ namespace QTTabBarLib {
             try {
                 Initialized += (sender, args) => Topmost = true;
                 ContentRendered += (sender, args) => Topmost = false;
-
+                SourceInitialized += (sender, args) => QTUtility2.SetDarkTitleBar(new WindowInteropHelper(this).Handle);
                 if (QTUtility.EnableDpiScaling)
                 {
                     QTUtility.InitializeDpiAwareness();
@@ -169,6 +169,22 @@ namespace QTTabBarLib {
                
                 // QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");
                 InitializeComponent();
+                QTUtility2.ApplyOptionsDialogTheme(Resources);
+				
+				// WPF's inherited default FontSize is SystemFonts.MessageFontSize, and Windows
+                // inflates that when "Make text bigger" (Accessibility -> TextScaleFactor) is set:
+                // 12 becomes 18 at 150%. This dialog is laid out in hard-coded pixels - 16px
+                // checkbox rows, a 136px category list, a fixed 750x650 window - so the bigger
+                // text just overflows its rows and gets clipped away. Pin the font back to the
+                // size the layout was drawn for and scale the whole dialog instead, so the text
+                // and the layout grow together.
+                double textScale = Math.Min(3.0, Math.Max(1.0, SystemFonts.MessageFontSize / 12.0));
+                FontSize = SystemFonts.MessageFontSize / textScale;
+                if(textScale > 1.0) {
+                    ((FrameworkElement)Content).LayoutTransform = new ScaleTransform(textScale, textScale);
+                    Width = Math.Min(Width * textScale, SystemParameters.WorkArea.Width);
+                    Height = Math.Min(Height * textScale, SystemParameters.WorkArea.Height);
+                }
 
                 // this.LoadViewFromUri("/QTTabBar;component/optionsdialog/optionsdialog.xaml");
                 // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
@@ -474,12 +490,19 @@ namespace QTTabBarLib {
         #endregion
 
         private void UpdateOptions() {
+            // AutoHookWindow only takes effect during explorer.exe startup (HookLibManager.
+            // Initialize() only ever runs once per process), so changing it needs a restart
+            // to actually apply.
+            bool oldAutoHookWindow = Config.Window.AutoHookWindow;
             foreach(OptionsDialogTab tab in tabbedPanel.Items) {
                 tab.CommitConfig();
             }
             ConfigManager.LoadedConfig = QTUtility2.DeepClone(WorkingConfig);
             ConfigManager.WriteConfig();
             ConfigManager.UpdateConfig();
+            if (Config.Window.AutoHookWindow != oldAutoHookWindow) {
+                QTUtility2.RestartExplorer();
+            }
         }
 
         private void CategoryListBoxItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
@@ -771,6 +794,19 @@ namespace QTTabBarLib {
             }
         }
 
+        // Like LogicalAndMultiConverter, but for a single checkbox that should set several
+        // underlying bools together (rather than one) - broadcasts the new value to every
+        // bound target instead of just the first.
+        internal class LogicalAndBroadcastMultiConverter : IMultiValueConverter {
+            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+                return values.All(b => b is bool && (bool)b);
+            }
+
+            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
+                return targetTypes.Select(t => value).ToArray();
+            }
+        }
+
         // Converts between many booleans and a string by StringJoining them.
         internal class BoolJoinMultiConverter : IMultiValueConverter {
             public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
@@ -883,8 +919,12 @@ namespace QTTabBarLib {
     /// The base class for the tab pages of the OptionsDialog.
     /// Contains a few things common to more than one page.
     /// </summary>
-    internal abstract class OptionsDialogTab : UserControl, IDpiAware
-    {
+    internal abstract class OptionsDialogTab : UserControl, IDpiAware {
+        protected OptionsDialogTab() {
+            // Deferred to Loaded: this constructor runs before the derived class's own
+            // InitializeComponent(), which is what actually populates Resources.
+            Loaded += (sender, args) => QTUtility2.ApplyOptionsDialogTheme(Resources);
+        }
         public static readonly DependencyProperty WorkingConfigProperty =
                 DependencyProperty.Register("WorkingConfig", typeof(Config), typeof(OptionsDialogTab),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));

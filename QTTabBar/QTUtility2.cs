@@ -226,6 +226,56 @@ namespace QTTabBarLib {
             return ((clr.R | (clr.G << 8)) | (clr.B << 0x10));
         }
 
+        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+        // Makes the window's title bar/border follow InNightMode instead of always
+        // being light, regardless of the Windows theme (WinForms/WPF don't do this
+        // on their own).
+        public static void SetDarkTitleBar(IntPtr hwnd) {
+            int useDark = QTUtility.getNightMode() ? 1 : 0;
+            PInvoke.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref useDark, sizeof(int));
+        }
+
+        // OptionsDialogResources.xaml hardcodes a dark palette; every Options page merges it via
+        // Source="..." rather than instantiating a class, so a code-behind on that dictionary
+        // never runs. This overwrites the same keys with the light palette instead, directly on
+        // the caller's own Resources (which DynamicResource lookups find before the merged dark
+        // dictionary further down the resource-lookup chain). No-op in dark mode.
+        public static void ApplyOptionsDialogTheme(System.Windows.ResourceDictionary resources) {
+            if (QTUtility.getNightMode()) return;
+            resources["ThemeBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources["ThemeFieldBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources["ThemeBorderBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources["ThemeForegroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources["ThemeSelectionBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources["SectionHeaderBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xF2, 0xF2, 0xF2));
+            resources[System.Windows.SystemColors.ControlTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.WindowTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.WindowBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            resources[System.Windows.SystemColors.HighlightBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
+            resources[System.Windows.SystemColors.HighlightTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+            resources[System.Windows.SystemColors.ControlBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+        }
+        // Some settings (e.g. Config.Window.AutoHookWindow) only take effect during process
+        // startup - QTUtility's static constructor and HookLibManager.Initialize() only ever
+        // run once per explorer.exe process - so changing them requires a full restart to pick
+        // up. Runs the kill+relaunch from a separate cmd.exe rather than doing it inline: this
+        // call is normally made from code running inside explorer.exe itself, which taskkill
+        // is about to terminate, so anything after the kill needs to survive in a process that
+        // isn't also about to die.
+        public static void RestartExplorer() {
+            try {
+                Process.Start(new ProcessStartInfo {
+                    FileName = "cmd.exe",
+                    Arguments = "/c taskkill /F /IM explorer.exe & start explorer.exe",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                });
+            }
+            catch (Exception ex) {
+                MakeErrorLog(ex, "RestartExplorer");
+            }
+        }
         /**
          * force log
          */

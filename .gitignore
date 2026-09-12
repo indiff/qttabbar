@@ -819,9 +819,3 @@ MigrationBackup/
 /BandObjectLib/*.ruleset
 *.ruleset
 /.idea
-
-# Graphify knowledge graph output
-/graphify-out/
-
-# Claude Code local session files
-/.claude/
