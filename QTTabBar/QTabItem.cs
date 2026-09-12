@@ -60,6 +60,7 @@ namespace QTTabBarLib {
         private string currentPath;
         private Dictionary<string, string> dicFocusedItemName;
         private Dictionary<string, Address[]> dicSelectedItems;
+        private Dictionary<string, double> dicScrollPercent;
         private bool fNowSlowTip;
         private string imageKey = string.Empty;
         private Stack<LogData> stckHistoryBackward;
@@ -199,6 +200,7 @@ namespace QTTabBarLib {
             stckHistoryBackward = new Stack<LogData>();
             dicSelectedItems = new Dictionary<string, Address[]>();
             dicFocusedItemName = new Dictionary<string, string>();
+            dicScrollPercent = new Dictionary<string, double>();
             Branches = new List<LogData>();
             CurrentPath = path;
             ToolTipText = string.Empty;
@@ -287,7 +289,8 @@ namespace QTTabBarLib {
                 dicFocusedItemName = new Dictionary<string, string>(dicFocusedItemName),
                 Branches = new List<LogData>(Branches.ToArray()),
                 dicSelectedItems = dicSelectedItems.Keys
-                        .ToDictionary(str => str, str => dicSelectedItems[str])
+                        .ToDictionary(str => str, str => dicSelectedItems[str]),
+                dicScrollPercent = new Dictionary<string, double>(dicScrollPercent)
             };
             return item;
         }
@@ -328,6 +331,13 @@ namespace QTTabBarLib {
             dicFocusedItemName.TryGetValue(path, out focused);
             return addressArray;
         }
+
+        // -1 when this tab has no remembered scroll position for that folder.
+        public double GetScrollPercentAt(string path) {
+            double percent;
+            return dicScrollPercent.TryGetValue(path, out percent) ? percent : -1;
+        }
+
         /**
          * 获取文本的大小
          */
@@ -459,6 +469,10 @@ namespace QTTabBarLib {
         public void SetSelectedItemsAt(string path, Address[] names, string focused) {
             dicSelectedItems[path] = names;
             dicFocusedItemName[path] = focused;
+        }
+
+        public void SetScrollPercentAt(string path, double percent) {
+            dicScrollPercent[path] = percent;
         }
     }
 

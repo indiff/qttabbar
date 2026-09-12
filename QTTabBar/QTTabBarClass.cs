@@ -3162,6 +3162,9 @@ namespace QTTabBarLib {
                             QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2 ShellBrowser.TrySetSelection " + str3);
                             ShellBrowser.TrySetSelection(selectedItemsAt, str3, true);
                         }
+                        // Last, so the remembered viewport wins: restoring the selection scrolls its
+                        // first item into view, which is rarely where the user was actually looking.
+                        RestoreScrollPercent(listView, CurrentTab.GetScrollPercentAt(CurrentAddress));
                     }
                     if(QTUtility.RestoreFolderTree_Hide) {
                         QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2 QTUtility.RestoreFolderTree_Hide");
@@ -7960,15 +7963,44 @@ System.NullReferenceException: Object reference not set to an instance of an obj
         }
 
         /**
+         * Put the view back where the tab left it.
+         *
+         * Explorer creates the destination list view before it has finished filling it, so at
+         * navigate-complete time the view is not scrollable yet and any scroll request is simply
+         * dropped (it reports -1, ScrollPattern's "no scroll"). Retry briefly until the items are
+         * actually in, then stop - whether we scrolled or the folder turned out to be short enough
+         * not to need it.
+         */
+        private void RestoreScrollPercent(AbstractListView view, double percent)
+        {
+            if (view == null || percent <= 0) return;
+            ActionDelayer.Add(() =>
+            {
+                // Another navigation overtook us - that view owns the scroll position now.
+                if (view != listView) return true;
+                double current = view.GetVerticalScrollPercent();
+                if (current < 0) return false;  // not populated yet, come back
+                if (current > 0) return true;   // already moved; don't fight the user
+                view.SetVerticalScrollPercent(percent);
+                return true;
+            }, 100, 100, 30);
+        }
+
+        /**
          * Save the selected item
          */
         protected void SaveSelectedItems(QTabItem tab)
         {
             Address[] addressArray;
             string str;
-            if (
-                ((tab != null) && !string.IsNullOrEmpty(CurrentAddress)) &&
-                ShellBrowser.TryGetSelection(out addressArray, out str, false, ShellBrowser))
+            if ((tab == null) || string.IsNullOrEmpty(CurrentAddress)) return;
+
+            // Saved independently of the selection: a folder the user scrolled through but never
+            // clicked in has no selection to restore, and that is exactly the case where coming
+            // back to the top of the list reads as the view having been refreshed.
+            tab.SetScrollPercentAt(CurrentAddress, listView.GetVerticalScrollPercent());
+
+            if (ShellBrowser.TryGetSelection(out addressArray, out str, false, ShellBrowser))
             {
                 if (addressArray != null && addressArray.Length > 0)
                 {

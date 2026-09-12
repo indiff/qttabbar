@@ -457,6 +457,22 @@ namespace QTTabBarLib {
             });
         }
 
+        public override double GetVerticalScrollPercent() {
+            return AutomationManager.DoQuery(factory => {
+                AutomationElement elem = factory.FromHandle(Handle);
+                return elem == null ? -1 : elem.GetVerticalScrollPercent();
+            });
+        }
+
+        public override void SetVerticalScrollPercent(double percent) {
+            if(percent < 0) return;
+            AutomationManager.DoQuery(factory => {
+                AutomationElement elem = factory.FromHandle(Handle);
+                if(elem != null) elem.SetVerticalScrollPercent(percent);
+                return 0;
+            });
+        }
+
         private void RefreshCache() {
             int prevItem = hotElement == null ? -1 : hotElement.Index;
             hotElement = null;

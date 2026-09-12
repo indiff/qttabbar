@@ -96,6 +96,16 @@ namespace QTTabBarLib {
         public virtual void RefreshSubDirTip(bool force = false) {
         }
 
+        // Vertical scroll offset as a percentage, or -1 when this view can't report one.
+        // Only Explorer's modern item view implements these; everything else keeps today's
+        // behaviour of starting at the top after a navigation.
+        public virtual double GetVerticalScrollPercent() {
+            return -1;
+        }
+
+        public virtual void SetVerticalScrollPercent(double percent) {
+        }
+
         public virtual void ScrollHorizontal(int amount) {
         }
 
