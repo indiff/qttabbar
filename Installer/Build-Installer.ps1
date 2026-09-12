@@ -175,9 +175,7 @@ try {
     & "$wix\candle.exe" -ext "$wix\WixBalExtension.dll" -ext "$wix\WixNetFxExtension.dll" -out obj\Release\Bundle\Bundle.wixobj Bundle.wxs
     if ($LASTEXITCODE -ne 0) { throw "candle.exe failed on Bundle.wxs" }
 		
-    & "$wix\light.exe" -ext "$wix\WixBalExtension.dll" -ext "C:\Program Files (x86)\WiX Toolset v3.11\bin\WixNetFxExtension.dll"  `
-		 obj\Release\Bundle\Bundle.wixobj `
-		-out "bin\Release\QTTabBar Setup $Version.exe"
+    & "$wix\light.exe" -ext "$wix\WixBalExtension.dll" -ext "$wix\WixNetFxExtension.dll" -out "bin\Release\QTTabBar Setup $Version.exe" obj\Release\Bundle\Bundle.wixobj
     if ($LASTEXITCODE -ne 0) { throw "light.exe failed on Bundle.wxs" }
 }
 finally {
