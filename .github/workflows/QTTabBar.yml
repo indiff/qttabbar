@@ -2,7 +2,7 @@ name: QTTabBar
 
 on:
   push:
-    branches: [ dev,master ]
+    branches: [ dev,master,sync ]
     tags: [ 'v*' ]
   pull_request:
     branches: [ master ]
