@@ -2994,7 +2994,12 @@ namespace QTTabBarLib {
             // Refresh the folder view when closing the window
             QTUtility2.log("QTTabBarClass ShellBrowser.OnNavigateComplete reset field FolderView");
             ShellBrowser.OnNavigateComplete();
-            
+
+            // In-tab navigation can recreate the list view under us without a WM_DESTROY,
+            // stranding the double-click subclass on a dead window. Navigation just completed,
+            // so the new view exists now - re-bind it if the current one went dead.
+            if(listViewManager != null) listViewManager.EnsureCurrentViewLive();
+
             // if(fFinalRelease && !IsShown) {
             if(!IsShown) {
                 QTUtility2.log("QTTabBarClass Explorer_NavigateComplete2  !IsShown");

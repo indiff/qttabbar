@@ -168,6 +168,21 @@ namespace QTTabBarLib {
                 InitializeComponent();
                 QTUtility2.ApplyOptionsDialogTheme(Resources);
 
+                // WPF's inherited default FontSize is SystemFonts.MessageFontSize, and Windows
+                // inflates that when "Make text bigger" (Accessibility -> TextScaleFactor) is set:
+                // 12 becomes 18 at 150%. This dialog is laid out in hard-coded pixels - 16px
+                // checkbox rows, a 136px category list, a fixed 750x650 window - so the bigger
+                // text just overflows its rows and gets clipped away. Pin the font back to the
+                // size the layout was drawn for and scale the whole dialog instead, so the text
+                // and the layout grow together.
+                double textScale = Math.Min(3.0, Math.Max(1.0, SystemFonts.MessageFontSize / 12.0));
+                FontSize = SystemFonts.MessageFontSize / textScale;
+                if(textScale > 1.0) {
+                    ((FrameworkElement)Content).LayoutTransform = new ScaleTransform(textScale, textScale);
+                    Width = Math.Min(Width * textScale, SystemParameters.WorkArea.Width);
+                    Height = Math.Min(Height * textScale, SystemParameters.WorkArea.Height);
+                }
+
                 // this.LoadViewFromUri("/QTTabBar;component/optionsdialog/optionsdialog.xaml");
                 // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
 

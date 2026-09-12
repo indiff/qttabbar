@@ -90,16 +90,24 @@ namespace QTTabBarLib {
                     RecaptureHandles(msg.LParam, fForceNew: true);
                 }
             }
-            else if(msg.Msg == WM.WINDOWPOSCHANGED && containerControllers.Count > 1) {
-                // Switching native tabs creates and shows nothing - the incoming tab's
-                // container is just moved to the top of the z-order. This is the only
-                // signal that a different tab's existing view is now the one on screen.
+            else if(msg.Msg == WM.WINDOWPOSCHANGED && msg.HWnd == ActiveContainer()) {
                 WINDOWPOS wp = (WINDOWPOS)Marshal.PtrToStructure(msg.LParam, typeof(WINDOWPOS));
-                if((wp.flags & SWP.NOZORDER) == 0 && msg.HWnd == ActiveContainer()) {
-                    IntPtr hwndShellView = WindowUtils.FindChildWindow(msg.HWnd,
-                            hwnd => PInvoke.GetClassName(hwnd) == "SHELLDLL_DefView");
-                    if(hwndShellView != IntPtr.Zero) {
-                        RecaptureHandles(hwndShellView);
+                if((wp.flags & SWP.NOZORDER) == 0) {
+                    if(containerControllers.Count > 1) {
+                        // Switching native tabs creates and shows nothing - the incoming tab's
+                        // container is just moved to the top of the z-order. This is the only
+                        // signal that a different tab's existing view is now the one on screen.
+                        IntPtr hwndShellView = WindowUtils.FindChildWindow(msg.HWnd,
+                                hwnd => PInvoke.GetClassName(hwnd) == "SHELLDLL_DefView");
+                        if(hwndShellView != IntPtr.Zero) {
+                            RecaptureHandles(hwndShellView);
+                        }
+                    }
+                    else {
+                        // Single native tab: no tab-switch signal ever comes, so if Explorer
+                        // recreated the list view in place - leaving the current view bound to a
+                        // now-dead window - this relayout is our chance to notice and re-bind it.
+                        EnsureCurrentViewLive();
                     }
                 }
             }
@@ -140,6 +148,25 @@ namespace QTTabBarLib {
                     liveViews.RemoveAt(i);
                     v.Dispose();
                 }
+            }
+        }
+
+        // The active tab's list view can be recreated in place (certain in-tab navigations
+        // on Windows 11) without our subclass ever receiving WM_DESTROY, leaving CurrentListView
+        // bound to a dead window. It then gets no mouse messages, so double-click silently stops
+        // working while Explorer-native back/forward (which never touch this subclass) keep going.
+        // With a single native tab there is no tab-switch or DefView-create signal to recapture on,
+        // so nothing re-binds it until the user opens another tab - exactly the "make a new tab and
+        // it starts working again" workaround. Callers with a reliable per-navigation or relayout
+        // signal call this to heal the current view immediately. Cheap no-op while it is still alive.
+        public void EnsureCurrentViewLive() {
+            if(fDisposed || CurrentListView == null) return;
+            // Handle == Zero is a legitimate virtual-folder placeholder (Home etc.), not a dead view.
+            if(CurrentListView.Handle == IntPtr.Zero || PInvoke.IsWindow(CurrentListView.Handle)) return;
+            IntPtr hwndShellView = WindowUtils.FindChildWindow(ActiveContainer(),
+                    hwnd => PInvoke.GetClassName(hwnd) == "SHELLDLL_DefView");
+            if(hwndShellView != IntPtr.Zero) {
+                RecaptureHandles(hwndShellView, fForceNew: true);
             }
         }
 
