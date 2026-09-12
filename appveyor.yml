@@ -1,0 +1,20 @@
+os: Visual Studio 2015
+clone_folder: C:\QBuild\
+test: off
+deploy: off
+configuration: Release
+platform: Any CPU
+
+
+build:
+- cmd: >-
+    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+
+    msbuild /v:m /p:"Configuration=Release" /p:Platform="Any CPU" "QTTabBar Rebirth.sln" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+
+
+artifacts:
+  - path: qttabbar\Installer\bin\Release\zh-CN\QTTabBar Setup.msi
+    name: QTTabBar Setup_zh-CN.msi
+  - path: qttabbar\Installer\bin\Release\en-US\QTTabBar Setup.msi
+    name: QTTabBar Setup_en-US.msi

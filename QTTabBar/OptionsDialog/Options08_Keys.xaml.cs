@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ namespace QTTabBarLib {
                     QTUtility2.log("plugin: " + p.PluginInformation.Name + " Enabled :" + p.PluginInformation.Enabled);
                     try {
                         if (null != p &&
-                            null != p.Instance && // Fix a null-pointer issue, by indiff
+                            null != p.Instance && // 修复空指针问题 by indiff
                             !p.Instance.QueryShortcutKeys(out actions))
                         {
                             actions = null;
@@ -62,7 +62,7 @@ namespace QTTabBarLib {
                     }
                     catch (Exception ex)
                     {
-                        // Print the plugin's name here
+                        // 这里打印出插件的名称
                         QTUtility2.MakeErrorLog(ex, "plugin: " + p.PluginInformation.Name + "!p.Instance.QueryShortcutKeys");
                    
                     }

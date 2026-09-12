@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,8 @@ namespace QuizoPlugins {
     /// <summary>
     /// Cut button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "关重复", Version = "1.0.0.0", Description = "关闭tab页上路径重复的文件夹")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Close Repeated Folders", Version = "1.0.0.0", Description = "Close folders with duplicate paths on tabs")]
+    //[Plugin(PluginType.Interactive, typeof(ClockStringProvider), Version = "1.0.0.0")]
     public class CloseRepeatButton : IBarButton {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
@@ -150,7 +151,7 @@ namespace QuizoPlugins {
     /// <summary>
     /// Copy button
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "排序", Version = "1.0.0.0", Description = "排序Tab")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Sort", Version = "1.0.0.0", Description = "Sort tabs")]
     public class SortButton : IBarButton {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
@@ -294,11 +295,11 @@ namespace QuizoPlugins {
     static class StringResources {
         public static string[] ButtonNames;
         static StringResources() {
-            if (  CultureInfo.CurrentCulture.Parent.Name.ToLower().StartsWith( "zh" )  )
+            if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
             {
                 ButtonNames = Resource.str_zh.Split(new char[] { ';' });
             }
-            else if (CultureInfo.CurrentCulture.Parent.Name.ToLower().StartsWith("ja") )
+            else if (PluginCulture.IsJapanese(CultureInfo.CurrentUICulture) )
             {
                 ButtonNames = Resource.str_ja.Split(new char[] { ';' });
             }

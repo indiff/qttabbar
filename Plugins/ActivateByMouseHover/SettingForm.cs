@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.Globalization;
+using QTPlugin;
 
 namespace QuizoPlugins
 {
@@ -14,16 +15,16 @@ namespace QuizoPlugins
 				this.numericUpDown1.Value = delay;
 			}
 
-            if (CultureInfo.CurrentCulture.Name == "ja-JP")
+            if (PluginCulture.IsJapanese(CultureInfo.CurrentUICulture))
             {
-                this.label1.Text = "Wait time (ms)";
+                this.label1.Text = "待機時間(ミリ秒)";
                 this.Text = "Activate By MouseHover";
             }
 
-            if (CultureInfo.CurrentCulture.Name == "zh-CHS")
+            if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
             {
-                this.label1.Text = "Delay time (ms)";
-                this.Text = "Activate tab on mouse hover";
+                this.label1.Text = "延时时间(毫秒)";
+                this.Text = "鼠标悬浮激活标签";
             }
        }
 

@@ -1,0 +1,467 @@
+﻿//    This file is part of QTTabBar, a shell extension for Microsoft
+//    Windows Explorer.
+//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
+//
+//    QTTabBar is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    QTTabBar is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using BandObjectLib;
+using Microsoft.Win32;
+using QTPlugin;
+using QTTabBarLib.Interop;
+using SHDocVw;
+
+namespace QTTabBarLib
+{
+    [ComVisible(true), Guid("d2bf470e-ed1c-487f-a888-2bd8835eb6ce")]
+    public sealed class QTSecondViewBar : BandObject
+    {
+        private Panel viewContainer;
+        private Panel controlContainer;
+        private SplitContainer addressBarContainer;
+        protected SplitContainer splitContainer;
+        protected IContainer components;
+        internal ContextMenuStripEx contextMenuTab;
+        internal QTabControl tabControl;
+        // private BreadcrumbsAddressBar breadCrumbs;
+        private int BandHeight;
+
+        private const int VIEW_MIN_HEIGHT = 64;
+        private bool fNowResizing;
+        private int prefSize;
+        private bool UserResizing;
+        private IntPtr ExplorerHandle;
+        private AbstractListView listView = new AbstractListView();
+        private ShellContextMenu shellContextMenu = new ShellContextMenu();
+        private ListViewMonitor listViewManager;
+        // public override bool HostedByThirdViewBar => true;
+
+        public QTSecondViewBar()
+        {
+            try
+            {
+                BandHeight = 500;
+                this.InitializeComponent();
+                // this.tabManager = (TabManagerBase) new QSecondViewBar.TabManagerSecond(this);
+            }
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex);
+            }
+        }
+
+        private void InitializeComponent()
+        {
+                
+            this.viewContainer = new Panel();
+            this.controlContainer = new Panel();
+            this.addressBarContainer = new SplitContainer();
+            this.splitContainer = new SplitContainer();
+            this.components = (IContainer)new Container();
+
+            this.InitializeContextMenus();
+            this.viewContainer.SuspendLayout();
+            this.controlContainer.SuspendLayout();
+            // this.addressBarContainer
+            this.addressBarContainer.Panel1.SuspendLayout();
+            this.addressBarContainer.Panel2.SuspendLayout();
+            this.addressBarContainer.SuspendLayout();
+            // this.splitContainer.BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            // this.breadCrumbs.SuspendLayout();
+            this.SuspendLayout();
+        }
+
+        protected void InitializeContextMenus()
+        {
+            this.contextMenuTab = new ContextMenuStripEx(this.components, true );
+            // this.contextMenuTab.ImageList = ;
+            this.contextMenuTab.Items.Add((ToolStripItem)new ToolStripMenuItem("测试"));
+            /*this.contextMenuTab.ItemClicked += new ToolStripItemClickedEventHandler(this.contextMenuTab_ItemClicked);
+            this.contextMenuTab.Opening += new CancelEventHandler(this.contextMenuTab_Opening);
+            this.contextMenuTab.Closed += new ToolStripDropDownClosedEventHandler(this.contextMenuTab_Closed);
+            this.tabControl.TabRightClick += new EventHandler<QEventArgs>(this.tabControl_TabRightClick);
+            this.tabControl.TabBarRightClick += new EventHandler<QEventArgs>(this.tabControl_TabBarRightClick);
+            this.contextMenuBar = new DropDownMenuEx(this.components, false, false, false);
+            this.contextMenuBar.ExplorerHandle = this.Handle;
+            this.contextMenuBar.ImageList = Graphic.ImageList;
+            this.contextMenuBar.Items.Add((ToolStripItem)new ToolStripMenuItem());
+            this.contextMenuBar.UsePrefix = true;
+            this.contextMenuBar.ItemClicked += new ToolStripItemClickedEventHandler(this.contextMenuBar_ItemClicked);
+            this.contextMenuBar.Opening += new CancelEventHandler(this.contextMenuBar_Opening);
+            this.contextMenuBar.Closed += new ToolStripDropDownClosedEventHandler(this.contextMenuBar_Closed);*/
+        }
+
+        private volatile bool FirstNavigationCompleted;
+        public override void ShowDW(bool fShow)
+        {
+            base.ShowDW(fShow);
+            if ((fShow && !FirstNavigationCompleted) && ((Explorer != null) && (Explorer.ReadyState == tagREADYSTATE.READYSTATE_COMPLETE)))
+            {
+                InitializeInstallation();
+            }
+            if (!fShow)
+            {
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                {
+                    key.SetValue("BreakTabBar", BandHasBreak() ? 1 : 0);
+                }
+            }
+            base.ShowDW( fShow );
+        }
+
+        private void InitializeInstallation()
+        {
+            InitializeOpenedWindow();
+            object locationURL = Explorer.LocationURL;
+            if (ShellBrowser != null)
+            {
+                using (IDLWrapper wrapper = ShellBrowser.GetShellPath())
+                {
+                    if (wrapper.Available)
+                    {
+                        locationURL = wrapper.Path;
+                    }
+                }
+            }
+            QTUtility2.log("QTTabBarClass InitializeInstallation  pDisp :" + null + " locationURL :" + (string)locationURL);
+            Explorer_NavigateComplete2(null, ref locationURL);
+        }
+
+        /**
+         * 初始化已经打开的窗口
+         */
+        private bool IsShown;
+        private void InitializeOpenedWindow()
+        {
+            IsShown = true;
+
+            if (QTUtility.WindowAlpha < 0xff)
+            {
+                QTUtility2.log("QTTabBarClass SetWindowLongPtr SetLayeredWindowAttributes");
+                PInvoke.SetWindowLongPtr(ExplorerHandle, -20, PInvoke.Ptr_OP_OR(PInvoke.GetWindowLongPtr(ExplorerHandle, -20), 0x80000));
+                PInvoke.SetLayeredWindowAttributes(ExplorerHandle, 0, QTUtility.WindowAlpha, 2);
+            }
+
+            listViewManager = new ListViewMonitor(ShellBrowser, ExplorerHandle, Handle);
+            listViewManager.ListViewChanged += ListViewMonitor_ListViewChanged;
+            listViewManager.Initialize();
+        }
+
+        private void ListViewMonitor_ListViewChanged(object sender, EventArgs args)
+        {
+            if (listViewManager != null) // 修复空指针问题 by indiff
+            {
+                listView = listViewManager.CurrentListView;
+                ExtendedListViewCommon elvc = listView as ExtendedListViewCommon;
+                if (elvc != null)
+                {
+                    // elvc.ItemCountChanged += ListView_ItemCountChanged;
+                    // elvc.SelectionActivated += ListView_SelectionActivated;
+                    // elvc.SelectionChanged += ListView_SelectionChanged;
+                    // elvc.MiddleClick += ListView_MiddleClick;
+                    // elvc.DoubleClick += ListView_DoubleClick;
+                    // elvc.EndLabelEdit += ListView_EndLabelEdit;
+                    // elvc.MouseActivate += ListView_MouseActivate;
+                    // elvc.SubDirTip_MenuItemClicked += subDirTip_MenuItemClicked;
+                    // elvc.SubDirTip_MenuItemRightClicked += subDirTip_MenuItemRightClicked;
+                    // elvc.SubDirTip_MultipleMenuItemsClicked += subDirTip_MultipleMenuItemsClicked;
+                    // elvc.SubDirTip_MultipleMenuItemsRightClicked += subDirTip_MultipleMenuItemsRightClicked;
+                }
+            }
+            // HandleF5();
+        }
+
+        public override void CloseDW(uint dwReserved)
+        {
+            try
+            {
+                /*string[] list1 = (from ITab tab in pluginServer.GetTabs()
+                                 where tab.Locked
+                                 select tab.Address.Path).ToArray();
+                MessageBox.Show(String.Join(",", list1));
+               
+
+                MessageBox.Show("关闭窗口:" + tabControl1.TabPages.Count );
+                string[] list = (from QTabItem item2 in tabControl1.TabPages
+                                 where item2.TabLocked
+                                 select item2.CurrentPath).ToArray();
+                MessageBox.Show(String.Join(",", list));
+ */
+
+                if (listViewManager != null)
+                {
+                    listViewManager.Dispose();
+                    listViewManager = null;
+                }
+                
+                if (TravelLog != null)
+                {
+                    QTUtility2.log("ReleaseComObject TravelLog");
+                    Marshal.FinalReleaseComObject(TravelLog);
+                    TravelLog = null;
+                }
+                if (shellContextMenu != null)
+                {
+                    shellContextMenu.Dispose();
+                    shellContextMenu = null;
+                }
+                if (ShellBrowser != null)
+                {
+                    ShellBrowser.Dispose();
+                    ShellBrowser = null;
+                }
+                /*foreach (ITravelLogEntry entry in LogEntryDic.Values)
+                {
+                    if (entry != null)
+                    {
+                        QTUtility2.log("ReleaseComObject entry");
+                        Marshal.FinalReleaseComObject(entry);
+                    }
+                }*/
+                fFinalRelease = true;
+                base.CloseDW(dwReserved);
+            }
+            catch (Exception exception2)
+            {
+                QTUtility2.MakeErrorLog(exception2, "tabbar closing");
+            }
+            base.CloseDW(dwReserved);
+        }
+        // public virtual void GetBandInfo(uint dwBandID, uint dwViewMode, ref DESKBANDINFO pdbi) {
+
+        public override void GetBandInfo(uint dwBandID, uint dwViewMode, ref DESKBANDINFO dbi)
+        {
+            base.GetBandInfo(dwBandID, dwViewMode, ref dbi);
+            try
+            {
+                if ((dbi.dwMask & DBIM.ACTUAL) != (0))
+                {
+                    // dbi.ptActual.X = Size.Width;
+                    // dbi.ptActual.Y = BandHeight;
+                    dbi.ptIntegral.X = 1;
+                    dbi.ptIntegral.Y = 1;
+                }
+
+                if ((dbi.dwMask & DBIM.INTEGRAL) != (0))
+                {
+                    // dbi.ptIntegral.X = -1;
+                    // dbi.ptIntegral.Y = 10;
+                    dbi.ptMinSize.X = this.prefSize;
+                    dbi.ptMinSize.Y = this.prefSize;
+                    this.fNowResizing = false;
+                }
+
+                if ((dbi.dwMask & DBIM.MAXSIZE) != (0))
+                {
+                    dbi.ptMaxSize.X = -1;
+                    dbi.ptMaxSize.Y = BandHeight;
+                }
+
+                if ((dbi.dwMask & DBIM.MINSIZE) != (0))
+                {
+                    dbi.ptMinSize.X = MinSize.Width;
+                    dbi.ptMinSize.Y = BandHeight;
+                }
+
+                if ((dbi.dwMask & DBIM.MODEFLAGS) != (0))
+                {
+                    dbi.dwModeFlags = DBIMF.VARIABLEHEIGHT | DBIMF.NOMARGINS;
+                }
+
+                if ((dbi.dwMask & DBIM.BKCOLOR) != (0))
+                {
+                    dbi.dwMask &= ~DBIM.BKCOLOR;
+                }
+
+                if ((dbi.dwMask & DBIM.TITLE) != (0))
+                {
+                    dbi.wszTitle = "second";
+                }
+            }
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex);
+            }
+        }
+
+        /*protected override void OnExplorerAttached()
+        {
+            try
+            {
+                this.explorerManager = InstanceManager.Register((BandObject)this, (object)this.bandObjectSite);
+                this.InitializeWidth();
+                this.viewContainer.CreateControl();
+                this.InstallHooks();
+                this.ProcessStartups();
+                this.ProcessStartups1();
+                this.fProcessingStartups = false;
+                base.OnExplorerAttached();
+            }
+            catch (Exception ex)
+            {
+                DebugUtil.AppendToCriticalExceptionLog(ex);
+            }
+        }*/
+
+        private ShellBrowserEx ShellBrowser;
+        private ITravelLogStg TravelLog;
+        protected override void OnExplorerAttached()
+        {
+            QTUtility2.log("QTSecondViewBar OnExplorerAttached");
+            ExplorerHandle = (IntPtr)Explorer.HWND;
+            try
+            {
+                object obj2;
+                object obj3;
+                _IServiceProvider bandObjectSite = (_IServiceProvider)BandObjectSite;
+                bandObjectSite.QueryService(ExplorerGUIDs.IID_IShellBrowser, ExplorerGUIDs.IID_IUnknown, out obj2);
+                ShellBrowser = new ShellBrowserEx((IShellBrowser)obj2);
+                HookLibManager.InitShellBrowserHook(ShellBrowser.GetIShellBrowser());
+                if (Config.Tweaks.ForceSysListView)
+                {
+                    ShellBrowser.SetUsingListView(true);
+                }
+                bandObjectSite.QueryService(ExplorerGUIDs.IID_ITravelLogStg, ExplorerGUIDs.IID_ITravelLogStg, out obj3);
+                TravelLog = (ITravelLogStg)obj3;
+            }
+            catch (COMException exception)
+            {
+                QTUtility2.MakeErrorLog(exception);
+            }
+
+            Explorer.BeforeNavigate2 += Explorer_BeforeNavigate2;
+            Explorer.NavigateComplete2 += Explorer_NavigateComplete2;
+            QTUtility2.log("QTSecondViewBar set BeforeNavigate2 NavigateComplete2");
+        }
+
+        private VisualStyleRenderer bgRenderer;
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            if (VisualStyleRenderer.IsSupported)
+            {
+                if (bgRenderer == null)
+                {
+                    bgRenderer = new VisualStyleRenderer(VisualStyleElement.Rebar.Band.Normal);
+                }
+                bgRenderer.DrawParentBackground(e.Graphics, e.ClipRectangle, this);
+            }
+            else
+            {
+                if (ReBarHandle != IntPtr.Zero)
+                {
+                    int colorref = (int)PInvoke.SendMessage(ReBarHandle, 0x414, IntPtr.Zero, IntPtr.Zero);
+                    using (SolidBrush brush = new SolidBrush(QTUtility2.MakeColor(colorref)))
+                    {
+                        e.Graphics.FillRectangle(brush, e.ClipRectangle);
+                        return;
+                    }
+                }
+                base.OnPaintBackground(e);
+            }
+        }
+
+        private void Explorer_BeforeNavigate2(object pDisp,
+            ref object URL,
+            ref object Flags,
+            ref object TargetFrameName,
+            ref object PostData,
+            ref object Headers,
+            ref bool Cancel)
+        {
+            // DebugUtil.WriteLine("QTTabBarClass Explorer_BeforeNavigate2:" ); // add by qwop.
+            QTUtility2.log("QTSecondViewBar Explorer_BeforeNavigate2  pDisp :" + pDisp
+                                                                             + " URL :" + (string)URL
+                                                                             + " Flags :" + Flags
+                                                                             + " TargetFrameName :" + TargetFrameName
+                                                                             + " PostData :" + PostData
+                                                                             + " Headers :" + Headers
+                                                                             + " Cancel :" + Cancel
+
+            );
+            /*if (!IsShown)
+            {
+                DoFirstNavigation(true, (string)URL);
+            }*/
+        }
+
+        private void Explorer_NavigateComplete2(object pDisp, ref object URL)
+        {
+            // add by indiff.
+            QTUtility2.log("QTSecondViewBar Explorer_NavigateComplete2  pDisp :"
+                           + pDisp
+                           + " URL :" + (string)URL
+            );
+        }
+
+        [ComRegisterFunction]
+        private static void Register(Type t)
+        {
+            string name = t.GUID.ToString("B");
+            string str = "QT Second View Bar";
+            using (RegistryKey subKey = Registry.ClassesRoot.CreateSubKey("CLSID\\" + name))
+            {
+                subKey.SetValue((string)null, (object)str);
+                subKey.SetValue("MenuText", (object)str);
+                subKey.SetValue("HelpText", (object)str);
+            }
+
+            using (RegistryKey subKey =
+                   Registry.LocalMachine.CreateSubKey("SOFTWARE\\Microsoft\\Internet Explorer\\Toolbar"))
+                subKey.SetValue(name, (object)"QTSecondViewBar");
+        }
+
+
+        [ComUnregisterFunction]
+        private static void Unregister(Type t)
+        {
+            string str = t.GUID.ToString("B");
+            try
+            {
+                using (RegistryKey subKey =
+                       Registry.LocalMachine.CreateSubKey("SOFTWARE\\Microsoft\\Internet Explorer\\Toolbar"))
+                    subKey.DeleteValue(str, false);
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                using (RegistryKey subKey = Registry.ClassesRoot.CreateSubKey("CLSID"))
+                {
+                    // subKey.DeleteSubKeyTree(str, false);
+                    subKey.DeleteSubKeyTree(str);
+                }
+            }
+            catch
+            {
+            }
+        }
+    }
+}

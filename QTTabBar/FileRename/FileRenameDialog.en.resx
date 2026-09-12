@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- ===== 窗体标题 ===== -->
+  <data name="FormTitle"><value>Batch Rename</value></data>
+  <!-- ===== 模式选择 ===== -->
+  <data name="lblMode"><value>Rename Mode:</value></data>
+  <data name="cboMode_Replace"><value>Find And Replace</value></data>
+  <data name="cboMode_Sequential"><value>Sequential Numbering</value></data>
+  <data name="cboMode_List"><value>List Rename</value></data>
+  <data name="btnPreset"><value>Presets</value></data>
+  <!-- ===== 查找替换 ===== -->
+  <data name="lblFind"><value>Find what:</value></data>
+  <data name="lblReplace"><value>Replace with:</value></data>
+  <data name="chkRegex"><value>Use regular expressions</value></data>
+  <data name="chkCase"><value>Match case</value></data>
+  <data name="chkPreserveExt"><value>Preserve file extension</value></data>
+  <!-- ===== 大小写转换 ===== -->
+  <data name="lblCase"><value>Case conversion:</value></data>
+  <data name="cboCase_None"><value>No change</value></data>
+  <data name="cboCase_Lower"><value>lowercase</value></data>
+  <data name="cboCase_Upper"><value>UPPERCASE</value></data>
+  <data name="cboCase_Title"><value>Title Case</value></data>
+  <!-- ===== 顺序编号 ===== -->
+  <data name="lblSeq"><value>Sequential #:</value></data>
+  <data name="lblStart"><value>Start</value></data>
+  <data name="lblInc"><value>Step</value></data>
+  <data name="lblDigits"><value>Digits</value></data>
+  <!-- ===== 子文件夹 ===== -->
+  <data name="chkSubfolders"><value>Include subfolders</value></data>
+  <data name="lblDepth"><value>Scan depth:</value></data>
+  <data name="lblDepthHint"><value>(0 = unlimited)</value></data>
+  <!-- ===== 冲突处理 ===== -->
+  <data name="lblCollision"><value>Name conflict:</value></data>
+  <data name="cboCollision_Confirm"><value>Ask for confirmation</value></data>
+  <data name="cboCollision_Auto"><value>Auto append number</value></data>
+  <data name="cboCollision_KeepNewer"><value>Keep newer file</value></data>
+  <!-- ===== 范围 ===== -->
+  <data name="lblScope"><value>Rename scope:</value></data>
+  <data name="chkFiles"><value>Files</value></data>
+  <data name="chkFolders"><value>Folders</value></data>
+  <!-- ===== 预览 ===== -->
+  <data name="lblPreview"><value>  Preview  (Original  →  New)</value></data>
+  <data name="colOriginal"><value>Original Name</value></data>
+  <data name="colNew"><value>New Name</value></data>
+  <data name="colType"><value>Type</value></data>
+  <data name="colStatus"><value>Status</value></data>
+  <data name="type_File"><value>File</value></data>
+  <data name="type_Folder"><value>Folder</value></data>
+  <data name="status_Unchanged"><value>Unchanged</value></data>
+  <data name="status_WillRename"><value>Will rename</value></data>
+  <data name="status_Success"><value>Success</value></data>
+  <!-- ===== 底部 ===== -->
+  <data name="lblStatus_Ready"><value>Ready</value></data>
+  <data name="lblStatus_Count"><value>{0} items total, {1} will be renamed</value></data>
+  <data name="lblStatus_Result"><value>Success: {0}, Failed: {1}</value></data>
+  <data name="btnExecute"><value>Execute Rename</value></data>
+  <data name="btnClose"><value>Close</value></data>
+  <!-- ===== 对话框 ===== -->
+  <data name="msg_ConfirmTitle"><value>Confirm Rename</value></data>
+  <data name="msg_Confirm"><value>Are you sure you want to rename {0} items?</value></data>
+  <data name="msg_ErrorTitle"><value>Error</value></data>
+  <data name="msg_Error"><value>Rename failed: {0}</value></data>
+  <data name="status_Failed"><value>Failed</value></data>
+</root>

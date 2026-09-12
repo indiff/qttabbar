@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano, indiff
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ namespace QuizoPlugins {
     /// Cut button
     /// </summary>
    // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Cut", Version = "1.0.0.0", Description = "Cut files")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "剪切", Version = "1.0.0.1", Description = "剪切文件;修复剪切插件严重bug")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Cut", Version = "1.0.0.1", Description = "Cut files; fixes critical cut plugin bugs")]
     public class CutButton : IBarButton {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;
@@ -156,7 +156,7 @@ namespace QuizoPlugins {
     /// Copy button
     /// </summary>
   // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Copy", Version = "1.0.0.0", Description = "Copy files")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "复制", Version = "1.0.0.0", Description = "复制文件")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Copy", Version = "1.0.0.0", Description = "Copy files")]
     public class CopyButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -250,7 +250,7 @@ namespace QuizoPlugins {
     /// Paste Button
     /// </summary>
    // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Paste", Version = "1.0.0.0", Description = "Paste files")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "粘贴", Version = "1.0.0.0", Description = "粘贴文件")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Paste", Version = "1.0.0.0", Description = "Paste files")]
     public class PasteButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -334,7 +334,7 @@ namespace QuizoPlugins {
     /// Delete button
     /// </summary>
   //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Delete", Version = "1.0.0.0", Description = "Delete files")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "删除", Version = "1.0.0.0", Description = "删除文件")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Delete", Version = "1.0.0.0", Description = "Delete files")]
     public class DeleteButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -428,7 +428,7 @@ namespace QuizoPlugins {
     /// CopyTo button
     /// </summary>
   //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Copy To Folder", Version = "1.0.0.0", Description = "Open copy-to-folder dialog")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "复制到文件夹", Version = "1.0.0.0", Description = "打开复制到对话框")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Copy To Folder", Version = "1.0.0.0", Description = "Open copy-to-folder dialog")]
     public class CopyToButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -523,7 +523,7 @@ namespace QuizoPlugins {
     /// MoveTo button
     /// </summary>
   //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Move To Folder", Version = "1.0.0.0", Description = "Open move-to-folder dialog")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "移动到文件夹", Version = "1.0.0.0", Description = "打开移动到文件夹")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Move To Folder", Version = "1.0.0.0", Description = "Open move-to-folder dialog")]
     public class MoveToButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -618,7 +618,7 @@ namespace QuizoPlugins {
     /// Undo Button
     /// </summary>
   //  [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Undo", Version = "1.0.0.0", Description = "Undo operation")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "撤销", Version = "1.0.0.0", Description = "撤销操作")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Undo", Version = "1.0.0.0", Description = "Undo operation")]
     public class UndoButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -693,7 +693,7 @@ namespace QuizoPlugins {
     /// Send up button
     /// </summary>
  //   [Plugin(PluginType.Background, Author = "Quizo", Name = "Send To Parent", Version = "1.0.0.1", Description = "Send files to parent folder. This copies when Ctrl key is down.")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "发送到父目录", Version = "1.0.0.1", Description = "发送文件到父目录.该复制操作在仅在Ctrl键按下.")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "Send To Parent", Version = "1.0.0.1", Description = "Send files to parent folder. Copy only while Ctrl is pressed.")]
     public class SendToParentButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -800,7 +800,7 @@ namespace QuizoPlugins {
     /// Properties button
     /// </summary>
  //   [Plugin(PluginType.Interactive, Author = "Quizo", Name = "Properties", Version = "1.0.0.1", Description = "Show file properties")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "属性", Version = "1.0.0.1", Description = "显示文件属性")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Properties", Version = "1.0.0.1", Description = "Show file properties")]
     public class PropertiesButton : IBarButton {
         private IPluginServer pluginServer;
         private string[] ResStr;
@@ -883,10 +883,10 @@ namespace QuizoPlugins {
     static class StringResources {
         public static string[] ButtonNames;
         static StringResources() {
-            if(CultureInfo.CurrentCulture.Parent.Name == "ja") {
+            if(PluginCulture.IsJapanese(CultureInfo.CurrentUICulture)) {
                 ButtonNames = Resource.str_ja.Split(new char[] { ';' });
             }
-            else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+            else if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
             {
                 ButtonNames = Resource.str_zh.Split(new char[] { ';' });
             }

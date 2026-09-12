@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -90,10 +90,10 @@ namespace SetHome
         private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
 
         /// <summary>
-        /// Remove a trailing backslash (\) from the path string; if it does not end with a backslash, do nothing
+        /// 移除原路径字符串末尾反斜杠(\)，若原路径字符串不以反斜杠结尾则不作任何操作
         /// </summary>
-        /// <param name="origin">Original path string</param>
-        /// <returns>The path string with the trailing backslash removed</returns>
+        /// <param name="origin">原路径字符串</param>
+        /// <returns>移除末尾反斜杠后的路径字符串</returns>
         public static string RemovePathEndBackslash(string origin)
         {
             while (origin.EndsWith("\\"))
@@ -104,11 +104,11 @@ namespace SetHome
         }
 
         /// <summary>
-        /// Run the setx command to set an environment variable
+        /// 运行setx命令设定环境变量
         /// </summary>
-        /// <param name="varName">Variable name to set</param>
-        /// <param name="value">Variable value</param>
-        /// <param name="isSysVar">Whether it is a system variable</param>
+        /// <param name="varName">设定变量名</param>
+        /// <param name="value">变量值</param>
+        /// <param name="isSysVar">是否是系统变量</param>
         public static void RunSetx(string varName, string value, bool isSysVar)
         {
             /*
@@ -138,21 +138,21 @@ namespace SetHome
         }
 
         /// <summary>
-        /// Surround a string with double quotes
+        /// 使用双引号包围字符串
         /// </summary>
-        /// <param name="origin">Original string</param>
-        /// <returns>The string surrounded by double quotes</returns>
+        /// <param name="origin">原字符串</param>
+        /// <returns>被双引号包围的字符串</returns>
         public static string SurroundByDoubleQuotes(string origin)
         {
             return "\"" + origin + "\"";
         }
 
         /// <summary>
-        /// Invoke a command line and get the execution result; this method is synchronous and will block the thread
+        /// 调用命令行并获取执行结果，该方法为同步方法，会堵塞线程
         /// </summary>
-        /// <param name="command">Command</param>
-        /// <param name="args">Argument array. E.g. for the command 7z a -t7z -mx9 a.7z dir, args should be: { "a", "-t7z", "-mx9", "a.7z", "dir" }</param>
-        /// <returns>Command output, as a string array; the first element is stdout, the second is stderr</returns>
+        /// <param name="command">命令</param>
+        /// <param name="args">参数数组。例如命令为7z a -t7z -mx9 a.7z dir，那么args的值应当是：{ "a", "-t7z", "-mx9", "a.7z", "dir" }</param>
+        /// <returns>命令输出结果，为string数组，数组的第一个为标准输出流，第二个为标准错误流</returns>
         public static string[] RunCommand(string command, string[] args)
         {
             string[] result = new string[2];
@@ -320,10 +320,10 @@ namespace SetHome
             }
             else
             {
-                // Get the current working directory
+                // 获取当前 工作目录
                 this.curTextBox.Text = System.Environment.CurrentDirectory;
             }
-            // If auto-configuration is enabled
+            // 如果是自动配置
 
             using (var envKey = Registry.CurrentUser.OpenSubKey(QTTabBar, true))
             {
@@ -390,14 +390,14 @@ namespace SetHome
                             gradle_Click(null, null);
                             isRun = true;
                         }
-                        else if (File.Exists(runserverCmd))  // Set rocketmq_home
+                        else if (File.Exists(runserverCmd))  // 设置 rocketmq_home
                         {
                             rocketmq_click(null, null);
                             isRun = true;
                         }
 
                         if (isRun) {
-                            // Dispose();  // This causes an error when the plugin runs
+                            // Dispose();  // 这里导致插件执行报错
                             Application.Exit();
                         }
                         
@@ -435,7 +435,7 @@ namespace SetHome
         private static string joinDevPath(string oldPath)
         {
             /*
-            // Handle cases where oldPath is empty
+            // 处理一些 oldPath 为空的情况
             HashSet<string> hs = new HashSet<string>();
             oldPath = oldPath.Trim();
             string[] sArray = oldPath.Split(';');
@@ -550,7 +550,7 @@ namespace SetHome
                 oldPath = oldPath + ";";
             }
 
-            // Case-insensitive
+            // 忽略大小写  
             if (
                 // !oldPath.Contains(@"C:\Windows\System32") &&
                 // !oldPath.Contains(@"%SystemRoot%\system32")  
@@ -564,7 +564,7 @@ namespace SetHome
 
         private void java_Click(object sender, EventArgs e)
         {
-            // 3. Set JAVA_HOME to the current directory
+            // 3. 设置当前目录JAVA_HOME
             string selectedPath = this.curTextBox.Text.Trim();
             string binPath = Path.Combine(selectedPath, "bin");
             string libPath = Path.Combine(selectedPath, "lib");
@@ -575,7 +575,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
-                MessageBox.Show("Current directory no longer exists");
+                MessageBox.Show("当前目录已经删除");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -583,7 +583,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
             {
-                MessageBox.Show("bin directory does not exist");
+                MessageBox.Show("bin目录不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -591,7 +591,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(javaPath) || !File.Exists(javaPath))
             {
-                MessageBox.Show("Java does not exist");
+                MessageBox.Show("Java不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -599,7 +599,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath))
             {
-                MessageBox.Show("lib directory does not exist");
+                MessageBox.Show("lib目录不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -621,7 +621,7 @@ namespace SetHome
                 // Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
                 // Environment.SetEnvironmentVariable("PATH", devPath + ";9", EnvironmentVariableTarget.Machine);
                 UpdateEnvPath();
-                MessageBox.Show("JAVA_HOME set successfully");
+                MessageBox.Show("设置JAVA_HOME成功");
             }
         }
 
@@ -637,10 +637,10 @@ namespace SetHome
                     var tempPath = paths[i];
                     if (!string.IsNullOrEmpty(tempPath.Trim()))
                     {
-                        // Filter out this path if it doesn't exist
+                        // 如果这个路径不存在则过滤掉
                         var combine = Path.Combine(tempPath, fileName);
 
-                        // Expand variables
+                        // 展开变量
                         string expandedPath = System.Environment.ExpandEnvironmentVariables(tempPath);
                         var existFlag = Directory.Exists(tempPath.Trim());
                         var existFlag2 = Directory.Exists(expandedPath.Trim());
@@ -673,7 +673,7 @@ namespace SetHome
                             (existFlag || existFlag2)
                             && !File.Exists(combine))
                         {
-                            // Check whether the file exists; if so, kill it
+                            // 判断文件是否存在，存在的话 kill 掉
                             sb.Append(tempPath.Trim());
                             sb.Append(';');
                         }
@@ -683,7 +683,7 @@ namespace SetHome
                 list.Clear();
                 list = null;
             }
-            // If not empty, check whether the end contains multiple semicolons ;
+            // 如果不为空的话， 则判断结尾是否包含多个分号 ;
             if (!string.IsNullOrEmpty(oldPath))
             {
                 /*if (oldPath.EndsWith(";;"))
@@ -695,11 +695,11 @@ namespace SetHome
                 {
                     oldPath = oldPath.Replace(";;;", ";");
                 }*/
-                // Regex-replace 2 or more consecutive ; with a single ;
+                // 正则替换掉，2个或者以上; 则替换成一个;
                // string pattern = @";+;+";
                // string replacement = ";";
                 //oldPath = Regex.Replace(oldPath, pattern, replacement);
-                // This causes a bug that replaces other characters
+                // 这里会引起 bug 替换掉其他字符
             }
             return sb.ToString();
         }
@@ -713,7 +713,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
-                MessageBox.Show("Current directory no longer exists");
+                MessageBox.Show("当前目录已经删除");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -721,7 +721,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
             {
-                MessageBox.Show("bin directory does not exist");
+                MessageBox.Show("bin目录不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -733,7 +733,7 @@ namespace SetHome
                 (String.IsNullOrEmpty(mvnBat) || !File.Exists(mvnBat))
                 )
             {
-                MessageBox.Show("mvn.cmd or mvn.bat does not exist");
+                MessageBox.Show("mvn.cmd或mvn.bat不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -755,21 +755,21 @@ namespace SetHome
                 envKey.SetValue("PATH", joinDevPath(oldPath));
                 //  RunSetx("Path", joinDevPath(oldPath), true);
 
-                MessageBox.Show("M2_HOME set successfully");
+                MessageBox.Show("设置M2_HOME成功");
                 UpdateEnvPath();
             }
         }
 
         private void mvnd_Click(object sender, EventArgs e)
         {
-            // 10. Set MVND_HOME to the current directory
+            // 10. 设置当前目录MVND_HOME
             string selectedPath = this.curTextBox.Text.Trim();
             string binPath = Path.Combine(selectedPath, "bin");
             string mvndexe = Path.Combine(binPath, "mvnd.exe");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
-                MessageBox.Show("Current directory no longer exists");
+                MessageBox.Show("当前目录已经删除");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -777,7 +777,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
             {
-                MessageBox.Show("bin directory does not exist");
+                MessageBox.Show("bin目录不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -785,7 +785,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(mvndexe) || !File.Exists(mvndexe))
             {
-                MessageBox.Show("mvnd.exe does not exist");
+                MessageBox.Show("mvndexe不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -799,21 +799,21 @@ namespace SetHome
                 envKey.SetValue("PATH", joinDevPath(oldPath));
                 // RunSetx("Path", joinDevPath(oldPath), true);
 
-                MessageBox.Show("MVND_HOME set successfully");
+                MessageBox.Show("设置MVND_HOME成功");
                 UpdateEnvPath();
             }
         }
 
         private void ant_Click(object sender, EventArgs e)
         {
-            // Set ANT_HOME to the current directory
+            // 设置当前目录ANT_HOME
             string selectedPath = this.curTextBox.Text.Trim();
             string binPath = Path.Combine(selectedPath, "bin");
             string antCmd = Path.Combine(binPath, "ant.cmd");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
-                MessageBox.Show("Current directory no longer exists");
+                MessageBox.Show("当前目录已经删除");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -821,7 +821,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
             {
-                MessageBox.Show("bin directory does not exist");
+                MessageBox.Show("bin目录不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -829,7 +829,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(antCmd) || !File.Exists(antCmd))
             {
-                MessageBox.Show("ant.cmd does not exist");
+                MessageBox.Show("antCmd不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -843,21 +843,21 @@ namespace SetHome
                 envKey.SetValue("PATH", joinDevPath(oldPath));
                 // RunSetx("Path", joinDevPath(oldPath), true);
 
-                MessageBox.Show("ANT_HOME set successfully");
+                MessageBox.Show("设置ANT_HOME成功");
                 UpdateEnvPath();
             }
         }
 
         private void gradle_Click(object sender, EventArgs e)
         {
-            // Set ANT_HOME to the current directory
+            // 设置当前目录ANT_HOME
             string selectedPath = this.curTextBox.Text.Trim();
             string binPath = Path.Combine(selectedPath, "bin");
             string gradleBat = Path.Combine(binPath, "gradle.bat");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
-                MessageBox.Show("Current directory no longer exists");
+                MessageBox.Show("当前目录已经删除");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -865,7 +865,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
             {
-                MessageBox.Show("bin directory does not exist");
+                MessageBox.Show("bin目录不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -873,7 +873,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(gradleBat) || !File.Exists(gradleBat))
             {
-                MessageBox.Show("gradle.bat does not exist");
+                MessageBox.Show("gradleBat不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -886,7 +886,7 @@ namespace SetHome
                 envKey.SetValue("GRADLE_HOME", selectedPath);
                 envKey.SetValue("PATH", joinDevPath(oldPath));
                 // RunSetx("Path", joinDevPath(oldPath), true);
-                MessageBox.Show("GRADLE_HOME set successfully");
+                MessageBox.Show("设置GRADLE_HOME成功");
                 UpdateEnvPath();
             }
         }
@@ -979,15 +979,15 @@ namespace SetHome
                 foreach (ManagementObject mo in searcher.Get())
                 {
                     
-                    sCPUSerialNumber = mo["Name"].ToString().Trim();//OS name
-                    //sCPUSerialNumber = mo["BootDevice"].ToString().Trim();//boot partition
-                    //sCPUSerialNumber = mo["NumberOfProcesses"].ToString().Trim();//current running process count
-                    //sCPUSerialNumber = mo["SerialNumber"].ToString().Trim();//OS serial number
-                    //sCPUSerialNumber = mo["OSLanguage"].ToString().Trim();//OS language
+                    sCPUSerialNumber = mo["Name"].ToString().Trim();//操作系统名字
+                    //sCPUSerialNumber = mo["BootDevice"].ToString().Trim();//系统启动分区
+                    //sCPUSerialNumber = mo["NumberOfProcesses"].ToString().Trim();//当前运行的进程数
+                    //sCPUSerialNumber = mo["SerialNumber"].ToString().Trim();//操作系统序列号
+                    //sCPUSerialNumber = mo["OSLanguage"].ToString().Trim();//操作系统的语言
                     //sCPUSerialNumber = mo["Manufacturer"].ToString().Trim();//
                 }
-                // MessageBox.Show(sCPUSerialNumber.Substring(10, 10));//split string
-                MessageBox.Show(sCPUSerialNumber);//split string
+                // MessageBox.Show(sCPUSerialNumber.Substring(10, 10));//分割字符串
+                MessageBox.Show(sCPUSerialNumber);//分割字符串
             }
             catch (Exception )
             {
@@ -1005,14 +1005,14 @@ namespace SetHome
         {
             // ROCKETMQ_HOME
 
-            // Set ANT_HOME to the current directory
+            // 设置当前目录ANT_HOME
             string selectedPath = this.curTextBox.Text.Trim();
             string binPath = Path.Combine(selectedPath, "bin");
             string runserverCmd = Path.Combine(binPath, "runserver.cmd");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
-                MessageBox.Show("Current directory no longer exists");
+                MessageBox.Show("当前目录已经删除");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -1020,7 +1020,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
             {
-                MessageBox.Show("bin directory does not exist");
+                MessageBox.Show("bin目录不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -1028,7 +1028,7 @@ namespace SetHome
 
             if (String.IsNullOrEmpty(runserverCmd) || !File.Exists(runserverCmd))
             {
-                MessageBox.Show("runserver.cmd does not exist");
+                MessageBox.Show("runserverCmd不存在");
                 SystemSounds.Hand.Play();
                 return;
             }
@@ -1041,7 +1041,7 @@ namespace SetHome
                 envKey.SetValue("ROCKETMQ_HOME", selectedPath);
                 // envKey.SetValue("PATH", joinDevPath(oldPath));
                 RunSetx("ROCKETMQ_HOME_INT", "1", true);
-                MessageBox.Show("ROCKETMQ_HOME set successfully");
+                MessageBox.Show("设置ROCKETMQ_HOME成功");
                 UpdateEnvPath();
             }
         }

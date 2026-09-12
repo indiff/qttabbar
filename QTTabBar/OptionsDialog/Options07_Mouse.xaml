@@ -2,7 +2,7 @@
 <!--
     This file is part of QTTabBar, a shell extension for Microsoft
     Windows Explorer.
-    Copyright (C) 2007-2021  Quizo, Paul Accisano
+    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 
     QTTabBar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@
                 SelectionMode="Single">
                 <ListBox.Style>
                     <Style TargetType="{x:Type ListView}">
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="Black"/>
                     </Style>
                 </ListBox.Style>
                 <ListView.ItemContainerStyle>
@@ -79,7 +79,6 @@
                         <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         <Setter Property="Height" Value="20"/>
-                        <Setter Property="Foreground" Value="White"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.GroupStyle>
@@ -108,7 +107,7 @@
                                     </Grid>
                                     <TextBlock 
                                         DockPanel.Dock="Left"
-                                        Foreground="CornflowerBlue"
+                                        Foreground="MediumBlue"
                                         Margin="6,3,4,2"
                                         Text="{qt:Resx Key=Options_Page07_Mouse}">
                                         <TextBlock.Style>

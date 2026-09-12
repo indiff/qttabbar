@@ -41,7 +41,7 @@ namespace QTTabBarLib {
     public static class QTUtility2 {
         private const int THRESHOLD_ELLIPSIS = 40;
         private static bool fConsoleAllocated;
-        // Whether to enable logging output; setting to false disables it. Off by default; can be toggled in the app options.
+        // 判断是否启用日志，发布改为false， 调试启用. 默认是关闭的，在常规选项里面可以设置启用
         public static bool ENABLE_LOGGER = false;
 
         public static string ExplorerPath
@@ -226,58 +226,6 @@ namespace QTTabBarLib {
             return ((clr.R | (clr.G << 8)) | (clr.B << 0x10));
         }
 
-        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
-
-        // Makes the window's title bar/border follow InNightMode instead of always
-        // being light, regardless of the Windows theme (WinForms/WPF don't do this
-        // on their own).
-        public static void SetDarkTitleBar(IntPtr hwnd) {
-            int useDark = QTUtility.getNightMode() ? 1 : 0;
-            PInvoke.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref useDark, sizeof(int));
-        }
-
-        // OptionsDialogResources.xaml hardcodes a dark palette; every Options page merges it via
-        // Source="..." rather than instantiating a class, so a code-behind on that dictionary
-        // never runs. This overwrites the same keys with the light palette instead, directly on
-        // the caller's own Resources (which DynamicResource lookups find before the merged dark
-        // dictionary further down the resource-lookup chain). No-op in dark mode.
-        public static void ApplyOptionsDialogTheme(System.Windows.ResourceDictionary resources) {
-            if (QTUtility.getNightMode()) return;
-            resources["ThemeBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
-            resources["ThemeFieldBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
-            resources["ThemeBorderBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
-            resources["ThemeForegroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
-            resources["ThemeSelectionBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
-            resources["SectionHeaderBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xF2, 0xF2, 0xF2));
-            resources[System.Windows.SystemColors.ControlTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
-            resources[System.Windows.SystemColors.WindowTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
-            resources[System.Windows.SystemColors.WindowBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
-            resources[System.Windows.SystemColors.HighlightBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xD9, 0xD9, 0xD9));
-            resources[System.Windows.SystemColors.HighlightTextBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
-            resources[System.Windows.SystemColors.ControlBrushKey] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
-        }
-
-        // Some settings (e.g. Config.Window.AutoHookWindow) only take effect during process
-        // startup - QTUtility's static constructor and HookLibManager.Initialize() only ever
-        // run once per explorer.exe process - so changing them requires a full restart to pick
-        // up. Runs the kill+relaunch from a separate cmd.exe rather than doing it inline: this
-        // call is normally made from code running inside explorer.exe itself, which taskkill
-        // is about to terminate, so anything after the kill needs to survive in a process that
-        // isn't also about to die.
-        public static void RestartExplorer() {
-            try {
-                Process.Start(new ProcessStartInfo {
-                    FileName = "cmd.exe",
-                    Arguments = "/c taskkill /F /IM explorer.exe & start explorer.exe",
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                });
-            }
-            catch (Exception ex) {
-                MakeErrorLog(ex, "RestartExplorer");
-            }
-        }
-
         /**
          * force log
          */
@@ -287,7 +235,7 @@ namespace QTTabBarLib {
             Dictionary<String, String> dic = new Dictionary<String, String>();
             if (trace != null)
             {
-                StackFrame frame = trace.GetFrame(1);//1 = caller, 2 = caller's caller, source method
+                StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
                 if (frame != null)
                 {
                     MethodBase method = frame.GetMethod();
@@ -318,7 +266,7 @@ namespace QTTabBarLib {
 
                 if (trace != null)
                 {
-                    StackFrame frame = trace.GetFrame(1);//1 = caller, 2 = caller's caller, source method
+                    StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
                     if (frame != null)
                     {
                         MethodBase method = frame.GetMethod();
@@ -359,7 +307,7 @@ namespace QTTabBarLib {
 
                 if (trace != null)
                 {
-                    StackFrame frame = trace.GetFrame(1);//1 = caller, 2 = caller's caller, source method
+                    StackFrame frame = trace.GetFrame(1);//1代表上级，2代表上上级，以此类推
                     if (frame != null)
                     {
                         MethodBase method = frame.GetMethod();
@@ -380,7 +328,7 @@ namespace QTTabBarLib {
 
         // private static DateTime dateTime ;
         private static Dictionary<int, DateTime> dictTime = new Dictionary<int, DateTime>();
-        // Ignore some methods in logging
+        // 忽略一些添加 日志
         private static string[] IGNORES = { "ReleaseComObject" };
         
         public static void log(string level, string optional,Dictionary<String, String> dic=null)
@@ -405,7 +353,7 @@ namespace QTTabBarLib {
             {
                 DateTime oldTime = dateTime;
                 dateTime = DateTime.Now;
-                useTime = "" + ((dateTime - oldTime).TotalMilliseconds) + "ms";
+                useTime = "" + ((dateTime - oldTime).TotalMilliseconds) + "毫秒";
             }
             else
             {
@@ -438,7 +386,7 @@ namespace QTTabBarLib {
                     var oldTime = dictTime[cThreadId];
                     if (null != oldTime)
                     {
-                        useTime = "" + ((DateTime.Now - oldTime).TotalMilliseconds) + "ms";
+                        useTime = "" + ((DateTime.Now - oldTime).TotalMilliseconds) + "毫秒";
                         dictTime[cThreadId] = DateTime.Now;
                     }
                 }
@@ -459,7 +407,7 @@ namespace QTTabBarLib {
             // add className and methodName debug
             if (null != dic && dic.Count > 0 && dic.ContainsKey("methodName") && dic.ContainsKey("className"))
             {
-                // Add class name
+                // 输出类名和方法名
                 if (dic.ContainsKey("className"))
                 {
                     var className = dic["className"];
@@ -482,14 +430,14 @@ namespace QTTabBarLib {
                     }
                 }
             }
-            // Process ID
+            // 进程ID
             if (process != null)
             {
                 line
                     .Append("\tP:")
                     .Append(process.Id);
             }
-            // Thread ID
+            // 线程 ID
             if (cThreadId != null)
             {
                 line
@@ -531,15 +479,15 @@ namespace QTTabBarLib {
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
                 var line = new StringBuilder();
                 line.AppendLine(DateTime.Now.ToString());
-                line.AppendLine(".NET Version: " + Environment.Version);
-                line.AppendLine("OS Version: " + Environment.OSVersion.Version +
+                line.AppendLine(".NET 版本: " + Environment.Version);
+                line.AppendLine("操作系统版本: " + Environment.OSVersion.Version + 
                                 " Major: " + Environment.OSVersion.Version.Major +
-                                " Arch: " + getEnv()
+                                " 环境: " + getEnv()
                                 );
-                line.AppendLine("QT Version: " + MakeVersionString());
+                line.AppendLine("QT 版本: " + MakeVersionString());
                 if (!String.IsNullOrEmpty(optional))
                 {
-                    line.AppendLine("Additional Info: " + optional);
+                    line.AppendLine("错误信息: " + optional);
                 }
                 if (ex == null)
                 {
@@ -598,20 +546,20 @@ namespace QTTabBarLib {
 
         /*
         public static object lockObject = new object();
-        // A reader-writer lock granting exclusive file-write permission - each thread waits its turn until the previous write finishes.
+        //读写锁，锁定文件写入权限，每个线程依次等待上个写入完成
         static ReaderWriterLockSlim LogWriteLock = new ReaderWriterLockSlim();
         */
 
 
         /*
-         * About Mutex
-         * Declaration:
-         *     private static readonly Mutex mutex = new Mutex();
-         * Usage:
-         *     mutex.WaitOne();
-         *     mutex.ReleaseMutex();
-         * Purpose: locks the critical section so other threads block until the current thread finishes, then releases the lock.
-         * A Mutex is a kernel-level synchronization object and can be used across process boundaries.
+        互斥锁Mutex
+        定义：
+            private static readonly Mutex mutex = new Mutex();
+            使用：
+            mutex.WaitOne();
+            mutex.ReleaseMutex();
+            作用：将会锁住代码块的内容，并阻止其他线程进入该代码块，直到该代码块运行完成，释放该锁。
+         * Mutex本身是可以系统级别的，所以是可以跨越进程的。
          */
         private static readonly Mutex M_MUTEX = new Mutex();
 
@@ -620,13 +568,13 @@ namespace QTTabBarLib {
             try
             {
                 M_MUTEX.WaitOne();
-                //Set the reader-writer lock to write mode to claim exclusive resource access
-                //After entering write mode, must exit on the same thread; ensure no exception is thrown before entering write mode, otherwise the lock is never released and further exceptions cascade
-                //Holding the lock while doing other work here would block other threads
+                //设置读写锁为写入模式独占资源
+                //因写入模式的进入与释放在同一个代码块内，请保证在块内进入写入模式前不会触发异常，否则会因为进入与释放次数不符从而触发异常
+                //请勿长时间占用读写锁否则会导致其他线程饥饿。
                 // LogWriteLock.EnterWriteLock();
                 // lock (lockObject) {
 
-                // Fix: the previous one wasn't released, causing this process to be unable to access the file
+                // 修复 正由另一进程使用，因此该进程无法访问该文件
                 if (File.Exists(path)) {
                     using (FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
                     {
@@ -647,7 +595,7 @@ namespace QTTabBarLib {
                     }
                 }
 
-                // As above - the previous one wasn't released, causing this process to be unable to access the file
+                // 存在问题 正由另一进程使用，因此该进程无法访问该文件
                     /*using (StreamWriter writer = new StreamWriter(path, true))
                     {
                         writer.WriteLine(formatLogLine);
@@ -656,8 +604,8 @@ namespace QTTabBarLib {
             }
             finally
             {
-                //Exit write mode, release the claimed resource
-                //Note: releasing locks in the wrong order will trigger an exception
+                //退出写入模式，释放资源占用
+                //注意释放与进入次数相同否则会触发异常
                 // LogWriteLock.ExitWriteLock();
 
                 M_MUTEX.ReleaseMutex();
@@ -686,7 +634,7 @@ namespace QTTabBarLib {
 
         public static void Close(TextReader sr)
         {
-            if (sr == null)
+            if (sr != null)
             {
                 sr.Close();
                 sr.Dispose();
@@ -695,7 +643,7 @@ namespace QTTabBarLib {
 
         public static void Close(Stream stream)
         {
-            if (stream == null)
+            if (stream != null)
             {
                 stream.Close();
                 stream.Dispose();
@@ -704,7 +652,7 @@ namespace QTTabBarLib {
 
         public static void Close(TextWriter sw)
         {
-            if (sw == null)
+            if (sw != null)
             {
                 sw.Close();
                 sw.Dispose();
@@ -727,7 +675,7 @@ namespace QTTabBarLib {
 
                     if (!String.IsNullOrEmpty(optional))
                     {
-                        writer.WriteLine("Additional Info: " + optional);
+                        writer.WriteLine("错误信息: " + optional);
                     }
                    
                     writer.WriteLine("--------------");
@@ -845,7 +793,7 @@ namespace QTTabBarLib {
         }
 
         public static string MakeVersionString() {
-            // qwop comment  confirm the .NET Framework version.
+            // qwop comment  添加 .net framework 的版本号
             if(QTUtility.IS_DEV_VERSION) {
                 return "DevBuild: " + QTUtility.GetLinkerTimestamp() + " (" + Environment.Version + ")";
             }
@@ -999,7 +947,7 @@ namespace QTTabBarLib {
 
 
         /**
-         * Set a string to the clipboard
+         * 设置字符串到剪贴板
          */
         internal static void SetStringClipboard(string str) {
             try {
@@ -1014,7 +962,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * Get a string from the clipboard
+         * 设置字符串到剪贴板
          */
         internal static string GetStringClipboard()
         {
@@ -1033,7 +981,7 @@ namespace QTTabBarLib {
             }
             return "";
         }
-        // Join a string using a separator
+        // 字符串通过分隔符连接
         public static string StringJoin<T>(this IEnumerable<T> list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -1044,7 +992,7 @@ namespace QTTabBarLib {
             }
             return sb.ToString();
         }
-        // Join a string using a separator
+        // 字符串通过分隔符连接
         public static string StringJoin(this IEnumerable list, string separator) {
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -1076,7 +1024,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///  Write to the registry - de-duplicate the close message before invoking the lock-tabs write
+        ///  写入注册表， 关闭消息去除写入锁定标签的调用
         ///  qttabbarclass  public override void CloseDW(uint dwReserved)
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -1084,10 +1032,10 @@ namespace QTTabBarLib {
         /// <param name="regValueName"></param>
         /// <param name="rkUserApps"></param>
         public static void WriteRegBinary<T>(T[] array, string regValueName, RegistryKey rkUserApps) {
-            // Write the array of locked-tab paths
+            // 如果锁定标签路径有内容
             if ("TabsLocked".Equals(regValueName))
             {
-                // MessageBox.Show("Writing locked tabs");
+                // MessageBox.Show("写入锁定标签");
                 if (null != array && array.Length > 0)
                 {
                     if (rkUserApps != null)
@@ -1099,7 +1047,7 @@ namespace QTTabBarLib {
 
                         if (null == newArray || newArray.Length == 0)
                         {
-                            // MessageBox.Show("Locked-tab array is empty: " + array.StringJoin(";"));
+                            // MessageBox.Show("锁定标签数据为空：" + array.StringJoin(";"));
                             if (rkUserApps != null)
                             {
                                 rkUserApps.SetValue("TabsLocked2", "");
@@ -1107,7 +1055,7 @@ namespace QTTabBarLib {
                         }
                         else
                         {
-                            //  MessageBox.Show("Locked-tab array is: " + array.StringJoin(";"));
+                            //  MessageBox.Show("锁定标签数据为：" + array.StringJoin(";"));
                             rkUserApps.SetValue("TabsLocked2", newArray.StringJoin(";"));
                         }
                         /*
@@ -1123,7 +1071,7 @@ namespace QTTabBarLib {
                 }
                 else if (null == array || array.Length == 0  )
                 {
-                    //   MessageBox.Show("Locked-tab array is empty: " + array.StringJoin(";"));
+                    //   MessageBox.Show("锁定标签数据为空：" + array.StringJoin(";"));
                     if (rkUserApps != null)
                     {
                         rkUserApps.SetValue("TabsLocked2", "");
@@ -1245,7 +1193,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///    Used for debugging messages
+        ///    用于调试消息
         /// </summary>
         /// <param name="msg"></param>
         public static void debugMessage(Message msg)
@@ -1273,7 +1221,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///    Used for debugging messages
+        ///    用于调试消息
         /// </summary>
         /// <param name="msg"></param>
         public static void debugMessage(MSG msg)
@@ -1306,22 +1254,22 @@ namespace QTTabBarLib {
 
             // Process.Start("TASKKILL /F /T /PID " + process.Id);
             /*string MyDosComLine1;
-            MyDosComLine1 = "TASKKILL /F /T /PID " + process.Id;//Kill the process by PID
+            MyDosComLine1 = "TASKKILL /F /T /PID " + process.Id;//返回根目录命令
             Process myProcess = new Process();
-            myProcess.StartInfo.FileName = "cmd.exe ";//Open the DOS command shell
+            myProcess.StartInfo.FileName = "cmd.exe ";//打开DOS控制平台 
             myProcess.StartInfo.UseShellExecute = false;
-            myProcess.StartInfo.CreateNoWindow = true;//Whether to show the DOS window; true = don't show;
+            myProcess.StartInfo.CreateNoWindow = true;//是否显示DOS窗口，true代表隐藏;
             myProcess.StartInfo.RedirectStandardInput = true;
             myProcess.StartInfo.RedirectStandardOutput = true;
             myProcess.StartInfo.RedirectStandardError = true;
             myProcess.Start();
-            StreamWriter sIn = myProcess.StandardInput;//Standard input stream
+            StreamWriter sIn = myProcess.StandardInput;//标准输入流 
             sIn.AutoFlush = true;
-            StreamReader sOut = myProcess.StandardOutput;//Standard output stream
-            StreamReader sErr = myProcess.StandardError;//Standard error stream
-            sIn.Write(MyDosComLine1 + Environment.NewLine);//Write a DOS command
+            StreamReader sOut = myProcess.StandardOutput;//标准输入流
+            StreamReader sErr = myProcess.StandardError;//标准错误流 
+            sIn.Write(MyDosComLine1 + Environment.NewLine);//第一条DOS命令
             log("write dos command: " + MyDosComLine1);
-            sIn.Write("exit" + Environment.NewLine);//exit, the DOS command exits the DOS window
+            sIn.Write("exit" + Environment.NewLine);//第四条DOS命令，退出DOS窗口
             if (myProcess.HasExited == false)
             {
                 myProcess.Kill();

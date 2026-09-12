@@ -96,7 +96,7 @@ namespace QTTabBarLib {
                 FilterPlugin = null;
                 FilterCorePlugin = null;
             }
-            // Create new tab: address, index, whether locked, whether selected
+            // 创建新标签 地址  索引 是否锁定  是否选中
             public bool CreateTab(Address address, int index, bool fLocked, bool fSelect) {
                 using(IDLWrapper wrapper = new IDLWrapper(address)) {
                     address.ITEMIDLIST = wrapper.IDL;
@@ -149,6 +149,7 @@ namespace QTTabBarLib {
                 shellBrowser = null;
             }
 
+
             public bool ExecuteCommand(Commands command, object arg) {
                 if(tabBar != null) {
                     IntPtr ptr;
@@ -186,7 +187,7 @@ namespace QTTabBarLib {
                                 tabBar.CloseAllTabsExcept(wrapper.Tab);
                                 return true;
                             }
-                        case Commands.CloseWindow: // Close window 2, indiff
+                        case Commands.CloseWindow: // 关闭窗口 2 indiff
                            /* using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
                             {
                                 string[] list = (from QTabItem item2 in tabControl1.TabPages
@@ -243,18 +244,14 @@ namespace QTTabBarLib {
                             break;
 
                         case Commands.MD5:
-                            if(!(arg is string[])) {
+                            if (!(arg is string[] paths))
+                            {
                                 break;
                             }
-                            if(md5Form == null) {
-                                md5Form = new FileHashComputerForm();
-                            }
-                            if(md5Form.InvokeRequired) {
-                                md5Form.Invoke(new FormMethodInvoker(ShowMD5FormCore), new object[] { arg });
-                            }
-                            else {
-                                ShowMD5FormCore(arg);
-                            }
+                            // 如果当前处于 static 上下文，需要获取实例引用
+                            // 通常 QTTabBarClass 有类似 Instance 或从 ExplorerBrowser 获取的方式
+                            var tabBarInstance = QTTabBarClass.GetThreadTabBar();
+                            tabBarInstance?.ShowMD5(paths);
                             return true;
 
                         case Commands.ShowProperties: {
@@ -815,7 +812,7 @@ namespace QTTabBarLib {
                     }
                 }
 
-                // Set to locked
+                // 设置为锁定
                 public bool Locked {
                     get {
                         return ((tab != null) && tab.TabLocked);

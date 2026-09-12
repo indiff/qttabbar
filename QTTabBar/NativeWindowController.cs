@@ -31,6 +31,7 @@ namespace QTTabBarLib {
             bool consumed = false;
             if(MessageCaptured != null)
             {
+                // QTUtility2.log("msg\t" + Enum.GetName(typeof(MsgEnum), m.Msg) + "\tw\t" + m.WParam + "\tl\t" + m.LParam);
                 /*switch (m.Msg)
                 {
                     case 26:

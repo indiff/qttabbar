@@ -22,13 +22,13 @@ namespace QTTabBarLib {
 
     internal static class RegConst {
         public const string Root = @"Software\QTTabBar\";
-        // HKEY_CURRENT_USER\Software\QTTabBar\Config\Skin , export skin
+        // HKEY_CURRENT_USER\Software\QTTabBar\Config\Skin , 导出皮肤
         public const string Root_Config_Skin= @"Software\QTTabBar\Config\Skin\";
-        // Config info registry path
+        // 配置信息注册表路径
         public const string Config = @"Config\";
-        // Group info registry path
+        // 分组信息注册表路径
         public const string Groups = @"Groups\";
-        // Custom-apps registry path
+        // 自定应用注册表路径
         public const string Apps = @"UserApps\";
         public const string StaticReg = @"Shared\";
     }

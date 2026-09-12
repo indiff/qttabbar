@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * Get the SubDirTip position
+         * 获取子文件夹提示的位置
          */
         protected override Point GetSubDirTipPoint(bool fByKey) {
             CachedListItemElement targetElement;
@@ -84,20 +84,20 @@ namespace QTTabBarLib {
             int x, y;
             Point ret;
             switch(ShellBrowser.ViewMode) {
-                case FVM.CONTENT: // Content
+                case FVM.CONTENT: // 内容
                     y = targetElement.FullRect.Bottom;
                     x = targetElement.LabelRect.Left;
                     ret = new Point(x, y - 16);
                     break;
 
-                case FVM.DETAILS: // Details
+                case FVM.DETAILS: // 详细信息
                     x = targetElement.LabelRect.Right;
                     y = targetElement.LabelRect.Top;
                     y += (targetElement.LabelRect.Bottom - y) / 2;
                     ret = new Point(x - 16, y - 8);
                     break;
 
-                case FVM.SMALLICON: // Small icon
+                case FVM.SMALLICON: // 小图标
                     x = targetElement.FullRect.Right;
                     y = targetElement.FullRect.Top;
                     x -= (targetElement.FullRect.Bottom - y) / 2;
@@ -105,21 +105,21 @@ namespace QTTabBarLib {
                     ret = new Point(x - 8, y - 8);
                     break;
 
-                case FVM.TILE: // Tile
+                case FVM.TILE: // 平铺
                     y = targetElement.FullRect.Bottom;
                     x = targetElement.IconRect.Right;
                     ret = new Point(x - 16, y - 16);
                     break;
 
-                case FVM.THUMBSTRIP: // Thumbnail strip
-                case FVM.THUMBNAIL:  // Thumbnail
-                case FVM.ICON: // Icon
+                case FVM.THUMBSTRIP: // 缩略图
+                case FVM.THUMBNAIL:  // 略图    
+                case FVM.ICON: // 图标
                     x = targetElement.FullRect.Right;
                     y = targetElement.IconRect.Bottom;
                     ret = new Point(x - 16, y - 16);
                     break;
 
-                case FVM.LIST: // List
+                case FVM.LIST: // 列表
                     x = targetElement.FullRect.Right;
                     y = targetElement.FullRect.Bottom;
                     ret = new Point(x, y - 15);
@@ -141,7 +141,7 @@ namespace QTTabBarLib {
             return new Point(rect.left, rect.top);
         }
 
-        // Wrap folder selection with arrow keys
+        // 使用箭头键时候环绕选择文件夹
         protected override bool HandleCursorLoop(Keys key) {
             int focusedIdx = ShellBrowser.GetFocusedIndex();
             int itemCount = ShellBrowser.GetItemCount();
@@ -207,7 +207,7 @@ namespace QTTabBarLib {
             }
         }
 
-        // Handle the Shift key event
+        // 处理Shift键盘事件
         public override void HandleShiftKey() {
             if(!Config.Tips.ShowPreviewsWithShift) {
                 HideThumbnailTooltip(5);
@@ -228,12 +228,12 @@ namespace QTTabBarLib {
             }
         }
 
-        // HitTest's underlying implementation: whenever a control receives a touch event, regardless of whether it can handle it, HitTest is called. Its underlying implementation:
-        // 1: First check whether it can accept the touch event itself
-        // 2: Then check whether the touch point is within its own bounds
-        // 3: Iterate over child controls back-to-front; once a child is found, repeat steps 1-2, converting the parent control's coordinate point into the child control's coordinate system, and call HitTest again.
-        // 4: If no suitable view is found in the end, return self - it is the suitable view
-        // Return value: an index, determined by which element's view the coordinate point falls on. Returns -1 if not found
+        // hitTest的底层实现：当控件接收到触摸事件的时候，不管能不能处理事件，都会调用hitTest方法，此方法的底层实现是：
+        // 1：先看自己是否能接受触摸事件  
+        // 2：再看触摸点是否在自己身上 
+        // 3：从后往前遍历子控件，拿到子控件后，再次重复1，2步骤，要把父控件上的坐标点转换为子控件坐标系下的点，再次执行hitTest方法。
+        // 4：若是最后还没有找到合适的view，那么就return self，自己就是合适的view
+        // 返回值：返回一个索引 index ，根据坐标点所在元素view位置来判断。 未找到返回-1
         public override int HitTest(Point pt, bool ScreenCoords) {
             if(hotElement != null) {
                 Point pt2 = pt;
@@ -268,7 +268,7 @@ namespace QTTabBarLib {
             });
         }
 
-        // Check whether it's the selected file
+        // 判断是否为选中的文件
         public override bool IsTrackingItemName() {
             if(ShellBrowser.ViewMode != FVM.DETAILS) return true;
             Point pt = Control.MousePosition;
@@ -514,6 +514,8 @@ namespace QTTabBarLib {
                 case WM.USER + 163:  // 1024 +163 = 1187  => 4A3
                     // var msgWParam = msg.WParam; //  0 
                     // var msgLParam = msg.LParam; //  0
+                    // QTUtility2.log("selection changes msgWParam " + msg.WParam);
+                    // QTUtility2.log("selection changes msgLParam " + msg.LParam);
                     OnSelectionChanged(ref msg);
                     break;
                 

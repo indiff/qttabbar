@@ -1,6 +1,6 @@
-//    This file is part of QTTabBar, a shell extension for Microsoft
+﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ namespace QTTabBarLib {
         public event EventHandler ValueChanged;
         
         /**
-         * ������ ��͸�����
+         * 工具栏 半透明组件
          */
         public ToolStripTrackBar()
             : base(new TrackBar()) {
@@ -139,7 +139,7 @@ namespace QTTabBarLib {
         }
     }
 
-    // ������
+    // 搜索框
     internal sealed class ToolStripSearchBox : ToolStripControlHost {
         private bool fLocked;
         private bool fNowDragging;
@@ -292,6 +292,56 @@ namespace QTTabBarLib {
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e) {
         }
 
+        // ✅ 统一渲染工具栏和溢出下拉菜单的背景
+        protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
+        {
+            Color bgColor;
+            if (Config.Skin.UseRebarBGColor)
+            {
+                bgColor = Config.Skin.RebarColor;
+            }
+            else if (QTUtility.InNightMode)
+            {
+                bgColor = Color.Black;
+            }
+            else
+            {
+                // 浅色模式下让系统默认渲染（保持 Explorer 风格）
+                base.OnRenderToolStripBackground(e);
+                return;
+            }
+
+            using (SolidBrush brush = new SolidBrush(bgColor))
+            {
+                e.Graphics.FillRectangle(brush, e.AffectedBounds);
+            }
+        }
+
+        // ✅ 溢出按钮本身的背景
+        protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
+        {
+            Color bgColor = Config.Skin.UseRebarBGColor
+                ? Config.Skin.RebarColor
+                : (QTUtility.InNightMode ? Color.Black : SystemColors.Window);
+
+            using (SolidBrush brush = new SolidBrush(bgColor))
+            {
+                e.Graphics.FillRectangle(brush, e.Item.Bounds);
+            }
+
+            // 绘制 >> 箭头
+            if (e.Item.Enabled)
+            {
+                using (Pen pen = new Pen(Config.Skin.ToolBarTextColor))
+                {
+                    int cx = e.Item.Bounds.Width / 2;
+                    int cy = e.Item.Bounds.Height / 2;
+                    e.Graphics.DrawLine(pen, cx - 3, cy - 2, cx, cy + 1);
+                    e.Graphics.DrawLine(pen, cx, cy + 1, cx + 3, cy - 2);
+                }
+            }
+        }
+
         /*protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
         {
             if (e.ToolStrip.OverflowButton.Enabled)
@@ -317,6 +367,7 @@ namespace QTTabBarLib {
             using (Bitmap bmp = freeBitmap.Clone())
             {
                 bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                // QTUtility2.log("SetWaterMarkImage " + dToutiaoX1080IntellijIdea3Png);
                 e.Graphics.DrawImage(bmp,
                     new Rectangle(0, e.ToolStrip.OverflowButton.Height - bmp.Height, e.ToolStrip.OverflowButton.Bounds.Width, e.ToolStrip.OverflowButton.Bounds.Height));
             }

@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size( 92, 17 );
 			this.checkBox1.TabIndex = 6;
-			this.checkBox1.Text = "Partial match search";
+			this.checkBox1.Text = "部分一致検索";
 			this.checkBox1.UseVisualStyleBackColor = true;
 			this.checkBox1.CheckedChanged += new System.EventHandler( this.checkBox1_CheckedChanged );
 			// 

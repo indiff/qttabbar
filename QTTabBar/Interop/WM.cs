@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -56,6 +56,8 @@ namespace QTTabBarLib.Interop {
         /// The WM_MOVE message is sent after a window has been moved.
         /// </summary>
         public const Int32 MOVE = 0x0003;
+        public const Int32 DPICHANGED = 0x02E0;
+
 
         /// <summary>
         /// The WM_SIZE message is sent to a window after its size has changed.

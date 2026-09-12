@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Plugin.Author" xml:space="preserve"><value>indiff</value></data>
+  <data name="Plugin.Name" xml:space="preserve"><value>時計</value></data>
+  <data name="Plugin.Description" xml:space="preserve"><value>時計プラグイン;祝日、ホットニュース、再読み込み、マルチモニターをサポート</value></data>
+  <data name="UI.NewsLoading" xml:space="preserve"><value>ニュースを読み込み中...</value></data>
+  <data name="UI.EscapeHint" xml:space="preserve"><value>ESCで非表示、クリックで終了、ホットニュース項目をダブルクリック👨‍🦲</value></data>
+  <data name="UI.Reload" xml:space="preserve"><value>再読み込み</value></data>
+  <data name="UI.HideToSide" xml:space="preserve"><value>横に隠す</value></data>
+  <data name="UI.MultiScreenDetected" xml:space="preserve"><value>マルチモニターを検出しました!</value></data>
+  <data name="UI.CheckScreens" xml:space="preserve"><value>画面を確認中...</value></data>
+  <data name="UI.DataLoading" xml:space="preserve"><value>データを読み込み中...</value></data>
+  <data name="UI.LoadSuccessCount" xml:space="preserve"><value>{0}件を読み込みました</value></data>
+  <data name="UI.LoadSuccess" xml:space="preserve"><value>読み込み成功</value></data>
+  <data name="UI.LoadFailed" xml:space="preserve"><value>読み込み失敗</value></data>
+  <data name="UI.NoLink" xml:space="preserve"><value>リンクが見つかりません</value></data>
+  <data name="UI.NotSupportedCountry" xml:space="preserve"><value>この地域ではホットニュースは未対応です。</value></data>
+  <data name="UI.LoadHotNews" xml:space="preserve"><value>ホットニュースを読み込み中</value></data>
+  <data name="UI.TooltipTemplate" xml:space="preserve"><value>{0}{1} ダブルクリックで開く🎅🎅</value></data>
+  <data name="UI.NewsFormTitle" xml:space="preserve"><value>ホットニュース</value></data>
+	<data name="Options.Title" xml:space="preserve"><value>QTClock オプション</value></data>
+  <data name="Options.DockSide" xml:space="preserve"><value>ニュースウィンドウの位置：</value></data>
+  <data name="Options.Left" xml:space="preserve"><value>左側</value></data>
+  <data name="Options.Right" xml:space="preserve"><value>右側</value></data>
+  <data name="Options.OK" xml:space="preserve"><value>OK</value></data>
+  <data name="Options.Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Greeting.Sunday" xml:space="preserve"><value>楽しい日曜日</value></data>
+  <data name="Greeting.Monday" xml:space="preserve"><value>月曜日</value></data>
+  <data name="Greeting.Tuesday" xml:space="preserve"><value>火曜日</value></data>
+  <data name="Greeting.Wednesday" xml:space="preserve"><value>水曜日</value></data>
+  <data name="Greeting.Thursday" xml:space="preserve"><value>木曜日</value></data>
+  <data name="Greeting.Friday" xml:space="preserve"><value>Happy Friday</value></data>
+  <data name="Greeting.Saturday" xml:space="preserve"><value>楽しい土曜日</value></data>
+  <data name="Week.Sunday" xml:space="preserve"><value>日曜日</value></data>
+  <data name="Week.Monday" xml:space="preserve"><value>月曜日</value></data>
+  <data name="Week.Tuesday" xml:space="preserve"><value>火曜日</value></data>
+  <data name="Week.Wednesday" xml:space="preserve"><value>水曜日</value></data>
+  <data name="Week.Thursday" xml:space="preserve"><value>木曜日</value></data>
+  <data name="Week.Friday" xml:space="preserve"><value>金曜日</value></data>
+  <data name="Week.Saturday" xml:space="preserve"><value>土曜日</value></data>
+  <data name="Calendar.DatePrefix" xml:space="preserve"><value>西暦{0}</value></data>
+  <data name="Calendar.LunarPrefix" xml:space="preserve"><value>旧暦{0}</value></data>
+  <data name="Calendar.LeapPrefix" xml:space="preserve"><value>閏{0}</value></data>
+  <data name="Calendar.YearSuffix" xml:space="preserve"><value>{0}年</value></data>
+  <data name="Calendar.ZodiacNames" xml:space="preserve"><value>牡羊座|牡牛座|双子座|蟹座|獅子座|乙女座|天秤座|蠍座|射手座|山羊座|水瓶座|魚座</value></data>
+  <data name="Calendar.SolarTerms" xml:space="preserve"><value>小寒|大寒|立春|雨水|啓蟄|春分|清明|穀雨|立夏|小満|芒種|夏至|小暑|大暑|立秋|処暑|白露|秋分|寒露|霜降|立冬|小雪|大雪|冬至</value></data>
+  <data name="Calendar.GanStr" xml:space="preserve"><value>甲乙丙丁戊己庚辛壬癸</value></data>
+  <data name="Calendar.ZhiStr" xml:space="preserve"><value>子丑寅卯辰巳午未申酉戌亥</value></data>
+  <data name="Calendar.AnimalStr" xml:space="preserve"><value>鼠牛虎兔龙蛇马羊猴鸡狗猪</value></data>
+  <data name="Calendar.NStr1" xml:space="preserve"><value>日一二三四五六七八九</value></data>
+  <data name="Calendar.NStr2" xml:space="preserve"><value>初十廿卅</value></data>
+  <data name="Calendar.MonthNames" xml:space="preserve"><value>|正月|二月|三月|四月|五月|六月|七月|八月|九月|十月|十一月|十二月</value></data>
+  <data name="Calendar.DayNames" xml:space="preserve"><value>|初一|初二|初三|初四|初五|初六|初七|初八|初九|初十|十一|十二|十三|十四|十五|十六|十七|十八|十九|二十|廿一|廿二|廿三|廿四|廿五|廿六|廿七|廿八|廿九|三十</value></data>
+</root>

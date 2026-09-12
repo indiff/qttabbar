@@ -1,13 +1,13 @@
-/* File Info
+﻿/* File Info 
  * Author:      indiff
- * CreateTime:  2021/1/5 1:58:08 PM
+ * CreateTime:  2021/1/5下午1:58:08 
  * LastEditor:  indiff
- * ModifyTime:  2021/8/28 7:47:22 PM
- * Description:
+ * ModifyTime:  2021/8/28下午7:47:22 
+ * Description: 
 */
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2024  Quizo, Paul Accisano, indiff
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -60,9 +60,9 @@ namespace QTTabBarLib {
         }
     }
 
-   /*
-    * @description: Tab position
-    */
+   /* 
+    * @描述: 标签位置
+    */     
     public enum TabPos {
         Rightmost,
         Right,
@@ -71,18 +71,18 @@ namespace QTTabBarLib {
         LastActive,
     }
 
-   /*
-    * @description: Stretch mode
-    */
+   /* 
+    * @描述: 拉伸模式
+    */   
     public enum StretchMode {
         Full,
         Real,
         Tile,
     }
 
-   /*
-    * @description: Mouse target
-    */
+   /* 
+    * @描述: 鼠标的目标
+    */   
     public enum MouseTarget {
         Anywhere,
         Tab,
@@ -92,9 +92,9 @@ namespace QTTabBarLib {
         ExplorerBackground
     }
 
-   /*
-    * @description: Mouse chord
-    */
+   /* 
+    * @描述: 鼠标弦
+    */  
     [Flags]
     public enum MouseChord {
         None    =   0,
@@ -109,9 +109,9 @@ namespace QTTabBarLib {
         X2      = 256,
     }
 
-    /*
-    * @description: Bound action
-    */
+    /* 
+    * @描述: 绑定动作
+    */  
     // WARNING
     // reordering these will break existing settings.
     public enum BindAction
@@ -141,7 +141,7 @@ namespace QTTabBarLib {
         BrowseFolder,
         CreateNewGroup,
         /***** add by indiff end *****/
-       // AddToGroup,  // Add to tab group - adding a new action has issues
+       // AddToGroup,  // 新增到标签组 ， 添加一个新操作有问题
         ShowOptions,
         ShowToolbarMenu,
         ShowTabMenuCurrent,
@@ -207,14 +207,14 @@ namespace QTTabBarLib {
 
         /******* add by indiff start *****/
         // add by indiff 2012 08 10
-        OpenCmd
-        ,
+        OpenCmd,
+        OpenPowerShell,
         ItemsOpenInNewTabNoSel //add bool indiff 2012 08 12
-            /***** add by indiff end *****/
+        /***** add by indiff end *****/
 
-          /******* add by indiff start *****/
-            // add by indiff 2019 12 16 19:27
-        , SortTab
+        /******* add by indiff start *****/
+        // add by indiff 2019 12 16 19:27
+        , SortTab 
         , TurnOffRepeat
         //add bool indiff 2019 12 16 19:27
         , KEYBOARD_ACTION_COUNT2
@@ -223,18 +223,18 @@ namespace QTTabBarLib {
     [Serializable]
     public class Config {
 		// Shortcuts to the loaded config, for convenience.
-        public static _Window Window    { get { return ConfigManager.LoadedConfig.window; } }	/* Window behavior */
-        public static _Tabs Tabs        { get { return ConfigManager.LoadedConfig.tabs; } }		/* Tab behavior */
-        public static _Tweaks Tweaks    { get { return ConfigManager.LoadedConfig.tweaks; } }	/* Tweaks */
-        public static _Tips Tips        { get { return ConfigManager.LoadedConfig.tips; } }		/* Preview tips */
-        public static _Misc Misc        { get { return ConfigManager.LoadedConfig.misc; } }		/* General options */
-        public static _Skin Skin        { get { return ConfigManager.LoadedConfig.skin; } }		/* Tab appearance */
-        public static _BBar BBar        { get { return ConfigManager.LoadedConfig.bbar; } }		/* Button options */
-        public static _Mouse Mouse      { get { return ConfigManager.LoadedConfig.mouse; } }	/* Mouse actions */
-        public static _Keys Keys        { get { return ConfigManager.LoadedConfig.keys; } }		/* Keyboard shortcuts */
-        public static _Plugin Plugin    { get { return ConfigManager.LoadedConfig.plugin; } }	/* Plugin management */
-        public static _Lang Lang        { get { return ConfigManager.LoadedConfig.lang; } }		/* Language config */
-        public static _Desktop Desktop { get { return ConfigManager.LoadedConfig.desktop; } }   /* About info */
+        public static _Window Window    { get { return ConfigManager.LoadedConfig.window; } }	/*窗口行为*/
+        public static _Tabs Tabs        { get { return ConfigManager.LoadedConfig.tabs; } }		/*标签行为*/
+        public static _Tweaks Tweaks    { get { return ConfigManager.LoadedConfig.tweaks; } }	/*调整工具*/
+        public static _Tips Tips        { get { return ConfigManager.LoadedConfig.tips; } }		/*预览提示*/
+        public static _Misc Misc        { get { return ConfigManager.LoadedConfig.misc; } }		/*常规选项*/
+        public static _Skin Skin        { get { return ConfigManager.LoadedConfig.skin; } }		/*标签外观*/
+        public static _BBar BBar        { get { return ConfigManager.LoadedConfig.bbar; } }		/*按钮选项*/
+        public static _Mouse Mouse      { get { return ConfigManager.LoadedConfig.mouse; } }	/*鼠标操作*/
+        public static _Keys Keys        { get { return ConfigManager.LoadedConfig.keys; } }		/*快捷操作*/
+        public static _Plugin Plugin    { get { return ConfigManager.LoadedConfig.plugin; } }	/*插件管理*/
+        public static _Lang Lang        { get { return ConfigManager.LoadedConfig.lang; } }		/*语言配置*/
+        public static _Desktop Desktop { get { return ConfigManager.LoadedConfig.desktop; } }   /*关于信息*/
 
         public _Window window   { get; set; }
         public _Tabs tabs       { get; set; }
@@ -267,7 +267,7 @@ namespace QTTabBarLib {
         [Serializable]
         public class _Window {
             public bool CaptureNewWindows        { get; set; }
-            public bool CaptureWeChatSelection   { get; set; } // Whether to capture the selected-file state when opening from WeChat, QQ, or DingTalk
+            public bool CaptureWeChatSelection   { get; set; } // 是否捕获微信、qq、钉钉的打开文件选中状态
             public bool RestoreSession           { get; set; }
             public bool RestoreOnlyLocked        { get; set; }
             public bool CloseBtnClosesUnlocked   { get; set; }
@@ -276,9 +276,8 @@ namespace QTTabBarLib {
             public bool TrayOnMinimize           { get; set; }
             public bool AutoHookWindow           { get; set; }
             public bool ShowFailNavMsg           { get; set; } // SHOW_FAIL_NAV_MSG
-            public bool AutoEnableExperimental   { get; set; } // auto-attach QTTabBarClass to every new Explorer window (see ContextMenuOptions/AutoLoader)
+           
             public bool OpenExplorerMaximized    { get; set; }
-
             public byte[] DefaultLocation        { get; set; }
 
             public _Window() {
@@ -300,25 +299,24 @@ namespace QTTabBarLib {
                 {
                     CaptureWeChatSelection = true;
                 }
-
+                
                 RestoreSession = true;
                 RestoreOnlyLocked = false;
                 CloseBtnClosesUnlocked = false;
                 CloseBtnClosesSingleTab = true;
                 TrayOnClose = false;
                 TrayOnMinimize = false;
-                // Auto-start hook off by default
+                // 默认关闭自动启动hook
                 AutoHookWindow = false;
-                AutoEnableExperimental = false;
                 OpenExplorerMaximized = false;
   //              string idl = Environment.OSVersion.Version >= new Version(6, 1)
   //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries
   //                     : "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // Computer
-                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // My Computer, opened by default
+                string idl = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"; // 我的电脑， 默认打开
                 using(IDLWrapper w = new IDLWrapper(idl)) {
                     DefaultLocation = w.IDL;
                 }
-                // Don't show the navigation-failed message box
+                // 不显示导航失败的提示框
                 ShowFailNavMsg = false;
             }
         }
@@ -361,24 +359,24 @@ namespace QTTabBarLib {
                 ActiveTabOnBottomRow = true;*/
 
                 /* qwop's default's value.*/
-                NewTabPosition = TabPos.Rightmost;  // New tab goes at the rightmost position
-                NextAfterClosed = TabPos.LastActive; // Which tab to switch to when the current tab closes
-                ActivateNewTab = true;  // Whether to switch to the new tab immediately
-                NeverOpenSame = true;   //  Reuse an existing tab
-                RenameAmbTabs = true;  // Fuzzy-match tab rename
-                DragOverTabOpensSDT = true; // Action when dragging onto a tab: true = copy/move the file, false = switch to it
-                // DragOverTabOpensSDT is stored in the registry as 0 / 1 (reg_dword)
-                ShowFolderIcon = true;  // Show folder icon
-                ShowSubDirTipOnTab = false;  // Show SubDirTip on tab
-                ShowDriveLetters = false; // Show drive letters
-                ShowCloseButtons = true;  // Show close buttons
-                CloseBtnsWithAlt = false; // Only close while Alt is held
-                CloseBtnsOnHover = false;  // Only show close button on hover
-                ShowNavButtons = false;  // Show nav buttons on tabs (default: off) - #28: could an option be added to control whether the two buttons on the right of the tab bar are shown?
-                NavButtonsOnRight = true; // On the right side
-                MultipleTabRows = true; // Allow multiple tab rows
-                ActiveTabOnBottomRow = false; // Always keep the active tab on the bottom row
-                NeedPlusButton = true; // Whether to show the blue "new tab" button
+                NewTabPosition = TabPos.Rightmost;  // 新标签在最右侧
+                NextAfterClosed = TabPos.LastActive; // 关闭标签时候切换导
+                ActivateNewTab = true;  // 是否立即切换到新标签
+                NeverOpenSame = true;   //  重用新标签
+                RenameAmbTabs = true;  // 模糊重命名标签
+                DragOverTabOpensSDT = true; // 拖拽标签后的操作  true 复制 移动 文件  false  切换到它
+                // DragOverTabOpensSDT 注册表存储的值为 0  1     reg_dword 类型
+                ShowFolderIcon = true;  // 显示驱动器图标
+                ShowSubDirTipOnTab = false;  // 在文件夹显示子标签
+                ShowDriveLetters = false; // 显示驱动器字符
+                ShowCloseButtons = true;  // 显示关闭按钮
+                CloseBtnsWithAlt = false; // 只有alt按住进行关闭
+                CloseBtnsOnHover = false;  // 仅鼠标悬浮关闭
+                ShowNavButtons = false;  // 在标签显示导航按钮 (	(默认配置关闭按钮显示)标签栏右侧的两个按钮能否添加一个选项以控制是否去掉呢。#28）
+                NavButtonsOnRight = true; // 在最右边
+                MultipleTabRows = true; // 允许多行标签
+                ActiveTabOnBottomRow = false; // 始终将活动标签置于底部行
+                NeedPlusButton = true; // 是否显示蓝色新增标签按钮
             }
         }
 
@@ -416,24 +414,24 @@ namespace QTTabBarLib {
                 /* qwop's default value.*/
                 if (QTUtility.IsWin7)
                 {
-                    AlwaysShowHeaders = true;  // Show column headers
+                    AlwaysShowHeaders = true;  // 显示列标题
                 }
                 else {
-                    AlwaysShowHeaders = false;  // Show column headers
+                    AlwaysShowHeaders = false;  // 显示列标题
                 }
-
-                RedirectLibraryFolders = false; // Use library folders
-                KillExtWhileRenaming = true;  // Don't include the extension when renaming
-                F2Selection = false; // Disable F2 rename cycling selection
-                WrapArrowKeySelection = true; // Wrap folder selection with arrow keys
-                BackspaceUpLevel = true;  // Backspace goes up one level
-                HorizontalScroll = true;  // Hold Shift while scrolling to scroll horizontally
-                ForceSysListView = false; // Use the legacy list view control
-                ToggleFullRowSelect = QTUtility.IsXP; // Select the full row in Details view
-                DetailsGridLines = false;  // Grid lines
-                AlternateRowColors = false;// Alternate row colors
-                AltRowForegroundColor = SystemColors.WindowText; // Foreground color
-                AltRowBackgroundColor = QTUtility2.MakeColor(0xfaf5f1); // Background color
+                
+                RedirectLibraryFolders = false; // 使用库文件夹
+                KillExtWhileRenaming = true;  // 重命名时候，不使用扩展名
+                F2Selection = false; // 禁用F2重命名周期选择
+                WrapArrowKeySelection = true; // 使用箭头键时候环绕选择文件夹
+                BackspaceUpLevel = true;  // backupspace 键回到上一级目录
+                HorizontalScroll = true;  // 同时按住shift滚轮水平滚动
+                ForceSysListView = false; // 启用旧版列表视图控件
+                ToggleFullRowSelect = QTUtility.IsXP; // 详细视图选中整行
+                DetailsGridLines = false;  // 网格线
+                AlternateRowColors = false;// 交替行颜色
+                AltRowForegroundColor = SystemColors.WindowText; // 前景色
+                AltRowBackgroundColor = QTUtility2.MakeColor(0xfaf5f1); // 背景色
             }
         }
 
@@ -451,8 +449,8 @@ namespace QTTabBarLib {
             public Font PreviewFont              { get; set; }
             public List<string> TextExt          { get; set; }
             public List<string> ImageExt         { get; set; }
-            public List<string> VideoExt         { get; set; }
-
+            public List<string> VideoExt { get; set; }
+            public List<string> DocumentExt { get; set; }
             public _Tips() {
                 /*ShowSubDirTips = true;
                  SubDirTipsPreview = true;
@@ -467,23 +465,23 @@ namespace QTTabBarLib {
                  TextExt = new List<string> {".txt", ".ini", ".inf" ,".cs", ".log", ".js", ".vbs"};
                  ImageExt = ThumbnailTooltipForm.MakeDefaultImgExts();*/
 
-                ShowSubDirTips = true;  // Whether to show SubDirTips
-                SubDirTipsPreview = true;  // SubDirTip preview
-                SubDirTipsFiles = true;  // SubDirTip files
-                SubDirTipsWithShift = false ; // Only show SubDirTip while Shift is held
-                ShowTooltipPreviews = true;
-                ShowPreviewInfo = true; // Enable file preview
-                ShowPreviewsWithShift = true; // Only enable file preview while Shift is held
-
-                // Preview width/height
+                ShowSubDirTips = true;  // 是否显示子目录提示
+                SubDirTipsPreview = true;  // 子目录提示预览
+                SubDirTipsFiles = true;  // 子目录提示文件
+                SubDirTipsWithShift = false ; // 仅当shift键按下显示子目录
+                ShowTooltipPreviews = true;  
+                ShowPreviewInfo = true; // 启用文件预览
+                ShowPreviewsWithShift = true; // 仅当shift健按下, 启用文件预览
+                
+                // 预览的宽高
                 PreviewMaxWidth = 600;
                 PreviewMaxHeight = 400;
                 //  PreviewMaxWidth = 512;
                 // PreviewMaxHeight = 256;
-                //  Font config
+                //  字体配置
                 PreviewFont = Control.DefaultFont;
                 PreviewFont = new Font(new FontFamily("微软雅黑"), 9f);
-                // Text-type extensions - added yml/yaml support
+                // 文本类型扩展名 添加 yml yaml 文件支持
                 TextExt = new List<string> {
                     ".asp" 
                     ,".aspx"
@@ -517,7 +515,7 @@ namespace QTTabBarLib {
                     ,".md" 
                     ,".markdown" 
                     ,".json" 
-                    ,".wsdl" // web service definition/description file
+                    ,".wsdl" // web service 定义描述文件
                     ,".m" 
                     ,".reg" 
                     ,".wxl" 
@@ -532,7 +530,7 @@ namespace QTTabBarLib {
                     ,".csproj"
                     ,".vbproj"
                 };
-                // Configure the default image extensions
+                // 配置默认的图像扩展名
                 ImageExt = ThumbnailTooltipForm.MakeDefaultImgExts();
                 VideoExt = ThumbnailTooltipForm.MakeDefaultVideoExts();
             }
@@ -558,9 +556,9 @@ namespace QTTabBarLib {
                 FileHistoryCount = 15;
                 NetworkTimeout = 0;
                 AutoUpdate = true;
-                // Sound playback off by default
+                // 默认关闭声音播放
                 SoundBox = false;
-                // Logging disabled by default
+                // 默认不启用日志功能 
                 EnableLog = false;
             }
         }
@@ -629,18 +627,18 @@ namespace QTTabBarLib {
                  ActiveTabInBold = false;*/
 
                 /* qwop's default value. */
-                UseTabSkin = false;  // Tab background
-                TabImageFile = "";  // Tab background file
-                TabSizeMargin = Padding.Empty;  // Set margin
-                TabContentMargin = Padding.Empty; // Content margin
-                OverlapPixels = 0;  //
+                UseTabSkin = false;  // 标签背景
+                TabImageFile = "";  // 标签背景文件
+                TabSizeMargin = Padding.Empty;  // 设置边缘
+                TabContentMargin = Padding.Empty; // 内容边缘
+                OverlapPixels = 0;  // 
                 HitTestTransparent = false;
-                TabHeight = 30;  // Height
-                TabMinWidth = 100;  // Min width
-                TabMaxWidth = 200;  // Max width
+                TabHeight = 30;  // 高度
+                TabMinWidth = 100;  // 最小宽度
+                TabMaxWidth = 200;  // 最大宽度
                 FixedWidthTabs = false;
                 TabTextFont = new Font(new FontFamily("微软雅黑"), 9f);
-                ToolBarTextColor = Color.Black;  // Toolbar text color
+                ToolBarTextColor = Color.Black;  // 工具栏文本颜色
                 TabTextActiveColor = Color.Black;
                 TabTextInactiveColor = Color.Black;
                 TabTextHotColor = Color.Black;
@@ -650,23 +648,23 @@ namespace QTTabBarLib {
                 TabShadHotColor = Color.WhiteSmoke;
                 RebarColor = Color.WhiteSmoke;
                 // RebarColor = Color.FromArgb(230,230,230);
-                // Set tab background color
+                // 设置标签背景色
                 // RebarColor = Color.FromArgb(245, 246, 247);
-                TabTitleShadows = false;  // Whether tab text shadow is enabled
-                TabTextCentered = true; // Whether tab text is centered
-                UseRebarBGColor = true;  // Whether to use the configured background color
-                UseRebarImage = false;  // Whether to use a custom toolbar image
-                RebarStretchMode = StretchMode.Tile;  // Layout mode
-                RebarImageFile = "";  // Custom toolbar image
+                TabTitleShadows = false;  // 标签文本阴影是否启用
+                TabTextCentered = true; // 标签文本是否居中
+                UseRebarBGColor = true;  // 是否启用配置背景颜色
+                UseRebarImage = false;  // 是否工具栏自定义图片,启用自定义图片
+                RebarStretchMode = StretchMode.Tile;  // 布局方式
+                RebarImageFile = "";  // 工具栏自定义图片
                 RebarImageSeperateBars = false;
                 RebarSizeMargin = Padding.Empty;
                 ActiveTabInBold = true;
-                SkinAutoColorChangeClose = false;  // Whether auto color-switching is disabled?
-                DrawHorizontalExplorerBarBgColor = false; //
-                DrawVerticalExplorerBarBgColor = false; //
+                SkinAutoColorChangeClose = false;  // 是否关闭自动变色？
+                DrawHorizontalExplorerBarBgColor = false; // 
+                DrawVerticalExplorerBarBgColor = false; // 
             }
-
-			// Switch colors when toggling dark mode
+			
+			// 切换暗色主题模式时候切换颜色
             internal void SwitchNighMode(bool isNighMode)
             {
                 if (this.SkinAutoColorChangeClose)
@@ -677,11 +675,11 @@ namespace QTTabBarLib {
                 if (isNighMode)
                 {
                     QTUtility2.log("change nightMode white skinChanged " + this.SkinAutoColorChangeClose);
-                    // UseTabSkin = false;  // Tab background
-                    // TabImageFile = "";  // Tab background file
-                    // TabSizeMargin = Padding.Empty;  // Set margin
-                    // TabContentMargin = Padding.Empty; // Content margin
-                    // OverlapPixels = 0;  //
+                    // UseTabSkin = false;  // 标签背景
+                    // TabImageFile = "";  // 标签背景文件
+                    // TabSizeMargin = Padding.Empty;  // 设置边缘
+                    // TabContentMargin = Padding.Empty; // 内容边缘
+                    // OverlapPixels = 0;  // 
                     // HitTestTransparent = false;
                     // TabHeight = 24;
                     // TabMinWidth = 50;
@@ -701,22 +699,22 @@ namespace QTTabBarLib {
                     // TabTextCentered = false;
                     // UseRebarBGColor = false;
                     // RebarColor = Color.FromArgb(230,230,230);
-                    // Set tab background color
-
-                    // UseRebarImage = false;  // Whether to use a custom toolbar image
+                    // 设置标签背景色
+                    
+                    // UseRebarImage = false;  // 是否工具栏自定义图片,启用自定义图片
                     // RebarStretchMode = StretchMode.Tile;
-                    // RebarImageFile = "";  // Custom toolbar image
+                    // RebarImageFile = "";  // 工具栏自定义图片
                     // RebarImageSeperateBars = false;
                     // RebarSizeMargin = Padding.Empty;
                     // ActiveTabInBold = true;
                 }
                 else
                 {
-                    // UseTabSkin = false;  // Tab background
-                    // TabImageFile = "";  // Tab background file
-                    // TabSizeMargin = Padding.Empty;  // Set margin
-                    // TabContentMargin = Padding.Empty; // Content margin
-                    // OverlapPixels = 0;  //
+                    // UseTabSkin = false;  // 标签背景
+                    // TabImageFile = "";  // 标签背景文件
+                    // TabSizeMargin = Padding.Empty;  // 设置边缘
+                    // TabContentMargin = Padding.Empty; // 内容边缘
+                    // OverlapPixels = 0;  // 
                     // HitTestTransparent = false;
                     // TabHeight = 24;
                     // TabMinWidth = 50;
@@ -738,10 +736,10 @@ namespace QTTabBarLib {
                     // TabTextCentered = false;
                     UseRebarBGColor = true;
                     // // RebarColor = Color.FromArgb(230,230,230);
-                    // // Set tab background color
-                    // UseRebarImage = false;  // Whether to use a custom toolbar image
+                    // // 设置标签背景色
+                    // UseRebarImage = false;  // 是否工具栏自定义图片,启用自定义图片
                     // RebarStretchMode = StretchMode.Tile;
-                    // RebarImageFile = "";  // Custom toolbar image
+                    // RebarImageFile = "";  // 工具栏自定义图片
                     // RebarImageSeperateBars = false;
                     // RebarSizeMargin = Padding.Empty;
                     // ActiveTabInBold = true;
@@ -759,11 +757,11 @@ namespace QTTabBarLib {
             public bool LockDropDownButtons      { get; set; }
             public bool ShowButtonLabels         { get; set; }
             public string ImageStripPath         { get; set; }
-
+            
             public _BBar() {
-                /* // the old
-                ButtonIndexes = QTUtility.IsXP
-                        ? new int[] {1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 9, 20}
+                /* // the old 
+                ButtonIndexes = QTUtility.IsXP 
+                        ? new int[] {1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 9, 20} 
                         : new int[] {3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 9, 20};
                 ActivePluginIDs = new string[0];
                 LockDropDownButtons = false;
@@ -776,15 +774,15 @@ namespace QTTabBarLib {
                 ButtonIndexes	=	QTUtility.IsXP
                         // ? new int[] { 1, 2, 0, 3, 4, 5, 0, 6, 7, 0, 11, 13, 12, 14, 15, 0, 21, 9, 20  }
                         // : new System.Int32[] { 3, 4, 5, 0, 6, 7, 0, 17, 11, 12, 14, 15, 13, 0, 21, 9, 19, 10 };
-                // Remove separators
+                // 去掉分割线
                         ? new int[] { 1, 2,  3, 4, 5,  6, 7,  11, 13, 12, 14, 15,  21, 9, 20  }
                         : new System.Int32[] { 3, 4, 5, 6, 7,  17, 11, 12, 14, 15, 13,  21, 9, 19, 10 };
                 ActivePluginIDs = new string[0];
-                LargeButtons	= true;  // Whether to show large buttons
-                LockSearchBarWidth	=	true;  // Lock search box size
-                LockDropDownButtons	=	true;  // Lock drop-down button menu order
-                ShowButtonLabels	=	true; // Whether to show button labels
-                ImageStripPath	=	"";  // Custom image path
+                LargeButtons	= true;  // 是否显示大按钮
+                LockSearchBarWidth	=	true;  // 锁定搜索框大小
+                LockDropDownButtons	=	true;  // 锁定下拉按钮菜单顺序
+                ShowButtonLabels	=	true; // 是否显示按钮标签
+                ImageStripPath	=	"";  // 自定义图片路径
             }
         }
 
@@ -806,7 +804,7 @@ namespace QTTabBarLib {
                     {MouseChord.X1 | MouseChord.Ctrl, BindAction.GoFirst},
                     {MouseChord.X2 | MouseChord.Ctrl, BindAction.GoLast}
                 };
-                TabActions = new Dictionary<MouseChord, BindAction> {
+                TabActions = new Dictionary<MouseChord, BindAction> { 
                     {MouseChord.Middle, BindAction.CloseTab},
                     {MouseChord.Ctrl | MouseChord.Left, BindAction.LockTab},
                     {MouseChord.Double, BindAction.UpOneLevelTab},
@@ -821,7 +819,7 @@ namespace QTTabBarLib {
                 };
                 ItemActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.Middle, BindAction.ItemOpenInNewTab},
-                    {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewWindow}
+                    {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewWindow}                        
                 };
                 MarginActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.Double, BindAction.UpOneLevel}
@@ -829,45 +827,49 @@ namespace QTTabBarLib {
 
                 /* qwop's default value. */
                 MouseScrollsHotWnd = false;
-                // Global mouse actions
+                // 全局鼠标动作
                 GlobalMouseActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.X1, BindAction.GoBack},
                     {MouseChord.X2, BindAction.GoForward},
                     {MouseChord.X1 | MouseChord.Ctrl, BindAction.GoFirst},
                     {MouseChord.X2 | MouseChord.Ctrl, BindAction.GoLast}
                 };
-               // Tab actions
-                TabActions = new Dictionary<MouseChord, BindAction> {
+               // 标签动作
+                TabActions = new Dictionary<MouseChord, BindAction> { 
                     {MouseChord.Middle, BindAction.CloseTab},
                     {MouseChord.Ctrl | MouseChord.Left, BindAction.LockTab},
                     {MouseChord.Double, BindAction.UpOneLevelTab},
                 };
-                // Tab bar actions
+                // 标签Bar处动作
                BarActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.Double, BindAction.NewTab},
                     {MouseChord.Middle, BindAction.RestoreLastClosed},
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.TearOffCurrent}
                 };
-                // Folder link actions
+                // 文件夹链接动作
                 LinkActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.None, BindAction.ItemsOpenInNewTabNoSel},
                     {MouseChord.Middle, BindAction.ItemOpenInNewTab},
                     {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewWindow}
                 };
-                // Explorer item actions
+                // 资源管理器项目空白处
                ItemActions = new Dictionary<MouseChord, BindAction> {
                     {MouseChord.Middle, BindAction.ItemOpenInNewTab},
-                    {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewTabNoSel}
+                    {MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemOpenInNewTabNoSel}                        
                 };
 
-               // Explorer blank area
+               // 资源管理器空白处
                MarginActions = new Dictionary<MouseChord, BindAction> {
                     { MouseChord.Double, BindAction.UpOneLevel}
                     // add by qwop //
                     ,{ MouseChord.Middle, BindAction.BrowseFolder}
-                    // Ctrl + double-click opens Command Prompt
+                    // ctrl + 双击 打开命令提示符
                     ,{ ( MouseChord) 66, BindAction.OpenCmd } // ===  {MouseChord.Ctrl | MouseChord.Double, BindAction.OpenCmd}
                     ,{ MouseChord.Ctrl | MouseChord.Middle, BindAction.ItemsOpenInNewTabNoSel}
+                    // 新增 alt + 双击 创建新文本文件
+                    ,{ MouseChord.Alt | MouseChord.Double, BindAction.NewFile}
+                    // 新增 ctrl + 双击 打开 PowerShell
+                   //  ,{ MouseChord.Ctrl | MouseChord.Double | MouseChord.Middle, BindAction.OpenPowerShell}
                     // add by qwop //
                 };
             }
@@ -876,79 +878,79 @@ namespace QTTabBarLib {
         [Serializable]
         public class _Keys {
             public int[] Shortcuts               { get; set; }
-            public Dictionary<string, int[]> PluginShortcuts { get; set; }
+            public Dictionary<string, int[]> PluginShortcuts { get; set; } 
             public bool UseTabSwitcher           { get; set; }
 
             public _Keys() {
-                // Initialize the default keyboard-shortcut dictionary entries
+                // 初始化默认的快捷键字典项
                 var dict = new Dictionary<BindAction, Keys> {
-                    // Go back
+                    // 后退操作
                     {BindAction.GoBack,             Key.Left  | Key.Alt},
-                    // Go forward
+                    // 前进操作
                     {BindAction.GoForward,          Key.Right | Key.Alt},
-                    // Jump to first
+                    // 跳转第一个
                     {BindAction.GoFirst,            Key.Left  | Key.Control | Key.Alt},
-                    // Jump to last
+                    // 跳转最后一个
                     {BindAction.GoLast,             Key.Right | Key.Control | Key.Alt},
-                    // Next tab
+                    // 下一个标签
                     {BindAction.NextTab,            Key.Tab   | Key.Control},
-                    // Previous tab
+                    // 上一个标签
                     {BindAction.PreviousTab,        Key.Tab   | Key.Control | Key.Shift},
-                    //  New tab
+                    //  新建标签
                     {BindAction.NewTab,             Key.T     | Key.Control},
-                    // New window
+                    // 新窗口
                     {BindAction.NewWindow,          Key.T     | Key.Control | Key.Shift},
-                    // Close tab
+                    // 关闭标签
                     {BindAction.CloseCurrent,       Key.W     | Key.Control},
-                    // Close other tabs
+                    // 关闭其他标签
                     {BindAction.CloseAllButCurrent, Key.W     | Key.Control | Key.Shift},
-                    // Restore last closed tab
+                    // 恢复关闭的标签
                     {BindAction.RestoreLastClosed,  Key.Z     | Key.Control | Key.Shift},
-                    // Keyboard shortcuts for lock/lock-all removed
+                    // 取消锁定键盘快捷键
                    // {BindAction.LockCurrent,        Key.L     | Key.Control},
                    // {BindAction.LockAll,            Key.L     | Key.Control | Key.Shift},
                     {BindAction.BrowseFolder,       Key.O     | Key.Control},
-                    // Open options
+                    // 打开选项
                     {BindAction.ShowOptions,        Key.O     | Key.Alt},
-                    // Show toolbar menu
+                    // 显示工具栏菜单
                     {BindAction.ShowToolbarMenu,    Key.Oemcomma  | Key.Alt},
-                    // Show tab menu
+                    // 显示标签菜单
                     {BindAction.ShowTabMenuCurrent, Key.OemPeriod | Key.Alt},
-                    // Show tab group menu
+                    // 显示标签组菜单
                     {BindAction.ShowGroupMenu,      Key.G     | Key.Alt},
-                    // Show user apps menu
+                    // 显示用户应用程序菜单
                     {BindAction.ShowUserAppsMenu,   Key.H     | Key.Alt},
-                    // Show recent tabs menu
+                    // 显示最近标签菜单
                     {BindAction.ShowRecentTabsMenu, Key.U     | Key.Alt},
-                    // Show recent files menu
+                    // 显示最近文件菜单
                     {BindAction.ShowRecentFilesMenu,Key.F     | Key.Alt},
-                    // Bug fix: hotkey conflict, adjusted by indiff
+                    // Bug fix 热键冲突， 调整 by indiff 
                     // {BindAction.NewFile,            Key.N     | Key.Control},
                     {BindAction.NewFile,            Key.N     | Key.Control | Key.Alt},
                     // {BindAction.NewFolder,          Key.N     | Key.Control | Key.Shift},
-                   //  {BindAction.NewFolder,          Key.N     | Key.Shift }, // Already a built-in system shortcut
-                   // Create tab group
+                   //  {BindAction.NewFolder,          Key.N     | Key.Shift }, // 系统默认自带
+                   // 创建标签组
                    {BindAction.CreateNewGroup,     Key.D    | Key.Control},
-                   // Add to tab group
+                   // 添加到标签组
                  //  {BindAction.AddToGroup,         Key.D    | Key.Control  },
                    // {BindAction.AddToGroup,         Key.G    | Key.Control | Key.Alt },
                 };
-                // Fix array-out-of-bounds issue, by indiff
+                // 修复数组越界问题 by indiff
                 var keyboardActionCount = (int)BindAction.KEYBOARD_ACTION_COUNT;
                 Shortcuts = new int[keyboardActionCount];
-                // Plugin shortcuts
+                // 插件快捷键
                 PluginShortcuts = new Dictionary<string, int[]>();
                 foreach(var pair in dict)
                 {
                     var pairKey = (int)pair.Key;
-                    // Fix array-out-of-bounds issue, by indiff
+                    // 修复数组越界问题 by indiff
                     if (pairKey > keyboardActionCount - 1)
                     {
                         continue;
                     }
                     Shortcuts[pairKey] = (int)pair.Value | QTUtility.FLAG_KEYENABLED;
                 }
-                // Enable tab switcher
+                // 启用标签切换器
                 UseTabSwitcher = true;
             }
         }
@@ -1008,7 +1010,7 @@ namespace QTTabBarLib {
                     BuiltInLang = "Turkish";
                 }
                 else if (uiCulture.Equals("ru_RU") || lUiCulture.Equals("ru"))
-                {  // lowercase check for Russian
+                {  // 小写判断俄罗斯
                     BuiltInLangSelectedIndex = 7;
                     BuiltInLang = "Russian";
                 }
@@ -1041,7 +1043,7 @@ namespace QTTabBarLib {
             public bool OneClickMenu             { get; set; }
             public bool EnableAppShortcuts       { get; set; }
             public int Width                     { get; set; }
-            public int lstSelectedIndex          { get; set; } /* Last selected menu item. */
+            public int lstSelectedIndex          { get; set; } /*最后选中的菜单项.*/
             public _Desktop() {
                 FirstItem = 0;
                 SecondItem = 1;
@@ -1066,7 +1068,7 @@ namespace QTTabBarLib {
                 // qwop's default value.
                 Width = 12;
 
-                // Last selected menu index, default 0. Automatically positions to this index next time it's opened
+                // 最后选中的菜单索引，默认为0. 下次打开的时候自动定位到该索引
                 lstSelectedIndex = 0;
             }
         }
@@ -1077,12 +1079,13 @@ namespace QTTabBarLib {
 
         public static void Initialize() {
             LoadedConfig = new Config();
-            QTUtility2.log("Config initialized successfully");
+            QTUtility2.log("初始化配置信息成功");
             ReadConfig();
-            QTUtility2.log("Config read from registry successfully");
+            QTUtility2.log("注册表读取配置信息成功");
         }
 
         public static void UpdateConfig(bool fBroadcast = true) {
+            QTUtility.ApplyConfiguredLanguageCulture();
             QTUtility.TextResourcesDic = Config.Lang.UseLangFile && File.Exists(Config.Lang.LangFile)
                     ? QTUtility.ReadLanguageFile(Config.Lang.LangFile)
                     : null;
@@ -1114,7 +1117,7 @@ namespace QTTabBarLib {
                     let categoryObject = categoryProperty.GetValue(LoadedConfig, null)
                     select new {
                         keyPath = RegPath + categoryType.Name.Substring(1),
-                        categoryObject,
+                        categoryObject, 
                         settings = (
                             from settingProperty in categoryType.GetProperties()
                             select new {
@@ -1163,8 +1166,8 @@ namespace QTTabBarLib {
                                 }
 
                                 setting.property.SetValue(category.categoryObject, value, null);
-
-
+                            
+                           
                         }
                     }
                 }
@@ -1177,14 +1180,14 @@ namespace QTTabBarLib {
                 Config.Tips.PreviewFont = Config.Tips.PreviewFont ?? Control.DefaultFont;
                 Config.Tips.PreviewMaxWidth = QTUtility.ValidateMinMax(Config.Tips.PreviewMaxWidth, 128, 1920);
                 Config.Tips.PreviewMaxHeight = QTUtility.ValidateMinMax(Config.Tips.PreviewMaxHeight, 96, 1200);
-                Config.Misc.TabHistoryCount = QTUtility.ValidateMinMax(Config.Misc.TabHistoryCount, 1, 30);
-                Config.Misc.FileHistoryCount = QTUtility.ValidateMinMax(Config.Misc.FileHistoryCount, 1, 30);
+                Config.Misc.TabHistoryCount = QTUtility.ValidateMinMax(Config.Misc.TabHistoryCount, 1, 100);
+                Config.Misc.FileHistoryCount = QTUtility.ValidateMinMax(Config.Misc.FileHistoryCount, 1, 100);
                 Config.Misc.NetworkTimeout = QTUtility.ValidateMinMax(Config.Misc.NetworkTimeout, 0, 120);
-                Config.Skin.TabHeight = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 10, 50);
-                // Adjust minimum tab width
+                Config.Skin.TabHeight = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 10, 100);
+                // 调整标签最小宽度
 				Config.Skin.TabMinWidth = QTUtility.ValidateMinMax(Config.Skin.TabMinWidth, 10, 100);
                 Config.Skin.TabMaxWidth = QTUtility.ValidateMinMax(Config.Skin.TabMaxWidth, 50, 999);
-                Config.Skin.OverlapPixels = QTUtility.ValidateMinMax(Config.Skin.TabHeight, 0, 20);
+                Config.Skin.OverlapPixels = QTUtility.ValidateMinMax(Config.Skin.OverlapPixels, 0, 20);
                 Config.Skin.TabTextFont = Config.Skin.TabTextFont ?? Control.DefaultFont;
                 Func<Padding, Padding> validatePadding = p => {
                     p.Left   = QTUtility.ValidateMinMax(p.Left,   0, 99);
@@ -1275,7 +1278,7 @@ namespace QTTabBarLib {
                     key.SetValue(setting.name,value);
                 }
             }
-
+			
         }
     }
 }

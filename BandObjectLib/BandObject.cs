@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2002-2022  Pavel Zolnikov, Quizo, Paul Accisano, indiff
+//    Copyright (C) 2002-2025  Pavel Zolnikov, Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -45,9 +45,9 @@ namespace BandObjectLib {
         /***
          *
          *
-         *    // Vertical Explorer bar	CATID_InfoBand
-            // Horizontal Explorer bar	CATID_CommBand
-            // Desktop	CATID_DeskBand
+         *    // 垂直资源管理器栏	CATID_InfoBand
+            // 水平资源管理器栏	CATID_CommBand
+            // 桌带	CATID_DeskBand
          *
          *
          */
@@ -74,7 +74,7 @@ namespace BandObjectLib {
 
         internal static bool HostedNotByExplorer = (ProcessName != "explorer");
 
-        // Whether to enable logging output; setting to false disables it. Off by default; can be toggled in the app options.
+        // 判断是否启用日志，发布改为false， 调试启用. 默认是关闭的，在常规选项里面可以设置启用
         // public static bool ENABLE_LOGGER = true;
 
         // We must subclass the rebar in order to fix a certain bug in 
@@ -174,7 +174,7 @@ namespace BandObjectLib {
             }
             return true;
         }
-        // The virtual keyword modifies a method, property, indexer, or event declaration, allowing it to be overridden in a derived class.
+        // virtual 关键字用于修改方法、属性、索引器或事件声明，并使它们可以在派生类中被重写。
         public virtual void CloseDW(uint dwReserved) {
             Util2.bandLog("CloseDW");
             fClosedDW = true;
@@ -215,105 +215,105 @@ namespace BandObjectLib {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="dwBandID">The identifier of the band, assigned by the container. Used by the band when it needs to communicate with the container.</param>
-        /// <param name="dwViewMode">The band object's view mode. One of the following values.</param>
+        /// <param name="dwBandID">容器分配的带的标识符。 如果需要，带区对象可以保留此值。</param>
+        /// <param name="dwViewMode">带对象的视图模式。 以下值之一：</param>
         /// DBIF_VIEWMODE_NORMAL
-        /// The band object is displayed horizontally.
+        /// 带状对象正在水平带中显示。
         ///
         /// DBIF_VIEWMODE_VERTICAL
-        ///     The band object is displayed in a vertical window.
+        ///     带状对象显示在垂直带中。
         ///
         /// DBIF_VIEWMODE_FLOATING
-        ///     The band object is displayed in a floating window.
+        ///     带状对象正在浮动带中显示。
         ///
         /// DBIF_VIEWMODE_TRANSPARENT
-        ///     The band object is displayed transparently.
-        /// <param name="pdbi">Information about the band object</param>
+        ///     带状对象正在透明带中显示。
+        /// <param name="pdbi">带对象的信息</param>
         /// ptMinSize
         /// 
-        /// Type: POINTL
+        /// 类型： POINTL
         /// 
-        /// The band object's minimum size, as a POINTL structure. The minimum width is in the POINTL structure's x member; the minimum height is in the y member.
+        /// 接收带对象的最小大小的 POINTL 结构。 最小宽度在 POINTL 结构的 x 成员中给出，最小高度在 y 成员中给出。
         /// 
         /// ptMaxSize
         /// 
-        /// Type: POINTL
+        /// 类型： POINTL
         /// 
-        /// A POINTL structure containing the band object's maximum size. The POINTL structure's y member gives the maximum height; the x member is ignored. If there is no limit on the maximum height, use (LONG) -1.
+        /// 一个 POINTL 结构，它接收带对象的最大大小。 POINTL 结构的 y 成员中提供了最大高度，x 成员将被忽略。 如果带对象对其最大高度没有限制，应使用 (LONG) -1。
         /// 
         /// ptIntegral
         /// 
-        /// Type: POINTL
+        /// 类型： POINTL
         /// 
-        /// A POINTL structure containing the size, in pixels, by which the band is resized. The vertical value is in the POINTL structure's y member; the x member is ignored.
+        /// 一个 POINTL 结构，它接收大小调整步骤值 (递增) ，其中调整了带对象的大小。 垂直步骤值在 POINTL 结构的 y 成员中 给出，x 成员将被忽略。
         /// 
-        /// Used only if the dwModeFlags member contains the DBIMF_VARIABLEHEIGHT flag; otherwise, ptIntegral is ignored.
+        /// dwModeFlags 成员必须包含 DBIMF_VARIABLEHEIGHT 标志;否则，将忽略 ptIntegral。
         /// 
         /// ptActual
         /// 
-        /// Type: POINTL
+        /// 类型： POINTL
         /// 
-        /// The band object's actual size, as a POINTL structure. The actual width is in the POINTL structure's x member; the actual height is in the y member. Even if the application uses these values, there's no guarantee the band will actually be this size.
+        /// 接收带对象的理想大小的 POINTL 结构。 理想宽度在 POINTL 结构的 x 成员中给出，理想高度在 y 成员中给出。 带容器尝试使用这些值，但无法保证波段大小为此大小。
         /// 
         /// wszTitle[256]
         /// 
-        /// Type: WCHAR[256]
+        /// 类型： WCHAR[256]
         /// 
-        /// The band object's title, as a WCHAR character array.
+        /// 接收带标题的 WCHAR 缓冲区。
         /// 
         /// dwModeFlags
         /// 
-        /// Type: DWORD
+        /// 类型：DWORD
         /// 
-        /// A value describing flags that specify the band object's mode of operation. Can be one or more values.
+        /// 一个 值，该值接收一组指定 band 对象的操作模式的标志。 以下一个或多个值：
         /// 
         /// DBIMF_NORMAL
-        /// Use default properties. Combine with mode flags to modify this flag.
+        /// 带使用默认属性。 其他模式标志修改此标志。
         /// 
         /// DBIMF_FIXED
-        /// Windows XP or later. The band object's size and position are fixed. When using this flag, the display size and resolution of the band must be maintained.
+        /// Windows XP 及更高版本： 带对象的大小和位置固定。 使用此标志时，不会在带对象上显示大小调整手柄。
         /// 
         /// DBIMF_FIXEDBMP
-        /// Windows XP or later. The band object uses a fixed bitmap (.bmp) file as its background. Note that not all versions support backgrounds, so even with this flag the bitmap may not display.
+        /// Windows XP 及更高版本： band 对象使用固定位图 (.bmp) 文件作为其背景。 请注意，并非所有情况下都支持背景，因此即使设置了此标志，也可能无法看到位图。
         /// 
         /// DBIMF_VARIABLEHEIGHT
-        /// The band object's height can be changed. The ptIntegral member specifies the increment size value.
+        /// 可以更改带对象的高度。 ptIntegral 成员定义可重设带对象大小的步骤值。
         /// 
         /// DBIMF_UNDELETEABLE
-        /// Windows XP or later. The band object cannot be manually deleted by the user.
+        /// Windows XP 及更高版本： 无法从乐队容器中删除 band 对象。
         /// 
         /// DBIMF_DEBOSSED
-        /// The band object should be displayed with an embossed appearance.
+        /// 带对象以凹陷的外观显示。
         /// 
         /// DBIMF_BKCOLOR
-        /// Display the band using the background color specified in crBkgnd.
+        /// 使用 crBkgnd 中指定的背景色显示带。
         /// 
         /// DBIMF_USECHEVRON
-        /// Windows XP or later. If it cannot be displayed (because its size is smaller than ptActual), show a chevron to indicate there are more targets to choose from. Display these options when the chevron is clicked.
+        /// Windows XP 及更高版本： 如果无法显示 (即，带对象小于 ptActual，则会显示 V 形，以指示有更多的可用选项。 单击 V 形时会显示这些选项。
         /// 
         /// DBIMF_BREAK
-        /// Windows XP or later. The band group displays on a new row within the container.
+        /// Windows XP 及更高版本： 乐队对象显示在带容器中的新行中。
         /// 
         /// DBIMF_ADDTOFRONT
-        /// Windows XP or later. The band should be the first entry in the new band group.
+        /// Windows XP 及更高版本： band 对象是乐队容器中的第一个对象。
         /// 
         /// DBIMF_TOPALIGN
-        /// Windows XP or later. The band should be displayed at the top of the new band group.
+        /// Windows XP 及更高版本： band 对象显示在乐队容器的顶部行中。
         /// 
         /// DBIMF_NOGRIPPER
-        /// Windows Vista or later. Do not show the size-adjustment handle that lets users move or resize the band object.
+        /// Windows Vista 及更高版本： 不会显示大小调整手柄，以允许用户移动或调整带对象的大小。
         /// 
         /// DBIMF_ALWAYSGRIPPER
-        /// Windows Vista or later. Always show the size-adjustment handle that lets users move or resize the band group, even if this is the only band using this size.
+        /// Windows Vista 及更高版本： 始终显示允许用户移动乐队对象或调整其大小的大小手柄，即使该带对象是容器中唯一的一个。
         /// 
         /// DBIMF_NOMARGINS
-        /// Windows Vista or later. The band should not show margins.
+        /// Windows Vista 及更高版本： 带对象不应显示边距。
         /// 
         /// crBkgnd
         /// 
-        /// Type: COLORREF
+        /// 类型： COLORREF
         /// 
-        /// The band object's background color, as a COLORREF structure. Used only if the dwModeFlags member contains the DBIMF_BKCOLOR flag; otherwise, crBkgnd is ignored.
+        /// 接收带的背景色的 COLORREF 结构。 dwModeFlags 成员必须包含 DBIMF_BKCOLOR 标志;否则，将忽略 crBkgnd。
         public virtual void GetBandInfo(uint dwBandID, uint dwViewMode, ref DESKBANDINFO pdbi) {
             this.bandID = (int) dwBandID;
             this.fVertical = dwViewMode == 1U;
@@ -412,7 +412,7 @@ namespace BandObjectLib {
         }
 
         /// <summary>
-        /// Notifies the docking window that the border space occupied by another band has changed. To respond to this method, the IDockingWindow implementation must call SetBorderSpaceDW even if its required border space doesn't need to change.
+        /// 通知停靠窗口对象框架的边框空间已更改。为了响应此方法，IDockingWindow 实现必须调用 SetBorderSpaceDW，即使不需要边框空间或不需要更改。
         /// </summary>
         /// <param name="prcBorder"></param>
         /// <param name="punkToolbarSite"></param>
@@ -610,7 +610,7 @@ namespace BandObjectLib {
         {
         }
 
-        /*#region Refresh feature, by indiff
+        /*#region 新增区域 by indiff
         public  void RefreshRebarBand()
         {
             // REBARBANDINFO* lParam = stackalloc REBARBANDINFO[1];
@@ -729,12 +729,12 @@ namespace BandObjectLib {
                 using (StreamWriter writer = new StreamWriter(path, true))
                 {
                     writer.WriteLine(DateTime.Now.ToString());
-                    writer.WriteLine(".NET Version: " + Environment.Version);
-                    writer.WriteLine("OS Version: " + Environment.OSVersion.Version);
-                    //writer.WriteLine("QT Version: " + MakeVersionString());
+                    writer.WriteLine(".NET 版本: " + Environment.Version);
+                    writer.WriteLine("操作系统版本: " + Environment.OSVersion.Version);
+                    //writer.WriteLine("QT 版本: " + MakeVersionString());
                     if (!String.IsNullOrEmpty(optional))
                     {
-                        writer.WriteLine("Additional Info: " + optional);
+                        writer.WriteLine("错误信息: " + optional);
                     }
                     if (ex == null)
                     {

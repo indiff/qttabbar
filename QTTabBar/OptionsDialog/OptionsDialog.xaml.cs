@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -115,36 +115,33 @@ namespace QTTabBarLib {
         }
 
         private static void ThreadEntry() {
-            // In .NET 4+, unhandled exceptions on any thread crash the process.
-            // Register dispatcher handler first so Show()/layout exceptions are caught.
             Dispatcher.CurrentDispatcher.UnhandledException += (sender, e) => {
                 QTUtility2.MakeErrorLog(e.Exception, "OptionsDialog Dispatcher unhandled exception");
                 e.Handled = true;
             };
-
             bool pulsed = false;
             try {
-                instance = new OptionsDialog();
-                lock(instanceThread) {
-                    Monitor.Pulse(instanceThread);
+            instance = new OptionsDialog();
+            lock(instanceThread) {
+                Monitor.Pulse(instanceThread);
                     pulsed = true;
+            }
+            instance.Closed += (sender, e) => {
+                // We can't immediately shut down here, because ForceClose may be holding the lock.
+                Dispatcher.CurrentDispatcher.BeginInvokeShutdown(DispatcherPriority.Input);
+            };
+            Dispatcher.CurrentDispatcher.ShutdownStarted += (sender, e) => {
+                lock(typeof(OptionsDialog)) {
+                    instance = null;
                 }
-                instance.Closed += (sender, e) => {
-                    // We can't immediately shut down here, because ForceClose may be holding the lock.
-                    Dispatcher.CurrentDispatcher.BeginInvokeShutdown(DispatcherPriority.Input);
-                };
-                Dispatcher.CurrentDispatcher.ShutdownStarted += (sender, e) => {
-                    lock(typeof(OptionsDialog)) {
-                        instance = null;
-                    }
-                };
-                instance.Show();
+            };
+            instance.Show();
 
                 if (instance.lstCategories != null && instance.WorkingConfig != null) {
                     instance.lstCategories.SelectedIndex = instance.WorkingConfig.desktop.lstSelectedIndex;
                 }
 
-                Dispatcher.Run();
+            Dispatcher.Run();
             }
             catch (Exception ex) {
                 QTUtility2.MakeErrorLog(ex, "OptionsDialog ThreadEntry fatal error");
@@ -162,32 +159,30 @@ namespace QTTabBarLib {
             try {
                 Initialized += (sender, args) => Topmost = true;
                 ContentRendered += (sender, args) => Topmost = false;
-                SourceInitialized += (sender, args) => QTUtility2.SetDarkTitleBar(new WindowInteropHelper(this).Handle);
-                // SetProcessDPIAware only exists on Vista and later - calling it directly would make the program incompatible with XP
-                PInvoke.SetProcessDPIAware();
-                InitializeComponent();
-                QTUtility2.ApplyOptionsDialogTheme(Resources);
 
-                // WPF's inherited default FontSize is SystemFonts.MessageFontSize, and Windows
-                // inflates that when "Make text bigger" (Accessibility -> TextScaleFactor) is set:
-                // 12 becomes 18 at 150%. This dialog is laid out in hard-coded pixels - 16px
-                // checkbox rows, a 136px category list, a fixed 750x650 window - so the bigger
-                // text just overflows its rows and gets clipped away. Pin the font back to the
-                // size the layout was drawn for and scale the whole dialog instead, so the text
-                // and the layout grow together.
-                double textScale = Math.Min(3.0, Math.Max(1.0, SystemFonts.MessageFontSize / 12.0));
-                FontSize = SystemFonts.MessageFontSize / textScale;
-                if(textScale > 1.0) {
-                    ((FrameworkElement)Content).LayoutTransform = new ScaleTransform(textScale, textScale);
-                    Width = Math.Min(Width * textScale, SystemParameters.WorkArea.Width);
-                    Height = Math.Min(Height * textScale, SystemParameters.WorkArea.Height);
+                if (QTUtility.EnableDpiScaling)
+                {
+                    QTUtility.InitializeDpiAwareness();
+                    // ✅ 添加 Per-Monitor DPI 变化监听
+                    this.DpiChanged += OnDpiChanged;
                 }
+               
+                // QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");
+                InitializeComponent();
 
                 // this.LoadViewFromUri("/QTTabBar;component/optionsdialog/optionsdialog.xaml");
                 // this.DataContext = container.Resolve<LoginViewModel>((typeof(LoginView),this));
+                Closing += (s, e) => {
+                    if (WorkingConfig != null && ConfigManager.LoadedConfig != null)
+                    {
+                        ConfigManager.LoadedConfig.desktop.lstSelectedIndex = WorkingConfig.desktop.lstSelectedIndex;
+                        ConfigManager.WriteConfig();
+                    }
+                };
 
 
-                // Set the default title and version
+                //   QTUtility2.log("InitializeComponent end");
+                // 设置默认的title 和版本
                 string str = QTUtility.CurrentVersion.ToString();
                 if (QTUtility.BetaRevision.Major > 0)
                 {
@@ -197,8 +192,14 @@ namespace QTTabBarLib {
                 {
                     str = str + " Alpha " + QTUtility.BetaRevision.Minor;
                 }
-                this.Title += str + QTUtility.BuildVerion; //  +"_" + QTUtility2.MakeVersionString();
 
+                if (int.TryParse(QTUtility.BuildVerion, out int bn) && bn > 0)
+                    this.Title += $"{str} build {bn}";
+                else
+                    this.Title += $"{str}_{QTUtility2.MakeVersionString()}";
+
+
+                //   QTUtility2.log("set title end");           
                 int i = 0;
                 tabbedPanel.ItemsSource = new OptionsDialogTab[] {
                     new Options01_Window        { Index = i++},
@@ -217,6 +218,7 @@ namespace QTTabBarLib {
                     new Options14_About         { Index = i}
                 };
 
+               // QTUtility2.log("tabbedPanel.ItemsSource end");    
 
                 // For some reason, on XP, the Options dialog starts up with a blank tab
                 // This is the only way I've found to fix it
@@ -224,6 +226,16 @@ namespace QTTabBarLib {
                 Loaded += (sender, args) => {
                     tabbedPanel.SelectedIndex = 1;
                     tabbedPanel.SelectedIndex = 0;
+
+                    // 恢复上次选中的页（在 XP 兼容逻辑之后执行）
+                    if (WorkingConfig != null && lstCategories != null)
+                    {
+                        int last = WorkingConfig.desktop.lstSelectedIndex;
+                        if (last >= 0 && last < lstCategories.Items.Count)
+                        {
+                            lstCategories.SelectedIndex = last;
+                        }
+                    }
                 };
 
                 WorkingConfig = QTUtility2.DeepClone(ConfigManager.LoadedConfig);
@@ -233,9 +245,11 @@ namespace QTTabBarLib {
                     if(ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
                     tab.InitializeConfig();
                 }
+              //  QTUtility2.log("InitializeConfig end");
 
                 //////////// setting by qwop .
                 setByQwop();
+              //  QTUtility2.log("利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度 end");
             }
             catch (Exception exception)
             {
@@ -244,12 +258,84 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// Per-Monitor DPI 变化时自动触发，重新计算窗口尺寸
+        /// </summary>
+        private void OnDpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            try
+            {
+                float newScale = (float)e.NewDpi.PixelsPerDip;
+                ApplyDpiScaledSize(newScale);
+
+                // ✅ 强制刷新所有 Tab 页面的布局
+                RefreshTabsForDpi(newScale);
+
+
+                QTUtility2.log($"OptionsDialog DpiChanged: {e.OldDpi.PixelsPerDip:F2} -> {newScale:F2}");
+            }
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "OptionsDialog OnDpiChanged");
+            }
+        }
+
+        /// <summary>
+        /// DPI 变化时通知所有 Tab 页面更新布局
+        /// </summary>
+        private void RefreshTabsForDpi(float dpiScale)
+        {
+            if (tabbedPanel?.Items == null) return;
+
+            foreach (var item in tabbedPanel.Items)
+            {
+                if (item is OptionsDialogTab tab)
+                {
+                    if (tab is IDpiAware dpiAwareTab)
+                        dpiAwareTab.OnDpiChanged(dpiScale);
+
+                    // ✅ 提升图片渲染质量，避免 4K 下模糊
+                    RenderOptions.SetBitmapScalingMode(tab, BitmapScalingMode.HighQuality);
+                    RenderOptions.SetClearTypeHint(tab, ClearTypeHint.Enabled);
+
+                    tab.InvalidateMeasure();
+                    tab.InvalidateArrange();
+                    tab.UpdateLayout();
+                }
+            }
+            tabbedPanel.InvalidateMeasure();
+            tabbedPanel.UpdateLayout();
+        }
+
+        /// <summary>
+        /// 根据 DPI 缩放因子设置窗口尺寸（初始化 + DPI变化 共用）
+        /// </summary>
+        private void ApplyDpiScaledSize(float dpiScale)
+        {
+            // 基准尺寸（96 DPI 下的逻辑像素）
+            const double BASE_WIDTH = 750;
+            const double BASE_HEIGHT = 650;
+            const double BASE_MIN_WIDTH = 600;
+            const double BASE_MIN_HEIGHT = 500;
+
+            this.Width = BASE_WIDTH * dpiScale;
+            this.Height = BASE_HEIGHT * dpiScale;
+            this.MinWidth = BASE_MIN_WIDTH * dpiScale;
+            this.MinHeight = BASE_MIN_HEIGHT * dpiScale;
+
+            // ✅ 全局字体缩放因子（WPF FontSize 是逻辑像素，PerMonitorV2 下自动适配，
+            // 但如果进程 DPI 感知有问题，这里手动放大）
+            this.FontSize = 12 * dpiScale;  // 基础字体
+            if (tabbedPanel != null)
+                tabbedPanel.FontSize = 12 * dpiScale;
+        }
+
 
         #region setting by qwop
         /// <summary>
-        /// Uses the primary screen's width to set the Options form's width, and an absolute height.
-        /// Can generate the initialized values for the WorkingConfig configuration.
-        /// Method: generateInitConfig()
+        /// 利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度。
+        /// 可以生成 WorkingConfig 配置 初始化的 值。 
+        /// 方法: generateInitConfig()
         /// </summary>
         private void setByQwop() {
             /*POINT point;
@@ -268,7 +354,7 @@ namespace QTTabBarLib {
 
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            // Dual-monitor open logic issue
+            // 双屏幕打开逻辑问题
             /*var bMulScreens = Screen.AllScreens.Length > 1;
             var screenWidth = 0;
             if (bMulScreens)
@@ -293,21 +379,42 @@ namespace QTTabBarLib {
 
             ////////////////////////////////////////
             // generateInitConfig();
-            // Set Esc to close the window
+            // 设置 Esc 关闭窗口
             this.KeyDown += ModifyPrice_KeyDown;
+            if (QTUtility.EnableDpiScaling)
+            {
+                // 根据 DPI 缩放窗口基础尺寸
+                float dpi = GetDpiScale();
+                this.Width = 750 * dpi;
+                this.Height = 650 * dpi;
+                this.MinWidth = 600 * dpi;
+                this.MinHeight = 500 * dpi; 
+            }
         }
+
+        private float GetDpiScale()
+        {
+            var source = PresentationSource.FromVisual(this);
+            if (source != null && source.CompositionTarget != null)
+            {
+                return (float)(source.CompositionTarget.TransformToDevice.M11);
+            }
+            return 1f;
+        }
+
+
 
         private void ModifyPrice_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)//Esc key
+            if (e.Key == Key.Escape)//Esc键  
             {
                 this.Close();
             }
         }
 
         /// <summary>
-        /// Reflects over all internal property values of the current WorkingConfig configuration
-        /// If an internal value is null, assign null when generating.
+        /// 反射当前的 WorkingConfig 配置的内部属性所有的值
+        /// 如果内部的值为空则生成赋空.
         /// Author: qwop
         /// Date:   2012-07-03
         /// </summary>
@@ -367,19 +474,12 @@ namespace QTTabBarLib {
         #endregion
 
         private void UpdateOptions() {
-            // AutoHookWindow only takes effect during explorer.exe startup (HookLibManager.
-            // Initialize() only ever runs once per process), so changing it needs a restart
-            // to actually apply.
-            bool oldAutoHookWindow = Config.Window.AutoHookWindow;
             foreach(OptionsDialogTab tab in tabbedPanel.Items) {
                 tab.CommitConfig();
             }
             ConfigManager.LoadedConfig = QTUtility2.DeepClone(WorkingConfig);
             ConfigManager.WriteConfig();
             ConfigManager.UpdateConfig();
-            if (Config.Window.AutoHookWindow != oldAutoHookWindow) {
-                QTUtility2.RestartExplorer();
-            }
         }
 
         private void CategoryListBoxItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
@@ -671,19 +771,6 @@ namespace QTTabBarLib {
             }
         }
 
-        // Like LogicalAndMultiConverter, but for a single checkbox that should set several
-        // underlying bools together (rather than one) - broadcasts the new value to every
-        // bound target instead of just the first.
-        internal class LogicalAndBroadcastMultiConverter : IMultiValueConverter {
-            public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
-                return values.All(b => b is bool && (bool)b);
-            }
-
-            public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
-                return targetTypes.Select(t => value).ToArray();
-            }
-        }
-
         // Converts between many booleans and a string by StringJoining them.
         internal class BoolJoinMultiConverter : IMultiValueConverter {
             public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
@@ -777,6 +864,15 @@ namespace QTTabBarLib {
         string KeyActionText { get; }
     }
 
+    /// <summary>
+    /// 选项卡页面实现此接口以响应 DPI 变化
+    /// 仅当 Tab 内部有硬编码像素值时才需要实现
+    /// </summary>
+    internal interface IDpiAware
+    {
+        void OnDpiChanged(float dpiScale);
+    }
+
     internal delegate bool NewHotkeyRequestedHandler(KeyEventArgs keyEvent, Keys currentKey, out Keys newKey);
     internal interface IHotkeyContainer {
         IEnumerable<IHotkeyEntry> GetHotkeyEntries();
@@ -787,13 +883,8 @@ namespace QTTabBarLib {
     /// The base class for the tab pages of the OptionsDialog.
     /// Contains a few things common to more than one page.
     /// </summary>
-    internal abstract class OptionsDialogTab : UserControl {
-        protected OptionsDialogTab() {
-            // Deferred to Loaded: this constructor runs before the derived class's own
-            // InitializeComponent(), which is what actually populates Resources.
-            Loaded += (sender, args) => QTUtility2.ApplyOptionsDialogTheme(Resources);
-        }
-
+    internal abstract class OptionsDialogTab : UserControl, IDpiAware
+    {
         public static readonly DependencyProperty WorkingConfigProperty =
                 DependencyProperty.Register("WorkingConfig", typeof(Config), typeof(OptionsDialogTab),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
@@ -941,6 +1032,10 @@ namespace QTTabBarLib {
             }
             sel.IsExpanded = expanded;
             sel.IsSelected = true;
+        }
+
+        public void OnDpiChanged(float dpiScale)
+        {
         }
     }
 }

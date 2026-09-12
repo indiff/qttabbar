@@ -2,7 +2,7 @@
 <!--
     This file is part of QTTabBar, a shell extension for Microsoft
     Windows Explorer.
-    Copyright (C) 2007-2021  Quizo, Paul Accisano
+    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 
     QTTabBar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@
             <Image
                 Height="64"
                 Margin="64,0,64,2"
-                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                RenderOptions.BitmapScalingMode="HighQuality"
                 Source="{Binding Source={x:Static qt:Resources_Image.imgCapture}, Converter={StaticResource BitmapToImageSourceConverter}}"
                 Stretch="None"
                 Width="64"/>
@@ -73,7 +73,7 @@
                 Grid.Column="1"
                 Height="64"
                 Margin="64,0,64,2"
-                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                RenderOptions.BitmapScalingMode="HighQuality"
                 Source="{Binding Source={x:Static qt:Resources_Image.imgNoCapture}, Converter={StaticResource BitmapToImageSourceConverter}}"
                 Stretch="None"
                 Width="64"/>
@@ -232,11 +232,15 @@
         <Label
 			Content="Others" 
 			Style="{StaticResource SectionHeaderStyle}"/>
+			<CheckBox x:Name="ctxAutoHookWindow"
+				Content="Auto Hook(You can close it, No bg image,Must restart Explorer)" 
+				IsChecked="{Binding Path=AutoHookWindow}"
+				Style="{StaticResource CheckStyle}"/>
         <CheckBox x:Name="ctxShowFailNavMsg"
-				Content="Show Fail Nav Message Box"
+				Content="Show Fail Nav Message Box" 
 				IsChecked="{Binding Path=ShowFailNavMsg}"
 				Style="{StaticResource CheckStyle}"/>
-
+			
 			<CheckBox x:Name="ctxCaptureWeChatSelection"
 				Content="Capture Selection(WeChat/QQ/DingDing)"
 				IsChecked="{Binding Path=CaptureWeChatSelection}"
@@ -245,20 +249,5 @@
 				Content="Open Explorer windows maximized"
 				IsChecked="{Binding Path=OpenExplorerMaximized}"
 				Style="{StaticResource CheckStyle}"/>
-			<!-- One user-facing switch for what used to be two separate settings
-			     (AutoHookWindow / AutoEnableExperimental): they're different underlying
-			     attach mechanisms (native hook vs. per-window SetSite/ShowDW), but nothing
-			     needs them independently, and having both confused whether QTTabBar was
-			     really on or off. Must restart Explorer - see UpdateOptions(). -->
-			<CheckBox x:Name="ctxAutoEnableExperimental"
-				Content="Enable QTTabBar on every Explorer window (experimental, must restart Explorer)"
-				Style="{StaticResource CheckStyle}">
-				<CheckBox.IsChecked>
-					<MultiBinding Converter="{StaticResource LogicalAndBroadcastMultiConverter}" Mode="TwoWay">
-						<Binding Path="AutoHookWindow"/>
-						<Binding Path="AutoEnableExperimental"/>
-					</MultiBinding>
-				</CheckBox.IsChecked>
-			</CheckBox>
     </StackPanel>
 </qt:OptionsDialogTab>

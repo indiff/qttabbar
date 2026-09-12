@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2022  Quizo, Paul Accisano, indiff
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -26,45 +26,45 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     internal static class InstanceManager {
-        // Selection dictionary: key is the path, value is the list of selected items
+        // 选中项字典，key为路径，value为选中的项列表
         private static Dictionary<string, List<string>> selectDict = new Dictionary<string, List<string>>();
-        // Thread-to-QTTabBar map: one QTTabBarClass instance per thread
+        // 线程与QTTabBar实例的映射，每个线程对应一个QTTabBarClass实例
         private static Dictionary<Thread, QTTabBarClass> dictTabInstances = new Dictionary<Thread, QTTabBarClass>();
-        // Thread-to-QTButtonBar map: one QTButtonBar instance per thread
+        // 线程与QTButtonBar实例的映射，每个线程对应一个QTButtonBar实例
         private static Dictionary<Thread, QTButtonBar> dictBBarInstances = new Dictionary<Thread, QTButtonBar>();
-        // Handle-to-QTTabBar map, for looking up a QTTabBarClass by handle
+        // 句柄与QTTabBar实例的映射，支持句柄快速查找QTTabBarClass
         private static StackDictionary<IntPtr, QTTabBarClass> sdTabHandles = new StackDictionary<IntPtr, QTTabBarClass>();
-        // Reader/writer lock for the button bar, for thread safety
+        // 按钮栏的读写锁，保证多线程安全
         private static ReaderWriterLock rwLockBtnBar = new ReaderWriterLock();
-        // Reader/writer lock for the tab bar, for thread safety
+        // 标签栏的读写锁，保证多线程安全
         private static ReaderWriterLock rwLockTabBar = new ReaderWriterLock();
-        // Reader/writer lock for the selection dictionary, for thread safety
+        // 选中项字典的读写锁，保证多线程安全
         private static ReaderWriterLock rwLockSelectDict = new ReaderWriterLock();
 
-        // WCF duplex client, used for inter-process communication
+        // WCF双工通信客户端，用于进程间通信
         private static DuplexClient commClient;
-        // Whether this is the main process
+        // 是否为主进程标志
         private static bool isServer;
 
-        // Variables used only by the main process
-        // The WCF service host
+        // 仅主进程使用的变量
+        // WCF服务端对象
         // Server-only stuff
         private static ServiceHost serviceHost;
-        // Callback interfaces for every connected WCF client
+        // 所有已连接的WCF客户端回调接口列表
         private static List<ICommClient> callbacks = new List<ICommClient>();
-        // Handle-to-WCF-client-callback map
+        // 句柄与WCF客户端回调接口的映射
         private static StackDictionary<IntPtr, ICommClient> sdInstances = new StackDictionary<IntPtr, ICommClient>();
 
-        // Tray icon manager
+        // 托盘图标管理对象
         private static TrayIcon trayIcon;
         // add by indiff
-        // Reader/writer lock used for thread synchronization (added by indiff)
+        // 读写锁，辅助多线程同步（indiff添加）
         private static ReaderWriterLockSlim rwLock = new ReaderWriterLockSlim();
 
 
         #region Comm Classes and Interfaces
         /// <summary>
-        /// WCF duplex client implementation
+        /// WCF双工通信客户端实现
         /// </summary>
         private class DuplexClient : DuplexClientBase<ICommService> {
             public DuplexClient(InstanceContext callbackInstance, Binding binding, EndpointAddress remoteAddress)
@@ -74,7 +74,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// WCF service contract - defines every method callable across processes
+        /// WCF服务契约接口，定义了所有进程间可以调用的方法
         /// </summary>
         [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(ICommClient))]
         private interface ICommService {
@@ -116,7 +116,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// WCF service implementation - handles all inter-process requests
+        /// WCF服务端实现，处理所有进程间的请求
         /// </summary>
         [ServiceBehavior(
                 ConcurrencyMode = ConcurrencyMode.Reentrant,
@@ -124,14 +124,14 @@ namespace QTTabBarLib {
         private class CommService : ICommService {
 
             /// <summary>
-            /// Checks whether the client connection has dropped
+            /// 判断客户端连接是否已断开
             /// </summary>
             private static bool IsDead(ICommClient client) {
                 ICommunicationObject ico = client as ICommunicationObject;
                 return ico != null && ico.State != CommunicationState.Opened;                
             }
             /// <summary>
-            /// Checks for and removes dropped client connections
+            /// 检查并移除已断开的客户端连接
             /// </summary>
             private static void CheckConnections() {
                 callbacks.RemoveAll(IsDead);
@@ -139,30 +139,39 @@ namespace QTTabBarLib {
             }
 
             /// <summary>
-            /// Gets the callback channel for the current operation
+            /// 获取当前操作的回调通道
             /// </summary>
             private static ICommClient GetCallback() {
                 return OperationContext.Current.GetCallbackChannel<ICommClient>();
             }
 
             /// <summary>
-            /// Gets the total number of instances
+            /// 获取所有实例总数
             /// </summary>
             public int GetTotalInstanceCount() {
                 CheckConnections();
                 return sdInstances.Count;
             }
 
+            /// <summary>
+            /// 添加托盘图标
+            /// </summary>
             public void AddToTrayIcon(IntPtr tabBarHandle, IntPtr explorerHandle, string currentPath, string[] tabNames, string[] tabPaths) {
                 if(trayIcon == null) trayIcon = new TrayIcon();
                 trayIcon.AddToTrayIcon(tabBarHandle, explorerHandle, currentPath, tabNames, tabPaths);
             }
 
+            /// <summary>
+            /// 移除托盘图标
+            /// </summary>
             public void RemoveFromTrayIcon(IntPtr tabBarHandle) {
                 if(trayIcon == null) trayIcon = new TrayIcon();
                 trayIcon.RestoreWindow(tabBarHandle);
             }
 
+            /// <summary>
+            /// 选中其它标签栏的指定标签
+            /// </summary>
             public void SelectTabOnOtherTabBar(IntPtr tabBarHandle, int index) {
                 ICommClient comm;
                 if(sdInstances.TryGetValue(tabBarHandle, out comm)) {
@@ -178,6 +187,10 @@ namespace QTTabBarLib {
                 }
             }
 
+
+            /// <summary>
+            /// 在主进程上执行指定操作
+            /// </summary>
             public bool ExecuteOnMainProcess(byte[] encodedAction, bool doAsync) {
                 CheckConnections();
                 if(IsMainProcess()) {
@@ -216,6 +229,9 @@ namespace QTTabBarLib {
                 return false;
             }
 
+            /// <summary>
+            /// 在服务进程上执行指定操作
+            /// </summary>
             public void ExecuteOnServerProcess(byte[] encodedAction, bool doAsync) {
                 try
                 {
@@ -243,6 +259,9 @@ namespace QTTabBarLib {
                 }
             }
 
+            /// <summary>
+            /// 在服务进程上获取返回值
+            /// </summary>
             public object GetFromServerProcess(byte[] encodedAction) {
                 try {
                     Delegate action = ByteToDel(encodedAction);
@@ -256,9 +275,9 @@ namespace QTTabBarLib {
                 }
             }
 
-            /**
-             *
-             */
+            /// <summary>
+            /// 广播消息到所有客户端
+            /// </summary>
             public void Broadcast(byte[] encodedAction) {
                 // TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                 ICommClient sender = GetCallback();
@@ -286,19 +305,30 @@ namespace QTTabBarLib {
                     QTUtility2.log("Broadcast Task.Run: completed " + i + " targets");
                 });
 
+
                 // TimeSpan abs = new TimeSpan(DateTime.Now.Ticks).Subtract(start).Duration();
+                // QTUtility2.log(string.Format("Broadcast sync cost {0} ", abs.TotalMilliseconds));
             }
 
+            /// <summary>
+            /// 删除实例
+            /// </summary>
             public void DeleteInstance(IntPtr hwnd) {
                 CheckConnections();
                 sdInstances.Remove(hwnd);
             }
 
+            /// <summary>
+            /// 判断是否为主进程
+            /// </summary>
             public bool IsMainProcess() {
                 CheckConnections();
                 return sdInstances.Count > 0 && GetCallback() == sdInstances.Peek();
             }
 
+            /// <summary>
+            /// 订阅回调
+            /// </summary>
             public void Subscribe() {
                 ICommClient callback = GetCallback();
                 if(!callbacks.Contains(callback)) {
@@ -306,6 +336,9 @@ namespace QTTabBarLib {
                 }
             }
 
+            /// <summary>
+            /// 推送实例到服务端
+            /// </summary>
             public void PushInstance(IntPtr hwnd) {
                 CheckConnections();
                 if(!callbacks.Contains(GetCallback())) return; // hmmm....
@@ -313,31 +346,40 @@ namespace QTTabBarLib {
             }
         }
 
+        /// <summary>
+        /// WCF客户端回调接口
+        /// </summary>
         private interface ICommClient {
             [OperationContract]
             void Execute(byte[] encodedAction);
         }
 
+        /// <summary>
+        /// WCF客户端回调实现
+        /// </summary>
         [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant, UseSynchronizationContext = false)]
         private class CommClient : ICommClient {
             public void Execute(byte[] encodedAction) {
+                
                 Delegate thedel = null;
                 bool isBeginInvokeMain = false;
                 try
                 {
                     QTUtility2.log("InstanceManager CommClient Execute : "
-                                   // +  encodedAction + 
-                                   // " Length: " + encodedAction.Length + 
-                                   // " str " + Encoding.Default.GetString(encodedAction)
+                        // +  encodedAction + 
+                        // " Length: " + encodedAction.Length + 
+                        // " str " + Encoding.Default.GetString(encodedAction)
                                    );
+
                     // add by indiff fix bug
-                    if (null == encodedAction || encodedAction.Length == 0 ) {
+                    if (null == encodedAction || encodedAction.Length == 0)
+                    {
                         return;
                     }
                     thedel = ByteToDel(encodedAction);
-                    if (thedel != null && thedel.Method != null )
+                    if (thedel != null && thedel.Method != null)
                     {
-                        QTUtility2.log( "InstanceManager CommClient DynamicInvoke action: " + thedel  + " method:" + thedel.Method);
+                        QTUtility2.log("InstanceManager CommClient DynamicInvoke action: " + thedel + " method:" + thedel.Method);
                         thedel.DynamicInvoke();
                     }
                 }
@@ -346,7 +388,7 @@ namespace QTTabBarLib {
                     string errStr = null;
                     if (thedel != null && thedel.Method != null)
                     {
-                        errStr = "delegate name:" + thedel.GetType()  + " ";
+                        errStr = "delegate name:" + thedel.GetType() + " ";
                         errStr += "method name:" + thedel.Method.Name + " daynamic invoke error";
                     }
                     QTUtility2.MakeErrorLog(ex, errStr);
@@ -379,14 +421,14 @@ namespace QTTabBarLib {
         #region Utility Methods
 
         /// <summary>
-        /// Serializes a delegate into a byte array
+        /// 委托对象序列化为字节数组
         /// </summary>
         private static byte[] DelToByte(Delegate del) {
             return QTUtility.ObjectToByteArray(new SerializeDelegate(del));
         }
 
         /// <summary>
-        /// Deserializes a byte array back into a delegate
+        /// 字节数组反序列化为委托对象
         /// </summary>
         private static Delegate ByteToDel(byte[] buf) {
             if (buf == null || buf.Length == 0 ) { return null; }
@@ -400,7 +442,7 @@ namespace QTTabBarLib {
 
 
         /// <summary>
-        /// Initializes inter-process communication and instance synchronization
+        /// 初始化进程间通信和实例同步
         /// </summary>
         public static void Initialize(bool skipServer = false) {
             uint desktopPID;
@@ -414,7 +456,7 @@ namespace QTTabBarLib {
             // WFC channels should never be opened on any thread that has a message loop!
             // Otherwise reentrant calls will deadlock, for some reason.
             // So, create a new thread and open the channels there.
-            // A WCF channel cannot be opened on a thread with a message loop or it deadlocks, so use a new thread
+            // WCF通道不能在有消息循环的线程上打开，否则会死锁，所以新建线程
             thread = new Thread(() => {
                 if(isServer && !skipServer) {
                     serviceHost = new ServiceHost(
@@ -451,13 +493,30 @@ namespace QTTabBarLib {
                     }
                 }
                 catch(EndpointNotFoundException e) {
-                    QTUtility2.MakeErrorLog( e, "Initialize commClient endpoint not found!" );
+                    if(isServer && !skipServer) {
+                        QTUtility2.MakeErrorLog(e, "Initialize commClient endpoint not found!");
+                    }
+                    try {
+                        commClient.Abort();
+                    }
+                    catch {
+                    }
+                    commClient = null;
+                }
+                catch(Exception e) {
+                    QTUtility2.MakeErrorLog(e, "Initialize commClient failed!");
+                    try {
+                        commClient.Abort();
+                    }
+                    catch {
+                    }
+                    commClient = null;
                 }
                 lock(thread) {
                     Monitor.Pulse(thread);
                 }
                 // Yes, we can just let the thread die here.
-                // Thread finished
+                // 线程结束
             });
             thread.Start();
             lock(thread) {
@@ -466,17 +525,19 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Gets the WCF communication channel
+        /// 获取WCF通信通道
         /// </summary>
         private static ICommService GetChannel() {
-            if(commClient.State != CommunicationState.Opened) {
+            if(commClient == null || commClient.State != CommunicationState.Opened) {
                 Initialize(true);
             }
-            return commClient.State == CommunicationState.Opened ? commClient.Channel : null;
+            return commClient != null && commClient.State == CommunicationState.Opened
+                    ? commClient.Channel
+                    : null;
         }
 
         /// <summary>
-        /// Static broadcast - sends the operation to every instance
+        /// 静态广播，将操作广播到所有实例
         /// </summary>
         public static void StaticBroadcast(Action action) {
             ICommService service = GetChannel();
@@ -484,7 +545,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Tab bar broadcast - sends the operation to every tab bar instance
+        /// 标签栏广播，将操作广播到所有标签栏实例
         /// </summary>
         public static void TabBarBroadcast(Action<QTTabBarClass> action, bool includeCurrent) {
             LocalTabBroadcast(action, Thread.CurrentThread);
@@ -496,7 +557,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Local tab bar broadcast
+        /// 本地标签栏广播
         /// </summary>
         public static void LocalTabBroadcast(Action<QTTabBarClass> action, Thread skip = null) {
             using(new Keychain(rwLockTabBar, false)) {
@@ -509,7 +570,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Button bar broadcast - sends the operation to every button bar instance
+        /// 按钮栏广播，将操作广播到所有按钮栏实例
         /// </summary>
         public static void ButtonBarBroadcast(Action<QTButtonBar> action, bool includeCurrent) {
             LocalBBarBroadcast(action, Thread.CurrentThread);
@@ -521,7 +582,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Local button bar broadcast
+        /// 本地按钮栏广播
         /// </summary>
         public static void LocalBBarBroadcast(Action<QTButtonBar> action, Thread skip = null) {
             using(new Keychain(rwLockBtnBar, false)) {
@@ -534,7 +595,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Runs the operation on the main process
+        /// 在主进程上执行操作
         /// </summary>
         private static void ExecuteOnMainProcess(Action action, bool doAsync) {
             ICommService service = GetChannel();
@@ -544,7 +605,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Ensures the operation runs on the main process
+        /// 确保操作在主进程执行
         /// </summary>
         public static bool EnsureMainProcess(Action action) {
             ICommService service = GetChannel();
@@ -555,41 +616,47 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Synchronously invokes a tab bar operation on the main process
+        /// 在主进程同步调用标签栏操作
         /// </summary>
         public static void InvokeMain(Action<QTTabBarClass> action) {
+            // QTUtility2.log("InstanceManager InvokeMain");
             ExecuteOnMainProcess(() => LocalInvokeMain(action), false);
         }
 
         /// <summary>
-        /// Asynchronously invokes a tab bar operation on the main process
+        /// 在主进程异步调用标签栏操作
         /// </summary>
         public static void BeginInvokeMain(Action<QTTabBarClass> action) {
+            // QTUtility2.log("InstanceManager BeginInvokeMain");
             ExecuteOnMainProcess(() => LocalInvokeMain(action, true), true);
         }
 
         /// <summary>
-        /// Invokes the main tab bar instance locally
+        /// 本地调用主标签栏实例
         /// </summary>
         public static void LocalInvokeMain(Action<QTTabBarClass> action, bool doAsync = false) {
             QTTabBarClass instance;
-            // Get the QTTabBar class instance for the current thread
+            // 获取主进程的 QTTabBar的实例
             using(new Keychain(rwLockTabBar, false)) {
                 instance = sdTabHandles.Count == 0 ? null : sdTabHandles.Peek();
             }
-            if(instance == null) return;
+            if(instance == null)
+            {
+                QTUtility2.log("LocalInvokeMain: instance ");
+                return;
+            }
             if(doAsync) {
-                QTUtility2.log("Async call:");
+                QTUtility2.log("异步调用:");
                 instance.BeginInvoke(action, instance);    
             }
             else {
-                QTUtility2.log("Sync call:" );
+                QTUtility2.log("同步调用:" );
                 instance.Invoke(action, instance);   
             }
         }
 
         /// <summary>
-        /// Registers a button bar instance
+        /// 注册按钮栏实例
         /// </summary>
         public static void RegisterButtonBar(QTButtonBar bbar) {
             using(new Keychain(rwLockBtnBar, true)) {
@@ -599,7 +666,7 @@ namespace QTTabBarLib {
 
 
         /// <summary>
-        /// Pushes a tab bar instance to the service host
+        /// 推送标签栏实例到服务端
         /// </summary>
         public static void PushTabBarInstance(QTTabBarClass tabbar) {
             IntPtr handle = tabbar.Handle;
@@ -612,7 +679,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Unregisters a button bar instance
+        /// 注销按钮栏实例
         /// </summary>
         public static void UnregisterButtonBar() {
             using(new Keychain(rwLockBtnBar, true)) {
@@ -621,7 +688,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Unregisters a tab bar instance
+        /// 注销标签栏实例
         /// </summary>
         public static bool UnregisterTabBar() {
             using(new Keychain(rwLockTabBar, true)) {
@@ -638,22 +705,22 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Gets the total number of instances
+        /// 获取所有实例总数
         /// </summary>
         public static int GetTotalInstanceCount() {
             ICommService service = GetChannel();
             return service == null ? dictTabInstances.Count : service.GetTotalInstanceCount();
         }
 
-        // Atomic operations for multithreading 
+        // 多线程原子操作 
         private static bool UseInterLocked = false;
-        // Mutex flag guarding selectDict against concurrent access
+        // selectDict操作的互斥标志，用于防止多线程同时操作selectDict
         private static int inTimer = 0;
-        // Lock object for selectDict operations
+        // selectDict操作的锁对象
         private static object LockSelectDict = new object();
 
         /// <summary>
-        /// Sets the selection list for the given key
+        /// 设置指定key的选中项列表
         /// </summary>
         public static void PutSelect(string key , List<string> list ) 
         {
@@ -665,7 +732,7 @@ namespace QTTabBarLib {
             {
                 if (Interlocked.Exchange(ref inTimer, 1) != 0)
                 {
-                    QTUtility2.log("Access denied");
+                    QTUtility2.log("拒绝进入");
                     return;
                 }
             }
@@ -678,7 +745,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("Exception");
+                QTUtility2.log("异常");
             }
             finally
             {
@@ -690,7 +757,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Removes the selection for the given key
+        /// 移除指定key的选中项
         /// </summary>
         public static void RemoveSelect(string key  ) 
         {
@@ -702,7 +769,7 @@ namespace QTTabBarLib {
             {
                 if (Interlocked.Exchange(ref inTimer, 1) != 0)
                 {
-                    QTUtility2.log("Access denied");
+                    QTUtility2.log("拒绝进入");
                     return;
                 }
             }
@@ -715,7 +782,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("Exception");
+                QTUtility2.log("异常");
             }
             finally
             {
@@ -727,7 +794,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Gets the selection list for the given key
+        /// 获取指定key的选中项列表
         /// </summary>
         public static List<string> GetSelect(string key)
         {
@@ -740,7 +807,7 @@ namespace QTTabBarLib {
             {
                 if (Interlocked.Exchange(ref inTimer, 1) != 0)
                 {
-                    QTUtility2.log("Access denied");
+                    QTUtility2.log("拒绝进入");
                     return null;
                 }
             }
@@ -754,7 +821,7 @@ namespace QTTabBarLib {
             }
             catch (Exception e)
             {
-                QTUtility2.log("Exception");
+                QTUtility2.log("异常");
                 return null;
             }
             finally
@@ -767,7 +834,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Gets the tab bar instance for the current thread
+        /// 获取当前线程的标签栏实例
         /// </summary>
         public static QTTabBarClass GetThreadTabBar() {
             using(new Keychain(rwLockTabBar, false)) {
@@ -777,7 +844,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Gets the button bar instance for the current thread
+        /// 获取当前线程的按钮栏实例
         /// </summary>
         public static QTButtonBar GetThreadButtonBar() {
             using(new Keychain(rwLockBtnBar, false)) {
@@ -787,7 +854,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Gets the button bar handle for the current thread
+        /// 获取当前线程的按钮栏句柄
         /// </summary>
         public static bool TryGetButtonBarHandle(IntPtr explorerHandle, out IntPtr ptr) {
             // todo
@@ -801,7 +868,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Runs the operation on the service process
+        /// 在服务进程上执行操作
         /// </summary>
         public static void ExecuteOnServerProcess(Action action, bool doAsync) {
             ICommService service;
@@ -819,7 +886,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Gets a return value from the service process
+        /// 在服务进程上获取返回值
         /// </summary>
         public static T GetFromServerProcess<T>(Func<T> func) {
             ICommService service;
@@ -839,7 +906,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Adds the tray icon
+        /// 添加托盘图标
         /// </summary>
         public static void AddToTrayIcon(IntPtr tabBarHandle, IntPtr explorerHandle, string currentPath, string[] tabNames, string[] tabPaths) {
             ICommService service = GetChannel();
@@ -847,7 +914,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Removes the tray icon
+        /// 移除托盘图标
         /// </summary>
         public static void RemoveFromTrayIcon(IntPtr tabBarHandle) {
             ICommService service = GetChannel();
@@ -858,7 +925,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Selects the given tab on another tab bar
+        /// 选中其它标签栏的指定标签
         /// </summary>
         public static void SelectTabOnOtherTabBar(IntPtr tabBarHandle, int index) {
             ICommService service = GetChannel();
@@ -866,7 +933,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Syncs the toolbar colour across every tab bar
+        /// 同步所有标签栏的工具栏颜色
         /// </summary>
         public static void SyncToolbarColorThreads()
         {

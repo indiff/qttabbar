@@ -46,7 +46,7 @@ namespace QTTabBarLib {
         private bool fForceClassic;
         private bool fLimitSize;
         private bool fNeedToDrawUpDown;
-        // Whether the plus button is needed
+        // 是否添加新增按钮
         private bool fNeedPlusButton;
         private bool fNowMouseIsOnCloseBtn;
         private bool fNowMouseIsOnIcon;
@@ -109,7 +109,7 @@ namespace QTTabBarLib {
         [ThreadStatic()]
         private static VisualStyleRenderer vsr_RPressed;
 
-        public event QTabCancelEventHandler CloseButtonClicked; // Close event
+        public event QTabCancelEventHandler CloseButtonClicked; // 关闭事件
         public event QTabCancelEventHandler Deselecting; 
         public event ItemDragEventHandler ItemDrag;
         public event QTabCancelEventHandler PointedTabChanged;
@@ -118,7 +118,7 @@ namespace QTTabBarLib {
         public event QTabCancelEventHandler Selecting;
         public event QTabCancelEventHandler TabCountChanged;
         public event QTabCancelEventHandler TabIconMouseDown;
-        // Plus button event
+        // 蓝色按钮事件
         public event QTabCancelEventHandler PlusButtonClicked;
 
         public QTabControl() {
@@ -129,21 +129,21 @@ namespace QTTabBarLib {
                      ControlStyles.ResizeRedraw | 
                      ControlStyles.UserPaint, true);*/
             
-            // ControlStyles.UserPaint // use custom drawing
-            // |ControlStyles.ResizeRedraw // redraw when the control's size changes
-            // |ControlStyles.SupportsTransparentBackColor // simulate transparency when BackColor's alpha is less than 255
-            // | ControlStyles.AllPaintingInWmPaint // control ignores the WM_ERASEBKGND message, to reduce flicker
-            // | ControlStyles.OptimizedDoubleBuffer // control draws to a buffer first and then to the screen, instead of drawing directly to the screen, to reduce flicker
-
-            // Get the dark-mode state once before initialization
+            // ControlStyles.UserPaint//使用自定义的绘制方式
+            // |ControlStyles.ResizeRedraw//当控件大小发生变化时就重新绘制
+            // |ControlStyles.SupportsTransparentBackColor//则控件接受 alpha 组件数小于 255 个的 BackColor 来模拟透明度
+            // | ControlStyles.AllPaintingInWmPaint//则控件忽略窗口消息 WM_ERASEBKGND 以减少闪烁
+            // | ControlStyles.OptimizedDoubleBuffer//则控件将首先绘制到缓冲区而不是直接绘制到屏幕，这可以减少闪烁
+       
+            // 初始化之前进行获取一次暗黑模式
             QTUtility.InNightMode = QTUtility.getNightMode();
 
             SetStyle(ControlStyles.UserPaint
-                     | ControlStyles.OptimizedDoubleBuffer
-                     | ControlStyles.ResizeRedraw//redraw when the control's size changes
-                     | ControlStyles.AllPaintingInWmPaint //control ignores the WM_ERASEBKGND message, to reduce flicker
-                     | ControlStyles.SupportsTransparentBackColor//control simulates transparency when BackColor's alpha is less than 255
-                     | ControlStyles.OptimizedDoubleBuffer //control draws to a buffer first and then to the screen, instead of drawing directly to the screen, to reduce flicker
+                     | ControlStyles.OptimizedDoubleBuffer 
+                     | ControlStyles.ResizeRedraw//当控件大小发生变化时就重新绘制
+                     | ControlStyles.AllPaintingInWmPaint //则控件忽略窗口消息 WM_ERASEBKGND 以减少闪烁
+                     | ControlStyles.SupportsTransparentBackColor//则控件接受 alpha 组件数小于 255 个的 BackColor 来模拟透明度
+                     | ControlStyles.OptimizedDoubleBuffer //则控件将首先绘制到缓冲区而不是直接绘制到屏幕，这可以减少闪烁
             , value : true);
 
             /*this.SetStyle(ControlStyles.UserPaint |
@@ -155,8 +155,8 @@ namespace QTTabBarLib {
             tabPages = new QTabCollection(this);
             
             sfTypoGraphic = StringFormat.GenericTypographic;
-            // MeasureTrailingSpaces includes the trailing space at the end of each line. By default, the boundary rectangle returned by MeasureString excludes the trailing space of each line; set this flag to include it when measuring.
-            // NoWrap disables automatic line wrapping when formatting within a rectangle. This flag is implied when a point is passed instead of a rectangle, or when the specified rectangle's line length is zero.
+            // MeasureTrailingSpaces 包括每一行结尾处的尾随空格。 在默认情况下，MeasureString 方法返回的边界矩形都将排除每一行结尾处的空格。 设置此标记以便在测定时将空格包括进去。
+            // NoWrap 在矩形内设置格式时，禁用自动换行功能。 当传递的是点而不是矩形时，或者指定矩形的行长度为零时，已隐含此标记。
             sfTypoGraphic.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap;
             sfTypoGraphic.LineAlignment = StringAlignment.Far;  // StringAlignment.Center StringAlignment.Near StringAlignment.Far
             sfTypoGraphic.Trimming = StringTrimming.EllipsisCharacter;
@@ -190,9 +190,9 @@ namespace QTTabBarLib {
             }*/
             // brshActive = new SolidBrush(colorSet[0]);
             // brshInactv = new SolidBrush(colorSet[1]);
-            // Handle dark mode, by indiff
-            /*brshActive = new SolidBrush(Config.Skin.TabTextActiveColor);  // Tab-text-active brush
-            brshInactv = new SolidBrush(Config.Skin.TabTextInactiveColor); // Tab-text-inactive brush
+            // 适配暗黑 by indiff dark mode
+            /*brshActive = new SolidBrush(Config.Skin.TabTextActiveColor);  // 标签激活画刷
+            brshInactv = new SolidBrush(Config.Skin.TabTextInactiveColor); // 标签非激活画刷
             if (QTUtility.InNightMode)
             {
                 BackColor = Config.Skin.TabShadActiveColor;
@@ -214,7 +214,7 @@ namespace QTTabBarLib {
             {
                 this.BackColor = SystemColors.Window;
             }*/
-            // Timer to support double-click suppression
+            // 定时器来支持双击事件
             timerSuppressDoubleClick = new Timer(components);
             timerSuppressDoubleClick.Interval = SystemInformation.DoubleClickTime + 100;
             timerSuppressDoubleClick.Tick += timerSuppressDoubleClick_Tick;
@@ -328,7 +328,7 @@ namespace QTTabBarLib {
             }
             return (x > (Width - 0x24));
         }
-
+        // 计算多行时候的矩形
         private void CalculateItemRectangle_MultiRows() {
             int x = 0;
             int count = tabPages.Count;
@@ -338,7 +338,7 @@ namespace QTTabBarLib {
             int num6 = height - 3;
             int num7 = 0;
             int num8 = 0;
-            if(sizeMode == TabSizeMode.Fixed) {  // Fixed width
+            if(sizeMode == TabSizeMode.Fixed) {  // 固定宽度
                 for(int i = 0; i < count; i++) {
                     if((x + num4) > width) {
                         num7++;
@@ -464,7 +464,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * Tab switching
+         * 标签切换
          */
         private bool ChangeSelection(QTabItem tabToSelect, int index) {
             if(((Deselecting != null) && (this.iSelectedIndex > -1)) && (this.iSelectedIndex < tabPages.Count)) {
@@ -496,7 +496,7 @@ namespace QTTabBarLib {
                 }
             }
             Refresh();
-            if(SelectedIndexChanged != null) { // The selected tab index has changed, raise the corresponding event
+            if(SelectedIndexChanged != null) { // 选择的标签索引发生变化， 则调用对应的事件
                 SelectedIndexChanged(this, new EventArgs());
             }
             iFocusedTabIndex = -1;
@@ -575,6 +575,7 @@ namespace QTTabBarLib {
             Brush rectBrush = null;
             if (QTUtility.InNightMode)
             {
+                // QTUtility2.log("QTabControl DrawBackground InNightMode ");
                 rectBrush = new SolidBrush(Config.Skin.TabShadActiveColor);
                 // Color light = Color.FromArgb(242, 242, 242);
                 Color light = Color.FromArgb(122, 122, 122);
@@ -608,7 +609,7 @@ namespace QTTabBarLib {
                   g.DrawRectangle(Pens.Black, new Rectangle(0, 0, rctItem.Width - 1, rctItem.Height - 1));
                   */
                 int num = bSelected ? 0 : 1;
-                if(tabImages == null) { // If the image is null
+                if(tabImages == null) { // 如果图片为空
                     // g.FillRectangle(rectBrush, rctItem);
                     g.DrawLine(SystemPens.ControlLightLight, 
                         new Point(rctItem.X + 2, rctItem.Y), 
@@ -629,24 +630,28 @@ namespace QTTabBarLib {
                         new Point(((rctItem.X + rctItem.Width) - num) - 1, rctItem.Y + 1), 
                         new Point((rctItem.X + rctItem.Width) - num, rctItem.Y + 2));
                     if(bSelected) {
+                        // QTUtility2.log("DrawBackground g.DrawLine bSelected");
                         Pen pen = new Pen(colorSet[2], 2f);
                         g.DrawLine(pen, 
                             new Point(rctItem.X, (rctItem.Y + rctItem.Height) - 1), 
                             new Point((rctItem.X + rctItem.Width) + 1,  (rctItem.Y + rctItem.Height) - 1));
                         pen.Dispose();
                     }
-                }  else {  // If the image is not null
+                }  else {  // 如果图片不为空
                     Bitmap bitmap;
                     if(bSelected) {
+                        // QTUtility2.log("tabImages[0] ");
                         bitmap = tabImages[0];
                     }
                     else if(fHot || (iPseudoHotIndex == index)) {
+                        // QTUtility2.log("tabImages[2] ");
                         bitmap = tabImages[2];
                     }
                     else {
+                        // QTUtility2.log("tabImages[1] ");
                         bitmap = tabImages[1];
                     }
-                    if(bitmap != null) { // If the image is not null
+                    if(bitmap != null) { // 如果图片不为空
                                 int left = sizingMargin.Left;
                                 int top = sizingMargin.Top;
                                 int right = sizingMargin.Right;
@@ -666,9 +671,11 @@ namespace QTTabBarLib {
                                     new Rectangle(rctItem.Right - right, rctItem.Bottom - bottom, right, bottom)
                                 };
                                 Rectangle[] rectangleArray2 = new Rectangle[9];
+                                // QTUtility2.log("图片矩形数组 9 ");
                                 int width = bitmap.Width;
                                 int height = bitmap.Height;
 
+                                // QTUtility2.log("图片宽度  " + width + " 图片高度  " + height);
                                 rectangleArray2[0] = new Rectangle(0, 0, left, top);
                                 rectangleArray2[1] = new Rectangle(left, 0, width - horizontal, top);
                                 rectangleArray2[2] = new Rectangle(width - right, 0, right, top);
@@ -682,14 +689,15 @@ namespace QTTabBarLib {
                                 {
                                     g.DrawImage(bitmap, rectangleArray[i], rectangleArray2[i], GraphicsUnit.Pixel);
                                 }
-                                // bitmap.Dispose(); // This causes an image error here
+                                // QTUtility2.log("drawbackground by image end");
+                                // bitmap.Dispose(); // 这里导致图片出错
                     }
                 }
             } // !fVisualStyle
             else {
                 VisualStyleRenderer renderer;
                 if(!bSelected) {
-                    // renderer for the unselected case
+                    // 非选中设置 renderer
                     if(!fHot && (iPseudoHotIndex != index)) {
                         Edges edges4 = edges;
                         if(edges4 == Edges.Left) {
@@ -726,12 +734,14 @@ namespace QTTabBarLib {
                     else {
                         renderer = vsr_MPressed;
                     }
+                    // QTUtility2.log("DrawBackground renderer.DrawBackground1");
                     if (!QTUtility.InNightMode)
                     {
                         renderer.DrawBackground(g, rctItem);
                     }
                     return;
                 }
+                // QTUtility2.log("DrawBackground renderer.DrawBackground2");
                 if (!QTUtility.InNightMode)
                 {
                     renderer.DrawBackground(g, rctItem);
@@ -774,65 +784,66 @@ namespace QTTabBarLib {
             }
         }
 
-        // bug #43
+        // 43 补丁bug
         /*
          * 
             Message ---
-            Object reference not set to an instance of an object.
+            未将对象引用设置到对象的实例。
             HelpLink ---
 
             Source ---
             QTTabBar
 
             StackTrace ---
-               at QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
-               at QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
+               在 QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
+               在 QTTabBarLib.QTabControl.OnPaint_MultipleRow(PaintEventArgs e)
             TargetSite ---
             Void DrawTab(System.Drawing.Graphics, System.Drawing.Rectangle, Int32, QTTabBarLib.QTabItem, Boolean)
          
              Message ---
-            Index was out of range. Must be non-negative and less than the size of the collection.
-                       Parameter name: index
+            索引超出范围。必须为非负值并小于集合大小。
+                       参数名: index
             HelpLink ---
 
             Source ---
             mscorlib
             StackTrace ---
-                       at System.Collections.ArrayList.get_Item(Int32 index)
-                       at System.Windows.Forms.ImageList.ImageCollection.IndexOfKey(String key)
-                       at System.Windows.Forms.ImageList.ImageCollection.ContainsKey(String key)
-                       at QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
+                       在 System.Collections.ArrayList.get_Item(Int32 index)
+                       在 System.Windows.Forms.ImageList.ImageCollection.IndexOfKey(String key)
+                       在 System.Windows.Forms.ImageList.ImageCollection.ContainsKey(String key)
+                       在 QTTabBarLib.QTabControl.DrawTab(Graphics g, Rectangle itemRct, Int32 index, QTabItem tabHot, Boolean fVisualStyle)
 */
-        // Draw the background image for the current visual-style element, using the specified border.
+        // 在指定边框内绘制当前视觉样式元素的背景图像
         private void DrawTab(Graphics g, Rectangle itemRct, int index, QTabItem tabHot, bool fVisualStyle) {
             try
             {
-                Rectangle textRect; // Text box area
-                Rectangle rctItem = textRect = itemRct; // Tab area
-                // Index was out of range. Must be non-negative and less than the size of the collection.
-                QTabItem baseTabItem = tabPages[index]; // The current tab item
-                bool bSelected = iSelectedIndex == index; // Whether it is selected
-                bool fHot = baseTabItem == tabHot; // Whether it is not the hot tab
-                textRect.X += 2; // x-axis offset of 2 pixels
+                Rectangle textRect; // 绘制文本区域
+                Rectangle rctItem = textRect = itemRct; // 标签区域
+                // 索引超出范围。必须为非负值并小于集合大小。
+                QTabItem baseTabItem = tabPages[index]; // 当前的标签项
+                bool bSelected = iSelectedIndex == index; // 是否选中
+                bool fHot = baseTabItem == tabHot; // 是否未热点标签
+                textRect.X += 2; // x轴偏移 2 像素
                 if(bSelected) {
-                    rctItem.Width += 4; // If selected, widen by 4 pixels
+                    rctItem.Width += 4; // 如果选中则宽度加宽 4 像素
                 }
                 else {
-                    rctItem.X += 2;  // Unselected tab: x-axis offset of 2 pixels
-                    rctItem.Y += 2;  // Unselected tab: y-axis offset of 2 pixels
-                    rctItem.Height -= 2;  // Unselected tab: height reduced by 2 pixels
-                    // textRect.Y += 2; // Unselected tab: text area y-axis offset of 2 pixels
+                    rctItem.X += 2;  // 非选中 标签区域x轴偏移 2 像素
+                    rctItem.Y += 2;  // 非选中 标签区域y轴偏移 2 像素
+                    rctItem.Height -= 2;  // 非选中 标签区域高度回缩 2 像素
+                    // textRect.Y += 2; // 非选中 文本区域y轴偏移 2 像素
                 }
                 DrawBackground(g, bSelected, fHot, rctItem, baseTabItem.Edge, fVisualStyle, index);
-                int tabPosYHalfTabHeight = (rctItem.Height - 0x10) / 2; // Tab Y-axis distance, half of 10 pixels
-                // Check whether to use an image
+                int tabPosYHalfTabHeight = (rctItem.Height - 0x10) / 2; // 标签Y轴回缩 10 像素的一半
+                // QTUtility2.log("draw folder image " + fDrawFolderImg +  " baseTabItem.ImageKey " + baseTabItem.ImageKey );
+                // 判断是否使用图片
                 if(fDrawFolderImg && QTUtility.ImageListGlobal.Images.ContainsKey(baseTabItem.ImageKey)) {
-                    // Image width/height 0x10 -> 16
+                    // 图片区域 0x10 -> 16
                     Rectangle imgRect = new Rectangle(
                         rctItem.X + (bSelected ? 7 : 5), 
                         rctItem.Y + tabPosYHalfTabHeight, 
                         0x10, 
-                        0x10); // 16 height * 16 width
+                        0x10); // 16 高度  * 16 宽度
                     textRect.X += 0x18;
                     textRect.Width -= 0x18; // 24
                     if((fNowMouseIsOnIcon && (iTabMouseOnButtonsIndex == index)) || (iTabIndexOfSubDirShown == index)) {
@@ -845,9 +856,9 @@ namespace QTTabBarLib {
                         }
                         g.DrawImage(bmpFolIconBG, new Rectangle(imgRect.X - 2, imgRect.Y - 2, imgRect.Width + 4, imgRect.Height + 4));
                     }
-					// Draw the folder image
+					// 绘制背景图片
                     g.DrawImage(QTUtility.ImageListGlobal.Images[baseTabItem.ImageKey], imgRect);
-					// Check whether to show the drive-letter icon
+					// 判断是否绘制锁定图标
                     if(Config.Tabs.ShowDriveLetters) {
                         string pathInitial = baseTabItem.PathInitial;
                         if(pathInitial.Length > 0) {
@@ -859,20 +870,20 @@ namespace QTTabBarLib {
                     textRect.X += 4;
                     textRect.Width -= 4;
                 }
-                if(baseTabItem.TabLocked) { // A locked tab needs to draw the lock image
+                if(baseTabItem.TabLocked) { // 如果锁定则绘制锁定图片
                     Rectangle lockRect = new Rectangle(
-                        rctItem.X + (bSelected ? 6 : 4),  // Selected offset 6 px, unselected offset 4 px
-                        rctItem.Y + tabPosYHalfTabHeight,  // Y-axis is half the tab height
+                        rctItem.X + (bSelected ? 6 : 4),  // 选中偏移 6 像素、非选中偏移 4 像素
+                        rctItem.Y + tabPosYHalfTabHeight,  // Y轴为标签一半高度
                         9, 
                         11); // 9 * 11
-                    if(fDrawFolderImg) { // Has a folder image
-                        lockRect.X += 9;   //  X offset 9 px
-                        lockRect.Y += 5;   //  Y offset 9 px
+                    if(fDrawFolderImg) { // 绘制文件夹图片
+                        lockRect.X += 9;   //  X 偏移 9 像素
+                        lockRect.Y += 5;   //  Y 偏移 9 像素
                     }
                     else {
-                        lockRect.Y += 2; //  X offset 2 px
-                        textRect.X += 10;//  Y offset 10 px
-                        textRect.Width -= 10;  // Width reduced by 10 px
+                        lockRect.Y += 2; //  X 偏移 2 像素
+                        textRect.X += 10;//  Y 偏移 10 像素
+                        textRect.Width -= 10;  // 宽度减10像素
                     }
                     if(bmpLocked == null) {
                         bmpLocked = Resources_Image.imgLocked;
@@ -887,22 +898,29 @@ namespace QTTabBarLib {
                     ((baseTabItem.TitleTextSize.Width + baseTabItem.SubTitleTextSize.Width) + 4f) : 
                     (baseTabItem.TitleTextSize.Width + 2f);
 
-                // Tab Y-axis offset is half of (text-area height - text height)
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.993ms 2022/10/1 16:57:52  Config.Skin.TabHeight 35
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  textRect.Height 35
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  baseTabItem.TitleTextSize.Height 20
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  textRect.X 26
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  textRect.Y 0
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0ms 2022/10/1 16:57:52  textPosX 53.5
-                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.994ms 2022/10/1 16:57:52  textPosY 2.5
+                // 标签Y轴偏移为 文本区域高度- 文本高度  一半
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.993毫秒 2022/10/1 16:57:52  Config.Skin.TabHeight 35
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0毫秒 2022/10/1 16:57:52  textRect.Height 35
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0毫秒 2022/10/1 16:57:52  baseTabItem.TitleTextSize.Height 20
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0毫秒 2022/10/1 16:57:52  textRect.X 26
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0毫秒 2022/10/1 16:57:52  textRect.Y 0
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0毫秒 2022/10/1 16:57:52  textPosX 53.5
+                // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.994毫秒 2022/10/1 16:57:52  textPosY 2.5
+                // QTUtility2.log(" Config.Skin.TabHeight " + Config.Skin.TabHeight);
+                // QTUtility2.log(" textRect.Height " + textRect.Height);
+                // QTUtility2.log(" baseTabItem.TitleTextSize.Height " + baseTabItem.TitleTextSize.Height);
+                // QTUtility2.log(" textRect.X " + textRect.X);
+                // QTUtility2.log(" textRect.Y " + textRect.Y);
+                // QTUtility2.log(" textPosX " + ((tabTextAlignment == StringAlignment.Center)
                 //     ? Math.Max(((textRect.Width - textWidth) / 2f), 0f) :
                 //     0f));
+                // QTUtility2.log(" textPosY " + Math.Max(((textRect.Height - baseTabItem.TitleTextSize.Height) / 2f) - 5, 0f));
                 // float textPosY = Math.Max(((textRect.Height - baseTabItem.TitleTextSize.Height) / 2f) - 5 , 0f);
                 // float textPosY = 0;
-                // Changed to centered display
+                // 调整为居中显示
                 float textPosY = -(textRect.Height - baseTabItem.TitleTextSize.Height) / 2;
                 // float textPosY = 5f;
-                // Calculate the horizontal-centering offset for the tab text
+                // 如果标签文本居中则计算出偏移值
                 float textPosX = (tabTextAlignment == StringAlignment.Center)
                               ? Math.Max(((textRect.Width - textWidth) / 2f), 0f) :
                               0f; 
@@ -911,12 +929,13 @@ namespace QTTabBarLib {
                                             textRect.Y + textPosY,
                                             Math.Min((baseTabItem.TitleTextSize.Width + 2f), (textRect.Width - textPosX)), 
                                             textRect.Height);
-                // Draw shadow text, dark mode
+                // 绘制阴影区域 dark mode
                 if(fDrawShadow)
                 {
                     
                     // Color clrTxtColor = bSelected ? colorSet[0] : colorSet[1];
                     // Color clrShdwColor = bSelected ? colorSet[3] : colorSet[4];
+                    // QTUtility2.log("DrawTextWithShadow1 " + clrTxtColor + " " + clrShdwColor + " InNightMode " + QTUtility.InNightMode);
                     DrawTextWithShadow(g, 
                         baseTabItem.Text, 
                         bSelected ? colorSet[0] : colorSet[1], 
@@ -928,6 +947,7 @@ namespace QTTabBarLib {
                         sfTypoGraphic);
                 }
                 else {
+                    // QTUtility2.log("g.DrawString1 color " + brshInactv.Color + " InNightMode " + QTUtility.InNightMode);
                     if (QTUtility.InNightMode)
                     {
                         brshActive = new SolidBrush(Config.Skin.TabTextActiveColor);
@@ -951,15 +971,15 @@ namespace QTTabBarLib {
                     rectangle.Width--;
                     ControlPaint.DrawFocusRectangle(g, rectangle);
                 }
-				// Whether comment/subtitle text is enabled
+				// 是否启用备注功能
                 if(isComment && (textRect.Width > baseTabItem.TitleTextSize.Width)) {
-                    // Changed to a centered algorithm: text height minus half the subtitle-text height
+                    // 设置为居中的区域, 文本高度 - 备注文本高度的一半
                     // float posY = Math.Max(((textRect.Height - baseTabItem.SubTitleTextSize.Height) / 2f), 0f);
                     float posY = Math.Max(((textRect.Height - baseTabItem.SubTitleTextSize.Height) / 2f), 0f);
-					// PointF	represents the top-left coordinate point
-					// SizeF	represents the rectangle's width and height.
+					// PointF	它表示矩形区域的左上角
+					// SizeF	它表示矩形区域的宽度和高度。
 					// posY = textRect.Y + posY;
-					posY = textRect.Y  - posY; // Fix an issue with incorrect subtitle position
+					posY = textRect.Y  - posY; // 修复重名标签出错乱问题
                     // float posY = textRect.Y + Math.Max( baseTabItem.SubTitleTextSize.Height, 0f );
 					RectangleF drawStrRectF = new RectangleF(
                         textRct.Right, 
@@ -968,8 +988,9 @@ namespace QTTabBarLib {
                             (baseTabItem.SubTitleTextSize.Width + 2f),
                             (textRect.Width - ((baseTabItem.TitleTextSize.Width + textPosX) + 4f))
                         ), 
-                        textRect.Height);  // Text height
+                        textRect.Height);  // 文本区域
                     if(fDrawShadow) {
+                        // QTUtility2.log("DrawTextWithShadow2 " + clrTxtColor + " " + clrShdwColor + " InNightMode " + QTUtility.InNightMode);
                         DrawTextWithShadow(g, 
                             (fAutoSubText ? "@" : ":") + baseTabItem.Comment, 
                             bSelected ? colorSet[0] : colorSet[1], 
@@ -979,6 +1000,7 @@ namespace QTTabBarLib {
                             sfTypoGraphic);
                     }
                     else {
+                        // QTUtility2.log("g.DrawString2 color " + brshInactv.Color + " InNightMode " + QTUtility.InNightMode);
                         g.DrawString((fAutoSubText ? "@" : ":") + baseTabItem.Comment, 
                             fntSubText, 
                             brshInactv, 
@@ -1069,14 +1091,19 @@ namespace QTTabBarLib {
         }
 
         private Rectangle GetCloseButtonRectangle(Rectangle rctTab, bool fSelected) {
-            int num = ((itemSize.Height - 15) / 2) + 1;
-            if(!fSelected) {
-                num += 2;
-            }
-            if((iMultipleType == 0) && fNeedToDrawUpDown) {
-                rctTab.X += iScrollWidth;
-            }
-            return new Rectangle(rctTab.Right - 0x11, rctTab.Top + num, 15, 15);
+            //int num = ((itemSize.Height - 15) / 2) + 1;
+            //if(!fSelected) {
+            //    num += 2;
+            //}
+            //if((iMultipleType == 0) && fNeedToDrawUpDown) {
+            //    rctTab.X += iScrollWidth;
+            //}
+            //return new Rectangle(rctTab.Right - 0x11, rctTab.Top + num, 15, 15);
+
+            int num = (int)Math.Round((itemSize.Height - QTUtility.Scale(15)) / 2.0) + 1;
+            if (!fSelected) num += QTUtility.Scale(2);
+            int btnSize = QTUtility.Scale(15);
+            return new Rectangle(rctTab.Right - QTUtility.Scale(0x11), rctTab.Top + num, btnSize, btnSize);
         }
 
         public int GetFocusedTabIndex() {
@@ -1114,8 +1141,8 @@ namespace QTTabBarLib {
         }
 
         /**
-         * Get the tab the mouse is over
-         * bug: when there is only one tab, clicking the tab's blank area is recognized as the tab
+         * 获取鼠标操作的标签
+         * bug 当只有一个标签的时候，点击标签空白处识别为标签
          */
         public QTabItem GetTabMouseOn() {
             if (this == null || this.IsDisposed)
@@ -1138,7 +1165,7 @@ namespace QTTabBarLib {
                 return null;
             }
 
-            // If there is only one tab
+            // 如果标签只有一个的话
             if (tabPages.Count == 1) {
                  if (tabPages[0].TabBounds.Contains(pt))
                  {
@@ -1471,7 +1498,7 @@ namespace QTTabBarLib {
 
         private RectangleF newRect;
         /**
-         * Draw the blue button
+         * 绘制蓝色按钮
          */
         private void DrawPlusButton(Graphics g,Rectangle drawRect)
         {
@@ -1667,7 +1694,7 @@ namespace QTTabBarLib {
             else {
                 SetTabImages(null);
             }
-            // Check whether tab text is centered or left-aligned
+            // 判断标签文本是否居中 还是 居左
             tabTextAlignment = Config.Skin.TabTextCentered ? StringAlignment.Center : StringAlignment.Near;
             fDrawShadow = Config.Skin.TabTitleShadows;
             fDrawCloseButton = Config.Tabs.ShowCloseButtons && !Config.Tabs.CloseBtnsWithAlt;
@@ -1697,6 +1724,20 @@ namespace QTTabBarLib {
                 }   
             }
             fAutoSubText = Config.Tabs.RenameAmbTabs;
+
+
+            float dpi = QTUtility.DpiScale;  // 每次都取最新值
+
+            if ((Config.Skin.TabMaxWidth >= Config.Skin.TabMinWidth) && (Config.Skin.TabMinWidth > 9))
+            {
+                maxAllowedTabWidth = (int)Math.Round(Config.Skin.TabMaxWidth * dpi);
+                minAllowedTabWidth = (int)Math.Round(Config.Skin.TabMinWidth * dpi);
+            }
+            itemSize = new Size(maxAllowedTabWidth, (int)Math.Round(Config.Skin.TabHeight * dpi));
+
+            // 字体缩放
+            Font baseFont = Config.Skin.TabTextFont;
+            SetFont(new Font(baseFont.FontFamily, baseFont.SizeInPoints * dpi, baseFont.Style));
         }
 
         public bool SelectFocusedTab() {

@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -126,7 +126,7 @@ namespace QTTabBarLib {
                 BindAction.CopyItemName,
                 BindAction.ChecksumItem,
             }},
-            {MouseTarget.ExplorerBackground, new BindAction[] { // Initialize the actions available in the background area
+            {MouseTarget.ExplorerBackground, new BindAction[] { // 初始化在背景区域的工作
                 BindAction.Nothing,
                 BindAction.BrowseFolder,
                 BindAction.NewFolder,
@@ -141,6 +141,7 @@ namespace QTTabBarLib {
 
                 // add by qwop start  comment 2012, 08,12, 23:13
                 BindAction.OpenCmd,
+                BindAction.OpenPowerShell,
                 BindAction.ItemsOpenInNewTabNoSel
                 // add by qwop end.
             }},

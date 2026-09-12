@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- ===== 窗体标题 ===== -->
+  <data name="FormTitle"><value>一括リネーム</value></data>
+  <!-- ===== 模式选择 ===== -->
+  <data name="lblMode"><value>リネームモード:</value></data>
+  <data name="cboMode_Replace"><value>検索置換</value></data>
+  <data name="cboMode_Sequential"><value>連番</value></data>
+  <data name="cboMode_List"><value>リストリネーム</value></data>
+  <data name="btnPreset"><value>プリセット</value></data>
+  <!-- ===== 查找替换 ===== -->
+  <data name="lblFind"><value>検索文字列:</value></data>
+  <data name="lblReplace"><value>置換後:</value></data>
+  <data name="chkRegex"><value>正規表現を使用</value></data>
+  <data name="chkCase"><value>大文字小文字を区別</value></data>
+  <data name="chkPreserveExt"><value>拡張子を保持</value></data>
+  <!-- ===== 大小写转换 ===== -->
+  <data name="lblCase"><value>大文字小文字:</value></data>
+  <data name="cboCase_None"><value>変換しない</value></data>
+  <data name="cboCase_Lower"><value>すべて小文字</value></data>
+  <data name="cboCase_Upper"><value>すべて大文字</value></data>
+  <data name="cboCase_Title"><value>先頭大文字</value></data>
+  <!-- ===== 顺序编号 ===== -->
+  <data name="lblSeq"><value>連番:</value></data>
+  <data name="lblStart"><value>開始</value></data>
+  <data name="lblInc"><value>増分</value></data>
+  <data name="lblDigits"><value>桁数</value></data>
+  <!-- ===== 子文件夹 ===== -->
+  <data name="chkSubfolders"><value>サブフォルダを含む</value></data>
+  <data name="lblDepth"><value>スキャン深度:</value></data>
+  <data name="lblDepthHint"><value>(0 = 無制限)</value></data>
+  <!-- ===== 冲突处理 ===== -->
+  <data name="lblCollision"><value>名前の衝突:</value></data>
+  <data name="cboCollision_Confirm"><value>確認ダイアログ</value></data>
+  <data name="cboCollision_Auto"><value>自動で連番追加</value></data>
+  <data name="cboCollision_KeepNewer"><value>新しいファイルを保持</value></data>
+  <!-- ===== 范围 ===== -->
+  <data name="lblScope"><value>リネーム範囲:</value></data>
+  <data name="chkFiles"><value>ファイル</value></data>
+  <data name="chkFolders"><value>フォルダ</value></data>
+  <!-- ===== 预览 ===== -->
+  <data name="lblPreview"><value>  プレビュー （元名  →  新名）</value></data>
+  <data name="colOriginal"><value>元の名前</value></data>
+  <data name="colNew"><value>新しい名前</value></data>
+  <data name="colType"><value>種類</value></data>
+  <data name="colStatus"><value>状態</value></data>
+  <data name="type_File"><value>ファイル</value></data>
+  <data name="type_Folder"><value>フォルダ</value></data>
+  <data name="status_Unchanged"><value>変更なし</value></data>
+  <data name="status_WillRename"><value>リネーム予定</value></data>
+  <data name="status_Success"><value>成功</value></data>
+  <!-- ===== 底部 ===== -->
+  <data name="lblStatus_Ready"><value>準備完了</value></data>
+  <data name="lblStatus_Count"><value>合計 {0} 件、{1} 件をリネームします</value></data>
+  <data name="lblStatus_Result"><value>成功: {0}, 失敗: {1}</value></data>
+  <data name="btnExecute"><value>リネーム実行</value></data>
+  <data name="btnClose"><value>閉じる</value></data>
+  <!-- ===== 对话框 ===== -->
+  <data name="msg_ConfirmTitle"><value>リネーム確認</value></data>
+  <data name="msg_Confirm"><value>{0} 件をリネームしてもよろしいですか？</value></data>
+  <data name="msg_ErrorTitle"><value>エラー</value></data>
+  <data name="msg_Error"><value>リネームに失敗しました: {0}</value></data>
+  <data name="status_Failed"><value>失敗</value></data>
+</root>

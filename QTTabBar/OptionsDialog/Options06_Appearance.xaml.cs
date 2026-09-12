@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ namespace QTTabBarLib {
 
         public override void ResetConfig() {
             WorkingConfig.skin = new Config._Skin();
-            // Fix an issue where resetting colors broke dark mode
+            // 修复颜色重置导致暗黑模式混乱问题
             WorkingConfig.skin.SkinAutoColorChangeClose = false;
             Config.Skin.SkinAutoColorChangeClose = false;
             QTUtility2.log("reset SwitchNighMode");
@@ -110,13 +110,13 @@ namespace QTTabBarLib {
 
         private void btnImportSkin_Click(object sender, RoutedEventArgs e)
         {
-            // Import skin.
-            System.Windows.MessageBox.Show("Double-click the registry file to import it directly");
+            // 导入皮肤.
+            System.Windows.MessageBox.Show("双击注册表可以直接导入");
         }
 
         private void btnExportSkin_Click(object sender, RoutedEventArgs e)
         {
-            // Export skin.
+            // 导出皮肤.
             using (System.Windows.Forms.SaveFileDialog sf = new System.Windows.Forms.SaveFileDialog())
             {
                 sf.Filter = "Registry file (*.reg)|*.reg";

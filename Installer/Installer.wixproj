@@ -57,6 +57,7 @@
   <ItemGroup>
     <Content Include="config.ini" />
     <Content Include="libai.png" />
+    <Content Include="UninstallDirectories.txt" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>

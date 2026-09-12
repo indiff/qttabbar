@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ namespace QTTabBarLib {
             // Should we do anything here?
         }
         /// <summary>
-        /// Submit configuration info
+        /// 提交配置信息
         /// </summary>
         public override void CommitConfig() {
             try {
@@ -96,13 +96,17 @@ namespace QTTabBarLib {
                     asm.Dispose();
                 }
                 PluginManager.SavePluginAssemblyPaths(paths.ToList());
-            
+
+                // 清理现场，释放内存
+                CurrentPlugins.Clear();
+                CurrentPlugins = null;
+
                 // Entries are invalid now, some assemblies may have been Disposed.
                 CurrentPlugins = new ObservableCollection<PluginEntry>();
              }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                QTUtility2.MakeErrorLog(exception, "Options12_Plugins CommitConfig");
+                QTUtility2.MakeErrorLog(e, "Options12_Plugins CommitConfig");
 
             }     
          }
@@ -126,7 +130,7 @@ namespace QTTabBarLib {
             });
         }
         /// <summary>
-        ///  Enable/disable plugin
+        ///  启用禁用插件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -147,7 +151,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        ///     Delete plugin
+        ///     删除插件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -203,7 +207,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Enable all plugins
+        /// 启用所有插件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -218,7 +222,7 @@ namespace QTTabBarLib {
         }
 
         /// <summary>
-        /// Disable all plugins
+        /// 禁用所有插件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

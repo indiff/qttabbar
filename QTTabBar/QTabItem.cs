@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -353,7 +353,6 @@ namespace QTTabBarLib {
             {
                 CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, str.Length) };
                 sfMeasure.SetMeasurableCharacterRanges(ranges);
-               
                 Region[] regionArray = g.MeasureCharacterRanges(str, fTitle ? font : fontSubText, rctMeasure, sfMeasure);
                 using(regionArray[0]) {
                     sizeF = regionArray[0].GetBounds(g).Size;

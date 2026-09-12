@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -22,11 +22,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("QTClock")]
-[assembly: AssemblyDescription("Clock plugin")]
+[assembly: AssemblyDescription("时钟插件")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTClock")]
-[assembly: AssemblyCopyright("Copyright (C)  2007-2022")]
+[assembly: AssemblyCopyright("Copyright (C)  2007-2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

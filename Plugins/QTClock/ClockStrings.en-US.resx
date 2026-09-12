@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+	<value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+	<value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+	<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+	<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Plugin.Author" xml:space="preserve"><value>indiff</value></data>
+  <data name="Plugin.Name" xml:space="preserve"><value>Clock</value></data>
+  <data name="Plugin.Description" xml:space="preserve"><value>Clock plugin; supports holidays, hot news, reload, and multi-monitor.</value></data>
+  <data name="UI.NewsLoading" xml:space="preserve"><value>Loading news...</value></data>
+  <data name="UI.EscapeHint" xml:space="preserve"><value>ESC to hide, click to exit, double-click a hot news item👨‍🦲</value></data>
+  <data name="UI.Reload" xml:space="preserve"><value>Reload</value></data>
+  <data name="UI.HideToSide" xml:space="preserve"><value>Hide to side</value></data>
+  <data name="UI.MultiScreenDetected" xml:space="preserve"><value>Multi-monitor detected!</value></data>
+  <data name="UI.CheckScreens" xml:space="preserve"><value>check screens...</value></data>
+  <data name="UI.DataLoading" xml:space="preserve"><value>Loading data...</value></data>
+  <data name="UI.LoadSuccessCount" xml:space="preserve"><value>Loaded {0} items</value></data>
+  <data name="UI.LoadSuccess" xml:space="preserve"><value>Loaded successfully</value></data>
+  <data name="UI.LoadFailed" xml:space="preserve"><value>Load failed</value></data>
+  <data name="UI.NoLink" xml:space="preserve"><value>No URL was found</value></data>
+  <data name="UI.NotSupportedCountry" xml:space="preserve"><value>Hot news is not supported for your region.</value></data>
+  <data name="UI.LoadHotNews" xml:space="preserve"><value>Loading hot news</value></data>
+  <data name="UI.TooltipTemplate" xml:space="preserve"><value>{0}{1} Double-click to open🎅🎅</value></data>
+  <data name="UI.NewsFormTitle" xml:space="preserve"><value>Hot News</value></data>
+	<data name="Options.Title" xml:space="preserve"><value>QTClock Options</value></data>
+  <data name="Options.DockSide" xml:space="preserve"><value>News window dock side:</value></data>
+  <data name="Options.Left" xml:space="preserve"><value>Left side</value></data>
+  <data name="Options.Right" xml:space="preserve"><value>Right side</value></data>
+  <data name="Options.OK" xml:space="preserve"><value>OK</value></data>
+  <data name="Options.Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Greeting.Sunday" xml:space="preserve"><value>Happy Sunday</value></data>
+  <data name="Greeting.Monday" xml:space="preserve"><value>Monday</value></data>
+  <data name="Greeting.Tuesday" xml:space="preserve"><value>Tuesday</value></data>
+  <data name="Greeting.Wednesday" xml:space="preserve"><value>Wednesday</value></data>
+  <data name="Greeting.Thursday" xml:space="preserve"><value>Thursday</value></data>
+  <data name="Greeting.Friday" xml:space="preserve"><value>Happy Friday</value></data>
+  <data name="Greeting.Saturday" xml:space="preserve"><value>Happy Saturday</value></data>
+  <data name="Week.Sunday" xml:space="preserve"><value>Sunday</value></data>
+  <data name="Week.Monday" xml:space="preserve"><value>Monday</value></data>
+  <data name="Week.Tuesday" xml:space="preserve"><value>Tuesday</value></data>
+  <data name="Week.Wednesday" xml:space="preserve"><value>Wednesday</value></data>
+  <data name="Week.Thursday" xml:space="preserve"><value>Thursday</value></data>
+  <data name="Week.Friday" xml:space="preserve"><value>Friday</value></data>
+  <data name="Week.Saturday" xml:space="preserve"><value>Saturday</value></data>
+  <data name="Calendar.DatePrefix" xml:space="preserve"><value>AD {0}</value></data>
+  <data name="Calendar.LunarPrefix" xml:space="preserve"><value>Lunar {0}</value></data>
+  <data name="Calendar.LeapPrefix" xml:space="preserve"><value>Leap {0}</value></data>
+  <data name="Calendar.YearSuffix" xml:space="preserve"><value>{0} year</value></data>
+  <data name="Calendar.ZodiacNames" xml:space="preserve"><value>Aries|Taurus|Gemini|Cancer|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces</value></data>
+  <data name="Calendar.SolarTerms" xml:space="preserve"><value>Minor Cold|Major Cold|Start of Spring|Rain Water|Insects Awaken|Spring Equinox|Pure Brightness|Grain Rain|Start of Summer|Grain Full|Grain in Ear|Summer Solstice|Minor Heat|Major Heat|Start of Autumn|End of Heat|White Dew|Autumn Equinox|Cold Dew|Frost's Descent|Start of Winter|Minor Snow|Major Snow|Winter Solstice</value></data>
+  <data name="Calendar.GanStr" xml:space="preserve"><value>甲乙丙丁戊己庚辛壬癸</value></data>
+  <data name="Calendar.ZhiStr" xml:space="preserve"><value>子丑寅卯辰巳午未申酉戌亥</value></data>
+  <data name="Calendar.AnimalStr" xml:space="preserve"><value>鼠牛虎兔龙蛇马羊猴鸡狗猪</value></data>
+  <data name="Calendar.NStr1" xml:space="preserve"><value>日一二三四五六七八九</value></data>
+  <data name="Calendar.NStr2" xml:space="preserve"><value>初十廿卅</value></data>
+  <data name="Calendar.MonthNames" xml:space="preserve"><value>|First Month|Second Month|Third Month|Fourth Month|Fifth Month|Sixth Month|Seventh Month|Eighth Month|Ninth Month|Tenth Month|Eleventh Month|Twelfth Month</value></data>
+  <data name="Calendar.DayNames" xml:space="preserve"><value>|First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Ninth|Tenth|Eleventh|Twelfth|Thirteenth|Fourteenth|Fifteenth|Sixteenth|Seventeenth|Eighteenth|Nineteenth|Twentieth|Twenty-first|Twenty-second|Twenty-third|Twenty-fourth|Twenty-fifth|Twenty-sixth|Twenty-seventh|Twenty-eighth|Twenty-ninth|Thirtieth</value></data>
+</root>

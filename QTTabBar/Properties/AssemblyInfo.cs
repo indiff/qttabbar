@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,29 +16,73 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Reflection;
-using System.Resources;
 using System.Runtime.InteropServices;
-
+using System.Resources;
+//
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+//
 [assembly: AssemblyTitle("QTTabBar")]
-[assembly: AssemblyDescription("QTTabBar Plugin")]
+//[assembly: AssemblyDescription("Main QTTabBar Assembly")]
+[assembly: AssemblyDescription("Ö÷QTTabBar³ÌÐò¼¯")]
 [assembly: AssemblyConfiguration("")]
+// [assembly: AssemblyCompany("Quizo and Paul Accisano")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("QTTabBar")]
-[assembly: AssemblyCopyright("Copyright (C)  2007-2026")]
+// 2007-2020
+[assembly: AssemblyCopyright("Copyright (C)  2007-2025")]
 [assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
+// [assembly: AssemblyFileVersion("1.6.0.0")]
 
-// Resources for the neutral culture live in this assembly, not a satellite.
-[assembly: NeutralResourcesLanguage("zh-CN")]
-
-// The band object is a COM server, so the assembly's types must be visible to COM
-// and the typelib id must stay stable - the installer registers it by this GUID.
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(true)]
-[assembly: Guid("76430850-7643-0850-7643-2bd8835eb6ce")]
 
-// Installer\Build-Installer.ps1 rewrites both of these from its -Version argument,
-// and stamps the same value into Installer.wxs as StrongName. They must stay in this
-// exact AssemblyVersion("x.y.z.w") shape or the regex silently misses and the MSI ends
-// up registering a strong name the built assembly does not have.
-[assembly: AssemblyVersion("1.6.1.0")]
-[assembly: AssemblyFileVersion("1.6.1.0")]
+
+[assembly: Guid("76430850-7643-0850-7643-2bd8835eb6ce")]
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersion("1.6.0.0")]
+[assembly: AssemblyFileVersion("1.6.0.0")]	// edit this
+//
+// In order to sign your assembly you must specify a key to use. Refer to the 
+// Microsoft .NET Framework documentation for more information on assembly signing.
+//
+// Use the attributes below to control which key is used for signing. 
+//
+// Notes: 
+//   (*) If no key is specified, the assembly is not signed.
+//   (*) KeyName refers to a key that has been installed in the Crypto Service
+//       Provider (CSP) on your machine. KeyFile refers to a file which contains
+//       a key.
+//   (*) If the KeyFile and the KeyName values are both specified, the 
+//       following processing occurs:
+//       (1) If the KeyName can be found in the CSP, that key is used.
+//       (2) If the KeyName does not exist and the KeyFile does exist, the key 
+//           in the KeyFile is installed into the CSP and used.
+//   (*) In order to create a KeyFile, you can use the sn.exe (Strong Name) utility.
+//       When specifying the KeyFile, the location of the KeyFile should be
+//       relative to the project output directory which is
+//       %Project Directory%\obj\<configuration>. For example, if your KeyFile is
+//       located in the project directory, you would specify the AssemblyKeyFile 
+//       attribute as [assembly: AssemblyKeyFile("..\\..\\mykey.snk")]
+//   (*) Delay Signing is an advanced option - see the Microsoft .NET Framework
+//       documentation for more information on this.
+//
+// Neutral Resource
+// "en" or "ja-JP"
+// if you want release global edition, change this to "en" from "ja-JP".
+// This improves lookup performance for the first resource you load, and can reduce your working set. 
+[assembly: NeutralResourcesLanguage("zh-CN")]

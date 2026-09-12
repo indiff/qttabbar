@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,9 @@ using BandObjectLib;
 namespace QTTabBarLib.Interop {
     [SuppressUnmanagedCodeSecurity]
     public static class PInvoke {
+        [DllImport("user32.dll")]
+        public static extern bool SetProcessDpiAwarenessContext(IntPtr dpiContext);
+
         [DllImport("kernel32.dll")]
         public static extern int AllocConsole();
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]

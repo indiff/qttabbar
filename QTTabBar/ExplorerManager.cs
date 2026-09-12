@@ -8,7 +8,7 @@ using QTTabBarLib.Interop;
 
 namespace QTTabBarLib
 {
-    internal sealed class ExplorerManager : NativeWindow, IDisposable
+    internal sealed class ExplorerManager : NativeWindow, IDisposable, ICommandInvokerWindow
     {
         [ThreadStatic]
         public static ExplorerManager ThreadInstance;
@@ -133,6 +133,8 @@ namespace QTTabBarLib
                 return ExplorerManager.windowDpi != 0 ? ExplorerManager.windowDpi : 96;
             }
         }
+
+        public IntPtr CommandWindowHandle { get; private set; }
 
         public static float WindowScaling
         {

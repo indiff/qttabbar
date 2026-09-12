@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -372,7 +372,7 @@ namespace QTTabBarLib.Interop {
             }
             catch (Exception ex)
             {
-                QTUtility2.MakeErrorLog(ex, "ShellMethods GetLinkTargetPath");
+                QTUtility2.MakeErrorLog(ex, "ShellMethods GetLinkTargetPath 375");
 
             }
             finally {

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -17,6 +17,8 @@
     </UpgradeBackupLocation>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <!-- 禁止生成卫星程序集 -->
+    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>QTClock.ruleset</CodeAnalysisRuleSet>
+    <UseWinFormsOutOfProcDesigner>False</UseWinFormsOutOfProcDesigner>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -35,7 +37,15 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>QTClock.ruleset</CodeAnalysisRuleSet>
+    <UseWinFormsOutOfProcDesigner>False</UseWinFormsOutOfProcDesigner>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>QTTabBar Rebirth.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -44,6 +54,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.Entity.Design" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
@@ -51,22 +62,54 @@
   <ItemGroup>
     <Compile Include="ChineseCalendar.cs" />
     <Compile Include="Clock.cs" />
+    <Compile Include="ClockOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClockSettings.cs" />
+    <Compile Include="ClockLocalization.cs" />
     <Compile Include="NewsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="NewsForm.Designer.cs">
       <DependentUpon>NewsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewsSourceConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="TranslateService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ClockOptionsForm.resx">
+      <DependentUpon>ClockOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClockStrings.resx" />
+    <EmbeddedResource Include="ClockStrings.en-US.resx">
+      <WithCulture>false</WithCulture>
+      <LogicalName>QuizoPlugins.ClockStrings.en-US.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClockStrings.ja-JP.resx">
+      <WithCulture>false</WithCulture>
+      <LogicalName>QuizoPlugins.ClockStrings.ja-JP.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClockStrings.zh.resx">
+      <WithCulture>false</WithCulture>
+      <LogicalName>QuizoPlugins.ClockStrings.zh.resources</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="NewsForm.resx">
       <DependentUpon>NewsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource.resx">
       <SubType>Designer</SubType>
@@ -75,6 +118,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="QTTabBar Rebirth.snk" />
     <None Include="Resources\img16.png" />
   </ItemGroup>
   <ItemGroup>

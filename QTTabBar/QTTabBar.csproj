@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -64,7 +64,6 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>QTTabBar1.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
@@ -74,7 +73,6 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>QTTabBar1.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Reg%29|x86'">
@@ -83,11 +81,9 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
-    <CodeAnalysisRuleSet>QTTabBar1.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Reg%29|AnyCPU'">
-    <CodeAnalysisRuleSet>QTTabBar1.ruleset</CodeAnalysisRuleSet>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
@@ -230,6 +226,8 @@
     </Compile>
     <Compile Include="FreeBitmap.cs" />
     <Compile Include="Graphic.cs" />
+    <Compile Include="ICommandInvokerWindow.cs" />
+    <Compile Include="Interop\CoreErrorHelper.cs" />
     <Compile Include="Interop\GWL.cs" />
     <Compile Include="Interop\IShellExecuteHook.cs" />
     <Compile Include="Interop\IVisualProperties.cs" />
@@ -243,6 +241,7 @@
     <Compile Include="Interop\VPCOLORFLAGS.cs" />
     <Compile Include="Interop\VPWATERMARKFLAGS.cs" />
     <Compile Include="Interop\WINDOWPOS.cs" />
+    <Compile Include="LruCache.cs" />
     <Compile Include="MsgEnum.cs" />
     <Compile Include="Multilang\CMLangConvertCharset.cs" />
     <Compile Include="Multilang\CMLangConvertCharsetClass.cs" />
@@ -332,6 +331,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PreMergeToMergedDeserializationBinder.cs" />
+    <Compile Include="ProcessUtil.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -498,6 +498,19 @@
     <Compile Include="Interop\WTS_THUMBNAILID.cs" />
     <Compile Include="Interop\_IDropTarget.cs" />
     <Compile Include="Interop\_ShellLinkObject.cs" />
+    <Compile Include="Dpi\IDpiAwareObject.cs" />
+    <Compile Include="Dpi\DpiManager.cs" />
+    <Compile Include="Dpi\DpiAwareControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dpi\DpiAwareForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dpi\DpiAwareUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FileRename\FileRenamerEngine.cs" />
+    <Compile Include="FileRename\FileRenameDialog.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="ListViewMonitor.cs" />
     <Compile Include="ExtendedListViewCommon.cs" />
@@ -567,7 +580,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileRename\FileRenameDialog.resx">
       <DependentUpon>FileRenameDialog.cs</DependentUpon>
-    </EmbeddedResource>
+      <WithCulture>false</WithCulture>
+      <LogicalName>QTTabBar.FileRename.resources</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="FileRename\FileRenameDialog.en.resx">
+      <SubType>Designer</SubType>
+		<WithCulture>false</WithCulture>
+      <LogicalName>QTTabBar.FileRename.en.resources</LogicalName>
+	</EmbeddedResource>
+    <EmbeddedResource Include="FileRename\FileRenameDialog.ja.resx">
+    	<WithCulture>false</WithCulture>
+      <LogicalName>QTTabBar.FileRename.ja.resources</LogicalName>
+	</EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -936,6 +960,16 @@
     <Folder Include="quizo\" />
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="MSHTML">
+      <Guid>{3050F1C5-98B5-11CF-BB82-00AA00BDCE0B}</Guid>
+      <VersionMajor>4</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <Private>False</Private>
+    </COMReference>
     <Reference Include="Interop.SHDocVw">
       <HintPath>..\BandObjectLib\bin\Release\Interop.SHDocVw.dll</HintPath>
     </Reference>

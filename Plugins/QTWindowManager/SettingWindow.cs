@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
@@ -32,7 +33,7 @@ namespace QuizoPlugins {
             InitializeComponent();
 
 
-            if(CultureInfo.CurrentCulture.Parent.Name == "ja") {
+            if(PluginCulture.IsJapanese(CultureInfo.CurrentUICulture)) {
                 string[] strs = Resource.ResStrs_Options_ja.Split(new char[] { ';' });
 
                 chbInitialSize.Text = strs[0];
@@ -51,7 +52,7 @@ namespace QuizoPlugins {
                 chbStartingPreset.Text = strs[13];
                 buttonGetCurrentToPreset.Text = strs[14];
             }
-            if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+            if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
             {
                 string[] strs = Resource.ResStrs_Options_zh.Split(new char[] { ';' });
 

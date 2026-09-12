@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
     // [Plugin(PluginType.Background, Author = "Quizo", Name = "Show StatusBar", Version = "0.9.0.0", Description = "ShowStatusBar")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "ÏÔÊ¾×´Ì¬À¸", Version = "0.9.0.0", Description = "ÏÔÊ¾×´Ì¬À¸")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "Show Status Bar", Version = "0.9.0.0", Description = "Show the status bar")]
     public class ShowStatusBar : IPluginClient {
         private IPluginServer pluginServer;
         private IShellBrowser shellBrowser;

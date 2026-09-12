@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>`.
 
 using System;
 using System.IO;
@@ -24,7 +24,7 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
    // [Plugin(PluginType.Background, Author = "Quizo", Name = "CreateNewItemButton", Version = "0.9.0.0", Description = "Create New Item by shortcut key.")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "创建新项目", Version = "0.9.0.0", Description = "通过快捷键创建新项目.")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "Create New Item", Version = "0.9.0.0", Description = "Create a new item with a shortcut key.")]
     public class CreateNewItem : IPluginClient
     {
         private IPluginServer pluginServer;

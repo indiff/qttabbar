@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Plugin.Author" xml:space="preserve">
+    <value>indiff</value>
+  </data>
+  <data name="Plugin.Name" xml:space="preserve">
+    <value>时钟</value>
+  </data>
+  <data name="Plugin.Description" xml:space="preserve">
+    <value>时钟插件；支持节假日、热点新闻、重新加载和多显示器。！</value>
+  </data>
+  <data name="UI.NewsLoading" xml:space="preserve">
+    <value>正在加载……</value>
+  </data>
+  <data name="UI.EscapeHint" xml:space="preserve">
+    <value>ESC隐藏，点击退出，双击热点新闻！</value>
+  </data>
+  <data name="UI.Reload" xml:space="preserve">
+    <value>重新载入</value>
+  </data>
+  <data name="UI.HideToSide" xml:space="preserve">
+    <value>隐藏这个</value>
+  </data>
+  <data name="UI.MultiScreenDetected" xml:space="preserve">
+    <value>检测到多显示器！ ！</value>
+  </data>
+  <data name="UI.CheckScreens" xml:space="preserve">
+    <value>检查屏幕... ！</value>
+  </data>
+  <data name="UI.DataLoading" xml:space="preserve">
+    <value>加载数据...</value>
+  </data>
+  <data name="UI.LoadSuccessCount" xml:space="preserve">
+    <value>已加载 {0} 个项目！</value>
+  </data>
+  <data name="UI.LoadSuccess" xml:space="preserve">
+    <value>加载成功！</value>
+  </data>
+  <data name="UI.LoadFailed" xml:space="preserve">
+    <value>加载失败...</value>
+  </data>
+  <data name="UI.NoLink" xml:space="preserve">
+    <value>没找到Url</value>
+  </data>
+  <data name="UI.NotSupportedCountry" xml:space="preserve">
+    <value>您所在的地区不支持热门新闻。！</value>
+  </data>
+  <data name="UI.LoadHotNews" xml:space="preserve">
+    <value>正在加载热门新闻！</value>
+  </data>
+  <data name="UI.TooltipTemplate" xml:space="preserve">
+    <value>{0} {1}双击打开！</value>
+  </data>
+  <data name="UI.NewsFormTitle" xml:space="preserve">
+    <value>热门资讯</value>
+  </data>
+  <data name="Options.Title" xml:space="preserve">
+    <value>QTClock选项！</value>
+  </data>
+  <data name="Options.DockSide" xml:space="preserve">
+    <value>新闻窗口码头侧： ！</value>
+  </data>
+  <data name="Options.Left" xml:space="preserve">
+    <value>左侧</value>
+  </data>
+  <data name="Options.Right" xml:space="preserve">
+    <value>相对方位</value>
+  </data>
+  <data name="Options.OK" xml:space="preserve">
+    <value>好的！</value>
+  </data>
+  <data name="Options.Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Greeting.Sunday" xml:space="preserve">
+    <value>快乐周日</value>
+  </data>
+  <data name="Greeting.Monday" xml:space="preserve">
+    <value>星期一</value>
+  </data>
+  <data name="Greeting.Tuesday" xml:space="preserve">
+    <value>星期二</value>
+  </data>
+  <data name="Greeting.Wednesday" xml:space="preserve">
+    <value>周三</value>
+  </data>
+  <data name="Greeting.Thursday" xml:space="preserve">
+    <value>星期四</value>
+  </data>
+  <data name="Greeting.Friday" xml:space="preserve">
+    <value>快乐星期五</value>
+  </data>
+  <data name="Greeting.Saturday" xml:space="preserve">
+    <value>周六快乐！</value>
+  </data>
+  <data name="Week.Sunday" xml:space="preserve">
+    <value>星期日</value>
+  </data>
+  <data name="Week.Monday" xml:space="preserve">
+    <value>星期一</value>
+  </data>
+  <data name="Week.Tuesday" xml:space="preserve">
+    <value>星期二</value>
+  </data>
+  <data name="Week.Wednesday" xml:space="preserve">
+    <value>周三</value>
+  </data>
+  <data name="Week.Thursday" xml:space="preserve">
+    <value>星期四</value>
+  </data>
+  <data name="Week.Friday" xml:space="preserve">
+    <value>星期五</value>
+  </data>
+  <data name="Week.Saturday" xml:space="preserve">
+    <value>星期六</value>
+  </data>
+  <data name="Calendar.DatePrefix" xml:space="preserve">
+    <value>AD</value>
+  </data>
+  <data name="Calendar.LunarPrefix" xml:space="preserve">
+    <value>农历</value>
+  </data>
+  <data name="Calendar.LeapPrefix" xml:space="preserve">
+    <value>跳跃</value>
+  </data>
+  <data name="Calendar.YearSuffix" xml:space="preserve">
+    <value>0年</value>
+  </data>
+  <data name="Calendar.ZodiacNames" xml:space="preserve">
+    <value>白羊座|金牛座|双子座|巨蟹座|狮子座|处女座|天秤座|天蝎座|射手座|摩羯座|水瓶座|双鱼座！</value>
+  </data>
+  <data name="Calendar.SolarTerms" xml:space="preserve">
+    <value>小寒|大寒|春季开始|雨水|昆虫觉醒|春分|纯净度|颗粒雨|夏季开始|颗粒充满|耳朵中的颗粒|夏至|小热量|大热量|秋季开始|炎热结束|白露|秋分|寒露|霜降|冬季开始|小雪|大雪|冬至！</value>
+  </data>
+  <data name="Calendar.GanStr" xml:space="preserve">
+    <value>甲乙丙丁戊己庚辛壬癸!</value>
+  </data>
+  <data name="Calendar.ZhiStr" xml:space="preserve">
+    <value>子丑寅卯辰巳午未申酉戌亥!</value>
+  </data>
+  <data name="Calendar.AnimalStr" xml:space="preserve">
+    <value>鼠牛虎兔龙蛇马羊猴鸡狗猪!</value>
+  </data>
+  <data name="Calendar.NStr1" xml:space="preserve">
+    <value>日一二三四五六七八九!</value>
+  </data>
+  <data name="Calendar.NStr2" xml:space="preserve">
+    <value>初十廿卅!</value>
+  </data>
+  <data name="Calendar.MonthNames" xml:space="preserve">
+    <value>|第一个月|第二个月|第三个月|第四个月|第五个月|第六个月|第七个月|第八个月|第九个月|第十个月|第十一个月|第十二个月！</value>
+  </data>
+  <data name="Calendar.DayNames" xml:space="preserve">
+    <value>|第一|第二|第三|第四|第五|第六|第七|第八|第九|第十|第十一|第十二|第十三|第十四|第十五|第十六|第十七|第十八|第十九|第二十|第二十一|第二十二|第二十三|第二十四|第二十五|第二十六|第二十七|第二十八|第二十九|第三十！</value>
+  </data>
+</root>

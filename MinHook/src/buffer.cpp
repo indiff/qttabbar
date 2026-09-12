@@ -26,244 +26,244 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cassert>
-#include <vector>
-#include <algorithm>
-#include <Windows.h>
-
-#include "buffer.h"
-
-namespace MinHook { namespace
-{
-	struct MEMORY_BLOCK
-	{
-		void*	pAddress;
-		DWORD	protect;
-		size_t	usedSize;
-		size_t	fixedSize;
-	};
-
-	template <typename T>
-	bool operator <(const MEMORY_BLOCK& lhs, const T& rhs);
-	template <typename T>
-	bool operator <(const T& lhs, const MEMORY_BLOCK& rhs);
-	bool operator <(const MEMORY_BLOCK& lhs, const MEMORY_BLOCK& rhs);
-
-	void*			AllocateBuffer(void* const pOrigin, DWORD protect, size_t size);
-	MEMORY_BLOCK*	GetMemoryBlock(void* const pOrigin, DWORD protect, size_t capacity);
-
-	const size_t BlockSize = 0x10000;
-
-#if defined _M_X64
-	intptr_t gMinAddress;
-	intptr_t gMaxAddress;
-#endif
-	std::vector<MEMORY_BLOCK> gMemoryBlocks;
-}}
-
-namespace MinHook 
-{
-	void InitializeBuffer()
-	{
-#if defined _M_X64
-		SYSTEM_INFO si;
-		GetSystemInfo(&si);
-		
-		gMinAddress = reinterpret_cast<intptr_t>(si.lpMinimumApplicationAddress);
-		gMaxAddress = reinterpret_cast<intptr_t>(si.lpMaximumApplicationAddress);
-#endif
-	}
-
-	void UninitializeBuffer()
-	{
-		for (std::vector<MEMORY_BLOCK>::iterator block = gMemoryBlocks.begin();
-			block != gMemoryBlocks.end(); block++)
-		{
-			VirtualFree(block->pAddress, 0, MEM_RELEASE);
-		}
-
-		std::vector<MEMORY_BLOCK> v;
-		gMemoryBlocks.swap(v);
-	}
-
-	void* AllocateCodeBuffer(void* const pOrigin, size_t size)
-	{
-		assert(("AllocateBuffer", (size > 0)));
-
-		return AllocateBuffer(pOrigin, PAGE_EXECUTE_READ, size);
-	}
-
-	void* AllocateDataBuffer(void* const pOrigin, size_t size)
-	{
-		assert(("AllocateBuffer", (size > 0)));
-
-		return AllocateBuffer(pOrigin, PAGE_READONLY, size);
-	}
-
-	void RollbackBuffer()
-	{
-		for (std::vector<MEMORY_BLOCK>::iterator block = gMemoryBlocks.begin();
-			block != gMemoryBlocks.end(); block++)
-		{
-			block->usedSize = block->fixedSize;
-		}
-	}
-
-	void CommitBuffer()
-	{
-		for (std::vector<MEMORY_BLOCK>::iterator block = gMemoryBlocks.begin();
-			block != gMemoryBlocks.end(); block++)
-		{
-			if (block->usedSize == block->fixedSize)
-			{
-				continue;
-			}
-
-			void* pBuffer = reinterpret_cast<char*>(block->pAddress) + block->fixedSize;
-			size_t size = block->usedSize - block->fixedSize;
-			DWORD op;
-			VirtualProtect(pBuffer, size, block->protect, &op);
-		}
-	}
-}
-
-namespace MinHook { namespace
-{
-	void* AllocateBuffer(void* const pOrigin, DWORD protect, size_t size)
-	{
-		assert(("AllocateBuffer", (protect == PAGE_EXECUTE_READ || protect == PAGE_READONLY)));
-		assert(("AllocateBuffer", (size > 0)));
-
-		// Round up to the alignment boundary
-		size = (size + TYPE_ALIGNMENT(void*) - 1) & ~(TYPE_ALIGNMENT(void*) - 1);
-
-		MEMORY_BLOCK* pBlock = GetMemoryBlock(pOrigin, protect, size);
-		if (pBlock == NULL)
-		{
-			return NULL;
-		}
-
-		void* pBuffer = reinterpret_cast<char*>(pBlock->pAddress) + pBlock->usedSize;
-		if (VirtualAlloc(pBuffer, size, MEM_COMMIT, pBlock->protect) == NULL)
-		{
-			return NULL;
-		}
-
-		DWORD oldProtect;
-		// PAGE_EXECUTE_READ -> PAGE_EXECUTE_READWRITE, PAGE_READONLY -> PAGE_READWRITE
-		if (!VirtualProtect(pBuffer, size, (pBlock->protect << 1), &oldProtect))
-		{
-			return NULL;
-		}
-
-		pBlock->usedSize += size;
-		return pBuffer;
-	}
-
-	MEMORY_BLOCK* GetMemoryBlock(void* const pOrigin, DWORD protect, size_t capacity)
-	{
-		assert(("GetMemoryBlock", (protect == PAGE_EXECUTE_READ || protect == PAGE_READONLY)));
-		assert(("GetMemoryBlock", (capacity > 0)));
-
-		typedef std::vector<MEMORY_BLOCK>::iterator mb_iter;
-
-#if defined _M_X64
-		intptr_t minAddr = gMinAddress;
-		intptr_t maxAddr = gMaxAddress; 
-		if (pOrigin != NULL)
-		{
-			// pOrigin +/- 512MB range
-			minAddr = std::max<intptr_t>(minAddr, reinterpret_cast<intptr_t>(pOrigin) - 0x20000000);
-			maxAddr = std::min<intptr_t>(maxAddr, reinterpret_cast<intptr_t>(pOrigin) + 0x20000000);
-		}
-#endif
-
-		// If a usable slot exists among already-registered regions, return it
-		MEMORY_BLOCK* pBlock = NULL;
-		{
-			mb_iter ib = gMemoryBlocks.begin();
-			mb_iter ie = gMemoryBlocks.end();
-#if defined _M_X64
-			if (pOrigin != NULL)
-			{
-				// Narrow down by address range beforehand
-				ib = std::lower_bound(ib, ie, minAddr);
-				ie = std::lower_bound(ib, ie, maxAddr);
-			}
-#endif
-			for (mb_iter i = ib; i != ie; ++i)
-			{
-				if (i->protect == protect && i->usedSize + capacity <= BlockSize)
-				{
-					return &(*i);
-				}
-			}
-		}
-
-		// If none found, allocate a new address region
-		void* pAlloc = NULL;
-#if defined _M_X64
-		if (pOrigin != NULL)
-		{
-			// Searching outward from the center of the search range for a free region
-			intptr_t min = minAddr / BlockSize;
-			intptr_t max = maxAddr / BlockSize;
-			int rel = 0;
-			MEMORY_BASIC_INFORMATION mi = { 0 };
-			for (int i = 0; i < (max - min + 1); ++i)
-			{
-				rel = -rel + (i & 1);
-				void* pQuery = reinterpret_cast<void*>(((min + max) / 2 + rel) * BlockSize);
-				VirtualQuery(pQuery, &mi, sizeof(mi));
-				if (mi.State == MEM_FREE)
-				{
-					pAlloc = VirtualAlloc(pQuery, BlockSize, MEM_RESERVE, protect);
-					if (pAlloc != NULL)
-					{
-						break;
-					}
-				}
-			}
-		}
-		else
-#endif		// In x86 mode, address doesn't matter
-		{
-			pAlloc = VirtualAlloc(NULL, BlockSize, MEM_RESERVE, protect);
-		}
-
-		if (pAlloc != NULL)
-		{
-			MEMORY_BLOCK block = { 0 };
-			block.pAddress = pAlloc;
-			block.protect = protect;
-
-#if defined _M_X64
-			mb_iter i = std::lower_bound(gMemoryBlocks.begin(), gMemoryBlocks.end(), pAlloc);
-#elif defined _M_IX86
-			mb_iter i = gMemoryBlocks.begin();
-#endif
-			i = gMemoryBlocks.insert(i, block);
-
-			return &(*i);
-		}
-
-		return NULL;
-	}
-
-	template <typename T>
-	bool operator <(const MEMORY_BLOCK& lhs, const T& rhs) 
-	{ 
-		return lhs.pAddress < reinterpret_cast<void*>(rhs); 
-	}
-
-	template <typename T>
-	bool operator <(const T& lhs, const MEMORY_BLOCK& rhs) 
-	{ 
-		return reinterpret_cast<void*>(lhs) < rhs.pAddress; 
-	}
-
-	bool operator <(const MEMORY_BLOCK& lhs, const MEMORY_BLOCK& rhs)
-	{ 
-		return lhs.pAddress < rhs.pAddress;
-	}
-}}
+ #include <cassert>
+ #include <vector>
+ #include <algorithm>
+ #include <Windows.h>
+ 
+ #include "buffer.h"
+ 
+ namespace MinHook { namespace
+ {
+	 struct MEMORY_BLOCK
+	 {
+		 void*	pAddress;
+		 DWORD	protect;
+		 size_t	usedSize;
+		 size_t	fixedSize;
+	 };
+ 
+	 template <typename T>
+	 bool operator <(const MEMORY_BLOCK& lhs, const T& rhs);
+	 template <typename T>
+	 bool operator <(const T& lhs, const MEMORY_BLOCK& rhs);
+	 bool operator <(const MEMORY_BLOCK& lhs, const MEMORY_BLOCK& rhs);
+ 
+	 void*			AllocateBuffer(void* const pOrigin, DWORD protect, size_t size);
+	 MEMORY_BLOCK*	GetMemoryBlock(void* const pOrigin, DWORD protect, size_t capacity);
+ 
+	 const size_t BlockSize = 0x10000;
+ 
+ #if defined _M_X64
+	 intptr_t gMinAddress;
+	 intptr_t gMaxAddress;
+ #endif
+	 std::vector<MEMORY_BLOCK> gMemoryBlocks;
+ }}
+ 
+ namespace MinHook 
+ {
+	 void InitializeBuffer()
+	 {
+ #if defined _M_X64
+		 SYSTEM_INFO si;
+		 GetSystemInfo(&si);
+		 
+		 gMinAddress = reinterpret_cast<intptr_t>(si.lpMinimumApplicationAddress);
+		 gMaxAddress = reinterpret_cast<intptr_t>(si.lpMaximumApplicationAddress);
+ #endif
+	 }
+ 
+	 void UninitializeBuffer()
+	 {
+		 for (std::vector<MEMORY_BLOCK>::iterator block = gMemoryBlocks.begin();
+			 block != gMemoryBlocks.end(); block++)
+		 {
+			 VirtualFree(block->pAddress, 0, MEM_RELEASE);
+		 }
+ 
+		 std::vector<MEMORY_BLOCK> v;
+		 gMemoryBlocks.swap(v);
+	 }
+ 
+	 void* AllocateCodeBuffer(void* const pOrigin, size_t size)
+	 {
+		 assert(("AllocateBuffer", (size > 0)));
+ 
+		 return AllocateBuffer(pOrigin, PAGE_EXECUTE_READ, size);
+	 }
+ 
+	 void* AllocateDataBuffer(void* const pOrigin, size_t size)
+	 {
+		 assert(("AllocateBuffer", (size > 0)));
+ 
+		 return AllocateBuffer(pOrigin, PAGE_READONLY, size);
+	 }
+ 
+	 void RollbackBuffer()
+	 {
+		 for (std::vector<MEMORY_BLOCK>::iterator block = gMemoryBlocks.begin();
+			 block != gMemoryBlocks.end(); block++)
+		 {
+			 block->usedSize = block->fixedSize;
+		 }
+	 }
+ 
+	 void CommitBuffer()
+	 {
+		 for (std::vector<MEMORY_BLOCK>::iterator block = gMemoryBlocks.begin();
+			 block != gMemoryBlocks.end(); block++)
+		 {
+			 if (block->usedSize == block->fixedSize)
+			 {
+				 continue;
+			 }
+ 
+			 void* pBuffer = reinterpret_cast<char*>(block->pAddress) + block->fixedSize;
+			 size_t size = block->usedSize - block->fixedSize;
+			 DWORD op;
+			 VirtualProtect(pBuffer, size, block->protect, &op);
+		 }
+	 }
+ }
+ 
+ namespace MinHook { namespace
+ {
+	 void* AllocateBuffer(void* const pOrigin, DWORD protect, size_t size)
+	 {
+		 assert(("AllocateBuffer", (protect == PAGE_EXECUTE_READ || protect == PAGE_READONLY)));
+		 assert(("AllocateBuffer", (size > 0)));
+ 
+		 // アライメント境界に切り上げ
+		 size = (size + TYPE_ALIGNMENT(void*) - 1) & ~(TYPE_ALIGNMENT(void*) - 1);
+ 
+		 MEMORY_BLOCK* pBlock = GetMemoryBlock(pOrigin, protect, size);
+		 if (pBlock == NULL)
+		 {
+			 return NULL;
+		 }
+ 
+		 void* pBuffer = reinterpret_cast<char*>(pBlock->pAddress) + pBlock->usedSize;
+		 if (VirtualAlloc(pBuffer, size, MEM_COMMIT, pBlock->protect) == NULL)
+		 {
+			 return NULL;
+		 }
+ 
+		 DWORD oldProtect;
+		 // PAGE_EXECUTE_READ -> PAGE_EXECUTE_READWRITE, PAGE_READONLY -> PAGE_READWRITE
+		 if (!VirtualProtect(pBuffer, size, (pBlock->protect << 1), &oldProtect))
+		 {
+			 return NULL;
+		 }
+ 
+		 pBlock->usedSize += size;
+		 return pBuffer;
+	 }
+ 
+	 MEMORY_BLOCK* GetMemoryBlock(void* const pOrigin, DWORD protect, size_t capacity)
+	 {
+		 assert(("GetMemoryBlock", (protect == PAGE_EXECUTE_READ || protect == PAGE_READONLY)));
+		 assert(("GetMemoryBlock", (capacity > 0)));
+ 
+		 typedef std::vector<MEMORY_BLOCK>::iterator mb_iter;
+ 
+ #if defined _M_X64
+		 intptr_t minAddr = gMinAddress;
+		 intptr_t maxAddr = gMaxAddress; 
+		 if (pOrigin != NULL)
+		 {
+			 // pOrigin ± 512MB の範囲 
+			 minAddr = std::max<intptr_t>(minAddr, reinterpret_cast<intptr_t>(pOrigin) - 0x20000000);
+			 maxAddr = std::min<intptr_t>(maxAddr, reinterpret_cast<intptr_t>(pOrigin) + 0x20000000);
+		 }
+ #endif
+ 
+		 // すでに登録済みの領域の中から使用可能なものが見つかれば、それを返す
+		 MEMORY_BLOCK* pBlock = NULL;
+		 {
+			 mb_iter ib = gMemoryBlocks.begin();
+			 mb_iter ie = gMemoryBlocks.end();
+ #if defined _M_X64
+			 if (pOrigin != NULL)
+			 {
+				 // 検索前にアドレス範囲で絞り込み
+				 ib = std::lower_bound(ib, ie, minAddr);
+				 ie = std::lower_bound(ib, ie, maxAddr);
+			 }
+ #endif
+			 for (mb_iter i = ib; i != ie; ++i)
+			 {
+				 if (i->protect == protect && i->usedSize + capacity <= BlockSize)
+				 {
+					 return &(*i);
+				 }
+			 }
+		 }
+ 
+		 // 見つからなければ、新たなアドレス領域を確保
+		 void* pAlloc = NULL;
+ #if defined _M_X64
+		 if (pOrigin != NULL)
+		 {
+			 // 検索範囲の中心から外側へ空き領域を探していく
+			 intptr_t min = minAddr / BlockSize;
+			 intptr_t max = maxAddr / BlockSize;
+			 int rel = 0;
+			 MEMORY_BASIC_INFORMATION mi = { 0 };
+			 for (int i = 0; i < (max - min + 1); ++i)
+			 {
+				 rel = -rel + (i & 1);
+				 void* pQuery = reinterpret_cast<void*>(((min + max) / 2 + rel) * BlockSize);
+				 VirtualQuery(pQuery, &mi, sizeof(mi));
+				 if (mi.State == MEM_FREE)
+				 {
+					 pAlloc = VirtualAlloc(pQuery, BlockSize, MEM_RESERVE, protect);
+					 if (pAlloc != NULL)
+					 {
+						 break;
+					 }
+				 }
+			 }
+		 }
+		 else
+ #endif		// X86モードでは、アドレスは問題にならない
+		 {
+			 pAlloc = VirtualAlloc(NULL, BlockSize, MEM_RESERVE, protect);
+		 }
+ 
+		 if (pAlloc != NULL)
+		 {
+			 MEMORY_BLOCK block = { 0 };
+			 block.pAddress = pAlloc;
+			 block.protect = protect;
+ 
+ #if defined _M_X64
+			 mb_iter i = std::lower_bound(gMemoryBlocks.begin(), gMemoryBlocks.end(), pAlloc);
+ #elif defined _M_IX86
+			 mb_iter i = gMemoryBlocks.begin();
+ #endif
+			 i = gMemoryBlocks.insert(i, block);
+ 
+			 return &(*i);
+		 }
+ 
+		 return NULL;
+	 }
+ 
+	 template <typename T>
+	 bool operator <(const MEMORY_BLOCK& lhs, const T& rhs) 
+	 { 
+		 return lhs.pAddress < reinterpret_cast<void*>(rhs); 
+	 }
+ 
+	 template <typename T>
+	 bool operator <(const T& lhs, const MEMORY_BLOCK& rhs) 
+	 { 
+		 return reinterpret_cast<void*>(lhs) < rhs.pAddress; 
+	 }
+ 
+	 bool operator <(const MEMORY_BLOCK& lhs, const MEMORY_BLOCK& rhs)
+	 { 
+		 return lhs.pAddress < rhs.pAddress;
+	 }
+ }}

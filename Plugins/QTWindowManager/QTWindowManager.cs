@@ -27,7 +27,7 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
    // [Plugin(PluginType.Background, Author = "Quizo", Name = "QT Window Manager", Version = "1.1.0.0", Description = "Window manager")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "QT窗口管理", Version = "1.1.0.1", Description = "窗口管理;修复空指针")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "QT Window Manager", Version = "1.1.0.1", Description = "Window manager; fixes null reference errors")]
     public class QTWindowManager : IBarDropButton {
         private IPluginServer pluginServer;
         private string[] ResStrs;
@@ -70,9 +70,9 @@ namespace QuizoPlugins {
             this.pluginServer = pluginServer;
 
             if(!pluginServer.TryGetLocalizedStrings(this, RES_COUNT, out ResStrs)) {
-                if(CultureInfo.CurrentCulture.Parent.Name == "ja")
+                if(PluginCulture.IsJapanese(CultureInfo.CurrentUICulture))
                     ResStrs = Resource.ResStrs_ja.Split(new char[] { ';' });
-                else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+                else if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
                     ResStrs = Resource.ResStrs_zh.Split(new char[] { ';' });
                 else
                     ResStrs = Resource.ResStrs.Split(new char[] { ';' });
@@ -82,9 +82,9 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            if (CultureInfo.CurrentCulture.Parent.Name == "ja")
+            if (PluginCulture.IsJapanese(CultureInfo.CurrentUICulture))
                 ResStrs = Resource.ResStrs_ja.Split(new char[] { ';' });
-            else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+            else if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
                 ResStrs = Resource.ResStrs_zh.Split(new char[] { ';' });
             else
                 ResStrs = Resource.ResStrs.Split(new char[] { ';' });

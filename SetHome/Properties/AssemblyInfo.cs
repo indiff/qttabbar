@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("SetHome")]
-[assembly: AssemblyDescription("Set Java toolchain environment variables (JDK/ANT/MAVEN/GRADLE)")]
+[assembly: AssemblyDescription("设置Java工具集环境变量(JDK/ANT/MAVEN/GRADLE)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("indiff")]
 [assembly: AssemblyProduct("SetHome")]
-[assembly: AssemblyCopyright("Copyright (C)  2021-2023")]
+[assembly: AssemblyCopyright("Copyright (C)  2021-2025")]
 [assembly: AssemblyTrademark("indiff")]
 [assembly: AssemblyCulture("")]
 
@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // 方法是按如下所示使用“*”:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.6")]
-[assembly: AssemblyFileVersion("1.0.0.7")]
+[assembly: AssemblyFileVersion("1.0.0.9")]

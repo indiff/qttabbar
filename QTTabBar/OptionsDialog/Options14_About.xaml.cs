@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ namespace QTTabBarLib {
 
         public override void InitializeConfig() {
             try {
-                // Set the default title and version
+                // 设置默认的title 和版本
                 string str = QTUtility.CurrentVersion.ToString();
                 if (QTUtility.BetaRevision.Major > 0)
                 {
@@ -66,7 +66,7 @@ namespace QTTabBarLib {
         }
 
         /**
-         * If Chinese locale, go to WeChat instead
+         * 中文方式，则进入微信
          */
         private void imgPaypal_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             var uiCulture = System.Globalization.CultureInfo.InstalledUICulture.Name;

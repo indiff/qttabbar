@@ -1,0 +1,86 @@
+Author=JNylson
+
+Language=pt_BR
+
+Country=Brazil
+
+Version_QTTabBar=DevBuild: 2022/8/15 19:01:42 (2.0.50727.9164)
+
+DateModified=08/15/2022
+
+ButtonBar_BtnName=Separador;Voltar;Avançar;Grupo;Recentes;Aplicativos;Nova janela;Fechar essa;Bloquear;Copiar;Sempre visível;Fechar;Fechar outras;Fechar janela;Fechar a esquerda;Fechar a direita;Subir um nível;Recarregar;Procurar;Opacidade;Caixa de pesquisa;Opções
+
+ButtonBar_Misc=Caminho;Nome;Caminho atual da pasta;Nome da pasta atual;MD5; itens;Caminhos de todas as abas abertas
+
+Desktop=Lista;Detalhes;Lado a lado;Padrão
+
+DialogButtons=OK;Cancelar;&Aplicar;Pa&drão;Resetar &Página;&Resetar Todos;Resetar;Adicionar;Adicionar...;Remover;Opções;Ativar;Desativar;Desfazer;Carregar...;Salvar...
+
+DragDropToolTip=Copiar para:;Mover para:;Criar atalho em:
+
+ErrorDialogs=Operação falhou.\r\nCertifique-se de que o arquivo ou o alvo do link exista:\r\n\r\n{0};Erro - QTTabBar;Aviso: Não foi possível ativar automaticamente o QTTabBar. Para habilitá-lo manualmente, pressione e solte a tecla Alt e selecione QTTabBar no menu Exibir/Barras de ferramentas.;Não foi possível ativar;Erro;Não é possível carregar a biblioteca hook do QTTabBar.;Não é possível inicializar a biblioteca hook do QTTabBar.;Alguns recursos podem não ser funcionais. Para resolver isso, você pode precisar reinstalar o aplicativo.;Falha de hook do Desktop. Por favor, re-habilite a ferramenta QT Tab Desktop.;Operação falhou.\r\nPor favor, certifique-se de que a pasta existe ou você tem permissão para acessar:\r\n\r\n\t{0}
+
+FileFilters=Arquivos de Imagem;Arquivos de Idioma;Arquivos de Plugin
+
+FileHashComputer=Caminho;Hash;Fechar;Limpar;Atualizar;Sempre visível;Mostrar resultados;Limpar ao sair;Caminho completo;(Calculando agora...)
+
+MarginDropDown=Todos;Esquerda;Superior;Direita;Inferior
+
+Misc_Strings=Pesquisa da Área de trabalho;O arquivo de imagem é inválido.\r\n\r\nPor favor, especifique arquivo de imagem 432 x 40 px.;Resultados da Pesquisa em;atalho;Escolha o arquivo;Escolha a pasta;Experimental;dummy
+
+Options_Page01_Window=Altera como o Explorer do Windows se comporta.;Modo de janela única;Capturar novas janelas do Explorer como novas abas;Não capturar novas janelas do Explorer;Local padrão para novas janelas e abas;Salvando sessão;Iniciar uma nova sessão a cada vez;Restaurar todas as abas da sessão anterior;Restaurar apenas as abas bloqueadas da sessão anterior;Quando o botão fechar é clicado;Fechar janela;Fechar aba atual;Fechar todas as abas desbloqueadas;Enviar janela para a bandeja de tarefas;Fechar;Minimizar;Botão azul mais
+
+Options_Page02_Tabs=Altera as opções relacionadas a abas.;Abrir novas abas:;Quando a aba atual é fechada, alterne para:;Alternar para novas abas imediatamente;Reutilizar as abas existentes;Renomear abas ambíguas;Ao arrastar, pairando sobre uma aba,;Alternar para essa;Mostrar menu de subpastas;Ícones da aba;Mostrar Ícones de pastas em abas;Mostrar menu de dica da subpasta quando o ícone é clicado;Mostrar a letra da unidade no ícone;Botão fechar;Mostrar botão fechar nas abas;Apenas com a tecla Alt pressionada;Apenas ao passar o mouse;Barra de abas;Mostrar botões de navegação na barra de abas;Na esquerda;Na direita;Permitir várias linhas de abas;Sempre colocar linha com a aba ativa na parte inferior;A esquerda da aba atual;A direita da aba atual;Na posição mais à esquerda;Na posição mais à direita;Aba para a esquerda;Aba para a direita;Aba mais a esquerda;Aba mais a direita;Última aba ativada;Comportamento
+
+Options_Page03_Tweaks=Ativa ou desativa os ajustes da Visualização da Lista do Explorer.;Ajustes que podem ser usados ​​com a Visualização em Lista;Exibir cabeçalhos de coluna em todos os modos de visualização (Windows Vista/7);Usar visualização padrão do sistema de arquivos para pastas de Biblioteca (Windows 7);Desmarcar a extensão do arquivo ao renomear arquivos (Windows XP);Seleção de ciclo com F2 durante a renomeação;Enrole ao redor ao mover a seleção com as teclas de seta;Backspace sobe um nível (Windows Vista/7);Rolagem com roda do mouse enquanto segura Shift horizontalmente;Ajustes que só podem ser usados com a Visualização em Listas mais antiga;Ativar controle da Visualização em Lista mais antiga (Windows 7);Selecionar linha completa na Visualização em Detalhes;Mostrar linhas de grade na Visualização em Detalhes;Cores de linha alternadas na Visualização em Detalhes;Cor de primeiro plano:;Cor de segundo plano:
+
+Options_Page04_Tooltips=Altera o comportamento da ferramenta de menu de subpastas e pré-visualização.;Dicas de subpastas;Ativar dicas de subpasta;Apenas com a tecla Shift pressionada;Mostrar arquivos;Mostrar dicas de ferramentas ao passar mouse sobre itens;Visualizar dicas de ferramentas;Ativar visualizar de dicas;Apenas com a tecla Shift pressionada;Mostrar Informações do arquivo abaixo das imagens;Largura x altura máxima:;Fonte:;Tipos de arquivos de texto;Tipos de arquivos de imagem e vídeo
+
+Options_Page05_General=Opções gerais para o comportamento do Qttabbar.;Integração da barra de tarefas;Mostrar visualizações de abas na Barra de tarefas;Histórico;Manter histórico de abas fechadas;Limpar;Manter histórico de arquivos abertos;Rede;Tempo limite de rede (Digite 0 para o padrão do sistema):;Verifique se há atualizações periodicamente;Verificar;Exportar;Exportar Configurações;Limpar histórico de arquivos?;Limpar histórico de abas?
+
+Options_Page06_Appearance=Altere a aparência das abas ou da barra de abas.;Imagem da aba;Imagem da aba personalizada:;Tamanho da margens:;Sobreposição da área:;Conteúdo da margens:;Acertar áreas transparentes de teste;Tamanho da aba;Altura:;Largura mín.:;Largura máx.:;Modo de tamanho:;Largura completa;Mesmo tamanho;Texto da aba;Cores do texto:;Cores de sombra:;Cor ativa;Cor inativa;Cor do realce;Fonte de texto:;Alinhamento:;Esquerda;Centro;Fundo da barra de ferramentas;Imagem;Cor sólida;Imagem para cada barra separada;Modo de esticar:;Tamanho das margens:;Arquivo de skin;Importar skin...;Exportar skin...;Esticar;Tamanho verdadeiro;Lado a lado
+
+Options_Page07_Mouse=Atribui comandos a diferentes ações do mouse.;Para adicionar um vinculo do mouse, execute uma ação do mouse no ícone de adição à esquerda do tipo de destino apropriado. Para remover um vinculo, selecione-a na lista e pressione a tecla Delete.;Outras opções do mouse;Roda do mouse rola a janela sob o mouse;Acordar mouse;Ação;Em qualquer lugar;Aba;Histórico da barra de abas;Link de Pasta;Arquivo ou Pasta;Fundo do Explorer;Clique Direito;Clique direito;Clique do Meio;Duplo Clique;X1 Clique;X2 Clique;Este botão do mouse não pode ser usado para este alvo.;Os botões válidos do mouse para este alvo são:;Botão inválido
+
+Options_Page08_Keys=Altera os atalhos de teclado.;Selecione uma ação da lista e pressione o gesto de tecla que você gostaria de vincular a ela.  Pressione Escape para limpar a ligação.;Outras opções de teclado;Mostrar a janela do Alternador de Abas quando Ctrl + Tab é pressionado;Ação;Teclas;Esta tecla já está atribuída a:;Deveria ser reatribuído?;Conflito de teclas
+
+Options_Page09_Groups=Cria e gerencia grupos de abas.;Para atribuir uma tecla de atalho a um grupo, selecione-o e pressione o gesto de tecla apropriada. Pressione Escape para limpar a ligação.;Criar novo grupo;Pasta;Inicialização;Tecla de atalho;Novo grupo;Abrir grupo "{0}"
+
+Options_Page10_Apps=Cria atalhos para arquivos ou aplicativos comumente usados.;Para atribuir uma tecla de atalho a um aplicativo, selecione-o e pressione o gesto de tecla apropriado. Pressione Escape para limpar a ligação.;Criar Nova Pasta;Caminho:;Argumentos:;Diretório de Trabalho:;Aplicativo;Tecla de atalho;As seguintes palavras-chave são substituídas por strings de caminho duplo em tempo de execução.;Arquivos selecionados.;Pastas selecionadas.;Arquivos e pastas selecionados.;Pasta atual.;Pasta atual se não houver seleção, de outra forma a pasta selecionada.;Nova pasta;Remova esta pasta e seu conteúdo?;Aplicativo executado "{0}"
+
+Options_Page11_ButtonBar=Personaliza a barra de botão.;Botões;Opções da barra de botão;Ícones grandes;Mostrar rótulos dos botões;Bloquear ordem dos menus do botão suspenso;Bloqueie tamanho da caixa de pesquisa;Imagens de botão personalizadas
+
+Options_Page12_Plugins=Gerencia os plugins de terceiros.;Instalar plugin;(Desativado);por {0};{0} foi removido.;Este plugin será instalado quando você pressionar OK ou Aplicar.;Este plugin será ativado quando você pressionar OK ou Aplicar.;Este plugin será desativado quando você pressionar OK ou Aplicar.;Desinstalar este plug-in também desinstalará os seguintes plugins:;Proceder?;Ativar;Desativar
+
+Options_Page13_Language=Altera o idioma.;Idioma principal;Usar idioma integrado:;Usar arquivo de idioma:;Arquivos de idiomas de plugin;Editor de arquivos de idioma;Mostrar Editor de Idiomas...;Original;Traduzido;Redefinir todas as entradas ao seu valor original?;Erro ao salvar o arquivo.;Chinês simplificado;Inglês;Alemão
+
+Options_Page14_About=Exibe as informações de créditos e da versão.;Código original por {0};Desenvolvedor Chefe:;Outros Desenvolvedores:;Ícones e gráficos:;Se você achou o Qttabbar útil, por favor considere fazer uma pequena doação.;汉化修改：;Criado por: {0}
+
+OptionsDialog=Opções do QTTabBar;Redefinir todas as opções nesta página para seus valores padrão?;Redefinir todas as opções para seus valores padrão? Isso não afetará grupos, aplicativos ou plugins.;Confirmações
+
+PayPalURL=https://github.com/indiff/qttabbar/blob/master/QTTabBar/Resources/wechat_pay.jpg
+
+ShortcutKeys_ActionNames=Voltar;Avançar;Volte para início;Avançar para o fim;Selecionar próxima aba;Selecionar aba anterior;Selecionar primeira aba;Selecionar última aba;Alternar para a última aba ativada;Abrir nova aba;Abrir nova janela;Mesclar abas de outras janelas;Fechar aba atual;Fechar todas mais atual;Fechar esquerda;Fechar direita;Fechar janela;Desfazer perto;Clonar aba atual;Abrir pasta atual em uma nova janela;Bloquear / desbloquear atual;Bloquear / desbloquear todas;Procurar pasta;Criar novo grupo;Abrir diálogo de opção;Mostrar menu da barra de ferramentas;Mostrar menu da aba atual;Mostrar menu de grupo (Barra de botão);Mostrar menu de pasta recente (Barra de botão);Mostrar menu de aplicativos do usuário (Barra de botão);Mostrar menu de arquivos recentes (Barra de botão);Criar novo arquivo vazio;Criar nova pasta;Copiar caminho dos arquivos selecionados;Copiar nome dos arquivos selecionados;Copiar caminho da pasta atual;Copiar nome da pasta atual;Verificar MD5 dos arquivos selecionados;Tornar janela sempre visível;Transparência +;Transparência -;Focar lista de arquivos;Focar barra de pesquisa (Explorer);Focar caixa de pesquisa (Barra de botão);Mostrar menu de subpasta para pasta selecionada;Enviar janela para bandeja de tarefas;Focar a barra de abas;Ordenar abas por nome;Ordenar abas pelo caminho;Ordenar abas por última ativação;Nada;Subir um nível;Atualizar;Colar;Maximizar;Minimizar;Abrir em uma nova aba;Abrir em uma nova aba sem ativar;Abrir em uma nova janela;Recortar;Copiar;Excluir;Propriedades;Copiar caminho;Copiar nome;Exibir checksum;Fechar aba;Fechar abas a esquerda;Fechar abas a direita;Subir um nível;Bloquear;Mostrar menu de contexto;Abrir em uma nova janela;Clonar;Copiar caminho;Propriedades;Mostrar menu de dicas do subdiretório;Fechar todas menos essa;Abrir CMD;Abrir pastas selecionadas na nova aba sem ativação
+
+ShortcutKeys_Groups=QTTabBar;{0} (Plugin)
+
+SiteURL=https://github.com/indiff/qttabbar
+
+TabBar_Menu=Fechar;Fechar a direita;Fechar esquerda;Fechar todas menos essa;Adicionar para o grupo;Criar novo grupo;Bloquear;Duplicar;Nova janela;Copiar caminho;Propriedades;Histórico de abas;Grupos;Desfazer fechado;Última ativada;Arquivos abertos recentes;Procurar pasta;Fechar todas mais atual;Fechar janela;Opções;Desbloquear;Adicionar ao menu de aplicativos : ;itens;Cancelar;Ramos;Remova este item do menu;A&brir conteúdo da pasta;Rótulo da aba;Ordenar aba por;Nome;Caminho;Ativa;Bloqueie barras de ferramentas;Mesclar abas de outras janelas;Inverter;Abrir CMD
+
+TabBar_Message=QTTabBar falhou ao abrir\r\n\r\n "{0}".
+
+TabBar_NewGroup=Criar um novo grupo;Nome do grupo:;Adicionar todas abas
+
+TabBar_Option_Genre=Janela;Abas;Ajustes;Dicas de ferramentas;Geral;Aparência;Mouse;Teclas;Grupos;Aplicativos;Barra de Botão;Plugins;Idioma;Sobre
+
+TaskBar_Menu=Barra de tarefas;Área de trabalho;Bloquear itens;Desenhar fundo do título;Menu de clique único;Ativar teclas de atalho de aplicativo
+
+TaskBar_Titles=Grupos;Desfazer fechado;Aplicativos;Arquivos abertos recente
+
+TrayIcon=1 janela;{0} janelas
+
+UpdateCheck=Uma nova versão do Qttabbar foi lançada:;Pressione OK para ir ao site.;Sua versão do QTTabBar está atualizada.;Nova versão de desenvolvimento encontrada:;Arquivo de versão não encontrado (404).;Erro de rede desconhecido.;Servidor não encontrado.;O servidor retornou as strings erradas.
+
+
+

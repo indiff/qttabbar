@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -25,13 +25,14 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
   //  [Plugin(PluginType.Background, Author = "Quizo", Name = "Folder Memo", Version = "1.0.0.0", Description = "Memo for folder.")]
- 	[Plugin(PluginType.Interactive, Author = "indiff", Name = "Folder Memo", Version = "1.0.0.0", Description = "Folder memo")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Folder Memo", Version = "1.0.0.0", Description = "Memo for folder.")]
     public class Memo : IPluginClient {
         internal static byte[] ConfigValues = new byte[4];
         private MemoForm memoForm;
         private IPluginServer pluginServer;
         private static string REG_MEMO = "QuizoPlugins.Memo";
         internal static string[] ResStrs;
+        private static string ResCultureName;
 
         static Memo() {
             ReadSettings();
@@ -86,16 +87,14 @@ namespace QuizoPlugins {
         public void Open(IPluginServer pluginServer, IShellBrowser shellBrowser) {
             this.pluginServer = pluginServer;
             if(!this.pluginServer.TryGetLocalizedStrings(this, 4, out ResStrs)) {
-                if(CultureInfo.CurrentCulture.Parent.Name == "ja") {
-                    ResStrs = Resource.str_ja.Split(new char[] { ';' });
-                }
-                else if(CultureInfo.CurrentCulture.Parent.Name == "zh-CHS") {
-                    ResStrs = Resource.str_zh.Split(new char[] { ';' });
-                }
-                else {
-                    ResStrs = Resource.str_en.Split(new char[] { ';' });
-                }
+                ResStrs = LoadResourceStrings();
             }
+            if(ResStrs == null || ResStrs.Length < 1) {
+                ResStrs = new[] { "Show / hide folder memo" };
+            }
+            ResCultureName = CultureInfo.CurrentUICulture == null
+                    ? string.Empty
+                    : CultureInfo.CurrentUICulture.Name;
             this.pluginServer.RegisterMenu(this, MenuType.Tab, ResStrs[0], true);
             this.pluginServer.NavigationComplete += pluginServer_NavigationComplete;
             this.pluginServer.ExplorerStateChanged += pluginServer_ExplorerStateChanged;
@@ -127,8 +126,44 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] descriptions) {
-            descriptions = new string[] { ResStrs[0] };
+            EnsureResStrings();
+            descriptions = new[] { ResStrs[0] };
             return true;
+        }
+
+        private static void EnsureResStrings() {
+            string cultureName = CultureInfo.CurrentUICulture == null
+                    ? string.Empty
+                    : CultureInfo.CurrentUICulture.Name;
+            if(ResStrs != null && ResStrs.Length >= 1 &&
+                    string.Equals(ResCultureName, cultureName, StringComparison.OrdinalIgnoreCase)) {
+                return;
+            }
+
+            ResStrs = LoadResourceStrings();
+            ResCultureName = cultureName;
+        }
+
+        private static string[] LoadResourceStrings() {
+            string value;
+            if(PluginCulture.IsJapanese(CultureInfo.CurrentUICulture)) {
+                value = Resource.str_ja;
+            }
+            else if(PluginCulture.IsChinese(CultureInfo.CurrentUICulture)) {
+                value = Resource.str_zh;
+            }
+            else {
+                value = Resource.str_en;
+            }
+
+            if(string.IsNullOrEmpty(value)) {
+                value = "Show / hide folder memo";
+            }
+
+            string[] result = value.Split(new[] { ';' });
+            return result.Length == 0 || string.IsNullOrEmpty(result[0])
+                    ? new[] { "Show / hide folder memo" }
+                    : result;
         }
 
         private static void ReadSettings() {

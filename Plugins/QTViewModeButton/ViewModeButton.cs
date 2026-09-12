@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
     //[Plugin(PluginType.Interactive, Author = "Quizo", Name = "Change Folder View Mode", Version = "1.0.0.0", Description = "Button to change folder viewmode for XP.")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "View", Version = "1.0.0.0", Description = "Change the button's view mode.")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "View", Version = "1.0.0.0", Description = "Add buttons to change the folder view mode.")]
     public class ViewModeButton : IBarCustomItem
     {
         private IPluginServer pluginServer;
@@ -48,9 +48,9 @@ namespace QuizoPlugins {
                 // this plugin has 2 language resources in assemly, but usually there's no need to do like this.
                 // it only has to have a resource of your own language.
 
-                if (CultureInfo.CurrentCulture.Parent.Name == "ja")
+                if (PluginCulture.IsJapanese(CultureInfo.CurrentUICulture))
                     ResStrs = Resource.viewModes_Ja.Split(new char[] { ';' });
-                else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+                else if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
                     ResStrs = Resource.viewModes_zh.Split(new char[] { ';' });
                 else
                     ResStrs = Resource.viewModes.Split(new char[] { ';' });
@@ -199,8 +199,8 @@ namespace QuizoPlugins {
         }
 
         /// <summary>
-        /// Update the button image
-        /// Fix a skin-config image issue
+        /// ∏¸–¬∞¥≈•Õº∆¨
+        /// –ﬁ∏¥∆§∑Ù≈‰÷√ø’Õº∆¨±®¥Ì
         /// check mode & button is null ?
         /// </summary>
         /// <param name="mode"></param>

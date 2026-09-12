@@ -1,6 +1,6 @@
 ﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2007-2021  Quizo, Paul Accisano
+//    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -203,13 +203,7 @@ namespace QTTabBarLib {
             }
 
             //txtLocation.FontStyle = b ? FontStyles.Italic : FontStyles.Normal;
-            // QTUtility.InNightMode only gets refreshed when a real QTTabBarClass is attached
-            // and processes a theme-change message - with the toolbar/experimental attach off,
-            // it never updates and stays at its false default regardless of the real theme.
-            // getNightMode() reads the registry directly, so it's correct with no attachment.
-            txtLocation.Foreground = QTUtility.getNightMode()
-                    ? (b ? Brushes.Gray : Brushes.White)
-                    : (b ? Brushes.DarkGray : Brushes.Black);
+            txtLocation.Foreground = b ? Brushes.DarkGray : Brushes.Black;
             watermarkVisible = b;
 
             string text;

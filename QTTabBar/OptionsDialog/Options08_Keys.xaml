@@ -2,7 +2,7 @@
 <!--
     This file is part of QTTabBar, a shell extension for Microsoft
     Windows Explorer.
-    Copyright (C) 2007-2021  Quizo, Paul Accisano
+    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 
     QTTabBar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@
                 BorderThickness="1.000001">
                 <ListBox.Style>
                     <Style TargetType="{x:Type ListView}">
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="Black"/>
                     </Style>
                 </ListBox.Style>
                 <ListBox.ItemContainerStyle>
@@ -80,10 +80,9 @@
                         <Setter Property="BorderThickness" Value="1"/>
                         <Setter Property="Padding" Value="5,2,5,2"/>
                         <Setter Property="Margin" Value="0,0,0,1"/>
-                        <Setter Property="Foreground" Value="White"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=Enabled}" Value="False">
-                                <Setter Property="Foreground" Value="Gray"/>
+                                <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -95,7 +94,7 @@
                                 <DockPanel LastChildFill="True">
                                     <TextBlock 
                                         DockPanel.Dock="Left"
-                                        Foreground="CornflowerBlue"
+                                        Foreground="MediumBlue"
                                         Margin="20, 1, 4, 4"
                                         Text="{qt:Resx Key=ShortcutKeys_Groups}">
                                         <TextBlock.Style>

@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
     // [Plugin(PluginType.Background, Author = "Quizo", Name = "MigemoLoader", Version = "0.9.1.0", Description = "Migemo integration")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "装载机", Version = "0.9.1.0", Description = "装载机集成，后台类型插件")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "Migemo Loader", Version = "0.9.1.0", Description = "Migemo integration; background plugin")]
     public class MigemoLoader : IFilter {
         private IPluginServer pluginServer;
 

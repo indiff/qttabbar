@@ -14,11 +14,11 @@ using QTTabBarLib.Interop;
 namespace QTTabBarLib
 {
     /**
-     internal - internal types or members are accessible only from files within the same assembly
+     internal 只有在同一程序集的文件中，内部类型或成员才可访问
      */
     public abstract class TabBarBase : BandObject
     {
-        // Add to group
+        // 添加到分组
         protected ToolStripMenuItem tsmiAddToGroup;
         protected ToolStripMenuItem tsmiBrowseFolder;
         protected ToolStripMenuItem tsmiCloneThis;
@@ -45,7 +45,8 @@ namespace QTTabBarLib
 
         /*add by qwop 2012.07.13*/
         protected ToolStripMenuItem tsmiOpenCmd;
-        protected ToolStripMenuItem enableApiHook;
+        protected ToolStripMenuItem tsmiOpenPowerShell;  // ← 新增
+        protected ToolStripMenuItem tsmiBatchRename;
         /*add by qwop 2012.07.13*/
 
         protected ToolStripSeparator tssep_Sys1;

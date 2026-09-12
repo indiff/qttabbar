@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ namespace QuizoPlugins {
     ///			Author, Name, Version, and Description are used in Options -> Plugins tab.
     /// </summary>
    // [Plugin(PluginType.Interactive, Author = "Quizo", Name = "SampleSplitButton", Version = "0.9.0.0", Description = "Sample plugin - shows SplitButton")]
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "≤‚ ‘≤Âº˛", Version = "0.9.0.0", Description = "≤‚ ‘π¶ƒ‹")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Sample Plugin", Version = "0.9.0.0", Description = "Test functionality")]
     public class SampleSplitButton : IBarDropButton
     {
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     This file is part of QTTabBar, a shell extension for Microsoft Windows Explorer.
-    Copyright (C) 2007-2021  Quizo, Paul Accisano
-    Copyright (C) 2011-2022  indiff
+    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
+    
 
     QTTabBar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,15 +22,15 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
 
     <?define SkuName = "QTTabBar"?>
-    <?define RTMProductVersion="1.5.0" ?>
-    <?define ProductVersion="1.5.9" ?> <!-- Change the last number to the svn revision before release -->
-    <?define VersionString="1.5.9 Beta(2026)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
+    <?define RTMProductVersion="1.6.0" ?>
+    <?define ProductVersion="1.6.0" ?> <!-- Change the last number to the svn revision before release -->
+    <?define VersionString="1.6.0 Beta(2026)" ?> <!-- Change to correct version before release, eg, 2019 1.5.0.0 Beta 1 -->
     <?define UpgradeCode="{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"?> <!-- NEVER CHANGE THIS, EVER!! -->
     <!-- Quizo and Paul Accisano and indiff -->
     <?define Manufacturer="indiff"?>
     <?define ProductCode="*"?>
     <!-- Important: this must be changed -->
-    <?define StrongName="QTTabBar, Version=1.5.9.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
+    <?define StrongName="QTTabBar, Version=1.6.0.0, Culture=neutral, PublicKeyToken=973461f1cd23d8eb"?>
     <?define MyLanguage="1033"?>
     <!-- Language code page 1252 1033
 Language                      Locale        Language Code Codepage
@@ -58,6 +58,7 @@ Language="1033"
             <UpgradeVersion Minimum="$(var.ProductVersion)" IncludeMinimum="no" OnlyDetect="yes" Property="NEWPRODUCTFOUND" />
             <UpgradeVersion Minimum="$(var.RTMProductVersion)" IncludeMinimum="yes" OnlyDetect="no" Maximum="$(var.ProductVersion)" IncludeMaximum="no" Property="UPGRADEFOUND" />
         </Upgrade>
+        <Binary Id="InstallerHelper" SourceFile="..\InstallerHelper\bin\Release\InstallerHelper.dll" />
         <Property Id="NETFRAMEWORK48">
             <RegistrySearch Id="NetFx48FullSearch"
                             Root="HKLM"
@@ -67,11 +68,8 @@ Language="1033"
         </Property>
 		    <!-- The URL for the application's update channel. -->
 		    <Property Id="ARPAUTHORIZEDCDFPREFIX" Value="https://github.com/indiff/qttabbar/releases" />
-		    <!-- The application's help URL. -->
 		    <Property Id="ARPHELPLINK" Value="https://github.com/indiff/qttabbar" />
-		    <!-- The application's homepage URL. -->
 		    <Property Id="ARPCOMMENTS" Value="https://indiff.github.io/qttabbar/" />
-		    <!-- 	The URL for the application's update information. -->
 		    <Property Id="ARPURLINFOABOUT" Value="https://github.com/indiff/qttabbar" />
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="CommonAppDataFolder">
@@ -124,6 +122,7 @@ Language="1033"
 				          <Component Id="QTClock" Win64="yes" Guid="27af1a85-9a08-4c12-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f12" Name="QTClock.dll" Source="..\Plugins\QTClock\bin\Release\QTClock.dll" KeyPath="yes" />
                   </Component>
+
 
                   <Component Id="QTWindowManager" Win64="yes" Guid="27af1a85-9a08-4c13-bdeb-d73fd4bd9574" DisableRegistryReflection="yes">
                     <File Id="f13" Name="QTWindowManager.dll" Source="..\Plugins\QTWindowManager\bin\Release\QTWindowManager.dll" KeyPath="yes" />
@@ -232,7 +231,7 @@ Language="1033"
                         <Condition>VersionNT64</Condition>
                         <?endif?>
                         <RegistryKey Root="HKLM" Key="Software\QTTabBar" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
-                          ~1~ Don't capture Control Panel@1@
+                          ~1~ ????????????@1@
                           <RegistryValue Name="NoCaptureAt" Value="::{26EE0668-A00A-44D7-9371-BEB064C98683};::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0" Type="string" Action="write" KeyPath ="yes" />
                         </RegistryKey>
                       </Component> -->           
@@ -339,6 +338,7 @@ Language="1033"
                 <ComponentRef Id="AutoLoader_$(var.arch)" />
                 <ComponentRef Id="ContextMenuOptions_$(var.arch)" />
             <?endforeach?>
+			
         </Feature>
 
         <CustomAction Id="PreventDowngrading" Error="!(loc.ALREADY_INSTALLED)" />
@@ -358,6 +358,12 @@ Language="1033"
         <!-- AppSearch must be done before RemoveExistingProducts and before FindRelatedProducts -->
         <AppSearch Sequence="1"></AppSearch>
         <RemoveExistingProducts After="InstallValidate">PREVIOUSVERSIONSINSTALLED</RemoveExistingProducts>
+		
+		
+		<!-- Restart Explorer -->
+		<Custom Action="KillExplorer" After="InstallFinalize">NOT REMOVE</Custom>
+		<Custom Action="WaitAfterKill" After="KillExplorer">NOT REMOVE</Custom>
+		<Custom Action="StartExplorer" After="WaitAfterKill">NOT REMOVE</Custom>
       </InstallExecuteSequence>
         
         <InstallUISequence>
@@ -365,7 +371,6 @@ Language="1033"
         </InstallUISequence>
 
         <UI>
-
           <ProgressText Action="RollbackCleanup">!(loc.COMPILE_IMG)</ProgressText>
           <!-- # Custom controls for the license screen.. -->
         </UI>

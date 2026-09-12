@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ using QTPlugin.Interop;
 
 namespace QuizoPlugins {
    // [Plugin(PluginType.Background, Author = "Quizo", Name = "FolderTreeButton", Version = "1.0.0.0", Description = "Show folder tree for XP")]
-    [Plugin(PluginType.Background, Author = "indiff", Name = "目录树", Version = "1.0.0.0", Description = "显示目录树(XP)，后台插件")]
+    [Plugin(PluginType.Background, Author = "indiff", Name = "Folder Tree", Version = "1.0.0.0", Description = "Show the folder tree on XP; background plugin")]
     public class QTFolderTreeButton : IBarButton {
         [DllImport("user32.dll")]
         private static extern IntPtr SetFocus(IntPtr hWnd);
@@ -45,9 +45,9 @@ namespace QuizoPlugins {
             this.shellBrowser = shellBrowser;
 
             if(!pluginServer.TryGetLocalizedStrings(this, 3, out ResStrs)) {
-                if(CultureInfo.CurrentCulture.Parent.Name == "ja")
+                if(PluginCulture.IsJapanese(CultureInfo.CurrentUICulture))
                     ResStrs = Resource.strQTFolderButton_ja.Split(new char[] { ';' });
-                else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+                else if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
                     ResStrs = Resource.strQTFolderButton_zh.Split(new char[] { ';' });
                 else
                     ResStrs = Resource.strQTFolderButton.Split(new char[] { ';' });
@@ -55,9 +55,9 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            if (CultureInfo.CurrentCulture.Parent.Name == "ja")
+            if (PluginCulture.IsJapanese(CultureInfo.CurrentUICulture))
                 ResStrs = Resource.strQTFolderButton_ja.Split(new char[] { ';' });
-            else if (CultureInfo.CurrentCulture.Parent.Name == "zh-CHS")
+            else if (PluginCulture.IsChinese(CultureInfo.CurrentUICulture))
                 ResStrs = Resource.strQTFolderButton_zh.Split(new char[] { ';' });
             else
                 ResStrs = Resource.strQTFolderButton.Split(new char[] { ';' });

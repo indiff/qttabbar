@@ -1,6 +1,6 @@
 //    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
-//    Copyright (C) 2010  Quizo, Paul Accisano
+//    Copyright (C) 2010-2025  Quizo, Paul Accisano, indiff
 //
 //    QTTabBar is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -17,21 +17,16 @@
 
 using System;
 using System.Drawing;
-using System.Media;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Security;
 using QTPlugin;
 using QTPlugin.Interop;
 using QTTabBarLib;
 using System.IO;
+using System.Media;
 
 // using System.Management.Automation;
 // using System.Management.Automation.Runspaces;
@@ -52,7 +47,7 @@ namespace Qwop {
     ///		
     ///			Author, Name, Version, and Description are used in Options -> Plugins tab.
     /// </summary>
-    [Plugin(PluginType.Interactive, Author = "indiff", Name = "Quick", Version = "1.0.0.1", Description = "QT quick menu; provides quick access to common system tools")]
+    [Plugin(PluginType.Interactive, Author = "indiff", Name = "QT Quick", Version = "1.0.0.1", Description = "Open QT options; restart Explorer with elevated privileges")]
     public class QTQuickButton : IBarDropButton
     {
         static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
@@ -62,7 +57,7 @@ namespace Qwop {
         private IShellBrowser shellBrowser;
 
         private bool fFirstMenuDropDown = true;
-        private string text = "Quick";
+        private string text = "快捷";
         private string REG_ENV_PATH = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
         private List<Address> lstSelectedItems = new List<Address>();
 
@@ -241,22 +236,22 @@ namespace Qwop {
             this.menu = menu;
 
             if(fFirstMenuDropDown) {
-                menu.Items.Add(new ToolStripMenuItem("My Documents"));
-                menu.Items.Add(new ToolStripMenuItem("Open...\\Control Panel...\\System"));
-                menu.Items.Add(new ToolStripMenuItem("Open...\\Control Panel...\\Personalization"));   
-                menu.Items.Add(new ToolStripMenuItem("Open...\\Control Panel...\\Programs and Features"));
-              //  menu.Items.Add(new ToolStripMenuItem("Set current directory JAVA_HOME"));
-              //  menu.Items.Add(new ToolStripMenuItem("Set current directory M2_HOME"));
-                menu.Items.Add(new ToolStripMenuItem("View system info"));
-                menu.Items.Add(new ToolStripMenuItem("Open File Explorer"));
-                menu.Items.Add(new ToolStripMenuItem("Restart"));
+                menu.Items.Add(new ToolStripMenuItem("我的文档"));
+                menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\系统"));
+                menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\个性化"));   
+                menu.Items.Add(new ToolStripMenuItem("控制面板\\所有控制面板项\\网络连接"));
+              //  menu.Items.Add(new ToolStripMenuItem("设置当前目录JAVA_HOME"));
+              //  menu.Items.Add(new ToolStripMenuItem("设置当前目录M2_HOME"));
+                menu.Items.Add(new ToolStripMenuItem("查看系统信息"));
+                menu.Items.Add(new ToolStripMenuItem("重启资源管理器")); 
+                menu.Items.Add(new ToolStripMenuItem("关机"));
 
-              //  menu.Items.Add(new ToolStripMenuItem("Set current directory ANT_HOME"));
-             //   menu.Items.Add(new ToolStripMenuItem("Set current directory MVND_HOME"));
+              //  menu.Items.Add(new ToolStripMenuItem("设置当前目录ANT_HOME"));
+             //   menu.Items.Add(new ToolStripMenuItem("设置当前目录MVND_HOME"));
 
-                menu.Items.Add(new ToolStripMenuItem("Clean Path"));
-                menu.Items.Add(new ToolStripMenuItem("Delete QTTabGroup startup items"));
-                menu.Items.Add(new ToolStripMenuItem("Open QTTabBar exception log"));
+                menu.Items.Add(new ToolStripMenuItem("设置Path"));
+                menu.Items.Add(new ToolStripMenuItem("删除QTTabGroup（启动项）"));
+                menu.Items.Add(new ToolStripMenuItem("打开QTTabBar异常日志"));
 
                 // menu.Items.Add(new ToolStripMenuItem("Test selection"));
                 fFirstMenuDropDown = false;
@@ -297,12 +292,12 @@ namespace Qwop {
                 switch (idx)
                 {
                     case 0: {
-                            // 0. My Documents
+                            // 0. 我的文档
                             path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                             break;
                     }
                     case 1 :{
-                            // 1. System
+                            // 1. 系统
                             if ( IsWin7 ) {
                                 path = "::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{BB06C0E4-D293-4F75-8A90-CB05B6477EEE}";
                                 string spa_exe = Environment.GetEnvironmentVariable("systemroot") + "\\System32\\SystemPropertiesAdvanced.exe";
@@ -314,7 +309,7 @@ namespace Qwop {
                             break;
                     }
                     case 2 :{
-                            // 2. Personalization
+                            // 2. 显示
                             if ( IsWin7 )
                                 path = "::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}";
                             else if ( IsXP )
@@ -324,7 +319,7 @@ namespace Qwop {
 
                     case 3:
                         {
-                            // 3. Programs and Features
+                            // 3. 网络连接
                             if (IsWin7)
                                 path = "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}";
                             else if (IsXP)
@@ -341,7 +336,7 @@ namespace Qwop {
 
                         if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                         {
-                            MessageBox.Show("Current directory no longer exists");
+                            MessageBox.Show("当前目录已经删除");
                            // QTUtility.SoundPlay();
                             return;
                         }
@@ -349,7 +344,7 @@ namespace Qwop {
 
                         if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                         {
-                            MessageBox.Show("bin directory does not exist");
+                            MessageBox.Show("bin目录不存在");
                            // QTUtility.SoundPlay();
                             return;
                         }
@@ -358,7 +353,7 @@ namespace Qwop {
 
                         if (String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath))
                         {
-                            MessageBox.Show("lib directory does not exist");
+                            MessageBox.Show("lib目录不存在");
                           //  QTUtility.SoundPlay();
                             return;
                         }
@@ -373,13 +368,13 @@ namespace Qwop {
                                 envKey.SetValue("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;" );
                             }
                             SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
-                            MessageBox.Show("JAVA_HOME set successfully");
+                            MessageBox.Show("设置JAVA_HOME成功");
                         }
                         break;
                     }
                     case 44:
                         {
-                            // 3. Set JAVA_HOME to the current directory
+                            // 3. 设置当前目录JAVA_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine( selectedPath, "bin" );
                             string libPath = Path.Combine( selectedPath, "lib" );
@@ -388,14 +383,14 @@ namespace Qwop {
 
 
                             if(String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath)) {
-                                MessageBox.Show("Current directory no longer exists");
+                                MessageBox.Show("当前目录已经删除");
                                // QTUtility.SoundPlay();
                                 return;
                             }
 
  
                             if(String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath)) {
-                                MessageBox.Show("bin directory does not exist");
+                                MessageBox.Show("bin目录不存在");
                               //  QTUtility.SoundPlay();
                                 return;
                             }
@@ -403,7 +398,7 @@ namespace Qwop {
 
  
                             if(String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath)) {
-                                MessageBox.Show("lib directory does not exist");
+                                MessageBox.Show("lib目录不存在");
                               //  QTUtility.SoundPlay();
                                 return;
                             }
@@ -411,7 +406,7 @@ namespace Qwop {
                             /*
  
                             if(String.IsNullOrEmpty(toolsJar) || !File.Exists(toolsJar)) {
-                                MessageBox.Show("tools.jar does not exist");
+                                MessageBox.Show("toolsJar不存在");
                                 QTUtility.SoundPlay();
                                 return;
                             }
@@ -419,7 +414,7 @@ namespace Qwop {
 
  
                             if(String.IsNullOrEmpty(toolsJar) || !File.Exists(dtJar)) {
-                                MessageBox.Show("dt.jar does not exist");
+                                MessageBox.Show("dtJar不存在");
                                 QTUtility.SoundPlay();
                                 return;
                             }
@@ -428,7 +423,7 @@ namespace Qwop {
 
                           //  Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
                            // Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;", EnvironmentVariableTarget.Machine);
-                            // De-duplicate; check whether it contains a java home entry to delete
+                            // 去重， 判断是否有 java home 删掉
                             string oldpath = filterEmpty( "java.exe" );
 
 
@@ -458,12 +453,12 @@ namespace Qwop {
                             //                    .Invoke();
                             Thread.Sleep(800);
 
-                            MessageBox.Show("JAVA_HOME set successfully");
+                            MessageBox.Show("设置JAVA_HOME成功");
                             break;
                         }
                     case 55:
                         {
-                            // 5. Set M2_HOME to the current directory
+                            // 5. 设置当前目录M2_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string mvnCmd = Path.Combine(binPath, "mvn.cmd");
@@ -471,7 +466,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
-                                MessageBox.Show("Current directory no longer exists");
+                                MessageBox.Show("当前目录已经删除");
                                // QTUtility.SoundPlay();
                                 return;
                             }
@@ -479,7 +474,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
-                                MessageBox.Show("bin directory does not exist");
+                                MessageBox.Show("bin目录不存在");
                              //   QTUtility.SoundPlay();
                                 return;
                             }
@@ -489,7 +484,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(mvnCmd) || !File.Exists(mvnCmd))
                             {
-                                MessageBox.Show("mvn.cmd does not exist");
+                                MessageBox.Show("mvnCmd不存在");
                               //  QTUtility.SoundPlay();
                                 return;
                             }
@@ -520,20 +515,20 @@ namespace Qwop {
                                 envKey.SetValue("M2_HOME", selectedPath);
 
                                 SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
-                                MessageBox.Show("M2_HOME set successfully");
+                                MessageBox.Show("设置M2_HOME成功");
                             }
                             break;
                         }
                     case 4:
                         {
-                            // 4. View system info
+                            // 4. 查看系统信息
                             string msinfo32 = Environment.GetEnvironmentVariable("systemroot") + "\\System32\\msinfo32.exe";
                             Process.Start(msinfo32);
                             break;
                         }
                     case 5:
                         {
-                            // 5. Open File Explorer
+                            // 5. 重启资源管理器
                             /*
                             foreach (Process p in Process.GetProcesses())
                             {
@@ -548,27 +543,27 @@ namespace Qwop {
                             Thread.Sleep(800);
                             Process.Start("explorer.exe");*/
                             string MyDosComLine1, MyDosComLine2, MyDosComLine3;
-                            MyDosComLine1 = "taskkill /f /im explorer.exe";//Restart the process for that directory
-                            MyDosComLine2 =  "start explorer.exe";//Launch the MyFiles directory
+                            MyDosComLine1 = "taskkill /f /im explorer.exe";//返回根目录命令
+                            MyDosComLine2 =  "start explorer.exe";//进入MyFiles目录
                             Process myProcess = new Process();
 
-                            myProcess.StartInfo.FileName = "cmd.exe ";//Open the DOS command shell 
+                            myProcess.StartInfo.FileName = "cmd.exe ";//打开DOS控制平台 
                             myProcess.StartInfo.UseShellExecute = false;
-                            myProcess.StartInfo.CreateNoWindow = true;//Whether to show the DOS window; true = do not show;
+                            myProcess.StartInfo.CreateNoWindow = true;//是否显示DOS窗口，true代表隐藏;
                             myProcess.StartInfo.RedirectStandardInput = true;
                             myProcess.StartInfo.RedirectStandardOutput = true;
                             myProcess.StartInfo.RedirectStandardError = true;
                             myProcess.Start();
-                            StreamWriter sIn = myProcess.StandardInput;//Standard input stream 
+                            StreamWriter sIn = myProcess.StandardInput;//标准输入流 
                             sIn.AutoFlush = true;
-                            StreamReader sOut = myProcess.StandardOutput;//Standard output stream
+                            StreamReader sOut = myProcess.StandardOutput;//标准输入流
 
-                            StreamReader sErr = myProcess.StandardError;//Standard error stream 
-                            sIn.Write(MyDosComLine1 + System.Environment.NewLine);//First DOS command 
-                            sIn.Write(MyDosComLine2 + System.Environment.NewLine);//Second DOS command 
-                            sIn.Write("exit" + System.Environment.NewLine);//exit, the DOS command exits the DOS window
-                            string s = sOut.ReadToEnd();//Get the output from running the DOS command 
-                            string er = sErr.ReadToEnd();//Get the error from running the DOS command
+                            StreamReader sErr = myProcess.StandardError;//标准错误流 
+                            sIn.Write(MyDosComLine1 + System.Environment.NewLine);//第一条DOS命令 
+                            sIn.Write(MyDosComLine2 + System.Environment.NewLine);//第二条DOS命令 
+                            sIn.Write("exit" + System.Environment.NewLine);//第四条DOS命令，退出DOS窗口
+                            string s = sOut.ReadToEnd();//读取执行DOS命令后输出信息 
+                            string er = sErr.ReadToEnd();//读取执行DOS命令后错误信息
                             if (myProcess.HasExited == false)
                             {
                                 myProcess.Kill();
@@ -584,7 +579,7 @@ namespace Qwop {
                         }
                     case 6:
                         {
-                            // 6. Restart
+                            // 6. 关机
                             IntPtr handle = GetShellTrayWnd();
                             CloseExplorer(handle, 1);
                             // PInvoke.PostMessage(hwndExplr, WM.CLOSE, IntPtr.Zero, (IntPtr)nCode)
@@ -593,14 +588,14 @@ namespace Qwop {
                         }
                     case 99:
                         {
-                            // 9. Set ANT_HOME to the current directory
+                            // 9. 设置当前目录ANT_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string antCmd = Path.Combine(binPath, "ant.cmd");
 
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
-                                MessageBox.Show("Current directory no longer exists");
+                                MessageBox.Show("当前目录已经删除");
                                // QTUtility.SoundPlay();
                                 return;
                             }
@@ -608,7 +603,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
-                                MessageBox.Show("bin directory does not exist");
+                                MessageBox.Show("bin目录不存在");
                                // QTUtility.SoundPlay();
                                 return;
                             }
@@ -616,7 +611,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(antCmd) || !File.Exists(antCmd))
                             {
-                                MessageBox.Show("ant.cmd does not exist");
+                                MessageBox.Show("antCmd不存在");
                               //  QTUtility.SoundPlay();
                                 return;
                             }
@@ -628,20 +623,20 @@ namespace Qwop {
                                 envKey.SetValue("ANT_HOME", selectedPath);
                                 envKey.SetValue("PATH", joinDevPath(oldPath));
                                 SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
-                                MessageBox.Show("ANT_HOME set successfully");
+                                MessageBox.Show("设置ANT_HOME成功");
                             }
                             break;
                         }
                     case 10:
                         {
-                            // 10. Set MVND_HOME to the current directory
+                            // 10. 设置当前目录MVND_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string mvndexe = Path.Combine(binPath, "mvnd.exe");
 
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
-                                MessageBox.Show("Current directory no longer exists");
+                                MessageBox.Show("当前目录已经删除");
                                // QTUtility.SoundPlay();
                                 return;
                             }
@@ -649,7 +644,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
-                                MessageBox.Show("bin directory does not exist");
+                                MessageBox.Show("bin目录不存在");
                              //   QTUtility.SoundPlay();
                                 return;
                             }
@@ -657,7 +652,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(mvndexe) || !File.Exists(mvndexe))
                             {
-                                MessageBox.Show("mvnd.exe does not exist");
+                                MessageBox.Show("mvndexe不存在");
                              //   QTUtility.SoundPlay();
                                 return;
                             }
@@ -669,7 +664,7 @@ namespace Qwop {
                                 envKey.SetValue("MVND_HOME", selectedPath);
                                 envKey.SetValue("PATH", joinDevPath(oldPath));
                                 SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
-                                MessageBox.Show("MVND_HOME set successfully");
+                                MessageBox.Show("设置MVND_HOME成功");
                             }
                             break;
                         }
@@ -677,7 +672,7 @@ namespace Qwop {
 
                     case 7:
                         {
-                            // 11. Launch as administrator
+                            // 11. 管理员方式启动
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string mvndexe = Path.Combine(binPath, "mvnd.exe");
@@ -740,12 +735,12 @@ namespace Qwop {
                                 }).Start();*/
                             }
                             else {
-                                MessageBox.Show( "SetHome executable not found");
+                                MessageBox.Show( "未找到可执行文件SetHome");
                             }
                             break;
                         }
 
-                    case 8:  // Delete group files
+                    case 8:  // 删除group文件
                         {
                             string startUpFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
                             try
@@ -761,7 +756,7 @@ namespace Qwop {
                             break;
                         }
 
-                    case 9:  // Delete QTTabBarException.log
+                    case 9:  // 删除 QTTabBarException.log
                     {
                         
                         string notepadExe = GuessNotepadPath();
@@ -808,13 +803,13 @@ namespace Qwop {
                 {
                     case 0:
                         {
-                            // 0. My Documents
+                            // 0. 我的文档
                             path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                             break;
                         }
                     case 1:
                         {
-                            // 1. System
+                            // 1. 系统
                             if (IsWin7)
                             {
                                 path = "::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{BB06C0E4-D293-4F75-8A90-CB05B6477EEE}";
@@ -825,7 +820,7 @@ namespace Qwop {
                         }
                     case 2:
                         {
-                            // 2. Personalization
+                            // 2. 显示
                             if (IsWin7)
                                 path = "::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}";
                             else if (IsXP)
@@ -908,7 +903,7 @@ namespace Qwop {
     //    internal static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
         //   internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
 
-        #region  Import DLLs
+        #region  引入dll
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
@@ -921,7 +916,7 @@ namespace Qwop {
         #endregion
 
 
-        // Close Explorer, send the close message
+        // 关闭资源管理器，发送关闭消息
         public static void CloseExplorer(IntPtr hwndExplr, int nCode, bool doAsync = false)
         {
             if (IsXP && nCode == 0) nCode = 3;

@@ -21,7 +21,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BandObjectLib;
 using Microsoft.Win32;
-using QTTabBarLib.Interop;
 using SHDocVw;
 
 namespace QTTabBarLib {
@@ -41,7 +40,7 @@ namespace QTTabBarLib {
                 key.SetValue("HelpText", "QTTabBar AutoLoader");
             }
             Registry.LocalMachine.CreateSubKey(BHOKEYNAME + name);
-            QTUtility2.flog( "AutoLoader registry: QTTabBar auto-load (install)");
+            QTUtility2.flog( "AutoLoader 注册表 QTTabBar 自动加载(安装)");
         }
 
         [ComUnregisterFunction]
@@ -49,19 +48,20 @@ namespace QTTabBarLib {
             using(RegistryKey key = Registry.LocalMachine.CreateSubKey(BHOKEYNAME)) {
                 key.DeleteSubKey(t.GUID.ToString("B"), false);
             }
-            QTUtility2.flog("AutoLoader registry: QTTabBar auto-load (uninstall)");
+            QTUtility2.flog("AutoLoader 注册表 QTTabBar 自动加载(卸载)");
         }
 
         public int SetSite(object site) {
-            // SetProcessDPIAware only exists on Vista and later - calling it directly would make the program incompatible with XP
+            // SetProcessDPIAware是Vista以上才有的函数，这样直接调用会使得程序不兼容XP
             // PInvoke.SetProcessDPIAware();
+            // QTUtility2.log("QTUtility AutoLoader SetSite SetProcessDPIAware 不兼容XP");
             QTUtility2.log("SetSite");
             explorer = site as IWebBrowser2;
             // QTUtility2.flog("QTTabBar AutoLoader SetSite ");
             /*if(explorer == null || Process.GetCurrentProcess().ProcessName == "iexplore") {
                 QTUtility2.log("QTTabBar AutoLoader SetSite Throw Exception ");
                 // QTUtility2.flog("QTTabBar AutoLoader SetSite Throw Exception ");
-                // Raise an exception with a specific failure HRESULT based on the given IErrorInfo interface
+                // 基于指定的 IErrorInfo 接口，用特定失败 HRESULT 引发异常
                 Marshal.ThrowExceptionForHR(E_FAIL);
             }
             else {*/
@@ -71,40 +71,6 @@ namespace QTTabBarLib {
                 QTUtility2.log("QTTabBar AutoLoader SetSite ActivateIt ");
                 // QTUtility2.flog("QTTabBar AutoLoader SetSite ActivateIt ");
                 ActivateIt();
-
-                // Normally the toolbar band triggers this on load. Without a band (e.g.
-                // Explorer never hosts the toolbar), InstanceManager/Config/etc. are
-                // never set up, so force it before checking the setting below.
-                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(QTUtility).TypeHandle);
-                // Windows 10 still has a real toolbar rebar - users enable QTTabBar (and
-                // separately QTButtonBar, if they only want one of the two) through
-                // Explorer's own View > Toolbars menu there, same as any other classic
-                // toolband. This auto-attach path never parents into a real rebar (see
-                // ContextMenuOptions.AttachToWindow), so it only ever gives double-click
-                // and hover preview, not tabs - worth running only where Windows 11's
-                // lack of a rebar leaves no other way to get even that much.
-                if (QTUtility.IsWin11 && Config.Window.AutoEnableExperimental) {
-                    // SetSite fires far earlier in the window's life than the existing
-                    // right-click "Enable QTTabBar" path ever did (that only ever ran on an
-                    // already-open, already-visible window). Attaching here immediately once
-                    // took down Explorer's ability to open further windows at all. Instead,
-                    // poll (on this same thread's own message loop, via a WinForms Timer, so
-                    // there's no cross-thread risk) until the window is actually visible
-                    // before attaching, and give up quietly after a few tries rather than
-                    // retrying forever if something's wrong.
-                    IWebBrowser2 wb = explorer;
-                    ActionDelayer.Add(() => {
-                        try {
-                            IntPtr hwnd = (IntPtr)wb.HWND;
-                            if (hwnd == IntPtr.Zero || !PInvoke.IsWindowVisible(hwnd)) return false;
-                            ContextMenuOptions.AttachToWindow(wb);
-                        }
-                        catch {
-                            // Fall through - treat as "done trying", not "keep retrying".
-                        }
-                        return true;
-                    }, 500, 500, 10);
-                }
             }
 
             return 0;

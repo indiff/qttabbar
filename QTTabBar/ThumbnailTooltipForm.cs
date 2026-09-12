@@ -1,4 +1,4 @@
-//    This file is part of QTTabBar, a shell extension for Microsoft
+﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
 //    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
@@ -15,6 +15,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
+using BandObjectLib;
+using MultiLanguage;
+using QTTabBarLib.Interop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,17 +28,13 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Forms.VisualStyles;
-using BandObjectLib;
-using MultiLanguage;
-using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
     /**
-     * Preview form
+     * 预览窗口
      */
     internal sealed class ThumbnailTooltipForm : Form {
         private const string EMPTYFILE = "  *empty file";
@@ -85,9 +84,11 @@ namespace QTTabBarLib {
         /// static fields.
         /// </summary>
         private static string supportedImages;
-        // Supported movie formats
+        // 支持的视频格式
         private static string supportedMovies = ".asx;.dvr-ms;.mp2;.flv;..mkv;.ts;.3g2;.3gp;.3gp2;.3gpp;.amr;.amv;.asf;.avi;.bdmv;.bik;.d2v;.divx;.drc;.dsa;.dsm;.dss;.dsv;.evo;.f4v;.flc;.fli;.flic;.flv;.hdmov;.ifo;.ivf;.m1v;.m2p;.m2t;.m2ts;.m2v;.m4b;.m4p;.m4v;.mkv;.mp2v;.mp4;.mp4v;.mpe;.mpeg;.mpg;.mpls;.mpv2;.mpv4;.mov;.mts;.ogm;.ogv;.pss;.pva;.qt;.ram;.ratdvd;.rm;.rmm;.rmvb;.roq;.rpm;.smil;.smk;.swf;.tp;.tpr;.ts;.vob;.vp6;.webm;.wm;.wmp;.wmv";
 
+        // 新增：支持的文档预览格式（依赖系统已安装的Office/PDF阅读器）
+        private static string supportedDocuments = ".pdf;.doc;.docx;.xls;.xlsx;.ppt;.pptx;.odt;.ods;.odp";
 
         private static Encoding Encoding950 = Encoding.GetEncoding(950);
         private static Encoding Encoding936 = Encoding.GetEncoding(936);
@@ -101,7 +102,8 @@ namespace QTTabBarLib {
         private static bool _nullSuggestsBinary = true;
         private static double _utf16ExpectedNullPercent = 70;
         private static double _utf16UnexpectedNullPercent = 10;
-
+        // 新增：记录当前是否正在预览视频，便于清理
+        private bool isVideoPreviewActive = false;
 
 
         public ThumbnailTooltipForm() {
@@ -114,13 +116,123 @@ namespace QTTabBarLib {
             imageCacheStore.Clear();
         }
 
+        /// <summary>
+        /// 停止视频预览并释放资源
+        /// </summary>
+        private void StopVideoPreview()
+        {
+            if (!isVideoPreviewActive) return;
+            try
+            {
+                videoPlayer.Stop();
+                videoPlayer.Source = null;
+                videoHost.Visible = false;
+                isVideoPreviewActive = false;
+            }
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, "StopVideoPreview");
+            }
+        }
+
+        /// <summary>
+        /// 将所有预览控件重置到统一的初始隐藏状态
+        /// 必须在 CreateThumbnail 开头、以及 HideToolTip 中调用
+        /// </summary>
+        private void ResetAllPreviewControls()
+        {
+            // 停止视频
+            StopVideoPreview();
+
+            SuspendLayout();
+
+            // 统一隐藏所有预览载体
+            pictureBox1.Visible = false;
+            pictureBox1.Image = null;
+            pictureBox1.Dock = DockStyle.None; // 解除 Dock 避免布局干扰
+
+            videoHost.Visible = false;
+            videoHost.Dock = DockStyle.None;
+
+            lblText.Visible = false;
+            lblText.Text = string.Empty;
+            lblText.Dock = DockStyle.None;
+
+            lblInfo.Visible = false;
+            lblInfo.Text = string.Empty;
+            lblInfo.Dock = DockStyle.None;
+
+            ResumeLayout(false);
+        }
+
+
+
         private bool CreateThumbnail(string path, ref Size formSize) {
+            // ✅ 关键修复：每次创建缩略图前，彻底重置所有控件状态
+            ResetAllPreviewControls();
+
             string ext = Path.GetExtension(path).ToLower();
-            if(ExtIsImage(ext) || ExtIsVideo(ext)) {
+
+            // ================= 新增：视频预览逻辑 =================
+            // ================= 视频预览逻辑 =================
+            if (ExtIsVideo(ext))
+            {
                 FileInfo info = new FileInfo(path);
-                if(!info.Exists || (info.Length <= 0L)) {
+                if (!info.Exists || info.Length <= 0L) return false;
+
+                try
+                {
+                    int targetWidth = Config.Tips.PreviewMaxWidth;
+                    int targetHeight = Config.Tips.PreviewMaxHeight;
+                    int displayWidth = targetWidth;
+                    int displayHeight = targetHeight;
+
+                    formSize = new Size(displayWidth + 8, displayHeight + 8);
+
+                    SuspendLayout();
+
+                    // ✅ 显式设置视频模式的控件状态
+                    videoHost.Visible = true;
+                    videoHost.Size = new Size(displayWidth, displayHeight);
+                    videoHost.Dock = DockStyle.Fill;
+                    videoHost.BringToFront();
+
+                    if (Config.Tips.ShowPreviewInfo)
+                    {
+                        lblInfo.Text = $"{Path.GetFileName(path)}\r\n{FormatSize(info.Length)}\r\n{info.LastWriteTime}";
+                        lblInfo.Dock = DockStyle.Bottom;
+                        lblInfo.Visible = true;
+                        lblInfo.BringToFront();
+                        formSize.Height += lblInfo.Height > 0 ? lblInfo.Height : 50;
+                    }
+
+                    videoPlayer.Volume = 0.0;
+                    videoPlayer.LoadedBehavior = System.Windows.Controls.MediaState.Manual;
+                    videoPlayer.UnloadedBehavior = System.Windows.Controls.MediaState.Manual;
+                    videoPlayer.Stop();
+                    videoPlayer.Source = new Uri(path, UriKind.Absolute);
+                    videoPlayer.Play();
+
+                    isVideoPreviewActive = true;
+                    ResumeLayout(true); // ✅ 强制立即执行布局
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    QTUtility2.MakeErrorLog(e, "CreateThumbnail Video");
+                    isVideoPreviewActive = false;
                     return false;
                 }
+            }
+
+
+            // ================= 图片预览逻辑 =================
+            if (ExtIsImage(ext))
+            {
+                FileInfo info = new FileInfo(path);
+                if (!info.Exists || info.Length <= 0L) return false;
+
+                // ... existing cache lookup logic unchanged ...
                 bool flag = false;
                 bool thumbnail = false;
                 bool fCached = false;
@@ -128,18 +240,21 @@ namespace QTTabBarLib {
                 ImageData item = null;
                 Size empty = Size.Empty;
                 Size sizeActual = Size.Empty;
-                lblInfo.Text = string.Empty;
                 string toolTipText = null;
-                if((maxWidth != Config.Tips.PreviewMaxWidth) || (maxHeight != Config.Tips.PreviewMaxHeight)) {
+
+                if ((maxWidth != Config.Tips.PreviewMaxWidth) || (maxHeight != Config.Tips.PreviewMaxHeight))
+                {
                     maxWidth = Config.Tips.PreviewMaxWidth;
                     maxHeight = Config.Tips.PreviewMaxHeight;
-                    pictureBox1.Image = null;
                     imageCacheStore.Clear();
                     lstPathFailedThumbnail.Clear();
                 }
-                foreach(ImageData data2 in imageCacheStore) {
-                    if(data2.Path.PathEquals(path)) {
-                        if(data2.ModifiedDate == info.LastWriteTime) {
+                foreach (ImageData data2 in imageCacheStore)
+                {
+                    if (data2.Path.PathEquals(path))
+                    {
+                        if (data2.ModifiedDate == info.LastWriteTime)
+                        {
                             bitmap = data2.Bitmap;
                             thumbnail = data2.Thumbnail;
                             empty = data2.RawSize;
@@ -147,34 +262,34 @@ namespace QTTabBarLib {
                             toolTipText = data2.TooltipText;
                             flag = true;
                         }
-                        else {
+                        else
+                        {
                             item = data2;
                         }
                         break;
                     }
                 }
-                if(item != null) {
-                    imageCacheStore.Remove(item);
-                }
-                if(!flag) {
-                    try {
+                if (item != null) imageCacheStore.Remove(item);
+
+                if (!flag)
+                {
+                    try
+                    {
                         ImageData data3;
-                        if(!ExtIsDefaultImage(ext)) {
-                            if(lstPathFailedThumbnail.Contains(path)) {
-                                return false;
-                            }
+                        if (!ExtIsDefaultImage(ext))
+                        {
+                            if (lstPathFailedThumbnail.Contains(path)) return false;
                             thumbnail = true;
-                            if(!QTUtility.IsXP) {
-                                data3 = LoadThumbnail(path, info.LastWriteTime, out empty, out sizeActual, out toolTipText, out fCached);
-                            }
-                            else {
-                                data3 = LoadThumbnail2(path, info.LastWriteTime, out empty, out sizeActual, out toolTipText, out fCached);
-                            }
+                            data3 = !QTUtility.IsXP
+                                ? LoadThumbnail(path, info.LastWriteTime, out empty, out sizeActual, out toolTipText, out fCached)
+                                : LoadThumbnail2(path, info.LastWriteTime, out empty, out sizeActual, out toolTipText, out fCached);
                         }
-                        else {
+                        else
+                        {
                             data3 = LoadImageFile(path, info.LastWriteTime, out empty, out sizeActual);
                         }
-                        if(data3 == null) {
+                        if (data3 == null)
+                        {
                             lstPathFailedThumbnail.Add(path);
                             return false;
                         }
@@ -183,137 +298,148 @@ namespace QTTabBarLib {
                     }
                     catch (Exception e)
                     {
-                        QTUtility2.MakeErrorLog(e, "CreateThumbnail");
+                        QTUtility2.MakeErrorLog(e, "CreateThumbnail Image");
                         return false;
                     }
                 }
-                int width = 0x9e;
-                if(width < sizeActual.Width) {
-                    width = sizeActual.Width;
-                }
-                bool flag4 = false;
-                if(Config.Tips.ShowPreviewInfo) {
-                    SizeF ef;
+
+                int width = Math.Max(0x9e, sizeActual.Width);
+                bool noInfo = !Config.Tips.ShowPreviewInfo;
+
+                if (Config.Tips.ShowPreviewInfo)
+                {
                     string text = Path.GetFileName(path) + "\r\n";
-                    if(thumbnail && (toolTipText != null)) {
-                        text = text + toolTipText;
+                    if (thumbnail && toolTipText != null)
+                    {
+                        text += toolTipText;
                     }
-                    else {
-                        bool flag5 = sizeActual == empty;
-                        text = text + FormatSize(info.Length);
-                        if(!thumbnail) {
-                            object obj2 = text;
-                            text = string.Concat(new object[] { obj2, "    ( ", empty.Width, " x ", empty.Height, " )", flag5 ? string.Empty : "*" });
-                        }
-                        text = text + "\r\n" + info.LastWriteTime;
+                    else
+                    {
+                        bool sameSize = sizeActual == empty;
+                        text += FormatSize(info.Length);
+                        if (!thumbnail)
+                            text += $"    ( {empty.Width} x {empty.Height} ){(sameSize ? "" : "*")}";
+                        text += "\r\n" + info.LastWriteTime;
                     }
-                    using(Graphics graphics = lblInfo.CreateGraphics()) {
-                        ef = graphics.MeasureString(text, lblInfo.Font, (width - 8));
+                    using (Graphics g = lblInfo.CreateGraphics())
+                    {
+                        SizeF ef = g.MeasureString(text, lblInfo.Font, width - 8);
+                        lblInfo.Text = text;
+                        lblInfo.Width = width;
+                        lblInfo.Height = (int)(ef.Height + 8f);
                     }
-                    lblInfo.SuspendLayout();
-                    lblInfo.Text = text;
-                    lblInfo.Width = width;
-                    lblInfo.Height = (int)(ef.Height + 8f);
-                    lblInfo.ResumeLayout();
-                    formSize = new Size(width + 8, (sizeActual.Height + lblInfo.Height) + 8);
+                    formSize = new Size(width + 8, sizeActual.Height + lblInfo.Height + 8);
                 }
-                else {
-                    flag4 = true;
+                else
+                {
                     formSize = new Size(width + 8, sizeActual.Height + 8);
                 }
-                try {
+
+                try
+                {
                     SuspendLayout();
-                    if(flag4) {
-                        lblInfo.Dock = DockStyle.None;
-                    }
-                    else {
+
+                    // ✅ 显式设置图片模式的控件状态
+                    pictureBox1.Visible = true;
+                    pictureBox1.Dock = DockStyle.Fill;
+                    pictureBox1.SizeMode = (sizeActual != bitmap.Size)
+                        ? PictureBoxSizeMode.Zoom : PictureBoxSizeMode.CenterImage;
+                    pictureBox1.Image = bitmap;
+                    pictureBox1.BringToFront();
+
+                    if (!noInfo)
+                    {
                         lblInfo.Dock = DockStyle.Bottom;
+                        lblInfo.Visible = true;
                         lblInfo.BringToFront();
                     }
-                    pictureBox1.SuspendLayout();
-                    pictureBox1.SizeMode = (sizeActual != bitmap.Size) ? PictureBoxSizeMode.Zoom : PictureBoxSizeMode.CenterImage;
-                    pictureBox1.Image = bitmap;
-                    pictureBox1.ResumeLayout();
-                    pictureBox1.BringToFront();
-                    ResumeLayout();
+
+                    ResumeLayout(true); // ✅ 强制立即执行布局
                     return true;
                 }
-                catch(Exception exception) {
-                    QTUtility2.MakeErrorLog(exception);
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, "CreateThumbnail Image Layout");
                     return false;
                 }
             }
-            if(ExtIsText(ext)) { // If the preview is a text file
+
+            // ================= 文本预览逻辑 =================
+            if (ExtIsText(ext))
+            {
                 FileInfo textFileInfo = new FileInfo(path);
-                if(textFileInfo.Exists) {
-                    try {
-                        SizeF sizeF;
-                        bool fLoadedAll = false;
-                        bool isEmptyText = false;
-                        string content;
-                        ioException = null;
-                        // File preview logic
+                if (!textFileInfo.Exists) return false;
 
-                        /*if (textFileInfo.Length > 0L && textFileInfo.Length <= MAX_TEXT_LENGTH)
-                        {
-                            content = LoadTextFile(path, out fLoadedAll);
-                        }
-                        else if (textFileInfo.Length > 0L && textFileInfo.Length > MAX_TEXT_LENGTH)
-                        {
-                            content = LoadTextFile(path, MAX_TEXT_LENGTH, out fLoadedAll);
-                        }*/
+                try
+                {
+                    bool fLoadedAll = false;
+                    bool isEmptyText = false;
+                    string content;
+                    ioException = null;
 
-                        if (textFileInfo.Length > 0L)
-                        {
-                            // content = LoadTextFile2(path, out fLoadedAll);
-                            content = LoadTextFile3(path, out fLoadedAll);
-                        }
-                        else {
-                            isEmptyText = true;
-                            // str4 = "  *empty file";
-                            content = EMPTYFILE;
-                        }
-                        Color normalColor = QTUtility.InNightMode ? Color.White : SystemColors.InfoText;
-                        Color emptyColor = QTUtility.InNightMode ? Color.Gray : SystemColors.GrayText;
-                        lblText.ForeColor = (ioException != null) ? Color.Red : (isEmptyText ? emptyColor : normalColor);
-                        try {
-                            lblText.Font = Config.Tips.PreviewFont;
-                            fFontAsigned = true;
-                        }
-                        catch (Exception e)
-                        {
-                            QTUtility2.MakeErrorLog(e, "ExtIsText");
-                            fFontAsigned = false;
-                        }
-                        int num2 = 0x100;
-                        if(fFontAsigned) {
-                            num2 = Math.Max((int)(num2 * (Config.Tips.PreviewFont.SizeInPoints / DefaultFont.Size)), 0x80);
-                            formSize.Width = num2;
-                        }
-                        using(Graphics graphics2 = lblText.CreateGraphics()) {
-                            sizeF = graphics2.MeasureString(content, lblText.Font, num2);
-                        }
-                        if((sizeF.Height < 512f) || fLoadedAll) {
-                            formSize.Height = (int)(sizeF.Height + 8f);
-                        }
-                        else {
-                            formSize.Height = 0x200;
-                        }
-                        SuspendLayout();
-                        lblInfo.Dock = DockStyle.None;
-                        lblText.Text = content;
-                        lblText.BringToFront();
-                        ResumeLayout();
-                        return true;
+                    if (textFileInfo.Length > 0L)
+                    {
+                        content = LoadTextFile3(path, out fLoadedAll);
                     }
-                    catch(Exception exception2) {
-                        QTUtility2.MakeErrorLog(exception2, null);
-                        return false;
+                    else
+                    {
+                        isEmptyText = true;
+                        content = EMPTYFILE;
                     }
+
+                    lblText.ForeColor = (ioException != null) ? Color.Red
+                        : (isEmptyText ? SystemColors.GrayText : SystemColors.InfoText);
+                    try
+                    {
+                        lblText.Font = Config.Tips.PreviewFont;
+                        fFontAsigned = true;
+                    }
+                    catch (Exception e)
+                    {
+                        QTUtility2.MakeErrorLog(e, "ExtIsText Font");
+                        fFontAsigned = false;
+                    }
+
+                    int num2 = 0x100;
+                    if (fFontAsigned)
+                    {
+                        num2 = Math.Max((int)(num2 * (Config.Tips.PreviewFont.SizeInPoints / DefaultFont.Size)), 0x80);
+                    }
+                    formSize.Width = num2;
+
+                    using (Graphics g = lblText.CreateGraphics())
+                    {
+                        SizeF sizeF = g.MeasureString(content, lblText.Font, num2);
+                        formSize.Height = (sizeF.Height < 512f || fLoadedAll)
+                            ? (int)(sizeF.Height + 8f) : 0x200;
+                    }
+
+                    SuspendLayout();
+
+                    // ✅ 显式设置文本模式的控件状态
+                    lblText.Visible = true;
+                    lblText.Dock = DockStyle.Fill;
+                    lblText.Text = content;
+                    lblText.BringToFront();
+
+                    // 文本模式不需要 lblInfo
+                    lblInfo.Visible = false;
+                    lblInfo.Dock = DockStyle.None;
+
+                    ResumeLayout(true); // ✅ 强制立即执行布局
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, "CreateThumbnail Text");
+                    return false;
                 }
             }
+
             return false;
         }
+
+       
 
         protected override void Dispose(bool disposing) {
             imageCacheStore.Clear();
@@ -343,9 +469,10 @@ namespace QTTabBarLib {
         private static bool ExtIsVideo(string ext) {
             return (ext.Length != 0 && GetConfiguredVideoExts().Contains(ext.ToLower()));
         }
-
-        public static bool ExtIsSupported(string ext) {
-            if(!ExtIsImage(ext) && !ExtIsVideo(ext)) {
+        public static bool ExtIsSupported(string ext)
+        {
+            if (!ExtIsImage(ext) && !ExtIsVideo(ext))
+            {
                 return ExtIsText(ext);
             }
             return true;
@@ -354,6 +481,7 @@ namespace QTTabBarLib {
         private static bool ExtIsText(string ext) {
             return (ext.Length != 0 && GetConfiguredTextExts().Contains(ext.ToLower()));
         }
+
 
         private static string FormatSize(long size) {
             string str = size + " bytes";
@@ -381,15 +509,42 @@ namespace QTTabBarLib {
             return supportedImages;
         }
 
-        public bool HideToolTip() {
-            if(fIsShownByKey) {
+        public bool HideToolTip2()
+        {
+            // 隐藏时务必停止视频
+            StopVideoPreview();
+
+            if (fIsShownByKey)
+            {
                 fIsShownByKey = false;
                 return false;
             }
             isShowing = false;
             PInvoke.ShowWindow(Handle, 0);
             pictureBox1.Image = null;
-            if(ThumbnailVisibleChanged != null) {
+
+            if (ThumbnailVisibleChanged != null)
+            {
+                ThumbnailVisibleChanged(this, new QEventArgs(ArrowDirection.Down));
+            }
+            return true;
+        }
+
+        public bool HideToolTip() {
+
+            // 隐藏时务必停止视频
+            StopVideoPreview();
+
+            if (fIsShownByKey) {
+                fIsShownByKey = false;
+                return false;
+            }
+            isShowing = false;
+            PInvoke.ShowWindow(Handle, 0);
+            pictureBox1.Image = null;
+
+
+            if (ThumbnailVisibleChanged != null) {
                 ThumbnailVisibleChanged(this, new QEventArgs(ArrowDirection.Down));
             }
             return true;
@@ -402,6 +557,8 @@ namespace QTTabBarLib {
             videoPlayer.LoadedBehavior = System.Windows.Controls.MediaState.Manual;
             videoPlayer.UnloadedBehavior = System.Windows.Controls.MediaState.Manual;
             videoPlayer.ScrubbingEnabled = true;
+
+
             videoHost = new ElementHost();
             videoHost.Dock = DockStyle.None;
             videoHost.BackColor = Color.Black;
@@ -411,9 +568,7 @@ namespace QTTabBarLib {
             lblInfo = new Label();
             ((ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            Color foreColor = QTUtility.InNightMode ? Color.White : SystemColors.InfoText;
-            Color backColor = QTUtility.InNightMode ? Color.FromArgb(32, 32, 32) : SystemColors.Info;
-            lblInfo.ForeColor = foreColor;
+            lblInfo.ForeColor = SystemColors.InfoText;
             lblInfo.BackColor = Color.Transparent;
             lblInfo.Dock = DockStyle.Bottom;
             lblInfo.Padding = new Padding(4);
@@ -427,7 +582,7 @@ namespace QTTabBarLib {
             pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             pictureBox1.TabStop = false;
             lblText.AutoEllipsis = true;
-            lblText.ForeColor = foreColor;
+            lblText.ForeColor = SystemColors.InfoText;
             lblText.BackColor = Color.Transparent;
             lblText.Dock = DockStyle.Fill;
             lblText.Location = new Point(0, 0);
@@ -436,7 +591,7 @@ namespace QTTabBarLib {
             lblText.UseMnemonic = false;
             AutoScaleDimensions = new SizeF(6f, 13f);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = backColor;
+            BackColor = SystemColors.Info;
             ClientSize = new Size(0x100, 0x80);
             Controls.Add(lblText);
             Controls.Add(pictureBox1);
@@ -497,10 +652,10 @@ namespace QTTabBarLib {
         }
 
         /// <summary> 
-        /// Given the file's path, read the file's binary data and determine the file's text encoding
+        /// 给定文件的路径，读取文件的二进制数据，判断文件的编码类型 
         /// </summary> 
-        /// <param name="FILE_NAME">File path</param> 
-        /// <returns>The file's text encoding</returns> 
+        /// <param name=“FILE_NAME“>文件路径</param> 
+        /// <returns>文件的编码类型</returns> 
         public static System.Text.Encoding GetType(string FILE_NAME)
         {
             FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
@@ -510,15 +665,15 @@ namespace QTTabBarLib {
         }
 
         /// <summary> 
-        /// Determine the file's text encoding from the given file stream
+        /// 通过给定的文件流，判断文件的编码类型 
         /// </summary> 
-        /// <param name="fs">File stream</param> 
-        /// <returns>The file's text encoding</returns> 
+        /// <param name=“fs“>文件流</param> 
+        /// <returns>文件的编码类型</returns> 
         public static System.Text.Encoding GetType(FileStream fs)
         {
             byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
             byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-            byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //has a BOM 
+            byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //带BOM 
             Encoding reVal = Encoding.Default;
 
             BinaryReader r = new BinaryReader(fs, System.Text.Encoding.Default);
@@ -548,20 +703,20 @@ namespace QTTabBarLib {
         } 
 
         /// <summary> 
-        /// Algorithm for determining whether it's UTF-8 with a BOM:
-        /// BOM stands for Byte Order Mark, i.e. a byte-order marker.
-        /// UTF-8 doesn't need a BOM to indicate byte order, but a BOM does indicate the encoding.
-        /// Windows can't tell a text file's encoding without a BOM,
-        /// so it can't distinguish UTF-8 from ASCII and similar encodings,
-        /// causing problems outside Windows (e.g. on Linux and other platforms).
+        /// 判断是否带BOM的UTF8格式（估算方法）
+        /// BOM：Byte Order Mark，定义字节顺序。
+        /// UTF-8不需要BOM表明字节顺序，但用BOM来表示编码方式。
+        /// Windows就是采用BOM来标记文本文件的编码方式的，
+        /// 可以把UTF-8和ASCII等编码区分开来，
+        /// 但在Windows之外（如，Linux ），会带来问题。
         /// </summary> 
         /// <param name="data"></param> 
         /// <returns></returns> 
         private static bool IsUTF8Bytes(byte[] data)
         {
-            // Byte count
+            // 字节数
             int charByteCounter = 1;
-            // Current byte
+            // 当前字节
             byte curByte;
             for (int i = 0; i < data.Length; i++)
             {
@@ -570,13 +725,13 @@ namespace QTTabBarLib {
                 {
                     if (curByte >= 0x80)
                     {
-                        // Check the current byte
+                        // 判断当前 
                         while (((curByte <<= 1) & 0x80) != 0)
                         {
                             charByteCounter++;
                         }
-                        // If the leading bit is not '0', count starting from 2 or 1
-                        // e.g.:110XXXXX...........1111110X 
+                        // 标记位首位若为非0 则至少以2个1开始
+                        // 如:110XXXXX...........1111110X 
                         if (charByteCounter == 1 || charByteCounter > 6)
                         {
                             return false;
@@ -585,7 +740,7 @@ namespace QTTabBarLib {
                 }
                 else
                 {
-                    // If it is UTF-8, the leading bit must be 1 here 
+                    // 若是UTF-8 此时第一位必须为1 
                     if ((curByte & 0xC0) != 0x80)
                     {
                         return false;
@@ -676,6 +831,7 @@ namespace QTTabBarLib {
             detechted = DetectEncoding(buffer);
             if (detechted != null)
             {
+                // QTUtility2.log(" try get DetectInputCodepage " + detechted.EncodingName + " " + detechted.CodePage);
                 QTUtility2.log(" try get DetectEncoding " + detechted.EncodingName + " " + detechted.CodePage);
                 return detechted.GetString(buffer);
             }
@@ -716,7 +872,7 @@ namespace QTTabBarLib {
             }
             if (info.nCodePage == Encoding.ASCII.CodePage)
             {
-                //ASCII and UTF-8 are compatible
+                //ASCIIのときはUTF-8にする
                 return Encoding.UTF8;
             }
             return Encoding.GetEncoding((int)info.nCodePage);
@@ -817,12 +973,12 @@ namespace QTTabBarLib {
         }
 
         /**
-         * codepage=936 Simplified Chinese GBK
-            codepage=950 Traditional Chinese BIG5
-            codepage=437 US/Canada English
-            codepage=932 Japanese
-            codepage=949 Korean
-            codepage=866 Russian
+         * codepage=936 简体中文GBK
+            codepage=950 繁体中文BIG5
+            codepage=437 美国/加拿大英语
+            codepage=932 日文
+            codepage=949 韩文
+            codepage=866 俄文
          */
         public static Encoding TryGetEncoding(byte[] bytes)
         {
@@ -1184,24 +1340,24 @@ namespace QTTabBarLib {
 
         public static bool IsTragetEncoding(byte[] bytes, Encoding targetEncoding)
         {
-            //Convert byte[] to string, then back to byte[]; check whether the byte count matches
+            //將byte[]轉為string再轉回byte[]看位元數是否有變
             var stringWithTragetEncoding = targetEncoding.GetString(bytes);
             var bytesWithTragetEncodingCount = targetEncoding.GetByteCount(stringWithTragetEncoding);
             return bytes.Length == bytesWithTragetEncodingCount;
         }
 
         /// <summary> 
-        /// Determine the file's text encoding
+        /// 判断文件流的编码类型 
         /// </summary> 
-        /// <param name="filestream">File stream</param> 
-        /// <returns>The text encoding</returns> 
+        /// <param name="filestream">文件流</param> 
+        /// <returns>流的编码类型</returns> 
         private static Encoding GetStreamEncoding(byte[] ss)
         {
             try
             {
                 byte[] Unicode = new byte[] { 0xFF, 0xFE, 0x41 };
                 byte[] UnicodeBIG = new byte[] { 0xFE, 0xFF, 0x00 };
-                //has a BOM 
+                //带BOM 
                 byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF };
                 Encoding reVal = Encoding.Default;
                 if (IsUTF8Bytes(ss) || (ss[0] == 0xEF && ss[1] == 0xBB && ss[2] == 0xBF))
@@ -1532,8 +1688,12 @@ namespace QTTabBarLib {
         }
 
         internal static List<string> MakeDefaultImgExts() {
-            string strs = GetGDIPSupportedImages();
-            if(QTUtility.IsEmptyStr(strs)) {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(GetGDIPSupportedImages());
+            builder.Append(supportedMovies);
+            var strs = builder.ToString();
+            if (QTUtility.IsEmptyStr(strs))
+            {
                 return new List<string>();
             }
             return new List<string>(strs.Split(QTUtility.SEPARATOR_CHAR));
@@ -1547,16 +1707,12 @@ namespace QTTabBarLib {
         }
 
         protected override void OnPaintBackground(PaintEventArgs e) {
-            // The themed tooltip visual style part is always light regardless of app
-            // dark mode, so it can't be used when InNightMode - paint manually instead.
-            if(!QTUtility.IsXP && !QTUtility.InNightMode && VisualStyleRenderer.IsSupported) {
+            if(!QTUtility.IsXP && VisualStyleRenderer.IsSupported) {
                 new VisualStyleRenderer(VisualStyleElement.ToolTip.Standard.Normal).DrawBackground(e.Graphics, new Rectangle(0, 0, Width, Height));
             }
             else {
                 base.OnPaintBackground(e);
-                Pen borderPen = QTUtility.InNightMode ? new Pen(Color.FromArgb(83, 83, 83)) : SystemPens.InfoText;
-                e.Graphics.DrawRectangle(borderPen, new Rectangle(0, 0, Width - 1, Height - 1));
-                if(QTUtility.InNightMode) borderPen.Dispose();
+                e.Graphics.DrawRectangle(SystemPens.InfoText, new Rectangle(0, 0, Width - 1, Height - 1));
             }
         }
 

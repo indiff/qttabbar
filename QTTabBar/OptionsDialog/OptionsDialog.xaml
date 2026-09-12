@@ -2,7 +2,7 @@
 <!--
     This file is part of QTTabBar, a shell extension for Microsoft
     Windows Explorer.
-    Copyright (C) 2007-2021  Quizo, Paul Accisano
+    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 
     QTTabBar is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
     xmlns:qt="clr-namespace:QTTabBarLib"
     x:Class="QTTabBarLib.OptionsDialog"
     x:ClassModifier="internal"
-    Background="{DynamicResource ThemeBackgroundBrush}"
+    Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
     Height="650"
     Title="{qt:Resx Key=OptionsDialog, Index=0}"
     ToolTip="{qt:Resx Key=OptionsDialog, Index=0}"
@@ -57,7 +57,7 @@
             LastChildFill="False"
             VerticalAlignment="Center">
             <DockPanel.Resources>
-                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                <Style TargetType="{x:Type Button}">
                     <Setter Property="Height" Value="22"/>
                     <Setter Property="Margin" Value="3,0"/>
                     <Setter Property="Padding" Value="0"/>
@@ -96,6 +96,17 @@
             SelectionMode="Single"
             PreviewMouseWheel="lstCategories_PreviewMouseWheel"
             Width="136">
+            <ListBox.Resources>
+                <SolidColorBrush 
+                    x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                    Color="White"/>
+                <SolidColorBrush 
+                    x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                    Color="Black"/>
+                <SolidColorBrush 
+                    x:Key="{x:Static SystemColors.ControlBrushKey}"
+                    Color="White"/>
+            </ListBox.Resources>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
@@ -113,18 +124,17 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid
-                        Background="{DynamicResource ThemeFieldBrush}"
+                        Background="#d8ded9"
                         Height="25"
                         Margin="0,1"
                         Cursor="Hand"
                         Width="128">
-                        <Image x:Name="imgCategorySelection"
+                        <Image x:Name="imgCategorySelection" 
                             Visibility="Collapsed"/>
                         <TextBlock
                             Margin="10,1"
                             Text="{qt:Resx Key=TabBar_Option_Genre}"
 							HorizontalAlignment="center"
-                            Foreground="{DynamicResource ThemeForegroundBrush}"
                             VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -165,7 +175,7 @@
 
         <!-- The main TabControl -->
     	<TabControl x:Name="tabbedPanel"
-            Background="{DynamicResource ThemeBackgroundBrush}"
+            Background="{StaticResource {x:Static SystemColors.ControlLightLightBrushKey}}"
             Grid.Column="1"
             Margin="0,3,3,0"
             Padding="0"

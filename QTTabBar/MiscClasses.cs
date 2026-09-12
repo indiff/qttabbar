@@ -191,25 +191,83 @@ namespace QTTabBarLib {
             Delegate = del;
         }
 
-        public SerializeDelegate(SerializationInfo info, StreamingContext context) {
-            Type delType = (Type)info.GetValue("delegateType", typeof(Type));
+        public SerializeDelegate(SerializationInfo info, StreamingContext context)
+        {
+            try
+            {
+                Type delType = null;
+                try
+                {
+                    delType = (Type)info.GetValue("delegateType", typeof(Type));
+                }
+                catch (SerializationException)
+                {
+                    // 兼容历史/异常数据中缺失 delegateType 的情况
+                }
 
-            // Type classType = (Type)info.GetValue("classType", typeof(Type));
-            // obj = Activator.CreateInstance(classType);
+                bool isSerializable = false;
+                try
+                {
+                    isSerializable = info.GetBoolean("isSerializable");
+                }
+                catch (SerializationException)
+                {
+                    Delegate = null;
+                    return;
+                }
 
-            //If it's a "simple" delegate we just read it straight off
-            if (info.GetBoolean("isSerializable")) {
-                Delegate = (Delegate)info.GetValue("delegate", delType);
+                //If it's a "simple" delegate we just read it straight off
+                if (isSerializable)
+                {
+                    if (delType == null)
+                    {
+                        Delegate = info.GetValue("delegate", typeof(Delegate)) as Delegate;
+                    }
+                    else
+                    {
+                        Delegate = (Delegate)info.GetValue("delegate", delType);
+                    }
+                }
+                //otherwise, we need to read its anonymous class
+                else
+                {
+                    if (delType == null)
+                    {
+                        Delegate = null;
+                        return;
+                    }
+
+                    MethodInfo method = null;
+                    AnonymousClassWrapper w = null;
+                    try
+                    {
+                        method = (MethodInfo)info.GetValue("method", typeof(MethodInfo));
+                        w = (AnonymousClassWrapper)info.GetValue("class", typeof(AnonymousClassWrapper));
+                    }
+                    catch (SerializationException)
+                    {
+                        Delegate = null;
+                        return;
+                    }
+
+                    if (method != null && w != null && w.obj != null)
+                    {
+                        Delegate = Delegate.CreateDelegate(delType, w.obj, method);
+                    }
+                    else
+                    {
+                        Delegate = null;
+                    }
+                }
             }
-            //otherwise, we need to read its anonymous class
-            else {
-                MethodInfo method = (MethodInfo)info.GetValue("method", typeof(MethodInfo));
-                AnonymousClassWrapper w = (AnonymousClassWrapper)info.GetValue("class", typeof(AnonymousClassWrapper));
-                Delegate = Delegate.CreateDelegate(delType, w.obj, method);
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "SerializeDelegate:");
             }
         }
 
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
             /*if(Delegate != null) {
                 info.AddValue("delegateType", Delegate.GetType());
             }
@@ -217,38 +275,48 @@ namespace QTTabBarLib {
             {
                 info.AddValue("delegateType", null);
             }*/
-			if(Delegate != null) {
-
-            	info.AddValue("delegateType", Delegate.GetType());
-			}
-            
-
-            //If it's an "simple" delegate we can serialize it directly
-            if(Delegate != null && (Delegate.Target == null || Delegate.Method.DeclaringType.GetCustomAttributes(
-                    typeof(SerializableAttribute), false).Length > 0)) {
-                info.AddValue("isSerializable", true);
-                info.AddValue("delegate", Delegate);
-            }
-            //otherwise, serialize anonymous class
-            else {
-                info.AddValue("isSerializable", false);
+            try
+            {
                 if (Delegate != null)
                 {
-                    info.AddValue("method", Delegate.Method);
-                    info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
+                    info.AddValue("delegateType", Delegate.GetType());
                 }
-                /*
-                // https://www.yuque.com/indiff/lc0r1g/zbdbz5
+                else
+                    info.AddValue("delegateType", null);  // 补回这行
+
+                //If it's an "simple" delegate we can serialize it directly
+                if (Delegate != null && (Delegate.Target == null || Delegate.Method.DeclaringType.GetCustomAttributes(
+                        typeof(SerializableAttribute), false).Length > 0))
+                {
+                    info.AddValue("isSerializable", true);
+                    info.AddValue("delegate", Delegate);
+                }
+                //otherwise, serialize anonymous class
                 else
                 {
-                    info.AddValue("method", null);
-                    info.AddValue("class", null);
-                }*/
+                    info.AddValue("isSerializable", false);
+                    if (Delegate != null)
+                    {
+                        info.AddValue("method", Delegate.Method);
+                        info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
+                    }
+                    /*
+                    // https://www.yuque.com/indiff/lc0r1g/zbdbz5
+                    else
+                    {
+                        info.AddValue("method", null);
+                        info.AddValue("class", null);
+                    }*/
 
-                // Causes certain methods to not execute, resulting in a blank UI. https://www.yuque.com/indiff/lc0r1g/vu0lyb
-                // info.AddValue("isSerializable", false);
-                // info.AddValue("method", Delegate.Method);
-                // info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
+                    // 导致某些方法都不执行，界面空白 https://www.yuque.com/indiff/lc0r1g/vu0lyb
+                    // info.AddValue("isSerializable", false);
+                    // info.AddValue("method", Delegate.Method);
+                    // info.AddValue("class", new AnonymousClassWrapper(Delegate.Method.DeclaringType, Delegate.Target));
+                }
+            }
+            catch (Exception exception)
+            {
+                QTUtility2.MakeErrorLog(exception, "ISerializable.GetObjectData:");
             }
         }
 
@@ -291,7 +359,7 @@ namespace QTTabBarLib {
                         info.AddValue(field.Name, new SerializeDelegate((Delegate)field.GetValue(obj)));
                     }
                     else if(!field.FieldType.IsSerializable) {
-                        // Debug.Assert(field.Name.Contains("<>")); // compiler-generated only  - assertion error issue, by indiff
+                        // Debug.Assert(field.Name.Contains("<>")); // compiler-generated only  断言报错问题 by indiff
                         info.AddValue(field.Name, new AnonymousClassWrapper(field.FieldType, field.GetValue(obj)));
                     }
                     else {
@@ -400,5 +468,70 @@ namespace QTTabBarLib {
         }
     }
 
+    // Delegate.BeginInvoke is stupid because it leaks if you don't call EndInvoke.
+    // This class implements fire-and-forget functionality.
+    internal static class AsyncHelper {
+       // [Serializable]
+        private class TargetInfo {
+            public TargetInfo(Delegate d, object[] args, int delay) {
+                Target = d;
+                Args = args;
+                Delay = delay;
+            }
+            public readonly Delegate Target;
+            public readonly object[] Args;
+            public readonly int Delay;
+        }
+
+        public static void BeginInvoke(int delayMillis, Delegate d, params object[] args) {
+            ThreadPool.QueueUserWorkItem(DynamicInvokeCallback, new TargetInfo(d, args, delayMillis));
+        }
+
+        public static void BeginInvoke(Delegate d, params object[] args) {
+            ThreadPool.QueueUserWorkItem(DynamicInvokeCallback, new TargetInfo(d, args, 0));
+        }
+
+        private static void DynamicInvokeCallback(object state){
+            if (state == null)
+            {
+                return; 
+            }
+            TargetInfo ti = (TargetInfo)state;
+            try {
+                if (ti.Delay > 0)
+                {
+                    Thread.Sleep(ti.Delay);
+                }
+                if (ti.Target != null)
+                {
+                    ti.Target.DynamicInvoke(ti.Args);
+                }
+            }
+            catch(Exception ex) {
+                QTUtility2.MakeErrorLog(ex, "AsyncHelper");
+            }
+        }
+    }
+
+    [Serializable]
+    internal class DisList<T> : List<T>, IDisposable where T : IDisposable {
+        public DisList() {
+        }
+
+        public DisList(IEnumerable<T> col) : base(col) {
+        }
+
+        public void Dispose() {
+            foreach(T t in this) {
+                try {
+                    t.Dispose();
+                }
+                catch(Exception e) {
+                    QTUtility2.MakeErrorLog(e, "DisList Dispose");
+                }
+            }
+            Clear();
+        }
+    }
 }
 

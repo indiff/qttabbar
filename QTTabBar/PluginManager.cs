@@ -1,4 +1,4 @@
-//    This file is part of QTTabBar, a shell extension for Microsoft
+﻿//    This file is part of QTTabBar, a shell extension for Microsoft
 //    Windows Explorer.
 //    Copyright (C) 2007-2025  Quizo, Paul Accisano, indiff
 //
@@ -40,7 +40,17 @@ namespace QTTabBarLib {
             return dicPluginAssemblies.TryGetValue(path, out asm);
         }
 
-        // ����������쳣
+        private static bool IsPluginEnabled(string[] enabled, PluginInformation info) {
+            if(enabled == null || info == null) {
+                return false;
+            }
+
+            string typeSuffix = "+" + info.TypeFullName;
+            return enabled.Contains(info.PluginID) ||
+                    enabled.Any(id => !string.IsNullOrEmpty(id) && id.EndsWith(typeSuffix, StringComparison.Ordinal));
+        }
+
+        // 处理插件的异常
         public static void HandlePluginException(Exception ex, IntPtr hwnd, string pluginID, string strCase) {
             MessageForm.Show(hwnd, 
                 "Error : " + strCase + "\r\nPlugin : \"" + pluginID + "\"\r\nErrorType : " + ex, 
@@ -54,14 +64,37 @@ namespace QTTabBarLib {
             InitDefaultQTConfigPlugin();    
             foreach(PluginAssembly pa in ReadAssemblyPaths().Select(LoadAssembly)) {
                 if(pa == null) continue;
-                foreach(PluginInformation info in pa.PluginInformations) {
+                foreach(PluginInformation info in pa.PluginInformations ?? Enumerable.Empty<PluginInformation>()) {
                     if(info.Enabled) LoadStaticInstance(info, pa);        
                 }
             }
+            EnsureDefaultClockPlugin();
+        }
+
+        private static void EnsureDefaultClockPlugin() {
+            PluginInformation clock = PluginInformations.FirstOrDefault(info =>
+                    info != null &&
+                    string.Equals(System.IO.Path.GetFileName(info.Path), "QTClock.dll", StringComparison.OrdinalIgnoreCase));
+            if(clock == null) return;
+
+            clock.Enabled = true;
+            string[] enabled = Config.Plugin.Enabled ?? new string[0];
+            if(!enabled.Contains(clock.PluginID)) {
+                Config.Plugin.Enabled = enabled.Concat(new[] { clock.PluginID }).ToArray();
+            }
+
+            string[] activePluginIDs = Config.BBar.ActivePluginIDs ?? new string[0];
+            if(activePluginIDs.Contains(clock.PluginID)) return;
+
+            Config.BBar.ActivePluginIDs = activePluginIDs.Concat(new[] { clock.PluginID }).ToArray();
+            int pluginButtonIndex = (activePluginIDs.Length + 1) << 16;
+            Config.BBar.ButtonIndexes = (Config.BBar.ButtonIndexes ?? new int[0])
+                    .Concat(new[] { pluginButtonIndex }).ToArray();
+            ConfigManager.WriteConfig();
         }
 
         /// <summary>
-        /// ����һ��Ĭ�ϵ� ����� ������ڵĻ��� TODO
+        /// 加载一个默认的 插件， 如果存在的话！ TODO
         /// </summary>
         private static void InitDefaultQTConfigPlugin()
         {
@@ -69,20 +102,33 @@ namespace QTTabBarLib {
             // the program data 's default plugin.
             // string defaultQtConfigPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll";
             // string turnOffRepeatPath = Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll";
+            // Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\SampleSplitButton.dll",                 
             string[] plugins = new string[] { 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\CreateNewItem.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\FolderTreeButton.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\Memo.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\MigemoLoader.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTClock.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTFileTools.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTViewModeButton.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTWindowManager.dll", 
-               // Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\SampleSplitButton.dll",                 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\ShowStatusBar.dll", 
-                Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\ActivateByMouseHover.dll"
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTQuick.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\TurnOffRepeat.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\CreateNewItem.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\FolderTreeButton.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\Memo.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\MigemoLoader.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTClock.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTFileTools.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTViewModeButton.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\QTWindowManager.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\ShowStatusBar.dll", 
+                //Environment.GetEnvironmentVariable("ProgramData") + @"\QTTabBar\ActivateByMouseHover.dll"
+
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\QTQuick.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\TurnOffRepeat.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\CreateNewItem.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\FolderTreeButton.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\Memo.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\MigemoLoader.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\QTClock.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\QTFileTools.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\QTViewModeButton.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\QTWindowManager.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\ShowStatusBar.dll"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"QTTabBar\ActivateByMouseHover.dll"),
             };
 
             List<string> lists = new List<string>();
@@ -126,7 +172,7 @@ namespace QTTabBarLib {
                 if(pa.PluginInfosExist) {
                     string[] enabled = Config.Plugin.Enabled;
                     foreach(PluginInformation info in pa.PluginInformations
-                            .Where(info => enabled.Contains(info.PluginID))) {
+                            .Where(info => IsPluginEnabled(enabled, info))) {
                         info.Enabled = true;
                         pa.Enabled = true;
                     }
@@ -163,7 +209,7 @@ namespace QTTabBarLib {
                 if(key == null) yield break;
                 foreach(string str in key.GetValueNames())
                 {
-                    // ��Ҫ�ж��ļ��Ƿ����
+                    // 需要判断文件是否存在
                     var path = (string)key.GetValue(str, string.Empty);
                     if (File.Exists(path))
                     {
@@ -173,63 +219,163 @@ namespace QTTabBarLib {
             }
         }
 
-        public static void RefreshPlugins() {
-            // Read in the Assemblies to refresh
-            string[] enabled = Config.Plugin.Enabled;
-/*
-δ�������������õ������ʵ����
-HelpLink ---
-
-Source ---
-QTTabBar
-StackTrace ---
-   �� QTTabBarLib.PluginManager.<RefreshPlugins>b__e(PluginAssembly asm)
-   �� System.Linq.Enumerable.<SelectManyIterator>d__14`2.MoveNext()
-   �� System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
-   �� System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
-   �� System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
- */
-            var pluginAssemblies = ReadAssemblyPaths().Select(path => {
-                PluginAssembly asm;
-                if(!GetAssembly(path, out asm)) return LoadAssembly(path);
-                foreach(PluginInformation info in asm.PluginInformations
-                            .Where(info
-                                => enabled.Contains(info.PluginID) &&
-                                   File.Exists( info.Path )
-                                )
-                        ) {
-                    info.Enabled = true;
-                    asm.Enabled = true;
-                }
-                return asm;
-            });
-            if (pluginAssemblies != null && pluginAssemblies.Count() > 0 )
+        private static readonly object _refreshLock = new object();
+        public static void RefreshPlugins()
+        {
+            // 防止并发调用导致字典损坏和 NRE
+            lock (_refreshLock)
             {
-                List<PluginAssembly> asmsToRefresh = pluginAssemblies.ToList();
-                // Uninstall the currently installed Assemblies that aren't in the new list
-                foreach(PluginAssembly asm in PluginAssemblies.Except(asmsToRefresh).ToList()) {
+                try
+                {
+                    MyRefreshPlugins();
+                }
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, "PluginManager.MyRefreshPlugins");
+                }
+            }
+        }
+
+        private static void MyRefreshPlugins()
+        {
+            string[] enabled = Config.Plugin.Enabled ?? Array.Empty<string>();
+
+            List<PluginAssembly> asmsToRefresh = ReadAssemblyPaths()
+                .Select(path =>
+                {
+                    try
+                    {
+                        PluginAssembly asm;
+                        if (!GetAssembly(path, out asm))
+                        {
+                            asm = LoadAssembly(path);
+                        }
+                        else
+                        {
+                            PluginAssembly oldAsm = asm;
+                            asm = LoadAssembly(path);
+                            if (asm == null)
+                            {
+                                asm = oldAsm;
+                            }
+                            else if (!ReferenceEquals(oldAsm, asm))
+                            {
+                                oldAsm.Dispose();
+                            }
+                        }
+
+                        // ✅ 核心修复：确保返回的对象及其关键属性完全有效
+                        if (asm == null || asm.PluginInformations == null)
+                        {
+                            return null; // 统一返回 null，由后续 Where 过滤
+                        }
+
+                        foreach (PluginInformation info in asm.PluginInformations)
+                        {
+                            if (info != null &&
+                                IsPluginEnabled(enabled, info) &&
+                                !string.IsNullOrEmpty(info.Path) &&
+                                File.Exists(info.Path))
+                            {
+                                info.Enabled = true;
+                                asm.Enabled = true;
+                            }
+                        }
+
+                        return asm;
+                    }
+                    catch (Exception ex)
+                    {
+                        // ✅ 防止单个插件加载失败导致整个 RefreshPlugins 崩溃
+                        QTUtility2.MakeErrorLog(ex, $"LoadPluginFailed: {path}");
+                        return null;
+                    }
+                })
+                .Where(asm => asm != null && asm.PluginInformations != null) // ✅ 双重保险
+                .Distinct()
+                .ToList();
+
+            if (asmsToRefresh.Count == 0) return;
+
+            // 卸载不在新列表中的程序集
+            //foreach (PluginAssembly asm in PluginAssemblies.Except(asmsToRefresh).ToList())
+            //{
+            //    if (asm != null) UninstallPluginAssembly(asm);
+            //}
+
+            // ✅ 修复：Except 可能因引用比较产生意外结果，改用路径比较
+            var newPaths = new HashSet<string>(
+                asmsToRefresh.Where(a => a != null).Select(a => a.Path),
+                StringComparer.OrdinalIgnoreCase);
+
+            foreach (PluginAssembly asm in PluginAssemblies.ToList())
+            {
+                if (asm == null || string.IsNullOrEmpty(asm.Path)) continue;
+                if (!newPaths.Contains(asm.Path))
+                {
                     UninstallPluginAssembly(asm);
                 }
+            }
 
-                // Make a list of PluginIDs that are disabled and disable them
-                List<string> pidsToUnload = asmsToRefresh.SelectMany(asm => asm.PluginInformations)
-                    .Where(pi => !pi.Enabled).Select(pi => pi.PluginID).ToList();
-                foreach(string pid in pidsToUnload) { // static
-                    Plugin plugin;
-                    if(!dicStaticPluginInstances.TryGetValue(pid, out plugin)) continue;
-                    if(plugin.PluginInformation.PluginType == PluginType.Static) plugin.Close(EndCode.Removed);
-                    dicStaticPluginInstances.Remove(pid);
-                }
-                ClearIEncodingDetector();
+            // ✅ 你已有的修复保持不变，但建议加上 try-catch 包裹每个插件的处理
+            // ✅ 修复：双重防御 + 安全访问 PluginID
+            List<string> pidsToUnload = asmsToRefresh
+                .Where(asm => asm != null)
+                .SelectMany(asm =>
+                {
+                    try { return asm.PluginInformations ?? Enumerable.Empty<PluginInformation>(); }
+                    catch { return Enumerable.Empty<PluginInformation>(); }
+                })
+                .Where(pi => pi != null && !pi.Enabled && !string.IsNullOrEmpty(pi.PluginID))
+                .Select(pi => pi.PluginID)
+                .ToList();
 
-                // Refresh the existing ones.
-                foreach(PluginAssembly pa in asmsToRefresh) {
-                    foreach(PluginInformation info in pa.PluginInformations) {
-                        if(info.Enabled) LoadStaticInstance(info, pa);
+            foreach (string pid in pidsToUnload)
+            {
+                Plugin plugin;
+                if (!dicStaticPluginInstances.TryGetValue(pid, out plugin)) continue;
+                try
+                {
+                    if (plugin != null && plugin.PluginInformation != null &&
+                        plugin.PluginInformation.PluginType == PluginType.Static)
+                    {
+                        plugin.Close(EndCode.Removed);
                     }
                 }
-                InstanceManager.LocalTabBroadcast(tabbar => tabbar.pluginServer.RefreshPlugins());
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, $"UnloadPluginFailed: {pid}");
+                }
+                dicStaticPluginInstances.Remove(pid);
             }
+            ClearIEncodingDetector();
+
+            // 重新加载启用的插件
+            foreach (PluginAssembly pa in asmsToRefresh)
+            {
+                if (pa == null || pa.PluginInformations == null) continue;
+
+                foreach (PluginInformation info in pa.PluginInformations)
+                {
+                    if (info != null && info.Enabled)
+                    {
+                        try
+                        {
+                            LoadStaticInstance(info, pa);
+                        }
+                        catch (Exception ex)
+                        {
+                            QTUtility2.MakeErrorLog(ex, $"LoadStaticInstanceFailed: {info?.PluginID}");
+                        }
+                    }
+                }
+            }
+
+            InstanceManager.LocalTabBroadcast(tabbar =>
+            {
+                if (tabbar != null && tabbar.pluginServer != null)
+                    tabbar.pluginServer.RefreshPlugins();
+            });
         }
 
         public static void SavePluginAssemblyPaths(List<string> paths) {
@@ -249,7 +395,42 @@ StackTrace ---
             return dicStaticPluginInstances.TryGetValue(pid, out plugin);
         }
 
-        public static void UninstallPluginAssembly(PluginAssembly pa) {
+        public static void UninstallPluginAssembly(PluginAssembly pa)
+        {
+            if (pa == null) return;
+            try
+            {
+                if (pa.PluginInformations == null) return;
+
+                List<string> pids = pa.PluginInformations
+                    .Where(pi => pi != null)
+                    .Select(pi => pi.PluginID)
+                    .Where(pid => !string.IsNullOrEmpty(pid))
+                    .ToList();
+
+                InstanceManager.LocalTabBroadcast(tabbar => pids.ForEach(pid =>
+                        tabbar.pluginServer.UnloadPluginInstance(pid, EndCode.Removed)));
+
+                foreach (PluginInformation info in pa.PluginInformations)
+                {
+                    if (info == null) continue;
+                    Plugin plugin;
+                    if (!dicStaticPluginInstances.TryGetValue(info.PluginID, out plugin)) continue;
+                    if (plugin != null && info.PluginType == PluginType.Static)
+                        plugin.Close(EndCode.Removed);
+                    dicStaticPluginInstances.Remove(info.PluginID);
+                }
+                dicPluginAssemblies.Remove(pa.Path);
+                pa.Uninstall();
+                pa.Dispose();
+            }
+            catch (Exception ex)
+            {
+                QTUtility2.MakeErrorLog(ex, "UninstallPluginAssembly: " + (pa?.Path ?? "null"));
+            }
+        }
+
+        public static void UninstallPluginAssembly_bak(PluginAssembly pa) {
             List<string> pids = pa.PluginInformations.Select(pi => pi.PluginID).ToList();
             InstanceManager.LocalTabBroadcast(tabbar => pids.ForEach(pid =>
                     tabbar.pluginServer.UnloadPluginInstance(pid, EndCode.Removed)));
@@ -260,9 +441,11 @@ StackTrace ---
                 if(info.PluginType == PluginType.Static) plugin.Close(EndCode.Removed);
                 dicStaticPluginInstances.Remove(info.PluginID);
             }
-            dicPluginAssemblies.Remove(pa.Path);
-            pa.Uninstall();
-            pa.Dispose();
+            if(pa != null) {
+                dicPluginAssemblies.Remove(pa.Path);
+                pa.Uninstall();
+                pa.Dispose();
+            }
         }
 
         public static IEncodingDetector IEncodingDetector {
@@ -273,15 +456,35 @@ StackTrace ---
 
         public static IEnumerable<PluginAssembly> PluginAssemblies {
             get {
-                return dicPluginAssemblies.Values;
+                lock (_refreshLock)
+                {
+                    return dicPluginAssemblies.Values
+                        .Where(v => v != null)
+                        .ToList();
+                }
             }
         }
 
-        public static IEnumerable<PluginInformation> PluginInformations {
-            get {
-                return dicPluginAssemblies.Values.SelectMany(pa => pa.PluginInformations);
+        //public static IEnumerable<PluginInformation> PluginInformations {
+        //    get {
+        //        return dicPluginAssemblies.Values
+        //                .Where(pa => pa != null && pa.PluginInformations != null)
+        //                .SelectMany(pa => pa.PluginInformations)
+        //                .Where(info => info != null);
+        //    }
+        //}
+
+        public static IEnumerable<PluginInformation> PluginInformations
+        {
+            get
+            {
+                return dicPluginAssemblies.Values
+                    .Where(pa => pa != null && pa.PluginInformations != null)
+                    .SelectMany(pa => pa.PluginInformations ?? Enumerable.Empty<PluginInformation>())
+                    .Where(info => info != null);
             }
         }
+
 
         [Serializable]
         public class PluginButton {
@@ -547,8 +750,13 @@ StackTrace ---
         }
 
         public List<PluginInformation> PluginInformations {
-            get {
-                return new List<PluginInformation>(dicPluginInformations.Values);
+            get
+            {
+                if (dicPluginInformations == null)
+                    return new List<PluginInformation>();
+                return dicPluginInformations.Values
+                    .Where(v => v != null)
+                    .ToList();
             }
         }
 

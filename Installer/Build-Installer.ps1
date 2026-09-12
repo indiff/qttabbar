@@ -4,12 +4,16 @@
     MSI, and bootstrapper. Run from any directory.
 
 .EXAMPLE
-    .\Installer\Build-Installer.ps1 -Version 1.5.6.4
+    .\Installer\Build-Installer.ps1 -Version 1.6.0 -Auto
 #>
 param(
     [Parameter(Mandatory = $true)]
     [ValidatePattern('^\d+\.\d+\.\d+(\.\d+)?$')]
-    [string]$Version
+    [string]$Version = "1.6.0",
+	
+	
+    [Parameter(Mandatory = $false)]
+    [switch]$Auto
 )
 
 $ErrorActionPreference = "Stop"
@@ -40,6 +44,18 @@ $installerWxs = Join-Path $installerDir "Installer.wxs"
     | Set-Content $installerWxs -NoNewline
 Write-Host "Updated $installerWxs"
 
+$uninstallDirectoriesFile = Join-Path $installerDir "UninstallDirectories.txt"
+$uninstallDirectories = if (Test-Path $uninstallDirectoriesFile) {
+    (Get-Content $uninstallDirectoriesFile | Where-Object {
+        $line = $_.Trim()
+        $line.Length -gt 0 -and -not $line.StartsWith('#')
+    }) -join "`r`n"
+} else {
+    ""
+}
+$uninstallDirectories = $uninstallDirectories.Replace('&', '&amp;').Replace('"', '&quot;')
+Write-Host "Loaded uninstall directory configuration from $uninstallDirectoriesFile"
+
 $bundleWxs = Join-Path $installerDir "Bundle.wxs"
 (Get-Content $bundleWxs -Raw) `
     -replace '(?<=<Bundle Name="QTTabBar )[\d.]+', $Version `
@@ -47,6 +63,23 @@ $bundleWxs = Join-Path $installerDir "Bundle.wxs"
     -replace '(?<=QTTabBar Setup )[\d.]+(?=\.msi")', $Version `
     | Set-Content $bundleWxs -NoNewline
 Write-Host "Updated $bundleWxs"
+
+ 
+$QTUtility = Join-Path $root "QTTabBar\QTUtility.cs"
+$BuildVerion = if ((Get-Content $QTUtility -Raw) -match 'BuildVerion = "\d+"; // (\d+)') { [int]$matches[1] } else { 0 }
+
+if ($Auto) {
+	$BuildVerion = $BuildVerion + 1
+	(Get-Content $QTUtility -Raw) `
+		-replace '(BuildVerion = ")\d+("; // )\d+(.*)', "`${1}$BuildVerion`${2}$BuildVerion`${3}" `
+		| Set-Content $QTUtility -NoNewline
+	Write-Host "Updated $QTUtility (BuildVerion -> $BuildVerion)" -ForegroundColor Green
+} else {
+	(Get-Content $QTUtility -Raw) `
+		-replace '(BuildVerion = ")\d+("; // )(\d+.*)', "`${1}0`${2}`${3}" `
+		| Set-Content $QTUtility -NoNewline
+	Write-Host "Updated $QTUtility (BuildVerion -> 0)" -ForegroundColor Red
+}
 
 # --- 2. Build every payload the installer packages ---------------------
 
@@ -97,18 +130,25 @@ foreach ($plat in @('Win32', 'x64')) {
     if ($LASTEXITCODE -ne 0) { throw "QTHookLib $plat build failed" }
 }
 
+    & $msbuild "$root\InstallerHelper\InstallerHelper.vcxproj" /p:Configuration=Release /p:Platform=Win32 $vcProps /nologo /v:minimal
+
+
 # --- 3. Build the MSI ---------------------------------------------------
 
 $wix = Get-ChildItem "C:\Program Files*\WiX Toolset v3.*\bin\candle.exe" -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty DirectoryName
 if (-not $wix) { throw "WiX Toolset v3.x not found (expected under 'WiX Toolset v3.*\bin')" }
 Push-Location $installerDir
 try {
-    New-Item -ItemType Directory -Force -Path "obj\Release", "bin\Release\en-US" | Out-Null
+    New-Item -ItemType Directory -Force -Path "obj\Release", "bin\Release\en-US", "bin\Release\zh-CN" | Out-Null
 
-    & "$wix\candle.exe" -ext "$wix\WixNetFxExtension.dll" -ext "$wix\WixUIExtension.dll" -ext "$wix\WixUtilExtension.dll" -out obj\Release\ Installer.wxs CustomWelcomeEulaDlg.wxs CustomWixUI_Minimal.wxs
+    & "$wix\candle.exe" -dQTUninstallDirectories="$uninstallDirectories" -ext "$wix\WixNetFxExtension.dll" -ext "$wix\WixUIExtension.dll" -ext "$wix\WixUtilExtension.dll" -out obj\Release\ Installer.wxs CustomWelcomeEulaDlg.wxs CustomWixUI_Minimal.wxs
     if ($LASTEXITCODE -ne 0) { throw "candle.exe failed on Installer.wxs" }
 
-    & "$wix\light.exe" -ext "$wix\WixNetFxExtension.dll" -ext "$wix\WixUIExtension.dll" -ext "$wix\WixUtilExtension.dll" -cultures:en-US -loc lang.wxl -sice:ICE80 -sice:ICE61 -out "bin\Release\en-US\QTTabBar Setup $Version.msi" obj\Release\Installer.wixobj obj\Release\CustomWelcomeEulaDlg.wixobj obj\Release\CustomWixUI_Minimal.wixobj
+    & "$wix\light.exe" -ext "$wix\WixNetFxExtension.dll" -ext "$wix\WixUIExtension.dll" -ext "$wix\WixUtilExtension.dll" -cultures:en-US  `
+		-loc lang.wxl `
+		-sice:ICE80 -sice:ICE61  `
+		-out "bin\Release\en-US\QTTabBar Setup $Version.msi" obj\Release\Installer.wixobj obj\Release\CustomWelcomeEulaDlg.wixobj  `
+		obj\Release\CustomWixUI_Minimal.wixobj
     if ($LASTEXITCODE -ne 0) { throw "light.exe failed on Installer.wxs" }
 
     # --- 4. Build the bootstrapper EXE ---------------------------------
@@ -117,12 +157,25 @@ try {
 
     & "$wix\candle.exe" -ext "$wix\WixBalExtension.dll" -ext "$wix\WixNetFxExtension.dll" -out obj\Release\Bundle\Bundle.wixobj Bundle.wxs
     if ($LASTEXITCODE -ne 0) { throw "candle.exe failed on Bundle.wxs" }
-
-    & "$wix\light.exe" -ext "$wix\WixBalExtension.dll" -ext "$wix\WixNetFxExtension.dll" -out "bin\Release\QTTabBar Setup $Version.exe" obj\Release\Bundle\Bundle.wixobj
+		
+    & "$wix\light.exe" -ext "$wix\WixBalExtension.dll" -ext "C:\Program Files (x86)\WiX Toolset v3.11\bin\WixNetFxExtension.dll"  `
+		 obj\Release\Bundle\Bundle.wixobj `
+		-out "bin\Release\QTTabBar Setup $Version.exe"
     if ($LASTEXITCODE -ne 0) { throw "light.exe failed on Bundle.wxs" }
 }
 finally {
     Pop-Location
 }
 
-Write-Host "`nBuilt: $installerDir\bin\Release\QTTabBar Setup $Version.exe"
+$builtInstaller = Join-Path $installerDir "bin\Release\QTTabBar Setup $Version.exe"
+Write-Host "`nBuilt: $builtInstaller"
+
+if ($Auto) {
+	# $BuildVerion = $BuildVerion + 1
+	$newName = "QTTabBar Setup ${Version}_build${BuildVerion}.exe"
+    
+    Rename-Item -Path $builtInstaller -NewName $newName -Force
+    
+	$builtInstaller = Join-Path $installerDir "bin\Release\$newName"
+    Write-Host "Renamed to: $builtInstaller" -ForegroundColor Green
+}

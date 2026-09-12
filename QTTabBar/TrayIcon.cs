@@ -29,7 +29,7 @@ using QTTabBarLib.Interop;
 namespace QTTabBarLib
 {
     /***
-     * Bottom-right corner when minimized
+     * 最小化的右下角
      */
     internal class TrayIcon
     {
@@ -244,7 +244,7 @@ namespace QTTabBarLib
                 contextMenuNotifyIcon.Items.Add(item);
             }
 
-            // QTUtility.TextResourcesDic["OptionsDialog"] sets localization
+            // QTUtility.TextResourcesDic["OptionsDialog"] 设置国际化
             var resDic = QTUtility.TextResourcesDic["TrayIcon"];
             var isRightFlag = null != resDic && resDic.Length > 2;
             var strRestore = isRightFlag ? resDic[2] : "Restore All";

@@ -55,7 +55,7 @@ namespace MinHook { namespace
 		std::vector<uintptr_t>	newIPs;
 	};
 
-	// Structures for writing instructions
+	// 命令書き込み用構造体
 #pragma pack(push, 1)
 	struct JMP_REL
 	{
@@ -97,7 +97,7 @@ namespace MinHook
 			return MH_ERROR_ALREADY_INITIALIZED;
 		}
 
-		// Initialize the hook buffer
+		// 内部関数バッファの初期化
 		InitializeBuffer();
 
 		gIsInitialized = true;
@@ -113,7 +113,7 @@ namespace MinHook
 			return MH_ERROR_NOT_INITIALIZED;
 		}
 
-		// Disable all hooks
+		// すべてのフックを解除
 		for (std::vector<HOOK_ENTRY>::const_iterator hook = gHooks.begin();
 			hook != gHooks.end(); hook++)
 		{
@@ -132,7 +132,7 @@ namespace MinHook
 		std::vector<HOOK_ENTRY> v;
 		gHooks.swap(v);
 
-		// Free the hook buffer
+		// 内部関数バッファの開放
 		UninitializeBuffer();
 
 		gIsInitialized = false;
@@ -161,7 +161,7 @@ namespace MinHook
 
 		if (pHook == NULL)
 		{
-			// Create the trampoline function
+			// トランポリン関数を作成する
 			CREATE_TREMPOLINE_T ct = { 0 };
 			ct.pTarget = pTarget;
 			if (!CreateTrampolineFunction(ct))
@@ -203,7 +203,7 @@ namespace MinHook
 			}
 #endif
 
-			// Take a backup of the target function
+			// ターゲット関数のバックアップをとる
 			void* pBackup = AllocateDataBuffer(NULL, sizeof(JMP_REL));
 			if (pBackup == NULL)
 			{
@@ -213,7 +213,7 @@ namespace MinHook
 
 			memcpy(pBackup, pTarget, sizeof(JMP_REL));
 
-			// Create the relay function
+			// 中継関数を作成する
 #if defined _M_X64
 			void* pRelay = AllocateCodeBuffer(pTarget, sizeof(JMP_ABS));
 			if (pRelay == NULL)
@@ -226,7 +226,7 @@ namespace MinHook
 #endif
 			CommitBuffer();
 
-			// Register the hook
+			// フック情報の登録
 			HOOK_ENTRY hook = { 0 };
 			hook.pTarget = pTarget;
 			hook.pDetour = pDetour;
@@ -245,7 +245,7 @@ namespace MinHook
 
 		}
 
-		// Handle the OUT parameter
+		// OUT引数の処理
 		*ppOriginal = pHook->pTrampoline;
 		
 		return MH_OK;
@@ -271,7 +271,7 @@ namespace MinHook
 			return MH_ERROR_ENABLED;
 		}
 
-		// Write a jump to the relay function or detour function at the beginning of the target function
+		// ターゲット関数の冒頭に、中継関数またはフック関数へのジャンプを書き込む
 		{
 			ScopedThreadExclusive tex(pHook->oldIPs, pHook->newIPs);
 
@@ -314,7 +314,7 @@ namespace MinHook
 			return MH_ERROR_DISABLED;
 		}
 
-		// Restore the beginning of the target function; the rest is kept for reuse
+		// ターゲット関数の冒頭を書き戻すだけ。他は再利用のため残しておく
 		{
 			ScopedThreadExclusive tex(pHook->oldIPs, pHook->newIPs);
 
@@ -353,7 +353,7 @@ namespace MinHook { namespace
 		static const DWORD PageExecuteMask 
 			= (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY); 
 
-		// Check whether the memory region is executable
+		// 未割り当てや実行不可能な領域をチェック
 		MEMORY_BASIC_INFORMATION mi = { 0 };
 		VirtualQuery(pAddress, &mi, sizeof(mi));
 
