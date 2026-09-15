@@ -468,6 +468,44 @@ namespace QTTabBarLib {
             }
         }
 
+        // Vertical scroll offset as a percentage, or -1 when the element exposes no
+        // ScrollPattern (a view that fits without scrolling reports NoScroll = -1 too,
+        // which is the same "nothing to restore" answer).
+        public double GetVerticalScrollPercent() {
+            object obj;
+            pElement.GetCurrentPattern(UIA_ScrollPatternId, out obj);
+            try {
+                if(obj == null) return -1;
+                IUIAutomationScrollPattern scrollPattern = obj as IUIAutomationScrollPattern;
+                if(scrollPattern == null) return -1;
+                double percent;
+                scrollPattern.get_CurrentVerticalScrollPercent(out percent);
+                return percent;
+            }
+            catch(COMException) {
+                return -1;
+            }
+            finally {
+                if(obj != null) Marshal.ReleaseComObject(obj);
+            }
+        }
+
+        public void SetVerticalScrollPercent(double percent) {
+            object obj;
+            pElement.GetCurrentPattern(UIA_ScrollPatternId, out obj);
+            try {
+                if(obj == null) return;
+                IUIAutomationScrollPattern scrollPattern = obj as IUIAutomationScrollPattern;
+                // UIA_ScrollPatternNoScroll: leave the horizontal offset alone.
+                if(scrollPattern != null) scrollPattern.SetScrollPercent(-1, percent);
+            }
+            catch(COMException) {
+            }
+            finally {
+                if(obj != null) Marshal.ReleaseComObject(obj);
+            }
+        }
+
         public void ScrollHorizontal(ScrollAmount amount, int times) {
             Scroll(amount, times, ScrollAmount.NoAmount, 0);
         }
