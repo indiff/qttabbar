@@ -3726,7 +3726,7 @@ namespace QTTabBarLib
             // stranding the double-click subclass on a dead window. Navigation just completed,
             // so the new view exists now - re-bind it if the current one went dead.
             
-            // if(listViewManager != null) listViewManager.EnsureCurrentViewLive();
+            if(listViewManager != null) listViewManager.EnsureCurrentViewLive();
 
 
             // if(fFinalRelease && !IsShown) {
