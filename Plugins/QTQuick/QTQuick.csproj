@@ -105,6 +105,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Resources\2012071011184831_easyicon_cn_24.png" />
   </ItemGroup>
   <ItemGroup>

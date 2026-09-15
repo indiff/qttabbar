@@ -442,15 +442,10 @@ namespace QTTabBarLib {
         }
 
         public bool TryGetSelection(out Address[] adSelectedItems, bool fDisplayName) {
-            if(GetSelectedCount() == 0) {
-                adSelectedItems = new Address[0];
-                return false;
-            }
-
             adSelectedItems = GetItems(true).Select(wrapper => fDisplayName
                      ? new Address(wrapper.PIDL, wrapper.DisplayName)
                      : new Address(wrapper.PIDL, wrapper.ParseName)).ToArray();
-            return true;
+            return adSelectedItems.Length > 0;
         }
 
         public bool TryGetSelection(out Address[] adSelectedItems, out string pathFocused, bool fDisplayName, ShellBrowserEx argShell = null) {

@@ -211,7 +211,7 @@ namespace QTTabBarLib {
                 QTUtility.GetHiddenFileSettings(out flag3, out flag2);
                 const FileAttributes attributes = FileAttributes.ReparsePoint | FileAttributes.System | FileAttributes.Hidden;
                 int num = 0;
-                foreach(DirectoryInfo info in di.GetDirectories()) {
+                foreach(DirectoryInfo info in di.EnumerateDirectories()) {
                     try {
                         string fullName = info.FullName;
                         string name = info.Name;
@@ -273,7 +273,7 @@ namespace QTTabBarLib {
                 int num2 = 0;
                 string str5 = ".lnk";
                 string str6 = ".url";
-                foreach(FileInfo info2 in di.GetFiles()) {
+                foreach(FileInfo info2 in di.EnumerateFiles()) {
                     try {
                         FileAttributes attributes3 = info2.Attributes;
                         bool flag8 = (attributes3 & FileAttributes.System) != 0;

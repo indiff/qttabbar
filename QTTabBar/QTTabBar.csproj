@@ -94,19 +94,38 @@
       <HintPath>Resources\Ricciolo.Controls.TreeListView.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Text.Encoding.CodePages, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.4.7.1\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="UtfUnknown, Version=2.0.0.0, Culture=neutral, PublicKeyToken=90217ce7a23260d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\UTF.Unknown.2.7.0\lib\netstandard2.0\UtfUnknown.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -582,16 +601,16 @@
       <DependentUpon>FileRenameDialog.cs</DependentUpon>
       <WithCulture>false</WithCulture>
       <LogicalName>QTTabBar.FileRename.resources</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileRename\FileRenameDialog.en.resx">
       <SubType>Designer</SubType>
-		<WithCulture>false</WithCulture>
+      <WithCulture>false</WithCulture>
       <LogicalName>QTTabBar.FileRename.en.resources</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileRename\FileRenameDialog.ja.resx">
-    	<WithCulture>false</WithCulture>
+      <WithCulture>false</WithCulture>
       <LogicalName>QTTabBar.FileRename.ja.resources</LogicalName>
-	</EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -732,8 +751,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ExplorerBrowser\ExplorerBrowserDiagram.cd" />
+    <None Include="packages.config" />
     <None Include="Resources\ButtonStrip24.png" />
   </ItemGroup>
   <ItemGroup>

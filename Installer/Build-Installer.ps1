@@ -31,19 +31,19 @@ $assemblyVersion = if ($Version -match '^\d+\.\d+\.\d+$') { "$Version.0" } else 
 
 $Force_Remove_Path = Join-Path $root "MinHook\bin\"
 if (Test-Path $Force_Remove_Path) {
-    Remove-Item -Path $MinHook_Release -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path $Force_Remove_Path -Recurse -Force -ErrorAction SilentlyContinue
 }
 $Force_Remove_Path = Join-Path $root "MinHook\obj\"
 if (Test-Path $Force_Remove_Path) {
-    Remove-Item -Path $MinHook_Release -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path $Force_Remove_Path -Recurse -Force -ErrorAction SilentlyContinue
 }
 $Force_Remove_Path = Join-Path $root "QTHookLib\obj\"
 if (Test-Path $Force_Remove_Path) {
-    Remove-Item -Path $MinHook_Release -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path $Force_Remove_Path -Recurse -Force -ErrorAction SilentlyContinue
 }
 $Force_Remove_Path = Join-Path $root "QTHookLib\bin\"
 if (Test-Path $Force_Remove_Path) {
-    Remove-Item -Path $MinHook_Release -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path $Force_Remove_Path -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 $assemblyInfo = Join-Path $root "QTTabBar\Properties\AssemblyInfo.cs"

@@ -1,4 +1,4 @@
-/* 
+﻿/* 
  *  MinHook - Minimalistic API Hook Library	
  *  Copyright (C) 2009 Tsuda Kageyu. All rights reserved.
  *  
@@ -226,10 +226,12 @@
 			 }
 		 }
 		 else
- #endif		// X86モードでは、アドレスは問題にならない
 		 {
 			 pAlloc = VirtualAlloc(NULL, BlockSize, MEM_RESERVE, protect);
 		 }
+ #else		// X86モードでは、アドレスは問題にならない
+		 pAlloc = VirtualAlloc(NULL, BlockSize, MEM_RESERVE, protect);
+ #endif
  
 		 if (pAlloc != NULL)
 		 {

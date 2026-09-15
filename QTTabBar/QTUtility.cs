@@ -49,7 +49,7 @@ namespace QTTabBarLib {
         // Derived from AssemblyVersion in Properties/AssemblyInfo.cs - the only place
         // the app's own version needs to be edited by hand outside the installer.
         internal static readonly Version CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        internal static readonly string BuildVerion = "107"; // 107  Build version, incremented by the build script
+        internal static readonly string BuildVerion = "111"; // 111  Build version, incremented by the build script
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
         // 快捷键启用标识

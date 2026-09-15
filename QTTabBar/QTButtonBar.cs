@@ -1830,7 +1830,7 @@ namespace QTTabBarLib {
 
         private void UnloadPluginsOnCreation() {
             QTTabBarClass tabbar = InstanceManager.GetThreadTabBar();
-            if(tabbar == null) return;
+            if(tabbar == null || tabbar.pluginServer == null || tabbar.pluginServer.Plugins == null) return;
             foreach(Plugin plugin in tabbar.pluginServer.Plugins) {
                 PluginType pluginType = plugin.PluginInformation.PluginType;
                 string pluginID = plugin.PluginInformation.PluginID;

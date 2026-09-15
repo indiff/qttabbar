@@ -451,13 +451,15 @@ namespace QTTabBarLib {
 
             const string PipeName = "QTTabBarPipe";
             string address = "net.pipe://localhost/" + PipeName + desktopPID;
-            Thread thread = null;
+            ManualResetEventSlim ready = new ManualResetEventSlim(false);
 
             // WFC channels should never be opened on any thread that has a message loop!
             // Otherwise reentrant calls will deadlock, for some reason.
             // So, create a new thread and open the channels there.
             // WCF通道不能在有消息循环的线程上打开，否则会死锁，所以新建线程
-            thread = new Thread(() => {
+            Thread thread = new Thread(() => {
+                try
+                {
                 if(isServer && !skipServer) {
                     serviceHost = new ServiceHost(
                             typeof(CommService),
@@ -512,17 +514,18 @@ namespace QTTabBarLib {
                     }
                     commClient = null;
                 }
-                lock(thread) {
-                    Monitor.Pulse(thread);
-                }
                 // Yes, we can just let the thread die here.
                 // 线程结束
-            });
-            thread.Start();
-            lock(thread) {
-                Monitor.Wait(thread);
-            }            
-        }
+                    }
+                    finally
+                    {
+                        ready.Set();
+                    }
+                });
+                thread.Start();
+                ready.Wait();
+                ready.Dispose();
+            }
 
         /// <summary>
         /// 获取WCF通信通道

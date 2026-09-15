@@ -31,6 +31,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Forms.VisualStyles;
+using UtfUnknown;
 
 namespace QTTabBarLib {
     /**
@@ -664,6 +665,11 @@ namespace QTTabBarLib {
             return r;
         }
 
+
+        // 仅读取前 4KB，足以判断 BOM 及常见编码特征，避免大文件内存溢出
+        private const int HeaderSize = 4096;
+
+
         /// <summary> 
         /// 通过给定的文件流，判断文件的编码类型 
         /// </summary> 
@@ -676,22 +682,47 @@ namespace QTTabBarLib {
             byte[] UTF8 = new byte[] { 0xEF, 0xBB, 0xBF }; //带BOM 
             Encoding reVal = Encoding.Default;
 
+            if (fs == null || fs.Length == 0)
+            {
+                return Encoding.Default;
+            }
+
+            // 1. 确保从文件头部开始读取
+            if (fs.CanSeek && fs.Position != 0)
+            {
+                fs.Seek(0, SeekOrigin.Begin);
+            }
+
             BinaryReader r = new BinaryReader(fs, System.Text.Encoding.Default);
-            int i;
-            int.TryParse(fs.Length.ToString(), out i);
-            byte[] ss = r.ReadBytes(i);
-            if (IsUTF8Bytes(ss) || (ss[0] == 0xEF && ss[1] == 0xBB && ss[2] == 0xBF))
+            byte[] buffer = new byte[Math.Min(fs.Length, HeaderSize)];
+            int bytesRead = fs.Read(buffer, 0, buffer.Length);
+            if (bytesRead == 0)
+            {
+                return Encoding.Default;
+            }
+            if (IsUTF8Bytes(buffer) || (buffer[0] == 0xEF && buffer[1] == 0xBB && buffer[2] == 0xBF))
             {
                 reVal = Encoding.UTF8;
             }
-            else if (ss[0] == 0xFE && ss[1] == 0xFF && ss[2] == 0x00)
+            else if (buffer[0] == 0xFE && buffer[1] == 0xFF && buffer[2] == 0x00)
             {
                 reVal = Encoding.BigEndianUnicode;
             }
-            else if (ss[0] == 0xFF && ss[1] == 0xFE && ss[2] == 0x41)
+            else if (buffer[0] == 0xFF && buffer[1] == 0xFE && buffer[2] == 0x41)
             {
                 reVal = Encoding.Unicode;
             }
+
+            // 使用 UTF.Unknown 进行智能检测
+            if (Encoding.Default == reVal )
+            {
+                var result = CharsetDetector.DetectFromBytes(buffer);
+                if (result.Detected != null && result.Detected.Encoding != null)
+                {
+                    reVal = result.Detected.Encoding;
+                }
+            }
+
             if (r != null) {
                 r.Close();
                // r.Dispose();
@@ -1812,7 +1843,9 @@ namespace QTTabBarLib {
         }
 
         private sealed class ImageCacheStore : Collection<ImageData> {
+            private const long MaxCacheBytes = 64L * 1024 * 1024;
             private int max_cache_length;
+            private long cacheBytes;
             private object syncObject = new object();
 
             public ImageCacheStore(int max_cache_length) {
@@ -1824,6 +1857,7 @@ namespace QTTabBarLib {
                     foreach(ImageData data in this) {
                         data.Dispose();
                     }
+                    cacheBytes = 0;
                     base.ClearItems();
                 }
             }
@@ -1831,8 +1865,11 @@ namespace QTTabBarLib {
             protected override void InsertItem(int index, ImageData item) {
                 lock(syncObject) {
                     base.InsertItem(index, item);
-                    if(Count > max_cache_length) {
-                        base[0].Dispose();
+                    cacheBytes += item.EstimatedBytes;
+                    while(Count > max_cache_length || cacheBytes > MaxCacheBytes) {
+                        ImageData oldest = base[0];
+                        cacheBytes -= oldest.EstimatedBytes;
+                        oldest.Dispose();
                         base.RemoveItem(0);
                     }
                 }
@@ -1840,14 +1877,20 @@ namespace QTTabBarLib {
 
             protected override void RemoveItem(int index) {
                 lock(syncObject) {
-                    base[index].Dispose();
+                    ImageData item = base[index];
+                    cacheBytes -= item.EstimatedBytes;
+                    item.Dispose();
                     base.RemoveItem(index);
                 }
             }
 
             protected override void SetItem(int index, ImageData item) {
                 lock(syncObject) {
+                    ImageData oldItem = base[index];
+                    cacheBytes -= oldItem.EstimatedBytes;
+                    oldItem.Dispose();
                     base.SetItem(index, item);
+                    cacheBytes += item.EstimatedBytes;
                 }
             }
         }
@@ -1861,6 +1904,7 @@ namespace QTTabBarLib {
             public bool Thumbnail;
             public string TooltipText;
             public Size ZoomedSize;
+            public long EstimatedBytes;
 
             public ImageData(Bitmap bmp, MemoryStream memoryStream, string path, DateTime dtModified, Size sizeRaw, Size sizeZoomed) {
                 Bitmap = bmp;
@@ -1869,6 +1913,9 @@ namespace QTTabBarLib {
                 ModifiedDate = dtModified;
                 RawSize = sizeRaw;
                 ZoomedSize = sizeZoomed;
+                EstimatedBytes = bmp == null
+                    ? 0
+                    : Math.Max(1L, (long)bmp.Width * bmp.Height * 4);
             }
 
             public void Dispose() {

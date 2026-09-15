@@ -1460,14 +1460,12 @@ namespace QTTabBarLib
                     Cursor = Cursors.Default;
                     if ((curTabDrag != null) && (curTabDrag != Cursors.Default))
                     {
-                        PInvoke.DestroyIcon(curTabDrag.Handle);
-                        GC.SuppressFinalize(curTabDrag);
+                        curTabDrag.Dispose();
                         curTabDrag = null;
                     }
                     if ((curTabCloning != null) && (curTabCloning != Cursors.Default))
                     {
-                        PInvoke.DestroyIcon(curTabCloning.Handle);
-                        GC.SuppressFinalize(curTabCloning);
+                        curTabCloning.Dispose();
                         curTabCloning = null;
                     }
                     if (dropTargetWrapper != null)
@@ -9322,8 +9320,9 @@ namespace QTTabBarLib
 
         protected void ShowMessageNavCanceled(string failedPath, bool fModal)
         {
+            failedPath = failedPath ?? string.Empty;
             QTUtility2.log("QTTabBarClass ShowMessageNavCanceled: " + failedPath);
-            QTUtility2.MakeErrorLog(null, string.Format("Failed navigation: {0}", failedPath));
+            QTUtility2.log(string.Format("Failed navigation: {0}", failedPath));
             if (Config.Window.ShowFailNavMsg)
             {
                 MessageForm.Show(ExplorerHandle,
@@ -9441,7 +9440,11 @@ namespace QTTabBarLib
             }
             QTUtility2.log("tabControl1_SelectedIndexChanged");
             QTabItem selectedTab = tabControl1.SelectedTab;
-            string currentPath = selectedTab.CurrentPath;
+            if (selectedTab == null)
+            {
+                return;
+            }
+            string currentPath = selectedTab.CurrentPath ?? string.Empty;
             if (IsSpecialFolderNeedsToTravel(currentPath) &&
                LogEntryDic.ContainsKey(selectedTab.GetLogHash(true, 0)))
             {

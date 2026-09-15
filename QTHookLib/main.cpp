@@ -930,13 +930,8 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
 	// Box1(L"DetourFillRect in ");
     auto iter = m_duiList.find(GetCurrentThreadId());
 
-	if (iter->second.hDC == hDC )
+	if (iter != m_duiList.end() && iter->second.hDC == hDC && m_config.imageList.size())
 	{
-		// Box1(L" resolve hdc suc" );
-	}
-    if (iter != m_duiList.end()) {
-        if (iter->second.hDC == hDC && m_config.imageList.size())
-        {
 			// Box1(L" second hdc suc" );
             RECT pRc;
             GetWindowRect(iter->second.hWnd, &pRc);
@@ -945,14 +940,10 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
             /*因图片定位方式不同 如果窗口大小改变 需要全体重绘 否则有残留
             * Due to different image positioning methods,
             * if the window size changes, you need to redraw, otherwise there will be residues*/
-            if ((iter->second.size.cx != wndSize.cx || iter->second.size.cy != wndSize.cy)
-                && m_config.imgPosMode != 0) {
-                InvalidateRect(iter->second.hWnd, 0, TRUE);
-            }
-			
-			// Box1(L"InvalidateRect suc ");
+			// 当前 FillRect 已经在处理重绘，尺寸变化时无需再次使整个窗口失效。
+			// 这样可以避免在高频绘制路径中排队额外的全窗口重绘。
 
-            //裁剪矩形 Clip rect
+			//裁剪矩形 Clip rect
             SaveDC(hDC);
             IntersectClipRect(hDC, lprc->left, lprc->top, lprc->right, lprc->bottom);
 
@@ -1067,7 +1058,6 @@ int WINAPI DetourFillRect(HDC hDC, const RECT* lprc, HBRUSH hbr)
 			// Box1(L"RestoreDC suc");
             iter->second.size = wndSize;
             // Log(L"DrawImage");
-        }
     }
     return ret;
 }
