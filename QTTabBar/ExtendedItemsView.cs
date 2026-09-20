@@ -285,7 +285,9 @@ namespace QTTabBarLib {
         }
 
         private bool IsHotTrackingEnabled() {
-            if(thumbnailTooltip != null && (thumbnailTooltip.IsShowing || fThumbnailPending)) {
+            bool previewEnabled = Config.Tips.ShowTooltipPreviews &&
+                    (!Config.Tips.ShowPreviewsWithShift ^ (Control.ModifierKeys == Keys.Shift));
+            if(previewEnabled || (thumbnailTooltip != null && (thumbnailTooltip.IsShowing || fThumbnailPending))) {
                 return true;
             }
             if(!fDragging && Config.Tips.ShowSubDirTips &&
@@ -375,6 +377,9 @@ namespace QTTabBarLib {
                     Point pt = QTUtility2.PointFromLPARAM(msg.LParam);
                     if(pt != lastMouseMovePoint) {
                         lastMouseMovePoint = pt;
+                        if(IsHotTrackingEnabled()) {
+                            PInvoke.PostMessage(Handle, WM_AFTERPAINT, IntPtr.Zero, IntPtr.Zero);
+                        }
                         if(focusedElement != null) {
                             if(hotElement == null && focusedElement.FullRect.Contains(pt)) {
                                 PInvoke.PostMessage(Handle, WM_AFTERPAINT, IntPtr.Zero, IntPtr.Zero);

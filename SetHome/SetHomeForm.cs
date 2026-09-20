@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Media;
 using System.Runtime.InteropServices;
-using System.Threading;
-using Microsoft.Win32;
 using System.Text;
+using System.Threading;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Shapes;
 
 namespace SetHome
 {
@@ -132,7 +134,7 @@ namespace SetHome
                 args.Add("/m");
             }
             args.Add(varName);
-           //  value = RemovePathEndBackslash(value);
+            //  value = RemovePathEndBackslash(value);
             args.Add(value);
             RunCommand("setx", args.ToArray());
         }
@@ -225,8 +227,8 @@ namespace SetHome
             // SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, IntPtr.Zero, null, SMTO_ABORTIFHUNG, 5000, IntPtr.Zero);
             // Update taskbar
             // SendNotifyMessage(HWND_BROADCAST, WM_SETTINGCHANGE, IntPtr.Zero, "TraySettings");
-            
-            
+
+
             /*IntPtr HWND_BROADCAST = (IntPtr)0xffff;
             const UInt32 WM_SETTINGCHANGE = 0x001A;
             var sendNotifyMessage = SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
@@ -327,7 +329,8 @@ namespace SetHome
 
             using (var envKey = Registry.CurrentUser.OpenSubKey(QTTabBar, true))
             {
-                if (envKey != null) {
+                if (envKey != null)
+                {
                     var flag = envKey.GetValue("AutoSetHome");
                     if (null != flag && flag.Equals("true"))
                     {
@@ -338,26 +341,29 @@ namespace SetHome
                         this.autoBox.Checked = false;
                     }
                 }
-                
-                else {
+
+                else
+                {
                     this.autoBox.Checked = false;
                 }
             }
 
-            if (this.autoBox.Checked) { 
+            if (this.autoBox.Checked)
+            {
                 // guess current dir
                 string selectedPath = this.curTextBox.Text.Trim();
-                if (Directory.Exists(selectedPath)) {
-                    string binPath = Path.Combine(selectedPath, "bin");
+                if (Directory.Exists(selectedPath))
+                {
+                    string binPath = System.IO.Path.Combine(selectedPath, "bin");
                     if (Directory.Exists(binPath))
                     {
-                        string javaPath = Path.Combine(binPath, "java.exe");
-                        string mvnCmd = Path.Combine(binPath, "mvn.cmd");
-                        string mvnBat = Path.Combine(binPath, "mvn.bat");
-                        string mvndexe = Path.Combine(binPath, "mvnd.exe");
-                        string antCmd = Path.Combine(binPath, "ant.cmd");
-                        string gradleBat = Path.Combine(binPath, "gradle.bat");
-                        string runserverCmd = Path.Combine(binPath, "runserver.cmd");
+                        string javaPath = System.IO.Path.Combine(binPath, "java.exe");
+                        string mvnCmd = System.IO.Path.Combine(binPath, "mvn.cmd");
+                        string mvnBat = System.IO.Path.Combine(binPath, "mvn.bat");
+                        string mvndexe = System.IO.Path.Combine(binPath, "mvnd.exe");
+                        string antCmd = System.IO.Path.Combine(binPath, "ant.cmd");
+                        string gradleBat = System.IO.Path.Combine(binPath, "gradle.bat");
+                        string runserverCmd = System.IO.Path.Combine(binPath, "runserver.cmd");
 
                         bool isRun = false;
                         if (File.Exists(javaPath))
@@ -396,11 +402,12 @@ namespace SetHome
                             isRun = true;
                         }
 
-                        if (isRun) {
+                        if (isRun)
+                        {
                             // Dispose();  // 这里导致插件执行报错
                             Application.Exit();
                         }
-                        
+
                     }
                 }
             }
@@ -421,7 +428,7 @@ namespace SetHome
             foreach (string stmp in sArray)
             {
 
-                if (!string.IsNullOrEmpty(stmp.Trim()) && !File.Exists(Path.Combine(stmp, ignoreFileName)))
+                if (!string.IsNullOrEmpty(stmp.Trim()) && !File.Exists(System.IO.Path.Combine(stmp, ignoreFileName)))
                 {
                     hs.Add(stmp);
                 }
@@ -492,7 +499,8 @@ namespace SetHome
                     ;
         }
 
-        private static bool IsSemicolon(string str) {
+        private static bool IsSemicolon(string str)
+        {
             var strTrim = str.Trim();
             var chars = strTrim.ToCharArray();
             bool allSemicolons = chars.All(c => c == ';');
@@ -508,28 +516,28 @@ namespace SetHome
             var antHome = Environment.GetEnvironmentVariable("ANT_HOME");
             var mvndHome = Environment.GetEnvironmentVariable("MVND_HOME");
             var gradleHome = Environment.GetEnvironmentVariable("GRADLE_HOME");
-           // MessageBox.Show(javaHome + @"\bin;");
+            // MessageBox.Show(javaHome + @"\bin;");
 
-            if (null != javaHome) 
+            if (null != javaHome)
                 oldPath = oldPath.Replace(javaHome + @"\bin;", "");
-            if (null != m2Home) 
+            if (null != m2Home)
                 oldPath = oldPath.Replace(m2Home + @"\bin;", "");
-            if (null != antHome) 
+            if (null != antHome)
                 oldPath = oldPath.Replace(antHome + @"\bin;", "");
-            if (null != mvndHome) 
+            if (null != mvndHome)
                 oldPath = oldPath.Replace(mvndHome + @"\bin;", "");
-            if (null != gradleHome) 
+            if (null != gradleHome)
                 oldPath = oldPath.Replace(gradleHome + @"\bin;", "");
 
-            if (null != javaHome) 
+            if (null != javaHome)
                 oldPath = oldPath.Replace(javaHome + @"\bin", "");
-            if (null != m2Home) 
+            if (null != m2Home)
                 oldPath = oldPath.Replace(m2Home + @"\bin", "");
-            if (null != antHome) 
+            if (null != antHome)
                 oldPath = oldPath.Replace(antHome + @"\bin", "");
-            if (null != mvndHome) 
+            if (null != mvndHome)
                 oldPath = oldPath.Replace(mvndHome + @"\bin", "");
-            if (null != gradleHome) 
+            if (null != gradleHome)
                 oldPath = oldPath.Replace(gradleHome + @"\bin", "");
 
             oldPath = oldPath.Replace(@"%JAVA_HOME%\bin;", "");
@@ -537,7 +545,7 @@ namespace SetHome
             oldPath = oldPath.Replace(@"%ANT_HOME%\bin;", "");
             oldPath = oldPath.Replace(@"%MVND_HOME%\bin;", "");
             oldPath = oldPath.Replace(@"%GRADLE_HOME%\bin;", "");
-            
+
             oldPath = oldPath.Replace(@"%JAVA_HOME%\bin", "");
             oldPath = oldPath.Replace(@"%M2_HOME%\bin", "");
             oldPath = oldPath.Replace(@"%ANT_HOME%\bin", "");
@@ -556,8 +564,9 @@ namespace SetHome
                 // !oldPath.Contains(@"%SystemRoot%\system32")  
                 !(oldPath.IndexOf(@"C:\Windows\System32", StringComparison.OrdinalIgnoreCase) >= 0) &&
                 !(oldPath.IndexOf(@"%SystemRoot%\system32", StringComparison.OrdinalIgnoreCase) >= 0)
-                ) {
-                oldPath = oldPath + @"C:\Windows\System32;"; 
+                )
+            {
+                oldPath = oldPath + @"C:\Windows\System32;";
             }
             return oldPath;
         }
@@ -566,11 +575,11 @@ namespace SetHome
         {
             // 3. 设置当前目录JAVA_HOME
             string selectedPath = this.curTextBox.Text.Trim();
-            string binPath = Path.Combine(selectedPath, "bin");
-            string libPath = Path.Combine(selectedPath, "lib");
-            string javaPath = Path.Combine(binPath, "java.exe");
-            string toolsJar = Path.Combine(libPath, "tools.jar");
-            string dtJar = Path.Combine(libPath, "dt.jar");
+            string binPath = System.IO.Path.Combine(selectedPath, "bin");
+            string libPath = System.IO.Path.Combine(selectedPath, "lib");
+            string javaPath = System.IO.Path.Combine(binPath, "java.exe");
+            string toolsJar = System.IO.Path.Combine(libPath, "tools.jar");
+            string dtJar = System.IO.Path.Combine(libPath, "dt.jar");
 
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
@@ -638,7 +647,7 @@ namespace SetHome
                     if (!string.IsNullOrEmpty(tempPath.Trim()))
                     {
                         // 如果这个路径不存在则过滤掉
-                        var combine = Path.Combine(tempPath, fileName);
+                        var combine = System.IO.Path.Combine(tempPath, fileName);
 
                         // 展开变量
                         string expandedPath = System.Environment.ExpandEnvironmentVariables(tempPath);
@@ -646,18 +655,20 @@ namespace SetHome
                         var existFlag2 = Directory.Exists(expandedPath.Trim());
                         if (existFlag)
                         {
-                            var normalPath = Path.GetFullPath(tempPath.Trim()).TrimEnd(Path.DirectorySeparatorChar,Path.AltDirectorySeparatorChar);
-                            if ( list.Contains(normalPath) )
+                            var normalPath = System.IO.Path.GetFullPath(tempPath.Trim()).TrimEnd(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+                            if (list.Contains(normalPath))
                             {
                                 continue;
-                            } else { 
+                            }
+                            else
+                            {
                                 list.Add(normalPath);
                             }
                         }
 
                         if (!existFlag && existFlag2)
                         {
-                            var normalPath = Path.GetFullPath(expandedPath.Trim()).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                            var normalPath = System.IO.Path.GetFullPath(expandedPath.Trim()).TrimEnd( System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
                             if (list.Contains(normalPath))
                             {
                                 continue;
@@ -696,8 +707,8 @@ namespace SetHome
                     oldPath = oldPath.Replace(";;;", ";");
                 }*/
                 // 正则替换掉，2个或者以上; 则替换成一个;
-               // string pattern = @";+;+";
-               // string replacement = ";";
+                // string pattern = @";+;+";
+                // string replacement = ";";
                 //oldPath = Regex.Replace(oldPath, pattern, replacement);
                 // 这里会引起 bug 替换掉其他字符
             }
@@ -707,9 +718,9 @@ namespace SetHome
         private void mvn_Click(object sender, EventArgs e)
         {
             string selectedPath = this.curTextBox.Text.Trim();
-            string binPath = Path.Combine(selectedPath, "bin");
-            string mvnCmd = Path.Combine(binPath, "mvn.cmd");
-            string mvnBat = Path.Combine(binPath, "mvn.bat");
+            string binPath = System.IO.Path.Combine(selectedPath, "bin");
+            string mvnCmd = System.IO.Path.Combine(binPath, "mvn.cmd");
+            string mvnBat = System.IO.Path.Combine(binPath, "mvn.bat");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
@@ -728,7 +739,7 @@ namespace SetHome
 
 
             if (
-                (String.IsNullOrEmpty(mvnCmd) || !File.Exists(mvnCmd)) 
+                (String.IsNullOrEmpty(mvnCmd) || !File.Exists(mvnCmd))
                 &&
                 (String.IsNullOrEmpty(mvnBat) || !File.Exists(mvnBat))
                 )
@@ -764,8 +775,8 @@ namespace SetHome
         {
             // 10. 设置当前目录MVND_HOME
             string selectedPath = this.curTextBox.Text.Trim();
-            string binPath = Path.Combine(selectedPath, "bin");
-            string mvndexe = Path.Combine(binPath, "mvnd.exe");
+            string binPath = System.IO.Path.Combine(selectedPath, "bin");
+            string mvndexe = System.IO.Path.Combine(binPath, "mvnd.exe");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
@@ -808,8 +819,8 @@ namespace SetHome
         {
             // 设置当前目录ANT_HOME
             string selectedPath = this.curTextBox.Text.Trim();
-            string binPath = Path.Combine(selectedPath, "bin");
-            string antCmd = Path.Combine(binPath, "ant.cmd");
+            string binPath = System.IO.Path.Combine(selectedPath, "bin");
+            string antCmd = System.IO.Path.Combine(binPath, "ant.cmd");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
@@ -852,8 +863,8 @@ namespace SetHome
         {
             // 设置当前目录ANT_HOME
             string selectedPath = this.curTextBox.Text.Trim();
-            string binPath = Path.Combine(selectedPath, "bin");
-            string gradleBat = Path.Combine(binPath, "gradle.bat");
+            string binPath = System.IO.Path.Combine(selectedPath, "bin");
+            string gradleBat = System.IO.Path.Combine(binPath, "gradle.bat");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
@@ -895,10 +906,12 @@ namespace SetHome
         {
             using (var envKey = Registry.CurrentUser.OpenSubKey(QTTabBar, true))
             {
-                if (autoBox.Checked) {
+                if (autoBox.Checked)
+                {
                     envKey.SetValue("AutoSetHome", "true");
                 }
-                else {
+                else
+                {
                     envKey.SetValue("AutoSetHome", "true");
                 }
             }
@@ -959,8 +972,8 @@ namespace SetHome
 
             if (!KillFlag)
             {
-                Process.Start(@"%systemroot%\taskkill.exe",  @"/F /T IM explorer.exe" );
-               // @"/F /T /PID " + process.Id);
+                Process.Start(@"%systemroot%\taskkill.exe", @"/F /T IM explorer.exe");
+                // @"/F /T /PID " + process.Id);
             }
 
             Thread.Sleep(1500);
@@ -978,7 +991,7 @@ namespace SetHome
                 string sCPUSerialNumber = "";
                 foreach (ManagementObject mo in searcher.Get())
                 {
-                    
+
                     sCPUSerialNumber = mo["Name"].ToString().Trim();//操作系统名字
                     //sCPUSerialNumber = mo["BootDevice"].ToString().Trim();//系统启动分区
                     //sCPUSerialNumber = mo["NumberOfProcesses"].ToString().Trim();//当前运行的进程数
@@ -989,10 +1002,10 @@ namespace SetHome
                 // MessageBox.Show(sCPUSerialNumber.Substring(10, 10));//分割字符串
                 MessageBox.Show(sCPUSerialNumber);//分割字符串
             }
-            catch (Exception )
+            catch (Exception)
             {
             }
-            
+
             var osVersionVersionString = Environment.OSVersion.VersionString;
             // MessageBox.Show(osVersionVersionString);
             // MessageBox.Show(Environment.OSVersion.Platform.ToString());
@@ -1007,8 +1020,8 @@ namespace SetHome
 
             // 设置当前目录ANT_HOME
             string selectedPath = this.curTextBox.Text.Trim();
-            string binPath = Path.Combine(selectedPath, "bin");
-            string runserverCmd = Path.Combine(binPath, "runserver.cmd");
+            string binPath = System.IO.Path.Combine(selectedPath, "bin");
+            string runserverCmd = System.IO.Path.Combine(binPath, "runserver.cmd");
 
             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
             {
@@ -1049,6 +1062,99 @@ namespace SetHome
         private void SetHomeForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             System.Environment.Exit(1);
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            // 强制卸载QTTabBar
+            // Get-WmiObject -Class Win32_Product | Where-Object {$_.UpgradeCode -eq "{ec9baff7-58fb-40cb-9f67-1c438a7524a5}"} | Select-Object IdentifyingNumber,Version,Name
+            // msiexec /x "{60F27D40-DE81-4F05-9D14-CC39674DE9DD}" /qn
+
+            bool found = false;
+
+            // 同时搜索 64 位和 32 位卸载注册表路径
+            string[] regPaths = new[]
+            {
+                @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+                @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+            };
+            var sb = new StringBuilder();
+            var count = 0;
+            var pcodes = new List<string>();
+            foreach (string basePath in regPaths)
+            {
+                var key = Registry.LocalMachine.OpenSubKey(basePath);
+                if (key == null) continue;
+
+                foreach (string subKeyName in key.GetSubKeyNames())
+                {
+                    var subKey = key.OpenSubKey(subKeyName);
+                    string displayName = subKey?.GetValue("DisplayName") as string;
+
+                    if (displayName != null &&
+                        displayName.IndexOf("qttabbar", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        found = true;
+                        string version = subKey.GetValue("DisplayVersion") as string ?? "未知";
+                        string installDate = subKey.GetValue("InstallDate") as string ?? "未知";
+
+                        sb.AppendLine($"名称:         {displayName}");
+                        sb.AppendLine($"版本:         {version}");
+                        sb.AppendLine($"ProductCode:  {subKeyName}");
+                        sb.AppendLine($"安装日期:     {installDate}");
+                        sb.AppendLine(new string('-', 60));
+                        pcodes.Add(subKeyName);
+                        count++;
+                    }
+                }
+            }
+
+            // 替换原有的 MessageBox.Show(..., MessageBoxButtons.OK, ...) 代码块
+            if (found)
+            {
+                var result = MessageBox.Show(
+                    sb.ToString().TrimEnd() + "\n\n是否立即强制卸载 QTTabBar？",
+                    "QTTabBar 查找结果",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    foreach (var guid in pcodes)
+                    {
+
+                        var process = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = "msiexec.exe",
+                            Arguments = $"/x \"{guid}\" /qn /norestart",
+                            UseShellExecute = false,
+                            CreateNoWindow = true
+                        });
+
+                        process?.WaitForExit();
+
+                        string msg = process?.ExitCode == 0
+                            ? "✅ QTTabBar 已成功卸载。"
+                            : $"❌ 卸载失败，msiexec 退出码: {process?.ExitCode}";
+
+                        var icon = process?.ExitCode == 0
+                            ? MessageBoxIcon.Information
+                            : MessageBoxIcon.Error;
+
+                        MessageBox.Show(msg, "卸载结果", MessageBoxButtons.OK, icon);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "未在注册表中找到包含 'qttabbar' 的已安装产品。",
+                    "QTTabBar 查找结果",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
         }
     }
 }

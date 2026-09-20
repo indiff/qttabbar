@@ -49,7 +49,7 @@ namespace QTTabBarLib {
         // Derived from AssemblyVersion in Properties/AssemblyInfo.cs - the only place
         // the app's own version needs to be edited by hand outside the installer.
         internal static readonly Version CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        internal static readonly string BuildVerion = "111"; // 111  Build version, incremented by the build script
+        internal static readonly string BuildVerion = "117"; // 117  Build version, incremented by the build script
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
         // 快捷键启用标识
@@ -1263,8 +1263,25 @@ namespace QTTabBarLib {
             CultureInfo.CurrentUICulture = culture;
         }
 
+        private static string[] GetBuiltInResource(string key) {
+            return Resources_String.ResourceManager
+                    .GetResourceStrings()
+                    .Where(pair => pair.Key == key)
+                    .Select(pair => pair.Value.Split(SEPARATOR_CHAR))
+                    .FirstOrDefault() ?? new string[0];
+        }
+
         public static void ValidateTextResources() {
             ValidateTextResources(ref TextResourcesDic);
+
+            string[] resources;
+            if(!TextResourcesDic.TryGetValue("TabBar_Menu", out resources) || resources == null || resources.Length == 0) {
+                TextResourcesDic["TabBar_Menu"] = GetBuiltInResource("TabBar_Menu");
+            }
+            if(!TextResourcesDic.TryGetValue("Misc_Strings", out resources) || resources == null || resources.Length == 0) {
+                TextResourcesDic["Misc_Strings"] = GetBuiltInResource("Misc_Strings");
+            }
+
             ResMain = TextResourcesDic["TabBar_Menu"];
             ResMisc = TextResourcesDic["Misc_Strings"];
             Resx.UpdateAll();

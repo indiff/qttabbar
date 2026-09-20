@@ -31,7 +31,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Forms.VisualStyles;
-using UtfUnknown;
+// using UtfUnknown;
 
 namespace QTTabBarLib {
     /**
@@ -173,13 +173,17 @@ namespace QTTabBarLib {
             ResetAllPreviewControls();
 
             string ext = Path.GetExtension(path).ToLower();
+            QTUtility2.log("Preview CreateThumbnail path=" + path + " ext=" + ext);
 
             // ================= 新增：视频预览逻辑 =================
             // ================= 视频预览逻辑 =================
             if (ExtIsVideo(ext))
             {
                 FileInfo info = new FileInfo(path);
-                if (!info.Exists || info.Length <= 0L) return false;
+                if (!info.Exists || info.Length <= 0L) {
+                    QTUtility2.log("Preview video rejected: file missing or empty");
+                    return false;
+                }
 
                 try
                 {
@@ -231,7 +235,10 @@ namespace QTTabBarLib {
             if (ExtIsImage(ext))
             {
                 FileInfo info = new FileInfo(path);
-                if (!info.Exists || info.Length <= 0L) return false;
+                if (!info.Exists || info.Length <= 0L) {
+                    QTUtility2.log("Preview image rejected: file missing or empty");
+                    return false;
+                }
 
                 // ... existing cache lookup logic unchanged ...
                 bool flag = false;
@@ -369,7 +376,10 @@ namespace QTTabBarLib {
             if (ExtIsText(ext))
             {
                 FileInfo textFileInfo = new FileInfo(path);
-                if (!textFileInfo.Exists) return false;
+                if (!textFileInfo.Exists) {
+                    QTUtility2.log("Preview text rejected: file missing");
+                    return false;
+                }
 
                 try
                 {
@@ -433,6 +443,7 @@ namespace QTTabBarLib {
                 catch (Exception ex)
                 {
                     QTUtility2.MakeErrorLog(ex, "CreateThumbnail Text");
+                    QTUtility2.log("Preview rejected: unsupported extension " + ext);
                     return false;
                 }
             }
@@ -635,8 +646,9 @@ namespace QTTabBarLib {
                         if(ImageAnimator.CanAnimate(bitmap)) {
                             MemoryStream stream = new MemoryStream();
                             bitmap.Save(stream, bitmap.RawFormat);
+                            stream.Position = 0;
                             var imgObj = new ImageData(new Bitmap(stream), stream, path, dtLastWriteTime, sizeRaw, sizeActual);
-                            QTUtility2.Close(stream);
+                            // ImageData owns the stream because Bitmap may read it lazily.
                             return imgObj;
                         }
                         return new ImageData(new Bitmap(bitmap, width, height), null, path, dtLastWriteTime, sizeRaw, sizeActual);
@@ -644,8 +656,9 @@ namespace QTTabBarLib {
                     sizeActual = sizeRaw;
                     MemoryStream stream2 = new MemoryStream();
                     bitmap.Save(stream2, bitmap.RawFormat);
+                    stream2.Position = 0;
                     var imgObj2 =  new ImageData(new Bitmap(stream2), stream2, path, dtLastWriteTime, sizeRaw, sizeRaw);
-                    QTUtility2.Close(stream2);
+                    // ImageData owns the stream because Bitmap may read it lazily.
                     return imgObj2;
                 }
             }
@@ -714,6 +727,7 @@ namespace QTTabBarLib {
             }
 
             // 使用 UTF.Unknown 进行智能检测
+            /*
             if (Encoding.Default == reVal )
             {
                 var result = CharsetDetector.DetectFromBytes(buffer);
@@ -722,6 +736,7 @@ namespace QTTabBarLib {
                     reVal = result.Detected.Encoding;
                 }
             }
+            */
 
             if (r != null) {
                 r.Close();

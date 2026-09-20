@@ -471,7 +471,7 @@ namespace QTTabBarLib {
                 SubDirTipsWithShift = false ; // 仅当shift键按下显示子目录
                 ShowTooltipPreviews = true;  
                 ShowPreviewInfo = true; // 启用文件预览
-                ShowPreviewsWithShift = true; // 仅当shift健按下, 启用文件预览
+                ShowPreviewsWithShift = false; // 默认悬停即可预览
                 
                 // 预览的宽高
                 PreviewMaxWidth = 600;

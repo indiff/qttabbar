@@ -3251,6 +3251,12 @@ namespace QTTabBarLib
                     ModifierKeys != Keys.Control &&
                     InstanceManager.GetTotalInstanceCount() > 0)
                 {
+                    QTUtility2.log("Capture begin path=" + path +
+                                   " explorerHandle=" + ExplorerHandle +
+                                   " controlHandle=" + Handle +
+                                   " isShown=" + IsShown +
+                                   " tabCount=" + TabCount +
+                                   " currentPath=" + CurrentTab.CurrentPath);
                     // 增加父进程的判断, 这里获得的父进程是 winlogon svchost 这里获取父进程获取不到微信或者qq
                     // string parentProcessName = QTUtility.GetParentProcessName();
                     // string allParentProcessNames = QTUtility.GetAllParentProcessNames();
@@ -3271,6 +3277,7 @@ namespace QTTabBarLib
                         }*/
 
                         string lcmd = cmd.ToLower();
+                        QTUtility2.log("Capture command=" + cmd);
                         if (lcmd.Contains("/select") || lcmd.Contains(",select"))
                         {
                             mCmdType = 1;
@@ -3279,6 +3286,8 @@ namespace QTTabBarLib
                             TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
+                                QTUtility2.log("Capture select target hwnd=" + tabbar.ExplorerHandle +
+                                               " path=" + path);
                                 tabbar.OpenNewTab(path);
                                 if (selectMe != "")
                                 {
@@ -3299,6 +3308,8 @@ namespace QTTabBarLib
                             TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
+                                QTUtility2.log("Capture factory target hwnd=" + tabbar.ExplorerHandle +
+                                               " path=" + path);
                                 tabbar.OpenNewTab(path);
                                 tabbar.RestoreWindow();
                                 if (Config.Window.CaptureWeChatSelection)
@@ -3315,6 +3326,8 @@ namespace QTTabBarLib
                             InstanceManager.BeginInvokeMain(tabbar =>
                             {
                                 // vscode 打开的时候是同进程， 可能需要 shell捕获
+                                QTUtility2.log("Capture other target hwnd=" + tabbar.ExplorerHandle +
+                                               " path=" + path);
                                 tabbar.OpenNewTab(path);
                                 QTUtility2.log("other cmd BeginInvokeMain RestoreWindow");
                                 tabbar.RestoreWindow();
@@ -3324,6 +3337,10 @@ namespace QTTabBarLib
                     }
 
                     fNowQuitting = true;
+                    QTUtility2.log("Capture source closing mCmdType=" + mCmdType +
+                                   " fNowQuitting=" + fNowQuitting +
+                                   " fHideExplorer=" + fHideExplorer +
+                                   " explorerHandle=" + ExplorerHandle);
                     if (QTUtility.IsXP)
                     {
                         QTUtility2.log("Close Explorer WindowUtils.CloseExplorer");
@@ -3343,18 +3360,56 @@ namespace QTTabBarLib
                         {
                             QTUtility2.log("Close Explorer Explorer.Quit");
                             Explorer.Quit();
-                            // WindowUtils.HideExplorer(ExplorerHandle);
-                            // WindowUtils.CloseExplorer(ExplorerHandle, 0);
+                            WindowUtils.HideExplorer(ExplorerHandle);
+                            WindowUtils.CloseExplorer(ExplorerHandle, 0, true);
+                        }
+                        else
+                        {
+                            ScheduleCapturedWindowClose();
                         }
                     }
                     QTUtility2.log("DoFirstNavigation return");
-                    // return;
+                    return;
                 } // 捕获命令的逻辑
                 QTUtility2.log("AddStartUpTabs ");
                 AddStartUpTabs(string.Empty, path);
                 QTUtility2.log("AddStartUpTabs InitializeOpenedWindow");
                 InitializeOpenedWindow();
             }
+        }
+
+        private void ScheduleCapturedWindowClose()
+        {
+            Timer timer = new Timer { Interval = 2000 };
+            EventHandler handler = null;
+            handler = (sender, args) =>
+            {
+                timer.Stop();
+                timer.Tick -= handler;
+                timer.Dispose();
+
+                if (!fNowQuitting)
+                {
+                    QTUtility2.log("Fallback close skipped because fNowQuitting=false");
+                    return;
+                }
+
+                try
+                {
+                    QTUtility2.log("Fallback close captured Explorer window hwnd=" +
+                                   ExplorerHandle + " isWindow=" +
+                                   PInvoke.IsWindow(ExplorerHandle));
+                    WindowUtils.HideExplorer(ExplorerHandle);
+                    Explorer.Quit();
+                    WindowUtils.CloseExplorer(ExplorerHandle, 0, true);
+                }
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, "Fallback close captured Explorer window");
+                }
+            };
+            timer.Tick += handler;
+            timer.Start();
         }
 
         /**

@@ -15,8 +15,14 @@
 //    You should have received a copy of the GNU General Public License
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
+using BandObjectLib;
+using Microsoft.Win32;
+using Microsoft.Win32.SafeHandles;
+using QTTabBarLib.Interop;
+using SHDocVw;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -31,11 +37,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using BandObjectLib;
-using Microsoft.Win32;
-using Microsoft.Win32.SafeHandles;
-using QTTabBarLib.Interop;
-using SHDocVw;
 
 namespace QTTabBarLib {
     public static class QTUtility2 {
@@ -377,11 +378,93 @@ namespace QTTabBarLib {
         }
 
         // private static DateTime dateTime ;
-        private static Dictionary<int, DateTime> dictTime = new Dictionary<int, DateTime>();
         // 忽略一些添加 日志
         private static string[] IGNORES = { "ReleaseComObject" };
-        
-        public static void log(string level, string optional,Dictionary<String, String> dic=null)
+
+
+        // 1. 将 Dictionary 替换为线程安全的 ConcurrentDictionary
+        // 2. 将 DateTime 替换为 Stopwatch 用于高精度耗时计算
+        private static readonly ConcurrentDictionary<int, Stopwatch> dictTime = new ConcurrentDictionary<int, Stopwatch>();
+
+        public static void log(string level, string optional, Dictionary<String, String> dic = null)
+        {
+            // 忽略逻辑保持不变
+            if (null != IGNORES && IGNORES.Length > 0)
+            {
+                string lower2 = optional.ToLower();
+                foreach (var ignore in IGNORES)
+                {
+                    if (lower2.Contains(ignore.ToLower()))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            // 目录创建逻辑保持不变
+            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appdataQT = Path.Combine(appdata, "QTTabBar");
+            if (!Directory.Exists(appdataQT))
+            {
+                Directory.CreateDirectory(appdataQT);
+            }
+
+            // 3. 简化线程ID获取，移除过时的 AppDomain.GetCurrentThreadId()
+            int threadId = Thread.CurrentThread.ManagedThreadId;
+            Process process = Process.GetCurrentProcess();
+
+            // 4. 使用 Stopwatch 计算耗时，解决精度和首次记录问题
+            string useTime = "";
+            var stopwatch = dictTime.GetOrAdd(threadId, _ => Stopwatch.StartNew());
+
+            // 获取自上次记录以来的耗时，并自动重置计时器
+            // 这解决了首次记录无耗时的问题，且全程线程安全
+            long elapsedMs = stopwatch.ElapsedMilliseconds;
+            stopwatch.Restart();
+
+            // 如果是该线程的第一条日志，elapsedMs 可能非常小（接近0），但逻辑是连贯的
+            // 如果希望第一条日志不显示耗时，可以加个标记，但通常显示 0ms 或实际间隔更合理
+            if (elapsedMs > 0)
+            {
+                useTime = $"{elapsedMs}毫秒";
+            }
+
+            string path = Path.Combine(appdataQT, "QTTabBar.log");
+            var line = new StringBuilder();
+            line.Append("[").Append(level).Append("]");
+
+            // 类名和方法名逻辑保持不变
+            if (dic != null && dic.Count > 0)
+            {
+                if (dic.TryGetValue("className", out var className) && !string.IsNullOrEmpty(className))
+                {
+                    line.Append("\tC:").Append(className);
+                }
+                if (dic.TryGetValue("methodName", out var methodName) && !string.IsNullOrEmpty(methodName))
+                {
+                    line.Append("\tM:").Append(methodName);
+                }
+            }
+
+            // 进程和线程信息
+            line.Append("\tP:").Append(process.Id);
+            line.Append("\tT:").Append(threadId);
+
+            if (!string.IsNullOrEmpty(useTime))
+            {
+                line.Append("\tcost:").Append(useTime);
+            }
+
+            // 5. 记录绝对时间戳（这里用 DateTime 没问题，因为只用于展示，不用于计算差值）
+            line.Append("\t").Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")) // 建议加上毫秒，方便排查
+               .Append("\t").Append(optional);
+
+            writeStr(path, line);
+        }
+
+        // private static Dictionary<int, DateTime> dictTime = new Dictionary<int, DateTime>();
+        /*
+        public static void log_bak(string level, string optional,Dictionary<String, String> dic=null)
         {
             // ignore 
             if (null != IGNORES && IGNORES.Length > 0)
@@ -397,18 +480,6 @@ namespace QTTabBarLib {
                 }
             }
 
-            /*
-             var useTime = "";
-             if (null != dateTime)
-            {
-                DateTime oldTime = dateTime;
-                dateTime = DateTime.Now;
-                useTime = "" + ((dateTime - oldTime).TotalMilliseconds) + "毫秒";
-            }
-            else
-            {
-                dateTime = DateTime.Now;
-            }*/
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string appdataQT = Path.Combine(appdata, "QTTabBar");
             if (!Directory.Exists(appdataQT))
@@ -514,7 +585,7 @@ namespace QTTabBarLib {
                 .Append(optional);
             writeStr(path, line);
         }
-
+        */
         
 
         public static void MakeErrorLog(Exception ex, string optional = null) {

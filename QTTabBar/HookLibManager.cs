@@ -15,10 +15,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using QTTabBarLib.Interop;
@@ -150,6 +150,16 @@ namespace QTTabBarLib {
                     return;
                 }
                 
+                string productName;
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(
+                    @"SOFTWARE\Microsoft\Windows NT\CurrentVersion"))
+                {
+                    productName = key == null ? string.Empty : key.GetValue("ProductName", string.Empty) as string;
+                }
+
+                bool isServer = !string.IsNullOrEmpty(productName)
+                        && productName.IndexOf("server", StringComparison.OrdinalIgnoreCase) >= 0;
+#if false
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
                 string sCPUSerialNumber = "";
                 foreach (ManagementObject mo in searcher.Get())
@@ -163,7 +173,9 @@ namespace QTTabBarLib {
                     //sCPUSerialNumber = mo["Manufacturer"].ToString().Trim();//
                 }
 
-                var isServer = sCPUSerialNumber.Contains("windows server");
+                #endif
+                                // Server detection is handled by the lightweight registry check above.
+
                 if (isServer)
                 {
                     QTUtility2.log("can not hook in server by get server");

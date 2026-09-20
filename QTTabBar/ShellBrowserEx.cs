@@ -93,17 +93,6 @@ namespace QTTabBarLib {
             if (fDisposed) return;
             fDisposed = true;
 
-            if (shellBrowser != null) {
-                try
-                {
-                    Marshal.FinalReleaseComObject(shellBrowser);
-                }
-                catch (Exception ex)
-                {
-                    QTUtility2.MakeErrorLog(ex, "ShellBrowserEx.Dispose shellBrowser");
-                }
-                shellBrowser = null; // 引起问题 ？ 未将对象引用设置到对象的实例
-            }
             if(folderView != null) {
                 try
                 {
@@ -114,6 +103,19 @@ namespace QTTabBarLib {
                     QTUtility2.MakeErrorLog(ex, "ShellBrowserEx.Dispose folderView");
                 }
                 folderView = null;
+            }
+            if (shellBrowser != null) {
+                try
+                {
+                    // Do not force-release this RCW because other Explorer callbacks
+                    // can still hold the same shell browser interface.
+                    Marshal.ReleaseComObject(shellBrowser);
+                }
+                catch (Exception ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, "ShellBrowserEx.Dispose shellBrowser");
+                }
+                shellBrowser = null;
             }
         }
         
@@ -185,9 +187,33 @@ namespace QTTabBarLib {
                     }
                 }*/
 
-                if ( folderView != null)
-                {
-                    folderView.Item(idx, out ppidl);
+                if(folderView != null) {
+                    int result = folderView.Item(idx, out ppidl);
+                    if(result != 0 || ppidl == IntPtr.Zero) {
+                        QTUtility2.log("GetItem fallback enumeration index=" + idx + " result=" + result);
+                        Guid guid = ExplorerGUIDs.IID_IEnumIDList;
+                        IEnumIDList itemList = null;
+                        try {
+                            if(folderView.Items(SVGIO.FLAG_VIEWORDER | SVGIO.ALLVIEW, ref guid, out itemList) == 0 &&
+                                    itemList != null) {
+                                IntPtr itemPidl;
+                                int itemIndex = 0;
+                                while(itemList.Next(1, out itemPidl, null) == 0) {
+                                    if(itemIndex++ == idx) {
+                                        ppidl = PInvoke.ILClone(itemPidl);
+                                        PInvoke.CoTaskMemFree(itemPidl);
+                                        break;
+                                    }
+                                    PInvoke.CoTaskMemFree(itemPidl);
+                                }
+                            }
+                        }
+                        finally {
+                            if(itemList != null) {
+                                Marshal.ReleaseComObject(itemList);
+                            }
+                        }
+                    }
                 }
                 
                 if(noAppend || ppidl == IntPtr.Zero) {
@@ -344,28 +370,29 @@ namespace QTTabBarLib {
             
          */
         public int Navigate(IDLWrapper idlw, SBSP flags = SBSP.SAMEBROWSER) {
-            if(fDisposed || idlw != null && idlw.Available && shellBrowser != null) {
-                try
-                {
-                    // var qtTabBarClass = InstanceManager.GetThreadTabBar();
-                    // var shellBrowserEx = qtTabBarClass.GetShellBrowser();
-                    // shellBrowserEx.shellBrowser.BrowseObject(idlw.PIDL, flags);
-                    return shellBrowser.BrowseObject(idlw.PIDL, flags);
-                }
-                catch (COMException e)
-                {
-                    QTUtility2.MakeErrorLog(e, " ShellBrowserEx Navigate COMException");
-                }
-                catch (InvalidComObjectException e)
-                {
-                    QTUtility2.MakeErrorLog(e, " ShellBrowserEx Navigate InvalidComObjectException");
-                    fDisposed = true;  // 标记为已失效，后续调用直接返回
-                    shellBrowser = null;
-                }
-                catch (Exception e)
-                {
-                    QTUtility2.MakeErrorLog(e, " ShellBrowserEx Navigate Exception");
-                }
+            if(fDisposed || shellBrowser == null || idlw == null || !idlw.Available) {
+                QTUtility2.log("ShellBrowserEx.Navigate skipped: disposed or invalid target");
+                return 1;
+            }
+
+            try
+            {
+                QTUtility2.log("ShellBrowserEx.Navigate BrowseObject");
+                return shellBrowser.BrowseObject(idlw.PIDL, flags);
+            }
+            catch (InvalidComObjectException e)
+            {
+                QTUtility2.MakeErrorLog(e, " ShellBrowserEx Navigate InvalidComObjectException");
+                fDisposed = true;
+                shellBrowser = null;
+            }
+            catch (COMException e)
+            {
+                QTUtility2.MakeErrorLog(e, " ShellBrowserEx Navigate COMException");
+            }
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, " ShellBrowserEx Navigate Exception");
             }
             return 1;
         }
@@ -417,21 +444,19 @@ namespace QTTabBarLib {
         public bool TryGetHotTrackPath(int iItem, out string path, string matchName) {
             path = null;
             try {
-                using(IDLWrapper wrapper = GetItem(iItem, true)) {
+                using(IDLWrapper wrapper = GetItem(iItem, false)) {
                     if (null != wrapper && wrapper.Available)
                     {
                         if(!string.IsNullOrEmpty(matchName) && matchName != wrapper.ParseName) {
                           //  QTUtility2.log("TryGetHotTrackPath not match " + matchName + " wrapper.ParseName " + wrapper.ParseName);
                             return false;
                         }
-                        using(IDLWrapper wrapper2 = ILAppend(wrapper.PIDL)) {
-                            path = wrapper2.ParseName;
-                            if(!string.IsNullOrEmpty(path) && path.IndexOfAny(Path.GetInvalidPathChars()) < 0) {
-                              //  QTUtility2.log("TryGetHotTrackPath  path " + path + " wrapper.ParseName " + wrapper2.ParseName);
-                                return true;
-                            }
-                            path = null;
+                        path = wrapper.ParseName;
+                        if(!string.IsNullOrEmpty(path) && path.IndexOfAny(Path.GetInvalidPathChars()) < 0) {
+                            QTUtility2.log("TryGetHotTrackPath path=" + path);
+                            return true;
                         }
+                        path = null;
                     }
                 }
             }

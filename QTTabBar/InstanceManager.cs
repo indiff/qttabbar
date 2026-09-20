@@ -522,9 +522,9 @@ namespace QTTabBarLib {
                         ready.Set();
                     }
                 });
+                thread.IsBackground = true;
                 thread.Start();
-                ready.Wait();
-                ready.Dispose();
+                ready.Wait(TimeSpan.FromSeconds(1));
             }
 
         /// <summary>
