@@ -92,14 +92,6 @@
       <DependentUpon>ClockOptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ClockStrings.resx" />
-    <EmbeddedResource Include="ClockStrings.en-US.resx">
-      <WithCulture>false</WithCulture>
-      <LogicalName>QuizoPlugins.ClockStrings.en-US.resources</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ClockStrings.ja-JP.resx">
-      <WithCulture>false</WithCulture>
-      <LogicalName>QuizoPlugins.ClockStrings.ja-JP.resources</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="ClockStrings.zh.resx">
       <WithCulture>false</WithCulture>
       <LogicalName>QuizoPlugins.ClockStrings.zh.resources</LogicalName>

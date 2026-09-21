@@ -1,16 +1,16 @@
 using System;
 using System.Globalization;
 using System.Resources;
-using Microsoft.Win32;
+using System.Reflection;
 using QTPlugin;
 
 namespace QuizoPlugins
 {
     public static class ClockLocalization
     {
-        private const string RegistryPath = @"Software\QTTabBar\QTClock";
-        private const string RegistryValueLanguage = "Language";
-        private static readonly ResourceManager ResourceManager = new ResourceManager("QuizoPlugins.ClockStrings", typeof(ClockLocalization).Assembly);
+        private static readonly Assembly Assembly = typeof(ClockLocalization).Assembly;
+        private static readonly ResourceManager EnglishResourceManager = new ResourceManager("QuizoPlugins.ClockStrings", Assembly);
+        private static readonly ResourceManager ChineseResourceManager = new ResourceManager("QuizoPlugins.ClockStrings.zh", Assembly);
         private static CultureInfo culture;
 
         public static CultureInfo Culture
@@ -37,7 +37,10 @@ namespace QuizoPlugins
         {
             try
             {
-                return ResourceManager.GetString(key, Culture) ?? key;
+                ResourceManager resourceManager = PluginCulture.IsChinese(Culture)
+                    ? ChineseResourceManager
+                    : EnglishResourceManager;
+                return resourceManager.GetString(key, CultureInfo.InvariantCulture) ?? key;
             }
             catch (MissingManifestResourceException)
             {
@@ -106,7 +109,10 @@ namespace QuizoPlugins
             }
 
             var key = "Holiday." + name;
-            var translated = ResourceManager.GetString(key, Culture);
+            ResourceManager resourceManager = PluginCulture.IsChinese(Culture)
+                ? ChineseResourceManager
+                : EnglishResourceManager;
+            var translated = resourceManager.GetString(key, CultureInfo.InvariantCulture);
             return string.IsNullOrEmpty(translated) ? name : translated;
         }
 
