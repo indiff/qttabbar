@@ -18,10 +18,6 @@ namespace QTPlugin {
                 return CultureInfo.GetCultureInfo("zh-CN");
             }
 
-            if(name.StartsWith("ja")) {
-                return CultureInfo.GetCultureInfo("ja-JP");
-            }
-
             if(name.StartsWith("en")) {
                 return CultureInfo.GetCultureInfo("en-US");
             }

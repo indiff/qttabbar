@@ -57,7 +57,6 @@ namespace Qwop {
         private IShellBrowser shellBrowser;
 
         private bool fFirstMenuDropDown = true;
-        private string text = "¿ì½Ý";
         private string REG_ENV_PATH = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
         private List<Address> lstSelectedItems = new List<Address>();
 
@@ -206,7 +205,7 @@ namespace Qwop {
             get {
                 // text for button label, button tooltip, buttonbar option.
 
-                return text;
+                return QTQuickLocalization.Get("Plugin.Text");
             }
         }
 
@@ -236,22 +235,22 @@ namespace Qwop {
             this.menu = menu;
 
             if(fFirstMenuDropDown) {
-                menu.Items.Add(new ToolStripMenuItem("ÎÒµÄÎÄµµ"));
-                menu.Items.Add(new ToolStripMenuItem("¿ØÖÆÃæ°å\\ËùÓÐ¿ØÖÆÃæ°åÏî\\ÏµÍ³"));
-                menu.Items.Add(new ToolStripMenuItem("¿ØÖÆÃæ°å\\ËùÓÐ¿ØÖÆÃæ°åÏî\\¸öÐÔ»¯"));   
-                menu.Items.Add(new ToolStripMenuItem("¿ØÖÆÃæ°å\\ËùÓÐ¿ØÖÆÃæ°åÏî\\ÍøÂçÁ¬½Ó"));
-              //  menu.Items.Add(new ToolStripMenuItem("ÉèÖÃµ±Ç°Ä¿Â¼JAVA_HOME"));
-              //  menu.Items.Add(new ToolStripMenuItem("ÉèÖÃµ±Ç°Ä¿Â¼M2_HOME"));
-                menu.Items.Add(new ToolStripMenuItem("²é¿´ÏµÍ³ÐÅÏ¢"));
-                menu.Items.Add(new ToolStripMenuItem("ÖØÆô×ÊÔ´¹ÜÀíÆ÷")); 
-                menu.Items.Add(new ToolStripMenuItem("¹Ø»ú"));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.MyDocuments")));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.System")));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.Display")));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.Network")));
+              //  menu.Items.Add(new ToolStripMenuItem("ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä¿Â¼JAVA_HOME"));
+              //  menu.Items.Add(new ToolStripMenuItem("ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä¿Â¼M2_HOME"));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.SystemInfo")));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.Explorer")));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.Shutdown")));
 
-              //  menu.Items.Add(new ToolStripMenuItem("ÉèÖÃµ±Ç°Ä¿Â¼ANT_HOME"));
-             //   menu.Items.Add(new ToolStripMenuItem("ÉèÖÃµ±Ç°Ä¿Â¼MVND_HOME"));
+              //  menu.Items.Add(new ToolStripMenuItem("ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä¿Â¼ANT_HOME"));
+             //   menu.Items.Add(new ToolStripMenuItem("ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä¿Â¼MVND_HOME"));
 
-                menu.Items.Add(new ToolStripMenuItem("ÉèÖÃPath"));
-                menu.Items.Add(new ToolStripMenuItem("É¾³ýQTTabGroup£¨Æô¶¯Ïî£©"));
-                menu.Items.Add(new ToolStripMenuItem("´ò¿ªQTTabBarÒì³£ÈÕÖ¾"));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.SetPath")));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.RemoveQTTabGroup")));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.ExceptionLog")));
 
                 // menu.Items.Add(new ToolStripMenuItem("Test selection"));
                 fFirstMenuDropDown = false;
@@ -292,7 +291,7 @@ namespace Qwop {
                 switch (idx)
                 {
                     case 0: {
-                            // 0. ÎÒµÄÎÄµµ
+                            // 0. ï¿½Òµï¿½ï¿½Äµï¿½
                             path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                             break;
                     }
@@ -309,7 +308,7 @@ namespace Qwop {
                             break;
                     }
                     case 2 :{
-                            // 2. ÏÔÊ¾
+                            // 2. ï¿½ï¿½Ê¾
                             if ( IsWin7 )
                                 path = "::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}";
                             else if ( IsXP )
@@ -319,7 +318,7 @@ namespace Qwop {
 
                     case 3:
                         {
-                            // 3. ÍøÂçÁ¬½Ó
+                            // 3. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             if (IsWin7)
                                 path = "::{7007ACC7-3202-11D1-AAD2-00805FC1270E}";
                             else if (IsXP)
@@ -336,7 +335,7 @@ namespace Qwop {
 
                         if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                         {
-                            MessageBox.Show("µ±Ç°Ä¿Â¼ÒÑ¾­É¾³ý");
+                            MessageBox.Show(QTQuickLocalization.Get("Error.CurrentDirectoryMissing"));
                            // QTUtility.SoundPlay();
                             return;
                         }
@@ -344,7 +343,7 @@ namespace Qwop {
 
                         if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                         {
-                            MessageBox.Show("binÄ¿Â¼²»´æÔÚ");
+                            MessageBox.Show(QTQuickLocalization.Get("Error.BinMissing"));
                            // QTUtility.SoundPlay();
                             return;
                         }
@@ -353,7 +352,7 @@ namespace Qwop {
 
                         if (String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath))
                         {
-                            MessageBox.Show("libÄ¿Â¼²»´æÔÚ");
+                            MessageBox.Show(QTQuickLocalization.Get("Error.LibMissing"));
                           //  QTUtility.SoundPlay();
                             return;
                         }
@@ -368,13 +367,13 @@ namespace Qwop {
                                 envKey.SetValue("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;" );
                             }
                             SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
-                            MessageBox.Show("ÉèÖÃJAVA_HOME³É¹¦");
+                            MessageBox.Show(QTQuickLocalization.Get("Success.JavaHome"));
                         }
                         break;
                     }
                     case 44:
                         {
-                            // 3. ÉèÖÃµ±Ç°Ä¿Â¼JAVA_HOME
+                            // 3. ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä¿Â¼JAVA_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine( selectedPath, "bin" );
                             string libPath = Path.Combine( selectedPath, "lib" );
@@ -383,14 +382,14 @@ namespace Qwop {
 
 
                             if(String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath)) {
-                                MessageBox.Show("µ±Ç°Ä¿Â¼ÒÑ¾­É¾³ý");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.CurrentDirectoryMissing"));
                                // QTUtility.SoundPlay();
                                 return;
                             }
 
  
                             if(String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath)) {
-                                MessageBox.Show("binÄ¿Â¼²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.BinMissing"));
                               //  QTUtility.SoundPlay();
                                 return;
                             }
@@ -398,7 +397,7 @@ namespace Qwop {
 
  
                             if(String.IsNullOrEmpty(libPath) || !Directory.Exists(libPath)) {
-                                MessageBox.Show("libÄ¿Â¼²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.LibMissing"));
                               //  QTUtility.SoundPlay();
                                 return;
                             }
@@ -406,7 +405,7 @@ namespace Qwop {
                             /*
  
                             if(String.IsNullOrEmpty(toolsJar) || !File.Exists(toolsJar)) {
-                                MessageBox.Show("toolsJar²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.ToolsJarMissing"));
                                 QTUtility.SoundPlay();
                                 return;
                             }
@@ -414,7 +413,7 @@ namespace Qwop {
 
  
                             if(String.IsNullOrEmpty(toolsJar) || !File.Exists(dtJar)) {
-                                MessageBox.Show("dtJar²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.DtJarMissing"));
                                 QTUtility.SoundPlay();
                                 return;
                             }
@@ -423,7 +422,7 @@ namespace Qwop {
 
                           //  Environment.SetEnvironmentVariable("JAVA_HOME", selectedPath, EnvironmentVariableTarget.Machine);
                            // Environment.SetEnvironmentVariable("CLASSPATH", @".;%JAVA_HOME%\lib\tools.jar;%JAVA_HOME%\lib\dt.jar;", EnvironmentVariableTarget.Machine);
-                            // È¥ÖØ£¬ ÅÐ¶ÏÊÇ·ñÓÐ java home É¾µô
+                            // È¥ï¿½Ø£ï¿½ ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ java home É¾ï¿½ï¿½
                             string oldpath = filterEmpty( "java.exe" );
 
 
@@ -453,12 +452,12 @@ namespace Qwop {
                             //                    .Invoke();
                             Thread.Sleep(800);
 
-                            MessageBox.Show("ÉèÖÃJAVA_HOME³É¹¦");
+                            MessageBox.Show(QTQuickLocalization.Get("Success.JavaHome"));
                             break;
                         }
                     case 55:
                         {
-                            // 5. ÉèÖÃµ±Ç°Ä¿Â¼M2_HOME
+                            // 5. ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä¿Â¼M2_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string mvnCmd = Path.Combine(binPath, "mvn.cmd");
@@ -466,7 +465,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
-                                MessageBox.Show("µ±Ç°Ä¿Â¼ÒÑ¾­É¾³ý");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.CurrentDirectoryMissing"));
                                // QTUtility.SoundPlay();
                                 return;
                             }
@@ -474,7 +473,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
-                                MessageBox.Show("binÄ¿Â¼²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.BinMissing"));
                              //   QTUtility.SoundPlay();
                                 return;
                             }
@@ -484,7 +483,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(mvnCmd) || !File.Exists(mvnCmd))
                             {
-                                MessageBox.Show("mvnCmd²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.MvnMissing"));
                               //  QTUtility.SoundPlay();
                                 return;
                             }
@@ -515,20 +514,20 @@ namespace Qwop {
                                 envKey.SetValue("M2_HOME", selectedPath);
 
                                 SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
-                                MessageBox.Show("ÉèÖÃM2_HOME³É¹¦");
+                                MessageBox.Show(QTQuickLocalization.Get("Success.M2Home"));
                             }
                             break;
                         }
                     case 4:
                         {
-                            // 4. ²é¿´ÏµÍ³ÐÅÏ¢
+                            // 4. ï¿½é¿´ÏµÍ³ï¿½ï¿½Ï¢
                             string msinfo32 = Environment.GetEnvironmentVariable("systemroot") + "\\System32\\msinfo32.exe";
                             Process.Start(msinfo32);
                             break;
                         }
                     case 5:
                         {
-                            // 5. ÖØÆô×ÊÔ´¹ÜÀíÆ÷
+                            // 5. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             /*
                             foreach (Process p in Process.GetProcesses())
                             {
@@ -543,27 +542,27 @@ namespace Qwop {
                             Thread.Sleep(800);
                             Process.Start("explorer.exe");*/
                             string MyDosComLine1, MyDosComLine2, MyDosComLine3;
-                            MyDosComLine1 = "taskkill /f /im explorer.exe";//·µ»Ø¸ùÄ¿Â¼ÃüÁî
-                            MyDosComLine2 =  "start explorer.exe";//½øÈëMyFilesÄ¿Â¼
+                            MyDosComLine1 = "taskkill /f /im explorer.exe";//ï¿½ï¿½ï¿½Ø¸ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½
+                            MyDosComLine2 =  "start explorer.exe";//ï¿½ï¿½ï¿½ï¿½MyFilesÄ¿Â¼
                             Process myProcess = new Process();
 
-                            myProcess.StartInfo.FileName = "cmd.exe ";//´ò¿ªDOS¿ØÖÆÆ½Ì¨ 
+                            myProcess.StartInfo.FileName = "cmd.exe ";//ï¿½ï¿½DOSï¿½ï¿½ï¿½ï¿½Æ½Ì¨ 
                             myProcess.StartInfo.UseShellExecute = false;
-                            myProcess.StartInfo.CreateNoWindow = true;//ÊÇ·ñÏÔÊ¾DOS´°¿Ú£¬true´ú±íÒþ²Ø;
+                            myProcess.StartInfo.CreateNoWindow = true;//ï¿½Ç·ï¿½ï¿½ï¿½Ê¾DOSï¿½ï¿½ï¿½Ú£ï¿½trueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
                             myProcess.StartInfo.RedirectStandardInput = true;
                             myProcess.StartInfo.RedirectStandardOutput = true;
                             myProcess.StartInfo.RedirectStandardError = true;
                             myProcess.Start();
-                            StreamWriter sIn = myProcess.StandardInput;//±ê×¼ÊäÈëÁ÷ 
+                            StreamWriter sIn = myProcess.StandardInput;//ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
                             sIn.AutoFlush = true;
-                            StreamReader sOut = myProcess.StandardOutput;//±ê×¼ÊäÈëÁ÷
+                            StreamReader sOut = myProcess.StandardOutput;//ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-                            StreamReader sErr = myProcess.StandardError;//±ê×¼´íÎóÁ÷ 
-                            sIn.Write(MyDosComLine1 + System.Environment.NewLine);//µÚÒ»ÌõDOSÃüÁî 
-                            sIn.Write(MyDosComLine2 + System.Environment.NewLine);//µÚ¶þÌõDOSÃüÁî 
-                            sIn.Write("exit" + System.Environment.NewLine);//µÚËÄÌõDOSÃüÁî£¬ÍË³öDOS´°¿Ú
-                            string s = sOut.ReadToEnd();//¶ÁÈ¡Ö´ÐÐDOSÃüÁîºóÊä³öÐÅÏ¢ 
-                            string er = sErr.ReadToEnd();//¶ÁÈ¡Ö´ÐÐDOSÃüÁîºó´íÎóÐÅÏ¢
+                            StreamReader sErr = myProcess.StandardError;//ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+                            sIn.Write(MyDosComLine1 + System.Environment.NewLine);//ï¿½ï¿½Ò»ï¿½ï¿½DOSï¿½ï¿½ï¿½ï¿½ 
+                            sIn.Write(MyDosComLine2 + System.Environment.NewLine);//ï¿½Ú¶ï¿½ï¿½ï¿½DOSï¿½ï¿½ï¿½ï¿½ 
+                            sIn.Write("exit" + System.Environment.NewLine);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DOSï¿½ï¿½ï¿½î£¬ï¿½Ë³ï¿½DOSï¿½ï¿½ï¿½ï¿½
+                            string s = sOut.ReadToEnd();//ï¿½ï¿½È¡Ö´ï¿½ï¿½DOSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ 
+                            string er = sErr.ReadToEnd();//ï¿½ï¿½È¡Ö´ï¿½ï¿½DOSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
                             if (myProcess.HasExited == false)
                             {
                                 myProcess.Kill();
@@ -579,7 +578,7 @@ namespace Qwop {
                         }
                     case 6:
                         {
-                            // 6. ¹Ø»ú
+                            // 6. ï¿½Ø»ï¿½
                             IntPtr handle = GetShellTrayWnd();
                             CloseExplorer(handle, 1);
                             // PInvoke.PostMessage(hwndExplr, WM.CLOSE, IntPtr.Zero, (IntPtr)nCode)
@@ -588,14 +587,14 @@ namespace Qwop {
                         }
                     case 99:
                         {
-                            // 9. ÉèÖÃµ±Ç°Ä¿Â¼ANT_HOME
+                            // 9. ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä¿Â¼ANT_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string antCmd = Path.Combine(binPath, "ant.cmd");
 
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
-                                MessageBox.Show("µ±Ç°Ä¿Â¼ÒÑ¾­É¾³ý");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.CurrentDirectoryMissing"));
                                // QTUtility.SoundPlay();
                                 return;
                             }
@@ -603,7 +602,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
-                                MessageBox.Show("binÄ¿Â¼²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.BinMissing"));
                                // QTUtility.SoundPlay();
                                 return;
                             }
@@ -611,7 +610,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(antCmd) || !File.Exists(antCmd))
                             {
-                                MessageBox.Show("antCmd²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.AntMissing"));
                               //  QTUtility.SoundPlay();
                                 return;
                             }
@@ -623,20 +622,20 @@ namespace Qwop {
                                 envKey.SetValue("ANT_HOME", selectedPath);
                                 envKey.SetValue("PATH", joinDevPath(oldPath));
                                 SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
-                                MessageBox.Show("ÉèÖÃANT_HOME³É¹¦");
+                                MessageBox.Show(QTQuickLocalization.Get("Success.AntHome"));
                             }
                             break;
                         }
                     case 10:
                         {
-                            // 10. ÉèÖÃµ±Ç°Ä¿Â¼MVND_HOME
+                            // 10. ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä¿Â¼MVND_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string mvndexe = Path.Combine(binPath, "mvnd.exe");
 
                             if (String.IsNullOrEmpty(selectedPath) || !Directory.Exists(selectedPath))
                             {
-                                MessageBox.Show("µ±Ç°Ä¿Â¼ÒÑ¾­É¾³ý");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.CurrentDirectoryMissing"));
                                // QTUtility.SoundPlay();
                                 return;
                             }
@@ -644,7 +643,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(binPath) || !Directory.Exists(binPath))
                             {
-                                MessageBox.Show("binÄ¿Â¼²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.BinMissing"));
                              //   QTUtility.SoundPlay();
                                 return;
                             }
@@ -652,7 +651,7 @@ namespace Qwop {
 
                             if (String.IsNullOrEmpty(mvndexe) || !File.Exists(mvndexe))
                             {
-                                MessageBox.Show("mvndexe²»´æÔÚ");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.MvndMissing"));
                              //   QTUtility.SoundPlay();
                                 return;
                             }
@@ -664,7 +663,7 @@ namespace Qwop {
                                 envKey.SetValue("MVND_HOME", selectedPath);
                                 envKey.SetValue("PATH", joinDevPath(oldPath));
                                 SendNotifyMessage((IntPtr)HWND_BROADCAST, WM_SETTINGCHANGE, (UIntPtr)0, "Environment");
-                                MessageBox.Show("ÉèÖÃMVND_HOME³É¹¦");
+                                MessageBox.Show(QTQuickLocalization.Get("Success.MvndHome"));
                             }
                             break;
                         }
@@ -672,7 +671,7 @@ namespace Qwop {
 
                     case 7:
                         {
-                            // 11. ¹ÜÀíÔ±·½Ê½Æô¶¯
+                            // 11. ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
                             string binPath = Path.Combine(selectedPath, "bin");
                             string mvndexe = Path.Combine(binPath, "mvnd.exe");
@@ -735,12 +734,12 @@ namespace Qwop {
                                 }).Start();*/
                             }
                             else {
-                                MessageBox.Show( "Î´ÕÒµ½¿ÉÖ´ÐÐÎÄ¼þSetHome");
+                                MessageBox.Show(QTQuickLocalization.Get("Error.SetHomeMissing"));
                             }
                             break;
                         }
 
-                    case 8:  // É¾³ýgroupÎÄ¼þ
+                    case 8:  // É¾ï¿½ï¿½groupï¿½Ä¼ï¿½
                         {
                             string startUpFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
                             try
@@ -756,7 +755,7 @@ namespace Qwop {
                             break;
                         }
 
-                    case 9:  // É¾³ý QTTabBarException.log
+                    case 9:  // É¾ï¿½ï¿½ QTTabBarException.log
                     {
                         
                         string notepadExe = GuessNotepadPath();
@@ -803,7 +802,7 @@ namespace Qwop {
                 {
                     case 0:
                         {
-                            // 0. ÎÒµÄÎÄµµ
+                            // 0. ï¿½Òµï¿½ï¿½Äµï¿½
                             path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                             break;
                         }
@@ -820,7 +819,7 @@ namespace Qwop {
                         }
                     case 2:
                         {
-                            // 2. ÏÔÊ¾
+                            // 2. ï¿½ï¿½Ê¾
                             if (IsWin7)
                                 path = "::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}";
                             else if (IsXP)
@@ -903,7 +902,6 @@ namespace Qwop {
     //    internal static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
         //   internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
 
-        #region  ÒýÈëdll
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
@@ -913,10 +911,7 @@ namespace Qwop {
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
         public const Int32 CLOSE = 0x0010;
-        #endregion
 
-
-        // ¹Ø±Õ×ÊÔ´¹ÜÀíÆ÷£¬·¢ËÍ¹Ø±ÕÏûÏ¢
         public static void CloseExplorer(IntPtr hwndExplr, int nCode, bool doAsync = false)
         {
             if (IsXP && nCode == 0) nCode = 3;

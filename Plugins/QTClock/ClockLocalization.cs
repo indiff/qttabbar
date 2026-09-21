@@ -112,27 +112,6 @@ namespace QuizoPlugins
 
         public static CultureInfo ResolveCulture()
         {
-            string overrideName = null;
-            using (var key = Registry.CurrentUser.OpenSubKey(RegistryPath))
-            {
-                if (key != null)
-                {
-                    overrideName = key.GetValue(RegistryValueLanguage) as string;
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(overrideName) && !overrideName.Equals("auto", StringComparison.OrdinalIgnoreCase))
-            {
-                try
-                {
-                    return CultureInfo.GetCultureInfo(overrideName);
-                }
-                catch (CultureNotFoundException)
-                {
-                    return CultureInfo.InstalledUICulture;
-                }
-            }
-
             return QTPlugin.PluginCulture.Normalize(CultureInfo.CurrentUICulture);
         }
 

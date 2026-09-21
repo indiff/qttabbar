@@ -19,7 +19,7 @@ namespace Qwop {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -47,8 +47,8 @@ namespace Qwop {
         }
         
         /// <summary>
-        ///   使用此强类型资源类，为所有资源查找
-        ///   重写当前线程的 CurrentUICulture 属性。
+        ///   重写当前线程的 CurrentUICulture 属性，对
+        ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Globalization.CultureInfo Culture {
@@ -77,6 +77,438 @@ namespace Qwop {
             get {
                 object obj = ResourceManager.GetObject("Config_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ant.cmd does not exist. 的本地化字符串。
+        /// </summary>
+        internal static string Error_AntMissing {
+            get {
+                return ResourceManager.GetString("Error.AntMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ant.cmd 不存在 的本地化字符串。
+        /// </summary>
+        internal static string Error_AntMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.AntMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The bin directory does not exist. 的本地化字符串。
+        /// </summary>
+        internal static string Error_BinMissing {
+            get {
+                return ResourceManager.GetString("Error.BinMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 bin 目录不存在 的本地化字符串。
+        /// </summary>
+        internal static string Error_BinMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.BinMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The current directory has been deleted. 的本地化字符串。
+        /// </summary>
+        internal static string Error_CurrentDirectoryMissing {
+            get {
+                return ResourceManager.GetString("Error.CurrentDirectoryMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 当前目录已经删除 的本地化字符串。
+        /// </summary>
+        internal static string Error_CurrentDirectoryMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.CurrentDirectoryMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 dt.jar does not exist. 的本地化字符串。
+        /// </summary>
+        internal static string Error_DtJarMissing {
+            get {
+                return ResourceManager.GetString("Error.DtJarMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 dt.jar 不存在 的本地化字符串。
+        /// </summary>
+        internal static string Error_DtJarMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.DtJarMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The lib directory does not exist. 的本地化字符串。
+        /// </summary>
+        internal static string Error_LibMissing {
+            get {
+                return ResourceManager.GetString("Error.LibMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 lib 目录不存在 的本地化字符串。
+        /// </summary>
+        internal static string Error_LibMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.LibMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 mvnd.exe does not exist. 的本地化字符串。
+        /// </summary>
+        internal static string Error_MvndMissing {
+            get {
+                return ResourceManager.GetString("Error.MvndMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 mvnd.exe 不存在 的本地化字符串。
+        /// </summary>
+        internal static string Error_MvndMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.MvndMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 mvn.cmd does not exist. 的本地化字符串。
+        /// </summary>
+        internal static string Error_MvnMissing {
+            get {
+                return ResourceManager.GetString("Error.MvnMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 mvn.cmd 不存在 的本地化字符串。
+        /// </summary>
+        internal static string Error_MvnMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.MvnMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 The SetHome executable was not found. 的本地化字符串。
+        /// </summary>
+        internal static string Error_SetHomeMissing {
+            get {
+                return ResourceManager.GetString("Error.SetHomeMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未找到可执行文件 SetHome 的本地化字符串。
+        /// </summary>
+        internal static string Error_SetHomeMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.SetHomeMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 tools.jar does not exist. 的本地化字符串。
+        /// </summary>
+        internal static string Error_ToolsJarMissing {
+            get {
+                return ResourceManager.GetString("Error.ToolsJarMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 tools.jar 不存在 的本地化字符串。
+        /// </summary>
+        internal static string Error_ToolsJarMissing_zh_CN {
+            get {
+                return ResourceManager.GetString("Error.ToolsJarMissing.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Control Panel\Appearance and Personalization\Display 的本地化字符串。
+        /// </summary>
+        internal static string Menu_Display {
+            get {
+                return ResourceManager.GetString("Menu.Display", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 控制面板\外观和个性化\显示 的本地化字符串。
+        /// </summary>
+        internal static string Menu_Display_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.Display.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Open QTTabBar Exception Log 的本地化字符串。
+        /// </summary>
+        internal static string Menu_ExceptionLog {
+            get {
+                return ResourceManager.GetString("Menu.ExceptionLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开 QTTabBar 异常日志 的本地化字符串。
+        /// </summary>
+        internal static string Menu_ExceptionLog_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.ExceptionLog.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Restart File Explorer 的本地化字符串。
+        /// </summary>
+        internal static string Menu_Explorer {
+            get {
+                return ResourceManager.GetString("Menu.Explorer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 重启资源管理器 的本地化字符串。
+        /// </summary>
+        internal static string Menu_Explorer_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.Explorer.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 My Documents 的本地化字符串。
+        /// </summary>
+        internal static string Menu_MyDocuments {
+            get {
+                return ResourceManager.GetString("Menu.MyDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 我的文档 的本地化字符串。
+        /// </summary>
+        internal static string Menu_MyDocuments_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.MyDocuments.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Control Panel\Network and Internet\Network Connections 的本地化字符串。
+        /// </summary>
+        internal static string Menu_Network {
+            get {
+                return ResourceManager.GetString("Menu.Network", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 控制面板\网络和 Internet\网络连接 的本地化字符串。
+        /// </summary>
+        internal static string Menu_Network_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.Network.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Remove QTTabGroup Registry Entry 的本地化字符串。
+        /// </summary>
+        internal static string Menu_RemoveQTTabGroup {
+            get {
+                return ResourceManager.GetString("Menu.RemoveQTTabGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除 QTTabGroup 注册表项 的本地化字符串。
+        /// </summary>
+        internal static string Menu_RemoveQTTabGroup_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.RemoveQTTabGroup.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Set Path 的本地化字符串。
+        /// </summary>
+        internal static string Menu_SetPath {
+            get {
+                return ResourceManager.GetString("Menu.SetPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置 Path 的本地化字符串。
+        /// </summary>
+        internal static string Menu_SetPath_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.SetPath.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Shut Down 的本地化字符串。
+        /// </summary>
+        internal static string Menu_Shutdown {
+            get {
+                return ResourceManager.GetString("Menu.Shutdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 关机 的本地化字符串。
+        /// </summary>
+        internal static string Menu_Shutdown_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.Shutdown.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Control Panel\System and Security\System 的本地化字符串。
+        /// </summary>
+        internal static string Menu_System {
+            get {
+                return ResourceManager.GetString("Menu.System", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 控制面板\系统和安全\系统 的本地化字符串。
+        /// </summary>
+        internal static string Menu_System_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.System.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 View System Information 的本地化字符串。
+        /// </summary>
+        internal static string Menu_SystemInfo {
+            get {
+                return ResourceManager.GetString("Menu.SystemInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 查看系统信息 的本地化字符串。
+        /// </summary>
+        internal static string Menu_SystemInfo_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.SystemInfo.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Quick 的本地化字符串。
+        /// </summary>
+        internal static string Plugin_Text {
+            get {
+                return ResourceManager.GetString("Plugin.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 快捷 的本地化字符串。
+        /// </summary>
+        internal static string Plugin_Text_zh_CN {
+            get {
+                return ResourceManager.GetString("Plugin.Text.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ANT_HOME was set successfully. 的本地化字符串。
+        /// </summary>
+        internal static string Success_AntHome {
+            get {
+                return ResourceManager.GetString("Success.AntHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置 ANT_HOME 成功 的本地化字符串。
+        /// </summary>
+        internal static string Success_AntHome_zh_CN {
+            get {
+                return ResourceManager.GetString("Success.AntHome.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 JAVA_HOME was set successfully. 的本地化字符串。
+        /// </summary>
+        internal static string Success_JavaHome {
+            get {
+                return ResourceManager.GetString("Success.JavaHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置 JAVA_HOME 成功 的本地化字符串。
+        /// </summary>
+        internal static string Success_JavaHome_zh_CN {
+            get {
+                return ResourceManager.GetString("Success.JavaHome.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 M2_HOME was set successfully. 的本地化字符串。
+        /// </summary>
+        internal static string Success_M2Home {
+            get {
+                return ResourceManager.GetString("Success.M2Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置 M2_HOME 成功 的本地化字符串。
+        /// </summary>
+        internal static string Success_M2Home_zh_CN {
+            get {
+                return ResourceManager.GetString("Success.M2Home.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 MVND_HOME was set successfully. 的本地化字符串。
+        /// </summary>
+        internal static string Success_MvndHome {
+            get {
+                return ResourceManager.GetString("Success.MvndHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置 MVND_HOME 成功 的本地化字符串。
+        /// </summary>
+        internal static string Success_MvndHome_zh_CN {
+            get {
+                return ResourceManager.GetString("Success.MvndHome.zh-CN", resourceCulture);
             }
         }
     }

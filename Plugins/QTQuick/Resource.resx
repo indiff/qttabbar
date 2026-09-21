@@ -124,4 +124,148 @@
   <data name="Config_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\20120710111655756_easyicon_cn_24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Plugin.Text">
+    <value>Quick</value>
+  </data>
+  <data name="Menu.MyDocuments">
+    <value>My Documents</value>
+  </data>
+  <data name="Menu.System">
+    <value>Control Panel\System and Security\System</value>
+  </data>
+  <data name="Menu.Display">
+    <value>Control Panel\Appearance and Personalization\Display</value>
+  </data>
+  <data name="Menu.Network">
+    <value>Control Panel\Network and Internet\Network Connections</value>
+  </data>
+  <data name="Menu.SystemInfo">
+    <value>View System Information</value>
+  </data>
+  <data name="Menu.Explorer" xml:space="preserve">
+    <value>Restart File Explorer</value>
+  </data>
+  <data name="Menu.Shutdown">
+    <value>Shut Down</value>
+  </data>
+  <data name="Menu.SetPath">
+    <value>Set Path</value>
+  </data>
+  <data name="Menu.RemoveQTTabGroup">
+    <value>Remove QTTabGroup Registry Entry</value>
+  </data>
+  <data name="Menu.ExceptionLog">
+    <value>Open QTTabBar Exception Log</value>
+  </data>
+  <data name="Error.CurrentDirectoryMissing">
+    <value>The current directory has been deleted.</value>
+  </data>
+  <data name="Error.BinMissing">
+    <value>The bin directory does not exist.</value>
+  </data>
+  <data name="Error.LibMissing">
+    <value>The lib directory does not exist.</value>
+  </data>
+  <data name="Error.ToolsJarMissing">
+    <value>tools.jar does not exist.</value>
+  </data>
+  <data name="Error.DtJarMissing">
+    <value>dt.jar does not exist.</value>
+  </data>
+  <data name="Error.MvnMissing">
+    <value>mvn.cmd does not exist.</value>
+  </data>
+  <data name="Error.AntMissing">
+    <value>ant.cmd does not exist.</value>
+  </data>
+  <data name="Error.MvndMissing">
+    <value>mvnd.exe does not exist.</value>
+  </data>
+  <data name="Success.JavaHome">
+    <value>JAVA_HOME was set successfully.</value>
+  </data>
+  <data name="Success.M2Home">
+    <value>M2_HOME was set successfully.</value>
+  </data>
+  <data name="Success.AntHome">
+    <value>ANT_HOME was set successfully.</value>
+  </data>
+  <data name="Success.MvndHome">
+    <value>MVND_HOME was set successfully.</value>
+  </data>
+  <data name="Error.SetHomeMissing">
+    <value>The SetHome executable was not found.</value>
+  </data>
+  <data name="Plugin.Text.zh-CN">
+    <value>快捷</value>
+  </data>
+  <data name="Menu.MyDocuments.zh-CN">
+    <value>我的文档</value>
+  </data>
+  <data name="Menu.System.zh-CN">
+    <value>控制面板\系统和安全\系统</value>
+  </data>
+  <data name="Menu.Display.zh-CN">
+    <value>控制面板\外观和个性化\显示</value>
+  </data>
+  <data name="Menu.Network.zh-CN">
+    <value>控制面板\网络和 Internet\网络连接</value>
+  </data>
+  <data name="Menu.SystemInfo.zh-CN">
+    <value>查看系统信息</value>
+  </data>
+  <data name="Menu.Explorer.zh-CN" xml:space="preserve">
+    <value>重启资源管理器</value>
+  </data>
+  <data name="Menu.Shutdown.zh-CN">
+    <value>关机</value>
+  </data>
+  <data name="Menu.SetPath.zh-CN">
+    <value>设置 Path</value>
+  </data>
+  <data name="Menu.RemoveQTTabGroup.zh-CN">
+    <value>删除 QTTabGroup 注册表项</value>
+  </data>
+  <data name="Menu.ExceptionLog.zh-CN">
+    <value>打开 QTTabBar 异常日志</value>
+  </data>
+  <data name="Error.CurrentDirectoryMissing.zh-CN">
+    <value>当前目录已经删除</value>
+  </data>
+  <data name="Error.BinMissing.zh-CN">
+    <value>bin 目录不存在</value>
+  </data>
+  <data name="Error.LibMissing.zh-CN">
+    <value>lib 目录不存在</value>
+  </data>
+  <data name="Error.ToolsJarMissing.zh-CN">
+    <value>tools.jar 不存在</value>
+  </data>
+  <data name="Error.DtJarMissing.zh-CN">
+    <value>dt.jar 不存在</value>
+  </data>
+  <data name="Error.MvnMissing.zh-CN">
+    <value>mvn.cmd 不存在</value>
+  </data>
+  <data name="Error.AntMissing.zh-CN">
+    <value>ant.cmd 不存在</value>
+  </data>
+  <data name="Error.MvndMissing.zh-CN">
+    <value>mvnd.exe 不存在</value>
+  </data>
+  <data name="Success.JavaHome.zh-CN">
+    <value>设置 JAVA_HOME 成功</value>
+  </data>
+  <data name="Success.M2Home.zh-CN">
+    <value>设置 M2_HOME 成功</value>
+  </data>
+  <data name="Success.AntHome.zh-CN">
+    <value>设置 ANT_HOME 成功</value>
+  </data>
+  <data name="Success.MvndHome.zh-CN">
+    <value>设置 MVND_HOME 成功</value>
+  </data>
+  <data name="Error.SetHomeMissing.zh-CN">
+    <value>未找到可执行文件 SetHome</value>
+  </data>
 </root>
