@@ -210,7 +210,7 @@ namespace QTTabBarLib {
             if(live != null && !fForceNew) {
                 // Back on a native tab whose view is still alive and subclassed.
                 CurrentListView = live;
-                ShellBrowser.RebindFolderView(hwndShellView);
+                ShellBrowser.RebindFolderView(hwndExplorer, hwndShellView);
                 ListViewChanged(this, null);
                 return;
             }
@@ -236,7 +236,7 @@ namespace QTTabBarLib {
             }
             CurrentListView.ListViewDestroyed += ListView_Destroyed;
             liveViews.Add(CurrentListView);
-            ShellBrowser.RebindFolderView(hwndShellView);
+            ShellBrowser.RebindFolderView(hwndExplorer, hwndShellView);
             ListViewChanged(this, null);
         }
 
