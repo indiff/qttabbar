@@ -359,6 +359,29 @@ namespace QTTabBarLib {
             }
         }
 
+        // With Windows 11 native tabs the IShellBrowser we were created with belongs to the tab
+        // QTTabBar attached to, so on any other tab folderView would still point at that tab's view
+        // and every item lookup (previews, subfolder tips) resolves to the wrong folder. Ask the
+        // active tab's own DefView for its browser instead.
+        public void RebindFolderView(IntPtr hwndShellView) {
+            if(hwndShellView == IntPtr.Zero) return;
+            try {
+                // WM_GETISHELLBROWSER (0x407): the returned pointer is not AddRef'd for us;
+                // GetObjectForIUnknown takes its own reference.
+                IntPtr pBrowser = PInvoke.SendMessage(hwndShellView, 0x407, IntPtr.Zero, IntPtr.Zero);
+                if(pBrowser == IntPtr.Zero) return;
+                IShellBrowser browser = Marshal.GetObjectForIUnknown(pBrowser) as IShellBrowser;
+                IShellView shellView;
+                if(browser != null && browser.QueryActiveShellView(out shellView) == 0) {
+                    IFolderView view = shellView as IFolderView;
+                    if(view != null) folderView = view;
+                }
+            }
+            catch(Exception e) {
+                QTUtility2.MakeErrorLog(e, "RebindFolderView");
+            }
+        }
+
         /**
          System.NullReferenceException: 未将对象引用设置到对象的实例。
             在 QTTabBarLib.Interop.IShellBrowser.BrowseObject(IntPtr pidl, SBSP wFlags)
