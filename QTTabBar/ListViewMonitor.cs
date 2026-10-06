@@ -198,6 +198,11 @@ namespace QTTabBarLib {
                     return;
                 }
                 PreviousListView = CurrentListView;
+                // Nothing else tells the outgoing view's tooltips it is no longer on screen: a
+                // native tab switch (e.g. Ctrl+Tab with the mouse still over a file) produces no
+                // mouse-leave or hot-item change, so a preview would stay up over the new tab.
+                PreviousListView.HideThumbnailTooltip(0);
+                PreviousListView.HideSubDirTip();
             }
 
             AbstractListView live = hwndListView == IntPtr.Zero ? null
