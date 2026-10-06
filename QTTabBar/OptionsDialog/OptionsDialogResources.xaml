@@ -30,6 +30,7 @@
     <qt:Converter       Type="{x:Type qt:OptionsDialog+ColorToBrushConverter        }" x:Key="ColorToBrushConverter"        />
     <qt:Converter       Type="{x:Type qt:OptionsDialog+FontStringConverter          }" x:Key="FontStringConverter"          />
     <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+LogicalAndMultiConverter     }" x:Key="LogicalAndMultiConverter"     />
+    <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+LogicalAndBroadcastMultiConverter }" x:Key="LogicalAndBroadcastMultiConverter" />
     <qt:MultiConverter  Type="{x:Type qt:OptionsDialog+BoolJoinMultiConverter       }" x:Key="BoolJoinMultiConverter"       />
 
     <!-- Label Style for Section Headers -->

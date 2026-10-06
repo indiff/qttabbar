@@ -494,13 +494,15 @@ namespace QTTabBarLib {
             // Initialize() only ever runs once per process), so changing it needs a restart
             // to actually apply.
             bool oldAutoHookWindow = Config.Window.AutoHookWindow;
+            bool oldAutoEnableExperimental = Config.Window.AutoEnableExperimental;
             foreach(OptionsDialogTab tab in tabbedPanel.Items) {
                 tab.CommitConfig();
             }
             ConfigManager.LoadedConfig = QTUtility2.DeepClone(WorkingConfig);
             ConfigManager.WriteConfig();
             ConfigManager.UpdateConfig();
-            if (Config.Window.AutoHookWindow != oldAutoHookWindow) {
+            if (Config.Window.AutoHookWindow != oldAutoHookWindow
+                || Config.Window.AutoEnableExperimental != oldAutoEnableExperimental) {
                 QTUtility2.RestartExplorer();
             }
         }
