@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BandObjectLib;
 using Microsoft.Win32;
+using QTTabBarLib.Interop;
 using SHDocVw;
 
 namespace QTTabBarLib {
@@ -71,6 +72,28 @@ namespace QTTabBarLib {
                 QTUtility2.log("QTTabBar AutoLoader SetSite ActivateIt ");
                 // QTUtility2.flog("QTTabBar AutoLoader SetSite ActivateIt ");
                 ActivateIt();
+
+                // Windows 11 has no toolbar rebar to host the band, so nothing else ever
+                // attaches QTTabBarClass to a window there. Make sure QTUtility's static init
+                // has run (normally the band triggers it), then attach once the window is
+                // visible - attaching straight from SetSite takes down Explorer's ability to
+                // open further windows. Poll on this thread's own message loop, give up after
+                // a few tries.
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(QTUtility).TypeHandle);
+                if (QTUtility.IsWin11 && Config.Window.AutoEnableExperimental) {
+                    IWebBrowser2 wb = explorer;
+                    ActionDelayer.Add(() => {
+                        try {
+                            IntPtr hwnd = (IntPtr)wb.HWND;
+                            if (hwnd == IntPtr.Zero || !PInvoke.IsWindowVisible(hwnd)) return false;
+                            ContextMenuOptions.AttachToWindow(wb);
+                        }
+                        catch {
+                            // treat as "done trying", not "keep retrying"
+                        }
+                        return true;
+                    }, 500, 500, 10);
+                }
             }
 
             return 0;
