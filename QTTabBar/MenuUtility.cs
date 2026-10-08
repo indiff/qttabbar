@@ -259,24 +259,57 @@ namespace QTTabBarLib {
         }
 
         public static void GroupMenu_ItemRightClicked(object sender, ItemRightClickedEventArgs e) {
-            DropDownMenuReorderable reorderable = (DropDownMenuReorderable)sender;
-            string path = TrackGroupContextMenu(e.ClickedItem.Text, e.IsKey ? e.Point : Control.MousePosition, reorderable.Handle);
-            if(!string.IsNullOrEmpty(path)) {
-                Action<QTTabBarClass> open = tabBar => {
-                    using(IDLWrapper idlw = new IDLWrapper(path)) {
-                        tabBar.OpenNewTabOrWindow(idlw);
+            try {
+                DropDownMenuReorderable reorderable = sender as DropDownMenuReorderable;
+                if(reorderable == null || e == null || e.ClickedItem == null) {
+                    if(e != null) e.HRESULT = 0xfffd;
+                    return;
+                }
+
+                bool removeGroup;
+                string groupName = e.ClickedItem.Text;
+                string path = TrackGroupContextMenu(
+                    groupName,
+                    e.IsKey ? e.Point : Control.MousePosition,
+                    reorderable.Handle,
+                    out removeGroup);
+                if(removeGroup) {
+                    if(GroupsManager.RemoveGroup(groupName)) {
+                        ToolStripItem groupItem = reorderable.Items
+                            .Cast<ToolStripItem>()
+                            .FirstOrDefault(item => string.Equals(item.Text, groupName, StringComparison.Ordinal));
+                        if(groupItem != null) {
+                            groupItem.Dispose();
+                        }
+                        e.HRESULT = 0;
                     }
-                };
-                QTTabBarClass threadBar = InstanceManager.GetThreadTabBar();
-                if(threadBar != null) {
-                    open(threadBar);
+                    else {
+                        e.HRESULT = 0xfffd;
+                    }
+                    return;
+                }
+
+                if(!string.IsNullOrEmpty(path)) {
+                    Action<QTTabBarClass> open = tabBar => {
+                        using(IDLWrapper idlw = new IDLWrapper(path)) {
+                            tabBar.OpenNewTabOrWindow(idlw);
+                        }
+                    };
+                    QTTabBarClass threadBar = InstanceManager.GetThreadTabBar();
+                    if(threadBar != null) {
+                        open(threadBar);
+                    }
+                    else {
+                        InstanceManager.InvokeMain(open);
+                    }
                 }
                 else {
-                    InstanceManager.InvokeMain(open);
+                    e.HRESULT = 0xfffd;
                 }
             }
-            else {
-                e.HRESULT = 0xfffd;
+            catch(Exception exception) {
+                QTUtility2.MakeErrorLog(exception, "GroupMenu_ItemRightClicked");
+                if(e != null) e.HRESULT = 0xfffd;
             }
         }
 
@@ -342,15 +375,19 @@ namespace QTTabBarLib {
 
         // TODO: what does this do?!
         // TODO: whatever it does, it should be returning an idl, not a path.
-        public static string TrackGroupContextMenu(string groupName, Point pnt, IntPtr pDropDownHandle) {
+        public static string TrackGroupContextMenu(string groupName, Point pnt, IntPtr pDropDownHandle, out bool removeGroup) {
             string name = string.Empty;
+            removeGroup = false;
             Group g = GroupsManager.GetGroup(groupName);
             if(g == null) return name;
             ContextMenu menu = new ContextMenu();
             if(!QTUtility.IsXP) {
                 foreach(string str2 in g.Paths) {
                     string text;
-                    if(str2.StartsWith(@"\\")) {
+                    if(string.IsNullOrEmpty(str2)) {
+                        text = string.Empty;
+                    }
+                    else if(str2.StartsWith(@"\\")) {
                         text = str2;
                     }
                     else {
@@ -362,10 +399,13 @@ namespace QTTabBarLib {
                 }
             }
             else {
-                // Ìí¼Ó·Ö×éµÄµÄÂ·¾¶ÁÐ±í
+                // æ·»åŠ åˆ†ç»„çš„çš„è·¯å¾„åˆ—è¡¨
                 foreach(string path in g.Paths) {
                     string displayName;
-                    if(path.StartsWith(@"\\")) {
+                    if(string.IsNullOrEmpty(path)) {
+                        displayName = string.Empty;
+                    }
+                    else if(path.StartsWith(@"\\")) {
                         displayName = path;
                     }
                     else {
@@ -377,11 +417,19 @@ namespace QTTabBarLib {
                     menu.MenuItems.Add(ex);
                 }
             }
+            MenuItem separator = new MenuItem("-");
+            MenuItem removeItem = new MenuItem(QTUtility.IsChinese ? "åˆ é™¤æ ‡ç­¾ç»„" : "Remove group");
+            menu.MenuItems.Add(separator);
+            menu.MenuItems.Add(removeItem);
             List<IntPtr> list = new List<IntPtr>();
             if(!QTUtility.IsXP) {
                 for(int k = 0; k < g.Paths.Count; k++) {
                     string imageKey = QTUtility.GetImageKey(g.Paths[k], null);
-                    IntPtr hbitmap = ((Bitmap)QTUtility.ImageListGlobal.Images[imageKey]).GetHbitmap(Color.Black);
+                    Bitmap image = QTUtility.ImageListGlobal == null
+                        ? null
+                        : QTUtility.ImageListGlobal.Images[imageKey] as Bitmap;
+                    if(image == null) continue;
+                    IntPtr hbitmap = image.GetHbitmap(Color.Black);
                     if(hbitmap != IntPtr.Zero) {
                         list.Add(hbitmap);
                         PInvoke.SetMenuItemBitmaps(menu.Handle, k, 0x400, hbitmap, IntPtr.Zero);
@@ -392,9 +440,15 @@ namespace QTTabBarLib {
             if(menu.MenuItems.Count > 0) {
                 maxValue = PInvoke.TrackPopupMenu(menu.Handle, 0x180, pnt.X, pnt.Y, 0, pDropDownHandle, IntPtr.Zero);
                 if(maxValue != 0) {
+                    uint removeId = PInvoke.GetMenuItemID(menu.Handle, removeItem.Index);
+                    if(maxValue == removeId) {
+                        removeGroup = true;
+                    }
                     for(int m = 0; m < menu.MenuItems.Count; m++) {
                         if(maxValue == PInvoke.GetMenuItemID(menu.Handle, m)) {
-                            name = menu.MenuItems[m].Name;
+                            if(!removeGroup) {
+                                name = menu.MenuItems[m].Name;
+                            }
                             break;
                         }
                     }
