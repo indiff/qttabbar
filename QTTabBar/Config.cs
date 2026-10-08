@@ -275,6 +275,7 @@ namespace QTTabBarLib {
             public bool TrayOnClose              { get; set; }
             public bool TrayOnMinimize           { get; set; }
             public bool AutoHookWindow           { get; set; }
+            public bool AutoEnableExperimental   { get; set; } // auto-attach QTTabBarClass to every new Explorer window (Windows 11, see AutoLoader)
             public bool ShowFailNavMsg           { get; set; } // SHOW_FAIL_NAV_MSG
            
             public bool OpenExplorerMaximized    { get; set; }
@@ -308,6 +309,7 @@ namespace QTTabBarLib {
                 TrayOnMinimize = false;
                 // 默认关闭自动启动hook
                 AutoHookWindow = false;
+                AutoEnableExperimental = false;
                 OpenExplorerMaximized = false;
   //              string idl = Environment.OSVersion.Version >= new Version(6, 1)
   //                       ? "::{031E4825-7B94-4DC3-B131-E946B44C8DD5}"  // Libraries

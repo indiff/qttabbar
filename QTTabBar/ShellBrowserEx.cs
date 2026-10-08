@@ -342,23 +342,73 @@ namespace QTTabBarLib {
         public void OnNavigateComplete() {
             if(shellBrowser == null) return;
 
-            // 是否释放有问题 by indiff
             if (folderView != null)
             {
                 QTUtility2.log("ReleaseComObject folderView to reset");
                 Marshal.ReleaseComObject(folderView);
                 folderView = null;
+            }
 
-                if (folderView == null)
-                {
-                    // 显示赋值 folderView 实例
-                    IShellView ppshv;
-                    if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
-                    {
-                        folderView = ppshv as IFolderView;
+            // Re-acquire unconditionally: nested inside the block above, a fresh ShellBrowserEx
+            // (folderView still null in the ctor's first call) never acquired one, which broke
+            // per-item lookups such as thumbnail previews and subfolder tips.
+            IShellView ppshv;
+            if (shellBrowser.QueryActiveShellView(out ppshv) == 0)
+            {
+                folderView = ppshv as IFolderView;
+            }
+        }
+
+        // With Windows 11 native tabs the IShellBrowser we were created with belongs to the tab
+        // QTTabBar attached to, so on any other tab folderView would still point at that tab's view
+        // and every item lookup (previews, subfolder tips) resolves to the wrong folder. Ask the
+        // active tab's own DefView for its browser instead.
+        public void RebindFolderView(IntPtr hwndExplorer, IntPtr hwndShellView) {
+            if(hwndShellView == IntPtr.Zero) return;
+            // Deferred (and retried): this is called from inside a window-message handler, and the
+            // new view's window exists before its browser has switched to it as the active view.
+            ActionDelayer.Add(() => TryBindFolderView(hwndExplorer, hwndShellView), 30, 50, 20);
+        }
+
+        // Every native tab is its own entry in ShellWindows (same frame HWND), and each one's
+        // browser knows its own active view. Find the one whose active view is hwndShellView.
+        // Returns true when done (bound, or nothing left to bind), false to retry.
+        private bool TryBindFolderView(IntPtr hwndExplorer, IntPtr hwndShellView) {
+            SHDocVw.ShellWindows windows = null;
+            try {
+                if(!PInvoke.IsWindow(hwndShellView)) return true;
+                windows = new SHDocVw.ShellWindows();
+                foreach(object window in windows) {
+                    try {
+                        SHDocVw.IWebBrowser2 wb = window as SHDocVw.IWebBrowser2;
+                        if(wb == null || (IntPtr)wb.HWND != hwndExplorer) continue;
+                        object oBrowser;
+                        ((_IServiceProvider)wb).QueryService(ExplorerGUIDs.IID_IShellBrowser, ExplorerGUIDs.IID_IUnknown, out oBrowser);
+                        IShellBrowser browser = oBrowser as IShellBrowser;
+                        IShellView shellView;
+                        if(browser == null || browser.QueryActiveShellView(out shellView) != 0 || shellView == null) continue;
+                        IntPtr hwndActive;
+                        shellView.GetWindow(out hwndActive);
+                        if(hwndActive != hwndShellView) continue;
+                        IFolderView view = shellView as IFolderView;
+                        if(view == null) continue;
+                        folderView = view;
+                        QTUtility2.log("RebindFolderView bound view hwnd=" + hwndShellView);
+                        return true;
+                    }
+                    catch(COMException) {
+                        // that tab went away mid-enumeration
                     }
                 }
-
+                QTUtility2.log("RebindFolderView no tab owns view hwnd=" + hwndShellView + ", retrying");
+                return false;
+            }
+            catch(Exception e) {
+                QTUtility2.MakeErrorLog(e, "RebindFolderView");
+                return true;
+            }
+            finally {
+                if(windows != null) Marshal.ReleaseComObject(windows);
             }
         }
 

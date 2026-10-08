@@ -398,8 +398,10 @@ namespace QTTabBarLib {
                         content = EMPTYFILE;
                     }
 
+                    Color normalColor = QTUtility.InNightMode ? Color.White : SystemColors.InfoText;
+                    Color emptyColor = QTUtility.InNightMode ? Color.Gray : SystemColors.GrayText;
                     lblText.ForeColor = (ioException != null) ? Color.Red
-                        : (isEmptyText ? SystemColors.GrayText : SystemColors.InfoText);
+                        : (isEmptyText ? emptyColor : normalColor);
                     try
                     {
                         lblText.Font = Config.Tips.PreviewFont;
@@ -580,7 +582,9 @@ namespace QTTabBarLib {
             lblInfo = new Label();
             ((ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            lblInfo.ForeColor = SystemColors.InfoText;
+            Color foreColor = QTUtility.InNightMode ? Color.White : SystemColors.InfoText;
+            Color backColor = QTUtility.InNightMode ? Color.FromArgb(32, 32, 32) : SystemColors.Info;
+            lblInfo.ForeColor = foreColor;
             lblInfo.BackColor = Color.Transparent;
             lblInfo.Dock = DockStyle.Bottom;
             lblInfo.Padding = new Padding(4);
@@ -594,7 +598,7 @@ namespace QTTabBarLib {
             pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             pictureBox1.TabStop = false;
             lblText.AutoEllipsis = true;
-            lblText.ForeColor = SystemColors.InfoText;
+            lblText.ForeColor = foreColor;
             lblText.BackColor = Color.Transparent;
             lblText.Dock = DockStyle.Fill;
             lblText.Location = new Point(0, 0);
@@ -603,7 +607,7 @@ namespace QTTabBarLib {
             lblText.UseMnemonic = false;
             AutoScaleDimensions = new SizeF(6f, 13f);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.Info;
+            BackColor = backColor;
             ClientSize = new Size(0x100, 0x80);
             Controls.Add(lblText);
             Controls.Add(pictureBox1);
@@ -1753,12 +1757,15 @@ namespace QTTabBarLib {
         }
 
         protected override void OnPaintBackground(PaintEventArgs e) {
-            if(!QTUtility.IsXP && VisualStyleRenderer.IsSupported) {
+            // The themed tooltip visual style is always light, so paint manually in dark mode.
+            if(!QTUtility.IsXP && !QTUtility.InNightMode && VisualStyleRenderer.IsSupported) {
                 new VisualStyleRenderer(VisualStyleElement.ToolTip.Standard.Normal).DrawBackground(e.Graphics, new Rectangle(0, 0, Width, Height));
             }
             else {
                 base.OnPaintBackground(e);
-                e.Graphics.DrawRectangle(SystemPens.InfoText, new Rectangle(0, 0, Width - 1, Height - 1));
+                Pen borderPen = QTUtility.InNightMode ? new Pen(Color.FromArgb(83, 83, 83)) : SystemPens.InfoText;
+                e.Graphics.DrawRectangle(borderPen, new Rectangle(0, 0, Width - 1, Height - 1));
+                if(QTUtility.InNightMode) borderPen.Dispose();
             }
         }
 

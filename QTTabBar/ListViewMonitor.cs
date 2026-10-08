@@ -198,6 +198,11 @@ namespace QTTabBarLib {
                     return;
                 }
                 PreviousListView = CurrentListView;
+                // Nothing else tells the outgoing view's tooltips it is no longer on screen: a
+                // native tab switch (e.g. Ctrl+Tab with the mouse still over a file) produces no
+                // mouse-leave or hot-item change, so a preview would stay up over the new tab.
+                PreviousListView.HideThumbnailTooltip(0);
+                PreviousListView.HideSubDirTip();
             }
 
             AbstractListView live = hwndListView == IntPtr.Zero ? null
@@ -205,6 +210,7 @@ namespace QTTabBarLib {
             if(live != null && !fForceNew) {
                 // Back on a native tab whose view is still alive and subclassed.
                 CurrentListView = live;
+                ShellBrowser.RebindFolderView(hwndExplorer, hwndShellView);
                 ListViewChanged(this, null);
                 return;
             }
@@ -230,6 +236,7 @@ namespace QTTabBarLib {
             }
             CurrentListView.ListViewDestroyed += ListView_Destroyed;
             liveViews.Add(CurrentListView);
+            ShellBrowser.RebindFolderView(hwndExplorer, hwndShellView);
             ListViewChanged(this, null);
         }
 

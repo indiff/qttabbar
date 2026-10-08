@@ -232,10 +232,19 @@
         <Label
 			Content="Others" 
 			Style="{StaticResource SectionHeaderStyle}"/>
+			<!-- One switch for both attach mechanisms (AutoHookWindow = native hook,
+			     AutoEnableExperimental = per-window SetSite/ShowDW on Windows 11). Both
+			     only take effect at Explorer startup - see UpdateOptions(). -->
 			<CheckBox x:Name="ctxAutoHookWindow"
-				Content="Auto Hook(You can close it, No bg image,Must restart Explorer)" 
-				IsChecked="{Binding Path=AutoHookWindow}"
-				Style="{StaticResource CheckStyle}"/>
+				Content="Enable QTTabBar on every Explorer window (experimental, must restart Explorer)"
+				Style="{StaticResource CheckStyle}">
+				<CheckBox.IsChecked>
+					<MultiBinding Converter="{StaticResource LogicalAndBroadcastMultiConverter}" Mode="TwoWay">
+						<Binding Path="AutoHookWindow"/>
+						<Binding Path="AutoEnableExperimental"/>
+					</MultiBinding>
+				</CheckBox.IsChecked>
+			</CheckBox>
         <CheckBox x:Name="ctxShowFailNavMsg"
 				Content="Show Fail Nav Message Box" 
 				IsChecked="{Binding Path=ShowFailNavMsg}"
