@@ -54,7 +54,7 @@ namespace QuizoPlugins {
 
         public bool QueryShortcutKeys(out string[] actions) {
           //  actions = new string[] { "Show statusbar" };
-            actions = new string[] { "��ʾ״̬��" };
+            actions = new string[] { "显示状态栏" };
             return true;
         }
 

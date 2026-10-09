@@ -44,7 +44,7 @@ namespace QuizoPlugins {
         }
 
         public bool QueryShortcutKeys(out string[] actions) {
-            actions = new string[] { "´´½¨ÎÄ¼þ¼Ð", "´´½¨ÐÂÎÄ±¾" };
+            actions = new string[] { "æ–°å»ºæ–‡ä»¶å¤¹", "æ–°å»ºæ–‡æœ¬" };
             return true;
         }
 
@@ -84,7 +84,7 @@ namespace QuizoPlugins {
                 // make new name
                 bool fDir = index == 0;
                 int i = 2;
-                string name = fDir ? "ÐÂÄ¿Â¼" : "ÐÂÎÄ±¾";
+                string name = fDir ? "æ–°å»ºæ–‡ä»¶å¤¹" : "æ–°å»ºæ–‡æœ¬";
                 string ext = fDir ? String.Empty : ".txt";
                 string pathNew = path + "\\" + name + ext;
 

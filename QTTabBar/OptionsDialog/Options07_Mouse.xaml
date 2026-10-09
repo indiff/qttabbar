@@ -71,7 +71,7 @@
                 SelectionMode="Single">
                 <ListBox.Style>
                     <Style TargetType="{x:Type ListView}">
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}"/>
                     </Style>
                 </ListBox.Style>
                 <ListView.ItemContainerStyle>
@@ -79,7 +79,7 @@
                         <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         <Setter Property="Height" Value="20"/>
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.GroupStyle>

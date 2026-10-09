@@ -72,7 +72,7 @@
                 BorderThickness="1.000001">
                 <ListBox.Style>
                     <Style TargetType="{x:Type ListView}">
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}"/>
                     </Style>
                 </ListBox.Style>
                 <ListBox.ItemContainerStyle>
@@ -80,7 +80,7 @@
                         <Setter Property="BorderThickness" Value="1"/>
                         <Setter Property="Padding" Value="5,2,5,2"/>
                         <Setter Property="Margin" Value="0,0,0,1"/>
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=Enabled}" Value="False">
                                 <Setter Property="Foreground" Value="Gray"/>

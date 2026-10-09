@@ -2195,12 +2195,12 @@ namespace QTTabBarLib
                         bitmapArray[1] = bitmap.Clone(new Rectangle(0, height, bitmap.Width, height), PixelFormat.Format32bppArgb);
                         bitmapArray[2] = bitmap.Clone(new Rectangle(0, height * 2, bitmap.Width, height), PixelFormat.Format32bppArgb);
                     }
-                    if (Path.GetExtension(Config.Skin.TabImageFile).PathEquals(".bmp"))
-                    {
-                        bitmapArray[0].MakeTransparent(Color.Magenta);
-                        bitmapArray[1].MakeTransparent(Color.Magenta);
-                        bitmapArray[2].MakeTransparent(Color.Magenta);
-                    }
+                    // Tab skins traditionally use magenta as the color key. Apply it to
+                    // every supported image format; PNG skins may also use a color key
+                    // instead of an alpha channel.
+                    bitmapArray[0].MakeTransparent(Color.Magenta);
+                    bitmapArray[1].MakeTransparent(Color.Magenta);
+                    bitmapArray[2].MakeTransparent(Color.Magenta);
                     return bitmapArray;
                 }
                 catch
