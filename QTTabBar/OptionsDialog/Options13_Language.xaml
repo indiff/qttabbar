@@ -144,7 +144,7 @@
                 Padding="6,1"
                 Margin="13,2,5,2">
                 <ToggleButton.Style>
-                    <Style TargetType="{x:Type ToggleButton}">
+                    <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
                         <Style.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -158,7 +158,7 @@
                 Orientation="Horizontal"
                 Visibility="{Binding ElementName=btnToggleLangEditor, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel.Resources>
-                    <Style TargetType="{x:Type Button}">
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Width" Value="80"/>
                         <Setter Property="Margin" Value="6,0,0,0"/>
                         <Setter Property="Height" Value="22"/>
@@ -187,7 +187,7 @@
                 KeyDown="lvwLangEditor_KeyDown">
                 <ListBox.Style>
                     <Style TargetType="{x:Type ListView}">
-                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}"/>
                     </Style>
                 </ListBox.Style>
                 <ListView.ItemContainerStyle>

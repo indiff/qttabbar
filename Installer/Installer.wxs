@@ -271,6 +271,9 @@ Language="1033"
                                     <ProgId Id="QTTabBarLib.$(var.compName)" Description="QTTabBarLib.$(var.compName)" />
                                 </Class>
                                 <RegistryKey Root="HKCR" Key="CLSID\$(var.compGUID)" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes">
+                                    <?if $(var.compName) = QTTabBarClass?>
+                                        <RegistryKey Key="Implemented Categories\{00021492-0000-0000-C000-000000000046}" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes" />
+                                    <?endif?>
                                     <?if $(var.compName) = QTCoTaskBarClass?>
                                         <RegistryKey Key="Implemented Categories\{00021492-0000-0000-C000-000000000046}" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes" />
                                     <?endif?>                                        
@@ -357,13 +360,14 @@ Language="1033"
       <InstallExecuteSequence>
         <!-- AppSearch must be done before RemoveExistingProducts and before FindRelatedProducts -->
         <AppSearch Sequence="1"></AppSearch>
-        <RemoveExistingProducts After="InstallValidate">PREVIOUSVERSIONSINSTALLED</RemoveExistingProducts>
-		
-		
-		<!-- Restart Explorer -->
-		<Custom Action="KillExplorer" After="InstallFinalize">NOT REMOVE</Custom>
-		<Custom Action="WaitAfterKill" After="KillExplorer">NOT REMOVE</Custom>
-		<Custom Action="StartExplorer" After="WaitAfterKill">NOT REMOVE</Custom>
+        <!-- Explorer loads QTTabBar.dll and QTPluginLib.dll into its process. It must be
+             stopped before RemoveExistingProducts/InstallFiles, otherwise GAC installation
+             and native-image generation can fail with ERROR_ACCESS_DENIED while the MSI
+             still reports success. -->
+        <Custom Action="KillExplorer" After="InstallValidate">NOT REMOVE</Custom>
+        <Custom Action="WaitAfterKill" After="KillExplorer">NOT REMOVE</Custom>
+        <RemoveExistingProducts After="WaitAfterKill">PREVIOUSVERSIONSINSTALLED</RemoveExistingProducts>
+        <Custom Action="StartExplorer" After="InstallFinalize">NOT REMOVE</Custom>
       </InstallExecuteSequence>
         
         <InstallUISequence>

@@ -2,7 +2,9 @@ echo off
 
 rem call VCVarsQueryRegistry.bat 32bit 64bit
 rem call "D:\Visual Studio 2010 Ultimate\Common7\Tools\VCVarsQueryRegistry.bat" 32bit 64bit
-call "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\VsDevCmd.bat" x64
+set "VSCMD_ARCH=-arch=x86"
+if /I "%~2"=="x64" set "VSCMD_ARCH=-arch=x64"
+call "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\Tools\VsDevCmd.bat" %VSCMD_ARCH%
 cd ..\QTTabBar\bin\Release
 IF EXIST QTTabBar.dll (
     gacutil /if QTTabBar.dll
@@ -45,4 +47,3 @@ rem start cmd.exe
 rem cmd cmd /k
 
 rem cmd /c start explorer.exe
-

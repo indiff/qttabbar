@@ -95,6 +95,7 @@
             Margin="3,3,0,0"
             SelectionMode="Single"
             PreviewMouseWheel="lstCategories_PreviewMouseWheel"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             Width="136">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
@@ -113,13 +114,12 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid
-                        Background="{DynamicResource ThemeFieldBrush}"
+                        x:Name="categoryBackground"
+                        Background="{DynamicResource ThemeCategoryBackgroundBrush}"
                         Height="25"
                         Margin="0,1"
                         Cursor="Hand"
                         Width="128">
-                        <Image x:Name="imgCategorySelection"
-                            Visibility="Collapsed"/>
                         <TextBlock
                             Margin="10,1"
                             Text="{qt:Resx Key=TabBar_Option_Genre}"
@@ -135,28 +135,24 @@
                     </Grid>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                            <Setter TargetName="imgCategorySelection" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="imgCategorySelection" Property="Source" Value="{Binding Source={x:Static qt:Resources_Image.imgOptions_NoFocus}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+                            <Setter TargetName="categoryBackground" Property="Background" Value="{DynamicResource ThemeCategorySelectedBrush}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True">
-                            <Setter TargetName="imgCategorySelection" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="imgCategorySelection" Property="Source" Value="{Binding Source={x:Static qt:Resources_Image.imgOptions_Hot}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+                            <Setter TargetName="categoryBackground" Property="Background" Value="{DynamicResource ThemeCategoryHoverBrush}"/>
                         </DataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
                                 <Condition Binding="{Binding Path=IsKeyboardFocused, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="imgCategorySelection" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="imgCategorySelection" Property="Source" Value="{Binding Source={x:Static qt:Resources_Image.imgOptions_Selected}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+                            <Setter TargetName="categoryBackground" Property="Background" Value="{DynamicResource ThemeCategoryFocusedBrush}"/>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
                                 <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Value="True"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="imgCategorySelection" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="imgCategorySelection" Property="Source" Value="{Binding Source={x:Static qt:Resources_Image.imgOptions_SelAndHot}, Converter={StaticResource BitmapToImageSourceConverter}}"/>
+                            <Setter TargetName="categoryBackground" Property="Background" Value="{DynamicResource ThemeCategoryFocusedBrush}"/>
                         </MultiDataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>

@@ -140,6 +140,8 @@ namespace QTTabBarLib
 
         // 标签别名编辑框
         private ToolStripTextBox menuTextBoxTabAlias;
+        private ToolStripMenuItem tsmiTabColor;
+        private ToolStripMenuItem tsmiTabMove;
 
         // 拖拽时的驱动器名
         private string strDraggingDrive;
@@ -5906,6 +5908,7 @@ namespace QTTabBarLib
             {
                 // MessageBox.Show( "InitializeTabMenu");
                 bool flag = false;
+                string[] customMenu = GetTabCustomMenuText();
                 if (tsmiClose == null)
                 {
                     flag = true;
@@ -5926,8 +5929,8 @@ namespace QTTabBarLib
                     /** add by qwop 2012-07-13.*/
                     int len = QTUtility.ResMain.Length;
                     tsmiOpenCmd = new ToolStripMenuItem(QTUtility.ResMain[len - 1]);
-                    tsmiOpenPowerShell = new ToolStripMenuItem("打开 PowerShell");  // ← 新增，后续可改资源
-                    tsmiBatchRename = new ToolStripMenuItem("批量重命名");
+                    tsmiOpenPowerShell = new ToolStripMenuItem(customMenu[0]);
+                    tsmiBatchRename = new ToolStripMenuItem(customMenu[1]);
                     /** add by qwop 2012-07-13.*/
 
 
@@ -5935,12 +5938,25 @@ namespace QTTabBarLib
                     tssep_Tab1 = new ToolStripSeparator();
                     tssep_Tab2 = new ToolStripSeparator();
                     tssep_Tab3 = new ToolStripSeparator();
+                    tsmiTabColor = new ToolStripMenuItem(customMenu[2]);
+                    tsmiTabColor.DropDown = new ContextMenuStripEx(components, false);
+                    tsmiTabColor.DropDownItemClicked += menuitemTabColor_DropDownItemClicked;
+                    AddTabColorMenuItems(customMenu);
+                    tsmiTabMove = new ToolStripMenuItem(customMenu[9]);
+                    tsmiTabMove.DropDown = new ContextMenuStripEx(components, false);
+                    tsmiTabMove.DropDownItemClicked += menuitemTabMove_DropDownItemClicked;
+                    tsmiTabMove.DropDownItems.Add(new ToolStripMenuItem(customMenu[10]) {
+                        Tag = true
+                    });
+                    tsmiTabMove.DropDownItems.Add(new ToolStripMenuItem(customMenu[11]) {
+                        Tag = false
+                    });
                     contextMenuTab.SuspendLayout();
                     contextMenuTab.Items[0].Dispose();
                     contextMenuTab.Items.AddRange(new ToolStripItem[] {
                         tsmiClose, tsmiCloseRight, tsmiCloseLeft, tsmiCloseAllButThis,
                         tssep_Tab1, tsmiAddToGroup, tsmiCreateGroup, tssep_Tab2, tsmiLockThis,
-                        tsmiCloneThis, tsmiCreateWindow, tsmiCopy, tsmiTabOrder, tssep_Tab3, tsmiProp,
+                        tsmiCloneThis, tsmiCreateWindow, tsmiCopy, tsmiTabOrder, tsmiTabColor, tsmiTabMove, tssep_Tab3, tsmiProp,
                         tsmiHistory,
                         tsmiOpenCmd,
                         tsmiOpenPowerShell,
@@ -5988,12 +6004,104 @@ namespace QTTabBarLib
                     tsmiProp.Text = QTUtility.ResMain[10];
                     tsmiHistory.Text = QTUtility.ResMain[11];
                     tsmiTabOrder.Text = QTUtility.ResMain[0x1c];
+                    tsmiOpenPowerShell.Text = customMenu[0];
+                    tsmiBatchRename.Text = customMenu[1];
+                    tsmiTabColor.Text = customMenu[2];
+                    tsmiTabColor.DropDownItems[0].Text = customMenu[3];
+                    tsmiTabColor.DropDownItems[1].Text = customMenu[4];
+                    tsmiTabColor.DropDownItems[2].Text = customMenu[5];
+                    tsmiTabColor.DropDownItems[3].Text = customMenu[6];
+                    tsmiTabColor.DropDownItems[4].Text = customMenu[7];
+                    tsmiTabColor.DropDownItems[6].Text = customMenu[8];
+                    tsmiTabMove.Text = customMenu[9];
+                    tsmiTabMove.DropDownItems[0].Text = customMenu[10];
+                    tsmiTabMove.DropDownItems[1].Text = customMenu[11];
                     menuTextBoxTabAlias.Text = menuTextBoxTabAlias.ToolTipText = QTUtility.ResMain[0x1b];
                 }
+
             }
             catch (Exception e)
             {
                 QTUtility2.MakeErrorLog(e);
+            }
+
+        }
+
+        private static string[] GetTabCustomMenuText()
+        {
+            string[] texts;
+            if(QTUtility.TextResourcesDic != null &&
+                    QTUtility.TextResourcesDic.TryGetValue("TabBar_CustomMenu", out texts) &&
+                    texts != null && texts.Length >= 12) {
+                return texts;
+            }
+            return new[] {
+                "Open PowerShell", "Batch rename", "Use tab color",
+                "Use color 1", "Use color 2", "Use color 3", "Use color 4",
+                "Use color 5", "Remove color", "Move tab", "Move to first",
+                "Move to last"
+            };
+        }
+
+        private void AddTabColorMenuItems(string[] customMenu)
+        {
+            Color[] colors = {
+                Color.FromArgb(255, 193, 7),
+                Color.FromArgb(139, 195, 74),
+                Color.FromArgb(3, 169, 244),
+                Color.FromArgb(244, 67, 54),
+                Color.FromArgb(156, 39, 176)
+            };
+            for(int i = 0; i < colors.Length; i++) {
+                ToolStripMenuItem item = new ToolStripMenuItem(customMenu[i + 3]) {
+                    Tag = colors[i],
+                    BackColor = colors[i],
+                    ForeColor = Color.Black,
+                    Image = CreateColorSwatch(colors[i])
+                };
+                tsmiTabColor.DropDownItems.Add(item);
+            }
+            tsmiTabColor.DropDownItems.Add(new ToolStripSeparator());
+            tsmiTabColor.DropDownItems.Add(new ToolStripMenuItem(customMenu[8]) {
+                Tag = Color.Empty
+            });
+        }
+
+        private static Bitmap CreateColorSwatch(Color color)
+        {
+            Bitmap bitmap = new Bitmap(16, 16);
+            using(Graphics graphics = Graphics.FromImage(bitmap))
+            using(Pen border = new Pen(Color.FromArgb(150, Color.Black))) {
+                graphics.Clear(Color.Transparent);
+                using(SolidBrush fill = new SolidBrush(color)) {
+                    graphics.FillRectangle(fill, 1, 1, 14, 14);
+                }
+                graphics.DrawRectangle(border, 0, 0, 15, 15);
+            }
+            return bitmap;
+        }
+
+        private void menuitemTabColor_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if(ContextMenuedTab == null || !(e.ClickedItem.Tag is Color)) {
+                return;
+            }
+            ContextMenuedTab.SetTabColor((Color)e.ClickedItem.Tag);
+            tabControl1.Invalidate(ContextMenuedTab.TabBounds);
+        }
+
+        private void menuitemTabMove_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if(ContextMenuedTab == null || !(e.ClickedItem.Tag is bool)) {
+                return;
+            }
+            int sourceIndex = tabControl1.TabPages.IndexOf(ContextMenuedTab);
+            if(sourceIndex < 0) {
+                return;
+            }
+            int destinationIndex = (bool)e.ClickedItem.Tag ? 0 : tabControl1.TabCount - 1;
+            if(sourceIndex != destinationIndex) {
+                tabControl1.TabPages.Relocate(sourceIndex, destinationIndex);
             }
         }
 
@@ -7627,6 +7735,8 @@ namespace QTTabBarLib
                 key2.SetValue(null, "QTTabBar");
                 key2.SetValue("MenuText", "QTTabBar");
                 key2.SetValue("HelpText", "QTTabBar");
+                key2.CreateSubKey(
+                    @"Implemented Categories\{00021492-0000-0000-C000-000000000046}");
             }
             using (RegistryKey key3 = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Toolbar"))
             {

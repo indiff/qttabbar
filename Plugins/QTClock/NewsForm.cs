@@ -18,6 +18,9 @@ namespace QuizoPlugins
     {
         private Clock.Item[] items;
         private Timer timer;
+        private Font newsItemFont;
+        private Font newsItemZoomFont;
+        private int hoveredNewsIndex = ListBox.NoMatches;
 
         public Clock clock { get; set; }
 
@@ -96,6 +99,19 @@ namespace QuizoPlugins
             ClockLocalization.ApplyCurrentCulture();
             InitializeComponent();
 
+            // Keep the selected news item at the same size and weight as the other rows.
+            // The themed ListBox renderer can otherwise apply a bold/oversized selected font.
+            newsItemFont = new Font(listBox1.Font.FontFamily, listBox1.Font.Size, FontStyle.Regular);
+            newsItemZoomFont = new Font(
+                listBox1.Font.FontFamily,
+                listBox1.Font.Size + 1.5f,
+                FontStyle.Bold);
+            listBox1.Font = newsItemFont;
+            listBox1.DrawMode = DrawMode.OwnerDrawFixed;
+            listBox1.DrawItem += listBox1_DrawItem;
+            listBox1.MouseMove += listBox1_MouseMove;
+            listBox1.MouseLeave += listBox1_MouseLeave;
+
             // 初始化 CheckedListBox
             checkedListBox1.CheckOnClick = true;
             foreach (var src in _newsSources)
@@ -139,6 +155,17 @@ namespace QuizoPlugins
                 timer.Tick -= timer_Tick;
                 timer.Dispose();
                 timer = null;
+            }
+
+            if (newsItemFont != null)
+            {
+                newsItemFont.Dispose();
+                newsItemFont = null;
+            }
+            if (newsItemZoomFont != null)
+            {
+                newsItemZoomFont.Dispose();
+                newsItemZoomFont = null;
             }
         }
 
@@ -401,6 +428,65 @@ namespace QuizoPlugins
             {
                 this.toolTip1.Active = false;
             }
+        }
+
+        private void listBox1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0 || e.Index >= listBox1.Items.Count)
+            {
+                return;
+            }
+
+            e.DrawBackground();
+
+            Color textColor = (e.State & DrawItemState.Selected) == DrawItemState.Selected
+                ? SystemColors.HighlightText
+                : listBox1.ForeColor;
+
+            bool zoomed = e.Index == hoveredNewsIndex ||
+                          (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+            Font itemFont = zoomed ? newsItemZoomFont : newsItemFont;
+            TextRenderer.DrawText(
+                e.Graphics,
+                listBox1.Items[e.Index].ToString(),
+                itemFont,
+                e.Bounds,
+                textColor,
+                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+
+            e.DrawFocusRectangle();
+        }
+
+        private void listBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            int index = listBox1.IndexFromPoint(e.Location);
+            if (index == hoveredNewsIndex)
+            {
+                return;
+            }
+
+            int previousIndex = hoveredNewsIndex;
+            hoveredNewsIndex = index;
+            if (previousIndex >= 0)
+            {
+                listBox1.Invalidate(listBox1.GetItemRectangle(previousIndex));
+            }
+            if (hoveredNewsIndex >= 0)
+            {
+                listBox1.Invalidate(listBox1.GetItemRectangle(hoveredNewsIndex));
+            }
+        }
+
+        private void listBox1_MouseLeave(object sender, EventArgs e)
+        {
+            if (hoveredNewsIndex < 0)
+            {
+                return;
+            }
+
+            int previousIndex = hoveredNewsIndex;
+            hoveredNewsIndex = ListBox.NoMatches;
+            listBox1.Invalidate(listBox1.GetItemRectangle(previousIndex));
         }
 
         private bool isEmpty(string description)

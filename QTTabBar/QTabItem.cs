@@ -23,6 +23,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Microsoft.Win32;
 using QTPlugin;
 using QTTabBarLib.Interop;
 
@@ -37,7 +38,7 @@ namespace QTTabBarLib {
         private static Font fontSubText;
         private static RectangleF rctMeasure = new RectangleF(0f, 0f, 512f, 50f);
         
-        // ±êÇ©×ÖÌå
+        // ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½
         public static Font TabFont {
             set {
                 if(font != null) {
@@ -52,7 +53,7 @@ namespace QTTabBarLib {
             }
         }
 
-        // ±êÇ©ÊÂ¼þ
+        // ï¿½ï¿½Ç©ï¿½Â¼ï¿½
         [field: NonSerialized]
         public event EventHandler Closed;
 
@@ -64,6 +65,7 @@ namespace QTTabBarLib {
         private string imageKey = string.Empty;
         private Stack<LogData> stckHistoryBackward;
         private Stack<LogData> stckHistoryForward;
+        private Color tabColor;
         private bool tabLocked;
         private string shellToolTip;
         private string titleText;
@@ -81,6 +83,18 @@ namespace QTTabBarLib {
         public SizeF TitleTextSize { get; private set; }
         public string ToolTipText { get; set; }
         public bool Underline { get; set; }
+
+        public Color TabColor {
+            get {
+                return tabColor;
+            }
+            set {
+                tabColor = value;
+                if(Owner != null) {
+                    Owner.Invalidate(TabBounds);
+                }
+            }
+        }
 
         // Props
         public string ImageKey {
@@ -201,6 +215,7 @@ namespace QTTabBarLib {
             dicFocusedItemName = new Dictionary<string, string>();
             Branches = new List<LogData>();
             CurrentPath = path;
+            tabColor = LoadTabColor(path);
             ToolTipText = string.Empty;
             titleText = title;
             if(font == null) {
@@ -280,6 +295,7 @@ namespace QTTabBarLib {
                 TabBounds = TabBounds,
                 Comment = Comment,
                 CurrentIDL = CurrentIDL,
+                TabColor = TabColor,
                 ToolTipText = ToolTipText,
                 shellToolTip = shellToolTip,
                 tabLocked = fAll && tabLocked,
@@ -330,25 +346,25 @@ namespace QTTabBarLib {
             return addressArray;
         }
         /**
-         * »ñÈ¡ÎÄ±¾µÄ´óÐ¡
+         * ï¿½ï¿½È¡ï¿½Ä±ï¿½ï¿½Ä´ï¿½Ð¡
          */
         private static SizeF GetTextSize(string str, Graphics g, bool fTitle) {
             SizeF sizeF; 
-            // fix bug ²ÎÊýÎÞÐ§    
+            // fix bug ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§    
             if ( String.IsNullOrEmpty( str ) || str.Trim().Length == 0  ) {
                 return SizeF.Empty;
             }
 
             if (font == null || fontSubText == null) {
-                QTUtility2.log(" GetTextSize ×ÖÌå¶ÔÏóÎ´³õÊ¼»¯£¡");
+                QTUtility2.log(" GetTextSize ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½");
             }
 
             if (rctMeasure.Width <= 0 || rctMeasure.Height <= 0) {
-                QTUtility2.log(" GetTextSize ¾ØÐÎÇøÓò¿í¶È»ò¸ß¶ÈÎª 0!");
+                QTUtility2.log(" GetTextSize ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È»ï¿½ß¶ï¿½Îª 0!");
             }
 
             if (g == null) {
-                QTUtility2.log(" GetTextSize ´«ÈëµÄ Graphics ¶ÔÏó g Ê§Ð§!");
+                QTUtility2.log(" GetTextSize ï¿½ï¿½ï¿½ï¿½ï¿½ Graphics ï¿½ï¿½ï¿½ï¿½ g Ê§Ð§!");
             }
             try
             {
@@ -459,6 +475,48 @@ namespace QTTabBarLib {
         public void SetSelectedItemsAt(string path, Address[] names, string focused) {
             dicSelectedItems[path] = names;
             dicFocusedItemName[path] = focused;
+        }
+
+        public void SetTabColor(Color color) {
+            TabColor = color;
+            SaveTabColor(CurrentPath, color);
+        }
+
+        private static Color LoadTabColor(string path) {
+            if(string.IsNullOrEmpty(path)) {
+                return Color.Empty;
+            }
+            try {
+                using(RegistryKey key = Registry.CurrentUser.OpenSubKey(RegConst.Root + @"\TabColors", false)) {
+                    object value = key == null ? null : key.GetValue(path);
+                    if(value is int) {
+                        return Color.FromArgb((int)value);
+                    }
+                }
+            }
+            catch(Exception exception) {
+                QTUtility2.MakeErrorLog(exception, "LoadTabColor");
+            }
+            return Color.Empty;
+        }
+
+        private static void SaveTabColor(string path, Color color) {
+            if(string.IsNullOrEmpty(path)) {
+                return;
+            }
+            try {
+                using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root + @"\TabColors")) {
+                    if(color.IsEmpty) {
+                        key.DeleteValue(path, false);
+                    }
+                    else {
+                        key.SetValue(path, color.ToArgb(), RegistryValueKind.DWord);
+                    }
+                }
+            }
+            catch(Exception exception) {
+                QTUtility2.MakeErrorLog(exception, "SaveTabColor");
+            }
         }
     }
 

@@ -45,6 +45,16 @@
     <SolidColorBrush x:Key="ThemeForegroundBrush"  Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="ThemeSelectionBrush"   Color="#FF626262"/>
     <SolidColorBrush x:Key="SectionHeaderBackgroundBrush" Color="#FF2C2C2C"/>
+    <SolidColorBrush x:Key="ThemeCategoryBackgroundBrush" Color="#FF2B2B2B"/>
+    <SolidColorBrush x:Key="ThemeCategoryHoverBrush"      Color="#FF363F4A"/>
+    <SolidColorBrush x:Key="ThemeCategorySelectedBrush"   Color="#FF3A5F8A"/>
+    <SolidColorBrush x:Key="ThemeCategoryFocusedBrush"    Color="#FF4778AD"/>
+    <SolidColorBrush x:Key="ThemeButtonBackgroundBrush"  Color="#FF383838"/>
+    <SolidColorBrush x:Key="ThemeButtonHoverBrush"       Color="#FF454545"/>
+    <SolidColorBrush x:Key="ThemeButtonPressedBrush"     Color="#FF515151"/>
+    <SolidColorBrush x:Key="ThemeButtonDisabledBrush"    Color="#FF292929"/>
+    <SolidColorBrush x:Key="ThemeButtonForegroundBrush"  Color="#FFF2F4F7"/>
+    <SolidColorBrush x:Key="ThemeButtonDisabledForegroundBrush" Color="#FF777C83"/>
 
     <!-- The classic-theme RadioButton/CheckBox/Label control templates read these
          system brush keys directly for their label text, ignoring a plain
@@ -64,9 +74,9 @@
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"       Color="#FF202020"/>
 
     <Style TargetType="Button">
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="#FFE1E1E1"/>
-        <Setter Property="BorderBrush" Value="#FF8C8C8C"/>
+        <Setter Property="Foreground" Value="{DynamicResource ThemeButtonForegroundBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <!-- The classic-theme ButtonChrome template has its own baked-in disabled
              rendering that ignores plain Background/Foreground setters entirely, so
@@ -89,10 +99,54 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#FFD5D5D5"/>
+                            <Setter Property="Background" Value="{DynamicResource ThemeButtonHoverBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="#FFBEBEBE"/>
+                            <Setter Property="Background" Value="{DynamicResource ThemeButtonPressedBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{DynamicResource ThemeButtonDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ThemeButtonDisabledForegroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ToggleButton">
+        <Setter Property="Foreground" Value="{DynamicResource ThemeButtonForegroundBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="{TemplateBinding Padding}"
+                            RecognizesAccessKey="True"
+                            TextElement.Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ThemeButtonHoverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ThemeButtonPressedBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ThemeCategorySelectedBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{DynamicResource ThemeButtonDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource ThemeButtonDisabledForegroundBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -232,6 +286,9 @@
         <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>
         <Setter Property="Foreground"  Value="{DynamicResource ThemeForegroundBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}"/>
+    </Style>
+    <Style TargetType="ListViewItem">
+        <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}"/>
     </Style>
     <Style TargetType="DataGrid">
         <Setter Property="Background"  Value="{DynamicResource ThemeFieldBrush}"/>

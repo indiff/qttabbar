@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.ini" />
+    <Content Include="install_000_QTTabBarInstaller.log" />
     <Content Include="libai.png" />
     <Content Include="UninstallDirectories.txt" />
   </ItemGroup>

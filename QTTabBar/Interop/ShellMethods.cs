@@ -30,6 +30,45 @@ using BandObjectLib;
 
 namespace QTTabBarLib.Interop {
     public static class ShellMethods {
+        private static readonly HashSet<string> ArchiveExtensions =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+                ".7z", ".ace", ".arj", ".bz2", ".cab", ".gz", ".gzip", ".jar",
+                ".r00", ".r01", ".r02", ".r03", ".r04", ".r05", ".r06", ".r07",
+                ".r08", ".r09", ".r10", ".r11", ".r12", ".r13", ".r14", ".r15",
+                ".r16", ".r17", ".r18", ".r19", ".r20", ".r21", ".r22", ".r23",
+                ".r24", ".r25", ".r26", ".r27", ".r28", ".r29", ".rar", ".tar",
+                ".tgz", ".z", ".zip", ".vsix"
+                , ".war"
+                , ".ear"
+                , ".apk"
+                , ".aar"
+                , ".ipa"
+                , ".xpi"
+                , ".crx"
+                , ".whl"
+                , ".egg"
+                , ".cbz "
+                , ".sketch"
+                , ".fig"
+                , ".zipx"
+                , ".cbz"
+                , ".nupkg"
+            };
+
+        public static bool IsArchivePath(string path) {
+            if(string.IsNullOrEmpty(path)) {
+                return false;
+            }
+
+            string[] pathParts = path.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach(string pathPart in pathParts) {
+                if(ArchiveExtensions.Contains(Path.GetExtension(pathPart))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static bool ClipboardContainsFileDropList(IntPtr hwnd) {
             if((hwnd != IntPtr.Zero) && PInvoke.OpenClipboard(hwnd)) {
                 try {
@@ -720,6 +759,9 @@ namespace QTTabBarLib.Interop {
                     return false;
                 }
                 if(!Directory.Exists(path)) {
+                    if(File.Exists(path) && IsArchivePath(path)) {
+                        return true;
+                    }
                     if(!File.Exists(path) || !Path.GetExtension(path).PathEquals(".lnk")) {
                         return false;
                     }

@@ -16,12 +16,14 @@
 //    along with QTTabBar.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using QTTabBarLib.Interop;
@@ -66,7 +68,7 @@ namespace QTTabBarLib {
         public event ItemRightClickedEventHandler MenuItemRightClicked;
         public event EventHandler MultipleMenuItemsClicked;
         public event ItemRightClickedEventHandler MultipleMenuItemsRightClicked;
-        // 判断是否中键过？
+        // 鍒ゆ柇鏄惁涓敭杩囷紵
         private bool fMiddleButton = false;
 
         public SubDirTipForm(IntPtr hwndMessageReflect, bool fEnableShiftKeyOnDDMR, AbstractListView lvw) {
@@ -195,6 +197,125 @@ namespace QTTabBarLib {
             item.TargetPath = targetIfFolderLink.FullName;
             item.QueryVirtualMenu += directoryItem_QueryVirtualMenu;
             return item;
+        }
+
+        private static object GetShellProperty(object target, string propertyName) {
+            return target.GetType().InvokeMember(propertyName,
+                BindingFlags.GetProperty, null, target, null);
+        }
+
+        private static object InvokeShellMethod(object target, string methodName, params object[] arguments) {
+            return target.GetType().InvokeMember(methodName,
+                BindingFlags.InvokeMethod, null, target, arguments);
+        }
+
+        private List<QMenuItem> CreateArchiveMenu(string archivePath) {
+            List<QMenuItem> folders = new List<QMenuItem>();
+            List<QMenuItem> files = new List<QMenuItem>();
+            object shell = null;
+            object shellFolder = null;
+            object shellItems = null;
+            try {
+                Type shellType = Type.GetTypeFromProgID("Shell.Application");
+                if(shellType == null) {
+                    return folders;
+                }
+
+                shell = Activator.CreateInstance(shellType);
+                shellFolder = InvokeShellMethod(shell, "Namespace", archivePath);
+                if(shellFolder == null) {
+                    QTUtility2.log("Archive subdir unavailable: Shell namespace is null, path=" + archivePath);
+                    return folders;
+                }
+
+                shellItems = InvokeShellMethod(shellFolder, "Items");
+                IEnumerable enumerable = shellItems as IEnumerable;
+                if(enumerable == null) {
+                    return folders;
+                }
+
+                foreach(object shellItem in enumerable) {
+                    try {
+                        string name = Convert.ToString(GetShellProperty(shellItem, "Name"));
+                        string path = Convert.ToString(GetShellProperty(shellItem, "Path"));
+                        bool isFolder = Convert.ToBoolean(GetShellProperty(shellItem, "IsFolder"));
+                        if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path)) {
+                            continue;
+                        }
+
+                        bool truncated;
+                        string title = QTUtility2.MakeNameEllipsis(name, out truncated);
+                        if(isFolder) {
+                            QMenuItem item = new QMenuItem(title, MenuTarget.Folder, MenuGenre.SubDirTip);
+                            item.Exists = true;
+                            item.ImageKey = "folder";
+                            item.Path = path;
+                            item.TargetPath = path;
+                            if(truncated) {
+                                item.OriginalTitle = name;
+                            }
+                            item.QueryVirtualMenu += directoryItem_QueryVirtualMenu;
+                            folders.Add(item);
+                        }
+                        else if(Config.Tips.SubDirTipsFiles) {
+                            ToolStripMenuItemEx item = new ToolStripMenuItemEx(title);
+                            string extension = Path.GetExtension(name).ToLowerInvariant();
+                            item.Exists = true;
+                            item.Path = path;
+                            item.Name = name;
+                            item.Extension = extension;
+                            item.ThumbnailPath = path;
+                            item.SetImageReservationKey(path, extension);
+                            if(truncated) {
+                                item.OriginalTitle = name;
+                            }
+                            item.MouseMove += tsmi_Files_MouseMove;
+                            item.MouseDown += tsmi_MouseDown;
+                            item.MouseUp += tsmi_MouseUp;
+                            files.Add(item);
+                        }
+                    }
+                    catch(Exception exception) {
+                        QTUtility2.MakeErrorLog(exception, "creating archive subfile menu");
+                    }
+                    finally {
+                        if(shellItem != null && Marshal.IsComObject(shellItem)) {
+                            Marshal.ReleaseComObject(shellItem);
+                        }
+                    }
+                }
+                if(tsmiComparer == null) {
+                    tsmiComparer = new ToolStripMeuItemComparer();
+                }
+                folders.Sort(tsmiComparer);
+                files.Sort(extComparer);
+                folders.AddRange(files);
+                QTUtility2.log("Archive subdir menu created path=" + archivePath +
+                    " folders=" + (folders.Count - files.Count) + " files=" + files.Count);
+                return folders;
+            }
+            catch(Exception exception) {
+                QTUtility2.MakeErrorLog(exception, "creating archive subdir menu");
+                return folders;
+            }
+            finally {
+                if(shellItems != null && Marshal.IsComObject(shellItems)) {
+                    Marshal.ReleaseComObject(shellItems);
+                }
+                if(shellFolder != null && Marshal.IsComObject(shellFolder)) {
+                    Marshal.ReleaseComObject(shellFolder);
+                }
+                if(shell != null && Marshal.IsComObject(shell)) {
+                    Marshal.ReleaseComObject(shell);
+                }
+            }
+        }
+
+        private List<QMenuItem> CreateMenuForPath(string path) {
+            if(ShellMethods.IsArchivePath(path)) {
+                return CreateArchiveMenu(path);
+            }
+            return CreateMenu(new DirectoryInfo(path), null);
         }
 
         private List<QMenuItem> CreateMenu(DirectoryInfo di, string pathChild) {
@@ -479,7 +600,7 @@ namespace QTTabBarLib {
                 target.ItemRightClicked += ddmr_ItemRightClicked;
                 target.Opened += ddmr_Opened;
                 target.MenuDragEnter += ddmr_MenuDragEnter;
-                // 添加鼠标中键事件
+                // 娣诲姞榧犳爣涓敭浜嬩欢
                 item.DropDown = target;
                 item.DropDownOpening += tsmi_DropDownOpening;
                 item.DropDownItemClicked += ddmr_ItemClicked;
@@ -504,9 +625,9 @@ namespace QTTabBarLib {
 
 
 
-        //  添加鼠标中键事件
+        //  娣诲姞榧犳爣涓敭浜嬩欢
         private void ddmr_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-            if (fMiddleButton)  // 如果是点了中键， 则不进行关闭
+            if (fMiddleButton)  // 濡傛灉鏄偣浜嗕腑閿紝 鍒欎笉杩涜鍏抽棴
             {
                 return;
             }
@@ -675,13 +796,18 @@ namespace QTTabBarLib {
             item.MouseMove += tsmi_Folder_MouseMove;
             item.MouseDown += tsmi_MouseDown;
             item.MouseUp += tsmi_MouseUp;
-            bool fSearchHidden;
-            bool fSearchSystem;
-            QTUtility.GetHiddenFileSettings(out fSearchHidden, out fSearchSystem);
-            bool flag3 = Config.Tips.SubDirTipsFiles;
             bool flag4;
-            using(FindFile file = new FindFile(item.TargetPath, fSearchHidden, fSearchSystem)) {
-                flag4 = file.SubDirectoryExists() || (flag3 && file.SubFileExists());
+            if(ShellMethods.IsArchivePath(item.TargetPath)) {
+                flag4 = true;
+            }
+            else {
+                bool fSearchHidden;
+                bool fSearchSystem;
+                QTUtility.GetHiddenFileSettings(out fSearchHidden, out fSearchSystem);
+                bool flag3 = Config.Tips.SubDirTipsFiles;
+                using(FindFile file = new FindFile(item.TargetPath, fSearchHidden, fSearchSystem)) {
+                    flag4 = file.SubDirectoryExists() || (flag3 && file.SubFileExists());
+                }
             }
             if(flag4) {
                 DropDownMenuDropTarget target = new DropDownMenuDropTarget(null, true, !fDesktop, false, hwndDialogParent);
@@ -864,7 +990,7 @@ namespace QTTabBarLib {
                     }
                 }
                 else {
-                    lstItems = CreateMenu(new DirectoryInfo(currentDir), null);
+                    lstItems = CreateMenuForPath(currentDir);
                 }
             }
             catch {
@@ -950,8 +1076,7 @@ namespace QTTabBarLib {
                     }
                 }
                 else {
-                    DirectoryInfo di = new DirectoryInfo(currentDir);
-                    lstItems = CreateMenu(di, null);
+                    lstItems = CreateMenuForPath(currentDir);
                 }
             }
             catch {
@@ -1072,8 +1197,9 @@ namespace QTTabBarLib {
                     }
                 }
                 else {
-                    DirectoryInfo di = new DirectoryInfo(item.TargetPath);
-                    lstItems = CreateMenu(di, item.PathChild);                    
+                    lstItems = ShellMethods.IsArchivePath(item.TargetPath)
+                        ? CreateArchiveMenu(item.TargetPath)
+                        : CreateMenu(new DirectoryInfo(item.TargetPath), item.PathChild);
                 }
             }
             catch {
@@ -1126,7 +1252,7 @@ namespace QTTabBarLib {
         private void tsmi_MouseUp(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Middle)
             {
-                // 中键新建标签
+                // 涓敭鏂板缓鏍囩
                 fMiddleButton = true;
                 QMenuItem item = (QMenuItem)sender;
                 var qtTabBarClass = InstanceManager.GetThreadTabBar();

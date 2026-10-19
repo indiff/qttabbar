@@ -230,13 +230,13 @@
             Style="{StaticResource CheckStyle}"/>
 
         <Label
-			Content="Others" 
+			Content="{qt:Resx Key=Options_Page01_Window, Index=17}" 
 			Style="{StaticResource SectionHeaderStyle}"/>
 			<!-- One switch for both attach mechanisms (AutoHookWindow = native hook,
 			     AutoEnableExperimental = per-window SetSite/ShowDW on Windows 11). Both
 			     only take effect at Explorer startup - see UpdateOptions(). -->
 			<CheckBox x:Name="ctxAutoHookWindow"
-				Content="Enable QTTabBar on every Explorer window (experimental, must restart Explorer)"
+				Content="{qt:Resx Key=Options_Page01_Window, Index=18}"
 				Style="{StaticResource CheckStyle}">
 				<CheckBox.IsChecked>
 					<MultiBinding Converter="{StaticResource LogicalAndBroadcastMultiConverter}" Mode="TwoWay">
@@ -246,16 +246,16 @@
 				</CheckBox.IsChecked>
 			</CheckBox>
         <CheckBox x:Name="ctxShowFailNavMsg"
-				Content="Show Fail Nav Message Box" 
+				Content="{qt:Resx Key=Options_Page01_Window, Index=19}"
 				IsChecked="{Binding Path=ShowFailNavMsg}"
 				Style="{StaticResource CheckStyle}"/>
 			
 			<CheckBox x:Name="ctxCaptureWeChatSelection"
-				Content="Capture Selection(WeChat/QQ/DingDing)"
+				Content="{qt:Resx Key=Options_Page01_Window, Index=20}"
 				IsChecked="{Binding Path=CaptureWeChatSelection}"
 				Style="{StaticResource CheckStyle}"/>
 			<CheckBox x:Name="ctxOpenExplorerMaximized"
-				Content="Open Explorer windows maximized"
+				Content="{qt:Resx Key=Options_Page01_Window, Index=21}"
 				IsChecked="{Binding Path=OpenExplorerMaximized}"
 				Style="{StaticResource CheckStyle}"/>
     </StackPanel>
