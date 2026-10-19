@@ -418,7 +418,7 @@ namespace QTTabBarLib {
                 }
             }
             MenuItem separator = new MenuItem("-");
-            MenuItem removeItem = new MenuItem(QTUtility.IsChinese ? "删除标签组" : "Remove group");
+            MenuItem removeItem = new MenuItem(QTTabBarClass.GetTabCustomMenuText()[12]);
             menu.MenuItems.Add(separator);
             menu.MenuItems.Add(removeItem);
             List<IntPtr> list = new List<IntPtr>();

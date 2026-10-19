@@ -6027,19 +6027,19 @@ namespace QTTabBarLib
 
         }
 
-        private static string[] GetTabCustomMenuText()
+        internal static string[] GetTabCustomMenuText()
         {
             string[] texts;
             if(QTUtility.TextResourcesDic != null &&
                     QTUtility.TextResourcesDic.TryGetValue("TabBar_CustomMenu", out texts) &&
-                    texts != null && texts.Length >= 12) {
+                    texts != null && texts.Length >= 13) {
                 return texts;
             }
             return new[] {
                 "Open PowerShell", "Batch rename", "Use tab color",
                 "Use color 1", "Use color 2", "Use color 3", "Use color 4",
                 "Use color 5", "Remove color", "Move tab", "Move to first",
-                "Move to last"
+                "Move to last", "Delete group"
             };
         }
 

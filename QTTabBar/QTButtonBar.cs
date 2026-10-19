@@ -621,7 +621,7 @@ namespace QTTabBarLib {
 
             // todo: check
             QTTabBarClass tabBar = InstanceManager.GetThreadTabBar();
-            if(tabBar != null) {
+            if(tabBar != null && tabBar.rebarController != null) {
                 tabBar.rebarController.RefreshHeight();
             }
             RefreshButtons();

@@ -610,15 +610,15 @@ namespace QTTabBarLib {
                 string path = Path.Combine(appdataQT, "QTTabBarException.log");
                 var line = new StringBuilder();
                 line.AppendLine(DateTime.Now.ToString());
-                line.AppendLine(".NET �汾: " + Environment.Version);
-                line.AppendLine("����ϵͳ�汾: " + Environment.OSVersion.Version + 
+                line.AppendLine(".NET Version: " + Environment.Version);
+                line.AppendLine("Operating System Version: " + Environment.OSVersion.Version +
                                 " Major: " + Environment.OSVersion.Version.Major +
-                                " ����: " + getEnv()
+                                " Architecture: " + getEnv()
                                 );
-                line.AppendLine("QT �汾: " + MakeVersionString());
+                line.AppendLine("QT Version: " + MakeVersionString());
                 if (!String.IsNullOrEmpty(optional))
                 {
-                    line.AppendLine("������Ϣ: " + optional);
+                    line.AppendLine("Context: " + optional);
                 }
                 if (ex == null)
                 {
@@ -706,10 +706,11 @@ namespace QTTabBarLib {
                 // lock (lockObject) {
 
                 // �޸� ������һ����ʹ�ã���˸ý����޷����ʸ��ļ�
+                EnsureUtf8Bom(path);
                 if (File.Exists(path)) {
                     using (FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
                     {
-                        using (StreamWriter sr = new StreamWriter(fs))
+                        using (StreamWriter sr = new StreamWriter(fs, new UTF8Encoding(false)))
                         {
                             sr.WriteLine(formatLogLine);
                         }
@@ -719,7 +720,7 @@ namespace QTTabBarLib {
                 {
                     using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                     {
-                        using (StreamWriter sr = new StreamWriter(fs))
+                        using (StreamWriter sr = new StreamWriter(fs, new UTF8Encoding(true)))
                         {
                             sr.WriteLine(formatLogLine);
                         }
@@ -761,6 +762,27 @@ namespace QTTabBarLib {
                     // Close(fs);
                 }
             }*/
+        }
+
+        private static void EnsureUtf8Bom(string path)
+        {
+            if(!File.Exists(path) || new FileInfo(path).Length == 0) {
+                return;
+            }
+            using(FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                if(stream.Length >= 3 &&
+                        stream.ReadByte() == 0xEF &&
+                        stream.ReadByte() == 0xBB &&
+                        stream.ReadByte() == 0xBF) {
+                    return;
+                }
+            }
+            byte[] content = File.ReadAllBytes(path);
+            byte[] preamble = new UTF8Encoding(true).GetPreamble();
+            using(FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite)) {
+                stream.Write(preamble, 0, preamble.Length);
+                stream.Write(content, 0, content.Length);
+            }
         }
 
         public static void Close(TextReader sr)
