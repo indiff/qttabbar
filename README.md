@@ -6,7 +6,7 @@
 [![GitHub all releases](https://img.shields.io/github/downloads/indiff/qttabbar/total)](https://github.com/indiff/qttabbar/releases)
 [![Github Stars](https://img.shields.io/github/stars/indiff/qttabbar?logo=github)](https://github.com/indiff/qttabbar)
 [![Gitee Stars](https://gitee.com/qwop/qttabbar/badge/star.svg)](https://gitee.com/qwop/qttabbar)
-[![.Net Framework 3.5](https://img.shields.io/badge/.NET%3D3.5-red.svg)](https://www.microsoft.com/zh-CN/download/details.aspx?id=21)
+[![.NET Framework 4.8](https://img.shields.io/badge/.NET-4.8-blue.svg)](https://dotnet.microsoft.com/download/dotnet-framework/net48)
  
 # Introduction [中文版本](README_zh.md)
 ![qttabbar2](https://user-images.githubusercontent.com/501276/131287626-fe8f1fdd-a894-43f8-9620-b7145d70936d.gif)
