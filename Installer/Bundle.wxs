@@ -22,7 +22,7 @@
 
             <!-- QTTabBar MSI (built from Installer.wixproj) -->
             <MsiPackage Id="QTTabBarInstaller"
-                        SourceFile="bin\Release\en-US\QTTabBar Setup.msi"
+                        SourceFile="bin\Release\en-US\QTTabBar Setup 1.6.4.msi"
                         Vital="yes"
                         DisplayInternalUI="no" />
         </Chain>
