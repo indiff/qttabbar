@@ -7154,20 +7154,35 @@ namespace QTTabBarLib
         }
 
         // todo: CLEANNNNNNNNN
-        public void OpenGroup(string groupName, bool fForceNewWindow, bool fDisableOverrides = false)
+        public void OpenGroup(string groupName, bool fForceNewWindow, bool fDisableOverrides = false, string diagnosticId = null)
         {
+            if(string.IsNullOrEmpty(diagnosticId)) {
+                diagnosticId = Guid.NewGuid().ToString("N");
+            }
+            Stopwatch groupTimer = Stopwatch.StartNew();
+            QTUtility2.flog("OpenGroup[" + diagnosticId + "] begin group=" + groupName +
+                " forceNewWindow=" + fForceNewWindow + " disableOverrides=" + fDisableOverrides);
             Group g;
             if (fForceNewWindow)
             {
                 g = GroupsManager.GetGroup(groupName);
-                if (g == null || g.Paths.Count <= 0) { return; }
+                if (g == null || g.Paths.Count <= 0) {
+                    QTUtility2.flog("OpenGroup[" + diagnosticId + "] no group/path; elapsedMs=" +
+                        groupTimer.ElapsedMilliseconds);
+                    return;
+                }
 
                 StaticReg.CreateWindowGroup = groupName;
+                QTUtility2.flog("OpenGroup[" + diagnosticId + "] opening new window path=" + g.Paths[0]);
                 using (IDLWrapper wrapper = new IDLWrapper(g.Paths[0]))
                 {
+                    QTUtility2.flog("OpenGroup[" + diagnosticId + "] first path wrapper available=" +
+                        wrapper.Available + " elapsedMs=" + groupTimer.ElapsedMilliseconds);
                     if (wrapper.Available)
                     {
                         OpenNewWindow(wrapper);
+                        QTUtility2.flog("OpenGroup[" + diagnosticId + "] new window dispatched elapsedMs=" +
+                            groupTimer.ElapsedMilliseconds);
                         return;
                     }
                 }
@@ -7202,13 +7217,24 @@ namespace QTTabBarLib
                 try
                 {
                     tabControl1.SetRedraw(false);
-                    var gpaths =
-                        from gpath in g.Paths
-                        where QTUtility2.PathExists(gpath) || gpath.Contains("???")
-                        select gpath;
-
-                    foreach (var gpath in gpaths)
+                    QTUtility2.flog("OpenGroup[" + diagnosticId + "] processing paths=" + g.Paths.Count +
+                        " existingTabs=" + tabControl1.TabCount + " skipDuplicates=" + flag3);
+                    int pathIndex = 0;
+                    foreach (string gpath in g.Paths)
                     {
+                        pathIndex++;
+                        Stopwatch pathTimer = Stopwatch.StartNew();
+                        QTUtility2.flog("OpenGroup[" + diagnosticId + "] path[" + pathIndex + "/" +
+                            g.Paths.Count + "] begin=" + gpath);
+                        Stopwatch existsTimer = Stopwatch.StartNew();
+                        bool pathExists = QTUtility2.PathExists(gpath);
+                        QTUtility2.flog("OpenGroup[" + diagnosticId + "] path[" + pathIndex +
+                            "] PathExists=" + pathExists + " elapsedMs=" + existsTimer.ElapsedMilliseconds);
+                        if(!pathExists && !gpath.Contains("???")) {
+                            QTUtility2.flog("OpenGroup[" + diagnosticId + "] path skipped as unavailable elapsedMs=" +
+                                pathTimer.ElapsedMilliseconds);
+                            continue;
+                        }
                         if (str4 == null) { str4 = gpath; }
 
                         var list =
@@ -7218,10 +7244,15 @@ namespace QTTabBarLib
                         if (!flag3 || !list.Contains(gpath.ToLower()))
                         {
                             num++;
+                            Stopwatch wrapperTimer = Stopwatch.StartNew();
                             using (var wrapper2 = new IDLWrapper(gpath))
                             {
+                                QTUtility2.flog("OpenGroup[" + diagnosticId + "] path[" + pathIndex +
+                                    "] IDLWrapper available=" + wrapper2.Available +
+                                    " elapsedMs=" + wrapperTimer.ElapsedMilliseconds);
                                 if (wrapper2.Available)
                                 {
+                                    Stopwatch createTabTimer = Stopwatch.StartNew();
                                     if (tabPage == null)
                                     {
                                         tabPage = CreateNewTab(wrapper2);
@@ -7230,6 +7261,8 @@ namespace QTTabBarLib
                                     {
                                         CreateNewTab(wrapper2);
                                     }
+                                    QTUtility2.flog("OpenGroup[" + diagnosticId + "] path[" + pathIndex +
+                                        "] CreateNewTab elapsedMs=" + createTabTimer.ElapsedMilliseconds);
                                 }
                             }
                             flag = true;
@@ -7242,6 +7275,8 @@ namespace QTTabBarLib
                                 select item
                             ).FirstOrDefault();
                         }
+                        QTUtility2.flog("OpenGroup[" + diagnosticId + "] path[" + pathIndex +
+                            "] complete elapsedMs=" + pathTimer.ElapsedMilliseconds);
                     }
 
                     NowTabsAddingRemoving = false;
@@ -7256,16 +7291,31 @@ namespace QTTabBarLib
                             NowTabCreated = true;
                         }
                         flag5 = tabPage != CurrentTab;
+                        QTUtility2.flog("OpenGroup[" + diagnosticId + "] selecting group tab");
                         tabControl1.SelectTab(tabPage);
                     }
+                }
+                catch(Exception exception)
+                {
+                    QTUtility2.MakeErrorLog(exception, "OpenGroup[" + diagnosticId + "]");
+                    throw;
                 }
                 finally
                 {
                     tabControl1.SetRedraw(true);
+                    QTUtility2.flog("OpenGroup[" + diagnosticId + "] redraw restored elapsedMs=" +
+                        groupTimer.ElapsedMilliseconds);
                 }
+                QTUtility2.flog("OpenGroup[" + diagnosticId + "] refreshing button bar");
                 TryCallButtonBar(bbar => bbar.RefreshButtons());
                 if (flag5) QTabItem.CheckSubTexts(tabControl1);
                 NowTabsAddingRemoving = false;
+                QTUtility2.flog("OpenGroup[" + diagnosticId + "] complete openedCount=" + num +
+                    " elapsedMs=" + groupTimer.ElapsedMilliseconds);
+            }
+            else {
+                QTUtility2.flog("OpenGroup[" + diagnosticId + "] group missing/empty; elapsedMs=" +
+                    groupTimer.ElapsedMilliseconds);
             }
         }
 

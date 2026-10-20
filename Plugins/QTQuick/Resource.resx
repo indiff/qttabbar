@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Config_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -124,148 +124,154 @@
   <data name="Config_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\20120710111655756_easyicon_cn_24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Plugin.Text">
+  <data name="Plugin.Text" xml:space="preserve">
     <value>Quick</value>
   </data>
-  <data name="Menu.MyDocuments">
+  <data name="Menu.MyDocuments" xml:space="preserve">
     <value>My Documents</value>
   </data>
-  <data name="Menu.System">
+  <data name="Menu.System" xml:space="preserve">
     <value>Control Panel\System and Security\System</value>
   </data>
-  <data name="Menu.Display">
+  <data name="Menu.Display" xml:space="preserve">
     <value>Control Panel\Appearance and Personalization\Display</value>
   </data>
-  <data name="Menu.Network">
+  <data name="Menu.Network" xml:space="preserve">
     <value>Control Panel\Network and Internet\Network Connections</value>
   </data>
-  <data name="Menu.SystemInfo">
+  <data name="Menu.SystemInfo" xml:space="preserve">
     <value>View System Information</value>
   </data>
   <data name="Menu.Explorer" xml:space="preserve">
     <value>Restart File Explorer</value>
   </data>
-  <data name="Menu.Shutdown">
+  <data name="Menu.Shutdown" xml:space="preserve">
     <value>Shut Down</value>
   </data>
-  <data name="Menu.SetPath">
+  <data name="Menu.SetPath" xml:space="preserve">
     <value>Set Path</value>
   </data>
-  <data name="Menu.RemoveQTTabGroup">
+  <data name="Menu.RemoveQTTabGroup" xml:space="preserve">
     <value>Remove QTTabGroup Registry Entry</value>
   </data>
-  <data name="Menu.ExceptionLog">
+  <data name="Menu.ExceptionLog" xml:space="preserve">
     <value>Open QTTabBar Exception Log</value>
   </data>
-  <data name="Error.CurrentDirectoryMissing">
+  <data name="Error.CurrentDirectoryMissing" xml:space="preserve">
     <value>The current directory has been deleted.</value>
   </data>
-  <data name="Error.BinMissing">
+  <data name="Error.BinMissing" xml:space="preserve">
     <value>The bin directory does not exist.</value>
   </data>
-  <data name="Error.LibMissing">
+  <data name="Error.LibMissing" xml:space="preserve">
     <value>The lib directory does not exist.</value>
   </data>
-  <data name="Error.ToolsJarMissing">
+  <data name="Error.ToolsJarMissing" xml:space="preserve">
     <value>tools.jar does not exist.</value>
   </data>
-  <data name="Error.DtJarMissing">
+  <data name="Error.DtJarMissing" xml:space="preserve">
     <value>dt.jar does not exist.</value>
   </data>
-  <data name="Error.MvnMissing">
+  <data name="Error.MvnMissing" xml:space="preserve">
     <value>mvn.cmd does not exist.</value>
   </data>
-  <data name="Error.AntMissing">
+  <data name="Error.AntMissing" xml:space="preserve">
     <value>ant.cmd does not exist.</value>
   </data>
-  <data name="Error.MvndMissing">
+  <data name="Error.MvndMissing" xml:space="preserve">
     <value>mvnd.exe does not exist.</value>
   </data>
-  <data name="Success.JavaHome">
+  <data name="Success.JavaHome" xml:space="preserve">
     <value>JAVA_HOME was set successfully.</value>
   </data>
-  <data name="Success.M2Home">
+  <data name="Success.M2Home" xml:space="preserve">
     <value>M2_HOME was set successfully.</value>
   </data>
-  <data name="Success.AntHome">
+  <data name="Success.AntHome" xml:space="preserve">
     <value>ANT_HOME was set successfully.</value>
   </data>
-  <data name="Success.MvndHome">
+  <data name="Success.MvndHome" xml:space="preserve">
     <value>MVND_HOME was set successfully.</value>
   </data>
-  <data name="Error.SetHomeMissing">
+  <data name="Error.SetHomeMissing" xml:space="preserve">
     <value>The SetHome executable was not found.</value>
   </data>
-  <data name="Plugin.Text.zh-CN">
+  <data name="Plugin.Text.zh-CN" xml:space="preserve">
     <value>快捷</value>
   </data>
-  <data name="Menu.MyDocuments.zh-CN">
+  <data name="Menu.MyDocuments.zh-CN" xml:space="preserve">
     <value>我的文档</value>
   </data>
-  <data name="Menu.System.zh-CN">
+  <data name="Menu.System.zh-CN" xml:space="preserve">
     <value>控制面板\系统和安全\系统</value>
   </data>
-  <data name="Menu.Display.zh-CN">
+  <data name="Menu.Display.zh-CN" xml:space="preserve">
     <value>控制面板\外观和个性化\显示</value>
   </data>
-  <data name="Menu.Network.zh-CN">
+  <data name="Menu.Network.zh-CN" xml:space="preserve">
     <value>控制面板\网络和 Internet\网络连接</value>
   </data>
-  <data name="Menu.SystemInfo.zh-CN">
+  <data name="Menu.SystemInfo.zh-CN" xml:space="preserve">
     <value>查看系统信息</value>
   </data>
   <data name="Menu.Explorer.zh-CN" xml:space="preserve">
     <value>重启资源管理器</value>
   </data>
-  <data name="Menu.Shutdown.zh-CN">
+  <data name="Menu.Shutdown.zh-CN" xml:space="preserve">
     <value>关机</value>
   </data>
-  <data name="Menu.SetPath.zh-CN">
+  <data name="Menu.SetPath.zh-CN" xml:space="preserve">
     <value>设置 Path</value>
   </data>
-  <data name="Menu.RemoveQTTabGroup.zh-CN">
+  <data name="Menu.RemoveQTTabGroup.zh-CN" xml:space="preserve">
     <value>删除 QTTabGroup 注册表项</value>
   </data>
-  <data name="Menu.ExceptionLog.zh-CN">
+  <data name="Menu.ExceptionLog.zh-CN" xml:space="preserve">
     <value>打开 QTTabBar 异常日志</value>
   </data>
-  <data name="Error.CurrentDirectoryMissing.zh-CN">
+  <data name="Error.CurrentDirectoryMissing.zh-CN" xml:space="preserve">
     <value>当前目录已经删除</value>
   </data>
-  <data name="Error.BinMissing.zh-CN">
+  <data name="Error.BinMissing.zh-CN" xml:space="preserve">
     <value>bin 目录不存在</value>
   </data>
-  <data name="Error.LibMissing.zh-CN">
+  <data name="Error.LibMissing.zh-CN" xml:space="preserve">
     <value>lib 目录不存在</value>
   </data>
-  <data name="Error.ToolsJarMissing.zh-CN">
+  <data name="Error.ToolsJarMissing.zh-CN" xml:space="preserve">
     <value>tools.jar 不存在</value>
   </data>
-  <data name="Error.DtJarMissing.zh-CN">
+  <data name="Error.DtJarMissing.zh-CN" xml:space="preserve">
     <value>dt.jar 不存在</value>
   </data>
-  <data name="Error.MvnMissing.zh-CN">
+  <data name="Error.MvnMissing.zh-CN" xml:space="preserve">
     <value>mvn.cmd 不存在</value>
   </data>
-  <data name="Error.AntMissing.zh-CN">
+  <data name="Error.AntMissing.zh-CN" xml:space="preserve">
     <value>ant.cmd 不存在</value>
   </data>
-  <data name="Error.MvndMissing.zh-CN">
+  <data name="Error.MvndMissing.zh-CN" xml:space="preserve">
     <value>mvnd.exe 不存在</value>
   </data>
-  <data name="Success.JavaHome.zh-CN">
+  <data name="Success.JavaHome.zh-CN" xml:space="preserve">
     <value>设置 JAVA_HOME 成功</value>
   </data>
-  <data name="Success.M2Home.zh-CN">
+  <data name="Success.M2Home.zh-CN" xml:space="preserve">
     <value>设置 M2_HOME 成功</value>
   </data>
-  <data name="Success.AntHome.zh-CN">
+  <data name="Success.AntHome.zh-CN" xml:space="preserve">
     <value>设置 ANT_HOME 成功</value>
   </data>
-  <data name="Success.MvndHome.zh-CN">
+  <data name="Success.MvndHome.zh-CN" xml:space="preserve">
     <value>设置 MVND_HOME 成功</value>
   </data>
-  <data name="Error.SetHomeMissing.zh-CN">
+  <data name="Error.SetHomeMissing.zh-CN" xml:space="preserve">
     <value>未找到可执行文件 SetHome</value>
+  </data>
+  <data name="Menu.QTTabBarLog" xml:space="preserve">
+    <value>Open QTTabBar Log</value>
+  </data>
+  <data name="Menu.QTTabBarLog.zh-CN" xml:space="preserve">
+    <value>打开QTTabBar日志</value>
   </data>
 </root>

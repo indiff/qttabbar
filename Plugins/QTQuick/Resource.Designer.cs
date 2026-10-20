@@ -333,6 +333,24 @@ namespace Qwop {
         }
         
         /// <summary>
+        ///   查找类似 Open QTTabBar Log 的本地化字符串。
+        /// </summary>
+        internal static string Menu_QTTabBarLog {
+            get {
+                return ResourceManager.GetString("Menu.QTTabBarLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开QTTabBar日志 的本地化字符串。
+        /// </summary>
+        internal static string Menu_QTTabBarLog_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.QTTabBarLog.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Remove QTTabGroup Registry Entry 的本地化字符串。
         /// </summary>
         internal static string Menu_RemoveQTTabGroup {

@@ -239,20 +239,13 @@ namespace Qwop {
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.System")));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.Display")));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.Network")));
-              //  menu.Items.Add(new ToolStripMenuItem("���õ�ǰĿ¼JAVA_HOME"));
-              //  menu.Items.Add(new ToolStripMenuItem("���õ�ǰĿ¼M2_HOME"));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.SystemInfo")));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.Explorer")));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.Shutdown")));
-
-              //  menu.Items.Add(new ToolStripMenuItem("���õ�ǰĿ¼ANT_HOME"));
-             //   menu.Items.Add(new ToolStripMenuItem("���õ�ǰĿ¼MVND_HOME"));
-
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.SetPath")));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.RemoveQTTabGroup")));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.ExceptionLog")));
-
-                // menu.Items.Add(new ToolStripMenuItem("Test selection"));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.QTTabBarLog")));
                 fFirstMenuDropDown = false;
             }
            
@@ -626,7 +619,7 @@ namespace Qwop {
                             }
                             break;
                         }
-                    case 10:
+                    case 1010:
                         {
                             // 10. ���õ�ǰĿ¼MVND_HOME
                             string selectedPath = pluginServer.SelectedTab.Address.Path;
@@ -783,6 +776,33 @@ namespace Qwop {
                         }
                         break;
                     }
+
+                    case 10:  // QTTabBar.log
+                        {
+                            string notepadExe = GuessNotepadPath();
+                            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                            string appdataQT = Path.Combine(appdata, "QTTabBar");
+                            if (!Directory.Exists(appdataQT))
+                            {
+                                Directory.CreateDirectory(appdataQT);
+                            }
+                            string logPath = Path.Combine(appdataQT, "QTTabBar.log");
+
+                            try
+                            {
+                                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                                process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                                process.StartInfo.FileName = notepadExe;
+                                process.StartInfo.Arguments = " " + logPath;
+                                process.StartInfo.WorkingDirectory = appdataQT;
+                                process.Start();
+                            }
+                            catch (Exception e)
+                            {
+                                // QTUtility2.MakeErrorLog(e);
+                            }
+                            break;
+                        }
                 }
                 
                 // pluginServer.CreateTab(new Address(mydocument), -1, false, true);
@@ -861,7 +881,6 @@ namespace Qwop {
                     return newGuessFilePath;
                 }
             }
-
             return "notepad.exe";
         }
 

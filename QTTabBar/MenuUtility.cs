@@ -97,6 +97,8 @@ namespace QTTabBarLib {
         }
 
         public static List<ToolStripItem> CreateGroupItems(ToolStripDropDownItem dropDownItem) {
+            Stopwatch timer = Stopwatch.StartNew();
+            QTUtility2.flog("GroupMenu.CreateItems begin groupCount=" + GroupsManager.GroupCount);
             List<ToolStripItem> ret = new List<ToolStripItem>();
             DropDownMenuReorderable dropDown = null;
             if(dropDownItem != null) {
@@ -108,7 +110,16 @@ namespace QTTabBarLib {
             }
             const string key = "groups";
             foreach(Group group in GroupsManager.Groups) {
-                if(group.Paths.Count == 0 || !QTUtility2.PathExists(group.Paths[0])) continue;
+                if(group.Paths.Count == 0) {
+                    QTUtility2.flog("GroupMenu skip empty group=" + group.Name);
+                    continue;
+                }
+                Stopwatch pathCheckTimer = Stopwatch.StartNew();
+                QTUtility2.flog("GroupMenu PathExists begin group=" + group.Name + " path=" + group.Paths[0]);
+                bool pathExists = QTUtility2.PathExists(group.Paths[0]);
+                QTUtility2.flog("GroupMenu PathExists end group=" + group.Name + " exists=" + pathExists +
+                    " elapsedMs=" + pathCheckTimer.ElapsedMilliseconds);
+                if(!pathExists) continue;
                 QMenuItem item = new QMenuItem(group.Name, MenuGenre.Group);
                 item.SetImageReservationKey(group.Paths[0], null);
                 if(dropDown != null) {
@@ -124,6 +135,8 @@ namespace QTTabBarLib {
             if(dropDownItem != null) {
                 dropDownItem.Enabled = dropDown.Items.Count > 0;
             }
+            QTUtility2.flog("GroupMenu.CreateItems complete itemCount=" + ret.Count +
+                " elapsedMs=" + timer.ElapsedMilliseconds);
             return ret;
         }
 

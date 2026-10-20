@@ -23,6 +23,7 @@ using QTTabBarLib.Interop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -798,6 +799,7 @@ namespace QTTabBarLib {
         }
 
         private void dropDownButtons_DropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+            string groupClickId = null;
             ToolStripItem ownerItem = ((ToolStripDropDown)sender).OwnerItem;
             QMenuItem clickedItem = e.ClickedItem as QMenuItem;
             if(ownerItem == null || ownerItem.Tag == null || clickedItem == null) return;
@@ -819,14 +821,28 @@ namespace QTTabBarLib {
                     return;
 
                 case BII_GROUP:
+                    groupClickId = Guid.NewGuid().ToString("N");
+                    QTUtility2.flog("GroupClick[" + groupClickId + "] begin group=" + clickedItem.Text +
+                        " modifiers=" + modifierKeys);
+                    Stopwatch groupClickTimer = Stopwatch.StartNew();
                     ddmrGroupButton.Close();
+                    QTUtility2.flog("GroupClick[" + groupClickId + "] menu closed elapsedMs=" +
+                        groupClickTimer.ElapsedMilliseconds);
                     if(ModifierKeys == (Keys.Control | Keys.Shift)) {
                         Group g = GroupsManager.GetGroup(e.ClickedItem.Text);
+                        if(g == null) {
+                            QTUtility2.flog("GroupClick[" + groupClickId + "] startup toggle skipped: group not found");
+                            return;
+                        }
                         g.Startup = !g.Startup;
                         GroupsManager.SaveGroups();
+                        QTUtility2.flog("GroupClick[" + groupClickId + "] startup toggle complete elapsedMs=" +
+                            groupClickTimer.ElapsedMilliseconds);
                     }
                     else {
-                        tabbar.OpenGroup(e.ClickedItem.Text, modifierKeys == Keys.Control);
+                        tabbar.OpenGroup(e.ClickedItem.Text, modifierKeys == Keys.Control, false, groupClickId);
+                        QTUtility2.flog("GroupClick[" + groupClickId + "] complete elapsedMs=" +
+                            groupClickTimer.ElapsedMilliseconds);
                     }
                     return;
 
