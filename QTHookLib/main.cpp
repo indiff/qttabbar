@@ -56,8 +56,8 @@ void Log(std::wstring log)
 	OutputDebugStringW((L"\n[Debug]: " + log).c_str());
 }
 
-int round_int( double r ) {
-    return (r > 0.0) ? (r + 0.5) : (r - 0.5);
+int round_int(double r) {
+    return static_cast<int>(std::round(r));
 }
 
 
@@ -83,7 +83,6 @@ void Log1(std::wstring log)
     //::GetTempPath(MAX_PATH, strTempPath.GetBuffer(MAX_PATH));
     LPCWSTR strLogFile = L"c:/Log.txt";
     HANDLE hFile = INVALID_HANDLE_VALUE;
-    DWORD dwBytesWritten = 0;
     BOOL bErrorFlag = FALSE;
     OVERLAPPED strOverlapped = {};
     strOverlapped.Offset = 0xFFFFFFFF;
@@ -93,19 +92,28 @@ void Log1(std::wstring log)
     {
         return ;
     }
-    char TimeMessage[MAX_PATH] = { 0 };
+    int logLength = WideCharToMultiByte(CP_UTF8, 0, log.c_str(), -1, NULL, 0, NULL, NULL);
+    if (logLength == 0) {
+        CloseHandle(hFile);
+        return;
+    }
+    std::vector<char> utf8Log(logLength);
+    if (WideCharToMultiByte(CP_UTF8, 0, log.c_str(), -1, utf8Log.data(), static_cast<int>(utf8Log.size()), NULL, NULL) == 0) {
+        CloseHandle(hFile);
+        return;
+    }
     SYSTEMTIME st;
     ::GetLocalTime(&st);
     char szTime[26] = { 0 };
     sprintf_s(szTime, "%04d-%02d-%02d %02d:%02d:%02d %d ", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
-    sprintf_s(TimeMessage, "%s: %s\n", szTime,log);
-    DWORD dwBytesToWrite = (DWORD)strlen(TimeMessage);
-    bErrorFlag = WriteFile(hFile, TimeMessage, dwBytesToWrite, NULL, &strOverlapped);
-    if (bErrorFlag==FALSE)
-    {
-        return ;
-    }
+    std::string timeMessage(szTime);
+    timeMessage += ": ";
+    timeMessage += utf8Log.data();
+    timeMessage += "\n";
+    DWORD dwBytesToWrite = static_cast<DWORD>(timeMessage.size());
+    bErrorFlag = WriteFile(hFile, timeMessage.data(), dwBytesToWrite, NULL, &strOverlapped);
     CloseHandle(hFile);
+    if (bErrorFlag == FALSE) return;
 }
 
 
@@ -1388,7 +1396,9 @@ HRESULT WINAPI DetourUpdateWindowList(/* IShellBrowserService */ IUnknown* _this
                 CComPtr<IShellWindows> psw;
                 if(psw.Create(CLSID_ShellWindows, CLSCTX_ALL)) {
                     long cookie;
-                    if(SUCCEEDED(psw->Register(pdisp, (long)hwnd, SWC_EXPLORER, &cookie))) {
+                    // IShellWindows::Register exposes HWND as a 32-bit LONG in its COM contract.
+                    long windowHandle = static_cast<long>(reinterpret_cast<INT_PTR>(hwnd));
+                    if(SUCCEEDED(psw->Register(pdisp, windowHandle, SWC_EXPLORER, &cookie))) {
                         psw->Revoke(cookie);
                     }
                 }

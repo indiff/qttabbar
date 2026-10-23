@@ -750,7 +750,10 @@ namespace QTTabBarLib
                     else if (msg.message == WM_SELECTFILE)
                     {
                         QTUtility2.log(" select file 1 " + " wparam " + wParam + " lparam " + lParam);
-                        // 这里可以处理选中文件的逻辑，当前为占位
+                        if (wParam == (IntPtr)1)
+                        {
+                            ListView_SelectionChanged();
+                        }
                         // lParam: point to an array of ITEMIDLISTs;
                         /*IShellView shellView = null;
                         if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out shellView))
@@ -3367,6 +3370,7 @@ namespace QTTabBarLib
                         }
                         else
                         {
+                            WindowUtils.HideExplorer(ExplorerHandle);
                             ScheduleCapturedWindowClose();
                         }
                     }
@@ -3425,70 +3429,63 @@ namespace QTTabBarLib
             }
 
             QTUtility2.log("Wait4Select");
-            int count = 1;
-            // 自关闭 计时器间隔 1 秒
-            Timer timer = new Timer { Interval = 1000 };
+            const int maxAttempts = 100;
+            int count = 0;
+            QTabItem targetTab = CurrentTab;
+            string targetPath = targetTab.CurrentPath;
+            Timer timer = new Timer { Interval = 100 };
             EventHandler handler = null;
             handler = (sender, args) =>
             {
+                count++;
+                bool selected = false;
                 try
                 {
-                    count++;
-                    // 超过次数10次 自关闭 
-                    if (count >= 10)
+                    if (CurrentTab == targetTab)
                     {
-                        timer.Stop();
-                        timer.Tick -= handler;
-                        timer.Dispose(); // 释放资源，防止对象累积
-                    }
-                    string SelectionPath = RegistryUtil.ReadSelection(CurrentTab.CurrentPath);
-                    QTUtility2.log(
-                        " ReadSelection key " +
-                        CurrentTab.CurrentPath +
-                        " path " + SelectionPath
-                    );
-                    if (QTUtility2.IsNotEmpty(SelectionPath))
-                    {
-                        QTUtility2.log("find mainShellView ");
-                        IShellView mainShellView = null;
-                        bool selected = false;
-                        if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out mainShellView))
+                        string selectionPath = RegistryUtil.ReadSelection(targetPath, true);
+                        if (QTUtility2.IsNotEmpty(selectionPath))
                         {
-                            mainShellView.Refresh();
-                            QTUtility2.log("Refresh ");
-                            using (IDLWrapper wrapper = new IDLWrapper(SelectionPath))
+                            IShellView mainShellView = null;
+                            if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out mainShellView))
                             {
-                                if (wrapper.Available && wrapper.PIDL != IntPtr.Zero)
+                                using (IDLWrapper wrapper = new IDLWrapper(selectionPath))
                                 {
-                                    QTUtility2.log("wrapper " + wrapper.Path);
-                                    IntPtr pIDLRltv = PInvoke.ILFindLastID(wrapper.PIDL);
-                                    if (pIDLRltv != IntPtr.Zero)
+                                    if (wrapper.Available && wrapper.PIDL != IntPtr.Zero)
                                     {
-                                        QTUtility2.log("SelectItem " + pIDLRltv);
-                                        // 选中文件
-                                        mainShellView.SelectItem(pIDLRltv, SVSIF.SELECT |
-                                                                           SVSIF.DESELECTOTHERS |
-                                                                           SVSIF.ENSUREVISIBLE
-                                        // | SVSIF.EDIT
-                                        );
-                                        selected = true;
+                                        IntPtr childPidl = PInvoke.ILFindLastID(wrapper.PIDL);
+                                        if (childPidl != IntPtr.Zero)
+                                        {
+                                            int result = mainShellView.SelectItem(childPidl, SVSIF.SELECT |
+                                                SVSIF.DESELECTOTHERS | SVSIF.ENSUREVISIBLE);
+                                            selected = result >= 0;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        if (selected)
-                        {
-                            timer.Stop();
-                            timer.Tick -= handler;
-                            timer.Dispose(); // 释放资源，防止对象累积
-                            // InstanceManager.RemoveSelect(CurrentTab.CurrentPath );
-                            // InstanceManager.selectDict.Remove(CurrentTab.CurrentPath);
                         }
                     }
                 }
                 catch (Exception e)
                 {
                     QTUtility2.MakeErrorLog(e, "Try WeChat Select File exception!");
+                }
+
+                if (selected)
+                {
+                    RegistryUtil.ReadSelection(targetPath);
+                    QTUtility2.log("Wait4Select selected path=" + targetPath + " attempts=" + count);
+                    timer.Stop();
+                    timer.Tick -= handler;
+                    timer.Dispose();
+                }
+                else if (count >= maxAttempts)
+                {
+                    RegistryUtil.ReadSelection(targetPath);
+                    QTUtility2.log("Wait4Select timed out path=" + targetPath);
+                    timer.Stop();
+                    timer.Tick -= handler;
+                    timer.Dispose();
                 }
             };
 
@@ -6199,36 +6196,29 @@ namespace QTTabBarLib
                 if (this.TabCount == 1 && // 当前捕获到的新进程是只有一个窗口
                     fHideExplorer && // 需要进行退出的窗口
                     (mCmdType == 2) && // factory 捕获 // || mCmdType == 3
-                    Config.Window.CaptureWeChatSelection && // 是否配置了进行捕获微信选中的文件
-                    QTUtility2.IsEmpty(tabText) // 标签文本是空的
+                    Config.Window.CaptureWeChatSelection // 是否配置了进行捕获微信选中的文件
                    )
                 {
-                    try
-                    {
-                        // var tabItem = tabControl1.TabPages[0];
                         IShellView shellView = null;
                         if (0 == ShellBrowser.GetIShellBrowser().QueryActiveShellView(out shellView))
                         {
                             var iid = new Guid("{0000010e-0000-0000-C000-000000000046}");
-                            object ppv;
-                            // QTTabBarLib.Common.HResult hr = shellView.GetItemObject((uint)SVSIF.SELECT, ref iid, out ppv);
-                            var hr = shellView.GetItemObject((uint)SVSIF.SELECT, ref iid, out ppv);
-                            if (hr == QTTabBarLib.Common.HResult.Ok)
+                            object ppv = null;
+                            try
                             {
-                                if (ppv != null)
+                                var hr = shellView.GetItemObject((uint)SVSIF.SELECT, ref iid, out ppv);
+                                IDataObject pDataObject = ppv as IDataObject;
+                                if (hr == QTTabBarLib.Common.HResult.Ok && pDataObject != null)
                                 {
-                                    IDataObject pDataObject = (IDataObject)ppv;
-                                    var shellObjectCollection = ShellObjectCollection.FromDataObject(pDataObject);
-                                    if (shellObjectCollection.Count > 0)
+                                    using (ShellObjectCollection shellObjectCollection =
+                                        ShellObjectCollection.FromDataObject(pDataObject))
                                     {
-                                        string key = "";
                                         foreach (ShellObject so in shellObjectCollection)
                                         {
                                             FileInfo info = new FileInfo(so.ParsingName);
                                             if (info.Exists)
                                             {
-                                                key = info.Directory.FullName;
-
+                                                string key = CurrentTab.CurrentPath;
                                                 if (QTUtility2.IsNotEmpty(key))
                                                 {
                                                     RegistryUtil.WriteSelection(key, so.ParsingName);
@@ -6243,30 +6233,15 @@ namespace QTTabBarLib
                                         }
                                     }
                                 }
-
-                                // release com object
-                                if (hr != QTTabBarLib.Common.HResult.Ok && null != ppv)
+                            }
+                            finally
+                            {
+                                if (ppv != null)
                                 {
                                     Marshal.ReleaseComObject(ppv);
                                 }
                             }
                         }
-                    }
-                    finally
-                    {
-                        try
-                        {
-                            if (fHideExplorer)
-                            {
-                                Explorer.Quit();
-                                WindowUtils.CloseExplorer(ExplorerHandle, 0);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            QTUtility2.MakeErrorLog(e, "关闭窗口");
-                        }
-                    }
                 }
             }
             catch (Exception e)

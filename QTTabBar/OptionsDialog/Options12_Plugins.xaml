@@ -228,7 +228,7 @@
                                         Orientation="Horizontal"
                                         DockPanel.Dock="Right">
                                         <StackPanel.Resources>
-                                            <Style TargetType="{x:Type Button}">
+                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                                 <Setter Property="DockPanel.Dock" Value="Right"/>
                                                 <Setter Property="Height" Value="22"/>
                                                 <Setter Property="Width" Value="70"/>

@@ -694,13 +694,13 @@ namespace QTTabBarLib {
                                     Image image4 = button.GetImage(false);
                                     if(image != null) {
                                         information.ImageLarge = image;
-                                        if(imageLarge != null) {
+                                        if(imageLarge != null && !ReferenceEquals(imageLarge, image)) {
                                             imageLarge.Dispose();
                                         }
                                     }
                                     if(image4 != null) {
                                         information.ImageSmall = image4;
-                                        if(imageSmall != null) {
+                                        if(imageSmall != null && !ReferenceEquals(imageSmall, image4)) {
                                             imageSmall.Dispose();
                                         }
                                     }

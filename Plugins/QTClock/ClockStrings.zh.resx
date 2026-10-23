@@ -175,16 +175,16 @@
     <value>QTClock选项！</value>
   </data>
   <data name="Options.DockSide" xml:space="preserve">
-    <value>新闻窗口码头侧： ！</value>
+    <value>新闻窗体位置:</value>
   </data>
   <data name="Options.Left" xml:space="preserve">
     <value>左侧</value>
   </data>
   <data name="Options.Right" xml:space="preserve">
-    <value>相对方位</value>
+    <value>右侧</value>
   </data>
   <data name="Options.OK" xml:space="preserve">
-    <value>好的！</value>
+    <value>确定</value>
   </data>
   <data name="Options.Cancel" xml:space="preserve">
     <value>取消</value>
@@ -208,7 +208,7 @@
     <value>快乐星期五</value>
   </data>
   <data name="Greeting.Saturday" xml:space="preserve">
-    <value>周六快乐！</value>
+    <value>周六快乐</value>
   </data>
   <data name="Week.Sunday" xml:space="preserve">
     <value>星期日</value>
@@ -232,13 +232,13 @@
     <value>星期六</value>
   </data>
   <data name="Calendar.DatePrefix" xml:space="preserve">
-    <value>AD</value>
+    <value>AD {0}</value>
   </data>
   <data name="Calendar.LunarPrefix" xml:space="preserve">
-    <value>农历</value>
+    <value>农历 {0}</value>
   </data>
   <data name="Calendar.LeapPrefix" xml:space="preserve">
-    <value>跳跃</value>
+    <value>跳跃 {0}</value>
   </data>
   <data name="Calendar.YearSuffix" xml:space="preserve">
     <value>0年</value>

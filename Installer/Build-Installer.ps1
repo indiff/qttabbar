@@ -135,9 +135,8 @@ foreach ($proj in $managedProjects) {
     if ($LASTEXITCODE -ne 0) { throw "build failed: $proj" }
 }
 
-# Native hook, both platforms. The vcxproj files don't pin a PlatformToolset, so
-# on a runner without VS2010 they default to v100 and fail with MSB8020 - force a
-# modern toolset (v143 covers every VS2022+ MSVC). QTHookLib links libMinHook, so
+# Native hook, both platforms. Use v143 for release packaging so both projects
+# build with the same toolset on VS2022+ runners. QTHookLib links libMinHook, so
 # build that first for each platform. Win32 -> QTHookLib32.dll, x64 -> ...64.dll.
 $vcProps = @('/p:PlatformToolset=v143', '/p:WindowsTargetPlatformVersion=10.0')
 foreach ($plat in @('Win32', 'x64')) {

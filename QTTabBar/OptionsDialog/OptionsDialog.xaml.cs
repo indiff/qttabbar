@@ -833,18 +833,26 @@ namespace QTTabBarLib {
             }
         }
 
-        // Converts Bitmaps to ImageSources.
-        [ValueConversion(typeof(Bitmap), typeof(ImageSource))]
+        // Converts drawing images to ImageSources.
+        [ValueConversion(typeof(System.Drawing.Image), typeof(ImageSource))]
         internal class BitmapToImageSourceConverter : IValueConverter {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-                if(value == null || !(value is Bitmap)) return null;
-                IntPtr hBitmap = ((Bitmap)value).GetHbitmap();
+                if(value == null || !(value is System.Drawing.Image)) return null;
+                Bitmap bitmap = value as Bitmap;
+                bool disposeBitmap = bitmap == null;
+                if(disposeBitmap) bitmap = new Bitmap((System.Drawing.Image)value);
                 try {
-                    return Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero,
-                            Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    IntPtr hBitmap = bitmap.GetHbitmap();
+                    try {
+                        return Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero,
+                                Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    }
+                    finally {
+                        PInvoke.DeleteObject(hBitmap);
+                    }
                 }
                 finally {
-                    PInvoke.DeleteObject(hBitmap);
+                    if(disposeBitmap) bitmap.Dispose();
                 }
             }
 

@@ -465,7 +465,8 @@ namespace QTTabBarLib {
                         if(PluginManager.TryGetStaticPluginInstance(PluginInfo.PluginID, out plugin)) {
                             try
                             {
-                                return ((IBarMultipleCustomItems)plugin.Instance).GetImage(large, Index);
+                                Image image = ((IBarMultipleCustomItems)plugin.Instance).GetImage(large, Index);
+                                if(image != null) return image;
                             }
                             catch (Exception ex)
                             {
