@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace QuizoPlugins
 {
-    internal sealed class ClockOptionsForm : Form
+    internal sealed class ClockOptionsForm : QTPlugin.DpiAwareForm
     {
         private readonly RadioButton leftRadioButton;
         private ProgressBar progressBar1;

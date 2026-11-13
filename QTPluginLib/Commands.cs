@@ -44,6 +44,7 @@ namespace QTPlugin {
         ReorderTabsByName,
         ReorderTabsByPath,
         ReorderTabsByActv,
-        ReorderTabsRevers
+        ReorderTabsRevers,
+        SelectAll
     }
 }

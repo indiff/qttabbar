@@ -42,14 +42,16 @@ using System.Xml;
 
 // using NetSerializer;
 
-namespace QTTabBarLib {
-    internal static class QTUtility {
+namespace QTTabBarLib
+{
+    internal static class QTUtility
+    {
         // 1.5.6.2  edit this 
         internal static readonly Version BetaRevision = new Version(1, 0); // Major = beta revision, Minor = alpha revision
         // Derived from AssemblyVersion in Properties/AssemblyInfo.cs - the only place
         // the app's own version needs to be edited by hand outside the installer.
         internal static readonly Version CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        internal static readonly string BuildVerion = "133"; // 133  Build version, incremented by the build script
+        internal static readonly string BuildVerion = "141"; // 141  Build version, incremented by the build script
         internal const int FIRST_MOUSE_ONLY_ACTION = 1000;
         internal static readonly string REG_PERSONALIZE = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
         // 快捷键启用标识
@@ -61,14 +63,14 @@ namespace QTTabBarLib {
         internal const bool IS_DEV_VERSION = true;  // <----------------- Change me before releasing!
         internal static readonly bool IsRTL = CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
         internal static readonly bool IsWin7 = Environment.OSVersion.Version >= new Version(6, 1);
-        internal static readonly bool IsWin8 = Environment.OSVersion.Version.Major == 6 &&  (Environment.OSVersion.Version.Minor == 2 || Environment.OSVersion.Version.Minor == 3);
+        internal static readonly bool IsWin8 = Environment.OSVersion.Version.Major == 6 && (Environment.OSVersion.Version.Minor == 2 || Environment.OSVersion.Version.Minor == 3);
 
         internal static readonly bool IsWin10 = (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Minor >= 0) || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 4);
 
         internal static readonly bool IsWin11 = (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build >= 22000);
 
         internal static readonly bool IsThanWin11 = (Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= 22000);
-        internal static readonly bool EnableDpiScaling = false;
+        internal static bool EnableDpiScaling => Config.Skin.ScaleTabIconsForHighDpi;
         private static Version osVersion = Environment.OSVersion.Version;
 
         internal static readonly bool IsXP = Environment.OSVersion.Version.Major <= 5;
@@ -82,7 +84,7 @@ namespace QTTabBarLib {
         internal const string REGUSER = RegConst.Root;
         internal static readonly char[] SEPARATOR_CHAR = new char[] { ';' };
         internal const string SEPARATOR_PATH_HASH_SESSION = "*?*?*";
-		// 是否为调试状态？
+        // 是否为调试状态？
         internal const bool NOW_DEBUGGING =
 #if DEBUG
             true;
@@ -110,7 +112,7 @@ namespace QTTabBarLib {
         internal static string[] ResMisc;
         internal static bool RestoreFolderTree_Hide;
         // internal static SolidBrush sbAlternate;
-       // internal static Font StartUpTabFont;
+        // internal static Font StartUpTabFont;
         internal static Dictionary<string, string[]> TextResourcesDic;
         internal static byte WindowAlpha = 0xff;
 
@@ -126,18 +128,6 @@ namespace QTTabBarLib {
         ///////////////////////// 新增 by indiff ////////////////////////////////////
 
         // QTTabBar/QTUtility.cs 或 QTTabBarClass.cs 静态构造函数中
-        [DllImport("user32.dll")]
-        private static extern bool SetProcessDpiAwarenessContext(IntPtr dpiContext);
-        [DllImport("user32.dll")]
-        private static extern int GetDpiForWindow(IntPtr hwnd);
-
-        public static readonly IntPtr DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = new IntPtr(-4);
-
-        [DllImport("shcore.dll")]
-        public static extern int SetProcessDpiAwareness(int value);
-        public const int PROCESS_PER_MONITOR_DPI_AWARE = 2;
-
-
         private static float _dpiScale = 1f;
         private static int _currentDpi = 96;
 
@@ -151,7 +141,7 @@ namespace QTTabBarLib {
         {
             try
             {
-                int dpi = GetDpiForWindow(hwnd);
+                int dpi = QTPlugin.DpiScaling.GetDpi(hwnd);
                 if (dpi <= 0) dpi = 96;
                 _currentDpi = dpi;
                 _dpiScale = dpi / 96f;
@@ -171,7 +161,7 @@ namespace QTTabBarLib {
             }
         }
 
-  
+
 
         // 便捷缩放方法保持不变
         public static int Scale(int px) => (int)Math.Round(px * _dpiScale);
@@ -180,30 +170,7 @@ namespace QTTabBarLib {
 
         public static void InitializeDpiAwareness()
         {
-            // Windows 10 1703+ 支持 Per-Monitor V2
-            // 失败时回退到 System DPI Aware
-            try
-            {
-                if (!SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
-                {
-                    // 回退：Vista+ 的基础 DPI 感知
-                    PInvoke.SetProcessDPIAware();
-                }
-            }
-            catch {
-                try
-                {
-                    // 降级：Per-Monitor（Win8.1+）
-                    SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
-                }
-                catch
-                {
-                    try { PInvoke.SetProcessDPIAware(); }  // 降级：System DPI
-                    catch { }
-                }
-            }
-
-            UpdateTextScale();  // ← 新增
+            UpdateTextScale();
             _dpiScale = DpiManager.SystemDpiScale;
         }
         private static float _textScale = 1f;
@@ -258,33 +225,33 @@ namespace QTTabBarLib {
         {
             // try
             // {
-                /*bool flag1 = false;
-                bool flag2 = true;
-                using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer", false))
+            /*bool flag1 = false;
+            bool flag2 = true;
+            using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer", false))
+            {
+                if (registryKey != null)
                 {
-                    if (registryKey != null)
+                    var value = registryKey.GetValue("ShellState");
+                    if (value != null)
                     {
-                        var value = registryKey.GetValue("ShellState");
-                        if (value != null)
+                        if (value.GetType().BaseType == typeof(Array))
                         {
-                            if (value.GetType().BaseType == typeof(Array))
-                            {
-                                byte[] numArray = (byte[]) value;
-                                if (numArray.Length > 3)
-                                    flag1 = ((int)numArray[4] & 32) == 0;
-                            }
-                        }
-                        
-                        using (RegistryKey rk = registryKey.OpenSubKey("Advanced", false))
-                        {
-                            if (rk != null)
-                                flag2 = QTUtility2.GetValueSafe<int>(rk, "ShowInfoTip", 1) != 0;
+                            byte[] numArray = (byte[]) value;
+                            if (numArray.Length > 3)
+                                flag1 = ((int)numArray[4] & 32) == 0;
                         }
                     }
+
+                    using (RegistryKey rk = registryKey.OpenSubKey("Advanced", false))
+                    {
+                        if (rk != null)
+                            flag2 = QTUtility2.GetValueSafe<int>(rk, "ShowInfoTip", 1) != 0;
+                    }
                 }
-                SingleClickMode = flag1;
-                ShowInfoTip = flag2;*/
-                InNightMode = getNightMode();
+            }
+            SingleClickMode = flag1;
+            ShowInfoTip = flag2;*/
+            InNightMode = getNightMode();
             // }
             // catch (Exception ex)
             // {
@@ -298,11 +265,13 @@ namespace QTTabBarLib {
         /// <summary>
         /// 只执行一次
         /// </summary>
-        static QTUtility() {
+        static QTUtility()
+        {
             // I'm tempted to just return for everything except "explorer"
             // Maybe I should...
             String processName = Process.GetCurrentProcess().ProcessName.ToLower();
-            if(processName == "iexplore" || processName == "regasm" || processName == "gacutil") {
+            if (processName == "iexplore" || processName == "regasm" || processName == "gacutil")
+            {
                 QTUtility2.log("QTUtility return :" + processName);
                 return;
             }
@@ -315,10 +284,11 @@ namespace QTTabBarLib {
                 string shortName = new AssemblyName(args.Name).Name;
                 Assembly already = Array.Find(AppDomain.CurrentDomain.GetAssemblies(),
                     a => string.Equals(a.GetName().Name, shortName, StringComparison.OrdinalIgnoreCase));
-                if(already != null) return already;
+                if (already != null) return already;
                 String resourceName = "QTTabBarLib.Resources." + shortName + ".dll";
-                using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)) {
-                    if(stream == null) return null;
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                {
+                    if (stream == null) return null;
                     byte[] assemblyData = new byte[stream.Length];
                     stream.Read(assemblyData, 0, assemblyData.Length);
                     QTUtility2.Close(stream);
@@ -326,14 +296,15 @@ namespace QTTabBarLib {
                 }
             };
 
-            try {
+            try
+            {
                 QTUtility2.log("QTUtility RefreshShellStateValues");
                 // RefreshShellStateValues();
 
                 // Load the config
                 ConfigManager.Initialize();
                 QTUtility2.log("QTUtility 加载配置");
-                
+
                 // Initialize the instance manager
                 InstanceManager.Initialize();
                 QTUtility2.log("QTUtility 初始化InstanceManager");
@@ -350,26 +321,34 @@ namespace QTTabBarLib {
                 // Load groups/apps
                 GroupsManager.LoadGroups();
                 QTUtility2.log("QTUtility 加载分组完成");
-                
+
+
                 AppsManager.LoadApps();
                 QTUtility2.log("QTUtility 创建全局文件夹图片列表");
 
-                if(Config.Lang.UseLangFile && File.Exists(Config.Lang.LangFile)) {
+                if (Config.Lang.UseLangFile && File.Exists(Config.Lang.LangFile))
+                {
                     TextResourcesDic = ReadLanguageFile(Config.Lang.LangFile);
                 }
                 ValidateTextResources();
 
-                using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
-                    if(key != null) {
-                        using(RegistryKey key2 = key.CreateSubKey("RecentlyClosed")) {
-                            if(key2 != null) {
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+                {
+                    if (key != null)
+                    {
+                        using (RegistryKey key2 = key.CreateSubKey("RecentlyClosed"))
+                        {
+                            if (key2 != null)
+                            {
                                 List<string> collection = key2.GetValueNames()
                                         .Select(str4 => (string)key2.GetValue(str4)).ToList();
                                 StaticReg.ClosedTabHistoryList = new UniqueList<string>(collection, Config.Misc.TabHistoryCount);
                             }
                         }
-                        using(RegistryKey key3 = key.CreateSubKey("RecentFiles")) {
-                            if(key3 != null) {
+                        using (RegistryKey key3 = key.CreateSubKey("RecentFiles"))
+                        {
+                            if (key3 != null)
+                            {
                                 List<string> list2 = key3.GetValueNames().Select(str5 =>
                                         (string)key3.GetValue(str5)).ToList();
                                 StaticReg.ExecutedPathsList = new UniqueList<string>(list2, Config.Misc.FileHistoryCount);
@@ -377,16 +356,18 @@ namespace QTTabBarLib {
                         }
                         RefreshLockedTabsList();
                         string str7 = (string)key.GetValue("NoCaptureAt", string.Empty);
-                        if(str7.Length > 0) {
+                        if (str7.Length > 0)
+                        {
                             NoCapturePathsList = new List<string>(str7.Split(SEPARATOR_CHAR));
                         }
-                        if(!byte.TryParse((string)key.GetValue("WindowAlpha", "255"), out WindowAlpha)) {
+                        if (!byte.TryParse((string)key.GetValue("WindowAlpha", "255"), out WindowAlpha))
+                        {
                             WindowAlpha = 0xff;
                         }
                     }
                 }
 
-               
+
 
                 // 配置不捕获控制面板
                 /*QTUtility2.log("QTUtility 加载忽略的路径 控制面板 网络连接");
@@ -400,7 +381,7 @@ namespace QTTabBarLib {
                         NoCapturePathsList.Add(item);
                     } 
                 }*/
-                
+
                 // default add ::{20D04FE0-3AEA-1069-A2D8-08002B30309D};::{26EE0668-A00A-44D7-9371-BEB064C98683}
                 /*
                 NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}");
@@ -410,11 +391,11 @@ namespace QTTabBarLib {
                 */
 
                 // 控制面板 ::{26EE0668-A00A-44D7-9371-BEB064C98683} ::{26EE0668-A00A-44D7-9371-BEB064C98683}\0
-              
-               // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // 我的电脑
-              //  NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // 所有控制面板
-               // NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}");
-                
+
+                // NoCapturePathsList.Add("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"); // 我的电脑
+                //  NoCapturePathsList.Add("::{21EC2020-3AEA-1069-A2DD-08002B30309D}"); // 所有控制面板
+                // NoCapturePathsList.Add("::{26EE0668-A00A-44D7-9371-BEB064C98683}\\0\\::{ED834ED6-4B5A-4BFE-8F11-A626DCB6A921}");
+
                 // 回收站      NoCapturePathsList.Add("::{645FF040-5081-101B-9F08-00AA002F954E}");
                 /*
                                                回收站 – {645FF040-5081-101B-9F08-00AA002F954E}
@@ -434,14 +415,16 @@ namespace QTTabBarLib {
                 PluginManager.Initialize();
                 QTUtility2.log("QTUtility 加载所有插件");
             }
-            catch(Exception exception) {
+            catch (Exception exception)
+            {
                 // TODO: Any errors here would be very serious.  Alert the user as such.
                 QTUtility2.MakeErrorLog(exception);
             }
         }
 
 
-        public static object ByteArrayToObject(byte[] arrBytes) {
+        public static object ByteArrayToObject(byte[] arrBytes)
+        {
             if (arrBytes != null && arrBytes.Length > 0)
             {
                 try
@@ -471,28 +454,33 @@ namespace QTTabBarLib {
         }
 
         private readonly static string[] strIconExt = new string[] { ".exe", ".lnk", ".ico", ".url", ".sln" };
-        public static bool ExtHasIcon(string ext) {
+        public static bool ExtHasIcon(string ext)
+        {
             return strIconExt.Contains(ext);
         }
 
         private readonly static string[] strCompressedExt = new string[] { ".zip", ".lzh", ".cab" };
 
-        public static bool ExtIsCompressed(string ext) {
+        public static bool ExtIsCompressed(string ext)
+        {
             return strCompressedExt.Contains(ext);
         }
 
-        public static void GetHiddenFileSettings(out bool fShowHidden, out bool fShowSystem) {
-            const uint SSF_SHOWALLOBJECTS   = 0x00001;
-            const uint SSF_SHOWSUPERHIDDEN  = 0x40000;
+        public static void GetHiddenFileSettings(out bool fShowHidden, out bool fShowSystem)
+        {
+            const uint SSF_SHOWALLOBJECTS = 0x00001;
+            const uint SSF_SHOWSUPERHIDDEN = 0x40000;
             SHELLSTATE ss = new SHELLSTATE();
             PInvoke.SHGetSetSettings(ref ss, SSF_SHOWALLOBJECTS | SSF_SHOWSUPERHIDDEN, false);
             fShowHidden = ss.fShowAllObjects != 0;
             fShowSystem = ss.fShowSuperHidden != 0;
         }
 
-        public static Icon GetIcon(IntPtr pIDL) {
+        public static Icon GetIcon(IntPtr pIDL)
+        {
             SHFILEINFO psfi = new SHFILEINFO();
-            if((IntPtr.Zero != PInvoke.SHGetFileInfo(pIDL, 0, ref psfi, Marshal.SizeOf(psfi), 0x109)) && (psfi.hIcon != IntPtr.Zero)) {
+            if ((IntPtr.Zero != PInvoke.SHGetFileInfo(pIDL, 0, ref psfi, Marshal.SizeOf(psfi), 0x109)) && (psfi.hIcon != IntPtr.Zero))
+            {
                 Icon icon = new Icon(Icon.FromHandle(psfi.hIcon), 0x10, 0x10);
                 PInvoke.DestroyIcon(psfi.hIcon);
                 return icon;
@@ -500,32 +488,41 @@ namespace QTTabBarLib {
             return Resources_Image.icoEmpty;
         }
 
-        public static Icon GetIcon(string path, bool fExtension) {
+        public static Icon GetIcon(string path, bool fExtension)
+        {
             Icon icon;
             SHFILEINFO psfi = new SHFILEINFO();
-            if(fExtension) {
-                if(path.Length == 0) {
+            if (fExtension)
+            {
+                if (path.Length == 0)
+                {
                     path = ".*";
                 }
-                if((IntPtr.Zero != PInvoke.SHGetFileInfo("*" + path, 0x80, ref psfi, Marshal.SizeOf(psfi), 0x111)) && (psfi.hIcon != IntPtr.Zero)) {
+                if ((IntPtr.Zero != PInvoke.SHGetFileInfo("*" + path, 0x80, ref psfi, Marshal.SizeOf(psfi), 0x111)) && (psfi.hIcon != IntPtr.Zero))
+                {
                     icon = new Icon(Icon.FromHandle(psfi.hIcon), 0x10, 0x10);
                     PInvoke.DestroyIcon(psfi.hIcon);
                     return icon;
                 }
                 return Resources_Image.icoEmpty;
             }
-            if(path.Length == 0) {
-                if((IntPtr.Zero != PInvoke.SHGetFileInfo("dummy", 0x10, ref psfi, Marshal.SizeOf(psfi), 0x111)) && (psfi.hIcon != IntPtr.Zero)) {
+            if (path.Length == 0)
+            {
+                if ((IntPtr.Zero != PInvoke.SHGetFileInfo("dummy", 0x10, ref psfi, Marshal.SizeOf(psfi), 0x111)) && (psfi.hIcon != IntPtr.Zero))
+                {
                     icon = new Icon(Icon.FromHandle(psfi.hIcon), 0x10, 0x10);
                     PInvoke.DestroyIcon(psfi.hIcon);
                     return icon;
                 }
                 return Resources_Image.icoEmpty;
             }
-            if(!IsXP && path.StartsWith("::")) {
+            if (!IsXP && path.StartsWith("::"))
+            {
                 IntPtr pszPath = PInvoke.ILCreateFromPath(path);
-                if(pszPath != IntPtr.Zero) {
-                    if((IntPtr.Zero != PInvoke.SHGetFileInfo(pszPath, 0, ref psfi, Marshal.SizeOf(psfi), 0x109)) && (psfi.hIcon != IntPtr.Zero)) {
+                if (pszPath != IntPtr.Zero)
+                {
+                    if ((IntPtr.Zero != PInvoke.SHGetFileInfo(pszPath, 0, ref psfi, Marshal.SizeOf(psfi), 0x109)) && (psfi.hIcon != IntPtr.Zero))
+                    {
                         icon = new Icon(Icon.FromHandle(psfi.hIcon), 0x10, 0x10);
                         PInvoke.DestroyIcon(psfi.hIcon);
                         PInvoke.CoTaskMemFree(pszPath);
@@ -534,7 +531,8 @@ namespace QTTabBarLib {
                     PInvoke.CoTaskMemFree(pszPath);
                 }
             }
-            else if((IntPtr.Zero != PInvoke.SHGetFileInfo(path, 0, ref psfi, Marshal.SizeOf(psfi), 0x101)) && (psfi.hIcon != IntPtr.Zero)) {
+            else if ((IntPtr.Zero != PInvoke.SHGetFileInfo(path, 0, ref psfi, Marshal.SizeOf(psfi), 0x101)) && (psfi.hIcon != IntPtr.Zero))
+            {
                 icon = new Icon(Icon.FromHandle(psfi.hIcon), 0x10, 0x10);
                 PInvoke.DestroyIcon(psfi.hIcon);
                 return icon;
@@ -542,52 +540,68 @@ namespace QTTabBarLib {
             return Resources_Image.icoEmpty;
         }
 
-        public static string GetImageKey(string path, string ext) {
-            if(!string.IsNullOrEmpty(path)) {
-                if(QTUtility2.IsNetworkPath(path)) {
-                    if(ext != null) {
+        public static string GetImageKey(string path, string ext)
+        {
+            if (!string.IsNullOrEmpty(path))
+            {
+                if (QTUtility2.IsNetworkPath(path))
+                {
+                    if (ext != null)
+                    {
                         ext = ext.ToLower();
-                        if(ext.Length == 0) {
+                        if (ext.Length == 0)
+                        {
                             SetImageKey("noext", path);
                             return "noext";
                         }
-                        if(!ImageListGlobal.Images.ContainsKey(ext)) {
+                        if (!ImageListGlobal.Images.ContainsKey(ext))
+                        {
                             ImageListGlobal.Images.Add(ext, GetIcon(ext, true));
                         }
                         return ext;
                     }
-                    if(IsNetworkRootFolder(path)) {
+                    if (IsNetworkRootFolder(path))
+                    {
                         SetImageKey(path, path);
                         return path;
                     }
                     SetImageKey("mynetwork", PATH_MYNETWORK);
                     return "mynetwork";
                 }
-                if(path.StartsWith("::")) {
+                if (path.StartsWith("::"))
+                {
                     SetImageKey(path, path);
                     return path;
                 }
-                if(ext != null) {
+                if (ext != null)
+                {
                     ext = ext.ToLower();
-                    if(ext.Length == 0) {
+                    if (ext.Length == 0)
+                    {
                         SetImageKey("noext", path);
                         return "noext";
                     }
-                    if(ExtHasIcon(ext)) {
+                    if (ExtHasIcon(ext))
+                    {
                         SetImageKey(path, path);
                         return path;
                     }
                     SetImageKey(ext, path);
                     return ext;
                 }
-                if(path.Contains("*?*?*")) {
+                if (path.Contains("*?*?*"))
+                {
                     byte[] buffer;
-                    if(ImageListGlobal.Images.ContainsKey(path)) {
+                    if (ImageListGlobal.Images.ContainsKey(path))
+                    {
                         return path;
                     }
-                    if(ITEMIDLIST_Dic_Session.TryGetValue(path, out buffer)) {
-                        using(IDLWrapper w = new IDLWrapper(buffer)) {
-                            if(w.Available) {
+                    if (ITEMIDLIST_Dic_Session.TryGetValue(path, out buffer))
+                    {
+                        using (IDLWrapper w = new IDLWrapper(buffer))
+                        {
+                            if (w.Available)
+                            {
                                 ImageListGlobal.Images.Add(path, GetIcon(w.PIDL));
                                 return path;
                             }
@@ -595,14 +609,19 @@ namespace QTTabBarLib {
                     }
                     return "noimage";
                 }
-                if(QTUtility2.IsShellPathButNotFileSystem(path)) {
+                if (QTUtility2.IsShellPathButNotFileSystem(path))
+                {
                     IDLWrapper wrapper;
-                    if(ImageListGlobal.Images.ContainsKey(path)) {
+                    if (ImageListGlobal.Images.ContainsKey(path))
+                    {
                         return path;
                     }
-                    if(IDLWrapper.TryGetCache(path, out wrapper)) {
-                        using(wrapper) {
-                            if(wrapper.Available) {
+                    if (IDLWrapper.TryGetCache(path, out wrapper))
+                    {
+                        using (wrapper)
+                        {
+                            if (wrapper.Available)
+                            {
                                 ImageListGlobal.Images.Add(path, GetIcon(wrapper.PIDL));
                                 return path;
                             }
@@ -610,54 +629,66 @@ namespace QTTabBarLib {
                     }
                     return "noimage";
                 }
-                if(path.StartsWith("ftp://") || path.StartsWith("http://")) {
+                if (path.StartsWith("ftp://") || path.StartsWith("http://"))
+                {
                     return "folder";
                 }
-                try {
+                try
+                {
                     DirectoryInfo info = new DirectoryInfo(path);
-                    if(info.Exists) {
+                    if (info.Exists)
+                    {
                         FileAttributes attributes = info.Attributes;
-                        if(((attributes & FileAttributes.System) != 0) || ((attributes & FileAttributes.ReadOnly) != 0)) {
+                        if (((attributes & FileAttributes.System) != 0) || ((attributes & FileAttributes.ReadOnly) != 0))
+                        {
                             SetImageKey(path, path);
                             return path;
                         }
                         return "folder";
                     }
-                    if(File.Exists(path)) {
+                    if (File.Exists(path))
+                    {
                         ext = Path.GetExtension(path).ToLower();
-                        if(ext.Length == 0) {
+                        if (ext.Length == 0)
+                        {
                             SetImageKey("noext", path);
                             return "noext";
                         }
-                        if(ExtHasIcon(ext)) {
+                        if (ExtHasIcon(ext))
+                        {
                             SetImageKey(path, path);
                             return path;
                         }
                         SetImageKey(ext, path);
                         return ext;
                     }
-                    if(path.ToLower().Contains(@".zip\")) {
+                    if (path.ToLower().Contains(@".zip\"))
+                    {
                         return "folder";
                     }
                 }
-                catch {
+                catch
+                {
                 }
             }
             return "noimage";
         }
 
-        public static DateTime GetLinkerTimestamp() {
+        public static DateTime GetLinkerTimestamp()
+        {
             string filePath = System.Reflection.Assembly.GetCallingAssembly().Location;
             const int c_PeHeaderOffset = 60;
             const int c_LinkerTimestampOffset = 8;
             byte[] buf = new byte[2048];
             Stream stream = null;
 
-            try {
+            try
+            {
                 stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 stream.Read(buf, 0, 2048);
             }
-            finally {
+            finally
+            {
                 QTUtility2.Close(stream);
             }
 
@@ -669,17 +700,22 @@ namespace QTTabBarLib {
             return dt;
         }
 
-        public static IEnumerable<KeyValuePair<string, string>> GetResourceStrings(this ResourceManager res) {
+        public static IEnumerable<KeyValuePair<string, string>> GetResourceStrings(this ResourceManager res)
+        {
             var dict = res.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
             var e = dict.GetEnumerator();
-            while(e.MoveNext()) {
+            while (e.MoveNext())
+            {
                 yield return new KeyValuePair<string, string>((string)e.Key, (string)e.Value);
             }
         }
 
-        public static T[] GetSettingValue<T>(T[] inputValues, T[] defaultValues, bool fClone) {
-            if((inputValues == null) || (inputValues.Length == 0)) {
-                if(!fClone) {
+        public static T[] GetSettingValue<T>(T[] inputValues, T[] defaultValues, bool fClone)
+        {
+            if ((inputValues == null) || (inputValues.Length == 0))
+            {
+                if (!fClone)
+                {
                     return defaultValues;
                 }
                 return (T[])defaultValues.Clone();
@@ -687,77 +723,98 @@ namespace QTTabBarLib {
             int length = defaultValues.Length;
             int num2 = inputValues.Length;
             T[] localArray = new T[length];
-            for(int i = 0; i < length; i++) {
-                if(i < num2) {
+            for (int i = 0; i < length; i++)
+            {
+                if (i < num2)
+                {
                     localArray[i] = inputValues[i];
                 }
-                else {
+                else
+                {
                     localArray[i] = defaultValues[i];
                 }
             }
             return localArray;
         }
 
-        public static void GetShellClickMode() {
+        public static void GetShellClickMode()
+        {
             const string lpSubKey = @"Software\Microsoft\Windows\CurrentVersion\Explorer";
             iIconUnderLineVal = 0;
             int lpcbData = 4;
-            try {
+            try
+            {
                 IntPtr ptr;
-                if(PInvoke.RegOpenKeyEx((IntPtr)(-2147483647), lpSubKey, 0, 0x20019, out ptr) == 0) {
-                    using(SafePtr lpData = new SafePtr(4)) {
+                if (PInvoke.RegOpenKeyEx((IntPtr)(-2147483647), lpSubKey, 0, 0x20019, out ptr) == 0)
+                {
+                    using (SafePtr lpData = new SafePtr(4))
+                    {
                         int num2;
-                        if(PInvoke.RegQueryValueEx(ptr, "IconUnderline", IntPtr.Zero, out num2, lpData, ref lpcbData) == 0) {
+                        if (PInvoke.RegQueryValueEx(ptr, "IconUnderline", IntPtr.Zero, out num2, lpData, ref lpcbData) == 0)
+                        {
                             byte[] destination = new byte[4];
                             Marshal.Copy(lpData, destination, 0, 4);
                             iIconUnderLineVal = destination[0];
-                        }                        
+                        }
                     }
                     PInvoke.RegCloseKey(ptr);
                 }
-                using(RegistryKey key = Registry.CurrentUser.OpenSubKey(lpSubKey, false)) {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(lpSubKey, false))
+                {
                     byte[] buffer2 = (byte[])key.GetValue("ShellState");
                     fSingleClick = false;
-                    if((buffer2 != null) && (buffer2.Length > 3)) {
+                    if ((buffer2 != null) && (buffer2.Length > 3))
+                    {
                         byte num3 = buffer2[4];
                         fSingleClick = (num3 & 0x20) == 0;
                     }
                 }
             }
-            catch(Exception exception) {
+            catch (Exception exception)
+            {
                 QTUtility2.MakeErrorLog(exception);
             }
         }
 
-        public static TabBarOption GetTabBarOption() {
+        public static TabBarOption GetTabBarOption()
+        {
             return null; // TODO
         }
 
-        private static bool IsNetworkRootFolder(string path) {
+        private static bool IsNetworkRootFolder(string path)
+        {
             string str = path.Substring(2);
             int index = str.IndexOf(Path.DirectorySeparatorChar);
-            if(index != -1) {
+            if (index != -1)
+            {
                 string str2 = str.Substring(index + 1);
-                if(str2.Length > 0) {
+                if (str2.Length > 0)
+                {
                     return (str2.IndexOf(Path.DirectorySeparatorChar) == -1);
                 }
             }
             return false;
         }
 
-       
 
 
-        public static void Initialize() {
+
+        public static void Initialize()
+        {
             // This method exists just to cause the static constructor to fire, if it hasn't already.
         }
 
-        public static void LoadReservedImage(ImageReservationKey irk) {
-            if(!ImageListGlobal.Images.ContainsKey(irk.ImageKey)) {
-                switch(irk.ImageType) {
+        public static void LoadReservedImage(ImageReservationKey irk)
+        {
+            if (!ImageListGlobal.Images.ContainsKey(irk.ImageKey))
+            {
+                switch (irk.ImageType)
+                {
                     case 0:
-                        if(irk.ImageKey != "noimage") {
-                            if(irk.ImageKey == "noext") {
+                        if (irk.ImageKey != "noimage")
+                        {
+                            if (irk.ImageKey == "noext")
+                            {
                                 ImageListGlobal.Images.Add("noext", GetIcon(string.Empty, true));
                                 return;
                             }
@@ -779,9 +836,11 @@ namespace QTTabBarLib {
 
                     case 5:
                         byte[] buffer;
-                        if(ITEMIDLIST_Dic_Session.TryGetValue(irk.ImageKey, out buffer)) {
-                            using(IDLWrapper w = new IDLWrapper(buffer)) {
-                                if(!w.Available) return;
+                        if (ITEMIDLIST_Dic_Session.TryGetValue(irk.ImageKey, out buffer))
+                        {
+                            using (IDLWrapper w = new IDLWrapper(buffer))
+                            {
+                                if (!w.Available) return;
                                 ImageListGlobal.Images.Add(irk.ImageKey, GetIcon(w.PIDL));
                             }
                         }
@@ -789,9 +848,12 @@ namespace QTTabBarLib {
 
                     case 6:
                         IDLWrapper wrapper;
-                        if(IDLWrapper.TryGetCache(irk.ImageKey, out wrapper)) {
-                            using(wrapper) {
-                                if(wrapper.Available) {
+                        if (IDLWrapper.TryGetCache(irk.ImageKey, out wrapper))
+                        {
+                            using (wrapper)
+                            {
+                                if (wrapper.Available)
+                                {
                                     ImageListGlobal.Images.Add(irk.ImageKey, GetIcon(wrapper.PIDL));
                                 }
                             }
@@ -801,10 +863,11 @@ namespace QTTabBarLib {
             }
         }
 
-        public static MouseChord MakeMouseChord(MouseChord button, Keys modifiers) {
-            if((modifiers & Keys.Shift) != 0) button |= MouseChord.Shift;
-            if((modifiers & Keys.Control) != 0) button |= MouseChord.Ctrl;
-            if((modifiers & Keys.Alt) != 0) button |= MouseChord.Alt;
+        public static MouseChord MakeMouseChord(MouseChord button, Keys modifiers)
+        {
+            if ((modifiers & Keys.Shift) != 0) button |= MouseChord.Shift;
+            if ((modifiers & Keys.Control) != 0) button |= MouseChord.Ctrl;
+            if ((modifiers & Keys.Alt) != 0) button |= MouseChord.Alt;
             return button;
         }
 
@@ -815,7 +878,8 @@ namespace QTTabBarLib {
             return type.Assembly.GetTypes().Where(t => t.IsSubclassOf(type));
         }
 
-        public static byte[] ObjectToByteArray(SerializeDelegate obj) {
+        public static byte[] ObjectToByteArray(SerializeDelegate obj)
+        {
 
             /*var settings = new Settings()
             {
@@ -827,10 +891,11 @@ namespace QTTabBarLib {
                 ser = new Serializer(types);
                 // ser = new Serializer(GetSubclasses(typeof(SerializeDelegate)));
             }*/
-            
 
-            if(obj == null) return null;
-            using(MemoryStream ms = new MemoryStream()) {
+
+            if (obj == null) return null;
+            using (MemoryStream ms = new MemoryStream())
+            {
                 // ser.Serialize(ms, obj);
                 new BinaryFormatter().Serialize(ms, obj);
                 return ms.ToArray();
@@ -884,7 +949,7 @@ namespace QTTabBarLib {
                 return QTUtility.osVersion.Major == 6 && QTUtility.osVersion.Minor == 4;
             }
         }
-        public static bool LaterThan10Beta17666 
+        public static bool LaterThan10Beta17666
         {
             get
             {
@@ -930,9 +995,10 @@ namespace QTTabBarLib {
             }
         }
 
-        public static Dictionary<string, string[]> ReadLanguageFile(string path) {
-          //  const string linebreak = "\r\n";
-          //  const string linebreakLiteral = @"\r\n";
+        public static Dictionary<string, string[]> ReadLanguageFile(string path)
+        {
+            //  const string linebreak = "\r\n";
+            //  const string linebreakLiteral = @"\r\n";
 
             //We have to remove the first linebreak in the XML element's value, before we can split 
             //on the linebreak. It's there in the XML, when the XML is created using the editor.
@@ -940,7 +1006,8 @@ namespace QTTabBarLib {
             //the relative places of the other substrings.
             //The simplest way to do this is with a regular expression.
 
-            try {
+            try
+            {
                 /* var dictionary = XElement.Load(path).Elements().ToDictionary(
                      element => element.Name.ToString(),
                      element => {
@@ -990,7 +1057,9 @@ namespace QTTabBarLib {
                     // reader.Close() 不需要显式调用，using 已保证 Dispose
                 }
                 return dictionary;
-            } catch (XmlException xmlException) {
+            }
+            catch (XmlException xmlException)
+            {
                 string msg = String.Join("\r\n", new[] {
                     "Invalid language file.",
                     "",
@@ -1001,18 +1070,21 @@ namespace QTTabBarLib {
                 });
                 System.Windows.Forms.MessageBox.Show(msg);
                 return null;
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
                 QTUtility2.MakeErrorLog(exception);
                 return null;
             }
         }
-       // private string QTTabBar = @"Software\QTTabBar\Config\Misc";
-     
+        // private string QTTabBar = @"Software\QTTabBar\Config\Misc";
 
-        
+
+
         public static void AsteriskPlay()
         {
-            if (Config.Misc.SoundBox) {
+            if (Config.Misc.SoundBox)
+            {
                 SystemSounds.Asterisk.Play();
             }
         }
@@ -1026,90 +1098,118 @@ namespace QTTabBarLib {
             }
         }
 
-        public static void RefreshLockedTabsList() {
-            using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
-                if(key != null) {
+        public static void RefreshLockedTabsList()
+        {
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+            {
+                if (key != null)
+                {
                     string[] collection = QTUtility2.ReadRegBinary<string>("TabsLocked", key);
-                    if((collection != null) && (collection.Length != 0)) {
+                    if ((collection != null) && (collection.Length != 0))
+                    {
                         StaticReg.LockedTabsToRestoreList.Assign(collection);
                     }
-                    else {
+                    else
+                    {
                         StaticReg.LockedTabsToRestoreList.Clear();
                     }
                 }
             }
         }
 
-        public static ImageReservationKey ReserveImageKey(QMenuItem qmi, string path, string ext) {
+        public static ImageReservationKey ReserveImageKey(QMenuItem qmi, string path, string ext)
+        {
             ImageReservationKey key = null;
-            if(string.IsNullOrEmpty(path)) {
+            if (string.IsNullOrEmpty(path))
+            {
                 return new ImageReservationKey("noimage", 0);
             }
-            if(!string.IsNullOrEmpty(ext)) {
+            if (!string.IsNullOrEmpty(ext))
+            {
                 ext = ext.ToLower();
-                if(ExtHasIcon(ext) && !QTUtility2.IsNetworkPath(path)) {
+                if (ExtHasIcon(ext) && !QTUtility2.IsNetworkPath(path))
+                {
                     return new ImageReservationKey(path, 2);
                 }
                 return new ImageReservationKey(ext, 1);
             }
-            if(QTUtility2.IsNetworkPath(path)) {
-                if(IsNetworkRootFolder(path)) {
+            if (QTUtility2.IsNetworkPath(path))
+            {
+                if (IsNetworkRootFolder(path))
+                {
                     return new ImageReservationKey(path, 4);
                 }
                 return new ImageReservationKey("folder", 3);
             }
-            if(path.StartsWith("::")) {
+            if (path.StartsWith("::"))
+            {
                 return new ImageReservationKey(path, 4);
             }
-            if(path.Contains("*?*?*")) {
+            if (path.Contains("*?*?*"))
+            {
                 return new ImageReservationKey(path, 5);
             }
-            if(QTUtility2.IsShellPathButNotFileSystem(path)) {
+            if (QTUtility2.IsShellPathButNotFileSystem(path))
+            {
                 return new ImageReservationKey(path, 6);
             }
-            if(path.StartsWith("ftp://") || path.StartsWith("http://")) {
+            if (path.StartsWith("ftp://") || path.StartsWith("http://"))
+            {
                 return new ImageReservationKey("folder", 3);
             }
-            try {
-                if(qmi.Exists) {
-                    if(qmi.Target == MenuTarget.Folder) {
-                        if(qmi.HasIcon) {
+            try
+            {
+                if (qmi.Exists)
+                {
+                    if (qmi.Target == MenuTarget.Folder)
+                    {
+                        if (qmi.HasIcon)
+                        {
                             return new ImageReservationKey(path, 4);
                         }
                         return new ImageReservationKey("folder", 3);
                     }
-                    if(qmi.Target == MenuTarget.File) {
+                    if (qmi.Target == MenuTarget.File)
+                    {
                         ext = Path.GetExtension(path).ToLower();
-                        if(ext.Length == 0) {
+                        if (ext.Length == 0)
+                        {
                             return new ImageReservationKey("noext", 0);
                         }
-                        if(ExtHasIcon(ext)) {
+                        if (ExtHasIcon(ext))
+                        {
                             return new ImageReservationKey(path, 2);
                         }
                         return new ImageReservationKey(ext, 1);
                     }
                 }
                 DirectoryInfo info = new DirectoryInfo(path);
-                if(info.Exists) {
+                if (info.Exists)
+                {
                     FileAttributes attributes = info.Attributes;
-                    if(((attributes & FileAttributes.System) != 0) || ((attributes & FileAttributes.ReadOnly) != 0)) {
+                    if (((attributes & FileAttributes.System) != 0) || ((attributes & FileAttributes.ReadOnly) != 0))
+                    {
                         return new ImageReservationKey(path, 4);
                     }
                     return new ImageReservationKey("folder", 3);
                 }
-                if(!File.Exists(path)) {
+                if (!File.Exists(path))
+                {
                     return new ImageReservationKey("noimage", 0);
                 }
                 ext = Path.GetExtension(path).ToLower();
-                if(ext.Length == 0) {
+                if (ext.Length == 0)
+                {
                     return new ImageReservationKey("noext", 0);
                 }
-                if(ExtHasIcon(ext)) {
+                if (ExtHasIcon(ext))
+                {
                     return new ImageReservationKey(path, 2);
                 }
                 key = new ImageReservationKey(ext, 1);
             }
-            catch {
+            catch
+            {
             }
             return key;
         }
@@ -1117,13 +1217,15 @@ namespace QTTabBarLib {
         /**
          * 非捕获 path 忽略掉
          */
-        public static void SaveClosing(List<string> closingPaths) {
+        public static void SaveClosing(List<string> closingPaths)
+        {
             if (null == closingPaths || closingPaths.Count == 0)
             {
                 return;
             }
-            using(RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root)) {
-                if(key != null)
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegConst.Root))
+            {
+                if (key != null)
                 {
                     string newCloseList =
                         string.Join(";", closingPaths.Where(p => !IsNoCapturePaths(p)).ToArray())
@@ -1133,14 +1235,20 @@ namespace QTTabBarLib {
             }
         }
 
-        public static void SaveRecentFiles(RegistryKey rkUser) {
-            if(rkUser != null) {
-                using(RegistryKey key = rkUser.CreateSubKey("RecentFiles")) {
-                    if(key != null) {
-                        foreach(string str in key.GetValueNames()) {
+        public static void SaveRecentFiles(RegistryKey rkUser)
+        {
+            if (rkUser != null)
+            {
+                using (RegistryKey key = rkUser.CreateSubKey("RecentFiles"))
+                {
+                    if (key != null)
+                    {
+                        foreach (string str in key.GetValueNames())
+                        {
                             key.DeleteValue(str, false);
                         }
-                        for(int i = 0; i < StaticReg.ExecutedPathsList.Count; i++) {
+                        for (int i = 0; i < StaticReg.ExecutedPathsList.Count; i++)
+                        {
                             key.SetValue(i.ToString(), StaticReg.ExecutedPathsList[i]);
                         }
                     }
@@ -1148,35 +1256,45 @@ namespace QTTabBarLib {
             }
         }
 
-        public static void SaveRecentlyClosed(RegistryKey rkUser) {
-            if(rkUser != null) {
-                using(RegistryKey key = rkUser.CreateSubKey("RecentlyClosed")) {
-                    if(key != null) {
-                        foreach(string str in key.GetValueNames()) {
+        public static void SaveRecentlyClosed(RegistryKey rkUser)
+        {
+            if (rkUser != null)
+            {
+                using (RegistryKey key = rkUser.CreateSubKey("RecentlyClosed"))
+                {
+                    if (key != null)
+                    {
+                        foreach (string str in key.GetValueNames())
+                        {
                             key.DeleteValue(str, false);
                         }
-                        for(int i = 0; i < StaticReg.ClosedTabHistoryList.Count; i++) {
+                        for (int i = 0; i < StaticReg.ClosedTabHistoryList.Count; i++)
+                        {
                             key.SetValue(i.ToString(), StaticReg.ClosedTabHistoryList[i]);
                         }
                     }
                 }
             }
         }
-        
+
         // 判断图片列表不能为空
-        private static void SetImageKey(string key, string itemPath) {
-            if( null != ImageListGlobal.Images && 
+        private static void SetImageKey(string key, string itemPath)
+        {
+            if (null != ImageListGlobal.Images &&
                 ImageListGlobal.Images.Count > 0 && // add by indiff check Images
-                !ImageListGlobal.Images.ContainsKey(key)) {
+                !ImageListGlobal.Images.ContainsKey(key))
+            {
                 ImageListGlobal.Images.Add(key, GetIcon(itemPath, false));
             }
         }
 
-        public static void SetTabBarOption(TabBarOption tabBarOption, QTTabBarClass tabBar) {
+        public static void SetTabBarOption(TabBarOption tabBarOption, QTTabBarClass tabBar)
+        {
             // TODO
         }
 
-        public static void ValidateMinMax(ref int value, int min, int max) {
+        public static void ValidateMinMax(ref int value, int min, int max)
+        {
             value = ValidateMinMax(value, min, max);
         }
 
@@ -1184,60 +1302,65 @@ namespace QTTabBarLib {
         public static bool getNightMode()
         {
             // if (Environment.OSVersion.Version.Major > 9)  {
-                /*using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"))
-                {
-                    if (rk != null)
-                        return QTUtility2.GetValueSafe<int>(rk, "AppsUseLightTheme", 1) == 0;
-                }*/
+            /*using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"))
+            {
+                if (rk != null)
+                    return QTUtility2.GetValueSafe<int>(rk, "AppsUseLightTheme", 1) == 0;
+            }*/
 
-                using (var envKey = Registry.CurrentUser.OpenSubKey(REG_PERSONALIZE, true))
+            using (var envKey = Registry.CurrentUser.OpenSubKey(REG_PERSONALIZE, true))
+            {
+                if (envKey == null)
                 {
-                    if (envKey == null)
+                    QTUtility2.log("can not get reg for personailize");
+                    return false;
+                }
+                object value = envKey.GetValue("AppsUseLightTheme");
+                if (value != null)
+                {
+                    string useTheme = value.ToString();
+                    if ("1".Equals(useTheme))
                     {
-                        QTUtility2.log("can not get reg for personailize");
+                        // the light
                         return false;
-                    }
-                    object value = envKey.GetValue("AppsUseLightTheme");
-                    if (value != null)
-                    {
-                        string useTheme = value.ToString();
-                        if ("1".Equals(useTheme))
-                        {
-                            // the light
-                            return false;
-                        }
-                        else
-                        {
-                            // the dark mode
-                            return true;
-                        }
                     }
                     else
                     {
-                        // default is light
-                        return false;
+                        // the dark mode
+                        return true;
                     }
                 }
+                else
+                {
+                    // default is light
+                    return false;
+                }
+            }
             // }
-           return true;
+            return true;
         }
 
 
 
-        public static int ValidateMinMax(int value, int min, int max) {
+        public static int ValidateMinMax(int value, int min, int max)
+        {
             int a = Math.Min(min, max);
             int b = Math.Max(min, max);
-            if(value < a) {
+            if (value < a)
+            {
                 value = a;
             }
-            else if(value > b) {
+            else if (value > b)
+            {
                 value = b;
             }
             return value;
         }
 
-        internal static CultureInfo GetBuiltInLanguageCulture(int selectedIndex) {
-            switch(selectedIndex) {
+        internal static CultureInfo GetBuiltInLanguageCulture(int selectedIndex)
+        {
+            switch (selectedIndex)
+            {
                 case 1:
                     return CultureInfo.GetCultureInfo("zh-CN");
                 case 2:
@@ -1257,13 +1380,15 @@ namespace QTTabBarLib {
             }
         }
 
-        internal static void ApplyConfiguredLanguageCulture() {
+        internal static void ApplyConfiguredLanguageCulture()
+        {
             CultureInfo culture = GetBuiltInLanguageCulture(Config.Lang.BuiltInLangSelectedIndex);
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;
         }
 
-        private static string[] GetBuiltInResource(string key) {
+        private static string[] GetBuiltInResource(string key)
+        {
             return Resources_String.ResourceManager
                     .GetResourceStrings()
                     .Where(pair => pair.Key == key)
@@ -1271,14 +1396,17 @@ namespace QTTabBarLib {
                     .FirstOrDefault() ?? new string[0];
         }
 
-        public static void ValidateTextResources() {
+        public static void ValidateTextResources()
+        {
             ValidateTextResources(ref TextResourcesDic);
 
             string[] resources;
-            if(!TextResourcesDic.TryGetValue("TabBar_Menu", out resources) || resources == null || resources.Length == 0) {
+            if (!TextResourcesDic.TryGetValue("TabBar_Menu", out resources) || resources == null || resources.Length == 0)
+            {
                 TextResourcesDic["TabBar_Menu"] = GetBuiltInResource("TabBar_Menu");
             }
-            if(!TextResourcesDic.TryGetValue("Misc_Strings", out resources) || resources == null || resources.Length == 0) {
+            if (!TextResourcesDic.TryGetValue("Misc_Strings", out resources) || resources == null || resources.Length == 0)
+            {
                 TextResourcesDic["Misc_Strings"] = GetBuiltInResource("Misc_Strings");
             }
 
@@ -1286,13 +1414,13 @@ namespace QTTabBarLib {
             ResMisc = TextResourcesDic["Misc_Strings"];
             Resx.UpdateAll();
         }
-    
+
         public static void ValidateTextResources(ref Dictionary<string, string[]> dict)
         {
             // MessageBox.Show("Config.Lang.UseLangFile:" + Config.Lang.UseLangFile + ",dict == null:" + (dict == null));
             // 需要过滤的掉的 url
             string[] urlKeys = { "SiteURL", "PayPalURL" };
-            
+
             // dict 的检测
             if (dict == null)
             {
@@ -1320,7 +1448,7 @@ namespace QTTabBarLib {
             }
 
             // 判断是否未使用内置语言,如果是的话，则直接遍历 内置语言
-            if ( !Config.Lang.UseLangFile )
+            if (!Config.Lang.UseLangFile)
             {
                 foreach (var pair in keyValuePairs)
                 {
@@ -1406,7 +1534,7 @@ namespace QTTabBarLib {
             string print = @"::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{2227A280-3AEA-1069-A2DE-08002B30309D}";// 打印机
             return !IsEmptyStr(path) && (
                 path.StartsWith(controlPanel) ||
-                path.StartsWith(print) 
+                path.StartsWith(print)
                 );
         }
 
@@ -1434,7 +1562,7 @@ namespace QTTabBarLib {
         public static string GetParentProcessName()
         {
             Process currentProcess = Process.GetCurrentProcess();
-            var process = GetParent( currentProcess );
+            var process = GetParent(currentProcess);
             if (process == null)
             {
                 return "";
@@ -1470,7 +1598,7 @@ namespace QTTabBarLib {
             }
         }
 
-     
+
 
         /// <summary>
         /// Gets the parent process of a specified process.
@@ -1501,7 +1629,8 @@ namespace QTTabBarLib {
     /// Restricts BinaryFormatter deserialization to types from the QTTabBar assembly,
     /// preventing arbitrary class instantiation from untrusted input.
     /// </summary>
-    internal sealed class QTTabBarDeserializationBinder : SerializationBinder {
+    internal sealed class QTTabBarDeserializationBinder : SerializationBinder
+    {
         private static readonly Assembly QTTabBarAssembly = typeof(QTTabBarDeserializationBinder).Assembly;
         private static readonly string QTTabBarAssemblyName = QTTabBarAssembly.GetName().Name;
         // Allowed assembly names in addition to the QTTabBar assembly itself.
@@ -1511,26 +1640,31 @@ namespace QTTabBarLib {
             "System.Core",
         };
 
-        public override Type BindToType(string assemblyName, string typeName) {
+        public override Type BindToType(string assemblyName, string typeName)
+        {
             AssemblyName an = new AssemblyName(assemblyName);
-            if(an.Name == QTTabBarAssemblyName) {
+            if (an.Name == QTTabBarAssemblyName)
+            {
                 Type t = QTTabBarAssembly.GetType(typeName, throwOnError: false);
-                if(t == null) throw new SerializationException("Unknown type during deserialization: " + typeName);
+                if (t == null) throw new SerializationException("Unknown type during deserialization: " + typeName);
                 return t;
             }
-            if(!AllowedAssemblyNames.Contains(an.Name)) {
+            if (!AllowedAssemblyNames.Contains(an.Name))
+            {
                 throw new SerializationException("Untrusted assembly during deserialization: " + assemblyName);
             }
             // Only load an assembly whose simple name is in the explicit allowlist
             Assembly resolved;
-            try {
+            try
+            {
                 resolved = Assembly.Load(assemblyName);
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
                 throw new SerializationException("Unable to load assembly during deserialization: " + assemblyName, ex);
             }
             Type type = resolved.GetType(typeName, throwOnError: false);
-            if(type == null) throw new SerializationException("Unknown type during deserialization: " + typeName);
+            if (type == null) throw new SerializationException("Unknown type during deserialization: " + typeName);
             return type;
         }
     }

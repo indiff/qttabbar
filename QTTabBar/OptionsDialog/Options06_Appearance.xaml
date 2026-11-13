@@ -196,6 +196,11 @@
                     Margin="0,0,10,0"/>
             </StackPanel>
         </Grid>
+        <CheckBox
+            Content="{qt:Resx Key=Options_Page06_Appearance, Index=36}"
+            Height="16"
+            IsChecked="{Binding Path=ScaleTabIconsForHighDpi}"
+            Margin="13,2,0,2"/>
         <Label
             Content="{qt:Resx Key=Options_Page06_Appearance, Index=14}"
             Style="{StaticResource SectionHeaderStyle}"/>

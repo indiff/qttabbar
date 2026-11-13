@@ -311,8 +311,6 @@ namespace QTTabBarLib {
                 Marshal.ReleaseComObject(BandObjectSite);
             }
             BandObjectSite = (IInputObjectSite)pUnkSite;
-            // 测试DPI兼容 indiff
-            PInvoke.SetProcessDPIAware();
 
             Application.EnableVisualStyles();
 

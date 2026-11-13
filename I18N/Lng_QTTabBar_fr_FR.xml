@@ -231,6 +231,7 @@ Largeur x Hauteur maximale:
 Polcice:
 Types de fichiers texte
 Types de fichiers image et vidéo
+Garder les aperçus PDF/Word/Excel ouverts et afficher le bouton de fermeture
 </Options_Page04_Tooltips>
 
 <Options_Page05_General>
@@ -291,6 +292,7 @@ Exporter un thème...
 Extensible
 Taille réelle
 Tuile
+Adapter à la haute résolution
 </Options_Page06_Appearance>
 
 <Options_Page07_Mouse>

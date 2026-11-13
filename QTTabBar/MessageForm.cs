@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    internal class MessageForm : Form {
+    internal class MessageForm : QTPlugin.DpiAwareForm {
         private Button btnCancel;
         private Button btnOk;
         private Button btnOk2;

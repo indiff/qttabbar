@@ -201,7 +201,7 @@ c правого края
 Тонкие настройки списка в Проводнике
 Настройки для всех версий Проводника
 Показывать столбцы во всех режимах отображения (Windows Vista/7)
-Использовать стандартное отображание для папок Библиотеки (Windows 7)
+Использовать стандартное отображение для папок Библиотеки (Windows 7)
 Не выделять расширение файла при переименовании (Windows XP)
 Не переключать выделение при нажатии F2 при переименовании
 Wrap around when moving the selection with the arrow keys
@@ -231,6 +231,7 @@ Wrap around when moving the selection with the arrow keys
 Шрифт:
 Текстовые типы файлов
 Изображения и видео
+Оставлять предпросмотр PDF/Word/Excel открытым и показывать кнопку закрытия
 </Options_Page04_Tooltips>
 
 <Options_Page05_General>
@@ -291,6 +292,7 @@ Wrap around when moving the selection with the arrow keys
 Растянуть
 Истиный размер
 Замостить
+Адаптировать для высокого разрешения
 </Options_Page06_Appearance>
 
 <Options_Page07_Mouse>

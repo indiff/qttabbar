@@ -229,6 +229,7 @@ Maximum Width x Height:
 Font:
 Text filetypes
 Image and Video filetypes
+Keep PDF/Word/Excel previews open and show a close button
 </Options_Page04_Tooltips>
 
 <Options_Page05_General>
@@ -286,6 +287,7 @@ Export Skin...
 Stretch
 True size
 Tile
+Scale for high-resolution displays
 </Options_Page06_Appearance>
 
 <Options_Page07_Mouse>

@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -56,31 +57,47 @@ namespace QTTabBarLib {
         private static OptionsDialog instance;
         private static Thread instanceThread;
         private static Thread launchingThread;
+        private static int nextOpenId;
+        private readonly int openId;
+        private readonly Stopwatch openStopwatch = Stopwatch.StartNew();
         private Config WorkingConfig;
         
         #region ---------- Static Methods ----------
 
         public static void Open() {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            QTUtility2.log($"OptionsDialogOpen phase=Open begin thread={Thread.CurrentThread.ManagedThreadId}");
             InstanceManager.ExecuteOnServerProcess(OpenInternal, false);
+            QTUtility2.log($"OptionsDialogOpen phase=Open complete elapsedMs={stopwatch.ElapsedMilliseconds} thread={Thread.CurrentThread.ManagedThreadId}");
         }
 
         private static void OpenInternal() {
+            int currentOpenId = Interlocked.Increment(ref nextOpenId);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            LogOpenStep(currentOpenId, "OpenInternal begin", stopwatch);
             lock(typeof(OptionsDialog)) {
                 // Prevent reentrant calls that might happen during the Wait call below.
-                if(launchingThread == Thread.CurrentThread) return;
+                if(launchingThread == Thread.CurrentThread) {
+                    LogOpenStep(currentOpenId, "OpenInternal reentrant request ignored", stopwatch);
+                    return;
+                }
                 try {
                     launchingThread = Thread.CurrentThread;
 
                     if(instance == null) {
+                        LogOpenStep(currentOpenId, "create dialog thread", stopwatch);
                         instanceThread = new Thread(ThreadEntry) { IsBackground = true };
                         instanceThread.SetApartmentState(ApartmentState.STA);
                         lock(instanceThread) {
-                            instanceThread.Start();
+                            instanceThread.Start(currentOpenId);
+                            LogOpenStep(currentOpenId, "dialog thread started; waiting for constructor", stopwatch);
                             // Don't return until we know that the instance is created!
                             Monitor.Wait(instanceThread);
+                            LogOpenStep(currentOpenId, "constructor wait completed", stopwatch);
                         }
                     }
                     else {
+                        LogOpenStep(currentOpenId, $"existing dialog activate begin dialogOpenId={instance.openId}", stopwatch);
                         instance.Dispatcher.Invoke(new Action(() => {
                             if(instance.WindowState == WindowState.Minimized) {
                                // MessageBox.Show("instance" + " -> " + instance.WindowState + " ->" + instance.WindowState) ;
@@ -98,10 +115,12 @@ namespace QTTabBarLib {
                                 instance.lastSelected.IsSelected = true;*/
                             }
                         }));
+                        LogOpenStep(currentOpenId, $"existing dialog activate complete dialogOpenId={instance.openId}", stopwatch);
                     }
                 }
                 finally {
                     launchingThread = null;
+                    LogOpenStep(currentOpenId, "OpenInternal complete", stopwatch);
                 }
             }
         }
@@ -114,18 +133,25 @@ namespace QTTabBarLib {
             }
         }
 
-        private static void ThreadEntry() {
+        private static void ThreadEntry(object state) {
+            int currentOpenId = state is int ? (int)state : -1;
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            bool pulsed = false;
+            try {
+            if(currentOpenId < 0) {
+                throw new InvalidOperationException("OptionsDialog thread was started without an open ID.");
+            }
+            LogOpenStep(currentOpenId, "ThreadEntry begin", stopwatch);
             Dispatcher.CurrentDispatcher.UnhandledException += (sender, e) => {
                 QTUtility2.MakeErrorLog(e.Exception, "OptionsDialog Dispatcher unhandled exception");
                 e.Handled = true;
             };
-            bool pulsed = false;
-            try {
-            instance = new OptionsDialog();
+            instance = new OptionsDialog(currentOpenId);
             lock(instanceThread) {
                 Monitor.Pulse(instanceThread);
                     pulsed = true;
             }
+            LogOpenStep(currentOpenId, "dialog constructed; caller released", stopwatch);
             instance.Closed += (sender, e) => {
                 // We can't immediately shut down here, because ForceClose may be holding the lock.
                 Dispatcher.CurrentDispatcher.BeginInvokeShutdown(DispatcherPriority.Input);
@@ -135,41 +161,59 @@ namespace QTTabBarLib {
                     instance = null;
                 }
             };
+            LogOpenStep(currentOpenId, "Show begin", stopwatch);
             instance.Show();
+            LogOpenStep(currentOpenId, "Show returned", stopwatch);
 
                 if (instance.lstCategories != null && instance.WorkingConfig != null) {
                     instance.lstCategories.SelectedIndex = instance.WorkingConfig.desktop.lstSelectedIndex;
                 }
 
+            LogOpenStep(currentOpenId, "Dispatcher.Run begin", stopwatch);
             Dispatcher.Run();
+            LogOpenStep(currentOpenId, "Dispatcher.Run returned", stopwatch);
             }
             catch (Exception ex) {
-                QTUtility2.MakeErrorLog(ex, "OptionsDialog ThreadEntry fatal error");
                 if (!pulsed) {
                     lock(instanceThread) {
                         Monitor.PulseAll(instanceThread);
                     }
                 }
+                QTUtility2.MakeErrorLog(ex, "OptionsDialog ThreadEntry fatal error");
+                LogOpenStep(currentOpenId, $"ThreadEntry exception type={ex.GetType().Name}", stopwatch);
             }
         }
 
         #endregion
 
-        private OptionsDialog() {
+        private OptionsDialog(int currentOpenId) {
+            openId = currentOpenId;
+            LogOpenStep("constructor begin");
             try {
-                Initialized += (sender, args) => Topmost = true;
-                ContentRendered += (sender, args) => Topmost = false;
-                SourceInitialized += (sender, args) => QTUtility2.SetDarkTitleBar(new WindowInteropHelper(this).Handle);
+                Initialized += (sender, args) => {
+                    Topmost = true;
+                    LogOpenStep("Initialized event");
+                };
+                ContentRendered += (sender, args) => {
+                    Topmost = false;
+                    LogOpenStep("ContentRendered event");
+                };
+                SourceInitialized += (sender, args) => {
+                    QTUtility2.SetDarkTitleBar(new WindowInteropHelper(this).Handle);
+                    LogOpenStep("SourceInitialized event");
+                };
                 if (QTUtility.EnableDpiScaling)
                 {
-                    QTUtility.InitializeDpiAwareness();
-                    // ✅ 添加 Per-Monitor DPI 变化监听
                     this.DpiChanged += OnDpiChanged;
                 }
                
                 // QTUtility2.log("QTUtility OptionsDialog SetProcessDPIAware 不兼容XP");
+                Stopwatch stageStopwatch = Stopwatch.StartNew();
                 InitializeComponent();
+                LogOpenStep("InitializeComponent complete", stageStopwatch);
+                stageStopwatch.Restart();
                 QTUtility2.ApplyOptionsDialogTheme(Resources);
+                LogOpenStep("apply window theme complete", stageStopwatch);
 				
 				// WPF's inherited default FontSize is SystemFonts.MessageFontSize, and Windows
                 // inflates that when "Make text bigger" (Accessibility -> TextScaleFactor) is set:
@@ -217,6 +261,7 @@ namespace QTTabBarLib {
 
                 //   QTUtility2.log("set title end");           
                 int i = 0;
+                stageStopwatch.Restart();
                 tabbedPanel.ItemsSource = new OptionsDialogTab[] {
                     new Options01_Window        { Index = i++},
                     new Options02_Tabs          { Index = i++},
@@ -233,6 +278,7 @@ namespace QTTabBarLib {
                     new Options13_Language      { Index = i++},
                     new Options14_About         { Index = i}
                 };
+                LogOpenStep($"create and assign {i + 1} option pages complete", stageStopwatch);
 
                // QTUtility2.log("tabbedPanel.ItemsSource end");    
 
@@ -240,6 +286,8 @@ namespace QTTabBarLib {
                 // This is the only way I've found to fix it
                 // TODO: Investigate and see if there's a better way
                 Loaded += (sender, args) => {
+                    Stopwatch loadedStopwatch = Stopwatch.StartNew();
+                    LogOpenStep("Loaded event begin");
                     tabbedPanel.SelectedIndex = 1;
                     tabbedPanel.SelectedIndex = 0;
 
@@ -252,26 +300,48 @@ namespace QTTabBarLib {
                             lstCategories.SelectedIndex = last;
                         }
                     }
+                    LogOpenStep($"Loaded event complete selectedIndex={lstCategories?.SelectedIndex}", loadedStopwatch);
                 };
 
+                stageStopwatch.Restart();
                 WorkingConfig = QTUtility2.DeepClone(ConfigManager.LoadedConfig);
+                LogOpenStep("clone configuration complete", stageStopwatch);
                 foreach(OptionsDialogTab tab in tabbedPanel.Items) {
+                    stageStopwatch.Restart();
                     tab.WorkingConfig = WorkingConfig;
                     IHotkeyContainer ihc = tab as IHotkeyContainer;
                     if(ihc != null) ihc.NewHotkeyRequested += ProcessNewHotkey;
-                    tab.InitializeConfig();
+                    try {
+                        tab.InitializeConfig();
+                    }
+                    finally {
+                        LogOpenStep($"InitializeConfig {tab.GetType().Name} complete", stageStopwatch);
+                    }
                 }
               //  QTUtility2.log("InitializeConfig end");
 
                 //////////// setting by qwop .
+                stageStopwatch.Restart();
                 setByQwop();
+                LogOpenStep("setByQwop complete", stageStopwatch);
               //  QTUtility2.log("利用主屏幕的宽度设置，选项窗体的宽度， 和绝对高度 end");
+                LogOpenStep("constructor complete");
             }
             catch (Exception exception)
             {
                 QTUtility2.MakeErrorLog(exception, "OptionsDialog constructor");
+                LogOpenStep($"constructor exception type={exception.GetType().Name}");
 
             }
+        }
+
+        private void LogOpenStep(string phase, Stopwatch stageStopwatch = null) {
+            LogOpenStep(openId, phase, openStopwatch, stageStopwatch);
+        }
+
+        private static void LogOpenStep(int currentOpenId, string phase, Stopwatch stopwatch, Stopwatch stageStopwatch = null) {
+            string stageElapsed = stageStopwatch == null ? string.Empty : $" stageMs={stageStopwatch.ElapsedMilliseconds}";
+            QTUtility2.log($"OptionsDialogOpen id={currentOpenId} phase={phase} elapsedMs={stopwatch.ElapsedMilliseconds}{stageElapsed} thread={Thread.CurrentThread.ManagedThreadId}");
         }
 
         /// <summary>
@@ -282,9 +352,7 @@ namespace QTTabBarLib {
             try
             {
                 float newScale = (float)e.NewDpi.PixelsPerDip;
-                ApplyDpiScaledSize(newScale);
-
-                // ✅ 强制刷新所有 Tab 页面的布局
+                // WPF dimensions are device-independent pixels; WPF handles their DPI scaling.
                 RefreshTabsForDpi(newScale);
 
 
@@ -322,30 +390,6 @@ namespace QTTabBarLib {
             tabbedPanel.InvalidateMeasure();
             tabbedPanel.UpdateLayout();
         }
-
-        /// <summary>
-        /// 根据 DPI 缩放因子设置窗口尺寸（初始化 + DPI变化 共用）
-        /// </summary>
-        private void ApplyDpiScaledSize(float dpiScale)
-        {
-            // 基准尺寸（96 DPI 下的逻辑像素）
-            const double BASE_WIDTH = 750;
-            const double BASE_HEIGHT = 650;
-            const double BASE_MIN_WIDTH = 600;
-            const double BASE_MIN_HEIGHT = 500;
-
-            this.Width = BASE_WIDTH * dpiScale;
-            this.Height = BASE_HEIGHT * dpiScale;
-            this.MinWidth = BASE_MIN_WIDTH * dpiScale;
-            this.MinHeight = BASE_MIN_HEIGHT * dpiScale;
-
-            // ✅ 全局字体缩放因子（WPF FontSize 是逻辑像素，PerMonitorV2 下自动适配，
-            // 但如果进程 DPI 感知有问题，这里手动放大）
-            this.FontSize = 12 * dpiScale;  // 基础字体
-            if (tabbedPanel != null)
-                tabbedPanel.FontSize = 12 * dpiScale;
-        }
-
 
         #region setting by qwop
         /// <summary>
@@ -397,25 +441,6 @@ namespace QTTabBarLib {
             // generateInitConfig();
             // 设置 Esc 关闭窗口
             this.KeyDown += ModifyPrice_KeyDown;
-            if (QTUtility.EnableDpiScaling)
-            {
-                // 根据 DPI 缩放窗口基础尺寸
-                float dpi = GetDpiScale();
-                this.Width = 750 * dpi;
-                this.Height = 650 * dpi;
-                this.MinWidth = 600 * dpi;
-                this.MinHeight = 500 * dpi; 
-            }
-        }
-
-        private float GetDpiScale()
-        {
-            var source = PresentationSource.FromVisual(this);
-            if (source != null && source.CompositionTarget != null)
-            {
-                return (float)(source.CompositionTarget.TransformToDevice.M11);
-            }
-            return 1f;
         }
 
 

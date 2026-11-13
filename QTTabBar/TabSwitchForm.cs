@@ -26,7 +26,7 @@ using System.Windows.Forms.VisualStyles;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    internal sealed class TabSwitchForm : Form {
+    internal sealed class TabSwitchForm : QTPlugin.DpiAwareForm {
         private IContainer components;
         private Dictionary<int, Rectangle> dicItemRcts = new Dictionary<int, Rectangle>();
         private bool fCompositionEnabled;
@@ -38,7 +38,7 @@ namespace QTTabBarLib {
         private int initialSelectedIndex;
         private List<PathData> lstPaths = new List<PathData>();
         private const int MAXITEM = 11;
-        private static int menuHeight;
+        private int menuHeight;
         private int selectedIndex;
         private ToolTip toolTipSwitcher;
 
@@ -68,13 +68,13 @@ namespace QTTabBarLib {
 
         private void DrawItems(Graphics g) {
             dicItemRcts.Clear();
-            int x = fCompositionEnabled ? 2 : 6;
-            int num2 = fCompositionEnabled ? 0 : (!QTUtility.IsXP ? 2 : 8);
-            int y = !QTUtility.IsXP ? 4 : 8;
-            int num4 = TabSwitchForm.menuHeight + (!QTUtility.IsXP ? 11 : 0x12);
+            int x = ScaleDpi(fCompositionEnabled ? 2 : 6);
+            int num2 = fCompositionEnabled ? 0 : ScaleDpi(!QTUtility.IsXP ? 2 : 8);
+            int y = ScaleDpi(!QTUtility.IsXP ? 4 : 8);
+            int num4 = menuHeight + ScaleDpi(!QTUtility.IsXP ? 11 : 0x12);
             int width = ClientSize.Width;
-            int menuHeight = TabSwitchForm.menuHeight;
-            int num7 = Math.Max((menuHeight - 0x10) / 2, 0);
+            int itemHeight = menuHeight;
+            int num7 = Math.Max((itemHeight - ScaleDpi(0x10)) / 2, 0);
             int count = lstPaths.Count;
             int num9 = 5;
             bool flag = count > 11;
@@ -84,7 +84,7 @@ namespace QTTabBarLib {
             if(num12 < 0) {
                 num12 += count;
             }
-            DrawText(g, GetTitleText(lstPaths[selectedIndex]), new Rectangle(num2, y, (width - 4) - num2, menuHeight), false, false, StringAlignment.Center);
+            DrawText(g, GetTitleText(lstPaths[selectedIndex]), new Rectangle(num2, y, (width - ScaleDpi(4)) - num2, itemHeight), false, false, StringAlignment.Center);
             for(int i = 0; i < num10; i++) {
                 int num14 = i + num12;
                 if(num14 < 0) {
@@ -93,24 +93,24 @@ namespace QTTabBarLib {
                 else if(num14 > (count - 1)) {
                     num14 -= count;
                 }
-                Rectangle rectangle = new Rectangle(x, num4, 0x18, menuHeight);
-                Rectangle rectangle2 = new Rectangle(0x24, num4 + num7, 0x10, 0x10);
-                Rectangle rectangle3 = new Rectangle(0x36, num4, 300, menuHeight);
-                Rectangle rectangle4 = new Rectangle(4, num4, width - 8, menuHeight);
+                Rectangle rectangle = new Rectangle(x, num4, ScaleDpi(0x18), itemHeight);
+                Rectangle rectangle2 = new Rectangle(ScaleDpi(0x24), num4 + num7, ScaleDpi(0x10), ScaleDpi(0x10));
+                Rectangle rectangle3 = new Rectangle(ScaleDpi(0x36), num4, ScaleDpi(300), itemHeight);
+                Rectangle rectangle4 = new Rectangle(ScaleDpi(4), num4, width - ScaleDpi(8), itemHeight);
                 bool flag2 = num14 == initialSelectedIndex;
                 DrawText(g, (num14 + 1).ToString(), rectangle, false, flag2, StringAlignment.Far);
                 g.DrawImage(GetImage(lstPaths[num14]), rectangle2);
                 DrawText(g, lstPaths[num14].strDisplay, rectangle3, false, flag2, StringAlignment.Near);
                 dicItemRcts[num14] = rectangle4;
                 if(num14 == iHoveredIndex) {
-                    DrawSelection(g, rectangle4, MouseButtons == MouseButtons.Left);
+                    DrawSelection(g, rectangle4, MouseButtons == MouseButtons.Left, DpiScale);
                 }
-                num4 += menuHeight;
+                num4 += itemHeight;
             }
-            Rectangle rct = new Rectangle(x, num4, 0x18, menuHeight);
-            Rectangle rect = new Rectangle(0x24, num4 + num7, 0x10, 0x10);
-            Rectangle rectangle7 = new Rectangle(0x36, num4, 300, menuHeight);
-            Rectangle rectangle8 = new Rectangle(4, num4, width - 8, menuHeight);
+            Rectangle rct = new Rectangle(x, num4, ScaleDpi(0x18), itemHeight);
+            Rectangle rect = new Rectangle(ScaleDpi(0x24), num4 + num7, ScaleDpi(0x10), ScaleDpi(0x10));
+            Rectangle rectangle7 = new Rectangle(ScaleDpi(0x36), num4, ScaleDpi(300), itemHeight);
+            Rectangle rectangle8 = new Rectangle(ScaleDpi(4), num4, width - ScaleDpi(8), itemHeight);
             bool fBold = selectedIndex == initialSelectedIndex;
             if(!fCompositionEnabled) {
                 g.FillRectangle(SystemBrushes.MenuHighlight, rectangle8);
@@ -119,10 +119,10 @@ namespace QTTabBarLib {
             g.DrawImage(GetImage(lstPaths[selectedIndex]), rect);
             DrawText(g, lstPaths[selectedIndex].strDisplay, rectangle7, true, fBold, StringAlignment.Near);
             if(fCompositionEnabled) {
-                DrawSelection(g, rectangle8, true);
+                DrawSelection(g, rectangle8, true, DpiScale);
             }
             dicItemRcts[selectedIndex] = rectangle8;
-            num4 += menuHeight;
+            num4 += itemHeight;
             for(int j = 0; j < num11; j++) {
                 int num16 = (j + selectedIndex) + 1;
                 if(num16 < 0) {
@@ -131,49 +131,50 @@ namespace QTTabBarLib {
                 else if(num16 > (count - 1)) {
                     num16 -= count;
                 }
-                Rectangle rectangle9 = new Rectangle(x, num4, 0x18, menuHeight);
-                Rectangle rectangle10 = new Rectangle(0x24, num4 + num7, 0x10, 0x10);
-                Rectangle rectangle11 = new Rectangle(0x36, num4, 300, menuHeight);
-                Rectangle rectangle12 = new Rectangle(4, num4, width - 8, menuHeight);
+                Rectangle rectangle9 = new Rectangle(x, num4, ScaleDpi(0x18), itemHeight);
+                Rectangle rectangle10 = new Rectangle(ScaleDpi(0x24), num4 + num7, ScaleDpi(0x10), ScaleDpi(0x10));
+                Rectangle rectangle11 = new Rectangle(ScaleDpi(0x36), num4, ScaleDpi(300), itemHeight);
+                Rectangle rectangle12 = new Rectangle(ScaleDpi(4), num4, width - ScaleDpi(8), itemHeight);
                 bool flag4 = num16 == initialSelectedIndex;
                 DrawText(g, (num16 + 1).ToString(), rectangle9, false, flag4, StringAlignment.Far);
                 g.DrawImage(GetImage(lstPaths[num16]), rectangle10);
                 DrawText(g, lstPaths[num16].strDisplay, rectangle11, false, flag4, StringAlignment.Near);
                 dicItemRcts[num16] = rectangle12;
                 if(num16 == iHoveredIndex) {
-                    DrawSelection(g, rectangle12, MouseButtons == MouseButtons.Left);
+                    DrawSelection(g, rectangle12, MouseButtons == MouseButtons.Left, DpiScale);
                 }
-                num4 += menuHeight;
+                num4 += itemHeight;
             }
         }
 
-        private static void DrawSelection(Graphics g, Rectangle rct, bool fHot) {
+        private static void DrawSelection(Graphics g, Rectangle rct, bool fHot, float dpiScale) {
+            int Scale(int value) => (int)Math.Round(value * dpiScale);
             if(!QTUtility.IsXP) {
                 int x = rct.X;
                 int y = rct.Y;
-                int num3 = rct.Width - 2;
+                int num3 = rct.Width - Scale(2);
                 int height = rct.Height;
                 if(!fHot) {
-                    g.DrawImage(Resources_Image.imgVistaMenu_LT, new Rectangle(x + 3, y, 4, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_LM, new Rectangle(x + 3, y + 4, 4, height - 8));
-                    g.DrawImage(Resources_Image.imgVistaMenu_LB, new Rectangle(x + 3, (y + height) - 4, 4, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_MT, new Rectangle(x + 7, y, num3 - 11, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_MM, new Rectangle(x + 7, y + 4, num3 - 11, height - 8));
-                    g.DrawImage(Resources_Image.imgVistaMenu_MB, new Rectangle(x + 7, (y + height) - 4, num3 - 11, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_RT, new Rectangle((x + num3) - 4, y, 4, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_RM, new Rectangle((x + num3) - 4, y + 4, 4, height - 8));
-                    g.DrawImage(Resources_Image.imgVistaMenu_RB, new Rectangle((x + num3) - 4, (y + height) - 4, 4, 4));
+                    g.DrawImage(Resources_Image.imgVistaMenu_LT, new Rectangle(x + Scale(3), y, Scale(4), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_LM, new Rectangle(x + Scale(3), y + Scale(4), Scale(4), height - Scale(8)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_LB, new Rectangle(x + Scale(3), (y + height) - Scale(4), Scale(4), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_MT, new Rectangle(x + Scale(7), y, num3 - Scale(11), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_MM, new Rectangle(x + Scale(7), y + Scale(4), num3 - Scale(11), height - Scale(8)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_MB, new Rectangle(x + Scale(7), (y + height) - Scale(4), num3 - Scale(11), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_RT, new Rectangle((x + num3) - Scale(4), y, Scale(4), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_RM, new Rectangle((x + num3) - Scale(4), y + Scale(4), Scale(4), height - Scale(8)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_RB, new Rectangle((x + num3) - Scale(4), (y + height) - Scale(4), Scale(4), Scale(4)));
                 }
                 else {
-                    g.DrawImage(Resources_Image.imgVistaMenu_LT_hot, new Rectangle(x + 3, y, 4, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_LM_hot, new Rectangle(x + 3, y + 4, 4, height - 8));
-                    g.DrawImage(Resources_Image.imgVistaMenu_LB_hot, new Rectangle(x + 3, (y + height) - 4, 4, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_MT_hot, new Rectangle(x + 7, y, num3 - 11, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_MM_hot, new Rectangle(x + 7, y + 4, num3 - 11, height - 8));
-                    g.DrawImage(Resources_Image.imgVistaMenu_MB_hot, new Rectangle(x + 7, (y + height) - 4, num3 - 11, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_RT_hot, new Rectangle((x + num3) - 4, y, 4, 4));
-                    g.DrawImage(Resources_Image.imgVistaMenu_RM_hot, new Rectangle((x + num3) - 4, y + 4, 4, height - 8));
-                    g.DrawImage(Resources_Image.imgVistaMenu_RB_hot, new Rectangle((x + num3) - 4, (y + height) - 4, 4, 4));
+                    g.DrawImage(Resources_Image.imgVistaMenu_LT_hot, new Rectangle(x + Scale(3), y, Scale(4), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_LM_hot, new Rectangle(x + Scale(3), y + Scale(4), Scale(4), height - Scale(8)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_LB_hot, new Rectangle(x + Scale(3), (y + height) - Scale(4), Scale(4), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_MT_hot, new Rectangle(x + Scale(7), y, num3 - Scale(11), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_MM_hot, new Rectangle(x + Scale(7), y + Scale(4), num3 - Scale(11), height - Scale(8)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_MB_hot, new Rectangle(x + Scale(7), (y + height) - Scale(4), num3 - Scale(11), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_RT_hot, new Rectangle((x + num3) - Scale(4), y, Scale(4), Scale(4)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_RM_hot, new Rectangle((x + num3) - Scale(4), y + Scale(4), Scale(4), height - Scale(8)));
+                    g.DrawImage(Resources_Image.imgVistaMenu_RB_hot, new Rectangle((x + num3) - Scale(4), (y + height) - Scale(4), Scale(4), Scale(4)));
                 }
             }
             else {
@@ -187,7 +188,7 @@ namespace QTTabBarLib {
         private void DrawText(Graphics g, string text, Rectangle rct, bool fSelect, bool fBold, StringAlignment horizontalAlign) {
             if(fCompositionEnabled) {
                 IntPtr hdc = g.GetHdc();
-                DrawTextOnGlass(hdc, text, fBold ? fntMenuBold : fntMenu, rct, 4, horizontalAlign);
+                DrawTextOnGlass(hdc, text, fBold ? fntMenuBold : fntMenu, rct, ScaleDpi(4), horizontalAlign);
                 g.ReleaseHdc(hdc);
             }
             else {
@@ -385,13 +386,17 @@ namespace QTTabBarLib {
             RECT rect;
             initialSelectedIndex = selectedIndex = indexCurrent;
             this.lstPaths = lstPaths;
-            menuHeight = SystemInformation.MenuHeight;
+            float systemScale = QTPlugin.DpiScaling.GetScale(IntPtr.Zero);
+            int baseMenuHeight = QTPlugin.DpiScaling.Enabled
+                ? (int)Math.Round(SystemInformation.MenuHeight / systemScale)
+                : SystemInformation.MenuHeight;
+            menuHeight = ScaleDpi(baseMenuHeight);
             if(!QTUtility.IsXP && (PInvoke.DwmIsCompositionEnabled(out fCompositionEnabled) != 0)) {
                 fCompositionEnabled = false;
             }
             int num = Math.Min(11, lstPaths.Count);
-            int cy = 0x2a + (menuHeight * (num + 1));
-            int cx = 0x184;
+            int cy = ScaleDpi(0x2a) + (menuHeight * (num + 1));
+            int cx = ScaleDpi(0x184);
             PInvoke.GetWindowRect(hwndExplr, out rect);
             int x = rect.left + ((rect.Width - cx) / 2);
             int y = rect.top + ((rect.Height - cy) / 2);

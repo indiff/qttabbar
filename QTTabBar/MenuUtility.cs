@@ -115,11 +115,11 @@ namespace QTTabBarLib {
                     continue;
                 }
                 Stopwatch pathCheckTimer = Stopwatch.StartNew();
-                QTUtility2.flog("GroupMenu PathExists begin group=" + group.Name + " path=" + group.Paths[0]);
-                bool pathExists = QTUtility2.PathExists(group.Paths[0]);
-                QTUtility2.flog("GroupMenu PathExists end group=" + group.Name + " exists=" + pathExists +
-                    " elapsedMs=" + pathCheckTimer.ElapsedMilliseconds);
-                if(!pathExists) continue;
+                //QTUtility2.flog("GroupMenu PathExists begin group=" + group.Name + " path=" + group.Paths[0]);
+                //bool pathExists = QTUtility2.PathExists(group.Paths[0]);
+                //QTUtility2.flog("GroupMenu PathExists end group=" + group.Name + " exists=" + pathExists +
+                //    " elapsedMs=" + pathCheckTimer.ElapsedMilliseconds);
+                //if(!pathExists) continue;
                 QMenuItem item = new QMenuItem(group.Name, MenuGenre.Group);
                 item.SetImageReservationKey(group.Paths[0], null);
                 if(dropDown != null) {

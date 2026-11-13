@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using QTTabBarLib.Dpi;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
@@ -75,6 +76,7 @@ namespace QTTabBarLib {
         private int iSelectedIndex;
         private int iTabIndexOfSubDirShown = -1;
         private int iTabMouseOnButtonsIndex = -1;
+        private float _dpiScale = 1f;
         private Size itemSize = new Size(100, 0x18);
         private int iToolTipIndex = -1;
         private int maxAllowedTabWidth = 10;
@@ -90,6 +92,42 @@ namespace QTTabBarLib {
         private ToolTip toolTip;
         private UpDown upDown;
         private const int UPDOWN_WIDTH = 0x24;
+
+        internal float DpiScaleFactor {
+            get {
+                return Config.Skin.ScaleTabIconsForHighDpi
+                    ? Math.Max(1f, _dpiScale)
+                    : 1f;
+            }
+        }
+
+        internal void UpdateDpiScale()
+        {
+            if (!IsHandleCreated)
+                return;
+
+            float newScale = DpiManager.GetControlDpiScale(this);
+            if (Math.Abs(newScale - _dpiScale) < 0.01f)
+                return;
+
+            _dpiScale = newScale;
+            if (Config.Skin.ScaleTabIconsForHighDpi)
+                RefreshOptions(true);
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            UpdateDpiScale();
+        }
+
+        internal int ScaleDpi(int value) {
+            return (int)Math.Round(value * DpiScaleFactor);
+        }
+
+        internal float ScaleDpi(float value) {
+            return value * DpiScaleFactor;
+        }
 
         [ThreadStatic()]
         private static VisualStyleRenderer vsr_LHot;
@@ -326,7 +364,7 @@ namespace QTTabBarLib {
                 tabPages[0].Edge = Edges.Left;
                 tabPages[tabPages.Count - 1].Edge = Edges.Right;
             }
-            return (x > (Width - 0x24));
+            return (x > (Width - ScaleDpi(UPDOWN_WIDTH)));
         }
         // �������ʱ��ľ���
         private void CalculateItemRectangle_MultiRows() {
@@ -335,7 +373,7 @@ namespace QTTabBarLib {
             int width = Width;
             int num4 = itemSize.Width;
             int height = itemSize.Height;
-            int num6 = height - 3;
+            int num6 = height - ScaleDpi(3);
             int num7 = 0;
             int num8 = 0;
             if(sizeMode == TabSizeMode.Fixed) {  // �̶�����
@@ -489,7 +527,7 @@ namespace QTTabBarLib {
                     iScrollWidth = -tabToSelect.TabBounds.X;
                     iScrollClickedCount = index;
                 }
-                else if((tabToSelect.TabBounds.X + iScrollWidth) > (Width - 0x24)) {
+                else if((tabToSelect.TabBounds.X + iScrollWidth) > (Width - ScaleDpi(UPDOWN_WIDTH))) {
                     while((tabToSelect.TabBounds.Right + iScrollWidth) > Width) {
                         OnUpDownClicked(true, true);
                     }
@@ -611,33 +649,35 @@ namespace QTTabBarLib {
                   g.FillRectangle(rectBrush, rctItem);
                   g.DrawRectangle(Pens.Black, new Rectangle(0, 0, rctItem.Width - 1, rctItem.Height - 1));
                   */
-                int num = bSelected ? 0 : 1;
+                int num = bSelected ? 0 : ScaleDpi(1);
+                int border = ScaleDpi(2);
+                int edge = ScaleDpi(1);
                 if(tabImages == null) { // ���ͼƬΪ��
                     // g.FillRectangle(rectBrush, rctItem);
                     g.DrawLine(SystemPens.ControlLightLight, 
-                        new Point(rctItem.X + 2, rctItem.Y), 
-                        new Point(((rctItem.X + rctItem.Width) - 2) - num, rctItem.Y));
+                        new Point(rctItem.X + border, rctItem.Y),
+                        new Point(((rctItem.X + rctItem.Width) - border) - num, rctItem.Y));
                     g.DrawLine(SystemPens.ControlLightLight, 
-                        new Point(rctItem.X + 2, rctItem.Y), 
-                        new Point(rctItem.X, rctItem.Y + 2));
+                        new Point(rctItem.X + border, rctItem.Y),
+                        new Point(rctItem.X, rctItem.Y + border));
                     g.DrawLine(SystemPens.ControlLightLight, 
-                        new Point(rctItem.X, rctItem.Y + 2), 
-                        new Point(rctItem.X, (rctItem.Y + rctItem.Height) - 1));
+                        new Point(rctItem.X, rctItem.Y + border),
+                        new Point(rctItem.X, (rctItem.Y + rctItem.Height) - edge));
                     g.DrawLine(SystemPens.ControlDarkDark, 
-                        new Point((rctItem.X + rctItem.Width) - num, rctItem.Y + 2), 
-                        new Point((rctItem.X + rctItem.Width) - num, (rctItem.Y + rctItem.Height) - 1));
+                        new Point((rctItem.X + rctItem.Width) - num, rctItem.Y + border),
+                        new Point((rctItem.X + rctItem.Width) - num, (rctItem.Y + rctItem.Height) - edge));
                     g.DrawLine(SystemPens.ControlDark, 
-                        new Point(((rctItem.X + rctItem.Width) - num) - 1, rctItem.Y + 1), 
-                        new Point(((rctItem.X + rctItem.Width) - num) - 1, (rctItem.Y + rctItem.Height) - 1));
+                        new Point(((rctItem.X + rctItem.Width) - num) - edge, rctItem.Y + edge),
+                        new Point(((rctItem.X + rctItem.Width) - num) - edge, (rctItem.Y + rctItem.Height) - edge));
                     g.DrawLine(SystemPens.ControlDarkDark, 
-                        new Point(((rctItem.X + rctItem.Width) - num) - 1, rctItem.Y + 1), 
-                        new Point((rctItem.X + rctItem.Width) - num, rctItem.Y + 2));
+                        new Point(((rctItem.X + rctItem.Width) - num) - edge, rctItem.Y + edge),
+                        new Point((rctItem.X + rctItem.Width) - num, rctItem.Y + border));
                     if(bSelected) {
                         // QTUtility2.log("DrawBackground g.DrawLine bSelected");
-                        Pen pen = new Pen(colorSet[2], 2f);
+                        Pen pen = new Pen(colorSet[2], ScaleDpi(2f));
                         g.DrawLine(pen, 
-                            new Point(rctItem.X, (rctItem.Y + rctItem.Height) - 1), 
-                            new Point((rctItem.X + rctItem.Width) + 1,  (rctItem.Y + rctItem.Height) - 1));
+                            new Point(rctItem.X, (rctItem.Y + rctItem.Height) - edge),
+                            new Point((rctItem.X + rctItem.Width) + edge,  (rctItem.Y + rctItem.Height) - edge));
                         pen.Dispose();
                     }
                 }  else {  // ���ͼƬ��Ϊ��
@@ -753,7 +793,12 @@ namespace QTTabBarLib {
         }
 
         private static void DrawDriveLetter(Graphics g, string str, Font fnt, Rectangle rctFldImg, bool fSelected) {
-            Rectangle layoutRectangle = new Rectangle(rctFldImg.X + 7, rctFldImg.Y + 6, 0x10, 0x10);
+            float scale = rctFldImg.Width / 16f;
+            Rectangle layoutRectangle = new Rectangle(
+                rctFldImg.X + (int)Math.Round(7 * scale),
+                rctFldImg.Y + (int)Math.Round(6 * scale),
+                rctFldImg.Width,
+                rctFldImg.Height);
             using(SolidBrush brush = 
                         new SolidBrush( 
                                 /*QTUtility2.MakeModColor(fSelected ? 
@@ -764,21 +809,21 @@ namespace QTTabBarLib {
                         )
                    ) {
                 Rectangle rectangle2 = layoutRectangle;
-                rectangle2.Offset(1, 0);
+                rectangle2.Offset((int)Math.Round(scale), 0);
                 g.DrawString(str, fnt, brush, rectangle2);
-                rectangle2.Offset(-2, 0);
+                rectangle2.Offset((int)Math.Round(-2 * scale), 0);
                 g.DrawString(str, fnt, brush, rectangle2);
-                rectangle2.Offset(1, -1);
+                rectangle2.Offset((int)Math.Round(scale), (int)Math.Round(-scale));
                 g.DrawString(str, fnt, brush, rectangle2);
-                rectangle2.Offset(0, 2);
+                rectangle2.Offset(0, (int)Math.Round(2 * scale));
                 g.DrawString(str, fnt, brush, rectangle2);
-                rectangle2.Offset(1, 0);
+                rectangle2.Offset((int)Math.Round(scale), 0);
                 g.DrawString(str, fnt, brush, rectangle2);
-                rectangle2.Offset(0, -2);
+                rectangle2.Offset(0, (int)Math.Round(-2 * scale));
                 g.DrawString(str, fnt, brush, rectangle2);
-                rectangle2.Offset(-2, 0);
+                rectangle2.Offset((int)Math.Round(-2 * scale), 0);
                 g.DrawString(str, fnt, brush, rectangle2);
-                rectangle2.Offset(0, 2);
+                rectangle2.Offset(0, (int)Math.Round(2 * scale));
                 g.DrawString(str, fnt, brush, rectangle2);
                 // dark mode brshActive.Color
                 // brush.Color = fSelected ? Config.Skin.TabTextActiveColor : Config.Skin.TabTextInactiveColor;
@@ -836,6 +881,15 @@ namespace QTTabBarLib {
                     rctItem.Height -= 2;  // ��ѡ�� ��ǩ����߶Ȼ��� 2 ����
                     // textRect.Y += 2; // ��ѡ�� �ı�����y��ƫ�� 2 ����
                 }
+                textRect.X += ScaleDpi(2) - 2;
+                if(bSelected) {
+                    rctItem.Width += ScaleDpi(4) - 4;
+                }
+                else {
+                    rctItem.X += ScaleDpi(2) - 2;
+                    rctItem.Y += ScaleDpi(2) - 2;
+                    rctItem.Height -= ScaleDpi(2) - 2;
+                }
                 DrawBackground(g, bSelected, fHot, rctItem, baseTabItem.Edge, fVisualStyle, index);
                 if(!baseTabItem.TabColor.IsEmpty) {
                     using(SolidBrush tabColorBrush = new SolidBrush(
@@ -843,6 +897,8 @@ namespace QTTabBarLib {
                         g.FillRectangle(tabColorBrush, rctItem);
                     }
                 }
+                float iconScale = DpiScaleFactor;
+                int iconSize = Math.Max(1, (int)Math.Round(0x10 * iconScale));
                 int tabPosYHalfTabHeight = (rctItem.Height - 0x10) / 2; // ��ǩY����� 10 ���ص�һ��
                 // QTUtility2.log("draw folder image " + fDrawFolderImg +  " baseTabItem.ImageKey " + baseTabItem.ImageKey );
                 // �ж��Ƿ�ʹ��ͼƬ
@@ -853,6 +909,16 @@ namespace QTTabBarLib {
                         rctItem.Y + tabPosYHalfTabHeight, 
                         0x10, 
                         0x10); // 16 �߶�  * 16 ����
+                    if(iconScale > 1f) {
+                        imgRect = new Rectangle(
+                            rctItem.X + (int)Math.Round((bSelected ? 7 : 5) * iconScale),
+                            rctItem.Y + (rctItem.Height - iconSize) / 2,
+                            iconSize,
+                            iconSize);
+                        int extraTextSpacing = (int)Math.Round(0x18 * iconScale) - 0x18;
+                        textRect.X += extraTextSpacing;
+                        textRect.Width -= extraTextSpacing;
+                    }
                     textRect.X += 0x18;
                     textRect.Width -= 0x18; // 24
                     if((fNowMouseIsOnIcon && (iTabMouseOnButtonsIndex == index)) || (iTabIndexOfSubDirShown == index)) {
@@ -863,7 +929,8 @@ namespace QTTabBarLib {
                         if(bmpFolIconBG == null) {
                             bmpFolIconBG = Resources_Image.imgFolIconBG;
                         }
-                        g.DrawImage(bmpFolIconBG, new Rectangle(imgRect.X - 2, imgRect.Y - 2, imgRect.Width + 4, imgRect.Height + 4));
+                        int backgroundMargin = ScaleDpi(2);
+                        g.DrawImage(bmpFolIconBG, new Rectangle(imgRect.X - backgroundMargin, imgRect.Y - backgroundMargin, imgRect.Width + (backgroundMargin * 2), imgRect.Height + (backgroundMargin * 2)));
                     }
 					// ���Ʊ���ͼƬ
                     g.DrawImage(QTUtility.ImageListGlobal.Images[baseTabItem.ImageKey], imgRect);
@@ -876,8 +943,8 @@ namespace QTTabBarLib {
                     }
                 }
                 else {
-                    textRect.X += 4;
-                    textRect.Width -= 4;
+                    textRect.X += ScaleDpi(4);
+                    textRect.Width -= ScaleDpi(4);
                 }
                 if(baseTabItem.TabLocked) { // ����������������ͼƬ
                     Rectangle lockRect = new Rectangle(
@@ -894,6 +961,17 @@ namespace QTTabBarLib {
                         textRect.X += 10;//  Y ƫ�� 10 ����
                         textRect.Width -= 10;  // ���ȼ�10����
                     }
+                    if(iconScale > 1f) {
+                        lockRect = new Rectangle(
+                            rctItem.X + ScaleDpi(bSelected ? 6 : 4) + (fDrawFolderImg ? ScaleDpi(9) : 0),
+                            rctItem.Y + ((rctItem.Height - iconSize) / 2) + (fDrawFolderImg ? ScaleDpi(5) : ScaleDpi(2)),
+                            ScaleDpi(9),
+                            ScaleDpi(11));
+                        if(!fDrawFolderImg) {
+                            textRect.X += ScaleDpi(10) - 10;
+                            textRect.Width -= ScaleDpi(10) - 10;
+                        }
+                    }
                     if(bmpLocked == null) {
                         bmpLocked = Resources_Image.imgLocked;
                     }
@@ -901,11 +979,11 @@ namespace QTTabBarLib {
                 }
                 bool isComment = baseTabItem.Comment.Length > 0;
                 if((fDrawCloseButton && !fCloseBtnOnHover) && !fNowShowCloseBtnAlt) {
-                    textRect.Width -= 15;
+                    textRect.Width -= ScaleDpi(15);
                 }
                 float textWidth = isComment ? 
-                    ((baseTabItem.TitleTextSize.Width + baseTabItem.SubTitleTextSize.Width) + 4f) : 
-                    (baseTabItem.TitleTextSize.Width + 2f);
+                    ((baseTabItem.TitleTextSize.Width + baseTabItem.SubTitleTextSize.Width) + ScaleDpi(4f)) :
+                    (baseTabItem.TitleTextSize.Width + ScaleDpi(2f));
 
                 // ��ǩY��ƫ��Ϊ �ı�����߶�- �ı��߶�  һ��
                 // [log] C:QTabControl M:DrawTab P:12464 T:1 cost:0.993���� 2022/10/1 16:57:52  Config.Skin.TabHeight 35
@@ -936,7 +1014,7 @@ namespace QTTabBarLib {
                 RectangleF textRct = new RectangleF(
                                             textRect.X + textPosX, 
                                             textRect.Y + textPosY,
-                                            Math.Min((baseTabItem.TitleTextSize.Width + 2f), (textRect.Width - textPosX)), 
+                                            Math.Min((baseTabItem.TitleTextSize.Width + ScaleDpi(2f)), (textRect.Width - textPosX)),
                                             textRect.Height);
                 // ������Ӱ���� dark mode
                 if(fDrawShadow)
@@ -975,9 +1053,9 @@ namespace QTTabBarLib {
                 }
                 if(iFocusedTabIndex == index) {
                     Rectangle rectangle = rctItem;
-                    rectangle.Inflate(-2, -1);
-                    rectangle.Y++;
-                    rectangle.Width--;
+                    rectangle.Inflate(-ScaleDpi(2), -ScaleDpi(1));
+                    rectangle.Y += ScaleDpi(1);
+                    rectangle.Width -= ScaleDpi(1);
                     ControlPaint.DrawFocusRectangle(g, rectangle);
                 }
 				// �Ƿ����ñ�ע����
@@ -994,8 +1072,8 @@ namespace QTTabBarLib {
                         textRct.Right, 
                         posY, 
                         Math.Min(
-                            (baseTabItem.SubTitleTextSize.Width + 2f),
-                            (textRect.Width - ((baseTabItem.TitleTextSize.Width + textPosX) + 4f))
+                            (baseTabItem.SubTitleTextSize.Width + ScaleDpi(2f)),
+                            (textRect.Width - ((baseTabItem.TitleTextSize.Width + textPosX) + ScaleDpi(4f)))
                         ), 
                         textRect.Height);  // �ı�����
                     if(fDrawShadow) {
@@ -1053,13 +1131,13 @@ namespace QTTabBarLib {
             }
         }
 
-        private static void DrawTextWithShadow(Graphics g, string txt, Color clrTxt, Color clrShdw, Font fnt, RectangleF rct, StringFormat sf) {
+        private void DrawTextWithShadow(Graphics g, string txt, Color clrTxt, Color clrShdw, Font fnt, RectangleF rct, StringFormat sf) {
             RectangleF layoutRectangle = rct;
             RectangleF ef2 = rct;
             RectangleF ef3 = rct;
-            layoutRectangle.Offset(1f, 1f);
-            ef2.Offset(2f, 0f);
-            ef3.Offset(1f, 2f);
+            layoutRectangle.Offset(ScaleDpi(1f), ScaleDpi(1f));
+            ef2.Offset(ScaleDpi(2f), 0f);
+            ef3.Offset(ScaleDpi(1f), ScaleDpi(2f));
             Color color = Color.FromArgb(0xc0, clrShdw);
             Color color2 = Color.FromArgb(0x80, clrShdw);
             using(SolidBrush brush = new SolidBrush(Color.FromArgb(0x40, clrShdw))) {
@@ -1109,10 +1187,12 @@ namespace QTTabBarLib {
             //}
             //return new Rectangle(rctTab.Right - 0x11, rctTab.Top + num, 15, 15);
 
-            int num = (int)Math.Round((itemSize.Height - QTUtility.Scale(15)) / 2.0) + 1;
-            if (!fSelected) num += QTUtility.Scale(2);
-            int btnSize = QTUtility.Scale(15);
-            return new Rectangle(rctTab.Right - QTUtility.Scale(0x11), rctTab.Top + num, btnSize, btnSize);
+            int buttonSize = ScaleDpi(15);
+            int num = (int)Math.Round((itemSize.Height - buttonSize) / 2.0) + ScaleDpi(1);
+            if(!fSelected) {
+                num += ScaleDpi(2);
+            }
+            return new Rectangle(rctTab.Right - ScaleDpi(0x11), rctTab.Top + num, buttonSize, buttonSize);
         }
 
         public int GetFocusedTabIndex() {
@@ -1120,14 +1200,16 @@ namespace QTTabBarLib {
         }
 
         private Rectangle GetFolderIconRectangle(Rectangle rctTab, bool fSelected) {
-            int num = (rctTab.Height - 0x10) / 2;
+            int iconSize = ScaleDpi(0x10);
+            int num = (rctTab.Height - iconSize) / 2;
             if(!fSelected) {
-                num += 2;
+                num += ScaleDpi(2);
             }
             if((iMultipleType == 0) && fNeedToDrawUpDown) {
                 rctTab.X += iScrollWidth;
             }
-            return new Rectangle(rctTab.X + (fSelected ? 5 : 3), (rctTab.Y + num) - 2, 20, 20);
+            int hitSize = ScaleDpi(20);
+            return new Rectangle(rctTab.X + ScaleDpi(fSelected ? 5 : 3), (rctTab.Y + num) - ScaleDpi(2), hitSize, hitSize);
         }
 
         private Rectangle GetItemRectangle(int index) {
@@ -1141,7 +1223,7 @@ namespace QTTabBarLib {
         private Rectangle GetItemRectWithInflation(int index) {
             Rectangle tabBounds = tabPages[index].TabBounds;
             if(index == iSelectedIndex) {
-                tabBounds.Inflate(4, 0);
+                tabBounds.Inflate(ScaleDpi(4), 0);
             }
             if(fNeedToDrawUpDown) {
                 tabBounds.X += iScrollWidth;
@@ -1489,7 +1571,7 @@ namespace QTTabBarLib {
                         DrawTab(e.Graphics, GetItemRectangle(iSelectedIndex), iSelectedIndex, tabMouseOn, fVisualStyle);
                     }
                     if((fNeedToDrawUpDown && (iSelectedIndex < tabPages.Count)) && ((iSelectedIndex > -1) && (GetItemRectangle(iSelectedIndex).X != 0))) {
-                        e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(0, 0, 2, e.ClipRectangle.Height));
+                        e.Graphics.FillRectangle(SystemBrushes.Control, new Rectangle(0, 0, ScaleDpi(2), e.ClipRectangle.Height));
                     }
 
                     if (fNeedPlusButton)
@@ -1509,36 +1591,22 @@ namespace QTTabBarLib {
         /**
          * ������ɫ��ť
          */
-        private void DrawPlusButton(Graphics g,Rectangle drawRect)
-        {
-            // Create string to draw.
-            String drawString = "+";
-
-            // Create font and brush.
-            Font drawFont = new Font("Arial", 16, FontStyle.Bold);
-
+        private void DrawPlusButton(Graphics g, Rectangle drawRect) {
             Color color = Color.Blue;
             if (QTUtility.InNightMode)
             {
                 color = Color.White;
             }
-            SolidBrush drawBrush = new SolidBrush(color);
 
-            // Create rectangle for drawing.
-            // int defaultDpi = DpiManager.DefaultDpi;
-            //  new PointF((float)defaultDpi / 96f, (float)defaultDpi / 96f);
             newRect = new RectangleF(
-                drawRect.X + drawRect.Width + 3 , 
-                drawRect.Y + drawRect.Height / 2 - 13, 
-                drawRect.Width / 2, 
-                drawRect.Height );
-            // QTUtility2.MakeErrorLog( "x:" + (drawRect.X + drawRect.Width) + ",y:" + (drawRect.Y + drawRect.Height / 2 - 10) + ",width:" + (drawRect.Width / 2) + ",height:" + (drawRect.Height));
-            //  new Rectangle(num, 0, PLUSBUTTON_WIDTH, ScaledTabHeight).TranslateClient(num2, IsRightToLeft);
-            // Draw rectangle to screen.
-            // Pen blackPen = new Pen(Color.Blue);
-            //g.DrawRectangle(blackPen, x, y, width, height);
-            // Draw string to screen.
-            g.DrawString(drawString, drawFont, drawBrush, newRect );
+                drawRect.X + drawRect.Width + ScaleDpi(3),
+                drawRect.Y + drawRect.Height / 2 - ScaleDpi(13),
+                drawRect.Width / 2,
+                drawRect.Height);
+            using(Font drawFont = new Font("Arial", ScaleDpi(16), FontStyle.Bold))
+            using(SolidBrush drawBrush = new SolidBrush(color)) {
+                g.DrawString("+", drawFont, drawBrush, newRect);
+            }
         }
 
         private void OnPaint_MultipleRow(PaintEventArgs e) {
@@ -1616,7 +1684,7 @@ namespace QTTabBarLib {
         }
 
         private void OnUpDownClicked(bool dir, bool lockPaint) {
-            int num = Width - 0x24;
+            int num = Width - ScaleDpi(UPDOWN_WIDTH);
             if((!dir || ((tabPages[tabPages.Count - 1].TabBounds.Right + iScrollWidth) >= num)) && (dir || ((tabPages[0].TabBounds.Left + iScrollWidth) != 0))) {
                 iScrollClickedCount += dir ? 1 : -1;
                 if(iScrollClickedCount > (tabPages.Count - 1)) {
@@ -1734,19 +1802,31 @@ namespace QTTabBarLib {
             }
             fAutoSubText = Config.Tabs.RenameAmbTabs;
 
+            float dpiScaleFactor = DpiScaleFactor;
+            sizingMargin = new Padding(
+                ScaleDpi(Config.Skin.TabSizeMargin.Left),
+                ScaleDpi(Config.Skin.TabSizeMargin.Top),
+                ScaleDpi(Config.Skin.TabSizeMargin.Right + 1),
+                ScaleDpi(Config.Skin.TabSizeMargin.Bottom + 1));
 
-            float dpi = QTUtility.DpiScale;  // ÿ�ζ�ȡ����ֵ
+
+            float dpi = DpiScaleFactor;
 
             if ((Config.Skin.TabMaxWidth >= Config.Skin.TabMinWidth) && (Config.Skin.TabMinWidth > 9))
             {
+                dpi = dpiScaleFactor;
                 maxAllowedTabWidth = (int)Math.Round(Config.Skin.TabMaxWidth * dpi);
                 minAllowedTabWidth = (int)Math.Round(Config.Skin.TabMinWidth * dpi);
             }
-            itemSize = new Size(maxAllowedTabWidth, (int)Math.Round(Config.Skin.TabHeight * dpi));
+            itemSize = new Size(maxAllowedTabWidth, ScaleDpi(Config.Skin.TabHeight));
 
             // ��������
             Font baseFont = Config.Skin.TabTextFont;
-            SetFont(new Font(baseFont.FontFamily, baseFont.SizeInPoints * dpi, baseFont.Style));
+            SetFont(new Font(baseFont.FontFamily, baseFont.SizeInPoints, baseFont.Style));
+            foreach(QTabItem tabPage in tabPages) {
+                tabPage.RefreshRectangle();
+            }
+            Refresh();
         }
 
         public bool SelectFocusedTab() {
@@ -1836,7 +1916,8 @@ namespace QTTabBarLib {
             fntSubText = Font;
             try
             {
-                fntSubText = new Font(Font.FontFamily, (sizeInPoints > 8.25f) ? (sizeInPoints - 0.75f) : sizeInPoints);
+                float scale = DpiScaleFactor;
+                fntSubText = new Font(Font.FontFamily, (sizeInPoints > (8.25f * scale)) ? (sizeInPoints - (0.75f * scale)) : sizeInPoints);
             }
             catch (Exception e)
             {
@@ -1849,7 +1930,8 @@ namespace QTTabBarLib {
             fntDriveLetter = Font;
             try
             {
-                fntDriveLetter = new Font(Font.FontFamily, 8.25f);
+                float iconScale = DpiScaleFactor;
+                fntDriveLetter = new Font(Font.FontFamily, 8.25f * iconScale);
             }
             catch (Exception e)
             {
@@ -1938,7 +2020,8 @@ namespace QTTabBarLib {
                     upDown.ValueChanged += upDown_ValueChanged;
                     Controls.Add(upDown);
                 }
-                upDown.Location = new Point(Width - 0x24, 0);
+                upDown.SetDpiScale(DpiScaleFactor);
+                upDown.Location = new Point(Width - ScaleDpi(UPDOWN_WIDTH), 0);
                 upDown.Visible = true;
                 upDown.BringToFront();
             }
@@ -2030,6 +2113,8 @@ namespace QTTabBarLib {
                     return;
             }
             base.WndProc(ref m);
+            if(msg == WM.DPICHANGED || msg == WM.DPICHANGED_AFTERPARENT)
+                UpdateDpiScale();
         }
 
         public bool AutoSubText {

@@ -25,7 +25,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 namespace QuizoPlugins {
-    internal sealed class MemoForm : Form {
+    internal sealed class MemoForm : QTPlugin.DpiAwareForm {
         private Button button1;
         private ToolStripMenuItem colorToolStripMenuItem;
         private ColumnHeader columnHeader1;

@@ -29,7 +29,7 @@ using Microsoft.Win32;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    internal sealed class FileHashComputerForm : Form {
+    internal sealed class FileHashComputerForm : QTPlugin.DpiAwareForm {
         private Button btnClear;
         private Button btnClose;
         private Button btnRefresh;
@@ -380,7 +380,7 @@ namespace QTTabBarLib {
             dgvHash.ReadOnly = true;
             dgvHash.RowHeadersVisible = false;
             dgvHash.RowTemplate.Height = 0x15;
-            // 355 * 162  0x133 0x73  ¿í¶ÈÉèÖÃÎªÆÁÄ» 1/3 ¸ß¶ÈÎªÆÁÄ» 1/6
+            // 355 * 162  0x133 0x73  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ä» 1/3 ï¿½ß¶ï¿½Îªï¿½ï¿½Ä» 1/6
             int width = Screen.PrimaryScreen.WorkingArea.Size.Width / 2;
             int height = Screen.PrimaryScreen.WorkingArea.Size.Height / 5;
             // ClientSize = new Size(0x1bf, 0xab);

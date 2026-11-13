@@ -232,6 +232,7 @@ Maximale Breite x Höhe:
 Schriftart:
 Text-Dateitypen
 Bild- und Videodateitypen
+PDF-/Word-/Excel-Vorschau geöffnet lassen und Schließen-Schaltfläche anzeigen
 </Options_Page04_Tooltips>
 
 <Options_Page05_General>
@@ -289,6 +290,7 @@ Skin exportieren...
 Strecken
 Echte Größe
 Fliese
+Für hohe Auflösungen skalieren
 </Options_Page06_Appearance>
 
 <Options_Page07_Mouse>
@@ -390,7 +392,7 @@ Hauptsprache
 Eingebaute Sprache verwenden:
 Sprachdatei verwenden:
 Plugin-Sprachdateien
-Sprachdatei-Editor
+Sprachedatei-Editor
 Spracheditor anzeigen...
 Original
 Übersetzt

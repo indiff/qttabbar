@@ -369,6 +369,24 @@ namespace Qwop {
         }
         
         /// <summary>
+        ///   查找类似 Select All (Ctrl+A) 的本地化字符串。
+        /// </summary>
+        internal static string Menu_SelectAll {
+            get {
+                return ResourceManager.GetString("Menu.SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 全选 (Ctrl+A) 的本地化字符串。
+        /// </summary>
+        internal static string Menu_SelectAll_zh_CN {
+            get {
+                return ResourceManager.GetString("Menu.SelectAll.zh-CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Set Path 的本地化字符串。
         /// </summary>
         internal static string Menu_SetPath {

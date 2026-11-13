@@ -231,6 +231,7 @@ Largura x altura máxima:
 Fonte:
 Tipos de arquivos de texto
 Tipos de arquivos de imagem e vídeo
+Manter abertas as visualizações PDF/Word/Excel e mostrar o botão fechar
 </Options_Page04_Tooltips>
 
 <Options_Page05_General>
@@ -288,6 +289,7 @@ Exportar skin...
 Esticar
 Tamanho verdadeiro
 Lado a lado
+Adaptar para alta resolução
 </Options_Page06_Appearance>
 
 <Options_Page07_Mouse>

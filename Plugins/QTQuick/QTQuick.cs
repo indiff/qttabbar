@@ -246,6 +246,7 @@ namespace Qwop {
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.RemoveQTTabGroup")));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.ExceptionLog")));
                 menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.QTTabBarLog")));
+                menu.Items.Add(new ToolStripMenuItem(QTQuickLocalization.Get("Menu.SelectAll")));
                 fFirstMenuDropDown = false;
             }
            
@@ -803,6 +804,10 @@ namespace Qwop {
                             }
                             break;
                         }
+
+                    case 11:
+                        pluginServer.ExecuteCommand(Commands.SelectAll, null);
+                        return;
                 }
                 
                 // pluginServer.CreateTab(new Address(mydocument), -1, false, true);

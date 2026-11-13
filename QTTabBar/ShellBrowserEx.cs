@@ -235,6 +235,28 @@ namespace QTTabBarLib {
             return folderView != null && folderView.ItemCount(SVGIO.ALLVIEW, out count) == 0 ? count : 0;
         }
 
+        public bool SelectAll() {
+            if(folderView == null) return false;
+
+            try {
+                int count;
+                int result = folderView.ItemCount(SVGIO.ALLVIEW, out count);
+                if(result < 0) Marshal.ThrowExceptionForHR(result);
+
+                for(int i = 0; i < count; i++) {
+                    SVSIF flags = SVSIF.SELECT | SVSIF.NOTAKEFOCUS;
+                    if(i == 0) flags |= SVSIF.DESELECTOTHERS;
+                    result = folderView.SelectItem(i, flags);
+                    if(result < 0) Marshal.ThrowExceptionForHR(result);
+                }
+                return true;
+            }
+            catch(Exception exception) {
+                QTUtility2.MakeErrorLog(exception, "SelectAll");
+                return false;
+            }
+        }
+
         public IEnumerable<IDLWrapper> GetItems(bool selectedOnly = false, bool noAppend = false) {
             if(folderView == null) yield break;
             Guid guid = ExplorerGUIDs.IID_IEnumIDList;
@@ -448,11 +470,18 @@ namespace QTTabBarLib {
         }
 
         public void SelectItem(int idx) {
-            if(folderView != null) 
-                folderView.SelectItem(idx, SVSIF.SELECT | 
-                                            SVSIF.DESELECTOTHERS | 
-                                            SVSIF.ENSUREVISIBLE | 
-                                            SVSIF.FOCUSED);
+            try
+            {
+                if (folderView != null)
+                    folderView.SelectItem(idx, SVSIF.SELECT |
+                                                SVSIF.DESELECTOTHERS |
+                                                SVSIF.ENSUREVISIBLE |
+                                                SVSIF.FOCUSED);
+            }
+            catch (Exception e)
+            {
+                QTUtility2.MakeErrorLog(e, " SelectItem Exception");
+            }
         }
 
         internal void SetStatusText(string status) {
@@ -503,7 +532,7 @@ namespace QTTabBarLib {
                         }
                         path = wrapper.ParseName;
                         if(!string.IsNullOrEmpty(path) && path.IndexOfAny(Path.GetInvalidPathChars()) < 0) {
-                            QTUtility2.log("TryGetHotTrackPath path=" + path);
+                            //  QTUtility2.log("TryGetHotTrackPath path=" + path);
                             return true;
                         }
                         path = null;

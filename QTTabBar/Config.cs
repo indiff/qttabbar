@@ -446,6 +446,7 @@ namespace QTTabBarLib {
             public bool ShowTooltipPreviews      { get; set; }
             public bool ShowPreviewsWithShift    { get; set; }
             public bool ShowPreviewInfo          { get; set; }
+            public bool KeepPreviewWindowOpen    { get; set; }
             public int PreviewMaxWidth           { get; set; }
             public int PreviewMaxHeight          { get; set; }
             public Font PreviewFont              { get; set; }
@@ -473,6 +474,7 @@ namespace QTTabBarLib {
                 SubDirTipsWithShift = false ; // 仅当shift键按下显示子目录
                 ShowTooltipPreviews = true;  
                 ShowPreviewInfo = true; // 启用文件预览
+                KeepPreviewWindowOpen = false;
                 ShowPreviewsWithShift = false; // 默认悬停即可预览
                 
                 // 预览的宽高
@@ -576,6 +578,7 @@ namespace QTTabBarLib {
             public int TabHeight                 { get; set; }
             public int TabMinWidth               { get; set; }
             public int TabMaxWidth               { get; set; }
+            public bool ScaleTabIconsForHighDpi   { get; set; }
             public bool FixedWidthTabs           { get; set; }
             public Font TabTextFont              { get; set; }
             public Color ToolBarTextColor        { get; set; }
@@ -638,6 +641,7 @@ namespace QTTabBarLib {
                 TabHeight = 30;  // 高度
                 TabMinWidth = 100;  // 最小宽度
                 TabMaxWidth = 200;  // 最大宽度
+                ScaleTabIconsForHighDpi = true; // 适配高分辨率
                 FixedWidthTabs = false;
                 TabTextFont = new Font(new FontFamily("微软雅黑"), 9f);
                 ToolBarTextColor = Color.Black;  // 工具栏文本颜色
@@ -1083,10 +1087,12 @@ namespace QTTabBarLib {
             LoadedConfig = new Config();
             QTUtility2.log("初始化配置信息成功");
             ReadConfig();
+            QTPlugin.DpiScaling.Enabled = Config.Skin.ScaleTabIconsForHighDpi;
             QTUtility2.log("注册表读取配置信息成功");
         }
 
         public static void UpdateConfig(bool fBroadcast = true) {
+            QTPlugin.DpiScaling.Enabled = Config.Skin.ScaleTabIconsForHighDpi;
             QTUtility.ApplyConfiguredLanguageCulture();
             QTUtility.TextResourcesDic = Config.Lang.UseLangFile && File.Exists(Config.Lang.LangFile)
                     ? QTUtility.ReadLanguageFile(Config.Lang.LangFile)

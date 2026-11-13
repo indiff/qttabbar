@@ -157,6 +157,9 @@
   <data name="Menu.ExceptionLog" xml:space="preserve">
     <value>Open QTTabBar Exception Log</value>
   </data>
+  <data name="Menu.SelectAll" xml:space="preserve">
+    <value>Select All (Ctrl+A)</value>
+  </data>
   <data name="Error.CurrentDirectoryMissing" xml:space="preserve">
     <value>The current directory has been deleted.</value>
   </data>
@@ -273,5 +276,8 @@
   </data>
   <data name="Menu.QTTabBarLog.zh-CN" xml:space="preserve">
     <value>打开QTTabBar日志</value>
+  </data>
+  <data name="Menu.SelectAll.zh-CN" xml:space="preserve">
+    <value>全选 (Ctrl+A)</value>
   </data>
 </root>

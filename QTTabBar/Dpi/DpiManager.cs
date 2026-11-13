@@ -31,10 +31,6 @@ namespace QTTabBarLib.Dpi
     {
         #region Win32 API
 
-        // ✅ 重命名 P/Invoke 方法，避免与公开方法 GetDpiForWindow 冲突
-        [DllImport("user32.dll", EntryPoint = "GetDpiForWindow")]
-        private static extern int NativeGetDpiForWindow(IntPtr hwnd);
-
         [DllImport("user32.dll")]
         private static extern int GetDpiForSystem();
 
@@ -104,13 +100,7 @@ namespace QTTabBarLib.Dpi
         /// <summary>获取窗口所在显示器的 DPI</summary>
         public static int GetDpiForWindow(IntPtr hwnd)
         {
-            if (hwnd == IntPtr.Zero) return _systemDpi;
-            try
-            {
-                int dpi = NativeGetDpiForWindow(hwnd);
-                return dpi > 0 ? dpi : _systemDpi;
-            }
-            catch { return _systemDpi; }
+            return hwnd == IntPtr.Zero ? _systemDpi : QTPlugin.DpiScaling.GetDpi(hwnd);
         }
 
         /// <summary>获取控件所在显示器的 DPI</summary>

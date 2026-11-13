@@ -230,6 +230,7 @@ Backspace键回到上一级目录（Windows Vista/7）
 字体设置：
 文本文件类型
 图像和视频文件类型
+仅固定 PDF、Word、Excel 预览窗口并显示关闭按钮
 </Options_Page04_Tooltips>
 
 <Options_Page05_General>
@@ -290,6 +291,7 @@ QTTabBar常规选项
 拉伸
 适应
 平铺
+适配高分辨率
 </Options_Page06_Appearance>
 
 <Options_Page07_Mouse>

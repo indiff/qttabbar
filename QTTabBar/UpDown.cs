@@ -25,12 +25,28 @@ using QTTabBarLib.Interop;
 namespace QTTabBarLib {
     internal sealed class UpDown : Control {
         private NativeUpDown nativeUpDown;
+        private float dpiScaleFactor = 1f;
 
         public event QEventHandler ValueChanged;
 
         public UpDown() {
             Size = new Size(0x24, 0x18);
             nativeUpDown = new NativeUpDown(this);
+        }
+
+        internal void SetDpiScale(float scale) {
+            if(Math.Abs(dpiScaleFactor - scale) < 0.001f) {
+                return;
+            }
+            dpiScaleFactor = scale;
+            Size = new Size(ScaleDpi(0x24), ScaleDpi(0x18));
+            if(nativeUpDown != null) {
+                nativeUpDown.UpdateBounds();
+            }
+        }
+
+        private int ScaleDpi(int value) {
+            return (int)Math.Round(value * dpiScaleFactor);
         }
 
         protected override void Dispose(bool disposing) {
@@ -53,9 +69,8 @@ namespace QTTabBarLib {
         }
 
         private sealed class NativeUpDown : NativeWindow {
+            private readonly UpDown ownerControl;
             private bool fTrackMouseEvent;
-            private static Rectangle rctDw = new Rectangle(0, 0, 0x12, 0x18);
-            private static Rectangle rctUp = new Rectangle(0x12, 0, 0x12, 0x18);
             private VisualStyleRenderer rendererDown_Hot;
             private VisualStyleRenderer rendererDown_Normal;
             private VisualStyleRenderer rendererDown_Pressed;
@@ -67,6 +82,7 @@ namespace QTTabBarLib {
             private TRACKMOUSEEVENT TME;
 
             public NativeUpDown(UpDown OwnerControl) {
+                ownerControl = OwnerControl;
                 CreateParams cp = new CreateParams();
                 cp.ClassName = "msctls_updown32";
                 cp.X = cp.Y = 0;
@@ -80,6 +96,10 @@ namespace QTTabBarLib {
                 TME.cbSize = Marshal.SizeOf(TME);
                 TME.dwFlags = 2;
                 TME.hwndTrack = Handle;
+            }
+
+            public void UpdateBounds() {
+                PInvoke.SetWindowPos(Handle, IntPtr.Zero, 0, 0, ownerControl.Width, ownerControl.Height, 0x14);
             }
 
             private void InitializeRenderer() {
@@ -100,7 +120,7 @@ namespace QTTabBarLib {
                                     PInvoke.TrackMouseEvent(ref TME);
                                 }
                                 bool flag = (((int)m.WParam) & 1) == 1;
-                                if((((int)((long)m.LParam)) & 0xffff) < 0x13) {
+                                if((((int)((long)m.LParam)) & 0xffff) < (ownerControl.Width / 2 + ownerControl.ScaleDpi(1))) {
                                     stateDown = flag ? 2 : 1;
                                     stateUP = 0;
                                 }
@@ -112,7 +132,7 @@ namespace QTTabBarLib {
                                 break;
                             }
                         case WM.LBUTTONDOWN:
-                            if((((int)((long)m.LParam)) & 0xffff) >= 0x13) {
+                            if((((int)((long)m.LParam)) & 0xffff) >= (ownerControl.Width / 2 + ownerControl.ScaleDpi(1))) {
                                 stateUP = 2;
                                 break;
                             }
@@ -120,7 +140,7 @@ namespace QTTabBarLib {
                             break;
 
                         case WM.LBUTTONUP:
-                            if((((int)((long)m.LParam)) & 0xffff) >= 0x13) {
+                            if((((int)((long)m.LParam)) & 0xffff) >= (ownerControl.Width / 2 + ownerControl.ScaleDpi(1))) {
                                 stateUP = 1;
                                 break;
                             }
@@ -162,8 +182,9 @@ namespace QTTabBarLib {
                                     else {
                                         renderer2 = rendererUp_Pressed;
                                     }
-                                    renderer.DrawBackground(graphics, rctDw);
-                                    renderer2.DrawBackground(graphics, rctUp);
+                                    int halfWidth = ownerControl.Width / 2;
+                                    renderer.DrawBackground(graphics, new Rectangle(0, 0, halfWidth, ownerControl.Height));
+                                    renderer2.DrawBackground(graphics, new Rectangle(halfWidth, 0, ownerControl.Width - halfWidth, ownerControl.Height));
                                 }
                                 PInvoke.ReleaseDC(m.HWnd, dC);
                                 PInvoke.ValidateRect(m.HWnd, IntPtr.Zero);

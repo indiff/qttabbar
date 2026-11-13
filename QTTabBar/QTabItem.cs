@@ -49,7 +49,8 @@ namespace QTTabBarLib {
                     fontSubText.Dispose();
                 }
                 float sizeInPoints = font.SizeInPoints;
-                fontSubText = new Font(value.FontFamily, (sizeInPoints > 8.25f) ? (sizeInPoints - 0.75f) : sizeInPoints, FontStyle.Regular);
+                float subTextSize = sizeInPoints > 8.25f ? sizeInPoints - 0.75f : sizeInPoints;
+                fontSubText = new Font(value.FontFamily, subTextSize, FontStyle.Regular);
             }
         }
 
@@ -223,7 +224,8 @@ namespace QTTabBarLib {
             }
             if(fontSubText == null) {
                 float sizeInPoints = font.SizeInPoints;
-                fontSubText = new Font(parent.Font.FontFamily, (sizeInPoints > 8.25f) ? (sizeInPoints - 0.75f) : sizeInPoints, FontStyle.Bold);
+                float subTextSize = sizeInPoints > 8.25f ? sizeInPoints - 0.75f : sizeInPoints;
+                fontSubText = new Font(parent.Font.FontFamily, subTextSize, FontStyle.Bold);
             }
             if(sfMeasure == null) {
                 sfMeasure = new StringFormat();
@@ -233,7 +235,7 @@ namespace QTTabBarLib {
                 RefreshRectangle();
             }
             else {
-                TabBounds = new Rectangle(TabBounds.X, TabBounds.Y, 100, 0x18);
+                TabBounds = new Rectangle(TabBounds.X, TabBounds.Y, parent.ScaleDpi(100), parent.ScaleDpi(0x18));
             }
         }
 
@@ -435,35 +437,36 @@ namespace QTTabBarLib {
 
         public void RefreshRectangle() {
             using(Graphics graphics = Owner.CreateGraphics()) {
-                float num = 6f;
+                float scale = Owner.DpiScaleFactor;
+                float num = 6f * scale;
                 if(Owner.DrawFolderImage) {
-                    num = 26f;
+                    num = 26f * scale;
                 }
                 else if(tabLocked) {
-                    num = 13f;
+                    num = 13f * scale;
                 }
                 if((Owner.EnableCloseButton && !Owner.TabCloseButtonOnHover) && !Owner.TabCloseButtonOnAlt) {
-                    num += 17f;
+                    num += 17f * scale;
                 }
                 TitleTextSize = GetTextSize(titleText, graphics, true);
                 SubTitleTextSize = SizeF.Empty;
                 if(Comment.Length > 0) {
                     SubTitleTextSize = GetTextSize("@ " + Comment, graphics, false);
-                    num += SubTitleTextSize.Width + 3f;
+                    num += SubTitleTextSize.Width + (3f * scale);
                 }
                 else {
-                    num++;
+                    num += scale;
                 }
                 int width = (int)(TitleTextSize.Width + num);
                 if(Owner.OncePainted && (width > Owner.Width)) {
-                    if(Owner.Width > 40) {
-                        width = Owner.Width - 40;
+                    if(Owner.Width > Owner.ScaleDpi(40)) {
+                        width = Owner.Width - Owner.ScaleDpi(40);
                     }
                     else {
-                        width = 0x20;
+                        width = Owner.ScaleDpi(0x20);
                     }
                 }
-                TabBounds = new Rectangle(TabBounds.X, TabBounds.Y, width, (int)TitleTextSize.Height);
+                TabBounds = new Rectangle(TabBounds.X, TabBounds.Y, width, (int)Math.Ceiling(TitleTextSize.Height));
             }
         }
 

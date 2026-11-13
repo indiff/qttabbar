@@ -169,6 +169,9 @@ namespace QTTabBarLib {
                             tabBar.Explorer.Refresh();
                             return true;
 
+                        case Commands.SelectAll:
+                            return tabBar.ShellBrowser.SelectAll();
+
                         case Commands.CloseCurrentTab:
                             return tabBar.CloseTab(tabBar.CurrentTab);
 

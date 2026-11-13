@@ -63,6 +63,10 @@ namespace QTTabBarLib {
         public virtual void HideThumbnailTooltip(int iReason = -1) {
         }
 
+        public virtual bool ClosePinnedThumbnailTooltip() {
+            return false;
+        }
+
         public virtual int HitTest(IntPtr LParam) {
             return -1;
         }

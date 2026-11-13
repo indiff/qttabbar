@@ -14,7 +14,7 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace QuizoPlugins
 {
-    public partial class NewsForm : Form
+    public partial class NewsForm : QTPlugin.DpiAwareForm
     {
         private Clock.Item[] items;
         private Timer timer;
@@ -27,7 +27,7 @@ namespace QuizoPlugins
         private static NewsForm instance;
 
         private static readonly object m_objLock = new object();
-        private static readonly int sideThickness = 4;//边缘的厚度，窗体停靠在边缘隐藏后留出来的可见部分的厚度 
+        private const int sideThickness = 4;
 
         private Rectangle WorkingArea
         {
@@ -49,11 +49,13 @@ namespace QuizoPlugins
             Point cursor = Cursor.Position;
             if (ClockSettings.DockSide == NewsDockSide.Left)
             {
-                return cursor.X >= area.Left && cursor.X <= area.Left + sideThickness &&
+                int thickness = ScaleDpi(sideThickness);
+                return cursor.X >= area.Left && cursor.X <= area.Left + thickness &&
                        cursor.Y >= area.Top && cursor.Y < area.Bottom;
             }
 
-            return cursor.X >= area.Right - sideThickness && cursor.X <= area.Right &&
+            int rightThickness = ScaleDpi(sideThickness);
+            return cursor.X >= area.Right - rightThickness && cursor.X <= area.Right &&
                    cursor.Y >= area.Top && cursor.Y < area.Bottom;
         }
 
@@ -72,8 +74,8 @@ namespace QuizoPlugins
             {
                 Rectangle area = WorkingArea;
                 return ClockSettings.DockSide == NewsDockSide.Left
-                    ? area.Left + sideThickness - Width
-                    : area.Right - sideThickness;
+                    ? area.Left + ScaleDpi(sideThickness) - Width
+                    : area.Right - ScaleDpi(sideThickness);
             }
         }
 
@@ -101,12 +103,7 @@ namespace QuizoPlugins
 
             // Keep the selected news item at the same size and weight as the other rows.
             // The themed ListBox renderer can otherwise apply a bold/oversized selected font.
-            newsItemFont = new Font(listBox1.Font.FontFamily, listBox1.Font.Size, FontStyle.Regular);
-            newsItemZoomFont = new Font(
-                listBox1.Font.FontFamily,
-                listBox1.Font.Size + 1.5f,
-                FontStyle.Bold);
-            listBox1.Font = newsItemFont;
+            UpdateNewsItemFonts();
             listBox1.DrawMode = DrawMode.OwnerDrawFixed;
             listBox1.DrawItem += listBox1_DrawItem;
             listBox1.MouseMove += listBox1_MouseMove;
@@ -169,6 +166,28 @@ namespace QuizoPlugins
             }
         }
 
+        protected override void OnDpiScaleChanged(float scaleFactor)
+        {
+            base.OnDpiScaleChanged(scaleFactor);
+            if (listBox1 != null)
+            {
+                UpdateNewsItemFonts();
+                listBox1.ItemHeight = ScaleDpi(15);
+            }
+        }
+
+        private void UpdateNewsItemFonts()
+        {
+            Font oldFont = newsItemFont;
+            Font oldZoomFont = newsItemZoomFont;
+            float fontSize = listBox1.Font.Size;
+            FontFamily fontFamily = listBox1.Font.FontFamily;
+            newsItemFont = new Font(fontFamily, fontSize, FontStyle.Regular);
+            newsItemZoomFont = new Font(fontFamily, fontSize + 1.5f, FontStyle.Bold);
+            listBox1.Font = newsItemFont;
+            oldFont?.Dispose();
+            oldZoomFont?.Dispose();
+        }
 
         public static NewsForm GetInstance()
         {
@@ -292,7 +311,7 @@ namespace QuizoPlugins
             {
                 screenWidth += Screen.PrimaryScreen.WorkingArea.Width;
             }
-            this.Top = 150;
+            this.Top = ScaleDpi(150);
             this.Left = screenWidth - this.Width;
         }
 

@@ -19,7 +19,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 namespace QuizoPlugins {
-    public class Option : Form {
+    public class Option : QTPlugin.DpiAwareForm {
         private Button buttonCancel;
         private Button buttonOK;
         private ComboBox comboBoxMode;

@@ -64,6 +64,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="CONSTANTS.cs" />
+    <Compile Include="DpiAwareForm.cs" />
     <Compile Include="DisplayStyle.cs" />
     <Compile Include="EndCode.cs" />
     <Compile Include="ExplorerWindowActions.cs" />
@@ -136,4 +137,3 @@
   </Target>
   -->
 </Project>
-

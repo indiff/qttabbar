@@ -78,11 +78,9 @@ namespace QTTabBarLib {
         private static readonly Size sizeSmallButton = new Size(16, 16);  // 小按钮 
 
         // 改为运行时计算的缩放尺寸（在 CreateItems 中初始化）
-        private Size sizeLargeButtonScaled;
-        private Size sizeSmallButtonScaled;
 
-        private static  ImageStrip imageStrip_Large = new ImageStrip(sizeLargeButton);
-        private static  ImageStrip imageStrip_Small = new ImageStrip(sizeSmallButton);
+        private ImageStrip imageStrip_Large = new ImageStrip(sizeLargeButton);
+        private ImageStrip imageStrip_Small = new ImageStrip(sizeSmallButton);
 
         private VisualStyleRenderer BackgroundRenderer;
         private const int BARHEIGHT_LARGE = 34;
@@ -116,16 +114,51 @@ namespace QTTabBarLib {
         public QTButtonBar() {
             // BarHeight = Config.Skin.TabHeight + 100;
             InitializeComponent();
+        }
 
-            // 初始化时根据当前窗口所在显示器设置 DPI
-            //QTUtility.UpdateDpiForWindow(this.Handle);
-
-            // 用 DpiManager 获取 DPI（替代原来的 QTUtility.UpdateDpiForWindow）
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            DpiScaling.EnabledChanged -= DpiScaling_EnabledChanged;
+            DpiScaling.EnabledChanged += DpiScaling_EnabledChanged;
             if (QTUtility.EnableDpiScaling)
             {
-                _currentDpiScale = DpiManager.GetWindowDpiScale(this.Handle);
+                QTUtility.UpdateDpiForWindow(Handle);
+                _currentDpiScale = DpiManager.GetWindowDpiScale(Handle);
                 RecalculateLayoutForDpi();
             }
+        }
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            DpiScaling.EnabledChanged -= DpiScaling_EnabledChanged;
+            base.OnHandleDestroyed(e);
+        }
+
+        private void DpiScaling_EnabledChanged(object sender, EventArgs e)
+        {
+            if (!IsHandleCreated || IsDisposed)
+                return;
+
+            if (InvokeRequired)
+            {
+                try
+                {
+                    BeginInvoke((MethodInvoker)(() => DpiScaling_EnabledChanged(sender, e)));
+                }
+                catch (InvalidOperationException ex)
+                {
+                    QTUtility2.MakeErrorLog(ex, "QTButtonBar.DpiScaling_EnabledChanged");
+                }
+                return;
+            }
+
+            if (QTUtility.EnableDpiScaling)
+                QTUtility.UpdateDpiForWindow(Handle);
+            _currentDpiScale = QTUtility.EnableDpiScaling
+                ? DpiManager.GetWindowDpiScale(Handle)
+                : 1f;
+            RecalculateLayoutForDpi();
         }
 
         private void RecalculateLayoutForDpi()
@@ -137,11 +170,15 @@ namespace QTTabBarLib {
                     ? BARHEIGHT_LARGE_LARGE
                     : BARHEIGHT_LARGE_SMALL;
 
-                int scaledHeight = QTUtility.Scale(logicalHeight);
+                int scaledHeight = QTUtility.EnableDpiScaling
+                    ? ScaleDpi(logicalHeight)
+                    : logicalHeight;
 
                 // 更新控件实际高度
                 Height = scaledHeight;
-                MinSize = new Size(20, scaledHeight);
+                MinSize = new Size(
+                    QTUtility.EnableDpiScaling ? ScaleDpi(20) : 20,
+                    scaledHeight);
 
                 // 通知 ReBar 父窗口刷新布局
                 QTTabBarClass tabBar = InstanceManager.GetThreadTabBar();
@@ -151,6 +188,12 @@ namespace QTTabBarLib {
             {
                 QTUtility2.MakeErrorLog(ex, "RecalculateLayoutForDpi");
             }
+        }
+
+        private int ScaleDpi(int value)
+        {
+            float scale = QTUtility.EnableDpiScaling ? Math.Max(1f, _currentDpiScale) : 1f;
+            return (int)Math.Round(value * scale);
         }
 
         /**
@@ -421,7 +464,7 @@ namespace QTTabBarLib {
             // ✅ 统一走 DPI 缩放
             if (QTUtility.EnableDpiScaling)
             {
-                Height = QTUtility.Scale(Config.BBar.LargeButtons
+                Height = ScaleDpi(Config.BBar.LargeButtons
                        ? BARHEIGHT_LARGE_LARGE
                        : BARHEIGHT_LARGE_SMALL);
 
@@ -975,7 +1018,7 @@ namespace QTTabBarLib {
             {
                 // ✅ 初始化时也应走 DPI 缩放，且不应有神秘的 +100
                 // 如果 +100 是为了预留空间，请用命名常量并注释原因
-                int initHeight = QTUtility.Scale(BarHeight);
+                int initHeight = ScaleDpi(BarHeight);
                 Height = initHeight;
                 MinSize = new Size(20, initHeight); 
             } else
@@ -989,7 +1032,7 @@ namespace QTTabBarLib {
         }
         
         // 加载默认的图片资源
-        private static void LoadDefaultImages(bool fWriteReg) {
+        private void LoadDefaultImages(bool fWriteReg) {
             imageStrip_Large.TransparentColor = imageStrip_Small.TransparentColor = Color.Empty;
             // 如果是 darkmode， 则换成白色背景
             Bitmap bmpLarge = null;
@@ -999,8 +1042,8 @@ namespace QTTabBarLib {
             if (QTUtility.EnableDpiScaling)
             {
                 // ✅ DPI 缩放：按钮图片尺寸
-                int imgLarge = QTUtility.Scale(24);
-                int imgSmall = QTUtility.Scale(16);
+                int imgLarge = ScaleDpi(24);
+                int imgSmall = ScaleDpi(16);
                 sizeLargeButtonScaled = new Size(imgLarge, imgLarge);
                 sizeSmallButtonScaled = new Size(imgSmall, imgSmall);
             }
@@ -1063,7 +1106,7 @@ namespace QTTabBarLib {
         }
         
        // 通过路径 加载外部图片
-        private static bool LoadExternalImage(string path) {
+        private bool LoadExternalImage(string path) {
             Bitmap bitmap;
             Bitmap bitmap2;
             if(LoadExternalImage(path, out bitmap, out bitmap2)) {
@@ -1185,7 +1228,7 @@ namespace QTTabBarLib {
             }
         }
 
-        private static void ManageImageList() {
+        private void ManageImageList() {
             if(Config.BBar.ImageStripPath == null) {
                 LoadDefaultImages(false);
             }
@@ -2018,7 +2061,8 @@ namespace QTTabBarLib {
 
         protected override void WndProc(ref Message m) {
             switch(m.Msg) {
-                case WM.DPICHANGED:// WM_DPICHANGED
+                case WM.DPICHANGED:
+                case WM.DPICHANGED_AFTERPARENT:
                     /*QTUtility.UpdateDpiForWindow(this.Handle);
                     QTUtility.UpdateTextScale();  // ← 新增
                     // DPI 变化后重新缩放字体（从原始基准计算，不累积）
@@ -2037,6 +2081,8 @@ namespace QTTabBarLib {
                             float oldScale = _currentDpiScale;
                             _currentDpiScale = newScale;
                             DpiManager.NotifyDpiChanged(oldScale, newScale);
+                            QTUtility.UpdateDpiForWindow(Handle);
+                            RecalculateLayoutForDpi();
                             CreateItems();
                         } 
                     }
@@ -2054,6 +2100,8 @@ namespace QTTabBarLib {
                             float oldScale = _currentDpiScale;
                             _currentDpiScale = newScale;
                             DpiManager.NotifyDpiChanged(oldScale, newScale);
+                            QTUtility.UpdateDpiForWindow(Handle);
+                            RecalculateLayoutForDpi();
                             CreateItems();
                         } 
                     }

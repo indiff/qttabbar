@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 namespace QuizoPlugins
 {
-	public partial class MigemoOptionForm : Form
+	public partial class MigemoOptionForm : QTPlugin.DpiAwareForm
 	{
 		public string pathDLL, pathDic;
 		public bool fPartialMatch;

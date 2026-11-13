@@ -327,7 +327,7 @@ namespace QTTabBarLib {
 
                 if (trace != null)
                 {
-                    StackFrame frame = trace.GetFrame(1);//1�����ϼ���2�������ϼ����Դ�����
+                    StackFrame frame = trace.GetFrame(1); 
                     if (frame != null)
                     {
                         MethodBase method = frame.GetMethod();
@@ -387,18 +387,13 @@ namespace QTTabBarLib {
             }
         }
 
-        // private static DateTime dateTime ;
-        // ����һЩ���� ��־
         private static string[] IGNORES = { "ReleaseComObject" };
 
 
-        // 1. �� Dictionary �滻Ϊ�̰߳�ȫ�� ConcurrentDictionary
-        // 2. �� DateTime �滻Ϊ Stopwatch ���ڸ߾��Ⱥ�ʱ����
         private static readonly ConcurrentDictionary<int, Stopwatch> dictTime = new ConcurrentDictionary<int, Stopwatch>();
 
         public static void log(string level, string optional, Dictionary<String, String> dic = null)
         {
-            // �����߼����ֲ���
             if (null != IGNORES && IGNORES.Length > 0)
             {
                 string lower2 = optional.ToLower();
@@ -411,7 +406,6 @@ namespace QTTabBarLib {
                 }
             }
 
-            // Ŀ¼�����߼����ֲ���
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string appdataQT = Path.Combine(appdata, "QTTabBar");
             if (!Directory.Exists(appdataQT))
@@ -419,31 +413,24 @@ namespace QTTabBarLib {
                 Directory.CreateDirectory(appdataQT);
             }
 
-            // 3. ���߳�ID��ȡ���Ƴ���ʱ�� AppDomain.GetCurrentThreadId()
             int threadId = Thread.CurrentThread.ManagedThreadId;
             Process process = Process.GetCurrentProcess();
 
-            // 4. ʹ�� Stopwatch �����ʱ��������Ⱥ��״μ�¼����
             string useTime = "";
             var stopwatch = dictTime.GetOrAdd(threadId, _ => Stopwatch.StartNew());
 
-            // ��ȡ���ϴμ�¼�����ĺ�ʱ�����Զ����ü�ʱ��
-            // �������״μ�¼�޺�ʱ�����⣬��ȫ���̰߳�ȫ
             long elapsedMs = stopwatch.ElapsedMilliseconds;
             stopwatch.Restart();
 
-            // ����Ǹ��̵߳ĵ�һ����־��elapsedMs ���ܷǳ�С���ӽ�0�������߼��������
-            // ���ϣ����һ����־����ʾ��ʱ�����ԼӸ���ǣ���ͨ����ʾ 0ms ��ʵ�ʼ��������
             if (elapsedMs > 0)
             {
-                useTime = $"{elapsedMs}����";
+                useTime = $"{elapsedMs} ms";
             }
 
             string path = Path.Combine(appdataQT, "QTTabBar.log");
             var line = new StringBuilder();
             line.Append("[").Append(level).Append("]");
 
-            // �����ͷ������߼����ֲ���
             if (dic != null && dic.Count > 0)
             {
                 if (dic.TryGetValue("className", out var className) && !string.IsNullOrEmpty(className))
@@ -456,7 +443,6 @@ namespace QTTabBarLib {
                 }
             }
 
-            // ���̺��߳���Ϣ
             line.Append("\tP:").Append(process.Id);
             line.Append("\tT:").Append(threadId);
 
@@ -465,8 +451,7 @@ namespace QTTabBarLib {
                 line.Append("\tcost:").Append(useTime);
             }
 
-            // 5. ��¼����ʱ����������� DateTime û���⣬��Ϊֻ����չʾ�������ڼ����ֵ��
-            line.Append("\t").Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")) // ������Ϻ��룬�����Ų�
+            line.Append("\t").Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")) 
                .Append("\t").Append(optional);
 
             writeStr(path, line);

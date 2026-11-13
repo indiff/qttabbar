@@ -26,6 +26,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using Microsoft.Win32;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -37,7 +38,7 @@ namespace QTTabBarLib {
     /**
      * 预览窗口
      */
-    internal sealed class ThumbnailTooltipForm : Form {
+    internal sealed class ThumbnailTooltipForm : QTPlugin.DpiAwareForm {
         private const string EMPTYFILE = "  *empty file";
         private bool fFontAsigned;
         private bool fIsShownByKey;
@@ -54,7 +55,13 @@ namespace QTTabBarLib {
         public const int MAX_THUMBNAIL_WIDTH = 0x780;
         private int maxHeight = Config.Tips.PreviewMaxHeight;
         private int maxWidth = Config.Tips.PreviewMaxWidth;
+        private bool previewCacheNeedsRefresh;
         private PictureBox pictureBox1;
+        private Panel documentPreviewHost;
+        private IPreviewHandler documentPreviewHandler;
+        private object documentPreviewComObject;
+        private Button documentPreviewCloseButton;
+        private bool isPreviewPinned;
         // Video preview player: a WPF MediaElement hosted in this borderless tooltip via ElementHost
         private ElementHost videoHost;
         private System.Windows.Controls.MediaElement videoPlayer;
@@ -88,8 +95,8 @@ namespace QTTabBarLib {
         // 支持的视频格式
         private static string supportedMovies = ".asx;.dvr-ms;.mp2;.flv;..mkv;.ts;.3g2;.3gp;.3gp2;.3gpp;.amr;.amv;.asf;.avi;.bdmv;.bik;.d2v;.divx;.drc;.dsa;.dsm;.dss;.dsv;.evo;.f4v;.flc;.fli;.flic;.flv;.hdmov;.ifo;.ivf;.m1v;.m2p;.m2t;.m2ts;.m2v;.m4b;.m4p;.m4v;.mkv;.mp2v;.mp4;.mp4v;.mpe;.mpeg;.mpg;.mpls;.mpv2;.mpv4;.mov;.mts;.ogm;.ogv;.pss;.pva;.qt;.ram;.ratdvd;.rm;.rmm;.rmvb;.roq;.rpm;.smil;.smk;.swf;.tp;.tpr;.ts;.vob;.vp6;.webm;.wm;.wmp;.wmv";
 
-        // 新增：支持的文档预览格式（依赖系统已安装的Office/PDF阅读器）
-        private static string supportedDocuments = ".pdf;.doc;.docx;.xls;.xlsx;.ppt;.pptx;.odt;.ods;.odp";
+        // Document previews use the thumbnail handler registered with Windows.
+        private static string supportedDocuments = ".pdf;.doc;.docx;.xls;.xlsx";
 
         private static Encoding Encoding950 = Encoding.GetEncoding(950);
         private static Encoding Encoding936 = Encoding.GetEncoding(936);
@@ -111,6 +118,24 @@ namespace QTTabBarLib {
             InitializeComponent();
             lstPathFailedThumbnail = new List<string>();
             imageCacheStore = new ImageCacheStore(0x80);
+        }
+
+        protected override void OnDpiScaleChanged(float scaleFactor)
+        {
+            base.OnDpiScaleChanged(scaleFactor);
+            RefreshPreviewDimensions();
+        }
+
+        private void RefreshPreviewDimensions()
+        {
+            int width = ScaleDpi(Config.Tips.PreviewMaxWidth);
+            int height = ScaleDpi(Config.Tips.PreviewMaxHeight);
+            if (maxWidth == width && maxHeight == height)
+                return;
+
+            maxWidth = width;
+            maxHeight = height;
+            previewCacheNeedsRefresh = true;
         }
 
         public void ClearCache() {
@@ -136,6 +161,37 @@ namespace QTTabBarLib {
             }
         }
 
+        private void StopDocumentPreview()
+        {
+            if (documentPreviewHandler != null)
+            {
+                try
+                {
+                    documentPreviewHandler.Unload();
+                }
+                catch (Exception ex)
+                {
+                    QTUtility2.log("Document preview unload failed: " + ex.Message);
+                }
+            }
+
+            if (documentPreviewHost != null)
+            {
+                documentPreviewHost.Visible = false;
+            }
+            if (documentPreviewCloseButton != null)
+            {
+                documentPreviewCloseButton.Visible = false;
+            }
+            isPreviewPinned = false;
+            documentPreviewHandler = null;
+            if (documentPreviewComObject != null && Marshal.IsComObject(documentPreviewComObject))
+            {
+                Marshal.ReleaseComObject(documentPreviewComObject);
+            }
+            documentPreviewComObject = null;
+        }
+
         /// <summary>
         /// 将所有预览控件重置到统一的初始隐藏状态
         /// 必须在 CreateThumbnail 开头、以及 HideToolTip 中调用
@@ -144,6 +200,7 @@ namespace QTTabBarLib {
         {
             // 停止视频
             StopVideoPreview();
+            StopDocumentPreview();
 
             SuspendLayout();
 
@@ -154,6 +211,9 @@ namespace QTTabBarLib {
 
             videoHost.Visible = false;
             videoHost.Dock = DockStyle.None;
+
+            documentPreviewHost.Visible = false;
+            documentPreviewHost.Dock = DockStyle.None;
 
             lblText.Visible = false;
             lblText.Text = string.Empty;
@@ -171,9 +231,21 @@ namespace QTTabBarLib {
         private bool CreateThumbnail(string path, ref Size formSize) {
             // ✅ 关键修复：每次创建缩略图前，彻底重置所有控件状态
             ResetAllPreviewControls();
+            RefreshPreviewDimensions();
+            if (previewCacheNeedsRefresh)
+            {
+                imageCacheStore.Clear();
+                lstPathFailedThumbnail.Clear();
+                previewCacheNeedsRefresh = false;
+            }
 
             string ext = Path.GetExtension(path).ToLower();
             QTUtility2.log("Preview CreateThumbnail path=" + path + " ext=" + ext);
+
+            if (ExtIsDocument(ext) && TryShowDocumentPreview(path, ref formSize))
+            {
+                return true;
+            }
 
             // ================= 新增：视频预览逻辑 =================
             // ================= 视频预览逻辑 =================
@@ -187,12 +259,12 @@ namespace QTTabBarLib {
 
                 try
                 {
-                    int targetWidth = Config.Tips.PreviewMaxWidth;
-                    int targetHeight = Config.Tips.PreviewMaxHeight;
+                    int targetWidth = maxWidth;
+                    int targetHeight = maxHeight;
                     int displayWidth = targetWidth;
                     int displayHeight = targetHeight;
 
-                    formSize = new Size(displayWidth + 8, displayHeight + 8);
+                    formSize = new Size(displayWidth + ScaleDpi(8), displayHeight + ScaleDpi(8));
 
                     SuspendLayout();
 
@@ -208,7 +280,7 @@ namespace QTTabBarLib {
                         lblInfo.Dock = DockStyle.Bottom;
                         lblInfo.Visible = true;
                         lblInfo.BringToFront();
-                        formSize.Height += lblInfo.Height > 0 ? lblInfo.Height : 50;
+                        formSize.Height += lblInfo.Height > 0 ? lblInfo.Height : ScaleDpi(50);
                     }
 
                     videoPlayer.Volume = 0.0;
@@ -231,12 +303,13 @@ namespace QTTabBarLib {
             }
 
 
-            // ================= 图片预览逻辑 =================
-            if (ExtIsImage(ext))
+            // Image and document previews use the same Shell thumbnail pipeline
+            // when the extension does not have a built-in GDI+ decoder.
+            if (ExtIsImage(ext) || ExtIsDocument(ext))
             {
                 FileInfo info = new FileInfo(path);
                 if (!info.Exists || info.Length <= 0L) {
-                    QTUtility2.log("Preview image rejected: file missing or empty");
+                    QTUtility2.log("Preview file rejected: file missing or empty path=" + path);
                     return false;
                 }
 
@@ -250,13 +323,7 @@ namespace QTTabBarLib {
                 Size sizeActual = Size.Empty;
                 string toolTipText = null;
 
-                if ((maxWidth != Config.Tips.PreviewMaxWidth) || (maxHeight != Config.Tips.PreviewMaxHeight))
-                {
-                    maxWidth = Config.Tips.PreviewMaxWidth;
-                    maxHeight = Config.Tips.PreviewMaxHeight;
-                    imageCacheStore.Clear();
-                    lstPathFailedThumbnail.Clear();
-                }
+                RefreshPreviewDimensions();
                 foreach (ImageData data2 in imageCacheStore)
                 {
                     if (data2.Path.PathEquals(path))
@@ -289,8 +356,13 @@ namespace QTTabBarLib {
                             if (lstPathFailedThumbnail.Contains(path)) return false;
                             thumbnail = true;
                             data3 = !QTUtility.IsXP
-                                ? LoadThumbnail(path, info.LastWriteTime, out empty, out sizeActual, out toolTipText, out fCached)
-                                : LoadThumbnail2(path, info.LastWriteTime, out empty, out sizeActual, out toolTipText, out fCached);
+                                ? LoadThumbnail(path, info.LastWriteTime, new Size(maxWidth, maxHeight), out empty, out sizeActual, out toolTipText, out fCached)
+                                : LoadThumbnail2(path, info.LastWriteTime, new Size(maxWidth, maxHeight), out empty, out sizeActual, out toolTipText, out fCached);
+                            if (data3 == null && !QTUtility.IsXP && ExtIsDocument(ext))
+                            {
+                                QTUtility2.log("Document Shell thumbnail unavailable; trying IExtractImage path=" + path);
+                                data3 = LoadThumbnail2(path, info.LastWriteTime, new Size(maxWidth, maxHeight), out empty, out sizeActual, out toolTipText, out fCached);
+                            }
                         }
                         else
                         {
@@ -311,7 +383,7 @@ namespace QTTabBarLib {
                     }
                 }
 
-                int width = Math.Max(0x9e, sizeActual.Width);
+                int width = Math.Max(ScaleDpi(0x9e), sizeActual.Width);
                 bool noInfo = !Config.Tips.ShowPreviewInfo;
 
                 if (Config.Tips.ShowPreviewInfo)
@@ -331,16 +403,16 @@ namespace QTTabBarLib {
                     }
                     using (Graphics g = lblInfo.CreateGraphics())
                     {
-                        SizeF ef = g.MeasureString(text, lblInfo.Font, width - 8);
+                        SizeF ef = g.MeasureString(text, lblInfo.Font, width - ScaleDpi(8));
                         lblInfo.Text = text;
                         lblInfo.Width = width;
-                        lblInfo.Height = (int)(ef.Height + 8f);
+                        lblInfo.Height = (int)(ef.Height + ScaleDpi(8));
                     }
-                    formSize = new Size(width + 8, sizeActual.Height + lblInfo.Height + 8);
+                    formSize = new Size(width + ScaleDpi(8), sizeActual.Height + lblInfo.Height + ScaleDpi(8));
                 }
                 else
                 {
-                    formSize = new Size(width + 8, sizeActual.Height + 8);
+                    formSize = new Size(width + ScaleDpi(8), sizeActual.Height + ScaleDpi(8));
                 }
 
                 try
@@ -413,10 +485,10 @@ namespace QTTabBarLib {
                         fFontAsigned = false;
                     }
 
-                    int num2 = 0x100;
+                    int num2 = ScaleDpi(0x100);
                     if (fFontAsigned)
                     {
-                        num2 = Math.Max((int)(num2 * (Config.Tips.PreviewFont.SizeInPoints / DefaultFont.Size)), 0x80);
+                        num2 = Math.Max((int)(num2 * (Config.Tips.PreviewFont.SizeInPoints / DefaultFont.Size)), ScaleDpi(0x80));
                     }
                     formSize.Width = num2;
 
@@ -424,7 +496,7 @@ namespace QTTabBarLib {
                     {
                         SizeF sizeF = g.MeasureString(content, lblText.Font, num2);
                         formSize.Height = (sizeF.Height < 512f || fLoadedAll)
-                            ? (int)(sizeF.Height + 8f) : 0x200;
+                            ? (int)(sizeF.Height + ScaleDpi(8)) : ScaleDpi(0x200);
                     }
 
                     SuspendLayout();
@@ -453,9 +525,131 @@ namespace QTTabBarLib {
             return false;
         }
 
-       
+        private bool TryShowDocumentPreview(string path, ref Size formSize)
+        {
+            try
+            {
+                string clsid = GetPreviewHandlerClsid(Path.GetExtension(path));
+                if (string.IsNullOrEmpty(clsid))
+                {
+                    QTUtility2.log("Document preview handler is not registered path=" + path);
+                    return false;
+                }
+
+                Type handlerType = Type.GetTypeFromCLSID(new Guid(clsid), true);
+                documentPreviewComObject = Activator.CreateInstance(handlerType);
+                IInitializeWithFile initializeWithFile = documentPreviewComObject as IInitializeWithFile;
+                documentPreviewHandler = documentPreviewComObject as IPreviewHandler;
+                if (initializeWithFile == null || documentPreviewHandler == null)
+                {
+                    QTUtility2.log("Document preview handler has unsupported interfaces clsid=" + clsid +
+                                   " path=" + path);
+                    StopDocumentPreview();
+                    return false;
+                }
+
+                initializeWithFile.Initialize(path, 0);
+                documentPreviewHost.Size = new Size(maxWidth, maxHeight);
+                QTTabBarLib.Interop.RECT previewRect = new QTTabBarLib.Interop.RECT
+                {
+                    left = 0,
+                    top = 0,
+                    right = maxWidth,
+                    bottom = maxHeight
+                };
+                documentPreviewHandler.SetWindow(documentPreviewHost.Handle, ref previewRect);
+                documentPreviewHandler.SetRect(ref previewRect);
+                documentPreviewHandler.DoPreview();
+
+                documentPreviewHost.Dock = DockStyle.Fill;
+                documentPreviewHost.Visible = true;
+                documentPreviewHost.BringToFront();
+                if (Config.Tips.ShowPreviewInfo)
+                {
+                    FileInfo info = new FileInfo(path);
+                    lblInfo.Text = Path.GetFileName(path) + "\r\n" + FormatSize(info.Length);
+                    lblInfo.Dock = DockStyle.Bottom;
+                    lblInfo.Visible = true;
+                    lblInfo.BringToFront();
+                    formSize = new Size(maxWidth + ScaleDpi(8),
+                        maxHeight + lblInfo.Height + ScaleDpi(8));
+                }
+                else
+                {
+                    formSize = new Size(maxWidth + ScaleDpi(8),
+                        maxHeight + ScaleDpi(8));
+                }
+
+                QTUtility2.log("Document preview handler started clsid=" + clsid + " path=" + path);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                QTUtility2.log("Document preview handler failed path=" + path +
+                               " error=" + ex.GetType().FullName + ": " + ex.Message);
+                StopDocumentPreview();
+                return false;
+            }
+        }
+
+        private static string GetPreviewHandlerClsid(string extension)
+        {
+            const string previewHandlerKey = @"ShellEx\{8895b1c6-b41f-4c1c-a562-0d564250836f}";
+            using (RegistryKey extensionKey = Registry.ClassesRoot.OpenSubKey(extension))
+            {
+                string clsid = GetDefaultRegistryValue(extensionKey, previewHandlerKey);
+                if (!string.IsNullOrEmpty(clsid))
+                {
+                    return clsid;
+                }
+
+                string progId = extensionKey == null ? null : extensionKey.GetValue(null) as string;
+                if (!string.IsNullOrEmpty(progId))
+                {
+                    using (RegistryKey progIdKey = Registry.ClassesRoot.OpenSubKey(progId))
+                    {
+                        clsid = GetDefaultRegistryValue(progIdKey, previewHandlerKey);
+                    }
+                }
+                return clsid;
+            }
+        }
+
+        private static string GetDefaultRegistryValue(RegistryKey parentKey, string subKeyName)
+        {
+            if (parentKey == null)
+            {
+                return null;
+            }
+            using (RegistryKey handlerKey = parentKey.OpenSubKey(subKeyName))
+            {
+                return handlerKey == null ? null : handlerKey.GetValue(null) as string;
+            }
+        }
+
+        [ComImport, Guid("B7D14566-0509-4cce-A71F-0A554233BD9B"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        private interface IInitializeWithFile
+        {
+            void Initialize([MarshalAs(UnmanagedType.LPWStr)] string filePath, uint mode);
+        }
+
+        [ComImport, Guid("8895B1C6-B41F-4C1C-A562-0D564250836F"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        private interface IPreviewHandler
+        {
+            void SetWindow(IntPtr hwnd, ref QTTabBarLib.Interop.RECT rect);
+            void SetRect(ref QTTabBarLib.Interop.RECT rect);
+            void DoPreview();
+            void Unload();
+            void SetFocus();
+            void QueryFocus(out IntPtr hwnd);
+            void TranslateAccelerator(IntPtr message);
+        }
 
         protected override void Dispose(bool disposing) {
+            if (disposing)
+            {
+                StopDocumentPreview();
+            }
             imageCacheStore.Clear();
             base.Dispose(disposing);
         }
@@ -485,11 +679,20 @@ namespace QTTabBarLib {
         }
         public static bool ExtIsSupported(string ext)
         {
+            if (ExtIsDocument(ext))
+            {
+                return true;
+            }
             if (!ExtIsImage(ext) && !ExtIsVideo(ext))
             {
                 return ExtIsText(ext);
             }
             return true;
+        }
+
+        private static bool ExtIsDocument(string ext) {
+            return !string.IsNullOrEmpty(ext) &&
+                   (";" + supportedDocuments + ";").IndexOf(";" + ext.ToLowerInvariant() + ";", StringComparison.Ordinal) >= 0;
         }
 
         private static bool ExtIsText(string ext) {
@@ -525,8 +728,13 @@ namespace QTTabBarLib {
 
         public bool HideToolTip2()
         {
+            if (isPreviewPinned)
+            {
+                return false;
+            }
             // 隐藏时务必停止视频
             StopVideoPreview();
+            StopDocumentPreview();
 
             if (fIsShownByKey)
             {
@@ -546,8 +754,13 @@ namespace QTTabBarLib {
 
         public bool HideToolTip() {
 
+            if (isPreviewPinned)
+            {
+                return false;
+            }
             // 隐藏时务必停止视频
             StopVideoPreview();
+            StopDocumentPreview();
 
             if (fIsShownByKey) {
                 fIsShownByKey = false;
@@ -578,6 +791,20 @@ namespace QTTabBarLib {
             videoHost.BackColor = Color.Black;
             videoHost.Child = videoPlayer;
             videoHost.Visible = false;
+            documentPreviewHost = new Panel();
+            documentPreviewHost.BackColor = Color.White;
+            documentPreviewHost.Dock = DockStyle.None;
+            documentPreviewHost.Visible = false;
+            documentPreviewHost.SizeChanged += DocumentPreviewHost_SizeChanged;
+            documentPreviewCloseButton = new Button();
+            documentPreviewCloseButton.Text = "X";
+            documentPreviewCloseButton.Size = new Size(28, 24);
+            documentPreviewCloseButton.Location = new Point(0x100 - 32, 4);
+            documentPreviewCloseButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            documentPreviewCloseButton.FlatStyle = FlatStyle.Flat;
+            documentPreviewCloseButton.TabStop = false;
+            documentPreviewCloseButton.Visible = false;
+            documentPreviewCloseButton.Click += DocumentPreviewCloseButton_Click;
             lblText = new Label();
             lblInfo = new Label();
             ((ISupportInitialize)pictureBox1).BeginInit();
@@ -613,10 +840,14 @@ namespace QTTabBarLib {
             Controls.Add(pictureBox1);
             Controls.Add(lblInfo);
             Controls.Add(videoHost);
+            Controls.Add(documentPreviewHost);
+            Controls.Add(documentPreviewCloseButton);
             // Keep videoHost between pictureBox1 and lblInfo in the collection: WinForms
             // docks controls in reverse collection order, so the bottom info bar must be
             // added after the player to claim its strip before the player fills the rest.
             Controls.SetChildIndex(videoHost, Controls.IndexOf(lblInfo));
+            Controls.SetChildIndex(documentPreviewHost, Controls.IndexOf(lblInfo));
+            Controls.SetChildIndex(documentPreviewCloseButton, 0);
             FormBorderStyle = FormBorderStyle.None;
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.Manual;
@@ -624,20 +855,72 @@ namespace QTTabBarLib {
             ResumeLayout(false);
         }
 
-        private static ImageData LoadImageFile(string path, DateTime dtLastWriteTime, out Size sizeRaw, out Size sizeActual) {
+        private void DocumentPreviewHost_SizeChanged(object sender, EventArgs e)
+        {
+            if (documentPreviewHandler == null || !documentPreviewHost.Visible)
+            {
+                return;
+            }
+
+            Rectangle bounds = documentPreviewHost.ClientRectangle;
+            QTTabBarLib.Interop.RECT previewRect = new QTTabBarLib.Interop.RECT
+            {
+                left = bounds.Left,
+                top = bounds.Top,
+                right = bounds.Right,
+                bottom = bounds.Bottom
+            };
+            try
+            {
+                documentPreviewHandler.SetRect(ref previewRect);
+            }
+            catch (Exception ex)
+            {
+                QTUtility2.log("Document preview resize failed: " + ex.Message);
+            }
+        }
+
+        private void DocumentPreviewCloseButton_Click(object sender, EventArgs e)
+        {
+            isPreviewPinned = false;
+            StopVideoPreview();
+            StopDocumentPreview();
+            isShowing = false;
+            PInvoke.ShowWindow(Handle, 0);
+            pictureBox1.Image = null;
+            if (ThumbnailVisibleChanged != null)
+            {
+                ThumbnailVisibleChanged(this, new QEventArgs(ArrowDirection.Down));
+            }
+        }
+
+        internal bool ClosePinnedPreview()
+        {
+            if (!isPreviewPinned || !isShowing)
+            {
+                return false;
+            }
+
+            DocumentPreviewCloseButton_Click(this, EventArgs.Empty);
+            return true;
+        }
+
+        private ImageData LoadImageFile(string path, DateTime dtLastWriteTime, out Size sizeRaw, out Size sizeActual) {
             sizeRaw = sizeActual = Size.Empty;
-            using(Bitmap bitmap = new Bitmap(path)) {
-                if(bitmap != null) {
-                    sizeRaw = bitmap.Size;
+            try {
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read,
+                           FileShare.ReadWrite | FileShare.Delete))
+                using (Image image = Image.FromStream(fileStream, true, true)) {
+                    sizeRaw = image.Size;
                     int width = sizeRaw.Width;
                     int height = sizeRaw.Height;
-                    int maxWidth = Config.Tips.PreviewMaxWidth;
-                    int maxHeight = Config.Tips.PreviewMaxHeight;
-                    if((height > maxHeight) || (width > maxWidth)) {
-                        if(height > maxHeight) {
+                    int maxWidth = this.maxWidth;
+                    int maxHeight = this.maxHeight;
+                    if ((height > maxHeight) || (width > maxWidth)) {
+                        if (height > maxHeight) {
                             width = (int)((maxHeight / ((double)height)) * width);
                             height = maxHeight;
-                            if(width > maxWidth) {
+                            if (width > maxWidth) {
                                 height = (int)((maxWidth / ((double)width)) * height);
                                 width = maxWidth;
                             }
@@ -647,26 +930,43 @@ namespace QTTabBarLib {
                             width = maxWidth;
                         }
                         sizeActual = new Size(width, height);
-                        if(ImageAnimator.CanAnimate(bitmap)) {
+                        if (ImageAnimator.CanAnimate(image)) {
                             MemoryStream stream = new MemoryStream();
-                            bitmap.Save(stream, bitmap.RawFormat);
+                            image.Save(stream, image.RawFormat);
                             stream.Position = 0;
-                            var imgObj = new ImageData(new Bitmap(stream), stream, path, dtLastWriteTime, sizeRaw, sizeActual);
-                            // ImageData owns the stream because Bitmap may read it lazily.
-                            return imgObj;
+                            return new ImageData(new Bitmap(stream), stream, path, dtLastWriteTime, sizeRaw, sizeActual);
                         }
-                        return new ImageData(new Bitmap(bitmap, width, height), null, path, dtLastWriteTime, sizeRaw, sizeActual);
+                        return new ImageData(new Bitmap(image, width, height), null, path, dtLastWriteTime, sizeRaw, sizeActual);
                     }
                     sizeActual = sizeRaw;
                     MemoryStream stream2 = new MemoryStream();
-                    bitmap.Save(stream2, bitmap.RawFormat);
+                    image.Save(stream2, image.RawFormat);
                     stream2.Position = 0;
-                    var imgObj2 =  new ImageData(new Bitmap(stream2), stream2, path, dtLastWriteTime, sizeRaw, sizeRaw);
-                    // ImageData owns the stream because Bitmap may read it lazily.
-                    return imgObj2;
+                    return new ImageData(new Bitmap(stream2), stream2, path, dtLastWriteTime, sizeRaw, sizeRaw);
                 }
             }
+            catch (ArgumentException ex) {
+                LogImageLoadFailure(path, ex);
+            }
+            catch (ExternalException ex) {
+                LogImageLoadFailure(path, ex);
+            }
+            catch (OutOfMemoryException ex) {
+                LogImageLoadFailure(path, ex);
+            }
+            catch (IOException ex) {
+                LogImageLoadFailure(path, ex);
+            }
+            catch (UnauthorizedAccessException ex) {
+                LogImageLoadFailure(path, ex);
+            }
             return null;
+        }
+
+        private static void LogImageLoadFailure(string path, Exception ex) {
+            QTUtility2.log("Preview image decode failed path=" + path +
+                           " exception=" + ex.GetType().FullName +
+                           " message=" + ex.Message);
         }
 
         /// <summary> 
@@ -1616,7 +1916,7 @@ namespace QTTabBarLib {
             return encoding.GetString(buffer);
         }
 
-        private static ImageData LoadThumbnail(string path, DateTime dtLastWriteTime, out Size sizeRaw, out Size sizeActual, out string toolTipText, out bool fCached) {
+        private static ImageData LoadThumbnail(string path, DateTime dtLastWriteTime, Size maxSize, out Size sizeRaw, out Size sizeActual, out string toolTipText, out bool fCached) {
             sizeRaw = sizeActual = Size.Empty;
             toolTipText = null;
             fCached = false;
@@ -1632,7 +1932,7 @@ namespace QTTabBarLib {
                     uint flags = 0;
                     uint pOutFlags = 0;
                     WTS_THUMBNAILID pThumbnailID = new WTS_THUMBNAILID();
-                    uint cxyRequestedThumbSize = (uint)Math.Min(0x400, Math.Min(Config.Tips.PreviewMaxWidth, Config.Tips.PreviewMaxHeight));
+                    uint cxyRequestedThumbSize = (uint)Math.Min(0x400, Math.Min(maxSize.Width, maxSize.Height));
                     if(cache2.GetThumbnail(ppsi, cxyRequestedThumbSize, flags, out ppvThumb, ref pOutFlags, ref pThumbnailID) == 0) {
                         IntPtr ptr2;
                         if((pOutFlags & 2) == 2) {
@@ -1679,11 +1979,12 @@ namespace QTTabBarLib {
             return null;
         }
 
-        private static ImageData LoadThumbnail2(string path, DateTime dtLastWriteTime, out Size sizeRaw, out Size sizeActual, out string toolTipText, out bool fCached) {
+        private static ImageData LoadThumbnail2(string path, DateTime dtLastWriteTime, Size maxSize, out Size sizeRaw, out Size sizeActual, out string toolTipText, out bool fCached) {
             sizeRaw = sizeActual = Size.Empty;
             toolTipText = null;
             fCached = false;
             IntPtr zero = IntPtr.Zero;
+            IntPtr hBitmap = IntPtr.Zero;
             IShellFolder ppv = null;
             object obj2 = null;
             try {
@@ -1694,14 +1995,15 @@ namespace QTTabBarLib {
                     Guid riid = ExplorerGUIDs.IID_IExtractImage;
                     IntPtr[] apidl = new IntPtr[] { ptr3 };
                     if(ppv.GetUIObjectOf(IntPtr.Zero, 1, apidl, ref riid, ref rgfReserved, out obj2) == 0) {
-                        IntPtr ptr2;
                         IExtractImage image = (IExtractImage)obj2;
                         StringBuilder pszPathBuffer = new StringBuilder(260);
                         int pdwPriority = 0;
-                        Size prgSize = new Size(Config.Tips.PreviewMaxWidth, Config.Tips.PreviewMaxHeight);
+                        Size prgSize = maxSize;
                         int pdwFlags = 0x60;
-                        if(((image.GetLocation(pszPathBuffer, pszPathBuffer.Capacity, ref pdwPriority, ref prgSize, 0x18, ref pdwFlags) == 0) && (image.Extract(out ptr2) == 0)) && (ptr2 != IntPtr.Zero)) {
-                            Bitmap bmp = Image.FromHbitmap(ptr2);
+                        if(((image.GetLocation(pszPathBuffer, pszPathBuffer.Capacity, ref pdwPriority, ref prgSize, 0x18, ref pdwFlags) == 0) && (image.Extract(out hBitmap) == 0)) && (hBitmap != IntPtr.Zero)) {
+                            Bitmap bmp = Image.FromHbitmap(hBitmap);
+                            PInvoke.DeleteObject(hBitmap);
+                            hBitmap = IntPtr.Zero;
                             Size size = bmp.Size;
                             sizeRaw = sizeActual = size;
                             ImageData data = new ImageData(bmp, null, path, dtLastWriteTime, size, size);
@@ -1722,6 +2024,9 @@ namespace QTTabBarLib {
                 QTUtility2.MakeErrorLog(exception);
             }
             finally {
+                if(hBitmap != IntPtr.Zero) {
+                    PInvoke.DeleteObject(hBitmap);
+                }
                 if(zero != IntPtr.Zero) {
                     PInvoke.CoTaskMemFree(zero);
                 }
@@ -1770,43 +2075,51 @@ namespace QTTabBarLib {
         }
 
         public bool ShowToolTip(string path, Point pnt) {
-            Size formSize = new Size(0x100, 0x80);
+            if (isPreviewPinned && isShowing)
+            {
+                return true;
+            }
+            IntPtr hwnd = Handle;
+            UpdateDpi();
+            RefreshPreviewDimensions();
+            Size formSize = new Size(ScaleDpi(0x100), ScaleDpi(0x80));
             if(!CreateThumbnail(path, ref formSize)) {
                 return false;
             }
+            ConfigurePreviewWindow(path);
             Rectangle workingArea = Screen.FromPoint(pnt).WorkingArea;
-            int num = ((formSize.Width + pnt.X) - workingArea.Right) + 8;
-            int num2 = ((formSize.Height + pnt.Y) - workingArea.Bottom) + 0x10;
+            int num = ((formSize.Width + pnt.X) - workingArea.Right) + ScaleDpi(8);
+            int num2 = ((formSize.Height + pnt.Y) - workingArea.Bottom) + ScaleDpi(0x10);
             bool flag = (workingArea.Right - pnt.X) < (pnt.X - workingArea.Left);
             bool flag2 = (workingArea.Bottom - pnt.Y) < (pnt.Y - workingArea.Top);
             bool flag3 = false;
             if((num > 0) && (num2 > 0)) {
                 if(flag) {
-                    pnt.X -= ((formSize.Width + 0x18) + 0x20) + 0x10;
+                    pnt.X -= ((formSize.Width + ScaleDpi(0x18)) + ScaleDpi(0x20)) + ScaleDpi(0x10);
                 }
                 if(flag2) {
-                    pnt.Y -= formSize.Height + 0x20;
+                    pnt.Y -= formSize.Height + ScaleDpi(0x20);
                     flag3 = true;
                 }
             }
             else if(num > 0) {
                 if(flag) {
-                    pnt.X -= num + 0x20;
+                    pnt.X -= num + ScaleDpi(0x20);
                 }
             }
             else if(num2 > 0) {
-                pnt.Y -= num2 + 0x10;
+                pnt.Y -= num2 + ScaleDpi(0x10);
                 flag3 = true;
             }
             if(pnt.X < workingArea.X) {
-                pnt.X = workingArea.X + 8;
+                pnt.X = workingArea.X + ScaleDpi(8);
                 if(!flag3) {
-                    pnt.Y += 8;
+                    pnt.Y += ScaleDpi(8);
                 }
             }
             isShowing = true;
-            PInvoke.SetWindowPos(Handle, (IntPtr)(-1), pnt.X + 0x18, pnt.Y + 0x10, formSize.Width, formSize.Height, 0x10);
-            PInvoke.ShowWindow(Handle, 4);
+            PInvoke.SetWindowPos(hwnd, (IntPtr)(-1), pnt.X + ScaleDpi(0x18), pnt.Y + ScaleDpi(0x10), formSize.Width, formSize.Height, 0x10);
+            PInvoke.ShowWindow(hwnd, 4);
             if(ThumbnailVisibleChanged != null) {
                 ThumbnailVisibleChanged(this, new QEventArgs(ArrowDirection.Up));
             }
@@ -1814,31 +2127,50 @@ namespace QTTabBarLib {
         }
 
         public bool ShowToolTip(string path, Rectangle rctMenuItem) {
-            Size formSize = new Size(0x100, 0x80);
+            if (isPreviewPinned && isShowing)
+            {
+                return true;
+            }
+            IntPtr hwnd = Handle;
+            UpdateDpi();
+            RefreshPreviewDimensions();
+            Size formSize = new Size(ScaleDpi(0x100), ScaleDpi(0x80));
             if(!CreateThumbnail(path, ref formSize)) {
                 return false;
             }
-            Point point = new Point(rctMenuItem.Right + 8, rctMenuItem.Bottom);
+            ConfigurePreviewWindow(path);
+            Point point = new Point(rctMenuItem.Right + ScaleDpi(8), rctMenuItem.Bottom);
             Rectangle workingArea = Screen.FromPoint(rctMenuItem.Location).WorkingArea;
             bool flag = (workingArea.Right - point.X) < (point.X - workingArea.Left);
             bool flag2 = false;
-            if(((((formSize.Width + point.X) - workingArea.Right) + 8) > 0) && flag) {
-                point.X = (rctMenuItem.X - formSize.Width) - 8;
+            if(((((formSize.Width + point.X) - workingArea.Right) + ScaleDpi(8)) > 0) && flag) {
+                point.X = (rctMenuItem.X - formSize.Width) - ScaleDpi(8);
             }
-            if((((formSize.Height + point.Y) - workingArea.Bottom) + 8) > 0) {
-                point.Y = (workingArea.Bottom - formSize.Height) - 0x10;
+            if((((formSize.Height + point.Y) - workingArea.Bottom) + ScaleDpi(8)) > 0) {
+                point.Y = (workingArea.Bottom - formSize.Height) - ScaleDpi(0x10);
                 flag2 = true;
             }
             if(point.X < workingArea.X) {
-                point.X = workingArea.X + 8;
+                point.X = workingArea.X + ScaleDpi(8);
                 if(!flag2) {
-                    point.Y += 8;
+                    point.Y += ScaleDpi(8);
                 }
             }
             isShowing = true;
-            PInvoke.SetWindowPos(Handle, (IntPtr)(-1), point.X, point.Y, formSize.Width, formSize.Height, 0x10);
-            PInvoke.ShowWindow(Handle, 4);
+            PInvoke.SetWindowPos(hwnd, (IntPtr)(-1), point.X, point.Y, formSize.Width, formSize.Height, 0x10);
+            PInvoke.ShowWindow(hwnd, 4);
             return true;
+        }
+
+        private void ConfigurePreviewWindow(string path)
+        {
+            isPreviewPinned = Config.Tips.KeepPreviewWindowOpen &&
+                              ExtIsDocument(Path.GetExtension(path));
+            documentPreviewCloseButton.Visible = isPreviewPinned;
+            if (isPreviewPinned)
+            {
+                documentPreviewCloseButton.BringToFront();
+            }
         }
 
         protected override CreateParams CreateParams {

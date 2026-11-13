@@ -231,6 +231,7 @@ Ancho x Alto máximo:
 Fuente:
 Tipos de archivo de texto
 Tipos de archivo imagen/vídeo
+Mantener abiertas las vistas previas PDF/Word/Excel y mostrar un botón de cierre
 </Options_Page04_Tooltips>
 
 <Options_Page05_General>
@@ -291,6 +292,7 @@ Exportar piel...
 Estirado
 Tamaño real
 Mosaico
+Adaptar para alta resolución
 </Options_Page06_Appearance>
 
 <Options_Page07_Mouse>

@@ -247,10 +247,10 @@ namespace QTTabBarLib
             // this.controlContainer.Location = new Point(20, 100);
             // this.controlContainer.Location = new Point(0, 256);
             // this.controlContainer.Size = new Size(256, CalcBandHeight(1));
-            this.controlContainer.Size = new Size(100, Config.Skin.TabHeight );
+            this.controlContainer.Size = new Size(tabControl1.ScaleDpi(100), tabControl1.ScaleDpi(Config.Skin.TabHeight));
             this.controlContainer.Margin = Padding.Empty;
             // this.controlContainer.Padding = Padding.Empty;
-            this.controlContainer.Padding = new Padding(0, 2, 5, 0);
+            this.controlContainer.Padding = new Padding(0, tabControl1.ScaleDpi(2), tabControl1.ScaleDpi(5), 0);
             // this.controlContainer.Padding = this.ControlContainerPadding;
             this.controlContainer.TabIndex = 1;
             this.controlContainer.Text = "ControlContainer";
@@ -2123,7 +2123,7 @@ namespace QTTabBarLib
             // BandHeight = (count * (Config.Skin.TabHeight - 3 )) ;
             // BandHeight = (count * (Config.Skin.TabHeight - 3));
             // BandHeight = (count * (Config.Skin.TabHeight + BandHeightSpace));
-            BandHeight = (count * (Config.Skin.TabHeight) + BandHeightSpace);
+            BandHeight = (count * tabControl1.ScaleDpi(Config.Skin.TabHeight)) + tabControl1.ScaleDpi(BandHeightSpace);
             // BandHeight = (count * (Config.Skin.TabHeight + 10 )) ;
             // fix bug
             /**

@@ -26,6 +26,7 @@ using System.Windows.Input;
 using Image = System.Drawing.Image;
 using Keys = System.Windows.Forms.Keys;
 using System;
+using System.Diagnostics;
 
 namespace QTTabBarLib {
     internal partial class Options09_Groups : OptionsDialogTab, IHotkeyContainer {
@@ -37,15 +38,38 @@ namespace QTTabBarLib {
         }
 
         public override void InitializeConfig() {
+            Stopwatch totalStopwatch = Stopwatch.StartNew();
             try {
-            tvwGroups.ItemsSource = CurrentGroups = new ParentedCollection<GroupEntry>(null,
-                    GroupsManager.Groups.Select(g => new GroupEntry(
-                    g.Name, g.ShortcutKey, g.Startup, g.Paths.Select(p => new FolderEntry(p)))));
+                var groups = GroupsManager.Groups.ToList();
+                QTUtility2.log($"Options09_Groups InitializeConfig begin groupCount={groups.Count}");
+
+                List<GroupEntry> entries = new List<GroupEntry>(groups.Count);
+                int folderCount = 0;
+                int groupIndex = 0;
+                Stopwatch groupsStopwatch = Stopwatch.StartNew();
+                foreach (Group group in groups) {
+                    Stopwatch groupStopwatch = Stopwatch.StartNew();
+                    int groupFolderCount = group.Paths.Count;
+                    folderCount += groupFolderCount;
+                    entries.Add(new GroupEntry(
+                            group.Name, group.ShortcutKey, group.Startup,
+                            group.Paths.Select(p => new FolderEntry(p))));
+                    if (groupStopwatch.ElapsedMilliseconds >= 25) {
+                        QTUtility2.log($"Options09_Groups slow group materialization index={groupIndex} folderCount={groupFolderCount} elapsedMs={groupStopwatch.ElapsedMilliseconds}");
+                    }
+                    groupIndex++;
+                }
+                QTUtility2.log($"Options09_Groups group materialization complete groupCount={entries.Count} folderCount={folderCount} elapsedMs={groupsStopwatch.ElapsedMilliseconds}");
+
+                Stopwatch bindingStopwatch = Stopwatch.StartNew();
+                tvwGroups.ItemsSource = CurrentGroups = new ParentedCollection<GroupEntry>(null, entries);
+                QTUtility2.log($"Options09_Groups ItemsSource assignment complete elapsedMs={bindingStopwatch.ElapsedMilliseconds}");
+                QTUtility2.log($"Options09_Groups InitializeConfig complete elapsedMs={totalStopwatch.ElapsedMilliseconds}");
             }
             catch (Exception exception)
             {
                 QTUtility2.MakeErrorLog(exception, "Options09_Groups InitializeConfig");
-
+                QTUtility2.log($"Options09_Groups InitializeConfig failed elapsedMs={totalStopwatch.ElapsedMilliseconds} exception={exception.GetType().Name}");
             }
         }
 
@@ -179,7 +203,17 @@ namespace QTTabBarLib {
             }
             public Image Icon {
                 get {
-                    return QTUtility.GetIcon(Path, false).ToBitmap();
+                    // UNC 路径（以 \\ 开头）现在直接使用缓存的通用文件夹图标，不再调用 Shell 按网络路径提取图标；本地和虚拟路径仍沿用原有逻辑。
+                    if (Path != null && Path.StartsWith(@"\\", StringComparison.Ordinal)) {
+                        return QTUtility.ImageListGlobal.Images["folder"];
+                    }
+
+                    Stopwatch stopwatch = Stopwatch.StartNew();
+                    Image icon = QTUtility.GetIcon(Path, false).ToBitmap();
+                    if (stopwatch.ElapsedMilliseconds >= 50) {
+                        QTUtility2.log($"Options09_Groups slow folder icon path={Path} elapsedMs={stopwatch.ElapsedMilliseconds}");
+                    }
+                    return icon;
                 }
             }
             public bool IsVirtualFolder {

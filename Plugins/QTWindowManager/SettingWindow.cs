@@ -24,7 +24,7 @@ using QTPlugin;
 using QTPlugin.Interop;
 
 namespace QuizoPlugins {
-    public partial class SettingWindow : Form {
+    public partial class SettingWindow : QTPlugin.DpiAwareForm {
         private IntPtr hwndExplorer;
         private Dictionary<string, Rectangle> dicPresets;
         private string startingPreset;

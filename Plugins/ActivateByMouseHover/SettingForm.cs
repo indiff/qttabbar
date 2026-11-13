@@ -4,7 +4,7 @@ using QTPlugin;
 
 namespace QuizoPlugins
 {
-	public partial class SettingForm : Form
+	public partial class SettingForm : QTPlugin.DpiAwareForm
 	{
 		public SettingForm( int delay )
 		{

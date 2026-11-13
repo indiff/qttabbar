@@ -197,7 +197,7 @@ Davranış
 </Options_Page02_Tabs>
 
 <Options_Page03_Tweaks>
-Liste Görünümü ince ayarlarını etkinleştirir veya devre dışı bırak.
+Liste Görünümü ince ayarlarını etkinleştir veya devre dışı bırak.
 Liste Görünümü ile kullanılabilen ince ayarlar
 Tüm görünüm modlarında sütun başlıklarını görüntüle (Windows Vista/7)
 Kitaplık klasörleri için standart dosya sistemi görünümünü kullan (Windows 7)
@@ -230,6 +230,7 @@ Maksimum Genişlik x Yükseklik:
 Yazı tipi:
 Metin dosya türleri
 Görüntü ve Video dosya türleri
+PDF/Word/Excel önizlemelerini açık tut ve kapat düğmesini göster
 </Options_Page04_Tooltips>
 
 <Options_Page05_General>
@@ -290,10 +291,11 @@ Temayı dışa aktar...
 Uzatılmış
 Gerçek boyut
 Döşeme
+Yüksek çözünürlüğe uyarla
 </Options_Page06_Appearance>
 
 <Options_Page07_Mouse>
-Farklı fare eylemlerine komutlar atayın.
+Farklı fare eylemleriyle komutlar atayın.
 Bir fare bağı eklemek için, uygun hedef türünün solundaki artı simgesi üzerinde bir fare eylemi gerçekleştirin. Bir bağı kaldırmak için listeden seçin ve Sil tuşuna basın.
 Diğer fare seçenekleri
 Fare tekerleği, farenin altındaki pencereyi kaydırır

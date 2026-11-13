@@ -482,6 +482,14 @@ namespace QTTabBarLib {
             }
         }
 
+        public override bool ClosePinnedThumbnailTooltip() {
+            if(thumbnailTooltip == null || !thumbnailTooltip.ClosePinnedPreview()) {
+                return false;
+            }
+            thumbnailIndex = -1;
+            return true;
+        }
+
         public override int HitTest(IntPtr LParam) {
             return HitTest(QTUtility2.PointFromLPARAM(LParam), false);
         }
@@ -937,8 +945,8 @@ namespace QTTabBarLib {
 
         protected void OnHotItemChanged(int iItem) {
             Keys modifierKeys = Control.ModifierKeys;
-            QTUtility2.log("ListView OnHotItemChanged item=" + iItem + " preview=" +
-                Config.Tips.ShowTooltipPreviews + " subDir=" + Config.Tips.ShowSubDirTips);
+            // QTUtility2.log("ListView OnHotItemChanged item=" + iItem + " preview=" +
+            //      Config.Tips.ShowTooltipPreviews + " subDir=" + Config.Tips.ShowSubDirTips);
             if(Config.Tips.ShowTooltipPreviews) {
                 if(!Config.Tips.ShowPreviewsWithShift ^ (modifierKeys == Keys.Shift)) {
                     if(iItem != thumbnailIndex) {
@@ -960,7 +968,6 @@ namespace QTTabBarLib {
                 }
             }
             RefreshSubDirTip();
-            
             return;
         }
 
@@ -976,6 +983,9 @@ namespace QTTabBarLib {
         }
 
         protected bool OnKeyDown(Keys key) {
+            if(key == Keys.Escape && ClosePinnedThumbnailTooltip()) {
+                return true;
+            }
             if(Config.Tips.ShowTooltipPreviews) {
                 if(Config.Tips.ShowPreviewsWithShift) {
                     if(key != Keys.ShiftKey) {
@@ -1034,8 +1044,8 @@ namespace QTTabBarLib {
         public abstract override bool PointIsBackground(Point pt, bool screenCoords); 
 
         public override void RefreshSubDirTip(bool force = false) {
-            QTUtility2.log("SubDir Refresh force=" + force + " enabled=" +
-                Config.Tips.ShowSubDirTips + " mouseOver=" + MouseIsOverListView());
+            //QTUtility2.log("SubDir Refresh force=" + force + " enabled=" +
+            //    Config.Tips.ShowSubDirTips + " mouseOver=" + MouseIsOverListView());
             if(fDragging) {
                 OnDragOver(Control.MousePosition);
             }
@@ -1165,7 +1175,7 @@ namespace QTTabBarLib {
                 bool flag = false;
                 try {
                     if(!ShellMethods.TryMakeSubDirTipPath(ref str)) {
-                        QTUtility2.log("SubDir rejected: path is not a directory " + str);
+                       // QTUtility2.log("SubDir rejected: path is not a directory " + str);
                         return false;
                     }
 

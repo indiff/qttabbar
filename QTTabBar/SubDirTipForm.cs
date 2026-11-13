@@ -29,7 +29,7 @@ using System.Windows.Forms;
 using QTTabBarLib.Interop;
 
 namespace QTTabBarLib {
-    internal sealed class SubDirTipForm : Form {
+    internal sealed class SubDirTipForm : QTPlugin.DpiAwareForm {
         private IContainer components;
         private DropDownMenuDropTarget contextMenuSubDir;
         private string currentDir;
@@ -951,7 +951,7 @@ namespace QTTabBarLib {
             AutoScaleDimensions = new SizeF(6f, 13f);
             // // AutoScaleMode.Dpi  / by indiff dpi
             // AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(15, 15);
+            ClientSize = new Size(0x10, 0x10);
             Controls.Add(lblSubDirBtn);
             FormBorderStyle = FormBorderStyle.None;
             ShowInTaskbar = false;
@@ -1351,7 +1351,8 @@ namespace QTTabBarLib {
             private bool fPressed;
 
             protected override void OnPaint(PaintEventArgs e) {
-                e.Graphics.DrawImage(fPressed ? bmpPrssed : bmpCold, new Rectangle(0, 0, 15, 15), new Rectangle(0, 0, 15, 15), GraphicsUnit.Pixel);
+                Bitmap image = fPressed ? bmpPrssed : bmpCold;
+                e.Graphics.DrawImage(image, ClientRectangle, new Rectangle(Point.Empty, image.Size), GraphicsUnit.Pixel);
             }
 
             public void SetPressed(bool fPressed) {

@@ -15,15 +15,25 @@ namespace QTTabBarLib
             return str.Length > nMax ? str.Substring(0, nMax) : str;
         }
 
-        public static void WriteSelection(string dirKey , string pathSelection)
+        public static bool WriteSelection(string dirKey , string pathSelection)
         {
             try
             {
                 using (RegistryKey registryKey = RegistryUtil.OpenUserRoot("Volatile", true, true))
+                {
+                    if (registryKey == null)
+                    {
+                        QTUtility2.log("RegistryUtil.WriteSelection failed: Volatile registry key is unavailable");
+                        return false;
+                    }
                     registryKey.SetValue(dirKey, (object)LimitLength(pathSelection, 5120));
+                }
+                return true;
             }
-            catch
+            catch (Exception ex)
             {
+                QTUtility2.MakeErrorLog(ex, "RegistryUtil.WriteSelection");
+                return false;
             }
         }
         public static T GetValueSafe<T>(RegistryKey rk, string valName, T defaultVal)
@@ -49,8 +59,9 @@ namespace QTTabBarLib
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                QTUtility2.MakeErrorLog(ex, "RegistryUtil.ReadSelection");
             }
             return (string)null;
         }

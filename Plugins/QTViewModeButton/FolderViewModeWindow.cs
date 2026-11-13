@@ -24,7 +24,7 @@ using QTPlugin.Interop;
 using ContentAlignment = System.Drawing.ContentAlignment;
 
 namespace QuizoPlugins {
-    internal sealed partial class FolderViewModeWindow : Form {
+    internal sealed partial class FolderViewModeWindow : QTPlugin.DpiAwareForm {
         private bool fFirstFocusing;
         public event EventHandler ViewModeChanged;
         private Color clrBG, clrBorder;
@@ -134,10 +134,14 @@ namespace QuizoPlugins {
 
         protected override void OnPaint(PaintEventArgs e) {
             base.OnPaint(e);
-            using(Pen p = new Pen(clrBorder)) {
-                e.Graphics.DrawRectangle(p, new Rectangle(0, 0, Width - 1, Height - 1));
+            float borderWidth = DpiScale;
+            using(Pen p = new Pen(clrBorder, borderWidth)) {
+                float inset = borderWidth / 2f;
+                e.Graphics.DrawRectangle(p, inset, inset, Width - borderWidth, Height - borderWidth);
             }
         }
+
+        private float DpiScale => QTPlugin.DpiScaling.Enabled ? QTPlugin.DpiScaling.GetScale(Handle) : 1f;
 
 
 
@@ -290,7 +294,13 @@ namespace QuizoPlugins {
                 base.OnPaintBackground(e);
 
             if(image != null) {
-                e.Graphics.DrawImage(image, new Rectangle(6, 6, 16, 16));
+                QTPlugin.DpiAwareForm form = FindForm() as QTPlugin.DpiAwareForm;
+                float scale = form == null ? 1f : form.DpiScale;
+                e.Graphics.DrawImage(image, new Rectangle(
+                    (int)Math.Round(6 * scale),
+                    (int)Math.Round(6 * scale),
+                    (int)Math.Round(16 * scale),
+                    (int)Math.Round(16 * scale)));
             }
         }
 

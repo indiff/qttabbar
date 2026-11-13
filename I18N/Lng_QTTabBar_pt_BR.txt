@@ -34,7 +34,7 @@ Options_Page02_Tabs=Altera as opções relacionadas a abas.;Abrir novas abas:;Qu
 
 Options_Page03_Tweaks=Ativa ou desativa os ajustes da Visualização da Lista do Explorer.;Ajustes que podem ser usados ​​com a Visualização em Lista;Exibir cabeçalhos de coluna em todos os modos de visualização (Windows Vista/7);Usar visualização padrão do sistema de arquivos para pastas de Biblioteca (Windows 7);Desmarcar a extensão do arquivo ao renomear arquivos (Windows XP);Seleção de ciclo com F2 durante a renomeação;Enrole ao redor ao mover a seleção com as teclas de seta;Backspace sobe um nível (Windows Vista/7);Rolagem com roda do mouse enquanto segura Shift horizontalmente;Ajustes que só podem ser usados com a Visualização em Listas mais antiga;Ativar controle da Visualização em Lista mais antiga (Windows 7);Selecionar linha completa na Visualização em Detalhes;Mostrar linhas de grade na Visualização em Detalhes;Cores de linha alternadas na Visualização em Detalhes;Cor de primeiro plano:;Cor de segundo plano:
 
-Options_Page04_Tooltips=Altera o comportamento da ferramenta de menu de subpastas e pré-visualização.;Dicas de subpastas;Ativar dicas de subpasta;Apenas com a tecla Shift pressionada;Mostrar arquivos;Mostrar dicas de ferramentas ao passar mouse sobre itens;Visualizar dicas de ferramentas;Ativar visualizar de dicas;Apenas com a tecla Shift pressionada;Mostrar Informações do arquivo abaixo das imagens;Largura x altura máxima:;Fonte:;Tipos de arquivos de texto;Tipos de arquivos de imagem e vídeo
+Options_Page04_Tooltips=Altera o comportamento da ferramenta de menu de subpastas e pré-visualização.;Dicas de subpastas;Ativar dicas de subpasta;Apenas com a tecla Shift pressionada;Mostrar arquivos;Mostrar dicas de ferramentas ao passar mouse sobre itens;Visualizar dicas de ferramentas;Ativar visualizar de dicas;Apenas com a tecla Shift pressionada;Mostrar Informações do arquivo abaixo das imagens;Largura x altura máxima:;Fonte:;Tipos de arquivos de texto;Tipos de arquivos de imagem e vídeo;Manter abertas as visualizações PDF/Word/Excel e mostrar o botão fechar
 
 Options_Page05_General=Opções gerais para o comportamento do Qttabbar.;Integração da barra de tarefas;Mostrar visualizações de abas na Barra de tarefas;Histórico;Manter histórico de abas fechadas;Limpar;Manter histórico de arquivos abertos;Rede;Tempo limite de rede (Digite 0 para o padrão do sistema):;Verifique se há atualizações periodicamente;Verificar;Exportar;Exportar Configurações;Limpar histórico de arquivos?;Limpar histórico de abas?
 
@@ -81,6 +81,4 @@ TaskBar_Titles=Grupos;Desfazer fechado;Aplicativos;Arquivos abertos recente
 TrayIcon=1 janela;{0} janelas
 
 UpdateCheck=Uma nova versão do Qttabbar foi lançada:;Pressione OK para ir ao site.;Sua versão do QTTabBar está atualizada.;Nova versão de desenvolvimento encontrada:;Arquivo de versão não encontrado (404).;Erro de rede desconhecido.;Servidor não encontrado.;O servidor retornou as strings erradas.
-
-
 

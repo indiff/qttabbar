@@ -34,7 +34,7 @@ Options_Page02_Tabs=Sekme seçeneklerini değiştir.;Yeni sekme aç:;Geçerli se
 
 Options_Page03_Tweaks=Liste Görünümü ince ayarlarını etkinleştirir veya devre dışı bırak.;Liste Görünümü ile kullanılabilen ince ayarlar;Tüm görünüm modlarında sütun başlıklarını görüntüle (Windows Vista/7);Kitaplık klasörleri için standart dosya sistemi görünümünü kullan (Windows 7);Dosyaları yeniden adlandırırken dosya uzantısının seçimini kaldır (Windows XP);Yeniden adlandırırken F2 ile seçimi değiştir;Ok tuşlarıyla seçimi taşırken kaydır;Backspace bir seviye yukarı çıkar (Windows Vista/7);Shift tuşunu basılı tutarken fare tekerleği yatay kaydırma yapar;Yalnızca eski Liste Görünümü ile kullanılabilen ince ayarlar;Eski Liste Görünümü kontrolünü etkinleştir (Windows 7);Ayrıntılı görünümde tam satır seçimi （Windows XP）;Ayrıntılı görünümde kılavuz çizgilerini göster;Ayrıntılı görünümde alternatif satır renkleri;Ön plan rengi:;Arka plan rengi:
 
-Options_Page04_Tooltips=Alt Klasör ve Önizleme araç ipuçlarının davranışını değiştirin.;Alt Klasör İpuçları;Alt Klasör İpuçlarını Etkinleştir;Sadece Shift tuşu aşağıdayken;Dosyaları göster;Menü öğeleri üzerinde fareyle gezinirken önizleme araç ipuçlarını göster;Önizleme ipuçları;Önizleme araç ipuçlarını etkinleştir;Sadece Shift tuşu aşağıdayken;Resimlerin altındaki dosya bilgilerini göster;Maksimum Genişlik x Yükseklik:;Yazı tipi:;Metin dosya türleri;Görüntü ve Video dosya türleri
+Options_Page04_Tooltips=Alt Klasör ve Önizleme araç ipuçlarının davranışını değiştirin.;Alt Klasör İpuçları;Alt Klasör İpuçlarını Etkinleştir;Sadece Shift tuşu aşağıdayken;Dosyaları göster;Menü öğeleri üzerinde fareyle gezinirken önizleme araç ipuçlarını göster;Önizleme ipuçları;Önizleme araç ipuçlarını etkinleştir;Sadece Shift tuşu aşağıdayken;Resimlerin altındaki dosya bilgilerini göster;Maksimum Genişlik x Yükseklik:;Yazı tipi:;Metin dosya türleri;Görüntü ve Video dosya türleri;PDF/Word/Excel önizlemelerini açık tut ve kapat düğmesini göster
 
 Options_Page05_General=QTTabBar genel davranış seçenekleri;Görev barı entegrasyonu;Görev barında sekme önizlemelerini göster;Tarih;Kapatılan sekmelerin geçmişini tut;Şimdi Temizle;Açılan dosyaların geçmişini tut;Ağ;Ağ Zaman Aşımı (Sistem varsayılanı için 0 girin):;Güncellemeleri periyodik olarak kontrol edin;Şimdi kontrol et;Dışa Aktar;Dışa Aktarma Ayarları...;Dosya geçmişi temizlensin mi?;Sekme geçmişi temizlensin mi?;Ses;Sesi etkinleştir;Günlüğü etkinleştir
 
@@ -81,6 +81,4 @@ TaskBar_Titles=Gruplar;Kapatmayı geri al;Uygulamalar;Son açılan dosyalar
 TrayIcon=1 pencere;{0} pencere
 
 UpdateCheck=QTTabBar'ın yeni bir sürümü yayınlandı:;Web sitesine gitmek için Tamam'a basın.;QTTabBar sürümünüz güncel.;Yeni geliştirme sürümü bulundu:;Sürüm dosyası bulunamadı (404).;Bilinmeyen ağ hatası.;Sunucu bulunamadı.;Sunucu yanlış dizeler döndürdü.
-
-
 

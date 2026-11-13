@@ -57,6 +57,7 @@ namespace QTTabBarLib.Interop {
         /// </summary>
         public const Int32 MOVE = 0x0003;
         public const Int32 DPICHANGED = 0x02E0;
+        public const Int32 DPICHANGED_AFTERPARENT = 0x02E3;
 
 
         /// <summary>
